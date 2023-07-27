@@ -30,7 +30,7 @@ export function parseError<TError>(err: TError): BaseError | null {
 
 const notPreview = process.env.NEXT_PUBLIC_VERCEL_ENV !== 'preview'
 
-export default function useCatchTxError(): CatchTxErrorReturn {
+export default function useCatchTxError(): any {
   const { t } = useTranslation()
   const { toastError, toastSuccess } = useToast()
   const [loading, setLoading] = useState(false)
@@ -74,8 +74,8 @@ export default function useCatchTxError(): CatchTxErrorReturn {
   )
 
   const fetchWithCatchTxError = useCallback(
-    async (callTx: () => Promise<SendTransactionResult | Hash>): Promise<WaitForTransactionResult | null> => {
-      let tx: SendTransactionResult | Hash = null
+    async (callTx: () => Promise<any>): Promise<any> => {
+      let tx: any = null
 
       try {
         setLoading(true)
@@ -113,8 +113,8 @@ export default function useCatchTxError(): CatchTxErrorReturn {
   )
 
   const fetchTxResponse = useCallback(
-    async (callTx: () => Promise<SendTransactionResult | Hash>): Promise<SendTransactionResult> => {
-      let tx: SendTransactionResult | Hash = null
+    async (callTx: () => Promise<any>): Promise<any> => {
+      let tx: any = null
 
       try {
         setTxResponseLoading(true)

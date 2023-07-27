@@ -32,27 +32,25 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
-    const receipt = await fetchWithCatchTxError(() => {
+    const receipt = await fetchWithCatchTxError(async () => {
       console.log('createGauge=================>', [account])
       return callWithGasPrice(rampFactoryContract, 'createGauge', [account]).catch((err) => {
         setPendingFb(false)
         console.log('createGauge=================>', err)
-        // toastError(
-        //   t('Issue creating ramp'),
-        //   <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-        //     {err}
-        //   </ToastDescriptionWithTx>,
-        // )
+        toastError(
+          t('Issue creating ramp'),
+          <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
+        )
       })
     })
     if (receipt?.status) {
       setPendingFb(false)
-      // toastSuccess(
-      //   t('Ramp successfully created'),
-      //   <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-      //     {t('You can now start processing transactions through your Ramp.')}
-      //   </ToastDescriptionWithTx>,
-      // )
+      toastSuccess(
+        t('Ramp successfully created'),
+        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          {t('You can now start processing transactions through your Ramp.')}
+        </ToastDescriptionWithTx>,
+      )
       dispatch(fetchRampsAsync())
     }
     onDismiss()
@@ -75,37 +73,36 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
   }, [inputRef])
 
   return (
-    <></>
-    // <Modal title={t('Create Ramp Pool')} onDismiss={onDismiss}>
-    //   <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
-    //     <Flex alignSelf="flex-start">
-    //       <ErrorIcon width={24} height={24} color="textSubtle" />
-    //     </Flex>
-    //     <Box>
-    //       <Text small color="textSubtle">
-    //         {t(
-    //           'The will create a new Ramp Pool with you as its Admin. Please read the documentation to learn more about Ramp Pools.',
-    //         )}
-    //       </Text>
-    //     </Box>
-    //   </Grid>
-    //   <Divider />
-    //   <Flex flexDirection="column" px="16px" pb="16px">
-    //     {account ? (
-    //       <Button
-    //         mb="8px"
-    //         onClick={handleCreateGauge}
-    //         endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
-    //         isLoading={pendingTx || pendingFb}
-    //         // disabled={firebaseDone}
-    //       >
-    //         {t('Create Ramp Contract')}
-    //       </Button>
-    //     ) : (
-    //       <ConnectWalletButton />
-    //     )}
-    //   </Flex>
-    // </Modal>
+    <Modal title={t('Create Ramp Pool')} onDismiss={onDismiss}>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              'The will create a new Ramp Pool with you as its Admin. Please read the documentation to learn more about Ramp Pools.',
+            )}
+          </Text>
+        </Box>
+      </Grid>
+      <Divider />
+      <Flex flexDirection="column" px="16px" pb="16px">
+        {account ? (
+          <Button
+            mb="8px"
+            onClick={handleCreateGauge}
+            endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
+            isLoading={pendingTx || pendingFb}
+            // disabled={firebaseDone}
+          >
+            {t('Create Ramp Contract')}
+          </Button>
+        ) : (
+          <ConnectWalletButton />
+        )}
+      </Flex>
+    </Modal>
   )
 }
 
