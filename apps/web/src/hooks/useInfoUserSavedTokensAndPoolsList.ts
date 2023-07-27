@@ -21,6 +21,10 @@ const defaultTokenAndPoolList: TokenAndPoolList = {
     tokens: [],
     pools: [],
   },
+  [ChainId.FANTOM_TESTNET]: {
+    tokens: [],
+    pools: [],
+  },
   [ChainId.ARBITRUM_ONE]: {
     tokens: [],
     pools: [],

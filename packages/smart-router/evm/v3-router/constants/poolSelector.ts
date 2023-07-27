@@ -12,7 +12,7 @@ export const DEFAULT_POOL_SELECTOR_CONFIG: PoolSelectorConfig = {
   topNWithBaseToken: 3,
 }
 
-export const V3_DEFAULT_POOL_SELECTOR_CONFIG: PoolSelectorConfigChainMap = {
+export const V3_DEFAULT_POOL_SELECTOR_CONFIG: any = {
   [ChainId.BSC]: {
     topN: 2,
     topNDirectSwaps: 2,
@@ -47,7 +47,7 @@ export const V3_DEFAULT_POOL_SELECTOR_CONFIG: PoolSelectorConfigChainMap = {
   },
 }
 
-export const V2_DEFAULT_POOL_SELECTOR_CONFIG: PoolSelectorConfigChainMap = {
+export const V2_DEFAULT_POOL_SELECTOR_CONFIG: any = {
   [ChainId.BSC]: {
     topN: 3,
     topNDirectSwaps: 2,

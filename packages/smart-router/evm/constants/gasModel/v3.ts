@@ -7,6 +7,7 @@ export const BASE_SWAP_COST_V3 = (id: ChainId): bigint => {
   switch (id) {
     case ChainId.BSC:
     case ChainId.BSC_TESTNET:
+    case ChainId.FANTOM_TESTNET:
     case ChainId.ETHEREUM:
     case ChainId.GOERLI:
       return 2000n
@@ -18,6 +19,7 @@ export const COST_PER_INIT_TICK = (id: ChainId): bigint => {
   switch (id) {
     case ChainId.BSC:
     case ChainId.BSC_TESTNET:
+    case ChainId.FANTOM_TESTNET:
     case ChainId.ETHEREUM:
     case ChainId.GOERLI:
       return 31000n
@@ -30,6 +32,7 @@ export const COST_PER_HOP_V3 = (id: ChainId): bigint => {
   switch (id) {
     case ChainId.BSC:
     case ChainId.BSC_TESTNET:
+    case ChainId.FANTOM_TESTNET:
     case ChainId.ETHEREUM:
     case ChainId.GOERLI:
       return 80000n

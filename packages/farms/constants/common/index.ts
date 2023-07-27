@@ -22,6 +22,7 @@ export const CHAIN_ID_TO_CHAIN_NAME = {
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.GOERLI]: 'ethereum',
   [ChainId.BSC_TESTNET]: 'bsc',
+  [ChainId.FANTOM_TESTNET]: 'ftm',
   [ChainId.POLYGON_ZKEVM]: 'polygon_zkevm',
   [ChainId.POLYGON_ZKEVM_TESTNET]: '',
   [ChainId.ZKSYNC_TESTNET]: '',
@@ -50,6 +51,12 @@ export const DEFAULT_COMMON_PRICE: Record<FarmV3SupportedChainId, CommonPrice> =
   },
   [ChainId.BSC]: {},
   [ChainId.BSC_TESTNET]: {
+    [bscTestnetTokens.mockA.address]: '10',
+    [bscTestnetTokens.usdt.address]: '1',
+    [bscTestnetTokens.busd.address]: '1',
+    [bscTestnetTokens.usdc.address]: '1',
+  },
+  [ChainId.FANTOM_TESTNET]: {
     [bscTestnetTokens.mockA.address]: '10',
     [bscTestnetTokens.usdt.address]: '1',
     [bscTestnetTokens.busd.address]: '1',

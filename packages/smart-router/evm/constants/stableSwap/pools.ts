@@ -11,11 +11,12 @@ export type StableSwapPoolMap<TChainId extends number> = {
 export const isStableSwapSupported = (chainId: number): chainId is StableSupportedChainId =>
   STABLE_SUPPORTED_CHAIN_IDS.includes(chainId)
 
-export const STABLE_SUPPORTED_CHAIN_IDS = [ChainId.BSC, ChainId.BSC_TESTNET] as const
+export const STABLE_SUPPORTED_CHAIN_IDS = [ChainId.BSC, ChainId.BSC_TESTNET, ChainId.FANTOM_TESTNET] as const
 
 export type StableSupportedChainId = (typeof STABLE_SUPPORTED_CHAIN_IDS)[number]
 
 export const STABLE_POOL_MAP = {
   [ChainId.BSC]: bscPools,
   [ChainId.BSC_TESTNET]: bscTestnetPools,
+  [ChainId.FANTOM_TESTNET]: bscTestnetPools,
 } satisfies StableSwapPoolMap<StableSupportedChainId>

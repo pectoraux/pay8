@@ -21,6 +21,7 @@ export const multiChainName: Record<number | string, MultiChainNameExtend> = {
   [ChainId.BSC]: 'BSC',
   [ChainId.ETHEREUM]: 'ETH',
   [ChainId.BSC_TESTNET]: 'BSC_TESTNET',
+  [ChainId.FANTOM_TESTNET]: 'FANTOM_TESTNET',
   [ChainId.POLYGON_ZKEVM]: 'POLYGON_ZKEVM',
 }
 

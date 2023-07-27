@@ -15,12 +15,14 @@ export const POOLS_CONFIG_BY_CHAIN = {
   [ChainId.ETHEREUM]: ethPools,
   [ChainId.BSC]: bscPools,
   [ChainId.BSC_TESTNET]: bscTestnetPools,
+  [ChainId.FANTOM_TESTNET]: bscTestnetPools,
 } as PoolsConfigByChain<SupportedChainId>
 
 export const LIVE_POOLS_CONFIG_BY_CHAIN = {
   [ChainId.ETHEREUM]: ethLivePools,
   [ChainId.BSC]: bscLivePools,
   [ChainId.BSC_TESTNET]: bscTestnetLivePools,
+  [ChainId.FANTOM_TESTNET]: bscTestnetLivePools,
 } as PoolsConfigByChain<SupportedChainId>
 
 export const getPoolsConfig = (chainId: ChainId) => {

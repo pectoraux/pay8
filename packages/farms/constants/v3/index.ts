@@ -9,7 +9,7 @@ import { farmsV3 as farm280 } from '../280'
 import { farmsV3 as farm1101 } from '../1101'
 import { farmsV3 as farm1442 } from '../1442'
 
-export const farmsV3ConfigChainMap: Record<FarmV3SupportedChainId, ComputedFarmConfigV3[]> = {
+export const farmsV3ConfigChainMap: any = {
   [ChainId.ETHEREUM]: farm1,
   [ChainId.GOERLI]: farm5,
   [ChainId.BSC]: farm56,
