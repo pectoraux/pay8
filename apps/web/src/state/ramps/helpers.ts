@@ -1,14 +1,6 @@
 import axios from 'axios'
 import NodeRSA from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
-import {
-  SerializedPool,
-  SerializedCakeVault,
-  DeserializedCakeVault,
-  SerializedLockedCakeVault,
-  VaultKey,
-} from 'state/types'
-import { isAddress } from 'utils'
 import { Token } from '@pancakeswap/sdk'
 import { getBep20Contract, getRampAdsContract, getRampContract } from 'utils/contractHelpers'
 import { firestore } from 'utils/firebase'
