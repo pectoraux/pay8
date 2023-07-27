@@ -1,15 +1,31 @@
 import styled from 'styled-components'
 
+import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
-import { Heading, Flex, Image, Text, Link, FlexLayout, PageHeader, Loading, Pool, ViewMode } from '@pancakeswap/uikit'
+import {
+  Heading,
+  Flex,
+  Image,
+  Text,
+  Link,
+  FlexLayout,
+  PageHeader,
+  Loading,
+  Pool,
+  ViewMode,
+  ArrowForwardIcon,
+  Button,
+  useModal,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithVault } from 'state/ramps/hooks'
-import { ChainId, Token } from '@pancakeswap/sdk'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
 import Page from 'components/Layout/Page'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { TokenPairImage } from 'components/TokenImage'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
+import { ChainId, Token } from '@pancakeswap/sdk'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 import CardActions from './components/PoolCard/CardActions'
 import AprRow from './components/PoolCard/AprRow'
@@ -17,6 +33,8 @@ import CardFooter from './components/PoolCard/CardFooter'
 import CakeVaultCard from './components/CakeVaultCard'
 import PoolControls from './components/PoolControls'
 import PoolRow, { VaultPoolRow } from './components/PoolsTable/PoolRow'
+import { useCurrency } from 'hooks/Tokens'
+import { useCallback, useState } from 'react'
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -40,7 +58,18 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
-  const { pools, userDataLoaded } = usePoolsWithVault()
+  // const { pools, userDataLoaded } = usePoolsWithVault()
+  const { pools, userDataLoaded: rampsLoaded } = usePoolsWithFilterSelector()
+  const { pools: bounties, userDataLoaded: bountiesLoaded } = usePoolsWithFilterSelector()
+
+  const isBounties = useRouter().pathname.includes('bounties')
+  const userDataLoaded = isBounties ? bountiesLoaded : rampsLoaded
+  const inputCurency = useCurrency(DEFAULT_TFIAT)
+  const [currency, setCurrency] = useState(inputCurency)
+  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  const [onPresentCreateGauge] = useModal(
+    <></>, // <CreateRampModal />
+  )
 
   usePoolsPageFetch()
 
@@ -50,14 +79,30 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Syrup Pools')}
+              {t('Decentralized Ramp Pools')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Just stake some tokens to earn.')}
+              {t('Transfer value on and off the platform')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('High APR, low risk.')}
+              {t('Make money helping people transfer value on and off the platform')}
             </Heading>
+            <Flex>
+              <Button p="0" variant="text">
+                <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
+                  {t('Create contract ')}{' '}
+                </Text>
+                {/* {isBounties && 
+                <CurrencyInputPanel
+                  showInput={false}
+                  currency={currency ?? inputCurency}
+                  onCurrencySelect={handleInputSelect}
+                  otherCurrency={currency ?? inputCurency}
+                  id='ramps-currency'
+                />} */}
+              </Button>
+              <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
+            </Flex>
           </Flex>
         </Flex>
       </PageHeader>
@@ -65,20 +110,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools}>
           {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
             <>
-              {showFinishedPools && chainId === ChainId.BSC && (
-                <FinishedTextContainer>
-                  <Text fontSize={['16px', null, '20px']} color="failure" pr="4px">
-                    {t('Looking for v1 CAKE syrup pools?')}
-                  </Text>
-                  <FinishedTextLink
-                    href="https://v1-farms.pancakeswap.finance/pools/history"
-                    fontSize={['16px', null, '20px']}
-                    color="failure"
-                  >
-                    {t('Go to migration page')}.
-                  </FinishedTextLink>
-                </FinishedTextContainer>
-              )}
               {account && !userDataLoaded && stakedOnly && (
                 <Flex justifyContent="center" mb="4px">
                   <Loading />
@@ -86,66 +117,53 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               )}
               {viewMode === ViewMode.CARD ? (
                 <CardLayout>
-                  {chosenPools.map((pool) =>
-                    pool.vaultKey ? (
-                      <CakeVaultCard key={pool.vaultKey} pool={pool} showStakedOnly={stakedOnly} />
-                    ) : (
-                      <Pool.PoolCard<Token>
-                        key={pool.sousId}
-                        pool={pool}
-                        isStaked={Boolean(pool?.userData?.stakedBalance?.gt(0))}
-                        cardContent={
-                          account ? (
-                            <CardActions pool={pool} stakedBalance={pool?.userData?.stakedBalance} />
-                          ) : (
-                            <>
-                              <Text mb="10px" textTransform="uppercase" fontSize="12px" color="textSubtle" bold>
-                                {t('Start earning')}
-                              </Text>
-                              <ConnectWalletButton />
-                            </>
-                          )
-                        }
-                        tokenPairImage={
-                          <TokenPairImage
-                            primaryToken={pool.earningToken}
-                            secondaryToken={pool.stakingToken}
-                            width={64}
-                            height={64}
-                          />
-                        }
-                        cardFooter={<CardFooter pool={pool} account={account} />}
-                        aprRow={<AprRow pool={pool} stakedBalance={pool?.userData?.stakedBalance} />}
-                      />
-                    ),
-                  )}
+                  {chosenPools.map((pool) => (
+                    <Pool.PoolCard<Token>
+                      key={pool.sousId}
+                      pool={pool}
+                      isStaked={Boolean(pool?.userData?.stakedBalance?.gt(0))}
+                      cardContent={
+                        account ? (
+                          <CardActions pool={pool} stakedBalance={pool?.userData?.stakedBalance} />
+                        ) : (
+                          <>
+                            <Text mb="10px" textTransform="uppercase" fontSize="12px" color="textSubtle" bold>
+                              {t('Start earning')}
+                            </Text>
+                            <ConnectWalletButton />
+                          </>
+                        )
+                      }
+                      tokenPairImage={
+                        <TokenPairImage
+                          primaryToken={pool.earningToken}
+                          secondaryToken={pool.stakingToken}
+                          width={64}
+                          height={64}
+                        />
+                      }
+                      cardFooter={<CardFooter pool={pool} account={account} />}
+                      aprRow={<AprRow pool={pool} stakedBalance={pool?.userData?.stakedBalance} />}
+                    />
+                  ))}
                 </CardLayout>
               ) : (
                 <Pool.PoolsTable>
-                  {chosenPools.map((pool) =>
-                    pool.vaultKey ? (
-                      <VaultPoolRow
-                        initialActivity={normalizedUrlSearch.toLowerCase() === pool.earningToken.symbol?.toLowerCase()}
-                        key={pool.vaultKey}
-                        vaultKey={pool.vaultKey}
-                        account={account}
-                      />
-                    ) : (
-                      <PoolRow
-                        initialActivity={normalizedUrlSearch.toLowerCase() === pool.earningToken.symbol?.toLowerCase()}
-                        key={pool.sousId}
-                        sousId={pool.sousId}
-                        account={account}
-                      />
-                    ),
-                  )}
+                  {chosenPools.map((pool) => (
+                    <PoolRow
+                      initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
+                      key={pool.sousId}
+                      sousId={pool.sousId}
+                      account={account}
+                    />
+                  ))}
                 </Pool.PoolsTable>
               )}
               <Image
                 mx="auto"
                 mt="12px"
                 src="/images/decorations/3d-syrup-bunnies.png"
-                alt="Pancake illustration"
+                alt="Payswap illustration"
                 width={192}
                 height={184.5}
               />

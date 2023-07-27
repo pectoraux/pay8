@@ -5,17 +5,17 @@ import { State, VaultKey } from '../types'
 // import { transformPool, transformVault } from './helpers'
 import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
-const selectPoolsData = (state: State) => state.ramps.data
-const selectPoolData = (sousId) => (state: State) => state.ramps.data.find((p) => p.sousId === sousId)
-const selectUserDataLoaded = (state: State) => state.ramps.userDataLoaded
-const selectVault = (key: VaultKey) => (state: State) => key ? state.ramps[key] : {}
+const selectPoolsData = (state: State) => state.ramps?.data
+const selectPoolData = (sousId) => (state: State) => state.ramps?.data.find((p) => p.sousId === sousId)
+const selectUserDataLoaded = (state: State) => state.ramps?.userDataLoaded
+const selectVault = (key: VaultKey) => (state: State) => key && state.ramps ? state.ramps[key] : {}
 const selectIfo = (state: State) => state.ramps.ifo
 const selectIfoUserCredit = (state: State) => state.ramps.ifo.credit ?? BIG_ZERO
 
-const selectCurrBribe = (state: State) => state.ramps.currBribe
-const selectCurrPool = (state: State) => state.ramps.currPool
+const selectCurrBribe = (state: State) => state.ramps?.currBribe
+const selectCurrPool = (state: State) => state.ramps?.currPool
 const selectFilteredData = (state: State) => {
-  return state.ramps.data.filter(
+  return state.ramps?.data.filter(
     (ramp) =>
       (!state.ramps.filters.workspace ||
         state.ramps.filters.workspace === 'All' ||
