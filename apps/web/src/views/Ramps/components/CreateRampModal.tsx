@@ -32,7 +32,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
-    const receipt = await fetchWithCatchTxError(async () => {
+    const receipt = await fetchWithCatchTxError(() => {
       console.log('createGauge=================>', [account])
       return callWithGasPrice(rampFactoryContract, 'createGauge', [account]).catch((err) => {
         setPendingFb(false)
