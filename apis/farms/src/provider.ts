@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/sdk'
 import { createPublicClient, http, PublicClient } from 'viem'
-import { bsc, bscTestnet, goerli, mainnet, zkSyncTestnet, polygonZkEvm } from 'viem/chains'
+import { bsc, bscTestnet, goerli, mainnet, zkSyncTestnet, polygonZkEvm, ftmTestnet } from 'viem/chains'
 
 const requireCheck = [ETH_NODE, GOERLI_NODE, BSC_NODE, BSC_TESTNET_NODE, POLYGON_ZKEVM_NODE, FANTOM_TESTNET_NODE]
 requireCheck.forEach((node) => {
@@ -40,7 +40,7 @@ export const bscTestnetClient: PublicClient = createPublicClient({
 })
 
 export const ftmTestnetClient: PublicClient = createPublicClient({
-  chain: bscTestnet,
+  chain: ftmTestnet,
   transport: http(FANTOM_TESTNET_NODE),
   batch: {
     multicall: {

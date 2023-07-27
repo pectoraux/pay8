@@ -34,7 +34,7 @@ const AptosChain = {
 
 const NetworkSelect = ({ switchNetwork, chainId }) => {
   const { t } = useTranslation()
-
+  console.log('chains================+>', chains)
   return (
     <>
       <Box px="16px" py="8px">

@@ -17,7 +17,7 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 const mostNodesConfig = Object.values(PUBLIC_NODES).reduce((prev, cur) => {
   return cur.length > prev ? cur.length : prev
 }, 0)
-
+console.log('CHAINS================>', CHAINS)
 export const { publicClient, chains } = configureChains(
   CHAINS,
   Array.from({ length: mostNodesConfig })
