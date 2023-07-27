@@ -1,10 +1,17 @@
 import { ChainId } from '@pancakeswap/sdk'
 
-export const supportedChainIdV2 = [ChainId.GOERLI, ChainId.BSC, ChainId.BSC_TESTNET, ChainId.ETHEREUM] as const
+export const supportedChainIdV2 = [
+  ChainId.GOERLI,
+  ChainId.BSC,
+  ChainId.BSC_TESTNET,
+  ChainId.FANTOM_TESTNET,
+  ChainId.ETHEREUM,
+] as const
 export const supportedChainIdV3 = [
   ChainId.GOERLI,
   ChainId.BSC,
   ChainId.BSC_TESTNET,
+  ChainId.FANTOM_TESTNET,
   ChainId.ETHEREUM,
   ChainId.ZKSYNC_TESTNET,
   ChainId.POLYGON_ZKEVM_TESTNET,

@@ -26,7 +26,7 @@ export const CHAIN_ID_TO_CHAIN_NAME = {
   [ChainId.POLYGON_ZKEVM]: 'polygon_zkevm',
   [ChainId.POLYGON_ZKEVM_TESTNET]: '',
   [ChainId.ZKSYNC_TESTNET]: '',
-} // satisfies Record<FarmV3SupportedChainId, string>
+} satisfies Record<FarmV3SupportedChainId, string>
 
 export const priceHelperTokens = {
   [ChainId.ETHEREUM]: {
@@ -44,7 +44,7 @@ export const priceHelperTokens = {
 } satisfies Record<number, PriceHelper>
 
 // for testing purposes
-export const DEFAULT_COMMON_PRICE: any = {
+export const DEFAULT_COMMON_PRICE: Record<FarmV3SupportedChainId, CommonPrice> = {
   [ChainId.ETHEREUM]: {},
   [ChainId.GOERLI]: {
     [goerliTestnetTokens.mockA.address]: '10',
