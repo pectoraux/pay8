@@ -8,9 +8,6 @@ import {
   SerializedLockedCakeVault,
   VaultKey,
 } from 'state/types'
-import { deserializeToken } from '@pancakeswap/token-lists'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { DeserializedPool } from '@pancakeswap/pools'
 import { isAddress } from 'utils'
 import { Token } from '@pancakeswap/sdk'
 import { getBep20Contract, getRampAdsContract, getRampContract } from 'utils/contractHelpers'
