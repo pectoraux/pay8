@@ -140,3 +140,15 @@ export const getAffiliateProgramAddress = (chainId?: number) => {
 export const getTradingRewardTopTradesAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.tradingRewardTopTrades, chainId)
 }
+
+export const getRampAdsAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.rampAds, chainId)
+}
+
+export const getRampHelperAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.rampHelper, chainId)
+}
+
+export const getRampFactoryAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.rampFactory, chainId)
+}

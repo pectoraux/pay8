@@ -64,11 +64,12 @@ export const V3_SUBGRAPH_URLS = {
   [ChainId.GOERLI]: 'https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-goerli',
   [ChainId.BSC]: `https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-bsc`,
   [ChainId.BSC_TESTNET]: 'https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-chapel',
+  // TODO: new chains
   [ChainId.ARBITRUM_ONE]: 'https://thegraph.com/hosted-service/subgraph/chef-jojo/exchange-v3-arb',
   [ChainId.ARBITRUM_GOERLI]: 'https://api.thegraph.com/subgraphs/name/chef-jojo/exhange-v3-arb-goerli',
   [ChainId.POLYGON_ZKEVM]: 'https://api.studio.thegraph.com/query/45376/exchange-v3-polygon-zkevm/v0.0.0',
   [ChainId.POLYGON_ZKEVM_TESTNET]: null,
-  [ChainId.ZKSYNC]: 'https://api.studio.thegraph.com/query/45376/exchange-v3-zksync/version/latest',
+  [ChainId.ZKSYNC]: null,
   [ChainId.ZKSYNC_TESTNET]: 'https://api.studio.thegraph.com/query/45376/exchange-v3-zksync-testnet/version/latest',
   [ChainId.LINEA_TESTNET]:
     'https://thegraph.goerli.zkevm.consensys.net/subgraphs/name/pancakeswap/exchange-v3-linea-goerli',
@@ -81,3 +82,30 @@ export const QUOTING_API = `${process.env.NEXT_PUBLIC_QUOTING_API}/v0/quote`
 export const FARMS_API = 'https://farms-api.pancakeswap.com'
 
 export const MERCURYO_WIDGET_ID = process.env.NEXT_PUBLIC_MERCURYO_WIDGET_ID || '76ba4ff5-2686-4ed4-8666-fadb0d9a5888'
+
+export const GRAPH_API_CANCAN = 'https://api.thegraph.com/subgraphs/name/pectoraux/cancan2'
+export const GRAPH_API_BUSINESS = 'https://api.thegraph.com/subgraphs/name/pectoraux/businessvoter'
+export const GRAPH_API_REFERRAL = 'https://api.thegraph.com/subgraphs/name/pectoraux/referralvoter'
+export const GRAPH_API_CONTRIBUTORS = 'https://api.thegraph.com/subgraphs/name/pectoraux/contributorsvoter'
+export const GRAPH_API_SM_VOTER = 'https://api.thegraph.com/subgraphs/name/pectoraux/stakemarketvoter'
+export const GRAPH_API_TB_VOTER = 'https://api.thegraph.com/subgraphs/name/pectoraux/trustbountiesvoter'
+export const GRAPH_API_ACC_VOTER = 'https://api.thegraph.com/subgraphs/name/pectoraux/acceleratorvoter'
+export const GRAPH_API_CONTRIBUTORS_VOTER = 'https://api.thegraph.com/subgraphs/name/pectoraux/contributorsvoter'
+export const GRAPH_API_SSI = 'https://api.thegraph.com/subgraphs/name/pectoraux/ssi'
+export const GRAPH_API_BETTINGS = 'https://api.thegraph.com/subgraphs/name/pectoraux/betting'
+export const GRAPH_API_STAKES = 'https://api.thegraph.com/subgraphs/name/pectoraux/stakemarket'
+export const GRAPH_API_VALUEPOOLS = 'https://api.thegraph.com/subgraphs/name/pectoraux/valuepools'
+export const GRAPH_API_VP_VOTER = 'https://api.thegraph.com/subgraphs/name/pectoraux/valuepoolvoter'
+export const GRAPH_API_AUDITORS = 'https://api.thegraph.com/subgraphs/name/pectoraux/auditors'
+export const GRAPH_API_CARDS = 'https://api.thegraph.com/subgraphs/name/pectoraux/cards'
+export const GRAPH_API_COLLATERALS = 'https://api.thegraph.com/subgraphs/name/pectoraux/collaterals'
+export const GRAPH_API_ARPS = 'https://api.thegraph.com/subgraphs/name/pectoraux/arp'
+export const GRAPH_API_LOTTERIES = 'https://api.thegraph.com/subgraphs/name/pectoraux/lotteries'
+export const GRAPH_API_BILLS = 'https://api.thegraph.com/subgraphs/name/pectoraux/bills'
+export const GRAPH_API_WILLS = 'https://api.thegraph.com/subgraphs/name/pectoraux/wills'
+export const GRAPH_API_GAMES = 'https://api.thegraph.com/subgraphs/name/pectoraux/games'
+export const GRAPH_API_RAMPS = 'https://api.thegraph.com/subgraphs/name/pectoraux/ramps'
+export const GRAPH_API_TRUSTBOUNTIES = 'https://api.thegraph.com/subgraphs/name/pectoraux/trustbounties'
+export const GRAPH_API_WORLDS = 'https://api.thegraph.com/subgraphs/name/pectoraux/worlds'
+export const GRAPH_API_SPONSORS = 'https://api.thegraph.com/subgraphs/name/pectoraux/sponsors'
+export const GRAPH_API_PAIRS = 'https://api.thegraph.com/subgraphs/name/pectoraux/pools'

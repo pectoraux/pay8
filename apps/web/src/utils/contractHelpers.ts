@@ -32,6 +32,9 @@ import {
   getV3MigratorAddress,
   getAffiliateProgramAddress,
   getTradingRewardTopTradesAddress,
+  getRampAdsAddress,
+  getRampHelperAddress,
+  getRampFactoryAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -81,6 +84,11 @@ import { v3MigratorABI } from 'config/abi/v3Migrator'
 import { getViemClients, viemClients } from 'utils/viem'
 import { Abi, PublicClient, WalletClient, getContract as viemGetContract } from 'viem'
 import { Address, erc20ABI, erc721ABI } from 'wagmi'
+
+import rampAbi from 'config/abi/ramp.json'
+import rampHelperAbi from 'config/abi/rampHelper.json'
+import rampFactoryAbi from 'config/abi/rampFactory.json'
+import rampAdsAbi from 'config/abi/rampAds.json'
 
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
@@ -384,6 +392,37 @@ export const getTradingRewardTopTradesContract = (signer?: WalletClient, chainId
   return getContract({
     abi: tradingRewardABI,
     address: getTradingRewardTopTradesAddress(chainId),
+    signer,
+    chainId,
+  })
+}
+
+export const getRampContract = (rampAddress: Address, signer?: WalletClient, chainId?: number) => {
+  return getContract({ abi: rampAbi, address: rampAddress, chainId, signer })
+}
+
+export const getRampAdsContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: rampAdsAbi,
+    address: getRampAdsAddress(chainId),
+    signer,
+    chainId,
+  })
+}
+
+export const getRampFactoryContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: rampFactoryAbi,
+    address: getRampFactoryAddress(chainId),
+    signer,
+    chainId,
+  })
+}
+
+export const getRampHelperContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: rampHelperAbi,
+    address: getRampHelperAddress(chainId),
     signer,
     chainId,
   })

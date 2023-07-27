@@ -603,4 +603,5 @@ export interface State {
   predictions: PredictionsState
   lottery: LotteryState
   pottery: PotteryState
+  ramps: any
 }
