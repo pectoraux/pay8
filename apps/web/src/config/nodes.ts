@@ -14,6 +14,7 @@ export const SERVER_NODES = {
     'https://bsc-dataseed1.binance.org',
   ].filter(Boolean),
   [ChainId.BSC_TESTNET]: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+  [ChainId.FANTOM_TESTNET]: ['https://rpc.testnet.fantom.network'],
   [ChainId.ETHEREUM]: [
     getNodeRealUrlV2(ChainId.ETHEREUM, process.env.SERVER_NODE_REAL_API_ETH),
     'https://eth.llamarpc.com',
@@ -47,6 +48,7 @@ export const PUBLIC_NODES = {
     'https://bsc-dataseed1.binance.org',
   ].filter(Boolean),
   [ChainId.BSC_TESTNET]: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+  [ChainId.FANTOM_TESTNET]: ['https://rpc.testnet.fantom.network'],
   [ChainId.ETHEREUM]: [
     getNodeRealUrlV2(ChainId.ETHEREUM, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH),
     'https://eth.llamarpc.com',

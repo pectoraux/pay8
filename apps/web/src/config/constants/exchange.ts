@@ -28,6 +28,7 @@ export const CHAIN_REFRESH_TIME = {
   [ChainId.GOERLI]: 12_000,
   [ChainId.BSC]: 6_000,
   [ChainId.BSC_TESTNET]: 6_000,
+  [ChainId.FANTOM_TESTNET]: 6_000,
   [ChainId.ARBITRUM_ONE]: 4_000,
   [ChainId.ARBITRUM_GOERLI]: 4_000,
   [ChainId.POLYGON_ZKEVM]: 7_000,

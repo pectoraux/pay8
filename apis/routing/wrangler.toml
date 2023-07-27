@@ -28,4 +28,5 @@ crons = ["0 0 * * *"]
 # - GOERLI_NODE
 # - BSC_NODE
 # - BSC_TESTNET_NODE
+# - FANTOM_TESTNET_NODE
 # Run `echo <VALUE> | wrangler secret put <NAME>` for each of these

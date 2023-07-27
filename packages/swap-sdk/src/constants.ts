@@ -7,6 +7,7 @@ export enum ChainId {
   GOERLI = 5,
   BSC = 56,
   BSC_TESTNET = 97,
+  FANTOM_TESTNET = 4002,
   ZKSYNC_TESTNET = 280,
   ZKSYNC = 324,
   POLYGON_ZKEVM = 1101,
@@ -28,6 +29,7 @@ export const FACTORY_ADDRESS_MAP = {
   [ChainId.GOERLI]: FACTORY_ADDRESS_ETH,
   [ChainId.BSC]: FACTORY_ADDRESS,
   [ChainId.BSC_TESTNET]: '0x6725f303b657a9451d8ba641348b6761a6cc7a17',
+  [ChainId.FANTOM_TESTNET]: '0x843b8C96676018024cb14C9429De8293b9ED9Eda',
   [ChainId.ARBITRUM_ONE]: '0x02a84c1b3BBD7401a5f7fa98a384EBC70bB5749E',
   [ChainId.ARBITRUM_GOERLI]: '0x333EAE459075b1d7dE8eb57997b5d4eee5F1070a',
   [ChainId.POLYGON_ZKEVM]: '0x02a84c1b3BBD7401a5f7fa98a384EBC70bB5749E',
@@ -45,6 +47,7 @@ export const INIT_CODE_HASH_MAP = {
   [ChainId.GOERLI]: INIT_CODE_HASH_ETH,
   [ChainId.BSC]: INIT_CODE_HASH,
   [ChainId.BSC_TESTNET]: '0xd0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66',
+  [ChainId.FANTOM_TESTNET]: '0xc686be96020737842c8d1dc73f500c20206f43ad5e5928a27a00cbf05cf911fa',
   [ChainId.ARBITRUM_ONE]: INIT_CODE_HASH_ETH,
   [ChainId.ARBITRUM_GOERLI]: INIT_CODE_HASH_ETH,
   [ChainId.POLYGON_ZKEVM]: INIT_CODE_HASH_ETH,
@@ -170,6 +173,14 @@ export const WBNB = {
     'Wrapped BNB',
     'https://www.binance.org'
   ),
+  [4002 /* FANTOM_TESTNET */]: new ERC20Token(
+    4002 /* FANTOM_TESTNET */,
+    '0xB8406F928784221b2dDD72a50Cf7563C45e8Ed9c',
+    18,
+    'WBNB',
+    'Wrapped BNB',
+    'https://www.binance.org'
+  ),
 }
 
 export const WNATIVE = {
@@ -177,6 +188,7 @@ export const WNATIVE = {
   [ChainId.GOERLI]: WETH9[ChainId.GOERLI],
   [ChainId.BSC]: WBNB[ChainId.BSC],
   [ChainId.BSC_TESTNET]: WBNB[ChainId.BSC_TESTNET],
+  [ChainId.FANTOM_TESTNET]: WBNB[ChainId.FANTOM_TESTNET],
   [ChainId.ARBITRUM_ONE]: WETH9[ChainId.ARBITRUM_ONE],
   [ChainId.ARBITRUM_GOERLI]: WETH9[ChainId.ARBITRUM_GOERLI],
   [ChainId.POLYGON_ZKEVM]: WETH9[ChainId.POLYGON_ZKEVM],
@@ -197,6 +209,11 @@ export const NATIVE = {
     decimals: 18,
   },
   [ChainId.BSC_TESTNET]: {
+    name: 'Binance Chain Native Token',
+    symbol: 'tBNB',
+    decimals: 18,
+  },
+  [ChainId.FANTOM_TESTNET]: {
     name: 'Binance Chain Native Token',
     symbol: 'tBNB',
     decimals: 18,

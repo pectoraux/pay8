@@ -41,6 +41,7 @@ const zChainId = z.enum([
   String(ChainId.ETHEREUM),
   String(ChainId.GOERLI),
   String(ChainId.BSC_TESTNET),
+  String(ChainId.FANTOM_TESTNET),
   String(ChainId.ZKSYNC_TESTNET),
   String(ChainId.POLYGON_ZKEVM),
 ])

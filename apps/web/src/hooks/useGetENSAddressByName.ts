@@ -14,7 +14,8 @@ export const useGetENSAddressByName = (ensNameOrAddress: string) => {
     enabled:
       (ENS_NAME_REGEX.test(ensNameOrAddress) || ADDRESS_REGEX.test(ensNameOrAddress)) &&
       chainId !== ChainId.BSC &&
-      chainId !== ChainId.BSC_TESTNET,
+      chainId !== ChainId.BSC_TESTNET &&
+      chainId !== ChainId.FANTOM_TESTNET,
   })
   return recipientENSAddress
 }
