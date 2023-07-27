@@ -44,7 +44,7 @@ export const priceHelperTokens = {
 } satisfies Record<number, PriceHelper>
 
 // for testing purposes
-export const DEFAULT_COMMON_PRICE: Record<FarmV3SupportedChainId, CommonPrice> = {
+export const DEFAULT_COMMON_PRICE: any = {
   [ChainId.ETHEREUM]: {},
   [ChainId.GOERLI]: {
     [goerliTestnetTokens.mockA.address]: '10',
