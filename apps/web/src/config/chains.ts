@@ -19,6 +19,7 @@ export const CHAIN_QUERY_NAME = {
   [ChainId.GOERLI]: 'goerli',
   [ChainId.BSC]: 'bsc',
   [ChainId.BSC_TESTNET]: 'bscTestnet',
+  [ChainId.FANTOM_TESTNET]: 'bscTestnet',
   [ChainId.ARBITRUM_ONE]: 'arb',
   [ChainId.ARBITRUM_GOERLI]: 'arbGoerli',
   [ChainId.POLYGON_ZKEVM]: 'polygonZkEVM',
