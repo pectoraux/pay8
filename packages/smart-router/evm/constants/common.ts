@@ -13,6 +13,7 @@ export const CHAIN_ID_TO_CHAIN_NAME = {
   [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.GOERLI]: '',
   [ChainId.BSC_TESTNET]: '',
+  [ChainId.FANTOM_TESTNET]: '',
   [ChainId.ARBITRUM_ONE]: 'arbitrum',
   [ChainId.ARBITRUM_GOERLI]: '',
   [ChainId.POLYGON_ZKEVM]: 'polygon_zkevm',

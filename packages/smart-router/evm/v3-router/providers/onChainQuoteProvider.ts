@@ -19,6 +19,7 @@ const DEFAULT_BATCH_RETRIES = 2
 
 const SUCCESS_RATE_CONFIG = {
   [ChainId.BSC_TESTNET]: 0.1,
+  [ChainId.FANTOM_TESTNET]: 0.1,
   [ChainId.BSC]: 0.1,
   [ChainId.ETHEREUM]: 0.1,
   [ChainId.GOERLI]: 0.1,
@@ -35,6 +36,7 @@ const SUCCESS_RATE_CONFIG = {
 // But for some chains like BSC the block time is quite short so need some extra tolerance
 const BLOCK_CONFLICT_TOLERANCE = {
   [ChainId.BSC_TESTNET]: 3,
+  [ChainId.FANTOM_TESTNET]: 3,
   [ChainId.BSC]: 3,
   [ChainId.ETHEREUM]: 1,
   [ChainId.GOERLI]: 1,

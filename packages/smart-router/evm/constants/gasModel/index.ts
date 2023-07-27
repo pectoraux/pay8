@@ -18,6 +18,7 @@ export const usdGasTokensByChain = {
   [ChainId.GOERLI]: [goerliTestnetTokens.usdc],
   [ChainId.BSC]: [bscTokens.busd],
   [ChainId.BSC_TESTNET]: [bscTestnetTokens.busd],
+  [ChainId.FANTOM_TESTNET]: [bscTestnetTokens.busd],
   [ChainId.ARBITRUM_ONE]: [arbitrumTokens.usdc],
   [ChainId.ARBITRUM_GOERLI]: [arbitrumGoerliTokens.usdc],
   [ChainId.POLYGON_ZKEVM]: [polygonZkEvmTokens.usdt],

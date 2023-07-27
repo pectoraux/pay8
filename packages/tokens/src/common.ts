@@ -254,6 +254,7 @@ export const STABLE_COIN = {
   [ChainId.GOERLI]: USDC[ChainId.GOERLI],
   [ChainId.BSC]: USDT[ChainId.BSC],
   [ChainId.BSC_TESTNET]: BUSD[ChainId.BSC_TESTNET],
+  [ChainId.FANTOM_TESTNET]: BUSD[ChainId.BSC_TESTNET],
   [ChainId.ARBITRUM_ONE]: USDC[ChainId.ARBITRUM_ONE],
   [ChainId.ARBITRUM_GOERLI]: USDC[ChainId.ARBITRUM_GOERLI],
   [ChainId.ZKSYNC]: USDC[ChainId.ZKSYNC],

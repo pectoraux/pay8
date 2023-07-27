@@ -19,6 +19,7 @@ const DEFAULT = {
 
 export const BATCH_MULTICALL_CONFIGS: ChainMap<BatchMulticallConfigs> = {
   [ChainId.BSC_TESTNET]: DEFAULT,
+  [ChainId.FANTOM_TESTNET]: DEFAULT,
   [ChainId.BSC]: {
     defaultConfig: {
       multicallChunk: 50,
