@@ -26,14 +26,15 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { ChainId, Token } from '@pancakeswap/sdk'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useCurrency } from 'hooks/Tokens'
+import { useCallback, useState } from 'react'
 
 import CardActions from './components/PoolCard/CardActions'
 import AprRow from './components/PoolCard/AprRow'
 import CardFooter from './components/PoolCard/CardFooter'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
-import { useCurrency } from 'hooks/Tokens'
-import { useCallback, useState } from 'react'
+import CreateRampModal from './components/CreateRampModal'
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -66,9 +67,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-  const [onPresentCreateGauge] = useModal(
-    <></>, // <CreateRampModal />
-  )
+  const [onPresentCreateGauge] = useModal(<CreateRampModal />)
 
   usePoolsPageFetch()
 
