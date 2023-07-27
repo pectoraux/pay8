@@ -17,7 +17,7 @@ export type MultiChainName = 'BSC' | 'ETH' | 'POLYGON_ZKEVM'
 
 export type MultiChainNameExtend = MultiChainName | 'BSC_TESTNET' | 'ZKSYNC_TESTNET'
 
-export const multiChainName: Record<number | string, MultiChainNameExtend> = {
+export const multiChainName: any = {
   [ChainId.BSC]: 'BSC',
   [ChainId.ETHEREUM]: 'ETH',
   [ChainId.BSC_TESTNET]: 'BSC_TESTNET',
