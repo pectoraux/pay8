@@ -6,7 +6,7 @@ import { farmsV3 as farm56 } from '@pancakeswap/farms/constants/56'
 import { farmsV3 as farm97 } from '@pancakeswap/farms/constants/97'
 import { tradingRewardV3Pair as tradingRewardV3Pair56 } from './56'
 
-export const tradingRewardPairConfigChainMap: Record<FarmV3SupportedChainId, ComputedFarmConfigV3[]> = {
+export const tradingRewardPairConfigChainMap: any = {
   [ChainId.ETHEREUM]: farm1,
   [ChainId.GOERLI]: farm5,
   [ChainId.BSC]: [...farm56, ...tradingRewardV3Pair56],
