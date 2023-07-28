@@ -16,6 +16,7 @@ export * from "./widgets/Farm";
 export * from "./widgets/Ifo";
 export * from "./widgets/RoiCalculator";
 export * as Pool from "./widgets/Pool";
+export * as Ramp from "./widgets/Ramp";
 export * as PoolHelpers from "./widgets/Pool/helpers";
 
 // Theme

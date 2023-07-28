@@ -1,7 +1,9 @@
-import { Text, TokenImage, Pool } from '@pancakeswap/uikit'
+import { Text, TokenImage, Pool, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
+import SaveIcon from 'views/Info/components/SaveIcon'
+import { useWatchlistTokens } from 'state/user/hooks'
 
 interface NameCellProps {
   pool: Pool.DeserializedPool<Token>
@@ -23,12 +25,21 @@ const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
   let title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
   let subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
 
+  const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
+
   return (
     <StyledCell role="cell">
       <TokenImage mr="8px" width={40} height={40} src={pool?.avatar} />
       <Pool.CellContent>
         <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
-          {title}
+          <Flex flexDirection="row">
+            {title}
+            <SaveIcon
+              fill={watchlistTokens.includes(pool?.id)}
+              onClick={() => addWatchlistToken(pool?.id)}
+              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
+            />
+          </Flex>
         </Text>
         <Text fontSize="12px" color="textSubtle">
           {subtitle}

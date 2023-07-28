@@ -447,9 +447,9 @@ export function useTrackedTokenPairs(): [ERC20Token, ERC20Token][] {
 
 export const useWatchlistTokens = (): [string[], (address: string) => void] => {
   const dispatch = useAppDispatch()
-  const savedTokensFromSelector = useSelector((state: AppState) => state.user.watchlistTokens)
+  const savedTokensFromSelector = useSelector((state: any) => state.user.watchlistTokens)
   const updatedSavedTokens = useCallback(
-    (address: string) => {
+    (address: any) => {
       dispatch(addWatchlistToken({ address }))
     },
     [dispatch],

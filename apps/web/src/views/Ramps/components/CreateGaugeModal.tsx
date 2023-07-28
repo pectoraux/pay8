@@ -20,8 +20,35 @@ import { useRouter } from 'next/router'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { useAppDispatch } from 'state'
 import { fetchRampsAsync } from 'state/ramps'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton } from './styles'
+import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
+import MintStage from './MintStage'
+import BurnStage from './BurnStage'
+import PartnerStage from './PartnerStage'
+import BuyRampStage from './BuyRampStage'
+import UpdateDevStage from './UpdateDevStage'
+import BuyAccountStage from './BuyAccountStage'
+import UpdateAdminStage from './UpdateAdminStage'
+import CreateClaimStage from './CreateClaimStage'
+import UpdateBadgeStage from './UpdateBadgeStage'
+import ClaimRevenueStage from './ClaimRevenueStage'
+import AdminWithdrawStage from './AdminWithdrawStage'
+import CreateProtocolStage from './CreateProtocolStage'
+import UpdateBlacklistStage from './UpdateBlacklistStage'
+import UpdateParametersStage from './UpdateParametersStage'
+import DeleteStage from './DeleteStage'
+import InitRampStage from './InitRampStage'
+import DeleteRampStage from './DeleteRampStage'
+import SponsorTagStage from './SponsorTagStage'
+import UpdateOwnerStage from './UpdateOwnerStage'
+import UpdateTokenStage from './UpdateTokenStage'
+import UnlockBountyStage from './UnlockBountyStage'
+import UpdateProfileStage from './UpdateProfileStage'
+import AddExtraTokenStage from './AddExtraTokenStage'
+import UpdateDevTokenStage from './UpdateDevTokenStage'
+import UpdateBountyStage from './UpdateBountyStage'
+import UpdateProtocolStage from './UpdateProtocolStage'
+import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -1000,51 +1027,49 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
         </Flex>
       )}
-      {/* {stage === LockStage.UPDATE_PARAMETERS && 
-      <UpdateParametersStage 
-        state={state} 
-        setState={setState} 
-        currency={currency} 
-        nftFilters={nftFilters} 
-        setNftFilters={setNftFilters}
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_DEV && 
-      <UpdateDevStage
-        state={state} 
-        handleChange={handleChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_ADMIN && 
-      <UpdateAdminStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_BLACKLIST && 
-      <UpdateBlacklistStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.CLAIM && 
-      <CreateClaimStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.CLAIM_REVENUE && 
-      <ClaimRevenueStage
-        state={state} 
-        handleChange={handleChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.MINT && 
+      {stage === LockStage.UPDATE_PARAMETERS && (
+        <UpdateParametersStage
+          state={state}
+          setState={setState}
+          currency={currency}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_DEV && (
+        <UpdateDevStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_ADMIN && (
+        <UpdateAdminStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_BLACKLIST && (
+        <UpdateBlacklistStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.CLAIM && (
+        <CreateClaimStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.CLAIM_REVENUE && (
+        <ClaimRevenueStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.MINT && (
         <MintStage
           state={state}
           pool={pool}
@@ -1052,140 +1077,109 @@ const CreateGaugeModal: React.FC<any> = ({
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
           rampHelperContract={rampHelperContract}
-          continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.BURN && 
-      <BurnStage
-        state={state}
-        handleChange={handleChange}
-        rampAddress={pool?.rampAddress}
-        rampHelperContract={rampHelperContract}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.PARTNER && 
-      <PartnerStage 
-        state={state}
-        handleChange={handleChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.CREATE_PROTOCOL && 
-      <CreateProtocolStage
-        state={state} 
-        handleChange={handleChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_PROTOCOL && 
-      <UpdateProtocolStage 
-        state={state} 
-        handleChange={handleChange} 
-        handleRawValueChange={handleRawValueChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_INDIVIDUAL_PROTOCOL && 
-      <UpdateProtocolStage 
-        state={state} 
-        handleChange={handleChange} 
-        handleRawValueChange={handleRawValueChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.BUY_ACCOUNT && 
-      <BuyAccountStage
-        state={state}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.BUY_RAMP && 
-      <BuyRampStage
-        state={state}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.ADMIN_WITHDRAW && 
-      <AdminWithdrawStage 
-        state={state}
-        currency={currency} 
-        pendingRevenue={adminARP?.pendingRevenue}
-        continueToNextStage={continueToNextStage} 
-        handleRawValueChange={handleRawValueChange}
-        />}
-      {stage === LockStage.UPDATE_BADGE_ID && 
-      <UpdateBadgeStage
-        state={state}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_TOKEN_ID && 
-      <UpdateTokenStage
-        state={state}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_DEV_TOKEN_ID && 
-      <UpdateDevTokenStage
-        state={state}
-        nftFilters={nftFilters} 
-        setNftFilters={setNftFilters}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_PROFILE_ID && 
-      <UpdateProfileStage
-        state={state}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-        {stage === LockStage.UPDATE_BOUNTY && 
-        <UpdateBountyStage 
-          state={state}
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.ADD_EXTRA_TOKEN && 
-        <AddExtraTokenStage 
-          state={state}
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UNLOCK_BOUNTY && 
-        <UnlockBountyStage 
-          state={state}
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_OWNER && 
-        <UpdateOwnerStage
-          state={state}
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.INIT_RAMP && 
-        <InitRampStage
-          state={state}
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
+          continueToNextStage={continueToNextStage}
         />
-      }
-      {stage === LockStage.SPONSOR_TAG && 
+      )}
+      {stage === LockStage.BURN && (
+        <BurnStage
+          state={state}
+          handleChange={handleChange}
+          rampAddress={pool?.rampAddress}
+          rampHelperContract={rampHelperContract}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.PARTNER && (
+        <PartnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.CREATE_PROTOCOL && (
+        <CreateProtocolStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_PROTOCOL && (
+        <UpdateProtocolStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_INDIVIDUAL_PROTOCOL && (
+        <UpdateProtocolStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BUY_ACCOUNT && (
+        <BuyAccountStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.BUY_RAMP && (
+        <BuyRampStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.ADMIN_WITHDRAW && (
+        <AdminWithdrawStage
+          state={state}
+          currency={currency}
+          pendingRevenue={adminARP?.pendingRevenue}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
+      )}
+      {stage === LockStage.UPDATE_BADGE_ID && (
+        <UpdateBadgeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_TOKEN_ID && (
+        <UpdateTokenStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_DEV_TOKEN_ID && (
+        <UpdateDevTokenStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_PROFILE_ID && (
+        <UpdateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_BOUNTY && (
+        <UpdateBountyStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.ADD_EXTRA_TOKEN && (
+        <AddExtraTokenStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UNLOCK_BOUNTY && (
+        <UnlockBountyStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_OWNER && (
+        <UpdateOwnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.INIT_RAMP && (
+        <InitRampStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.SPONSOR_TAG && (
         <SponsorTagStage
           state={state}
           account={account}
           currency={currency}
-          handleChange={handleChange} 
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
+          continueToNextStage={continueToNextStage}
         />
-      }
-      {stage === LockStage.UPDATE_SPONSOR_MEDIA && 
+      )}
+      {stage === LockStage.UPDATE_SPONSOR_MEDIA && (
         <UpdateSponsorMediaStage
           state={state}
-          handleChange={handleChange} 
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
+          continueToNextStage={continueToNextStage}
         />
-      }
+      )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.DELETE_RAMP && <DeleteRampStage continueToNextStage={continueToNextStage} />} */}
-      {stage === LockStage.APPROVE_AND_CONFIRM && (
+      {stage === LockStage.DELETE_RAMP && <DeleteRampStage continueToNextStage={continueToNextStage} />}
+      {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"
           handleApprove={handleApprove}
