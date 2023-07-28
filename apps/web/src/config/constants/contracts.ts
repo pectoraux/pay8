@@ -248,4 +248,12 @@ export default {
     56: '0xB69C2F1ceB9e8eCa8B40cD0935E3160ecb065EC5',
     97: '0x87EDbF47a1e2373282c34298F4041c0c80e328E8',
   },
+  mobility: {
+    97: '0xe12e51A9007abA2575B7e4227f2520Fb1E9EDf74',
+    56: '0x',
+  },
+  delivery: {
+    97: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    56: '0x',
+  },
 } as const satisfies Record<string, Record<number, `0x${string}`>>

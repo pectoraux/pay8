@@ -13,6 +13,7 @@ interface CurrencyInputPanelProps extends Omit<NumericalInputProps, "onBlur"> {
   top?: React.ReactNode;
   bottom?: React.ReactNode;
   showBridgeWarning?: boolean;
+  showInput?: boolean;
 }
 export function CurrencyInputPanel({
   value,
@@ -25,6 +26,7 @@ export function CurrencyInputPanel({
   disabled,
   error,
   loading,
+  showInput,
   showBridgeWarning,
 }: CurrencyInputPanelProps) {
   return (
@@ -32,57 +34,65 @@ export function CurrencyInputPanel({
       <AtomBox display="flex" alignItems="center" justifyContent="space-between">
         {top}
       </AtomBox>
-      <AtomBox
-        display="flex"
-        flexDirection="column"
-        flexWrap="nowrap"
-        position="relative"
-        backgroundColor="backgroundAlt"
-        zIndex="1"
-      >
+      {showInput ? (
         <AtomBox
-          as="label"
-          className={inputContainerVariants({
-            hasZapStyle: !!zapStyle,
-            showBridgeWarning: !!showBridgeWarning,
-            error: Boolean(error),
-          })}
+          display="flex"
+          flexDirection="column"
+          flexWrap="nowrap"
+          position="relative"
+          backgroundColor="backgroundAlt"
+          zIndex="1"
         >
           <AtomBox
-            display="flex"
-            flexDirection="row"
-            flexWrap="nowrap"
-            color="text"
-            fontSize="12px"
-            lineHeight="16px"
-            px="16px"
-            pt="12px"
+            as="label"
+            className={inputContainerVariants({
+              hasZapStyle: !!zapStyle,
+              showBridgeWarning: !!showBridgeWarning,
+              error: Boolean(error),
+            })}
           >
-            <NumericalInput
-              error={Boolean(error)}
-              disabled={disabled}
-              loading={loading}
-              className="token-amount-input"
-              value={value}
-              onBlur={onInputBlur}
-              onUserInput={(val) => {
-                onUserInput(val);
-              }}
-            />
+            <AtomBox
+              display="flex"
+              flexDirection="row"
+              flexWrap="nowrap"
+              color="text"
+              fontSize="12px"
+              lineHeight="16px"
+              px="16px"
+              pt="12px"
+            >
+              <NumericalInput
+                error={Boolean(error)}
+                disabled={disabled}
+                loading={loading}
+                className="token-amount-input"
+                value={value}
+                onBlur={onInputBlur}
+                onUserInput={(val) => {
+                  onUserInput(val);
+                }}
+              />
+            </AtomBox>
+            {bottom}
           </AtomBox>
-          {bottom}
+
+          {error ? (
+            <Text pb="8px" fontSize="12px" color="red">
+              {error}
+            </Text>
+          ) : null}
+
+          {disabled && (
+            <AtomBox
+              role="presentation"
+              position="absolute"
+              inset="0px"
+              backgroundColor="backgroundAlt"
+              opacity="0.6"
+            />
+          )}
         </AtomBox>
-
-        {error ? (
-          <Text pb="8px" fontSize="12px" color="red">
-            {error}
-          </Text>
-        ) : null}
-
-        {disabled && (
-          <AtomBox role="presentation" position="absolute" inset="0px" backgroundColor="backgroundAlt" opacity="0.6" />
-        )}
-      </AtomBox>
+      ) : null}
     </AtomBox>
   );
 }

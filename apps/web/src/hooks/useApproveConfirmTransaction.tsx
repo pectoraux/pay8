@@ -86,12 +86,7 @@ type ApproveConfirmTransaction = {
   onApproveSuccess?: ({ state, receipt }: OnSuccessProps) => void
 } & (CustomApproveProps | ERC20TokenApproveProps)
 
-const useApproveConfirmTransaction = ({
-  onConfirm,
-  onSuccess = noop,
-  onApproveSuccess = noop,
-  ...props
-}: ApproveConfirmTransaction) => {
+const useApproveConfirmTransaction = ({ onConfirm, onSuccess = noop, onApproveSuccess = noop, ...props }: any) => {
   const { onApprove, onRequiresApproval } =
     props && 'onApprove' in props ? props : { onRequiresApproval: undefined, onApprove: undefined }
   const { minAmount, spender, token, targetAmount } =

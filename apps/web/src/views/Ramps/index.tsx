@@ -17,6 +17,7 @@ import {
   useModal,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
 import Page from 'components/Layout/Page'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -85,14 +86,18 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
                   {t('Create contract ')}{' '}
                 </Text>
-                {/* {isBounties && 
-                <CurrencyInputPanel
-                  showInput={false}
-                  currency={currency ?? inputCurency}
-                  onCurrencySelect={handleInputSelect}
-                  otherCurrency={currency ?? inputCurency}
-                  id='ramps-currency'
-                />} */}
+                {isBounties && (
+                  <CurrencyInputPanel
+                    id="ramps-currency"
+                    showUSDPrice
+                    showMaxButton
+                    showCommonBases
+                    showInput={false}
+                    showQuickInputButton
+                    currency={currency ?? inputCurency}
+                    onCurrencySelect={handleInputSelect}
+                  />
+                )}
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>

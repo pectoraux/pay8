@@ -7,8 +7,10 @@ import { Token } from '@pancakeswap/sdk'
 
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import CreateGaugeModal from '../../CreateGaugeModal'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -31,16 +33,16 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSession
   const rampCurrencyInput = useCurrency(currencyId)
   const [currency, setCurrency] = useState(rampAccount?.address)
   const stakingTokenContract = useERC20(rampAccount?.token?.address || '')
+  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
 
   const [openPresentControlPanel] = useModal(
-    <></>,
-    // <CreateGaugeModal
-    //   variant={variant}
-    //   location="staked"
-    //   pool={pool}
-    //   currency={currency ?? rampCurrencyInput}
-    //   rampAccount={rampAccount}
-    // />
+    <CreateGaugeModal
+      variant={variant}
+      location="staked"
+      pool={pool}
+      currency={currency ?? rampCurrencyInput}
+      rampAccount={rampAccount}
+    />,
   )
 
   if (!account) {
@@ -90,13 +92,17 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSession
         </Text>
       </ActionTitles>
       <>
-        {/* <CurrencyInputPanel
+        <CurrencyInputPanel
+          id={`ramp-stake-${pool?.sousId}`}
+          showUSDPrice
+          showMaxButton
+          showCommonBases
           showInput={false}
+          showQuickInputButton
           currency={currency ?? rampCurrencyInput}
-          onCurrencySelect={handleInputSelect}
           otherCurrency={currency ?? rampCurrencyInput}
-          id={pool?.sousId}
-        /> */}
+          onCurrencySelect={handleInputSelect}
+        />
         <ActionContent>
           <Button width="100%" onClick={openPresentControlPanel} variant="secondary">
             {t('Control Panel')}

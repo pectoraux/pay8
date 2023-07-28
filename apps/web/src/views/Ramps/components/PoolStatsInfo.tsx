@@ -26,6 +26,7 @@ import { useCurrPool } from 'state/ramps/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/ramps'
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -44,9 +45,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(
-    <></>, // <WebPagesModal height="500px" nfts={pool?.nfts} />
-  )
+  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
   console.log('onPresentNFTs====================>', pool)
   const goToContract = () => {
     if (isBounty) {

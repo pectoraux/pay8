@@ -152,3 +152,7 @@ export const getRampHelperAddress = (chainId?: number) => {
 export const getRampFactoryAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.rampFactory, chainId)
 }
+
+export const getVeFromWorkspace = (wk: string, chainId?: number) => {
+  return getAddressFromMap(addresses[wk], chainId)
+}
