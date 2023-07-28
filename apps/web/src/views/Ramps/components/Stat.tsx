@@ -4,7 +4,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { isLocked, isStaked } from 'utils/cakePool'
 import { Token } from '@pancakeswap/sdk'
 import useAvgLockDuration from './LockedPool/hooks/useAvgLockDuration'
-import Apr from './Apr'
 
 export const PerformanceFee: React.FC<
   React.PropsWithChildren<{ userData?: Pool.DeserializedVaultUser; performanceFeeAsDecimal?: number }>
@@ -88,7 +87,7 @@ export const AprInfo: React.FC<
   return (
     <Flex justifyContent="space-between" alignItems="center">
       <Text small>{t('APR')}:</Text>
-      <Apr pool={pool} showIcon stakedBalance={stakedBalance} performanceFee={0} fontSize="14px" />
+      {/* <Apr pool={pool} showIcon stakedBalance={stakedBalance} performanceFee={0} fontSize="14px" /> */}
     </Flex>
   )
 }
