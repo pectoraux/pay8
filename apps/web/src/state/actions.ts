@@ -10,3 +10,4 @@ export {
   updateUserPendingReward,
   updateUserStakedBalance,
 } from './pools'
+export { fetchRampsAsync } from './ramps'

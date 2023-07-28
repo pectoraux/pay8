@@ -12,7 +12,8 @@
     "test:config": "vitest --run --config vitest-config-test.config.ts",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:style": "npx stylelint '**/*.{ts,tsx}'",
-    "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\""
+    "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
+    "typechain": "typechain --out-dir src/config/abi/types --target=ethers-v5 \"src/config/abi/*.json\""
   },
   "browserslist": {
     "production": [
@@ -41,6 +42,8 @@
     "react-iframe": "^1.8.5",
     "stripe": "^9.13.0",
     "nodemailer-markdown": "^1.0.3",
+    "@ethersproject/contracts": "^5.0.0",
+    "@ethersproject/providers": "^5.0.0",
     "@gelatonetwork/limit-orders-lib": "^4.1.0",
     "@gnosis.pm/safe-apps-wagmi": "^1.2.0",
     "@next/bundle-analyzer": "13.0.7",
@@ -116,6 +119,7 @@
     "viem": "^1.2.9"
   },
   "devDependencies": {
+    "@typechain/ethers-v5": "^8.0.5",
     "@next/eslint-plugin-next": "13.4.2",
     "@stylelint/postcss-css-in-js": "^0.37.2",
     "@testing-library/jest-dom": "^5.16.2",

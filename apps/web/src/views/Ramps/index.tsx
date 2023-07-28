@@ -60,10 +60,12 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { chainId } = useActiveChainId()
   // const { pools, userDataLoaded } = usePoolsWithVault()
   const { pools, userDataLoaded: rampsLoaded } = usePoolsWithFilterSelector()
-  const { pools: bounties, userDataLoaded: bountiesLoaded } = usePoolsWithFilterSelector()
-
+  // const { pools: bounties, userDataLoaded: bountiesLoaded } = usePoolsWithFilterSelector()
+  console.log('pools=============>', pools)
   const isBounties = useRouter().pathname.includes('bounties')
-  const userDataLoaded = isBounties ? bountiesLoaded : rampsLoaded
+  const userDataLoaded = isBounties
+    ? true // bountiesLoaded
+    : rampsLoaded
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])

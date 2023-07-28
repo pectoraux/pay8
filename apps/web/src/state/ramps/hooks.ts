@@ -39,6 +39,7 @@ export const useFetchPublicPoolsData = () => {
   useSlowRefreshEffect(() => {
     const fetchPoolsDataWithFarms = async () => {
       batch(() => {
+        console.log('fetchRampsAsync===================>Done')
         dispatch(fetchRampsAsync())
       })
     }

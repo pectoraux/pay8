@@ -90,6 +90,11 @@ import rampHelperAbi from 'config/abi/rampHelper.json'
 import rampFactoryAbi from 'config/abi/rampFactory.json'
 import rampAdsAbi from 'config/abi/rampAds.json'
 
+import { rampABI } from 'config/abi/ramp'
+import { rampHelperABI } from 'config/abi/rampHelper'
+import { rampFactoryABI } from 'config/abi/rampFactory'
+import { rampAdsABI } from 'config/abi/rampAds'
+
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
   address,
@@ -398,12 +403,12 @@ export const getTradingRewardTopTradesContract = (signer?: WalletClient, chainId
 }
 
 export const getRampContract = (rampAddress: Address, signer?: WalletClient, chainId?: number) => {
-  return getContract({ abi: rampAbi, address: rampAddress, chainId, signer })
+  return getContract({ abi: rampABI, address: rampAddress, signer, chainId })
 }
 
 export const getRampAdsContract = (signer?: WalletClient, chainId?: number) => {
   return getContract({
-    abi: rampAdsAbi,
+    abi: rampAdsABI,
     address: getRampAdsAddress(chainId),
     signer,
     chainId,
@@ -412,7 +417,7 @@ export const getRampAdsContract = (signer?: WalletClient, chainId?: number) => {
 
 export const getRampFactoryContract = (signer?: WalletClient, chainId?: number) => {
   return getContract({
-    abi: rampFactoryAbi,
+    abi: rampFactoryABI,
     address: getRampFactoryAddress(chainId),
     signer,
     chainId,
@@ -421,7 +426,7 @@ export const getRampFactoryContract = (signer?: WalletClient, chainId?: number) 
 
 export const getRampHelperContract = (signer?: WalletClient, chainId?: number) => {
   return getContract({
-    abi: rampHelperAbi,
+    abi: rampHelperABI,
     address: getRampHelperAddress(chainId),
     signer,
     chainId,

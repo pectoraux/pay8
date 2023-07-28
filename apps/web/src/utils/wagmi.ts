@@ -17,7 +17,41 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 const mostNodesConfig = Object.values(PUBLIC_NODES).reduce((prev, cur) => {
   return cur.length > prev ? cur.length : prev
 }, 0)
-console.log('CHAINS================>', CHAINS)
+
+const getNodeRealUrl = (networkName: string) => {
+  let host = null
+
+  switch (networkName) {
+    case 'homestead':
+      if (process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) {
+        host = `eth-mainnet.nodereal.io/v1/${process.env.NEXT_PUBLIC_NODE_REAL_API_ETH}`
+      }
+      break
+    case 'rinkeby':
+      if (process.env.NEXT_PUBLIC_NODE_REAL_API_RINKEBY) {
+        host = `eth-rinkeby.nodereal.io/v1/${process.env.NEXT_PUBLIC_NODE_REAL_API_RINKEBY}`
+      }
+      break
+    case 'goerli':
+      if (process.env.NEXT_PUBLIC_NODE_REAL_API_GOERLI) {
+        host = `eth-goerli.nodereal.io/v1/${process.env.NEXT_PUBLIC_NODE_REAL_API_GOERLI}`
+      }
+      break
+    default:
+      host = null
+  }
+
+  if (!host) {
+    return null
+  }
+
+  const url = `https://${host}`
+  return {
+    http: url,
+    webSocket: url.replace(/^http/i, 'wss').replace('.nodereal.io/v1', '.nodereal.io/ws/v1'),
+  }
+}
+
 export const { publicClient, chains } = configureChains(
   CHAINS,
   Array.from({ length: mostNodesConfig })

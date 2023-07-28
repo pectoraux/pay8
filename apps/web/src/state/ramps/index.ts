@@ -75,6 +75,7 @@ export const fetchRampsAsync = () => async (dispatch) => {
     const data = ramps.filter((ramp) => !!ramp)
     console.log('fetchBusinesses================>', data, ramps)
     dispatch(setRampsPublicData(data || []))
+    console.log('fetchBusinesses================>Done')
   } catch (error) {
     console.error('[Pools Action]===============>', error)
   }
@@ -141,6 +142,7 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setRampsPublicData: (state, action) => {
+      console.log('setRampsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setPoolUserData: (state, action) => {

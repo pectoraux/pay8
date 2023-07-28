@@ -30,8 +30,8 @@ const NameCell: React.FC<React.PropsWithChildren<NameCellProps>> = ({ pool }) =>
   const { isMobile } = useMatchBreakpoints()
   const { sousId, stakingToken, earningToken, userData, isFinished, vaultKey, totalStaked } = pool
 
-  const stakingTokenSymbol = stakingToken.symbol
-  const earningTokenSymbol = earningToken.symbol
+  const stakingTokenSymbol = stakingToken?.symbol ?? ''
+  const earningTokenSymbol = earningToken?.symbol ?? ''
 
   let title: React.ReactNode = `${t('Earn')} ${earningTokenSymbol}`
   let subtitle: React.ReactNode = `${t('Stake')} ${stakingTokenSymbol}`
@@ -39,14 +39,14 @@ const NameCell: React.FC<React.PropsWithChildren<NameCellProps>> = ({ pool }) =>
 
   return (
     <StyledCell role="cell">
-      <TokenPairImage
+      {/* <TokenPairImage
         primaryToken={earningToken}
         secondaryToken={stakingToken}
         mr="8px"
         width={40}
         height={40}
         style={{ minWidth: 40 }}
-      />
+      /> */}
       <Pool.CellContent>
         <Text fontSize="12px" bold color={isFinished ? 'failure' : 'secondary'} textTransform="uppercase">
           {t('Staked')}

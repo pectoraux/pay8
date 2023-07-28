@@ -6,7 +6,11 @@ import { getBep20Contract, getRampAdsContract, getRampContract } from 'utils/con
 import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_RAMPS } from 'config/constants/endpoints'
+import { publicClient } from 'utils/wagmi'
 import { rampFields, accountFields, sessionFields } from './queries'
+import { rampABI } from 'config/abi/ramp'
+import { erc20ABI } from 'wagmi'
+import { rampAdsABI } from 'config/abi/rampAds'
 
 export const fetchRampData = async (rampAddress) => {
   return (await firestore.collection('ramps').doc(rampAddress).get()).data()
@@ -157,20 +161,52 @@ export const fetchRamp = async (address) => {
   try {
     const rampAddress = address?.toLowerCase()
     const gauge = await getRampSg(rampAddress)
-    console.log('fetchRamp=========>', rampAddress, gauge)
     const rampContract = getRampContract(rampAddress)
     const rampAdsContract = getRampAdsContract()
+    console.log('fetchRamp=========>', rampAddress, gauge, rampContract)
     // const serializedTokens = serializeTokens()
-    const [
-      devaddr_,
-      tokens,
-      [rampBadgeId, rampTokenId, mintFee, burnFee, rampSalePrice, soldAccounts, automatic, _ve],
-    ] = await Promise.all([
-      rampContract.read?.devaddr_(),
-      rampContract.read.getAllTokens([0]),
-      rampContract.read.getParams() as any,
-    ])
-    console.log('fetchRamp1=========>', _ve)
+    const bscClient = publicClient({ chainId: 4002 })
+    const [devaddr_, tokens, params] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: rampAddress,
+          abi: rampABI,
+          functionName: 'devaddr_',
+        },
+        {
+          address: rampAddress,
+          abi: rampABI,
+          functionName: 'getAllTokens',
+          args: [BigInt(0)],
+        },
+        {
+          address: rampAddress,
+          abi: rampABI,
+          functionName: 'getParams',
+        },
+      ],
+    })
+    console.log('fetchRamp0=========>', devaddr_, tokens, params)
+    const rampBadgeId = params.result[0]
+    const rampTokenId = params.result[1]
+    const mintFee = params.result[2]
+    const burnFee = params.result[3]
+    const rampSalePrice = params.result[4]
+    const soldAccounts = params.result[5]
+    const automatic = params.result[6]
+    const _ve = params.result[7]
+    console.log(
+      'fetchRamp1=========>',
+      rampBadgeId,
+      rampTokenId,
+      mintFee,
+      burnFee,
+      rampSalePrice,
+      soldAccounts,
+      automatic,
+      _ve,
+    )
     const { sessions, clientIds, secretKeys, publishableKeys, ...rest } = gauge
     const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
     const allSessions = await Promise.all(
@@ -185,12 +221,26 @@ export const fetchRamp = async (address) => {
                 privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
               })
             : ''
-          const tokenContract = getBep20Contract(session?.tokenAddress)
-          const [name, symbol, decimals] = await Promise.all([
-            tokenContract.read.name(),
-            tokenContract.read.symbol(),
-            tokenContract.read.decimals(),
-          ])
+          const [name, symbol, decimals] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: session?.tokenAddress,
+                abi: erc20ABI,
+                functionName: 'name',
+              },
+              {
+                address: session?.tokenAddress,
+                abi: erc20ABI,
+                functionName: 'symbol',
+              },
+              {
+                address: session?.tokenAddress,
+                abi: erc20ABI,
+                functionName: 'decimals',
+              },
+            ],
+          })
           if (session.mintSession) {
             ppData = await Promise.all([axios.post('/api/check', { sessionId: session.sessionId, sk: sk0 })])
           }
@@ -212,34 +262,54 @@ export const fetchRamp = async (address) => {
     )
     console.log('fetchRamp2=========>', allSessions, rampAddress, tokens)
     let accounts = []
+    const _tokens = tokens as any
     try {
       accounts = await Promise.all(
-        (tokens as any).map(async (token) => {
-          const [
-            [status, tokenId, bountyId, profileId, badgeId, minted, burnt, salePrice, maxPartners, cap],
-            [mintable, balance, collateralStatus],
-          ] = await Promise.all([
-            rampContract.read.protocolInfo(token) as any,
-            rampAdsContract.read.mintAvailable(rampAddress, token) as any,
-          ])
-          return {
-            status: status === 0 ? 'Sold' : status === 1 ? 'Open' : 'Close',
-            isOverCollateralised: collateralStatus === 0,
-            backingBalance: new BigNumber(balance._hex).toJSON(),
-            mintable: new BigNumber(mintable._hex).toJSON(),
-            tokenId: new BigNumber(tokenId._hex).toJSON(),
-            bountyId: new BigNumber(bountyId._hex).toJSON(),
-            profileId: new BigNumber(profileId._hex).toJSON(),
-            badgeId: new BigNumber(badgeId._hex).toJSON(),
-            minted: new BigNumber(minted._hex).toJSON(),
-            burnt: new BigNumber(burnt._hex).toJSON(),
-            salePrice: new BigNumber(salePrice._hex).toJSON(),
-            maxPartners: new BigNumber(maxPartners._hex).toJSON(),
-            cap: new BigNumber(cap._hex).toJSON(),
-            token: new Token(56, token, 18, 'TUSD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
-            // allTokens.find((tk) => tk.address === token),
-          }
-        }),
+        !_tokens?.length
+          ? []
+          : _tokens.map(async (token) => {
+              const [protocolInfo, mintAvailable] = await bscClient.multicall({
+                allowFailure: true,
+                contracts: [
+                  {
+                    address: rampAddress,
+                    abi: rampABI,
+                    functionName: 'protocolInfo',
+                    args: [token],
+                  },
+                  {
+                    address: rampAddress,
+                    abi: rampAdsABI,
+                    functionName: 'mintAvailable',
+                    args: [rampAddress, token],
+                  },
+                ],
+              })
+              // const [
+              //   [status, tokenId, bountyId, profileId, badgeId, minted, burnt, salePrice, maxPartners, cap],
+              //   [mintable, balance, collateralStatus],
+              // ] = await Promise.all([
+              //   rampContract.read.protocolInfo(token) as any,
+              //   rampAdsContract.read.mintAvailable(rampAddress, token) as any,
+              // ])
+              return {
+                status: protocolInfo[0] === 0 ? 'Sold' : protocolInfo[0] === 1 ? 'Open' : 'Close',
+                isOverCollateralised: mintAvailable[2] === 0,
+                backingBalance: mintAvailable[1]?.toString(),
+                mintable: mintAvailable[0]?.toString(),
+                tokenId: protocolInfo[1]?.toString(),
+                bountyId: protocolInfo[2]?.toString(),
+                profileId: protocolInfo[3]?.toString(),
+                badgeId: protocolInfo[4]?.toString(),
+                minted: protocolInfo[5]?.toString(),
+                burnt: protocolInfo[6]?.toString(),
+                salePrice: protocolInfo[7]?.toString(),
+                maxPartners: protocolInfo[8]?.toString(),
+                cap: protocolInfo[9]?.toString(),
+                token: new Token(56, token, 18, 'TUSD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
+                // allTokens.find((tk) => tk.address === token),
+              }
+            }),
       )
     } catch (err) {
       console.log('mintAvailable========>', err)
@@ -340,7 +410,7 @@ export const fetchRamp = async (address) => {
           privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
         })
       : ''
-    console.log('secretKeys================>', [sk0, sk1, sk2, sk3, sk4])
+    console.log('secretKeys================>', [sk0, sk1, sk2, sk3, sk4], rampBadgeId.toString())
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
       ...rest,
@@ -350,15 +420,15 @@ export const fetchRamp = async (address) => {
       allSessions,
       rampAddress,
       accounts,
-      devaddr_,
+      // devaddr_,
       automatic,
       _ve,
-      rampBadgeId: new BigNumber(rampBadgeId._hex).toJSON(),
-      rampTokenId: new BigNumber(rampTokenId._hex).toJSON(),
-      mintFee: new BigNumber(mintFee._hex).toJSON(),
-      burnFee: new BigNumber(burnFee._hex).toJSON(),
-      rampSalePrice: new BigNumber(rampSalePrice._hex).toJSON(),
-      soldAccounts: new BigNumber(soldAccounts._hex).toJSON(),
+      rampBadgeId: rampBadgeId.toString(),
+      rampTokenId: rampTokenId.toString(),
+      mintFee: mintFee.toString(),
+      burnFee: burnFee.toString(),
+      rampSalePrice: rampSalePrice.toString(),
+      soldAccounts: soldAccounts.toString(),
     }
   } catch (err) {
     console.log('fetchRamp err================>', err, address)
