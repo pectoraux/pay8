@@ -26,7 +26,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({
+const AdminWithdrawStage: React.FC<any> = ({
   state,
   currency,
   pendingRevenue,
@@ -84,4 +84,4 @@ const SetPriceStage: React.FC<any> = ({
   )
 }
 
-export default SetPriceStage
+export default AdminWithdrawStage
