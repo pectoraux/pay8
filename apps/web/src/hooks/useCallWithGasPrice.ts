@@ -69,7 +69,7 @@ export function useCallWithGasPrice() {
         : never,
     >(
       contract: { abi: TAbi; account: Account; chain: Chain; address: Address },
-      methodName: InferFunctionName<TAbi, TFunctionName>,
+      methodName: any,
       methodArgs?: Args extends never ? undefined : Args,
       overrides?: Omit<CallParameters, 'chain' | 'to' | 'data'>,
     ): Promise<SendTransactionResult> => {

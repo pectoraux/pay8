@@ -153,6 +153,18 @@ export const getRampFactoryAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.rampFactory, chainId)
 }
 
+export const getTrustBountiesAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.trustbounties, chainId)
+}
+
+export const getTrustBountiesHelperAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.trustbountiesHelper, chainId)
+}
+
+export const getTrustBountiesVoterAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.trustbountiesvoter, chainId)
+}
+
 export const getVeFromWorkspace = (wk: string, chainId?: number) => {
   return getAddressFromMap(addresses[wk], chainId)
 }

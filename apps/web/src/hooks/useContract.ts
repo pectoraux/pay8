@@ -50,6 +50,9 @@ import {
   getRampHelperContract,
   getRampAdsContract,
   getRampContract,
+  getTrustBountiesContract,
+  getTrustBountiesVoterContract,
+  getTrustBountiesHelperContract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
@@ -419,4 +422,22 @@ export const useRampContract = (rampAddress: Address) => {
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(() => rampAddress && getRampContract(rampAddress, signer, chainId), [rampAddress, signer, chainId])
+}
+
+export const useTrustBountiesContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getTrustBountiesContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useTrustBountiesHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getTrustBountiesHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useTrustBountiesVoterContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getTrustBountiesVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }

@@ -35,6 +35,9 @@ import {
   getRampAdsAddress,
   getRampHelperAddress,
   getRampFactoryAddress,
+  getTrustBountiesAddress,
+  getTrustBountiesHelperAddress,
+  getTrustBountiesVoterAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -94,6 +97,9 @@ import { rampABI } from 'config/abi/ramp'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { rampFactoryABI } from 'config/abi/rampFactory'
 import { rampAdsABI } from 'config/abi/rampAds'
+import { trustbountiesHelperABI } from 'config/abi/trustbountiesHelper'
+import { trustbountiesVoterABI } from 'config/abi/trustbountiesVoter'
+import { trustbountiesABI } from 'config/abi/trustbounties'
 
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
@@ -428,6 +434,33 @@ export const getRampHelperContract = (signer?: WalletClient, chainId?: number) =
   return getContract({
     abi: rampHelperABI,
     address: getRampHelperAddress(chainId),
+    signer,
+    chainId,
+  })
+}
+
+export const getTrustBountiesContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: trustbountiesABI,
+    address: getTrustBountiesAddress(chainId),
+    signer,
+    chainId,
+  })
+}
+
+export const getTrustBountiesHelperContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: trustbountiesHelperABI,
+    address: getTrustBountiesHelperAddress(chainId),
+    signer,
+    chainId,
+  })
+}
+
+export const getTrustBountiesVoterContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: trustbountiesVoterABI,
+    address: getTrustBountiesVoterAddress(chainId),
     signer,
     chainId,
   })
