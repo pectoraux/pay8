@@ -50,7 +50,7 @@ import { getCakePriceFromOracle } from 'hooks/useCakePriceAsBN'
 
 import fetchFarms from '../farms/fetchFarms'
 import getFarmsPrices from '../farms/getFarmsPrices'
-import { fetchRamps, getAccountSg, fetchRampData } from './helpers'
+import { fetchRamps, getAccountSg, fetchRampData, fetchRamp } from './helpers'
 import { resetUserState } from '../global/actions'
 
 export const initialFilterState = Object.freeze({
@@ -78,6 +78,17 @@ export const fetchRampsAsync = () => async (dispatch) => {
     console.log('fetchBusinesses================>Done')
   } catch (error) {
     console.error('[Pools Action]===============>', error)
+  }
+}
+
+export const fetchRampAsync = (rampAddress) => async (dispatch) => {
+  try {
+    console.log('fetchBusinesses1================>', rampAddress)
+    const ramp = await fetchRamp(rampAddress)
+    console.log('fetchBusinesse================>', ramp, rampAddress)
+    dispatch(setRampsPublicData([ramp] || []))
+  } catch (error) {
+    console.error('[Pools Action] error when getting staking limits', error)
   }
 }
 

@@ -13,11 +13,12 @@ import { getLivePoolsConfig } from '@pancakeswap/pools'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { fetchRampsAsync } from '.'
+import { fetchRampAsync, fetchRampsAsync } from '.'
 import { VaultKey } from '../types'
 import { fetchFarmsPublicDataAsync } from '../farms'
 import {
   makePoolWithUserDataLoadingSelector,
+  makePoolWithUserDataLoadingSelector2,
   makeVaultPoolByKey,
   poolsWithVaultSelector,
   ifoCreditSelector,
@@ -48,8 +49,21 @@ export const useFetchPublicPoolsData = () => {
   }, [dispatch, chainId])
 }
 
+export const fetchPoolsDataWithFarms = async (ramp, dispatch) => {
+  if (ramp) {
+    batch(() => {
+      dispatch(fetchRampAsync(ramp))
+    })
+  }
+}
+
 export const usePool = (sousId: number): { pool: any; userDataLoaded: boolean } => {
   const poolWithUserDataLoadingSelector = useMemo(() => makePoolWithUserDataLoadingSelector(sousId), [sousId])
+  return useSelector(poolWithUserDataLoadingSelector)
+}
+
+export const usePool2 = (address): { pool?: any; userDataLoaded: boolean } => {
+  const poolWithUserDataLoadingSelector = useMemo(() => makePoolWithUserDataLoadingSelector2(address), [address])
   return useSelector(poolWithUserDataLoadingSelector)
 }
 

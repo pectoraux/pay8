@@ -108,11 +108,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools}>
           {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
             <>
-              {account && !userDataLoaded && stakedOnly && (
+              {/* {account && !userDataLoaded && stakedOnly && (
                 <Flex justifyContent="center" mb="4px">
                   <Loading />
                 </Flex>
-              )}
+              )} */}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

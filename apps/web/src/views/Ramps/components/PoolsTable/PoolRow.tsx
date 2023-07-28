@@ -21,11 +21,22 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   console.log('ramppool=================>', pool)
 
   return (
-    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
+    <Pool.ExpandRow
+      initialActivity={initialActivity}
+      panel={<ActionPanel account={account} pool={pool} rampAccount={rampAccount} expanded />}
+    >
       <NameCell pool={pool} rampAccount={rampAccount} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={0} />
-      <TotalValueCell labelText={t('Minted Liquidity')} amount={0} symbol="" />
-      <TotalValueCell labelText={t('Burnt Liquidity')} amount={0} symbol="" />
+      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
+      <TotalValueCell
+        labelText={t('Minted Liquidity')}
+        amount={rampAccount?.minted}
+        symbol={rampAccount?.token?.symbol ?? ''}
+      />
+      <TotalValueCell
+        labelText={t('Burnt Liquidity')}
+        amount={rampAccount?.burnt}
+        symbol={rampAccount?.token?.symbol ?? ''}
+      />
     </Pool.ExpandRow>
   )
 }

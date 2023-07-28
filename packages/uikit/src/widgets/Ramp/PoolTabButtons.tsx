@@ -65,19 +65,24 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
 
   const { t } = useTranslation();
 
-  const isExact = !router.pathname.includes("manual");
+  const isExact = !router.asPath.includes("under") && !router.pathname.includes("bounties");
 
   const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
 
   const liveOrFinishedSwitch = (
     <Wrapper>
       <ButtonMenu activeIndex={isExact ? 0 : 1} scale="sm" variant="subtle">
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/ramps" replace>
-          {t("Automatic")}
+        <ButtonMenuItem as={NextLinkFromReactRouter} to={`/ramps/${router.query.ramp}`} replace>
+          {t("Over")}
         </ButtonMenuItem>
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/ramps/manual" replace>
-          {t("Manual")}
+        <ButtonMenuItem as={NextLinkFromReactRouter} to={`/ramps/${router.query.ramp}?under`} replace>
+          {t("Under")}
         </ButtonMenuItem>
+        <NotificationDot show>
+          <ButtonMenuItem id="finished-pools-button" as={NextLinkFromReactRouter} to="/ramps/bounties" replace>
+            {t("Bounties")}
+          </ButtonMenuItem>
+        </NotificationDot>
       </ButtonMenu>
     </Wrapper>
   );
