@@ -17,12 +17,10 @@ export const stagesWithApproveButton = [
 ]
 
 export const stagesWithConfirmButton = [
-  LockStage.CONFIRM_COSIGNS,
   LockStage.CONFIRM_DELETE,
   LockStage.CONFIRM_DELETE_RAMP,
   LockStage.CONFIRM_UPDATE_PROTOCOL,
   LockStage.CONFIRM_ADMIN_WITHDRAW,
-  LockStage.CONFIRM_UPDATE_COSIGN,
   LockStage.CONFIRM_CREATE_PROTOCOL,
   LockStage.CONFIRM_UPDATE_PARAMETERS,
   LockStage.CONFIRM_CLAIM_REVENUE,
@@ -86,7 +84,6 @@ export const stagesWithBackButton = [
   LockStage.CLAIM,
   LockStage.UPDATE_OWNER,
   LockStage.UPDATE_BOUNTY,
-  LockStage.UPDATE_TRUST,
   LockStage.BUY_ACCOUNT,
   LockStage.PARTNER,
   LockStage.BURN,
@@ -98,19 +95,14 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_PARTNER,
   LockStage.CONFIRM_BUY_ACCOUNT,
   LockStage.CONFIRM_BUY_RAMP,
-  LockStage.CONFIRM_UPDATE_TRUST,
   LockStage.CONFIRM_UPDATE_BOUNTY,
   LockStage.CONFIRM_CREATE_PROTOCOL,
   LockStage.ADMIN_WITHDRAW,
   LockStage.UPDATE_PROTOCOL,
-  LockStage.UPDATE_COSIGN,
-  LockStage.CONFIRM_UPDATE_COSIGN,
   LockStage.CONFIRM_UPDATE_PROTOCOL,
   LockStage.CONFIRM_ADMIN_WITHDRAW,
   LockStage.DELETE,
-  LockStage.COSIGNS,
   LockStage.CONFIRM_DELETE,
-  LockStage.CONFIRM_COSIGNS,
   LockStage.CONFIRM_DELETE_RAMP,
 ]
 
