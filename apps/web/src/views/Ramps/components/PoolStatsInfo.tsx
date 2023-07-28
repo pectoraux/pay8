@@ -1,19 +1,31 @@
-import { Flex, LinkExternal, Skeleton, Text, Pool, ScanLink } from '@pancakeswap/uikit'
+import {
+  Flex,
+  LinkExternal,
+  AutoRenewIcon,
+  ArrowForwardIcon,
+  Pool,
+  ScanLink,
+  useModal,
+  Button,
+  Link,
+  FlexGap,
+  IconButton,
+  LanguageIcon,
+  TwitterIcon,
+  TelegramIcon,
+  ProposalIcon,
+  SmartContractIcon,
+} from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { memo, useMemo } from 'react'
-import { useCurrentBlock } from 'state/block/hooks'
-import { useVaultPoolByKey } from 'state/pools/hooks'
-import { VaultKey } from 'state/types'
-import { getVaultPoolAddress } from 'utils/addressHelpers'
-import { getPoolBlockInfo } from 'views/Pools/helpers'
+import { memo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { getTokenInfoPath } from 'state/info/utils'
-import MaxStakeRow from './MaxStakeRow'
-import { AprInfo, DurationAvg, PerformanceFee, TotalLocked } from './Stat'
+import { useCurrPool } from 'state/ramps/hooks'
+import { useAppDispatch } from 'state'
+import { useRouter } from 'next/router'
+import { setCurrPoolData } from 'state/ramps'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -22,128 +34,90 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
-  pool,
-  account,
-  showTotalStaked = true,
-  alignLinksToRight = true,
-}) => {
+const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
-  const currentBlock = useCurrentBlock()
   const { chainId } = useActiveChainId()
-
-  const {
-    stakingToken,
-    earningToken,
-    totalStaked,
-    startTimestamp,
-    endTimestamp,
-    stakingLimit,
-    stakingLimitEndTimestamp,
-    contractAddress,
-    vaultKey,
-    profileRequirement,
-    isFinished,
-    userData: poolUserData,
-  } = pool
-
-  const stakedBalance = poolUserData?.stakedBalance ? poolUserData.stakedBalance : BIG_ZERO
-
-  const {
-    totalCakeInVault,
-    totalLockedAmount,
-    fees: { performanceFeeAsDecimal },
-    userData,
-  } = useVaultPoolByKey(vaultKey)
-
-  const tokenAddress = earningToken.address || ''
-  const poolContractAddress = contractAddress
-  const cakeVaultContractAddress = getVaultPoolAddress(vaultKey)
-
-  const { shouldShowBlockCountdown, timeUntilStart, timeRemaining, hasPoolStarted } = getPoolBlockInfo(
-    pool,
-    currentBlock,
+  const router = useRouter()
+  const [pendingTx, setPendingTx] = useState(false)
+  const { earningToken, rampAddress } = pool
+  const isBounty = router.pathname.includes('bounties')
+  const tokenAddress = earningToken?.address || ''
+  const dispatch = useAppDispatch()
+  const currState = useCurrPool()
+  const [onPresentNFTs] = useModal(
+    <></>, // <WebPagesModal height="500px" nfts={pool?.nfts} />
   )
-  const tokenInfoPath = useMemo(() => getTokenInfoPath(chainId, earningToken.address), [chainId, earningToken.address])
+  console.log('onPresentNFTs====================>', pool)
+  const goToContract = () => {
+    if (isBounty) {
+      router.push(`/ramps/bounties/`)
+    } else {
+      router.push(`/ramps/${rampAddress}`)
+    }
+  }
 
   return (
     <>
-      {profileRequirement && (profileRequirement.required || profileRequirement.thresholdPoints.gt(0)) && (
-        <Flex mb="8px" justifyContent="space-between">
-          <Text small>{t('Requirement')}:</Text>
-          <Text small textAlign="right">
-            {profileRequirement.required && t('Pancake Profile')}{' '}
-            {profileRequirement.thresholdPoints.gt(0) && (
-              <Text small>
-                {profileRequirement.thresholdPoints.toNumber()} {t('Profile Points')}
-              </Text>
-            )}
-          </Text>
-        </Flex>
-      )}
-      {!vaultKey && <AprInfo pool={pool} stakedBalance={stakedBalance} />}
-      {showTotalStaked && (
-        <Pool.TotalStaked
-          totalStaked={vaultKey ? totalCakeInVault : totalStaked}
-          tokenDecimals={stakingToken.decimals}
-          symbol={stakingToken.symbol}
-          decimalsToShow={0}
-        />
-      )}
-      {vaultKey === VaultKey.CakeVault && <TotalLocked totalLocked={totalLockedAmount} lockedToken={stakingToken} />}
-      {vaultKey === VaultKey.CakeVault && <DurationAvg />}
-      {!isFinished && stakingLimit && stakingLimit.gt(0) && (
-        <MaxStakeRow
-          small
-          currentBlock={currentBlock}
-          hasPoolStarted={hasPoolStarted}
-          stakingLimit={stakingLimit}
-          stakingLimitEndTimestamp={stakingLimitEndTimestamp}
-          stakingToken={stakingToken}
-          endTimestamp={endTimestamp}
-        />
-      )}
-      {shouldShowBlockCountdown && (
-        <Flex mb="2px" justifyContent="space-between" alignItems="center">
-          <Text small>{hasPoolStarted ? t('Ends in') : t('Starts in')}:</Text>
-          {timeRemaining || timeUntilStart ? (
-            <Pool.TimeCountdownDisplay timestamp={hasPoolStarted ? endTimestamp : startTimestamp} />
-          ) : (
-            <Skeleton width="54px" height="21px" />
-          )}
-        </Flex>
-      )}
-      {vaultKey && <PerformanceFee userData={userData} performanceFeeAsDecimal={performanceFeeAsDecimal} />}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={tokenInfoPath} bold={false} small>
-          {t('See Token Info')}
-        </LinkExternal>
+        <Button
+          as={Link}
+          variant="text"
+          p="0"
+          height="auto"
+          color="primary"
+          endIcon={
+            pendingTx ? (
+              <AutoRenewIcon spin color="currentColor" />
+            ) : (
+              <ArrowForwardIcon
+                onClick={() => {
+                  setPendingTx(true)
+                  goToContract()
+                }}
+                color="primary"
+              />
+            )
+          }
+          isLoading={pendingTx}
+          onClick={() => {
+            setPendingTx(true)
+            goToContract()
+          }}
+        >
+          {t('View All Accounts')}
+        </Button>
       </Flex>
-      {!vaultKey && (
+      {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <LinkExternal href={earningToken.projectLink} bold={false} small>
-            {t('View Project Site')}
-          </LinkExternal>
+          <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
+            {t('View Owner Info')}
+          </ScanLink>
         </Flex>
       )}
-      {vaultKey && (
+      {pool?.devaddr_ && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <LinkExternal href="https://docs.pancakeswap.finance/products/syrup-pool/new-cake-pool" bold={false} small>
-            {t('View Tutorial')}
-          </LinkExternal>
+          <ScanLink href={getBlockExploreLink(pool?.devaddr_, 'address', chainId)} bold={false} small>
+            {t('View Admin Info')}
+          </ScanLink>
         </Flex>
       )}
-      {poolContractAddress && (
+      {pool?.rampAddress && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink
-            href={getBlockExploreLink(vaultKey ? cakeVaultContractAddress : poolContractAddress, 'address', chainId)}
-            bold={false}
-            small
-          >
+          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
             {t('View Contract')}
           </ScanLink>
         </Flex>
       )}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
+          {t('See Admin Channel')}
+        </LinkExternal>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
+          {t('View NFTs')}
+        </LinkExternal>
+      </Flex>
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
@@ -160,6 +134,66 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
           />
         </Flex>
       )}
+      <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
+        {pool?.accounts?.map((balance) => (
+          <Button
+            key={balance.token.address}
+            onClick={() => {
+              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
+              dispatch(setCurrPoolData(newState))
+            }}
+            mt="4px"
+            mr={['2px', '2px', '4px', '4px']}
+            scale="sm"
+            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+          >
+            {balance.token.symbol}
+          </Button>
+        ))}
+      </Flex>
+      <Flex>
+        <FlexGap gap="16px" pt="24px" pl="4px">
+          <IconButton
+            as={Link}
+            style={{ cursor: 'pointer' }}
+            // onClick={onPresentProject}
+          >
+            <LanguageIcon color="textSubtle" />
+          </IconButton>
+          <IconButton
+            as={Link}
+            style={{ cursor: 'pointer' }}
+            // onClick={onPresentArticle}
+          >
+            <ProposalIcon color="textSubtle" />
+          </IconButton>
+          <IconButton
+            as={Link}
+            style={{ cursor: 'pointer' }}
+            // onClick={onPresentPayChat}
+          >
+            <SmartContractIcon color="textSubtle" />
+          </IconButton>
+          {true && (
+            <IconButton
+              as={Link}
+              style={{ cursor: 'pointer' }}
+              // onClick={onPresentTwitter}
+            >
+              <TwitterIcon color="textSubtle" />
+            </IconButton>
+          )}
+          {true && (
+            <IconButton
+              as={Link}
+              style={{ cursor: 'pointer' }}
+              // onClick={onPresentTelegram}
+            >
+              <TelegramIcon color="textSubtle" />
+            </IconButton>
+          )}
+        </FlexGap>
+      </Flex>
     </>
   )
 }

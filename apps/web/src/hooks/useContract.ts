@@ -47,6 +47,7 @@ import {
   getV3MigratorContract,
   getTradingRewardTopTradesContract,
   getRampFactoryContract,
+  getRampHelperContract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
@@ -398,4 +399,10 @@ export const useRampFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(() => getRampFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useRampHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getRampHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }

@@ -154,14 +154,6 @@ export const PoolsSlice = createSlice({
         return pool
       })
     },
-    setPoolsPublicData: (state, action) => {
-      const livePoolsData: SerializedPool[] = action.payload
-      const livePoolsSousIdMap = keyBy(livePoolsData, 'sousId')
-      state.data = state.data.map((pool) => {
-        const livePoolData = livePoolsSousIdMap[pool.sousId]
-        return { ...pool, ...livePoolData }
-      })
-    },
     setCurrBribeData: (state, action) => {
       state.currBribe = action.payload
     },
@@ -226,6 +218,6 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setRampsPublicData, setPoolsPublicData, setPoolUserData } = PoolsSlice.actions
+export const { setRampsPublicData, setCurrBribeData, setPoolUserData, setCurrPoolData } = PoolsSlice.actions
 
 export default PoolsSlice.reducer

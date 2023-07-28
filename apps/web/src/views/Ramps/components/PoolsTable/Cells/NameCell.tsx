@@ -1,14 +1,6 @@
-import { Text, TokenPairImage as UITokenPairImage, useMatchBreakpoints, Skeleton, Pool } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
-import { TokenPairImage } from 'components/TokenImage'
-import { vaultPoolConfig } from 'config/constants/pools'
+import { Text, TokenImage, Pool } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { memo, useMemo } from 'react'
-import { useVaultPoolByKey } from 'state/ramps/hooks'
-import { VaultKey, DeserializedLockedCakeVault } from 'state/types'
 import styled from 'styled-components'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getVaultPosition, VaultPosition, VaultPositionParams } from 'utils/cakePool'
 import { Token } from '@pancakeswap/sdk'
 
 interface NameCellProps {
@@ -25,63 +17,25 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<React.PropsWithChildren<NameCellProps>> = ({ pool }) => {
+const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
-  const { sousId, stakingToken, earningToken, userData, isFinished, vaultKey, totalStaked } = pool
 
-  const stakingTokenSymbol = stakingToken?.symbol ?? ''
-  const earningTokenSymbol = earningToken?.symbol ?? ''
-
-  let title: React.ReactNode = `${t('Earn')} ${earningTokenSymbol}`
-  let subtitle: React.ReactNode = `${t('Stake')} ${stakingTokenSymbol}`
-  const showSubtitle = sousId !== 0 || (sousId === 0 && !isMobile)
+  let title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
+  let subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
 
   return (
     <StyledCell role="cell">
-      {/* <TokenPairImage
-        primaryToken={earningToken}
-        secondaryToken={stakingToken}
-        mr="8px"
-        width={40}
-        height={40}
-        style={{ minWidth: 40 }}
-      /> */}
+      <TokenImage mr="8px" width={40} height={40} src={pool?.avatar} />
       <Pool.CellContent>
-        <Text fontSize="12px" bold color={isFinished ? 'failure' : 'secondary'} textTransform="uppercase">
-          {t('Staked')}
-        </Text>
-        <Text bold={!isMobile} small={isMobile}>
+        <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
           {title}
         </Text>
-        {showSubtitle && (
-          <Text fontSize="12px" color="textSubtle">
-            {subtitle}
-          </Text>
-        )}
+        <Text fontSize="12px" color="textSubtle">
+          {subtitle}
+        </Text>
       </Pool.CellContent>
     </StyledCell>
   )
 }
 
 export default NameCell
-
-const stakedStatus = {
-  [VaultPosition.None]: { text: '', color: 'secondary' },
-  [VaultPosition.Locked]: { text: 'Locked', color: 'secondary' },
-  [VaultPosition.LockedEnd]: { text: 'Locked End', color: 'secondary' },
-  [VaultPosition.AfterBurning]: { text: 'After Burning', color: 'failure' },
-  [VaultPosition.Flexible]: { text: 'Flexible', color: 'success' },
-}
-
-export const StakedCakeStatus: React.FC<React.PropsWithChildren<VaultPositionParams>> = memo(
-  ({ userShares, locked, lockEndTime }) => {
-    const vaultPosition = getVaultPosition({ userShares, locked, lockEndTime })
-    const { t } = useTranslation()
-    return (
-      <Text fontSize="12px" bold color={stakedStatus[vaultPosition].color} textTransform="uppercase">
-        {t(stakedStatus[vaultPosition].text)}
-      </Text>
-    )
-  },
-)

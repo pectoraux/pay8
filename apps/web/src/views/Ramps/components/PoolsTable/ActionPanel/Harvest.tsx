@@ -1,54 +1,25 @@
-import { Button, Text, useModal, Flex, Skeleton, Heading, Balance, Pool } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
+import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
-import { PoolCategory } from 'config/constants/types'
-import { formatNumber, getBalanceNumber, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { Token } from '@pancakeswap/sdk'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import CollectModal from '../../Modals/CollectModal'
 
-const HarvestAction: React.FunctionComponent<React.PropsWithChildren<Pool.DeserializedPool<Token>>> = ({
-  sousId,
-  poolCategory,
-  earningToken,
-  userData,
-  userDataLoaded,
-  earningTokenPrice,
-}) => {
+const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
 
-  const earnings = userData?.pendingReward ? new BigNumber(userData.pendingReward) : BIG_ZERO
-  const earningTokenBalance = getBalanceNumber(earnings, earningToken.decimals)
-  const earningTokenDollarBalance = getBalanceNumber(earnings.multipliedBy(earningTokenPrice), earningToken.decimals)
-  const hasEarnings = earnings.gt(0)
-  const fullBalance = getFullDisplayBalance(earnings, earningToken.decimals)
-  const formattedBalance = formatNumber(earningTokenBalance, 3, 3)
-  const isBnbPool = poolCategory === PoolCategory.BINANCE
-
-  const [onPresentCollect] = useModal(
-    <CollectModal
-      formattedBalance={formattedBalance}
-      fullBalance={fullBalance}
-      earningTokenSymbol={earningToken.symbol}
-      earningsDollarValue={earningTokenDollarBalance}
-      sousId={sousId}
-      isBnbPool={isBnbPool}
-    />,
-  )
-
   const actionTitle = (
-    <>
-      <Text fontSize="12px" bold color="secondary" as="span">
-        {earningToken.symbol}{' '}
+    <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+      {rampAccount ? (
+        <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+          {t('Current Token')}{' '}
+        </Text>
+      ) : null}
+      <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+        {rampAccount?.symbol}
       </Text>
-      <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-        {t('Earned')}
-      </Text>
-    </>
+    </Flex>
   )
 
   if (!account) {
@@ -56,19 +27,7 @@ const HarvestAction: React.FunctionComponent<React.PropsWithChildren<Pool.Deseri
       <ActionContainer>
         <ActionTitles>{actionTitle}</ActionTitles>
         <ActionContent>
-          <Heading>0</Heading>
-          <Button disabled>{t('Harvest')}</Button>
-        </ActionContent>
-      </ActionContainer>
-    )
-  }
-
-  if (!userDataLoaded) {
-    return (
-      <ActionContainer>
-        <ActionTitles>{actionTitle}</ActionTitles>
-        <ActionContent>
-          <Skeleton width={180} height="32px" marginTop={14} />
+          <Button disabled>{t('Please Connect Your Wallet')}</Button>
         </ActionContent>
       </ActionContainer>
     )
@@ -79,35 +38,152 @@ const HarvestAction: React.FunctionComponent<React.PropsWithChildren<Pool.Deseri
       <ActionTitles>{actionTitle}</ActionTitles>
       <ActionContent>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-          <>
-            {hasEarnings ? (
-              <>
-                <Balance lineHeight="1" bold fontSize="20px" decimals={5} value={earningTokenBalance} />
-                {earningTokenPrice > 0 && (
-                  <Balance
-                    display="inline"
-                    fontSize="12px"
-                    color="textSubtle"
-                    decimals={2}
-                    prefix="~"
-                    value={earningTokenDollarBalance}
-                    unit=" USD"
-                  />
-                )}
-              </>
-            ) : (
-              <>
-                <Heading color="textDisabled">0</Heading>
-                <Text fontSize="12px" color="textDisabled">
-                  0 USD
-                </Text>
-              </>
-            )}
-          </>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {t(rampAccount?.status || '')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Account Status')}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {pool?.automatic === undefined
+              ? '-'
+              : pool?.automatic
+              ? t('Automatic')
+              : pool?.redirect
+              ? t('Semi-Automatic')
+              : t('Manual')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Account Type')}
+          </Text>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={rampAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(rampAccount?.minted)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Token Minted')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={rampAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(rampAccount?.burnt)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Token Burnt')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={rampAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(rampAccount?.salePrice)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Sale Price')}
+            </Text>
+          </Box>
         </Flex>
-        <Button disabled={!hasEarnings} onClick={onPresentCollect}>
-          {t('Harvest')}
-        </Button>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={0}
+              value={rampAccount?.maxPartners}
+              prefix="# "
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Maximum Partners')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            {parseInt(rampAccount?.tokenId) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={rampAccount?.tokenId}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Attached veNFT Token Id')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            {parseInt(rampAccount?.token?.bountyId) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={rampAccount?.token?.bountyId}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Attached Bounty Id')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            {parseInt(rampAccount?.token?.profileId) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={rampAccount?.token?.profileId}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Attached Profile Id')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            {parseInt(rampAccount?.token?.badgeId) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={rampAccount?.token?.profileId}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Attached Badge Id')}
+            </Text>
+          </Box>
+        </Flex>
       </ActionContent>
     </ActionContainer>
   )

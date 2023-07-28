@@ -12,7 +12,6 @@ import {
   PageHeader,
   Loading,
   Pool,
-  ViewMode,
   ArrowForwardIcon,
   Button,
   useModal,
@@ -20,18 +19,12 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
 import Page from 'components/Layout/Page'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import { TokenPairImage } from 'components/TokenImage'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
-import { ChainId, Token } from '@pancakeswap/sdk'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
 
-import CardActions from './components/PoolCard/CardActions'
-import AprRow from './components/PoolCard/AprRow'
-import CardFooter from './components/PoolCard/CardFooter'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateRampModal from './components/CreateRampModal'
@@ -115,50 +108,16 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   <Loading />
                 </Flex>
               )}
-              {viewMode === ViewMode.CARD ? (
-                <CardLayout>
-                  {chosenPools.map((pool) => (
-                    <Pool.PoolCard<Token>
-                      key={pool.sousId}
-                      pool={pool}
-                      isStaked={Boolean(pool?.userData?.stakedBalance?.gt(0))}
-                      cardContent={
-                        account ? (
-                          <CardActions pool={pool} stakedBalance={pool?.userData?.stakedBalance} />
-                        ) : (
-                          <>
-                            <Text mb="10px" textTransform="uppercase" fontSize="12px" color="textSubtle" bold>
-                              {t('Start earning')}
-                            </Text>
-                            <ConnectWalletButton />
-                          </>
-                        )
-                      }
-                      tokenPairImage={
-                        <TokenPairImage
-                          primaryToken={pool.earningToken}
-                          secondaryToken={pool.stakingToken}
-                          width={64}
-                          height={64}
-                        />
-                      }
-                      cardFooter={<CardFooter pool={pool} account={account} />}
-                      aprRow={<AprRow pool={pool} stakedBalance={pool?.userData?.stakedBalance} />}
-                    />
-                  ))}
-                </CardLayout>
-              ) : (
-                <Pool.PoolsTable>
-                  {chosenPools.map((pool) => (
-                    <PoolRow
-                      initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
-                      key={pool.sousId}
-                      sousId={pool.sousId}
-                      account={account}
-                    />
-                  ))}
-                </Pool.PoolsTable>
-              )}
+              <Pool.PoolsTable>
+                {chosenPools.map((pool) => (
+                  <PoolRow
+                    initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
+                    key={pool.sousId}
+                    sousId={pool.sousId}
+                    account={account}
+                  />
+                ))}
+              </Pool.PoolsTable>
               <Image
                 mx="auto"
                 mt="12px"
