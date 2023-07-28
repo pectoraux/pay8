@@ -35,6 +35,7 @@ import { differenceInSeconds } from 'date-fns'
 import { FetchStatus } from 'config/constants/types'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
+import { fetchBountiesAsync } from 'state/trustbounties'
 
 interface SetPriceStageProps {
   currency?: any
