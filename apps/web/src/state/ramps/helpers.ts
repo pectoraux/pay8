@@ -252,9 +252,9 @@ export const fetchRamp = async (address) => {
             token: new Token(
               56,
               session?.tokenAddress,
-              decimals,
-              symbol?.toUpperCase() ?? 'symbol',
-              name ?? 'name',
+              Number(decimals),
+              symbol?.toString()?.toUpperCase() ?? 'symbol',
+              name?.toString() ?? 'name',
               'https://www.trueusd.com/',
             ),
           }
