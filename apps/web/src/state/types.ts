@@ -603,5 +603,21 @@ export interface State {
   predictions: PredictionsState
   lottery: LotteryState
   pottery: PotteryState
+  accelerator: any
+  arps: any
+  auditors: any
+  bettings: any
+  bills: any
+  businesses: any
+  contributors: any
+  futureCollaterals: any
+  games: any
+  lotteries: any
+  payCards: any
+  referrals: any
+  sponsors: any
+  stakemarket: any
   ramps: any
+  wills: any
+  worlds: any
 }

@@ -12,6 +12,20 @@ import user from './user/reducer'
 import potteryReducer from './pottery'
 import rampsReducer from './ramps'
 import trustbountiesReducer from './trustbounties'
+import acceleratorReducer from './accelerator'
+import businessesReducer from './businesses'
+import auditorsReducer from './auditors'
+import bettingsReducer from './bettings'
+import billsReducer from './bills'
+import contributorsReducer from './contributors'
+import futureCollateralsReducer from './futureCollaterals'
+import payCardsReducer from './payCards'
+import gamesReducer from './games'
+import lotteriesReducer from './lotteries'
+import referralsReducer from './referrals'
+import sponsorsReducer from './sponsors'
+import willsReducer from './wills'
+import worldsReducer from './worlds'
 import globalReducer from './global/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions']
@@ -34,6 +48,20 @@ const persistedReducer = persistReducer(
     pottery: potteryReducer,
     ramps: rampsReducer,
     trustbounties: trustbountiesReducer,
+    accelerator: acceleratorReducer,
+    auditors: auditorsReducer,
+    businesses: businessesReducer,
+    bettings: bettingsReducer,
+    bills: billsReducer,
+    contributors: contributorsReducer,
+    futureCollaterals: futureCollateralsReducer,
+    payCards: payCardsReducer,
+    games: gamesReducer,
+    lotteries: lotteriesReducer,
+    referrals: referralsReducer,
+    sponsors: sponsorsReducer,
+    wills: willsReducer,
+    worlds: worldsReducer,
 
     // Exchange
     user,
