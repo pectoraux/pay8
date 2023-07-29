@@ -31,31 +31,31 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Decentralized Ramp Pools')}
+              {t('Stake Market')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Transfer value on and off the platform')}
+              {t(
+                "Browse this channel's StakeMarket, Valuepools, ARPs, Trustbounties, Lotteries, Catalogs, Bettings...",
+              )}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Make money helping people transfer value on and off the platform')}
+              {t('Buy products and services from eCommerce stores, Delivery/Telehealth... channels')}
             </Heading>
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create contract ')}{' '}
+                  {t('Create an Stake in ')}{' '}
                 </Text>
-                {/* {(
-                  <CurrencyInputPanel
-                    id="ramps-currency"
-                    showUSDPrice
-                    showMaxButton
-                    showCommonBases
-                    showInput={false}
-                    showQuickInputButton
-                    currency={currency ?? inputCurency}
-                    onCurrencySelect={handleInputSelect}
-                  />
-                )} */}
+                <CurrencyInputPanel
+                  id="stakes-currency"
+                  showUSDPrice
+                  showMaxButton
+                  showCommonBases
+                  showInput={false}
+                  showQuickInputButton
+                  currency={currency ?? inputCurency}
+                  onCurrencySelect={handleInputSelect}
+                />
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>

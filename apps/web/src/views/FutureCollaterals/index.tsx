@@ -31,18 +31,20 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Decentralized Ramp Pools')}
+              {t('Future Collaterals')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Transfer value on and off the platform')}
+              {t('Mint a collateral that appreciates in value')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Make money helping people transfer value on and off the platform')}
+              {t(
+                'Read the documentation to understand how future collaterals work, then pick and mint your collateral.',
+              )}
             </Heading>
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create contract ')}{' '}
+                  {t('Mint Collateral')}{' '}
                 </Text>
                 {/* {(
                   <CurrencyInputPanel

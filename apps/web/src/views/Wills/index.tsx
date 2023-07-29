@@ -31,13 +31,16 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Decentralized Ramp Pools')}
+              {t('Will Contracts')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Transfer value on and off the platform')}
+              {t('Create a contract and start managing your assets')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Make money helping people transfer value on and off the platform')}
+              {t('Will contracts enable you to safely store your assets and prevent them from theft.')}
+            </Heading>
+            <Heading scale="md" color="text">
+              {t('They can also work as programmable wills that transfer your assets to your heirs after your death.')}
             </Heading>
             <Flex>
               <Button p="0" variant="text">

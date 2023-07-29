@@ -1,7 +1,7 @@
 import { useAccount } from 'wagmi'
 import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/arps/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
@@ -31,13 +31,15 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Decentralized Ramp Pools')}
+              {t('ARP Contracts')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Transfer value on and off the platform')}
+              {t('Create a contract and start managing your receivables & payables')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Make money helping people transfer value on and off the platform')}
+              {t(
+                'Browse between different arps and apply for an account in one offering the services you are looking for.',
+              )}
             </Heading>
             <Flex>
               <Button p="0" variant="text">

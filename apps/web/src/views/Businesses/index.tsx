@@ -31,13 +31,13 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Decentralized Ramp Pools')}
+              {t('CanCan Businesses')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Transfer value on and off the platform')}
+              {t('Have a business in the marketplace?')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Make money helping people transfer value on and off the platform')}
+              {t('Create a gauge and start earning each time you make a sale.')}
             </Heading>
             <Flex>
               <Button p="0" variant="text">
