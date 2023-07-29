@@ -1,73 +1,16 @@
-export const trustbountiesHelperABI = [
+export const willNoteABI = [
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'bountyId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'partnerBounty',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'endTime',
-        type: 'uint256',
-      },
-    ],
-    name: 'AddApproval',
-    type: 'event',
+    inputs: [],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
   },
   {
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'bountyId',
-        type: 'uint256',
-      },
-      {
         indexed: false,
         internalType: 'address',
-        name: 'source',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'balanceAmount',
-        type: 'uint256',
-      },
-    ],
-    name: 'AddBalance',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'bountyId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'owner',
+        name: 'will',
         type: 'address',
       },
       {
@@ -79,29 +22,17 @@ export const trustbountiesHelperABI = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'parentBountyId',
+        name: 'value',
         type: 'uint256',
       },
       {
         indexed: false,
-        internalType: 'uint256',
-        name: 'collectionId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'bountySource',
-        type: 'string',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'avatar',
-        type: 'string',
+        internalType: 'enum NFTYPE',
+        name: 'tokenType',
+        type: 'uint8',
       },
     ],
-    name: 'CreateBounty',
+    name: 'AddBalance',
     type: 'event',
   },
   {
@@ -109,42 +40,75 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         indexed: true,
-        internalType: 'uint256',
-        name: 'claimId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'bountyId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
         internalType: 'address',
-        name: 'hunter',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'approved',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'Approval',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'operator',
         type: 'address',
       },
       {
         indexed: false,
         internalType: 'bool',
-        name: 'friendly',
-        type: 'bool',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'atPeace',
+        name: 'approved',
         type: 'bool',
       },
     ],
-    name: 'CreateClaim',
+    name: 'ApprovalForAll',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'ClaimTransferNote',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
+      },
+    ],
+    name: 'CreateWILL',
     type: 'event',
   },
   {
@@ -153,61 +117,62 @@ export const trustbountiesHelperABI = [
       {
         indexed: true,
         internalType: 'uint256',
-        name: 'bountyId',
+        name: 'protocolId',
         type: 'uint256',
       },
       {
         indexed: false,
         internalType: 'address',
-        name: 'source',
+        name: 'will',
         type: 'address',
       },
     ],
-    name: 'DeleteBalance',
+    name: 'DeleteProtocol',
     type: 'event',
   },
   {
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
+      },
+    ],
+    name: 'DeleteWILL',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'Paused',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
+      },
+      {
+        indexed: false,
         internalType: 'uint256',
-        name: 'bountyId',
+        name: 'toPay',
         type: 'uint256',
       },
     ],
-    name: 'DeleteBounty',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'bountyId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'partnerBounty',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'deactivate',
-        type: 'bool',
-      },
-    ],
-    name: 'RemoveApproval',
+    name: 'PayInvoicePayable',
     type: 'event',
   },
   {
@@ -215,55 +180,49 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         indexed: false,
-        internalType: 'address[]',
-        name: 'factories',
-        type: 'address[]',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'add',
-        type: 'bool',
-      },
-    ],
-    name: 'UpdateAuthorizedSourceFactories',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'bountyId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'collectionId',
-        type: 'uint256',
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
       },
       {
         indexed: false,
         internalType: 'address',
-        name: 'newOwner',
+        name: 'token',
         type: 'address',
       },
       {
         indexed: false,
-        internalType: 'string',
-        name: 'avatar',
-        type: 'string',
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
       },
       {
         indexed: false,
-        internalType: 'string',
-        name: 'terms',
-        type: 'string',
+        internalType: 'enum NFTYPE',
+        name: 'tokenType',
+        type: 'uint8',
       },
     ],
-    name: 'UpdateBounty',
+    name: 'RemoveBalance',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'profileId',
+        type: 'uint256',
+      },
+    ],
+    name: 'StartWillWithdrawalCountDown',
     type: 'event',
   },
   {
@@ -271,30 +230,74 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         indexed: true,
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        indexed: true,
         internalType: 'uint256',
-        name: 'claimId',
+        name: 'tokenId',
         type: 'uint256',
       },
+    ],
+    name: 'Transfer',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
       {
         indexed: false,
         internalType: 'address',
-        name: 'winner',
+        name: 'will',
         type: 'address',
       },
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'endTime',
+        name: 'protocolId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'due',
         type: 'uint256',
       },
       {
         indexed: false,
         internalType: 'bool',
-        name: 'atPeace',
+        name: 'adminNote',
         type: 'bool',
       },
     ],
-    name: 'UpdateClaim',
+    name: 'TransferDueToNote',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'Unpaused',
     type: 'event',
   },
   {
@@ -309,7 +312,7 @@ export const trustbountiesHelperABI = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'collectionId',
+        name: 'willId',
         type: 'uint256',
       },
       {
@@ -363,106 +366,132 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         indexed: false,
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'profileId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'updatePeriod',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'minWithdrawableNow',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'minNFTWithdrawableNow',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'willWithdrawalPeriod',
+        type: 'uint256',
+      },
+    ],
+    name: 'UpdateParameters',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'profileId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'media',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      {
+        indexed: false,
         internalType: 'address[]',
         name: 'tokens',
         type: 'address[]',
       },
       {
         indexed: false,
-        internalType: 'bool',
-        name: 'add',
-        type: 'bool',
+        internalType: 'uint256[]',
+        name: 'percentages',
+        type: 'uint256[]',
       },
     ],
-    name: 'UpdateWhitelistedTokens',
+    name: 'UpdateProtocol',
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'WETH',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
+    anonymous: false,
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
-      },
-      {
+        indexed: true,
         internalType: 'address',
-        name: '_source',
+        name: 'from',
         type: 'address',
       },
       {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
+        indexed: false,
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
       },
-    ],
-    name: 'addBalanceETH',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'appealWindow',
-    outputs: [
       {
+        indexed: false,
         internalType: 'uint256',
-        name: '',
+        name: 'amount',
         type: 'uint256',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    name: 'Withdraw',
+    type: 'event',
   },
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
       },
       {
         internalType: 'uint256',
-        name: '_claimId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: '_title',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: '_content',
-        type: 'string',
-      },
-    ],
-    name: 'applyClaimResultsETH',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
+        name: 'tokenId',
         type: 'uint256',
       },
     ],
-    name: 'attach',
+    name: 'approve',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -470,25 +499,12 @@ export const trustbountiesHelperABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
       },
     ],
-    name: 'attachments',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'balanceBuffer',
+    name: 'balanceOf',
     outputs: [
       {
         internalType: 'uint256',
@@ -503,7 +519,7 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_token',
+        name: '_will',
         type: 'address',
       },
       {
@@ -513,7 +529,7 @@ export const trustbountiesHelperABI = [
       },
       {
         internalType: 'address',
-        name: '_referrer',
+        name: '_token',
         type: 'address',
       },
       {
@@ -528,7 +544,7 @@ export const trustbountiesHelperABI = [
       },
       {
         internalType: 'uint256[]',
-        name: '_bountyNTokenId',
+        name: '_protocolIds',
         type: 'uint256[]',
       },
     ],
@@ -540,20 +556,14 @@ export const trustbountiesHelperABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
       },
     ],
-    name: 'canAttach',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
+    name: 'claimPendingRevenueFromNote',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -572,60 +582,32 @@ export const trustbountiesHelperABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
+        internalType: 'address',
+        name: '_will',
+        type: 'address',
       },
     ],
-    name: 'detach',
+    name: 'deleteWILL',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
     inputs: [
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_partnerBounty',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_amount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_endTime',
-        type: 'uint256',
-      },
-    ],
-    name: 'emitAddApproval',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
-      },
       {
         internalType: 'address',
-        name: '_source',
+        name: 'token',
         type: 'address',
       },
       {
         internalType: 'uint256',
-        name: '_balanceAmount',
+        name: 'value',
         type: 'uint256',
+      },
+      {
+        internalType: 'enum NFTYPE',
+        name: 'tokenType',
+        type: 'uint8',
       },
     ],
     name: 'emitAddBalance',
@@ -637,14 +619,17 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'bountyId',
+        name: '_toPay',
         type: 'uint256',
       },
-      {
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
+    ],
+    name: 'emitPayInvoicePayable',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
       {
         internalType: 'address',
         name: 'token',
@@ -652,26 +637,16 @@ export const trustbountiesHelperABI = [
       },
       {
         internalType: 'uint256',
-        name: 'parentBountyId',
+        name: 'value',
         type: 'uint256',
       },
       {
-        internalType: 'uint256',
-        name: 'collectionId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: 'bountySource',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'avatar',
-        type: 'string',
+        internalType: 'enum NFTYPE',
+        name: 'tokenType',
+        type: 'uint8',
       },
     ],
-    name: 'emitCreateBounty',
+    name: 'emitRemoveBalance',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -680,156 +655,11 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_claimId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_amount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '_hunter',
-        type: 'address',
-      },
-      {
-        internalType: 'bool',
-        name: '_friendly',
-        type: 'bool',
-      },
-      {
-        internalType: 'bool',
-        name: '_atPeace',
-        type: 'bool',
-      },
-    ],
-    name: 'emitCreateClaim',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '_source',
-        type: 'address',
-      },
-    ],
-    name: 'emitDeleteBalance',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
+        name: '_profileId',
         type: 'uint256',
       },
     ],
-    name: 'emitDeleteBounty',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_partnerBounty',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_amount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: '_deactivate',
-        type: 'bool',
-      },
-    ],
-    name: 'emitRemoveApproval',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'bountyId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'collectionId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-      {
-        internalType: 'string',
-        name: 'avatar',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'terms',
-        type: 'string',
-      },
-    ],
-    name: 'emitUpdateBounty',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_claimId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_endTime',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: '_atPeace',
-        type: 'bool',
-      },
-      {
-        internalType: 'address',
-        name: '_winner',
-        type: 'address',
-      },
-    ],
-    name: 'emitUpdateClaim',
+    name: 'emitStartWillWithdrawalCountDown',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -843,7 +673,7 @@ export const trustbountiesHelperABI = [
       },
       {
         internalType: 'uint256',
-        name: '_collectionId',
+        name: '_willId',
         type: 'uint256',
       },
       {
@@ -886,55 +716,131 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_start',
+        name: '_profileId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_updatePeriod',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_minWithdrawableNow',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_minNFTWithdrawableNow',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_willWithdrawalPeriod',
         type: 'uint256',
       },
     ],
-    name: 'getAuthorizedSourceFactories',
-    outputs: [
-      {
-        internalType: 'address[]',
-        name: '_factories',
-        type: 'address[]',
-      },
-    ],
-    stateMutability: 'view',
+    name: 'emitUpdateParameters',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'uint256',
-        name: '_bountyId',
+        name: '_profileId',
         type: 'uint256',
       },
-    ],
-    name: 'getLatestClaimId',
-    outputs: [
       {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
+        internalType: 'address',
+        name: '_owner',
+        type: 'address',
       },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
       {
-        internalType: 'uint256',
-        name: '_start',
-        type: 'uint256',
+        internalType: 'string',
+        name: '_media',
+        type: 'string',
       },
-    ],
-    name: 'getWhitelistedTokens',
-    outputs: [
+      {
+        internalType: 'string',
+        name: '_description',
+        type: 'string',
+      },
       {
         internalType: 'address[]',
         name: '_tokens',
         type: 'address[]',
       },
+      {
+        internalType: 'uint256[]',
+        name: '_percentages',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'emitUpdateProtocol',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_will',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_start',
+        type: 'uint256',
+      },
+    ],
+    name: 'getAllMoney',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: 'contracts',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_start',
+        type: 'uint256',
+      },
+    ],
+    name: 'getAllWills',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: 'wills',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getApproved',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
@@ -943,11 +849,16 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_token',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'operator',
         type: 'address',
       },
     ],
-    name: 'isAuthorizedSourceFactories',
+    name: 'isApprovedForAll',
     outputs: [
       {
         internalType: 'bool',
@@ -962,30 +873,11 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_ve',
+        name: '_will',
         type: 'address',
       },
     ],
-    name: 'isVe',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_token',
-        type: 'address',
-      },
-    ],
-    name: 'isWhiteListed',
+    name: 'isGauge',
     outputs: [
       {
         internalType: 'bool',
@@ -998,24 +890,60 @@ export const trustbountiesHelperABI = [
   },
   {
     inputs: [],
-    name: 'minLockPeriod',
+    name: 'name',
     outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
       {
         internalType: 'uint256',
         name: '',
         type: 'uint256',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'minToClaim',
+    name: 'notes',
     outputs: [
       {
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'will',
+        type: 'address',
+      },
+      {
+        internalType: 'bool',
+        name: 'isNFT',
+        type: 'bool',
+      },
+      {
         internalType: 'uint256',
-        name: '',
+        name: 'due',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'profileId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'percentage',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'payswapFees',
         type: 'uint256',
       },
     ],
@@ -1044,133 +972,11 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '',
+        name: '_user',
         type: 'address',
       },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256[]',
-        name: '',
-        type: 'uint256[]',
-      },
-      {
-        internalType: 'uint256[]',
-        name: '',
-        type: 'uint256[]',
-      },
-      {
-        internalType: 'bytes',
-        name: '',
-        type: 'bytes',
-      },
     ],
-    name: 'onERC1155BatchReceived',
-    outputs: [
-      {
-        internalType: 'bytes4',
-        name: '',
-        type: 'bytes4',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bytes',
-        name: '',
-        type: 'bytes',
-      },
-    ],
-    name: 'onERC1155Received',
-    outputs: [
-      {
-        internalType: 'bytes4',
-        name: '',
-        type: 'bytes4',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bytes',
-        name: '',
-        type: 'bytes',
-      },
-    ],
-    name: 'onERC721Received',
-    outputs: [
-      {
-        internalType: 'bytes4',
-        name: '',
-        type: 'bytes4',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'value',
-        type: 'uint256',
-      },
-    ],
-    name: 'safeTransfer',
+    name: 'notifyNFTFees',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1179,9 +985,36 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_bountyId',
+        name: 'tokenId',
         type: 'uint256',
       },
+    ],
+    name: 'ownerOf',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'paused',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
       {
         internalType: 'address',
         name: 'from',
@@ -1194,11 +1027,57 @@ export const trustbountiesHelperABI = [
       },
       {
         internalType: 'uint256',
-        name: 'value',
+        name: 'tokenId',
         type: 'uint256',
       },
     ],
     name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: '_data',
+        type: 'bytes',
+      },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'operator',
+        type: 'address',
+      },
+      {
+        internalType: 'bool',
+        name: 'approved',
+        type: 'bool',
+      },
+    ],
+    name: 'setApprovalForAll',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1220,17 +1099,87 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_WETH',
+        name: '_will',
         type: 'address',
       },
     ],
-    name: 'setWETH',
+    name: 'setContractAddressAt',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'bytes4',
+        name: 'interfaceId',
+        type: 'bytes4',
+      },
+    ],
+    name: 'supportsInterface',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [],
+    name: 'symbol',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'tokenId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'tokenURI',
+    outputs: [
+      {
+        internalType: 'string',
+        name: 'output',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bool',
+        name: '_admin',
+        type: 'bool',
+      },
+    ],
     name: 'tradingFee',
     outputs: [
       {
@@ -1259,6 +1208,62 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'address',
+        name: '_will',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_profileId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_position',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'transferDueToNotePayable',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -1277,35 +1282,12 @@ export const trustbountiesHelperABI = [
   {
     inputs: [
       {
-        internalType: 'address[]',
-        name: '_factories',
-        type: 'address[]',
-      },
-      {
-        internalType: 'bool',
-        name: '_add',
-        type: 'bool',
-      },
-    ],
-    name: 'updateAuthorizedSourceFactories',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
-        name: '_contract',
+        name: '_last_gauge',
         type: 'address',
       },
-      {
-        internalType: 'bool',
-        name: '_add',
-        type: 'bool',
-      },
     ],
-    name: 'updateCanAttach',
+    name: 'updateGauge',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1314,22 +1296,12 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_minLockPeriod',
+        name: '_tradingFeeAdmin',
         type: 'uint256',
       },
       {
         internalType: 'uint256',
-        name: '_balanceBuffer',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_appealWindow',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_tradingFee',
+        name: '_tradingFeeUser',
         type: 'uint256',
       },
       {
@@ -1337,13 +1309,8 @@ export const trustbountiesHelperABI = [
         name: '_tradingNFTFee',
         type: 'uint256',
       },
-      {
-        internalType: 'uint256',
-        name: '_minToClaim',
-        type: 'uint256',
-      },
     ],
-    name: 'updateParameters',
+    name: 'updateParams',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1352,34 +1319,11 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_ve',
+        name: '_valuepoolAddress',
         type: 'address',
       },
-      {
-        internalType: 'bool',
-        name: '_add',
-        type: 'bool',
-      },
     ],
-    name: 'updateVes',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address[]',
-        name: '_tokens',
-        type: 'address[]',
-      },
-      {
-        internalType: 'bool',
-        name: '_add',
-        type: 'bool',
-      },
-    ],
-    name: 'updateWhitelistedTokens',
+    name: 'updateValuepool',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1388,16 +1332,33 @@ export const trustbountiesHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '',
+        name: '_will',
         type: 'address',
       },
+      {
+        internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+      {
+        internalType: 'bool',
+        name: '_add',
+        type: 'bool',
+      },
     ],
-    name: 'ves',
+    name: 'updateWhereIHaveMyMoney',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'valuepoolAddress',
     outputs: [
       {
-        internalType: 'bool',
+        internalType: 'address',
         name: '',
-        type: 'bool',
+        type: 'address',
       },
     ],
     stateMutability: 'view',

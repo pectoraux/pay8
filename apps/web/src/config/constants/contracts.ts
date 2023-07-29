@@ -581,6 +581,26 @@ export default {
     97: '0x0Bb7F9c3dDb587A8843D92f2De22B936c0537545',
     56: '0x',
   },
+  ssi: {
+    56: '0x',
+    97: '0x1de9D006f209E9A7556270cae74D1F0D6864168a',
+  },
+  card: {
+    56: '0x',
+    97: '0x9899019bb90D216d1DD2Db790daf2dB7dFb6D827',
+  },
+  futureCollaterals: {
+    56: '0x',
+    97: '0xD2b2435aa749E42F3523033Fe167Ae543082375F',
+  },
+  profile: {
+    56: '0x',
+    97: '0x810EBEa7d4330B6A6EFa2f73FF7E7773c57F98CD',
+  },
+  profileHelper: {
+    56: '0x',
+    97: '0xf2Ca8333888cf3C673E81225228a000F9b7b4338',
+  },
   mobility: {
     97: '0xe12e51A9007abA2575B7e4227f2520Fb1E9EDf74',
     56: '0x',

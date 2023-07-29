@@ -1,4 +1,4 @@
-export const trustbountiesABI = [
+export const trustBountiesABI = [
   {
     inputs: [
       {

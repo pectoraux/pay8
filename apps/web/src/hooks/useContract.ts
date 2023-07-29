@@ -53,6 +53,93 @@ import {
   getTrustBountiesContract,
   getTrustBountiesVoterContract,
   getTrustBountiesHelperContract,
+  getReferralVoterContract,
+  getFeeToContract,
+  getPoolGaugeContract,
+  getBettingMinterContract,
+  getBettingHelperContract,
+  getBettingFactoryContract,
+  getValuepoolFactoryContract,
+  getNFTicketHelper,
+  getNFTicket,
+  getPaywallContract,
+  getVaContract,
+  getValuepoolContract,
+  getBribeContract,
+  getGaugeContract,
+  getSSIContract,
+  getBusinessVoterContract,
+  getVaFactoryContract,
+  getValuepoolHelper2Contract,
+  getValuepoolHelperContract,
+  getValuepoolVoterContract,
+  getSponsorHelperContract,
+  getContributorsVoterContract,
+  getAcceleratorVoterContract,
+  getSponsorFactoryContract,
+  getSponsorContract,
+  getWorldNoteContract,
+  getWorldHelper3Contract,
+  getWorldHelper2Contract,
+  getWorldHelperContract,
+  getWorldFactoryContract,
+  getWorldContract,
+  getGameContract,
+  getGameHelper2Contract,
+  getGameHelperContract,
+  getGameMinterContract,
+  getGameFactoryContract,
+  getBILLNoteContract,
+  getBILLMinterContract,
+  getBILLHelperContract,
+  getBILLFactoryContract,
+  getBILLContract,
+  getWillNoteContract,
+  getWillFactoryContract,
+  getWillContract,
+  getARPNoteContract,
+  getARPMinterContract,
+  getARPHelperContract,
+  getARPFactoryContract,
+  getARPContract,
+  getAuditorNoteContract,
+  getAuditorHelper2Contract,
+  getAuditorHelperContract,
+  getAuditorFactoryContract,
+  getAuditorContract,
+  getFutureCollateralsContract,
+  getCardContract,
+  getBettingContract,
+  getVeContract,
+  getStakeMarketVoterContract,
+  getStakeMarketBribeContract,
+  getStakeMarketHelperContract,
+  getStakeMarketNoteContract,
+  getStakeMarketContract,
+  getMinterContract,
+  getMinterFactoryContract,
+  getNftMarketHelper3Contract,
+  getNftMarketHelper2Contract,
+  getNftMarketHelperContract,
+  getNftMarketTradesContract,
+  getNftMarketOrdersContract,
+  getPaywallARPHelperContract,
+  getPaywallARPFactoryContract,
+  getPaywallMarketHelper2Contract,
+  getPaywallMarketHelperContract,
+  getPaywallMarketTradesContract,
+  getPaywallMarketOrdersContract,
+  getMarketHelper3Contract,
+  getMarketHelper2Contract,
+  getMarketHelperContract,
+  getMarketTradesContract,
+  getMarketOrdersContract,
+  getMarketEventsContract,
+  getMarketCollectionsContract,
+  getProfileHelperContract,
+  getLotteryContract,
+  getLotteryRandomNumberGeneratorContract,
+  getLotteryHelperContract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
@@ -440,4 +527,551 @@ export const useTrustBountiesVoterContract = ({ chainId: chainId_ }: { chainId?:
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(() => getTrustBountiesVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+/**
+ * Payswap
+ */
+
+export const useProfileHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getProfileHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useLotteryContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getLotteryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useLotteryRandomNumberGenerator = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(
+    () => getLotteryRandomNumberGeneratorContract(signer, chainId_ ?? chainId),
+    [signer, chainId_, chainId],
+  )
+}
+
+export const useLotteryHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getLotteryHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMarketCollectionsContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getMarketCollectionsContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMarketEventsContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getMarketEventsContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMarketOrdersContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getMarketOrdersContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMarketTradesContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getMarketTradesContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMarketHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getMarketHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMarketHelper2Contract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getMarketHelper2Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMarketHelper3Contract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getMarketHelper3Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const usePaywallMarketOrdersContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getPaywallMarketOrdersContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const usePaywallMarketTradesContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getPaywallMarketTradesContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const usePaywallMarketHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getPaywallMarketHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const usePaywallMarketHelper2Contract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getPaywallMarketHelper2Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const usePaywallARPFactoryContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getPaywallARPFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const usePaywallARPHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getPaywallARPHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useNftMarketOrdersContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getNftMarketOrdersContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useNftMarketTradesContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getNftMarketTradesContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useNftMarketHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getNftMarketHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useNftMarketHelper2Contract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getNftMarketHelper2Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useNftMarketHelper3Contract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getNftMarketHelper3Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMinterFactoryContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getMinterFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useMinterContract = (minterAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(
+    () => minterAddress && getRampContract(minterAddress, signer, chainId),
+    [minterAddress, signer, chainId],
+  )
+}
+
+export const useStakeMarketContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getStakeMarketContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useStakeMarketNoteContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getStakeMarketNoteContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useStakeMarketHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getStakeMarketHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useStakeMarketBribeContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getStakeMarketBribeContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useStakeMarketVoterContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getStakeMarketVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useVeContract = (veAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => veAddress && getVeContract(veAddress, signer, chainId), [veAddress, signer, chainId])
+}
+
+export const useBettingContract = (bettingAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(
+    () => bettingAddress && getBettingContract(bettingAddress, signer, chainId),
+    [bettingAddress, signer, chainId],
+  )
+}
+
+export const useCardContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getCardContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useFutureCollateralContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getFutureCollateralsContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useAuditorContract = (auditorAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(
+    () => auditorAddress && getAuditorContract(auditorAddress, signer, chainId),
+    [auditorAddress, signer, chainId],
+  )
+}
+
+export const useAuditorFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getAuditorFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useAuditorHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getAuditorHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useAuditorHelper2 = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getAuditorHelper2Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useAuditorNote = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getAuditorNoteContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useARPContract = (arpAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => arpAddress && getARPContract(arpAddress, signer, chainId), [arpAddress, signer, chainId])
+}
+
+export const useARPFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getARPFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useARPHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getARPHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useARPMinter = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getARPMinterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useARPNote = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getARPNoteContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useWILLContract = (willAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => willAddress && getWillContract(willAddress, signer, chainId), [willAddress, signer, chainId])
+}
+
+export const useWILLFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getWillFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useWILLNote = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getWillNoteContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBILLContract = (billAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => billAddress && getBILLContract(billAddress, signer, chainId), [billAddress, signer, chainId])
+}
+
+export const useBILLFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBILLFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBILLHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBILLHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBILLMinter = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBILLMinterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBILLNote = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBILLNoteContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useGameFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getGameFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useGameMinter = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getGameMinterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useGameHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getGameHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useGameHelper2 = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getGameHelper2Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useGameContract = (gameAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => gameAddress && getGameContract(gameAddress, signer, chainId), [gameAddress, signer, chainId])
+}
+
+export const useWorldContract = (worldAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => worldAddress && getWorldContract(worldAddress, signer, chainId), [worldAddress, signer, chainId])
+}
+
+export const useWorldFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getWorldFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useWorldHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getWorldHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useWorldHelper2 = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getWorldHelper2Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useWorldHelper3 = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getWorldHelper3Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useWorldNote = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getWorldNoteContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useSponsorContract = (sponsorAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(
+    () => sponsorAddress && getSponsorContract(sponsorAddress, signer, chainId),
+    [sponsorAddress, signer, chainId],
+  )
+}
+
+export const useSponsorFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getSponsorFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useAcceleratorContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getAcceleratorVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useContributorsContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getContributorsVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useSponsorHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getSponsorHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useValuepoolVoterContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getValuepoolVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useValuepoolHelperContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getValuepoolHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useValuepoolHelper2Contract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getValuepoolHelper2Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useVaFactoryContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getVaFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBusinessVoter = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBusinessVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useSSIContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getSSIContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useGaugeContract = (gaugeAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => gaugeAddress && getGaugeContract(gaugeAddress, signer, chainId), [gaugeAddress, signer, chainId])
+}
+
+export const useBribeContract = (bribeAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => bribeAddress && getBribeContract(bribeAddress, signer, chainId), [bribeAddress, signer, chainId])
+}
+
+export const useValuepoolContract = (valuepoolAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(
+    () => valuepoolAddress && getValuepoolContract(valuepoolAddress, signer, chainId),
+    [valuepoolAddress, signer, chainId],
+  )
+}
+
+export const useVaContract = (vaAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => vaAddress && getVaContract(vaAddress, signer, chainId), [vaAddress, signer, chainId])
+}
+
+export const usePaywallContract = (paywallAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(
+    () => paywallAddress && getPaywallContract(paywallAddress, signer, chainId),
+    [paywallAddress, signer, chainId],
+  )
+}
+
+export const useNFTicket = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getNFTicket(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useNFTicketHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getNFTicketHelper(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useValuepoolFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getValuepoolFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBettingFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBettingFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBettingHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBettingHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBettingMinter = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBettingMinterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const usePoolGaugeContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getPoolGaugeContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useFeeToContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getFeeToContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useReferralVoter = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getReferralVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }
