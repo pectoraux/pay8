@@ -113,13 +113,11 @@ const config: (
         {
           label: t('ARPs'),
           href: '/arps',
-          hideSubNav: true,
         },
         {
           label: t('Auditors'),
           href: '/auditors',
           image: '/images/decorations/tc.png',
-          hideSubNav: true,
         },
         {
           label: t('Bills'),
