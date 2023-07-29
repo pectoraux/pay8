@@ -41,19 +41,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
   const { earningToken, rampAddress } = pool
-  const isBounty = router.pathname.includes('bounties')
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool)
-  const goToContract = () => {
-    if (isBounty) {
-      router.push(`/ramps/bounties/`)
-    } else {
-      router.push(`/ramps/${rampAddress}`)
-    }
-  }
+  console.log('onPresentNFTs====================>', pool, rampAddress)
 
   return (
     <>
@@ -71,7 +63,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
               <ArrowForwardIcon
                 onClick={() => {
                   setPendingTx(true)
-                  goToContract()
+                  router.push(`/ramps/${rampAddress}`)
                 }}
                 color="primary"
               />
@@ -80,7 +72,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           isLoading={pendingTx}
           onClick={() => {
             setPendingTx(true)
-            goToContract()
+            router.push(`/ramps/${rampAddress}`)
           }}
         >
           {t('View All Accounts')}

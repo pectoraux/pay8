@@ -153,7 +153,7 @@ export function PoolControls<T>({
   }
 
   chosenPools = useMemo(() => {
-    const sortedPools = sortPools<T>(sortOption, chosenPools)
+    const sortedPools = sortPools<T>(account, sortOption, chosenPools)
       .slice(0, numberOfPoolsVisible)
       .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.id) : true));
 
