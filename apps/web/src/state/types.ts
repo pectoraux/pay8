@@ -613,7 +613,7 @@ export interface State {
   futureCollaterals: any
   games: any
   lotteries: any
-  payCards: any
+  cards: any
   referrals: any
   sponsors: any
   stakemarket: any

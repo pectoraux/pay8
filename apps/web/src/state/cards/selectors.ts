@@ -5,29 +5,29 @@ import { State, VaultKey } from '../types'
 // import { transformPool, transformVault } from './helpers'
 import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
-const selectPoolsData = (state: State) => state.payCards?.data
-const selectPoolData = (sousId) => (state: State) => state.payCards?.data.find((p) => p.sousId === sousId)
+const selectPoolsData = (state: State) => state.cards?.data
+const selectPoolData = (sousId) => (state: State) => state.cards?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.payCards.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
-const selectUserDataLoaded = (state: State) => state.payCards?.userDataLoaded
-const selectVault = (key: VaultKey) => (state: State) => key && state.payCards ? state.payCards[key] : {}
-const selectIfo = (state: State) => state.payCards.ifo
-const selectIfoUserCredit = (state: State) => state.payCards.ifo.credit ?? BIG_ZERO
+  state.cards.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+const selectUserDataLoaded = (state: State) => state.cards?.userDataLoaded
+const selectVault = (key: VaultKey) => (state: State) => key && state.cards ? state.cards[key] : {}
+const selectIfo = (state: State) => state.cards.ifo
+const selectIfoUserCredit = (state: State) => state.cards.ifo.credit ?? BIG_ZERO
 
-const selectCurrBribe = (state: State) => state.payCards?.currBribe
-const selectCurrPool = (state: State) => state.payCards?.currPool
+const selectCurrBribe = (state: State) => state.cards?.currBribe
+const selectCurrPool = (state: State) => state.cards?.currPool
 const selectFilteredData = (state: State) => {
-  return state.payCards?.data.filter(
+  return state.cards?.data.filter(
     (ramp) =>
-      (!state.payCards.filters.workspace ||
-        state.payCards.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.payCards.filters.workspace?.toLowerCase()) &&
-      (!state.payCards.filters.country ||
-        state.payCards.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.payCards.filters.country?.toLowerCase()) &&
-      (!state.payCards.filters.city ||
-        state.payCards.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.payCards.filters.city?.toLowerCase()),
+      (!state.cards.filters.workspace ||
+        state.cards.filters.workspace === 'All' ||
+        ramp?.workspace?.toLowerCase() === state.cards.filters.workspace?.toLowerCase()) &&
+      (!state.cards.filters.country ||
+        state.cards.filters.country === 'All' ||
+        ramp?.country?.toLowerCase() === state.cards.filters.country?.toLowerCase()) &&
+      (!state.cards.filters.city ||
+        state.cards.filters.city === 'All' ||
+        ramp?.city?.toLowerCase() === state.cards.filters.city?.toLowerCase()),
   )
 }
 

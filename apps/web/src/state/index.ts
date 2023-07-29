@@ -19,7 +19,7 @@ import bettingsReducer from './bettings'
 import billsReducer from './bills'
 import contributorsReducer from './contributors'
 import futureCollateralsReducer from './futureCollaterals'
-import payCardsReducer from './payCards'
+import cardsReducer from './cards'
 import gamesReducer from './games'
 import lotteriesReducer from './lotteries'
 import referralsReducer from './referrals'
@@ -56,7 +56,7 @@ const persistedReducer = persistReducer(
     bills: billsReducer,
     contributors: contributorsReducer,
     futureCollaterals: futureCollateralsReducer,
-    payCards: payCardsReducer,
+    cards: cardsReducer,
     games: gamesReducer,
     lotteries: lotteriesReducer,
     referrals: referralsReducer,
