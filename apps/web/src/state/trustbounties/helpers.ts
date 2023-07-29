@@ -13,7 +13,7 @@ import { erc20ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
-import { trustbountiesABI } from 'config/abi/trustBounties'
+import { trustBountiesABI } from 'config/abi/trustBounties'
 
 export const getBounties = async (first: number, skip: number, where) => {
   try {
@@ -120,13 +120,13 @@ export const fetchBounties = async (
           contracts: [
             {
               address: trustbountiesContract.address,
-              abi: trustbountiesABI,
+              abi: trustBountiesABI,
               functionName: 'bountyInfo',
               args: [BigInt(bountyId)],
             },
             {
               address: trustbountiesContract.address,
-              abi: trustbountiesABI,
+              abi: trustBountiesABI,
               functionName: 'getBalance',
               args: [BigInt(bountyId)],
             },
@@ -150,7 +150,7 @@ export const fetchBounties = async (
               contracts: [
                 {
                   address: trustbountiesContract.address,
-                  abi: trustbountiesABI,
+                  abi: trustBountiesABI,
                   functionName: 'claims',
                   args: [BigInt(bountyId), BigInt(parseInt(claim.id) - 1)],
                 },
