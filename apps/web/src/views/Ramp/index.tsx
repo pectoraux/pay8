@@ -8,7 +8,6 @@ import {
   Image,
   Text,
   Link,
-  FlexLayout,
   PageHeader,
   Box,
   Pool,
@@ -18,14 +17,11 @@ import {
   Breadcrumbs,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms } from 'state/ramps/hooks'
 import Page from 'components/Layout/Page'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAppDispatch } from 'state'
 
 import PoolControls from './components/PoolControls'
@@ -43,12 +39,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const { pools, userDataLoaded: rampLoaded } = usePoolsWithFilterSelector()
-  // const { pools: bounties, userDataLoaded: bountiesLoaded } = useBountiesWithFilterSelector()
-  const isBounties = router.pathname.includes('bounties')
-  const userDataLoaded = isBounties
-    ? true // bountiesLoaded
-    : rampLoaded
+  const { pools } = usePoolsWithFilterSelector()
   const { ramp, session_id: sessionId, state: status, userCurrency } = router.query
   const ogRamp = useMemo(() => pools?.length && pools[0], [pools])
   const isOwner = ogRamp?.devaddr_ === account
@@ -61,13 +52,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [onPresentAdminSettings] = useModal(
     <CreateGaugeModal variant="admin" currency={currency ?? userCurrency} location="header" pool={ogRamp} />,
   )
-  const [onPresentDeleteARP] = useModal(<CreateGaugeModal variant="delete" currency={currency ?? userCurrency} />)
-  const [onPresentTrustBounties] = useModal(
-    <></>, // <CreateBountyModal currency={currency ?? userCurrency} />
-  )
+  const [onPresentDeleteContract] = useModal(<CreateGaugeModal variant="delete" currency={currency ?? userCurrency} />)
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
-      location="arps"
+      location="home"
       pool={pools?.length && pools[0]}
       currency={currency ?? userCurrency}
       status={status}
@@ -83,7 +71,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   }, [status, sessionId, router.query, openedAlready, openPresentControlPanel])
 
   usePoolsPageFetch()
-  // useBountiesPageFetch()
 
   useEffect(() => {
     fetchPoolsDataWithFarms(router.query.ramp, dispatch)
@@ -95,19 +82,17 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {isBounties ? t('Trust Bounties') : t('Decentralized Ramp')}
+              {t('Decentralized Ramp')}
             </Heading>
             <Heading scale="md" color="text">
               {t('%ramp%', { ramp: (ramp ?? '')?.toString() })}
             </Heading>
             <Heading scale="md" color="text">
-              {isBounties
-                ? t('Create a trust bounty so your customers can start minting from your ramp')
-                : t(ogRamp?.description ?? '')}
+              {t(ogRamp?.description ?? '')}
             </Heading>
             {isOwner ? (
               <Flex pt="17px">
-                <Button p="0" onClick={isBounties ? onPresentTrustBounties : onPresentAdminSettings} variant="text">
+                <Button p="0" onClick={onPresentAdminSettings} variant="text">
                   <Text color="primary" bold fontSize="16px" mr="4px">
                     {t('Admin Settings')}
                   </Text>
@@ -140,7 +125,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {isOwner ? (
                 <FinishedTextButton
                   as={Link}
-                  onClick={onPresentDeleteARP}
+                  onClick={onPresentDeleteContract}
                   fontSize={['16px', null, '20px']}
                   color="failure"
                   pl={17}

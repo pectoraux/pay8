@@ -1,16 +1,18 @@
 import useSWR from 'swr'
-import { useEffect, useMemo } from 'react'
-import axios from 'axios'
-import NodeRSA from 'encrypt-rsa'
+import { useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { requiresApproval } from 'utils/requiresApproval'
 import { fetchBountiesAsync } from '.'
-import { makePoolWithUserDataLoadingSelector } from './selectors'
-import {} from './helpers'
+import {
+  currBribeSelector,
+  currPoolSelector,
+  makePoolWithUserDataLoadingSelector,
+  poolsWithFilterSelector,
+} from './selectors'
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -62,4 +64,24 @@ export const usePoolsPageFetch = () => {
   //     }
   //   })
   // }, [account, dispatch])
+}
+
+export const useCurrBribe = () => {
+  return useSelector(currBribeSelector)
+}
+
+export const useCurrPool = () => {
+  return useSelector(currPoolSelector)
+}
+
+export const usePoolsWithFilterSelector = () => {
+  return useSelector(poolsWithFilterSelector)
+}
+
+export const useGetRequiresApproval = (c, a, s) => {
+  const { data, status } = useSWR(['tb', 'allowance', s.toLowerCase()], async () => requiresApproval(c, a, s))
+  return {
+    status,
+    needsApproval: data ?? true,
+  }
 }
