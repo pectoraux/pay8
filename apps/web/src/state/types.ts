@@ -618,6 +618,7 @@ export interface State {
   sponsors: any
   stakemarket: any
   ramps: any
+  valuepools: any
   wills: any
   worlds: any
 }

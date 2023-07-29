@@ -24,6 +24,7 @@ import gamesReducer from './games'
 import lotteriesReducer from './lotteries'
 import referralsReducer from './referrals'
 import sponsorsReducer from './sponsors'
+import valuepoolsReducer from './valuepools'
 import willsReducer from './wills'
 import worldsReducer from './worlds'
 import globalReducer from './global/reducer'
@@ -60,6 +61,7 @@ const persistedReducer = persistReducer(
     lotteries: lotteriesReducer,
     referrals: referralsReducer,
     sponsors: sponsorsReducer,
+    valuepools: valuepoolsReducer,
     wills: willsReducer,
     worlds: worldsReducer,
 
