@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { getReferralVoterAddress } from 'utils/addressHelpers'
+import { getProfileAddress, getReferralVoterAddress } from 'utils/addressHelpers'
 import { gql, request } from 'graphql-request'
 import { GRAPH_API_REFERRAL } from 'config/constants/endpoints'
 // import { getCollectionApi } from 'state/cancan/helpers'
@@ -10,6 +10,7 @@ import { vestingABI } from 'config/abi/vesting'
 import { gaugeABI } from 'config/abi/gauge'
 import { erc20ABI } from 'wagmi'
 import { bribeABI } from 'config/abi/bribe'
+import { profileABI } from 'config/abi/profile'
 
 export const getReferralsData = async () => {
   try {
@@ -158,4 +159,86 @@ export const fetchReferrals = async () => {
       .flat(),
   )
   return referrals
+}
+
+export const fetchReferralsUserData = async (account, pools) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const augmentedPools = await Promise.all(
+    pools
+      ?.map(async (pool) => {
+        const [balanceOf] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: pool.ve,
+              abi: vestingABI,
+              functionName: 'balanceOf',
+              args: [account],
+            },
+          ],
+        })
+        const arr = Array.from({ length: Number(balanceOf.result) }, (v, i) => i)
+        const tokenIds = await Promise.all(
+          arr.map(async (idx) => {
+            const [tokenId] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: pool.ve,
+                  abi: vestingABI,
+                  functionName: 'tokenOfOwnerByIndex',
+                  args: [account, BigInt(idx)],
+                },
+              ],
+            })
+            return tokenId.toString()
+          }),
+        )
+        const [profileId] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: getProfileAddress(),
+              abi: profileABI,
+              functionName: 'addressToProfileId',
+              args: [account],
+            },
+          ],
+        })
+        const augmentedBribes = await Promise.all(
+          pool.bribes.map(async (bribe) => {
+            const [earned, allowance] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: bribe.businessBribe,
+                  abi: bribeABI,
+                  functionName: 'earned',
+                  args: [bribe.tokenAddress, BigInt(profileId.result)],
+                },
+                {
+                  address: bribe.tokenAddress,
+                  abi: erc20ABI,
+                  functionName: 'allowance',
+                  args: [account, bribe.businessBribe],
+                },
+              ],
+            })
+            return {
+              ...bribe,
+              earned: earned.toString(),
+              allowance: allowance.toString(),
+            }
+          }),
+        )
+        return {
+          ...pool,
+          tokenIds,
+          profileId,
+          augmentedBribes,
+        }
+      })
+      .flat(),
+  )
+  return augmentedPools
 }

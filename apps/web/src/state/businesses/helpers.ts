@@ -7,8 +7,9 @@ import { vestingABI } from 'config/abi/vesting'
 import { gaugeABI } from 'config/abi/gauge'
 import { bribeABI } from 'config/abi/bribe'
 import { collectionFields } from 'state/businessvoting/queries'
-import { getBusinessVoterAddress } from 'utils/addressHelpers'
+import { getBusinessVoterAddress, getProfileAddress } from 'utils/addressHelpers'
 import { businessVoterABI } from 'config/abi/businessVoter'
+import { profileABI } from 'config/abi/profile'
 
 export const getBusinessesData = async () => {
   try {
@@ -158,4 +159,86 @@ export const fetchBusinesses = async () => {
       .flat(),
   )
   return businesses
+}
+
+export const fetchBusinessesUserData = async (account, pools) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const augmentedPools = await Promise.all(
+    pools
+      ?.map(async (pool) => {
+        const [balanceOf] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: pool.ve,
+              abi: vestingABI,
+              functionName: 'balanceOf',
+              args: [account],
+            },
+          ],
+        })
+        const arr = Array.from({ length: Number(balanceOf.result) }, (v, i) => i)
+        const tokenIds = await Promise.all(
+          arr.map(async (idx) => {
+            const [tokenId] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: pool.ve,
+                  abi: vestingABI,
+                  functionName: 'tokenOfOwnerByIndex',
+                  args: [account, BigInt(idx)],
+                },
+              ],
+            })
+            return tokenId.toString()
+          }),
+        )
+        const [profileId] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: getProfileAddress(),
+              abi: profileABI,
+              functionName: 'addressToProfileId',
+              args: [account],
+            },
+          ],
+        })
+        const augmentedBribes = await Promise.all(
+          pool.bribes.map(async (bribe) => {
+            const [earned, allowance] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: bribe.businessBribe,
+                  abi: bribeABI,
+                  functionName: 'earned',
+                  args: [bribe.tokenAddress, BigInt(profileId.result)],
+                },
+                {
+                  address: bribe.tokenAddress,
+                  abi: erc20ABI,
+                  functionName: 'allowance',
+                  args: [account, bribe.businessBribe],
+                },
+              ],
+            })
+            return {
+              ...bribe,
+              earned: earned.toString(),
+              allowance: allowance.toString(),
+            }
+          }),
+        )
+        return {
+          ...pool,
+          tokenIds,
+          profileId,
+          augmentedBribes,
+        }
+      })
+      .flat(),
+  )
+  return augmentedPools
 }

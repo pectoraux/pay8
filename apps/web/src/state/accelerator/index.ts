@@ -1,56 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
-import BigNumber from 'bignumber.js'
 import keyBy from 'lodash/keyBy'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { bscTokens } from '@pancakeswap/tokens'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { fetchTokenUSDValue } from '@pancakeswap/utils/llamaPrice'
 import {
-  fetchPoolsTimeLimits,
-  fetchPoolsTotalStaking,
-  fetchPoolsProfileRequirement,
-  fetchPoolsStakingLimits,
   fetchPoolsAllowance,
   fetchUserBalances,
   fetchUserPendingRewards,
   fetchUserStakeBalances,
-  fetchPublicIfoData,
-  fetchUserIfoCredit,
-  fetchPublicVaultData,
-  fetchPublicFlexibleSideVaultData,
-  fetchVaultUser,
-  fetchVaultFees,
-  fetchFlexibleSideVaultUser,
-  getCakeVaultAddress,
-  getCakeFlexibleSideVaultAddress,
-  getPoolsConfig,
-  isLegacyPool,
-  getPoolAprByTokenPerSecond,
-  getPoolAprByTokenPerBlock,
 } from '@pancakeswap/pools'
 import { ChainId } from '@pancakeswap/sdk'
 
-import {
-  PoolsState,
-  SerializedPool,
-  SerializedVaultFees,
-  SerializedCakeVault,
-  SerializedLockedVaultUser,
-  PublicIfoData,
-  SerializedVaultUser,
-  SerializedLockedCakeVault,
-} from 'state/types'
-import { Address, erc20ABI } from 'wagmi'
-import { isAddress } from 'utils'
-import { publicClient } from 'utils/wagmi'
 import { getViemClients } from 'utils/viem'
-import { getPoolsPriceHelperLpFiles } from 'config/constants/priceHelperLps/index'
-import { farmV3ApiFetch } from 'state/farmsV3/hooks'
-import { getCakePriceFromOracle } from 'hooks/useCakePriceAsBN'
-
-import fetchFarms from '../farms/fetchFarms'
-import getFarmsPrices from '../farms/getFarmsPrices'
-import { fetchRamps, getAccountSg, fetchRampData, fetchRamp } from './helpers'
+import { fetchAccelerator, fetchAcceleratorUserData } from './helpers'
 import { resetUserState } from '../global/actions'
 
 export const initialFilterState = Object.freeze({
@@ -67,54 +26,40 @@ const initialState: any = {
   currBribe: {},
   currPool: {},
 }
+let pools = []
 
-export const fetchRampsAsync = () => async (dispatch) => {
+export const fetchAcceleratorGaugesAsync = () => async (dispatch) => {
   try {
-    console.log('fetchBusinesses1================>')
-    const ramps = await fetchRamps()
-    const data = ramps.filter((ramp) => !!ramp)
-    console.log('fetchBusinesses================>', data, ramps)
-    dispatch(setRampsPublicData(data || []))
-    console.log('fetchBusinesses================>Done')
+    console.log('fetchAccelerator1================>')
+    const businesses = await fetchAccelerator()
+    console.log('fetchAccelerator================>', businesses)
+    const data = businesses
+    dispatch(setAcceleratorPublicData(data || []))
+    console.log('userData1================>', pools)
   } catch (error) {
-    console.error('[Pools Action]===============>', error)
+    console.error('[Pools Action] error when getting staking limits======>', error)
   }
 }
 
-export const fetchRampAsync = (rampAddress) => async (dispatch) => {
+export const fetchAcceleratorUserDataAsync = createAsyncThunk<
+  { sousId: number; allowance: any; bribes: any }[],
+  { account: string }
+>('pool/fetchPoolsUserData', async ({ account }, { rejectWithValue }) => {
   try {
-    console.log('fetchBusinesses1================>', rampAddress)
-    const ramp = await fetchRamp(rampAddress)
-    console.log('fetchBusinesse================>', ramp, rampAddress)
-    dispatch(setRampsPublicData([ramp] || []))
-  } catch (error) {
-    console.error('[Pools Action] error when getting staking limits', error)
-  }
-}
-
-export const fetchRampsUserDataAsync = createAsyncThunk<
-  { sousId: number; allowance: any; stakingTokenBalance: any; stakedBalance: any; pendingReward: any }[],
-  string
->('pool/fetchPoolsUserData', async (account, { rejectWithValue }) => {
-  try {
-    console.log('fetchRampsUserDataAsync1===============>', account)
-    const [accountData] = await Promise.all([getAccountSg(account, 'stripe')])
-    console.log('fetchRampsUserDataAsync===============>', accountData)
-    const userData = []
+    const allBribes = await fetchAcceleratorUserData(account, pools)
+    const userData = pools.map((pool) => ({
+      sousId: parseInt(pool.sousId),
+      allowance: 0,
+      profileId: allBribes?.find((entry) => parseInt(entry.sousId) === parseInt(pool.sousId))?.profileId,
+      tokenIds: allBribes?.find((entry) => parseInt(entry.sousId) === parseInt(pool.sousId))?.tokenIds,
+      bribes: allBribes?.find((entry) => parseInt(entry.sousId) === parseInt(pool.sousId))?.augmentedBribes,
+    }))
+    console.log('userData================>', userData)
     return userData
   } catch (e) {
-    console.log('err fetchRampsUserDataAsync===============>', e)
     return rejectWithValue(e)
   }
 })
-
-export const updateRamp = createAsyncThunk<{ rampAddress: string; value: any }, { rampAddress: string }>(
-  'pool/updateRamp',
-  async ({ rampAddress }) => {
-    const data = await fetchRampData(rampAddress)
-    return { rampAddress, value: data }
-  },
-)
 
 export const updateUserAllowance = createAsyncThunk<
   { sousId: number; field: string; value: any },
@@ -149,14 +94,14 @@ export const updateUserPendingReward = createAsyncThunk<
 })
 
 export const PoolsSlice = createSlice({
-  name: 'Ramps',
+  name: 'Accelerator',
   initialState,
   reducers: {
-    setRampsPublicData: (state, action) => {
-      console.log('setRampsPublicData==============>', action.payload)
+    setAcceleratorPublicData: (state, action) => {
       state.data = [...action.payload]
+      pools = [...action.payload]
     },
-    setPoolUserData: (state, action) => {
+    setAcceleratorUserData: (state, action) => {
       const { sousId } = action.payload
       state.data = state.data.map((pool) => {
         if (pool.sousId === sousId) {
@@ -180,25 +125,17 @@ export const PoolsSlice = createSlice({
       })
       state.userDataLoaded = false
     })
-    builder.addCase(
-      fetchRampsUserDataAsync.fulfilled,
-      (
-        state,
-        action: PayloadAction<
-          { sousId: number; allowance: any; stakingTokenBalance: any; stakedBalance: any; pendingReward: any }[]
-        >,
-      ) => {
-        const userData = action.payload
-        const userDataSousIdMap = keyBy(userData, 'sousId')
-        state.data = state.data.map((pool) => ({
-          ...pool,
-          userDataLoaded: true,
-          userData: userDataSousIdMap[pool.sousId],
-        }))
-        state.userDataLoaded = true
-      },
-    )
-    builder.addCase(fetchRampsUserDataAsync.rejected, (state, action) => {
+    builder.addCase(fetchAcceleratorUserDataAsync.fulfilled, (state, action) => {
+      const userData = action.payload
+      const userDataSousIdMap = keyBy(userData, 'sousId')
+      state.data = state.data.map((pool) => ({
+        ...pool,
+        userDataLoaded: true,
+        userData: userDataSousIdMap[pool.sousId],
+      }))
+      state.userDataLoaded = true
+    })
+    builder.addCase(fetchAcceleratorUserDataAsync.rejected, (state, action) => {
       console.error('[Pools Action] Error fetching pool user data', action.payload)
     })
     builder.addMatcher(
@@ -217,18 +154,11 @@ export const PoolsSlice = createSlice({
         }
       },
     )
-    builder.addMatcher(
-      isAnyOf(updateRamp.fulfilled),
-      (state, action: PayloadAction<{ rampAddress: string; value: any }>) => {
-        const { rampAddress, value } = action.payload
-        const index = state.data.findIndex((p: any) => p.rampAddress === rampAddress)
-        state.data[index] = { ...value, ...state.data[index] }
-      },
-    )
   },
 })
 
 // Actions
-export const { setRampsPublicData, setCurrBribeData, setPoolUserData, setCurrPoolData } = PoolsSlice.actions
+export const { setAcceleratorPublicData, setCurrBribeData, setAcceleratorUserData, setCurrPoolData } =
+  PoolsSlice.actions
 
 export default PoolsSlice.reducer

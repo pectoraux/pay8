@@ -1,30 +1,33 @@
-import axios from 'axios'
-import NodeRSA from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
-import { Token } from '@pancakeswap/sdk'
-import { getBep20Contract, getRampAdsContract, getRampContract } from 'utils/contractHelpers'
 import { firestore } from 'utils/firebase'
+import { Token } from '@pancakeswap/sdk'
+import { GRAPH_API_BILLS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-import { GRAPH_API_RAMPS } from 'config/constants/endpoints'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+// import { getCollection } from 'state/cancan/helpers'
+import {
+  getBILLNoteContract,
+  getBILLMinterContract,
+  getBILLContract,
+  getBep20Contract,
+} from '../../utils/contractHelpers'
+import { billFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
-import { rampFields, accountFields, sessionFields } from './queries'
-import { rampABI } from 'config/abi/ramp'
+import { billABI } from 'config/abi/bill'
 import { erc20ABI } from 'wagmi'
-import { rampAdsABI } from 'config/abi/rampAds'
+import { getBILLMinterAddress, getBILLNoteAddress } from 'utils/addressHelpers'
+import { billNoteABI } from 'config/abi/billNote'
+import { billMinterABI } from 'config/abi/billMinter'
 
-export const fetchRampData = async (rampAddress) => {
-  return (await firestore.collection('ramps').doc(rampAddress).get()).data()
-}
-
-export const getRamps = async (first = 5, skip = 0, where = {}) => {
+export const getProtocols = async (first = 5, skip = 0, where = {}) => {
   try {
     const res = await request(
-      GRAPH_API_RAMPS,
+      GRAPH_API_BILLS,
       gql`
-      # query getRamps($first: Int!, $skip: Int!, $where: NFT_filter) 
+      query getProtocols($first: Int!, $skip: Int!, $where: Protocol_filter, $orderDirection: OrderDirection) 
       {
-        ramps(first: $first, skip: $skip, where: $where) {
-          ${rampFields}
+        protocols(first: $first, skip: $skip, where: $where) {
+          ${protocolFields}
         }
       }
       `,
@@ -34,424 +37,269 @@ export const getRamps = async (first = 5, skip = 0, where = {}) => {
         where,
       },
     )
-    console.log('res.ramps===================>', res.ramps)
-    return res.ramps
+    return res.protocols
   } catch (error) {
-    console.error('Failed to fetch ramps==============>', error)
+    console.error('Failed to fetch protocols===========>', error)
     return []
   }
 }
 
-export const getNfts = async (first = 5, skip = 0, where = {}) => {
+export const getProtocol = async (billAddress: string) => {
   try {
     const res = await request(
-      GRAPH_API_RAMPS,
+      GRAPH_API_BILLS,
       gql`
-        # query getRamps($first: Int!, $skip: Int!, $where: NFT_filter)
+        query getProtocolData($billAddress: String!) 
         {
-          nfts {
-            id
-            profileId
-            tokenAddress
-            metadataUrl
+          protocols(where: { bill: $billAddress }) {
+            ${protocolFields}
           }
         }
       `,
+      { billAddress },
+    )
+    return res.protocols
+  } catch (error) {
+    console.error('Failed to fetch protocol=============>', error, billAddress)
+    return null
+  }
+}
+
+export const getBill = async (billAddress) => {
+  try {
+    const res = await request(
+      GRAPH_API_BILLS,
+      gql`
+        query getBill($billAddress: String) 
+        {
+          bill(id: $billAddress) {
+            ${billFields}
+            protocols {
+              ${protocolFields}
+            }
+          }
+        }
+      `,
+      { billAddress },
+    )
+    console.log('getBill=================>', billAddress, res)
+    return res.bill
+  } catch (error) {
+    console.error('Failed to fetch protocol=============>', error, billAddress)
+    return null
+  }
+}
+
+export const getBills = async (first = 5, skip = 0, where) => {
+  try {
+    const res = await request(
+      GRAPH_API_BILLS,
+      gql`
+        query getBills($where: BILL_filter) 
+        {
+          bills(first: $first, skip: $skip, where: $where) {
+            ${billFields}
+            protocols {
+              ${protocolFields}
+            }
+          }
+        }
+      `,
+      { first, skip, where },
+    )
+    console.log('getBillsFromSg33=============>', res)
+    return res.bills
+  } catch (error) {
+    console.error('Failed to fetch protocol=============>', where, error)
+    return null
+  }
+}
+
+export const fetchBill = async (billAddress) => {
+  const bill = await getBill(billAddress.toLowerCase())
+  const bscClient = publicClient({ chainId: 4002 })
+  const [devaddr_, bountyRequired, profileRequired, collectionId] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
       {
-        first,
-        skip,
-        where,
+        address: billAddress,
+        abi: billABI,
+        functionName: 'devaddr_',
       },
-    )
-    console.log('res.nfts===================>', res.nfts)
-    return res.nfts
-  } catch (error) {
-    console.error('Failed to fetch nfts==============>', error)
-    return []
-  }
-}
-
-export const getSession = async (sessionId: string, rampAddress: string) => {
-  const sId = `${sessionId}-${rampAddress}`
-  try {
-    const res = await request(
-      GRAPH_API_RAMPS,
-      gql`
-        query getSessionData($sId: String!) 
-        {
-          session(id: $sId) {
-            ${sessionFields}
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'bountyRequired',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'profileRequired',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'collectionId',
+      },
+    ],
+  })
+  const collection = {} // await getCollection(new BigNumber(collectionId._hex).toJSON())
+  const accounts = await Promise.all(
+    bill?.protocols?.map(async (protocol) => {
+      const protocolId = protocol.id.split('_')[0]
+      const [protocolInfo, optionId, isAutoChargeable] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'protocolInfo',
+            args: [BigInt(protocolId)],
           },
-          ramps(id: $rampAddress) {
-            clientIds,
-            secretKeys,
-            publishableKeys,
-          }
-        }
-      `,
-      { sId, rampAddress },
-    )
-    console.log('11getSession===========>', res)
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'optionId',
+            args: [BigInt(protocolId)],
+          },
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'isAutoChargeable',
+            args: [BigInt(protocolId)],
+          },
+        ],
+      })
+      const _token = protocolInfo.result[0]
+      const version = protocolInfo.result[1]
+      const bountyId = protocolInfo.result[2]
+      const profileId = protocolInfo.result[3]
+      const credit = protocolInfo.result[4]
+      const debit = protocolInfo.result[5]
+      const startPayable = protocolInfo.result[6]
+      const startReceivable = protocolInfo.result[7]
+      const periodPayable = protocolInfo.result[8]
+      const periodReceivable = protocolInfo.result[9]
+      const creditFactor = protocolInfo.result[10]
+      const debitFactor = protocolInfo.result[11]
 
-    return res.session
-  } catch (error) {
-    console.error('Failed to fetch session=============>', error, sessionId)
-    return null
+      const [adminBountyId, name, symbol, decimals, totalLiquidity, receivables, payables] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'adminBountyId',
+            args: [_token],
+          },
+          {
+            address: _token,
+            abi: erc20ABI,
+            functionName: 'name',
+          },
+          {
+            address: _token,
+            abi: erc20ABI,
+            functionName: 'symbol',
+          },
+          {
+            address: _token,
+            abi: erc20ABI,
+            functionName: 'decimals',
+          },
+          {
+            address: _token,
+            abi: erc20ABI,
+            functionName: 'balanceOf',
+            args: [billAddress],
+          },
+          {
+            address: getBILLNoteAddress(),
+            abi: billNoteABI,
+            functionName: 'getDueReceivable',
+            args: [billAddress, BigInt(protocolId)],
+          },
+          {
+            address: getBILLNoteAddress(),
+            abi: billNoteABI,
+            functionName: 'getDuePayable',
+            args: [billAddress, BigInt(protocolId)],
+          },
+        ],
+      })
+      console.log('nextDuePayable=================>', receivables, payables)
+      return {
+        ...protocol,
+        protocolId,
+        isAutoChargeable,
+        adminBountyId: adminBountyId.toString(),
+        bountyId: bountyId.toString(),
+        profileId: profileId.toString(),
+        version: version.toString(),
+        optionId: optionId.toString(),
+        credit: credit.toString(),
+        debit: debit.toString(),
+        creditFactor: creditFactor.toString(),
+        debitFactor: debitFactor.toString(),
+        periodReceivable: periodReceivable.toString(),
+        periodPayable: periodPayable.toString(),
+        startPayable: startPayable.toString(),
+        startReceivable: startReceivable.toString(),
+        totalLiquidity: totalLiquidity.toString(),
+        dueReceivable: receivables[0].toString(),
+        nextDueReceivable: receivables[1].toString(),
+        duePayable: payables[0].toString(),
+        nextDuePayable: payables[1].toString(),
+        token: new Token(
+          56,
+          _token,
+          decimals.result,
+          symbol?.toString()?.toUpperCase() ?? 'symbol',
+          name?.toString() ?? 'name',
+          'https://www.payswap.org/',
+        ),
+        // allTokens.find((tk) => tk.address === token),
+      }
+    }),
+  )
+
+  // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
+  return {
+    ...bill,
+    billAddress,
+    accounts,
+    profileRequired,
+    devaddr_,
+    collection,
+    collectionId: collectionId.toString(),
+    bountyRequired: bountyRequired.toString(),
   }
 }
 
-export const getRampSg = async (rampAddress: string) => {
-  try {
-    const res = await request(
-      GRAPH_API_RAMPS,
-      gql`
-        query getRampData($rampAddress: String!) 
-        {
-          ramp(id: $rampAddress) {
-            ${rampFields}
-          }
-        }
-      `,
-      { rampAddress },
-    )
-    console.log('getRampSg=================>', res)
-    return res.ramp
-  } catch (error) {
-    console.error('Failed to fetch session=============>', error)
-    return null
-  }
-}
-
-export const getAccountSg = async (address: string, channel: string) => {
-  const ownerAddress = address?.toLowerCase()
-  try {
-    const res = await request(
-      GRAPH_API_RAMPS,
-      gql`
-        query getAccountData($ownerAddress: String!, $channel: String!) 
-        {
-          accounts(where: { owner: $ownerAddress, channel: $channel }) {
-            ${accountFields}
-          }
-        }
-      `,
-      { ownerAddress, channel },
-    )
-    console.log('getAccountSg=================>', res)
-    return res.accounts?.length && res.accounts[0]
-  } catch (error) {
-    console.error('Failed to fetch account=============>', error)
-    return null
-  }
-}
-
-export const getTokenData = async (tokenAddress) => {
-  const tokenContract = getBep20Contract(tokenAddress)
-  const [name, symbol, decimals] = await Promise.all([
-    tokenContract.read.name(),
-    tokenContract.read.symbol(),
-    tokenContract.read.decimals(),
-  ])
-  console.log('tokenAddress================>', tokenAddress, name, symbol)
-  return { name, symbol, decimals }
-}
-
-// eslint-disable-next-line consistent-return
-export const fetchRamp = async (address) => {
-  try {
-    const rampAddress = address?.toLowerCase()
-    const gauge = await getRampSg(rampAddress)
-    const rampContract = getRampContract(rampAddress)
-    const rampAdsContract = getRampAdsContract()
-    console.log('fetchRamp=========>', rampAddress, gauge, rampContract)
-    // const serializedTokens = serializeTokens()
-    const bscClient = publicClient({ chainId: 4002 })
-    const [devaddr_, tokens, params] = await bscClient.multicall({
-      allowFailure: true,
-      contracts: [
-        {
-          address: rampAddress,
-          abi: rampABI,
-          functionName: 'devaddr_',
-        },
-        {
-          address: rampAddress,
-          abi: rampABI,
-          functionName: 'getAllTokens',
-          args: [BigInt(0)],
-        },
-        {
-          address: rampAddress,
-          abi: rampABI,
-          functionName: 'getParams',
-        },
-      ],
-    })
-    console.log('fetchRamp0=========>', devaddr_, tokens, params)
-    const rampBadgeId = params.result[0]
-    const rampTokenId = params.result[1]
-    const mintFee = params.result[2]
-    const burnFee = params.result[3]
-    const rampSalePrice = params.result[4]
-    const soldAccounts = params.result[5]
-    const automatic = params.result[6]
-    const _ve = params.result[7]
-    console.log(
-      'fetchRamp1=========>',
-      rampBadgeId,
-      rampTokenId,
-      mintFee,
-      burnFee,
-      rampSalePrice,
-      soldAccounts,
-      automatic,
-      _ve,
-    )
-    const { sessions, clientIds, secretKeys, publishableKeys, ...rest } = gauge
-    const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-    const allSessions = await Promise.all(
-      sessions
-        .filter((session) => session?.active)
-        .map(async (session) => {
-          let ppData
-          const sk = gauge.secretKeys?.length && gauge.secretKeys[0]
-          const sk0 = sk
-            ? nodeRSA.decryptStringWithRsaPrivateKey({
-                text: sk,
-                privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-              })
-            : ''
-          const [name, symbol, decimals] = await bscClient.multicall({
-            allowFailure: true,
-            contracts: [
-              {
-                address: session?.tokenAddress,
-                abi: erc20ABI,
-                functionName: 'name',
-              },
-              {
-                address: session?.tokenAddress,
-                abi: erc20ABI,
-                functionName: 'symbol',
-              },
-              {
-                address: session?.tokenAddress,
-                abi: erc20ABI,
-                functionName: 'decimals',
-              },
-            ],
-          })
-          if (session.mintSession) {
-            ppData = await Promise.all([axios.post('/api/check', { sessionId: session.sessionId, sk: sk0 })])
-          }
-
-          return {
-            ...session,
-            ppDataFound: !ppData || !ppData?.error,
-            ppData: ppData?.data,
-            token: new Token(
-              56,
-              session?.tokenAddress,
-              Number(decimals),
-              symbol?.toString()?.toUpperCase() ?? 'symbol',
-              name?.toString() ?? 'name',
-              'https://www.trueusd.com/',
-            ),
-          }
-        }),
-    )
-    console.log('fetchRamp2=========>', allSessions, rampAddress, tokens)
-    let accounts = []
-    const _tokens = tokens as any
-    try {
-      accounts = await Promise.all(
-        !_tokens?.length
-          ? []
-          : _tokens.map(async (token) => {
-              const [protocolInfo, mintAvailable] = await bscClient.multicall({
-                allowFailure: true,
-                contracts: [
-                  {
-                    address: rampAddress,
-                    abi: rampABI,
-                    functionName: 'protocolInfo',
-                    args: [token],
-                  },
-                  {
-                    address: rampAddress,
-                    abi: rampAdsABI,
-                    functionName: 'mintAvailable',
-                    args: [rampAddress, token],
-                  },
-                ],
-              })
-              // const [
-              //   [status, tokenId, bountyId, profileId, badgeId, minted, burnt, salePrice, maxPartners, cap],
-              //   [mintable, balance, collateralStatus],
-              // ] = await Promise.all([
-              //   rampContract.read.protocolInfo(token) as any,
-              //   rampAdsContract.read.mintAvailable(rampAddress, token) as any,
-              // ])
-              return {
-                status: protocolInfo[0] === 0 ? 'Sold' : protocolInfo[0] === 1 ? 'Open' : 'Close',
-                isOverCollateralised: mintAvailable[2] === 0,
-                backingBalance: mintAvailable[1]?.toString(),
-                mintable: mintAvailable[0]?.toString(),
-                tokenId: protocolInfo[1]?.toString(),
-                bountyId: protocolInfo[2]?.toString(),
-                profileId: protocolInfo[3]?.toString(),
-                badgeId: protocolInfo[4]?.toString(),
-                minted: protocolInfo[5]?.toString(),
-                burnt: protocolInfo[6]?.toString(),
-                salePrice: protocolInfo[7]?.toString(),
-                maxPartners: protocolInfo[8]?.toString(),
-                cap: protocolInfo[9]?.toString(),
-                token: new Token(56, token, 18, 'TUSD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
-                // allTokens.find((tk) => tk.address === token),
-              }
-            }),
-      )
-    } catch (err) {
-      console.log('mintAvailable========>', err)
-    }
-    console.log('fetchRamp3=========>', accounts)
-    const cIds = clientIds || ['', '', '', '', '']
-    const sks = secretKeys || ['', '', '', '', '']
-    const pks = publishableKeys || ['', '', '', '', '']
-    const pk0 = pks[0]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[0],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    console.log('pks=======================>', pks[0], pk0)
-    const pk1 = pks[1]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[1],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const pk2 = pks[2]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[2],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const pk3 = pks[3]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[3],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const pk4 = pks[4]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[4],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk0 = sks[0]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[0],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk1 = sks[1]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[1],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk2 = sks[2]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[2],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk3 = sks[3]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[3],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk4 = sks[4]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[4],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-
-    const cId0 = cIds[0]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[0],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const cId1 = cIds[1]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[1],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const cId2 = cIds[2]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[2],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const cId3 = cIds[3]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[3],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const cId4 = cIds[4]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[4],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    console.log('secretKeys================>', [sk0, sk1, sk2, sk3, sk4], rampBadgeId.toString())
-    // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
-    return {
-      ...rest,
-      secretKeys: [sk0, sk1, sk2, sk3, sk4],
-      clientIds: [cId0, cId1, cId2, cId3, cId4],
-      publishableKeys: [pk0, pk1, pk2, pk3, pk4],
-      allSessions,
-      rampAddress,
-      accounts,
-      // devaddr_,
-      automatic,
-      _ve,
-      rampBadgeId: rampBadgeId.toString(),
-      rampTokenId: rampTokenId.toString(),
-      mintFee: mintFee.toString(),
-      burnFee: burnFee.toString(),
-      rampSalePrice: rampSalePrice.toString(),
-      soldAccounts: soldAccounts.toString(),
-    }
-  } catch (err) {
-    console.log('fetchRamp err================>', err, address)
-  }
-}
-
-export const fetchRamps = async () => {
-  const gauges = await getRamps()
-  const nfts = await getNfts()
-  const ramps = await Promise.all(
-    gauges
-      .filter((gauge) => !!gauge)
-      .map(async (gauge, index) => {
-        const data = await fetchRamp(gauge.id)
-        console.log('2gauges=============>', data)
-
+export const fetchBills = async ({ fromBill }) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const [billAddresses] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getBILLMinterAddress(),
+        abi: billMinterABI,
+        functionName: 'getAllBills',
+        args: [BigInt(0)],
+      },
+    ],
+  })
+  const bills = await Promise.all(
+    billAddresses.result
+      .filter((billAddress) => (fromBill ? billAddress?.toLowerCase() === fromBill?.toLowerCase() : true))
+      .map(async (billAddress, index) => {
+        const data = await fetchBill(billAddress)
         return {
           sousId: index,
           ...data,
-          nfts,
         }
       })
       .flat(),
   )
-  return ramps
+  return bills
 }

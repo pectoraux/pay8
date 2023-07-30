@@ -10,6 +10,11 @@ import { profileHelperABI } from 'config/abi/profileHelper'
 import { erc20ABI } from 'wagmi'
 import { trustBountiesABI } from 'config/abi/trustBounties'
 
+export interface GetProfileResponse {
+  hasRegistered: boolean
+  profile?: any
+}
+
 export const getProfileData = async (profileId) => {
   try {
     const res = await request(
@@ -274,4 +279,46 @@ export const fetchProfiles = async () => {
       .flat(),
   )
   return profiles
+}
+
+export const getProfile = async (address) => {
+  try {
+    const bscClient = publicClient({ chainId: 4002 })
+    const [profileId] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getProfileAddress(),
+          abi: profileABI,
+          functionName: 'addressToProfileId',
+          args: [address],
+        },
+      ],
+    })
+    let profileInfo
+    if (parseInt(profileId.toString()) > 0) {
+      const [_profileInfo] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: getProfileAddress(),
+            abi: profileABI,
+            functionName: 'profileInfo',
+            args: [BigInt(profileId.toString())],
+          },
+        ],
+      })
+      profileInfo = _profileInfo
+    }
+    const res = {
+      profile: profileInfo,
+      profileId,
+    }
+    console.log('profileContract================>', res)
+    return res
+  } catch (e) {
+    console.log('profileCallsResult4==================>', e)
+    console.error(e)
+    return null
+  }
 }
