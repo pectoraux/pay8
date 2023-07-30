@@ -261,6 +261,7 @@ import { stakeMarketVoterABI } from 'config/abi/stakeMarketVoter'
 import { ssiABI } from 'config/abi/ssi'
 import { vaABI } from 'config/abi/va'
 import { valuePoolABI } from 'config/abi/valuePool'
+import { vestingABI } from 'config/abi/vesting'
 import { valuePoolFactoryABI } from 'config/abi/valuePoolFactory'
 import { valuePoolHelperABI } from 'config/abi/valuePoolHelper'
 import { valuePoolHelper2ABI } from 'config/abi/valuePoolHelper2'
@@ -1383,6 +1384,15 @@ export const getVaContract = (vaAddress: Address, signer?: WalletClient, chainId
   return getContract({
     abi: vaABI,
     address: vaAddress,
+    signer,
+    chainId,
+  })
+}
+
+export const getVestingContract = (vestingContractAddress: Address, signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: vestingABI,
+    address: vestingContractAddress,
     signer,
     chainId,
   })

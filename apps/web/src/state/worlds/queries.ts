@@ -1,58 +1,44 @@
-export const rampFields = `
+export const voteFields = `
 id
-owner
-collectionId
-description
-rampAddress
-applicationLink
-publishableKeys
-secretKeys
-clientIds
-avatar
-channels
+liked
+world
+createdAt
+updatedAt
 profileId
-likes
-dislikes
-sessions {
-    id
-    user
-    active
-    amount
-    sessionId
-    mintSession
-    tokenAddress
-    identityTokenId
-}
-tokens {
-    id
-    addedToTokenSet
-}
-transactionHistory {
-    id
-    user
-    block
-    token
-    txType
-    netPrice
-    timestamp
-}
-`
-export const sessionFields = `
-id
-user
-active
-amount
-sessionId
-mintSession
-tokenAddress
-identityTokenId
 `
 
-export const accountFields = `
+export const worldNFTFields = `
 id
-owner
-active
-channel
-moreInfo
-timestamp
+tokenId
+metadataUrl
+`
+
+export const worldFields = `
+  id
+  owner
+  active
+  likes
+  dislikes
+  profileId
+  applicationLink
+  votes {
+    ${voteFields}
+  }
+  worldNFTs {
+    ${worldNFTFields}
+  }
+  notes {
+    id
+    metadataUrl
+  }
+`
+
+export const protocolFields = `
+  id
+  active
+  owner
+  media
+  description
+  autoCharge
+  token
 `

@@ -1,58 +1,51 @@
-export const rampFields = `
-id
-owner
-collectionId
-description
-rampAddress
-applicationLink
-publishableKeys
-secretKeys
-clientIds
-avatar
-channels
-profileId
-likes
-dislikes
-sessions {
-    id
-    user
-    active
-    amount
-    sessionId
-    mintSession
-    tokenAddress
-    identityTokenId
-}
-tokens {
-    id
-    addedToTokenSet
-}
-transactionHistory {
-    id
-    user
-    block
-    token
-    txType
-    netPrice
-    timestamp
-}
-`
-export const sessionFields = `
-id
-user
-active
-amount
-sessionId
-mintSession
-tokenAddress
-identityTokenId
+export const sponsorFields = `
+  id
+  likes
+  dislikes
+  contents
+  active
+  owner
+  profileId
+  applicationLink
 `
 
-export const accountFields = `
-id
-owner
-active
-channel
-moreInfo
-timestamp
+export const sponsorFields2 = `
+  id
+  likes
+  dislikes
+  avatar
+  sponsorDescription
+  contacts {
+    channel
+    value
+  }
+  workspaces {
+    traitType
+    value
+  }
+  countries {
+    traitType
+    value
+  }
+  cities {
+    traitType
+    value
+  }
+  products {
+    traitType
+    value
+  }
+`
+
+export const protocolFields = `
+  id
+  active
+  owner
+  sponsor
+  media
+  description
+  notes {
+    id
+    metadataUrl
+  }
 `

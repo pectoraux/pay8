@@ -1,58 +1,51 @@
-export const rampFields = `
+export const tokenFields = `
 id
-owner
-collectionId
-description
-rampAddress
-applicationLink
-publishableKeys
-secretKeys
-clientIds
-avatar
-channels
-profileId
-likes
-dislikes
-sessions {
-    id
-    user
-    active
-    amount
-    sessionId
-    mintSession
-    tokenAddress
-    identityTokenId
-}
-tokens {
-    id
-    addedToTokenSet
-}
-transactionHistory {
-    id
-    user
-    block
-    token
-    txType
-    netPrice
-    timestamp
-}
-`
-export const sessionFields = `
-id
-user
-active
-amount
-sessionId
-mintSession
 tokenAddress
-identityTokenId
+value
 `
 
-export const accountFields = `
+export const userFields = `
 id
-owner
-active
-channel
-moreInfo
-timestamp
+ticketNumber
+claimed
+account
+tokens {
+  ${tokenFields}
+}
+`
+
+export const historyFields = `
+id
+createdAt
+updatedAt
+finalNumber
+countWinnersPerBracket
+numberOfWinningTickets
+lottery {
+  id
+  users {
+    ${userFields}
+  }
+  tokens {
+    ${tokenFields}
+  }
+}
+`
+
+export const lotteryFields = `
+  id
+  treasuryFee
+  referrerFee
+  priceTicket
+  firstTicketId
+  discountDivisor
+  startTime
+  endTime
+  collectionId
+  users {
+    ${userFields}
+  }
+  history {
+    ${historyFields}
+  }
 `

@@ -1,58 +1,67 @@
-export const rampFields = `
+export const voteFields = `
 id
-owner
-collectionId
-description
-rampAddress
-applicationLink
-publishableKeys
-secretKeys
-clientIds
-avatar
-channels
+liked
+auditor
+createdAt
+updatedAt
 profileId
-likes
-dislikes
-sessions {
-    id
-    user
-    active
-    amount
-    sessionId
-    mintSession
-    tokenAddress
-    identityTokenId
-}
-tokens {
-    id
-    addedToTokenSet
-}
-transactionHistory {
-    id
-    user
-    block
-    token
-    txType
-    netPrice
-    timestamp
-}
-`
-export const sessionFields = `
-id
-user
-active
-amount
-sessionId
-mintSession
-tokenAddress
-identityTokenId
 `
 
-export const accountFields = `
-id
-owner
-active
-channel
-moreInfo
-timestamp
+export const auditorFields = `
+  id
+  owner
+  active
+  likes
+  dislikes
+  profileId
+  applicationLink
+  votes {
+    ${voteFields}
+  }
+  notes {
+    id
+    metadataUrl
+  }
+`
+
+export const auditorFields2 = `
+  id
+  likes
+  dislikes
+  avatar
+  auditorDescription
+  contacts {
+    channel
+    value
+  }
+  workspaces {
+    traitType
+    value
+  }
+  countries {
+    traitType
+    value
+  }
+  cities {
+    traitType
+    value
+  }
+  products {
+    traitType
+    value
+  }
+`
+
+export const protocolFields = `
+  id
+  active
+  owner
+  media
+  description
+  ratings
+  esgRating
+  tokens {
+    id
+    metadataUrl
+  }
 `

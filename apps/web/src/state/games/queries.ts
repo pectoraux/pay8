@@ -1,58 +1,35 @@
-export const rampFields = `
+export const objectFields = `
 id
-owner
-collectionId
-description
-rampAddress
-applicationLink
-publishableKeys
-secretKeys
-clientIds
-avatar
-channels
-profileId
-likes
-dislikes
-sessions {
-    id
-    user
-    active
-    amount
-    sessionId
-    mintSession
-    tokenAddress
-    identityTokenId
-}
-tokens {
-    id
-    addedToTokenSet
-}
-transactionHistory {
-    id
-    user
-    block
-    token
-    txType
-    netPrice
-    timestamp
-}
-`
-export const sessionFields = `
-id
-user
+name
 active
-amount
-sessionId
-mintSession
-tokenAddress
-identityTokenId
+createdAt
+updatedAt
 `
 
-export const accountFields = `
-id
-owner
-active
-channel
-moreInfo
-timestamp
+export const gameFields = `
+  id
+  owner
+  token
+  createdAt
+  updatedAt
+  gameContract
+  active
+  claimable
+  tokenId
+  pricePerMinutes
+  creatorShare
+  referrerFee
+  teamShare
+  objectNames {
+    ${objectFields}
+  }
+`
+
+export const protocolFields = `
+  id
+  active
+  owner
+  game
+  minutes
+  metadataUrl
 `
