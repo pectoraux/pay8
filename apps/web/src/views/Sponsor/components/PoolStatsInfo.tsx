@@ -28,14 +28,12 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
+const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
-  const [pendingTx, setPendingTx] = useState(false)
-  const earningToken = pool?.token
+  const { sponsorAddress } = pool
+  const earningToken = currAccount?.token
   const tokenAddress = earningToken?.address || ''
-  const dispatch = useAppDispatch()
 
   return (
     <>

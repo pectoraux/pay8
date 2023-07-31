@@ -5,19 +5,19 @@ import { useTranslation } from '@pancakeswap/localization'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
-const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
 
   const actionTitle = (
     <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-      {rampAccount ? (
+      {currAccount ? (
         <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
           {t('Current Token')}{' '}
         </Text>
       ) : null}
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {rampAccount?.symbol}
+        {currAccount?.symbol}
       </Text>
     </Flex>
   )
@@ -39,7 +39,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
       <ActionContent>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {t(rampAccount?.status || '')}
+            {t(currAccount?.status || '')}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Account Status')}
@@ -61,8 +61,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(rampAccount?.minted)}
+              decimals={currAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(currAccount?.minted)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Token Minted')}
@@ -73,8 +73,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(rampAccount?.burnt)}
+              decimals={currAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(currAccount?.burnt)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Token Burnt')}
@@ -85,8 +85,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(rampAccount?.salePrice)}
+              decimals={currAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(currAccount?.salePrice)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Sale Price')}
@@ -100,7 +100,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               color="textSubtle"
               fontSize="12px"
               decimals={0}
-              value={rampAccount?.maxPartners}
+              value={currAccount?.maxPartners}
               prefix="# "
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -108,13 +108,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.tokenId) ? (
+            {parseInt(currAccount?.tokenId) ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={rampAccount?.tokenId}
+                value={currAccount?.tokenId}
                 prefix="# "
               />
             ) : (
@@ -127,13 +127,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.bountyId) ? (
+            {parseInt(currAccount?.token?.bountyId) ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={rampAccount?.token?.bountyId}
+                value={currAccount?.token?.bountyId}
                 prefix="# "
               />
             ) : (
@@ -146,13 +146,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.profileId) ? (
+            {parseInt(currAccount?.token?.profileId) ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={rampAccount?.token?.profileId}
+                value={currAccount?.token?.profileId}
                 prefix="# "
               />
             ) : (
@@ -165,13 +165,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.badgeId) ? (
+            {parseInt(currAccount?.token?.badgeId) ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={rampAccount?.token?.profileId}
+                value={currAccount?.token?.profileId}
                 prefix="# "
               />
             ) : (

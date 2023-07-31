@@ -40,12 +40,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, rampAddress } = pool
+  const { earningToken, bettingAddress } = pool
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool, rampAddress)
+  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" pool={pool} />)
 
   return (
     <>
@@ -63,7 +62,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
               <ArrowForwardIcon
                 onClick={() => {
                   setPendingTx(true)
-                  router.push(`/ramps/${rampAddress}`)
+                  router.push(`/bettings/${pool?.id}`)
                 }}
                 color="primary"
               />
@@ -72,7 +71,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           isLoading={pendingTx}
           onClick={() => {
             setPendingTx(true)
-            router.push(`/ramps/${rampAddress}`)
+            router.push(`/bettings/${pool?.id}`)
           }}
         >
           {t('View All Accounts')}

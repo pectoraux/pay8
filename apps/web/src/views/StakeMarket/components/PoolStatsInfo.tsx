@@ -19,7 +19,7 @@ import {
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
 import { useCurrPool } from 'state/stakemarket/hooks'
@@ -38,46 +38,17 @@ interface ExpandedFooterProps {
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
-  const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, rampAddress } = pool
+  const { earningToken } = useMemo(() => {
+    return {
+      earningToken: pool.earningToken,
+      arpAddress: pool.arpAddress,
+    }
+  }, [pool])
   const tokenAddress = earningToken?.address || ''
-  const dispatch = useAppDispatch()
-  const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool, rampAddress)
+  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.tokenIds} />)
 
   return (
     <>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <Button
-          as={Link}
-          variant="text"
-          p="0"
-          height="auto"
-          color="primary"
-          endIcon={
-            pendingTx ? (
-              <AutoRenewIcon spin color="currentColor" />
-            ) : (
-              <ArrowForwardIcon
-                onClick={() => {
-                  setPendingTx(true)
-                  router.push(`/ramps/${rampAddress}`)
-                }}
-                color="primary"
-              />
-            )
-          }
-          isLoading={pendingTx}
-          onClick={() => {
-            setPendingTx(true)
-            router.push(`/ramps/${rampAddress}`)
-          }}
-        >
-          {t('View All Accounts')}
-        </Button>
-      </Flex>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
@@ -125,7 +96,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           />
         </Flex>
       )}
-      <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
+      {/* <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
         {pool?.accounts?.map((balance) => (
           <Button
             key={balance.token.address}
@@ -141,7 +112,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             {balance.token.symbol}
           </Button>
         ))}
-      </Flex>
+      </Flex> */}
       <Flex>
         <FlexGap gap="16px" pt="24px" pl="4px">
           <IconButton

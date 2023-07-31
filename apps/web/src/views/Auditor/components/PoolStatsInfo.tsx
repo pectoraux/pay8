@@ -28,14 +28,11 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
+const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const earningToken = pool?.token
-  const tokenAddress = earningToken?.address || ''
-  const dispatch = useAppDispatch()
+  const tokenAddress = currAccount?.token?.address || ''
 
   return (
     <>
@@ -75,8 +72,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             marginTextBetweenLogo="4px"
             textOptions={AddToWalletTextOptions.TEXT}
             tokenAddress={tokenAddress}
-            tokenSymbol={earningToken.symbol}
-            tokenDecimals={earningToken.decimals}
+            tokenSymbol={currAccount?.token?.symbol}
+            tokenDecimals={currAccount?.token?.decimals}
             tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
           />
         </Flex>

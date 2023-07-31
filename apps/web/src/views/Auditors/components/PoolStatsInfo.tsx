@@ -40,12 +40,14 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, rampAddress } = pool
+  const { auditorAddress } = pool
+  const currState = useCurrPool()
+  const currProtocol = pool?.accounts?.find((acct) => acct?.id === currState[pool?.id])
+  const earningToken = currProtocol?.token
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
-  const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool, rampAddress)
+  const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} />)
+  // const [onPresentNFTs] = useModal(<WebPagesModal2 height="500px" nfts={currProtocol?.tokens} />)
 
   return (
     <>
@@ -63,7 +65,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
               <ArrowForwardIcon
                 onClick={() => {
                   setPendingTx(true)
-                  router.push(`/ramps/${rampAddress}`)
+                  router.push(`/auditors/${auditorAddress}`)
                 }}
                 color="primary"
               />
@@ -72,7 +74,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           isLoading={pendingTx}
           onClick={() => {
             setPendingTx(true)
-            router.push(`/ramps/${rampAddress}`)
+            router.push(`/auditors/${auditorAddress}`)
           }}
         >
           {t('View All Accounts')}
@@ -104,11 +106,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
           {t('View NFTs')}
         </LinkExternal>
-      </Flex>
+      </Flex> */}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

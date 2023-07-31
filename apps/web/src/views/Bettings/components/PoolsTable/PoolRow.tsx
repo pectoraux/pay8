@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
+import { Pool } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/ramps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 

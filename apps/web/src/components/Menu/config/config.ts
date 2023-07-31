@@ -4,7 +4,6 @@ import {
   SwapIcon,
   SwapFillIcon,
   EarnFillIcon,
-  PancakeProtectorIcon,
   EarnIcon,
   TrophyIcon,
   TrophyFillIcon,
@@ -106,8 +105,8 @@ const config: (
     {
       label: t('Earn'),
       href: '/auditors',
-      icon: TrophyIcon,
-      fillIcon: TrophyFillIcon,
+      icon: EarnIcon,
+      fillIcon: EarnFillIcon,
       supportChainIds: SUPPORT_ONLY_BSC,
       items: [
         {

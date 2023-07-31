@@ -40,12 +40,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, rampAddress } = pool
+  const { earningToken, sponsorAddress } = pool
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool, rampAddress)
+  const [onPresentNotes] = useModal(<WebPagesModal height="500px" pool={pool} notes />)
 
   return (
     <>
@@ -63,7 +62,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
               <ArrowForwardIcon
                 onClick={() => {
                   setPendingTx(true)
-                  router.push(`/ramps/${rampAddress}`)
+                  router.push(`/sponsors/${sponsorAddress}`)
                 }}
                 color="primary"
               />
@@ -72,7 +71,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           isLoading={pendingTx}
           onClick={() => {
             setPendingTx(true)
-            router.push(`/ramps/${rampAddress}`)
+            router.push(`/sponsors/${sponsorAddress}`)
           }}
         >
           {t('View All Accounts')}
@@ -104,11 +103,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
           {t('View NFTs')}
         </LinkExternal>
-      </Flex>
+      </Flex> */}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

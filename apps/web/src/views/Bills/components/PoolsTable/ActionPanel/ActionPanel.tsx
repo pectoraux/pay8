@@ -1,11 +1,9 @@
 import styled, { keyframes, css } from 'styled-components'
 import { Box, Flex, Text, useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
 import { Token } from '@pancakeswap/sdk'
-import { useState } from 'react'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import PoolStatsInfo from '../../PoolStatsInfo'
-import Sessions from './Sessions'
 
 const expandAnimation = keyframes`
   from {
@@ -84,30 +82,24 @@ const InfoSection = styled(Box)`
   }
 `
 
-const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) => {
+const ActionPanel: React.FC<any> = ({ account, pool, currAccount, expanded }) => {
   const { isMobile } = useMatchBreakpoints()
-  const [showSessions, setShowSessions] = useState(false)
-  const toggleSessions = () => setShowSessions(!showSessions)
-
   return (
-    <>
-      <StyledActionPanel expanded={expanded}>
-        <InfoSection>
-          <Flex flexDirection="column" mb="8px">
-            <PoolStatsInfo pool={pool} account={account} alignLinksToRight={isMobile} />
-          </Flex>
-        </InfoSection>
-        <ActionContainer>
-          <Box width="100%">
-            <ActionContainer hasBalance>
-              <Harvest pool={pool} rampAccount={rampAccount} />
-              <Stake pool={pool} rampAccount={rampAccount} toggleSessions={toggleSessions} />
-            </ActionContainer>
-          </Box>
-        </ActionContainer>
-      </StyledActionPanel>
-      {showSessions && <Sessions pool={pool} />}
-    </>
+    <StyledActionPanel expanded={expanded}>
+      <InfoSection>
+        <Flex flexDirection="column" mb="8px">
+          <PoolStatsInfo pool={pool} account={account} alignLinksToRight={isMobile} />
+        </Flex>
+      </InfoSection>
+      <ActionContainer>
+        <Box width="100%">
+          <ActionContainer hasBalance>
+            <Harvest pool={pool} currAccount={currAccount} />
+            <Stake pool={pool} currAccount={currAccount} />
+          </ActionContainer>
+        </Box>
+      </ActionContainer>
+    </StyledActionPanel>
   )
 }
 

@@ -1,5 +1,6 @@
 import {
   Flex,
+  Box,
   LinkExternal,
   AutoRenewIcon,
   ArrowForwardIcon,
@@ -15,6 +16,8 @@ import {
   TelegramIcon,
   ProposalIcon,
   SmartContractIcon,
+  ReactMarkdown,
+  Text,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -37,46 +40,80 @@ interface ExpandedFooterProps {
 
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
-  const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, rampAddress } = pool
+  const { worldAddress } = pool
+  const currState = useCurrPool()
+  const isBounty = router.pathname.includes('bounties')
+  const earningToken = currState[pool?.id]
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
-  const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool, rampAddress)
+  const { chainId } = useActiveChainId()
+  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" worldNFTs={pool?.worldNFTs} />)
+  const [onPresentNotes] = useModal(<WebPagesModal height="500px" worldNFTs={pool?.notes} />)
 
   return (
     <>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <Button
-          as={Link}
-          variant="text"
-          p="0"
-          height="auto"
-          color="primary"
-          endIcon={
-            pendingTx ? (
-              <AutoRenewIcon spin color="currentColor" />
-            ) : (
-              <ArrowForwardIcon
-                onClick={() => {
-                  setPendingTx(true)
-                  router.push(`/ramps/${rampAddress}`)
-                }}
-                color="primary"
-              />
-            )
-          }
-          isLoading={pendingTx}
-          onClick={() => {
-            setPendingTx(true)
-            router.push(`/ramps/${rampAddress}`)
-          }}
-        >
-          {t('View All Accounts')}
-        </Button>
+        <Box>
+          <ReactMarkdown>{pool?.collection?.description}</ReactMarkdown>
+        </Box>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Button
+            as={Link}
+            variant="text"
+            p="0"
+            height="auto"
+            color="primary"
+            endIcon={
+              pendingTx ? (
+                <AutoRenewIcon spin color="currentColor" />
+              ) : (
+                <ArrowForwardIcon
+                  onClick={() => {
+                    setPendingTx(true)
+                    router.push(`/worlds/${pool?.worldAddress}`)
+                  }}
+                  color="primary"
+                />
+              )
+            }
+            isLoading={pendingTx}
+            onClick={() => {
+              setPendingTx(true)
+              router.push(`/worlds/${pool?.worldAddress}`)
+            }}
+          >
+            {t('View All Accounts')}
+          </Button>
+        </Flex>
+      </Flex>
+      <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+        <Text color="primary" fontSize="14px">
+          {t('Bounty Required')} {`->`} {pool?.bountyRequired ? t('True') : t('False')}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('World Id')} {`->`} {pool?.profileId}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Bounty Id')} {`->`} {pool?.bountyId}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('World Color')} {`->`} {pool?.color ?? ''}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Trading Fee')} {`->`} {parseInt(pool?.tradingFee) / 100}%
+        </Text>
+        {pool?.collection?.countries ? (
+          <Text color="primary" fontSize="14px">
+            {t('Countries')} {`->`} {pool.collection.countries}
+          </Text>
+        ) : null}
+        {pool?.collection?.cities ? (
+          <Text color="primary" fontSize="14px">
+            {t('Cities')} {`->`} {pool.collection.cities}
+          </Text>
+        ) : null}
       </Flex>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

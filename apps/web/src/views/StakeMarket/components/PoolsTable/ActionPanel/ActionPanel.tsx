@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import PoolStatsInfo from '../../PoolStatsInfo'
-import Sessions from './Sessions'
+import Applications from './Applications'
 
 const expandAnimation = keyframes`
   from {
@@ -84,10 +84,10 @@ const InfoSection = styled(Box)`
   }
 `
 
-const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) => {
+const ActionPanel: React.FC<any> = ({ account, pool, currPool, setCurrPool, expanded }) => {
   const { isMobile } = useMatchBreakpoints()
-  const [showSessions, setShowSessions] = useState(false)
-  const toggleSessions = () => setShowSessions(!showSessions)
+  const [showApplications, setShowApplications] = useState(false)
+  const toggleApplications = () => setShowApplications(!showApplications)
 
   return (
     <>
@@ -100,13 +100,13 @@ const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) =>
         <ActionContainer>
           <Box width="100%">
             <ActionContainer hasBalance>
-              <Harvest pool={pool} rampAccount={rampAccount} />
-              <Stake pool={pool} rampAccount={rampAccount} toggleSessions={toggleSessions} />
+              <Harvest pool={pool} currPool={currPool} setCurrPool={setCurrPool} />
+              <Stake pool={pool} currPool={currPool} toggleApplications={toggleApplications} />
             </ActionContainer>
           </Box>
         </ActionContainer>
       </StyledActionPanel>
-      {showSessions && <Sessions pool={pool} />}
+      {showApplications && <Applications sousId={pool.sousId} />}
     </>
   )
 }

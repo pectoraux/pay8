@@ -15,6 +15,8 @@ import {
   TelegramIcon,
   ProposalIcon,
   SmartContractIcon,
+  ReactMarkdown,
+  Box,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -22,7 +24,7 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrPool } from 'state/businesses/hooks'
+import { useCurrBribe, useCurrPool } from 'state/businesses/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/businesses'
@@ -38,45 +40,20 @@ interface ExpandedFooterProps {
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
-  const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, rampAddress } = pool
-  const tokenAddress = earningToken?.address || ''
+  const tokenAddress = pool.vestingTokenAddress || ''
+  const earningToken = pool?.token
   const dispatch = useAppDispatch()
-  const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool, rampAddress)
+  const currState = useCurrBribe()
 
   return (
     <>
+      <Box>
+        <ReactMarkdown>{pool?.description}</ReactMarkdown>
+      </Box>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <Button
-          as={Link}
-          variant="text"
-          p="0"
-          height="auto"
-          color="primary"
-          endIcon={
-            pendingTx ? (
-              <AutoRenewIcon spin color="currentColor" />
-            ) : (
-              <ArrowForwardIcon
-                onClick={() => {
-                  setPendingTx(true)
-                  router.push(`/ramps/${rampAddress}`)
-                }}
-                color="primary"
-              />
-            )
-          }
-          isLoading={pendingTx}
-          onClick={() => {
-            setPendingTx(true)
-            router.push(`/ramps/${rampAddress}`)
-          }}
-        >
-          {t('View All Accounts')}
-        </Button>
+        <LinkExternal color="failure" href={`/businesses/voting/${pool?.id}`} bold>
+          {t('OPEN VOTES')}
+        </LinkExternal>
       </Flex>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -104,11 +81,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
           {t('View NFTs')}
         </LinkExternal>
-      </Flex>
+      </Flex> */}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
@@ -119,8 +96,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             marginTextBetweenLogo="4px"
             textOptions={AddToWalletTextOptions.TEXT}
             tokenAddress={tokenAddress}
-            tokenSymbol={earningToken.symbol}
-            tokenDecimals={earningToken.decimals}
+            tokenSymbol={earningToken?.symbol}
+            tokenDecimals={earningToken?.decimals}
             tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
           />
         </Flex>

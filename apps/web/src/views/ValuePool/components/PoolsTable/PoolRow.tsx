@@ -17,10 +17,7 @@ const PoolRow: React.FC<any> = ({ id, account, vpAccount, initialActivity }) => 
 
   console.log('valuepool====>', vpAccount, pool)
   return (
-    <Pool.ExpandRow
-      initialActivity={initialActivity}
-      panel={<ActionPanel account={account} pool={pool} vpAccount={vpAccount} expanded />}
-    >
+    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
       <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} vpAccount={vpAccount} />
       <AccountID labelText={t('Token ID')} vpAccount={vpAccount} />
       <VaSpecsCell pool={pool} nft={vpAccount} vpCurrencyInput={vpCurrencyInput} />

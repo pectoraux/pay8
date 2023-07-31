@@ -15,6 +15,8 @@ import {
   TelegramIcon,
   ProposalIcon,
   SmartContractIcon,
+  Box,
+  ReactMarkdown,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -22,7 +24,7 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrPool } from 'state/accelerator/hooks'
+import { useCurrBribe, useCurrPool } from 'state/accelerator/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/accelerator'
@@ -39,52 +41,21 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const router = useRouter()
-  const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, rampAddress } = pool
-  const isBounty = router.pathname.includes('bounties')
-  const tokenAddress = earningToken?.address || ''
+  const { vestingTokenAddress } = pool
+  const tokenAddress = vestingTokenAddress || ''
+  const earningToken = pool?.token
   const dispatch = useAppDispatch()
-  const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool)
-  const goToContract = () => {
-    if (isBounty) {
-      router.push(`/ramps/bounties/`)
-    } else {
-      router.push(`/ramps/${rampAddress}`)
-    }
-  }
+  const currState = useCurrBribe()
 
   return (
     <>
+      <Box>
+        <ReactMarkdown>{pool?.description}</ReactMarkdown>
+      </Box>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <Button
-          as={Link}
-          variant="text"
-          p="0"
-          height="auto"
-          color="primary"
-          endIcon={
-            pendingTx ? (
-              <AutoRenewIcon spin color="currentColor" />
-            ) : (
-              <ArrowForwardIcon
-                onClick={() => {
-                  setPendingTx(true)
-                  goToContract()
-                }}
-                color="primary"
-              />
-            )
-          }
-          isLoading={pendingTx}
-          onClick={() => {
-            setPendingTx(true)
-            goToContract()
-          }}
-        >
-          {t('View All Accounts')}
-        </Button>
+        <LinkExternal color="failure" href={`/accelerator/voting/${pool?.id}`} bold>
+          {t('OPEN PITCH')}
+        </LinkExternal>
       </Flex>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -112,11 +83,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
           {t('View NFTs')}
         </LinkExternal>
-      </Flex>
+      </Flex> */}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
@@ -127,8 +98,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             marginTextBetweenLogo="4px"
             textOptions={AddToWalletTextOptions.TEXT}
             tokenAddress={tokenAddress}
-            tokenSymbol={earningToken.symbol}
-            tokenDecimals={earningToken.decimals}
+            tokenSymbol={earningToken?.symbol}
+            tokenDecimals={earningToken?.decimals}
             tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
           />
         </Flex>

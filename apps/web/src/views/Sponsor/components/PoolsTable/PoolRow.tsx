@@ -13,7 +13,10 @@ const PoolRow: React.FC<any> = ({ id, account, currAccount, initialActivity }) =
   const { t } = useTranslation()
 
   return (
-    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
+    <Pool.ExpandRow
+      initialActivity={initialActivity}
+      panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
+    >
       <NameCell currAccount={currAccount} />
       <TotalValueCell
         labelText={t('Liquidity')}

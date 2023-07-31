@@ -5,7 +5,8 @@ import { useState } from 'react'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import PoolStatsInfo from '../../PoolStatsInfo'
-import Sessions from './Sessions'
+import Purchases from './Purchases'
+import Sponsors from './Sponsors'
 
 const expandAnimation = keyframes`
   from {
@@ -86,8 +87,11 @@ const InfoSection = styled(Box)`
 
 const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) => {
   const { isMobile } = useMatchBreakpoints()
-  const [showSessions, setShowSessions] = useState(false)
-  const toggleSessions = () => setShowSessions(!showSessions)
+  const [showSponsors, setShowSponsors] = useState(false)
+  const toggleSponsors = () => setShowSponsors(!showSponsors)
+
+  const [showScheduledPurchases, setShowScheduledPurchases] = useState(false)
+  const toggleScheduledPurchases = () => setShowScheduledPurchases(!showScheduledPurchases)
 
   return (
     <>
@@ -100,13 +104,19 @@ const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) =>
         <ActionContainer>
           <Box width="100%">
             <ActionContainer hasBalance>
-              <Harvest pool={pool} rampAccount={rampAccount} />
-              <Stake pool={pool} rampAccount={rampAccount} toggleSessions={toggleSessions} />
+              <Harvest />
+              <Stake
+                sousId={pool.sousId}
+                id={pool.id}
+                toggleSponsors={toggleSponsors}
+                toggleScheduledPurchases={toggleScheduledPurchases}
+              />
             </ActionContainer>
           </Box>
         </ActionContainer>
       </StyledActionPanel>
-      {showSessions && <Sessions pool={pool} />}
+      {showSponsors && <Sponsors sponsors={pool?.sponsors ?? []} />}
+      {showScheduledPurchases && <Purchases queue={pool?.queue} valuepoolAddress={pool?.valuepoolAddress} />}
     </>
   )
 }
