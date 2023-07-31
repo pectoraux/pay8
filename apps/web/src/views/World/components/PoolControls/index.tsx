@@ -1,5 +1,5 @@
 import { useAccount } from 'wagmi'
-import { Ramp } from '@pancakeswap/uikit'
+import { Worlds } from '@pancakeswap/uikit'
 import { useUserPoolStakedOnly, useUserPoolsViewMode } from 'state/user/hooks'
 import { useInitialBlockTimestamp } from 'state/block/hooks'
 import { Token } from '@pancakeswap/sdk'
@@ -14,7 +14,7 @@ export default function PoolControlsContainer(props) {
   const threshHold = Number(initialBlockTimestamp) > 0 ? Number(initialBlockTimestamp) + POOL_START_THRESHOLD : 0
 
   return (
-    <Ramp.PoolControls<Token>
+    <Worlds.PoolControls<Token>
       {...props}
       stakedOnly={stakedOnly}
       setStakedOnly={setStakedOnly}
