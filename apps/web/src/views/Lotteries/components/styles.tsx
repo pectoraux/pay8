@@ -23,6 +23,7 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_DRAW_FINAL_NUMBER,
   LockStage.CONFIRM_CLOSE_LOTTERY,
   LockStage.CONFIRM_CLAIM_TICKETS,
+  LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES,
 ]
 
 export const stagesWithBackButton = [
@@ -49,6 +50,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_DRAW_FINAL_NUMBER,
   LockStage.CONFIRM_BUY_TICKETS,
   LockStage.CONFIRM_CLOSE_LOTTERY,
+  LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES,
 ]
 
 export const Divider = styled.div`

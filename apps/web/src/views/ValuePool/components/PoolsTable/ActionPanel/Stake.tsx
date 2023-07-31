@@ -1,7 +1,6 @@
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
-import { useERC20 } from 'hooks/useContract'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 

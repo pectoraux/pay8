@@ -12,6 +12,7 @@ export const stagesWithApproveButton = [LockStage.CONFIRM_UPDATE_AUTOCHARGE]
 
 export const stagesWithConfirmButton = [
   LockStage.CONFIRM_DELETE,
+  LockStage.CONFIRM_WITHDRAW,
   LockStage.CONFIRM_DELETE_PROTOCOL,
   LockStage.CONFIRM_UPDATE_PROTOCOL,
   LockStage.CONFIRM_UPDATE_PARAMETERS,
@@ -44,6 +45,7 @@ export const stagesWithConfirmButton = [
 
 export const stagesWithBackButton = [
   LockStage.UPDATE_CATEGORY,
+  LockStage.CONFIRM_WITHDRAW,
   LockStage.CONFIRM_UPDATE_CATEGORY,
   LockStage.UPDATE_PRICE_PER_MINUTES,
   LockStage.CONFIRM_UPDATE_PRICE_PER_MINUTES,

@@ -1,25 +1,26 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
-import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
+import { InjectedModalProps, useToast, Button, Flex, LinkExternal } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useRampContract, useRampHelper, useRampAds } from 'hooks/useContract'
+import {
+  useERC20,
+  useWorldContract,
+  useWorldHelper,
+  useWorldHelper2,
+  useWorldHelper3,
+  useWorldNote,
+} from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useRouter } from 'next/router'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { useAppDispatch } from 'state'
-import { fetchRampsAsync } from 'state/ramps'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import MintStage from './MintStage'
@@ -49,69 +50,69 @@ import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import BigNumber from 'bignumber.js'
+import { differenceInSeconds } from 'date-fns'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
-  [LockStage.UPDATE_PROTOCOL]: t('Update Account'),
-  [LockStage.UPDATE_INDIVIDUAL_PROTOCOL]: t('Update Account'),
-  [LockStage.ADMIN_WITHDRAW]: t('Withdraw'),
-  [LockStage.PRE_MINT]: t('tFIAT Mint'),
-  [LockStage.INIT_RAMP]: t('Update Ramp Info'),
-  [LockStage.UPDATE_PARAMETERS]: t('Update Parameters'),
-  [LockStage.CLAIM]: t('Create Claim'),
-  [LockStage.CLAIM_REVENUE]: t('Claim Revenue'),
-  [LockStage.UPDATE_OWNER]: t('Update Owner'),
-  [LockStage.UPDATE_BOUNTY]: t('Update Attached Bounty'),
-  [LockStage.UNLOCK_BOUNTY]: t('Unlock Attached Bounty'),
-  [LockStage.UPDATE_TOKEN_ID]: t('Update veNFT Token'),
-  [LockStage.UPDATE_DEV_TOKEN_ID]: t('Update Ramp veNFT Token'),
-  [LockStage.UPDATE_BADGE_ID]: t('Update Attached Badge'),
-  [LockStage.UPDATE_PROFILE_ID]: t('Update Attached Profile'),
-  [LockStage.BUY_RAMP]: t('Buy Ramp'),
-  [LockStage.BUY_ACCOUNT]: t('Buy Account'),
-  [LockStage.PARTNER]: t('Partner'),
-  [LockStage.BURN]: t('Burn'),
-  [LockStage.MINT]: t('Mint'),
+  [LockStage.UPDATE_ADMIN]: t('Update Admin'),
+  [LockStage.UPDATE_PARAMETERS]: t('Update Bounty Required'),
+  [LockStage.VOTE]: t('Vote'),
+  [LockStage.UPDATE_AUTOCHARGE]: t('Update Autocharge'),
+  [LockStage.UPDATE_TAX_CONTRACT]: t('Update Tax Contract'),
+  [LockStage.ADMIN_AUTOCHARGE]: t('Autocharge'),
   [LockStage.DELETE]: t('Delete'),
-  [LockStage.DELETE_RAMP]: t('Delete Ramp'),
-  [LockStage.CREATE_PROTOCOL]: t('Create Account'),
-  [LockStage.UPDATE_ADMIN]: t('Update Contract Admin'),
-  [LockStage.UPDATE_DEV]: t('Update Contract Owner'),
-  [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
-  [LockStage.ADD_EXTRA_TOKEN]: t('Add Extra Token'),
-  [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
+  [LockStage.UPDATE_DISCOUNT_DIVISOR]: t('Update Discount Divisor'),
+  [LockStage.UPDATE_PENALTY_DIVISOR]: t('Update Penalty Divisor'),
+  [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
+  [LockStage.UPDATE_BOUNTY]: t('Update Bounty'),
+  [LockStage.UPDATE_TOKEN_IDS]: t('Update Token IDs'),
+  [LockStage.TRANSFER_RECEIVABLE_TO_NOTE]: t('Transfer Note'),
+  [LockStage.CLAIM_NOTE]: t('Claim Note'),
+  [LockStage.UPDATE_TAG_REGISTRATION]: t('Update Tag Registration'),
+  [LockStage.CLAIM_TOKEN_SPONSOR_FUND]: t('Claim Pending From Sponsor'),
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
-  [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
+  [LockStage.UPDATE_CODE_INFO]: t('Update Code Info'),
+  [LockStage.UPDATE_CATEGORY]: t('Update Category'),
+  [LockStage.UPDATE_PRICE_PER_MINUTES]: t('Update Price Per Minute'),
+  [LockStage.UPDATE_EXCLUDED_CONTENT]: t('Update Excluded Content'),
+  [LockStage.UPDATE_WORLD_BOUNTY]: t('Update World Bounty'),
+  [LockStage.MINT_PAST_WORLD]: t('Mint Past World'),
+  [LockStage.MINT_PRESENT_WORLD]: t('Mint World'),
+  [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
+  [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
-  [LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE]: t('Back'),
-  [LockStage.CONFIRM_REMOVE_EXTRA_TOKEN]: t('Back'),
-  [LockStage.CONFIRM_ADD_EXTRA_TOKEN]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_BLACKLIST]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_URI_GENERATOR]: t('Back'),
+  [LockStage.CONFIRM_MINT_PRESENT_WORLD]: t('Back'),
+  [LockStage.CONFIRM_MINT_PAST_WORLD]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_WORLD_BOUNTY]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_EXCLUDED_CONTENT]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_PRICE_PER_MINUTES]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_CATEGORY]: t('Back'),
+  [LockStage.CONFIRM_CLAIM_PENDING]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_CODE_INFO]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
+  [LockStage.CONFIRM_CLAIM_TOKEN_SPONSOR_FUND]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_TAG_REGISTRATION]: t('Back'),
+  [LockStage.CONFIRM_CLAIM_NOTE]: t('Back'),
+  [LockStage.CONFIRM_TRANSFER_RECEIVABLE_TO_NOTE]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_PROFILE_ID]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_TOKEN_IDS]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_BOUNTY]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_PROTOCOL]: t('Back'),
   [LockStage.CONFIRM_UPDATE_DEV]: t('Back'),
   [LockStage.CONFIRM_UPDATE_ADMIN]: t('Back'),
-  [LockStage.CONFIRM_INIT_RAMP]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_PROTOCOL]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL]: t('Back'),
-  [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
-  [LockStage.CONFIRM_CREATE_PROTOCOL]: t('Back'),
-  [LockStage.CONFIRM_DELETE]: t('Back'),
-  [LockStage.CONFIRM_DELETE_RAMP]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_BOUNTY]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_PROFILE_ID]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_BADGE_ID]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_TOKEN_ID]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID]: t('Back'),
-  [LockStage.CONFIRM_UNLOCK_BOUNTY]: t('Back'),
-  [LockStage.CONFIRM_BUY_RAMP]: t('Back'),
-  [LockStage.CONFIRM_BUY_ACCOUNT]: t('Back'),
-  [LockStage.CONFIRM_PARTNER]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_OWNER]: t('Back'),
-  [LockStage.CONFIRM_CLAIM]: t('Back'),
-  [LockStage.CONFIRM_CLAIM_REVENUE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PARAMETERS]: t('Back'),
-  [LockStage.CONFIRM_BURN]: t('Back'),
-  [LockStage.CONFIRM_MINT]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_TAX_CONTRACT]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_AUTOCHARGE]: t('Back'),
+  [LockStage.CONFIRM_ADMIN_AUTOCHARGE]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR]: t('Back'),
+  [LockStage.CONFIRM_DELETE]: t('Back'),
+  [LockStage.CONFIRM_DELETE_PROTOCOL]: t('Back'),
+  [LockStage.CONFIRM_VOTE]: t('Back'),
   [LockStage.TX_CONFIRMED]: t('Transaction Confirmed'),
 })
 
@@ -119,117 +120,71 @@ interface BuyModalProps extends InjectedModalProps {
   nftToBuy: NftToken
 }
 
-const CreateGaugeModal: React.FC<any> = ({
-  variant = 'user',
-  sessionId,
-  session,
-  location = 'ramp',
-  pool,
-  currency,
-  rampAccount,
-  onDismiss,
-}) => {
-  const [stage, setStage] = useState(
-    variant === 'mint'
-      ? LockStage.CONFIRM_MINT
-      : sessionId
-      ? LockStage.PRE_MINT
-      : variant === 'init'
-      ? LockStage.INIT_RAMP
-      : variant === 'user'
-      ? LockStage.SETTINGS
-      : variant === 'buy'
-      ? LockStage.BUY_RAMP
-      : variant === 'delete'
-      ? LockStage.DELETE_RAMP
-      : LockStage.ADMIN_SETTINGS,
-  )
-  const { theme } = useTheme()
-  const { t } = useTranslation()
-  const { callWithGasPrice } = useCallWithGasPrice()
-  const { account, chainId } = useAccountActiveChain()
+const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromStake', pool, currency, onDismiss }) => {
+  const [stage, setStage] = useState(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
-  const [checked, setChecked] = useState('')
+  const { t } = useTranslation()
+  const { theme } = useTheme()
+  const { account } = useWeb3React()
+  const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
-  const adminARP = pool
   const router = useRouter()
-  const stakingTokenContract = useERC20(
-    currency?.address || rampAccount?.token?.address || router.query?.userCurrency || '',
-  )
-  const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '')
-  const rampHelperContract = useRampHelper()
-  const rampAdsContract = useRampAds()
-  const dispatch = useAppDispatch()
-  console.log('mcurrencyy1===============>', currency, rampAccount, pool, rampContract)
+  const stakingTokenContract = useERC20(currency?.address || router.query?.userCurrency || '')
+  const worldContract = useWorldContract(pool?.worldAddress || router.query.world || '')
+  const worldNoteContract = useWorldNote()
+  const worldHelperContract = useWorldHelper()
+  const worldHelper2Contract = useWorldHelper2()
+  const worldHelper3Contract = useWorldHelper3()
+  const currAccount = pool.accounts?.find((acct) => acct === account)
+  console.log('mcurrencyy===============>', currency, pool, worldContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
-  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const [nftFilters, setNftFilters] = useState<any>({})
-  console.log('sessionId===================>', session, sessionId)
+
+  // console.log("router===================>", router)
+  // const { state: status, userAccount, session_id, userCurrency, amount } = router.query
   const [state, setState] = useState<any>(() => ({
-    sk: pool?.secretKeys && pool?.secretKeys[0],
-    pk: pool?.publishableKeys && pool?.publishableKeys[0],
     owner: pool?.owner,
-    sponsor: '',
-    tag: '',
-    message: '',
+    avatar: pool?.world?.avatar,
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
-    tokenId: pool?.tokenId ?? '0',
-    identityTokenId: (session && session?.identityTokenId) || '0',
-    automatic: pool?.automatic ? 1 : 0,
-    applicationLink: pool?.applicationLink || '',
-    publishableKeys: pool?.publishableKeys?.toString() || '',
-    secretKeys: pool?.secretKeys?.toString() || '',
-    clientIds: pool?.clientIds?.toString() || '',
-    accountId: pool?.userData?.active && pool?.userData?.id,
-    description: pool?.description || '',
-    avatar: pool?.avatar || '',
-    channels: pool?.channels?.toString() || '',
-    moreInfo: '',
-    amountPayable: session ? session.amount : '',
-    amountReceivable: '',
-    paidPayable: '',
-    add: 0,
-    paidReceivable: '',
-    periodPayable: '',
-    periodReceivable: '',
-    startPayable: '',
-    startReceivable: '',
+    tokenId: pool?.tokenId,
+    maxNotesPerProtocol: pool?.maxNotesPerProtocol,
+    amountPayable: '',
+    taxAddress: '',
+    toAddress: '',
     numPeriods: '',
-    name: '',
-    symbol: '',
-    startProtocolId: '',
-    endProtocolId: '',
-    requestAddress: '',
-    requestAmount: '',
-    recipient: '',
-    splitShares: '',
-    adminNote: false,
-    period: pool?.period,
-    bufferTime: pool?.bufferTime,
-    limitFactor: pool?.limitFactor,
-    gaugeBalanceFactor: pool?.gaugeBalanceFactor,
-    profileRequired: pool?.profileRequired,
+    category: 0,
+    contentType: '',
+    uriGenerator: '',
+    nfts: '',
+    first4: '',
+    last4: '',
+    planet: '',
+    amountReceivable: currAccount?.amountReceivable,
+    periodReceivable: currAccount?.periodReceivable ?? '0',
+    startReceivable: currAccount?.startReceivable,
+    description: currAccount?.description,
+    rating: currAccount?.description ?? '',
+    media: pool?.media,
+    identityTokenId: '0',
+    protocolId: currAccount?.protocolId ?? '0',
+    autoCharge: 0,
+    like: 0,
+    add: 0,
+    optionId: currAccount?.optionId ?? '0',
+    factor: '',
+    period: '',
+    cap: '',
+    message: '',
+    world: pool?.worldAddress,
     bountyRequired: pool?.bountyRequired,
-    paidDays: '',
+    ve: pool?._ve,
     cosignEnabled: pool?.cosignEnabled,
     minCosigners: pool?.minCosigners || '',
-    requests: adminARP?.userData?.requests?.length || [],
-    amounts: adminARP?.userData?.amounts?.length || [],
-    token: session ? session?.token?.address : stakingTokenContract?.address || rampAccount?.token?.address,
-    close: false,
-    cap: pool?.cap || 0,
-    salePrice: pool?.rampSalePrice || 0,
-    maxPartners: pool?.maxPartners || 0,
-    partnerBountyId: 0,
-    bountyIds: [],
-    badgeId: pool?.rampBadgeId,
-    _ve: pool?._ve || stakingTokenContract?.address || rampAccount?.token?.address,
-    mintFee: pool?.mintFee,
-    burnFee: pool?.burnFee,
-    title: '',
-    content: '',
-    sessionId: session?.id || sessionId || '',
+    token: currency?.address,
+    name: pool?.name,
+    applicationLink: pool?.world?.applicationLink,
+    accounts: [],
+    // owner: currAccount?.owner || account
   }))
 
   const updateValue = (key: any, value: any) => {
@@ -242,23 +197,59 @@ const CreateGaugeModal: React.FC<any> = ({
     const { name: inputName, value } = evt.currentTarget
     updateValue(inputName, value)
   }
-  const handleRawValueChange = (key: string) => (value: string | Date) => {
+  const handleRawValueChange = (key: any) => (value: any) => {
     updateValue(key, value)
   }
 
   const goBack = () => {
     switch (stage) {
-      case LockStage.INIT_RAMP:
+      case LockStage.UPDATE_AUTOCHARGE:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_AUTOCHARGE:
+        setStage(LockStage.UPDATE_AUTOCHARGE)
+        break
+      case LockStage.UPDATE_TAX_CONTRACT:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_TAX_CONTRACT:
+        setStage(LockStage.UPDATE_TAX_CONTRACT)
+        break
+      case LockStage.UPDATE_TOKEN_IDS:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_TOKEN_IDS:
+        setStage(LockStage.UPDATE_TOKEN_IDS)
+        break
+      case LockStage.UPDATE_ADMIN:
         setStage(LockStage.ADMIN_SETTINGS)
         break
-      case LockStage.CONFIRM_INIT_RAMP:
-        setStage(LockStage.INIT_RAMP)
+      case LockStage.CONFIRM_UPDATE_ADMIN:
+        setStage(LockStage.UPDATE_ADMIN)
         break
-      case LockStage.CONFIRM_UPDATE_PARAMETERS:
-        setStage(LockStage.UPDATE_PARAMETERS)
+      case LockStage.UPDATE_DEV:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_DEV:
+        setStage(LockStage.UPDATE_DEV)
+        break
+      case LockStage.UPDATE_BOUNTY:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_BOUNTY:
+        setStage(LockStage.UPDATE_BOUNTY)
+        break
+      case LockStage.ADMIN_AUTOCHARGE:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_ADMIN_AUTOCHARGE:
+        setStage(LockStage.ADMIN_AUTOCHARGE)
         break
       case LockStage.UPDATE_PARAMETERS:
         setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_PARAMETERS:
+        setStage(LockStage.UPDATE_PARAMETERS)
         break
       case LockStage.UPDATE_PROTOCOL:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -266,44 +257,50 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_UPDATE_PROTOCOL:
         setStage(LockStage.UPDATE_PROTOCOL)
         break
-      case LockStage.UPDATE_INDIVIDUAL_PROTOCOL:
+      case LockStage.CONFIRM_VOTE:
+        setStage(LockStage.VOTE)
+        break
+      case LockStage.VOTE:
         setStage(LockStage.SETTINGS)
         break
-      case LockStage.CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL:
-        setStage(LockStage.UPDATE_INDIVIDUAL_PROTOCOL)
+      case LockStage.CONFIRM_DELETE_PROTOCOL:
+        setStage(LockStage.DELETE_PROTOCOL)
         break
-      case LockStage.CONFIRM_CLAIM:
-        setStage(LockStage.CLAIM)
-        break
-      case LockStage.CLAIM:
-        setStage(LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_CLAIM_REVENUE:
-        setStage(LockStage.CLAIM_REVENUE)
-        break
-      case LockStage.CLAIM_REVENUE:
-        setStage(LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_ADD_EXTRA_TOKEN:
-        setStage(LockStage.ADD_EXTRA_TOKEN)
-        break
-      case LockStage.ADD_EXTRA_TOKEN:
-        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_REMOVE_EXTRA_TOKEN:
-        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_UPDATE_BADGE_ID:
-        setStage(LockStage.UPDATE_BADGE_ID)
-        break
-      case LockStage.UPDATE_BADGE_ID:
+      case LockStage.DELETE_PROTOCOL:
         setStage(LockStage.ADMIN_SETTINGS)
         break
-      case LockStage.CONFIRM_UPDATE_TOKEN_ID:
-        setStage(LockStage.UPDATE_TOKEN_ID)
+      case LockStage.CONFIRM_DELETE:
+        setStage(LockStage.DELETE)
         break
-      case LockStage.UPDATE_TOKEN_ID:
+      case LockStage.DELETE:
         setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_TRANSFER_RECEIVABLE_TO_NOTE:
+        setStage(LockStage.TRANSFER_RECEIVABLE_TO_NOTE)
+        break
+      case LockStage.TRANSFER_RECEIVABLE_TO_NOTE:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.UPDATE_DISCOUNT_DIVISOR:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR:
+        setStage(LockStage.UPDATE_DISCOUNT_DIVISOR)
+        break
+      case LockStage.UPDATE_PENALTY_DIVISOR:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR:
+        setStage(LockStage.UPDATE_PENALTY_DIVISOR)
+        break
+      case LockStage.CONFIRM_UPDATE_PROFILE_ID:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_CLAIM_NOTE:
+        setStage(LockStage.CLAIM_NOTE)
+        break
+      case LockStage.CLAIM_NOTE:
+        setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_SPONSOR_TAG:
         setStage(LockStage.SPONSOR_TAG)
@@ -311,113 +308,74 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.SPONSOR_TAG:
         setStage(LockStage.SETTINGS)
         break
+      case LockStage.CONFIRM_UPDATE_TAG_REGISTRATION:
+        setStage(LockStage.UPDATE_TAG_REGISTRATION)
+        break
+      case LockStage.UPDATE_TAG_REGISTRATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_CODE_INFO:
+        setStage(LockStage.UPDATE_CODE_INFO)
+        break
+      case LockStage.UPDATE_CODE_INFO:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_CLAIM_PENDING:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.UPDATE_SPONSOR_MEDIA)
         break
+      case LockStage.CONFIRM_UPDATE_CATEGORY:
+        setStage(LockStage.UPDATE_CATEGORY)
+        break
+      case LockStage.UPDATE_CATEGORY:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_PRICE_PER_MINUTES:
+        setStage(LockStage.UPDATE_PRICE_PER_MINUTES)
+        break
+      case LockStage.UPDATE_PRICE_PER_MINUTES:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_EXCLUDED_CONTENT:
+        setStage(LockStage.UPDATE_EXCLUDED_CONTENT)
+        break
+      case LockStage.UPDATE_EXCLUDED_CONTENT:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_WORLD_BOUNTY:
+        setStage(LockStage.UPDATE_WORLD_BOUNTY)
+        break
+      case LockStage.UPDATE_WORLD_BOUNTY:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_MINT_PAST_WORLD:
+        setStage(LockStage.MINT_PAST_WORLD)
+        break
+      case LockStage.MINT_PAST_WORLD:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_MINT_PRESENT_WORLD:
+        setStage(LockStage.MINT_PRESENT_WORLD)
+        break
+      case LockStage.MINT_PRESENT_WORLD:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_URI_GENERATOR:
+        setStage(LockStage.UPDATE_URI_GENERATOR)
+        break
+      case LockStage.UPDATE_URI_GENERATOR:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.UPDATE_SPONSOR_MEDIA:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
-      case LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE:
-        setStage(LockStage.ADMIN_SETTINGS)
+      case LockStage.CONFIRM_CLAIM_TOKEN_SPONSOR_FUND:
+        setStage(LockStage.CLAIM_TOKEN_SPONSOR_FUND)
         break
-      case LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID:
-        setStage(LockStage.UPDATE_DEV_TOKEN_ID)
-        break
-      case LockStage.UPDATE_DEV_TOKEN_ID:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.CONFIRM_UPDATE_BLACKLIST:
-        setStage(LockStage.UPDATE_BLACKLIST)
-        break
-      case LockStage.UPDATE_BLACKLIST:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.CONFIRM_UPDATE_ADMIN:
-        setStage(LockStage.UPDATE_ADMIN)
-        break
-      case LockStage.UPDATE_ADMIN:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.CONFIRM_UPDATE_DEV:
-        setStage(LockStage.UPDATE_DEV)
-        break
-      case LockStage.UPDATE_DEV:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.CONFIRM_ADMIN_WITHDRAW:
-        setStage(LockStage.ADMIN_WITHDRAW)
-        break
-      case LockStage.CONFIRM_UPDATE_PROFILE_ID:
-        setStage(LockStage.UPDATE_PROFILE_ID)
-        break
-      case LockStage.UPDATE_PROFILE_ID:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.CONFIRM_UNLOCK_BOUNTY:
-        setStage(LockStage.UNLOCK_BOUNTY)
-        break
-      case LockStage.UNLOCK_BOUNTY:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.ADMIN_WITHDRAW:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.DELETE:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.CONFIRM_DELETE_RAMP:
-        setStage(LockStage.DELETE_RAMP)
-        break
-      case LockStage.CONFIRM_BUY_ACCOUNT:
-        setStage(LockStage.BUY_ACCOUNT)
-        break
-      case LockStage.BUY_ACCOUNT:
-        setStage(LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_PARTNER:
-        setStage(LockStage.PARTNER)
-        break
-      case LockStage.PARTNER:
-        setStage(LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_DELETE:
-        setStage(LockStage.DELETE)
-        break
-      case LockStage.CONFIRM_BURN:
-        setStage(LockStage.BURN)
-        break
-      case LockStage.BURN:
-        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.CONFIRM_MINT:
-        if (!sessionId) setStage(LockStage.MINT)
-        break
-      case LockStage.MINT:
-        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.BUY_RAMP:
-        setStage(LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_BUY_RAMP:
-        setStage(LockStage.BUY_RAMP)
-        break
-      case LockStage.CONFIRM_CREATE_PROTOCOL:
-        setStage(LockStage.CREATE_PROTOCOL)
-        break
-      case LockStage.CONFIRM_UPDATE_BOUNTY:
-        setStage(LockStage.UPDATE_BOUNTY)
-        break
-      case LockStage.UPDATE_BOUNTY:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.UPDATE_OWNER:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
-      case LockStage.CONFIRM_UPDATE_OWNER:
-        setStage(LockStage.UPDATE_OWNER)
-        break
-      case LockStage.CREATE_PROTOCOL:
-        setStage(LockStage.ADMIN_SETTINGS)
+      case LockStage.CLAIM_TOKEN_SPONSOR_FUND:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       default:
         break
@@ -426,102 +384,89 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const continueToNextStage = () => {
     switch (stage) {
-      case LockStage.INIT_RAMP:
-        setStage(LockStage.CONFIRM_INIT_RAMP)
+      case LockStage.UPDATE_AUTOCHARGE:
+        setStage(LockStage.CONFIRM_UPDATE_AUTOCHARGE)
+        break
+      case LockStage.UPDATE_TAX_CONTRACT:
+        setStage(LockStage.CONFIRM_UPDATE_TAX_CONTRACT)
+        break
+      case LockStage.UPDATE_TOKEN_IDS:
+        setStage(LockStage.CONFIRM_UPDATE_TOKEN_IDS)
         break
       case LockStage.UPDATE_DEV:
         setStage(LockStage.CONFIRM_UPDATE_DEV)
         break
+      case LockStage.UPDATE_BOUNTY:
+        setStage(LockStage.CONFIRM_UPDATE_BOUNTY)
+        break
       case LockStage.UPDATE_ADMIN:
         setStage(LockStage.CONFIRM_UPDATE_ADMIN)
         break
-      case LockStage.CREATE_PROTOCOL:
-        setStage(LockStage.CONFIRM_CREATE_PROTOCOL)
-        break
-      case LockStage.MINT:
-        setStage(LockStage.CONFIRM_MINT)
-        break
-      case LockStage.BURN:
-        setStage(LockStage.CONFIRM_BURN)
-        break
-      case LockStage.PARTNER:
-        setStage(LockStage.CONFIRM_PARTNER)
-        break
-      case LockStage.BUY_ACCOUNT:
-        setStage(LockStage.CONFIRM_BUY_ACCOUNT)
-        break
-      case LockStage.BUY_RAMP:
-        setStage(LockStage.CONFIRM_BUY_RAMP)
-        break
-      case LockStage.UPDATE_BADGE_ID:
-        setStage(LockStage.CONFIRM_UPDATE_BADGE_ID)
-        break
-      case LockStage.UPDATE_PROFILE_ID:
-        setStage(LockStage.CONFIRM_UPDATE_PROFILE_ID)
-        break
-      case LockStage.UPDATE_TOKEN_ID:
-        setStage(LockStage.CONFIRM_UPDATE_TOKEN_ID)
-        break
-      case LockStage.SPONSOR_TAG:
-        setStage(LockStage.CONFIRM_SPONSOR_TAG)
+      case LockStage.UPDATE_CODE_INFO:
+        setStage(LockStage.CONFIRM_UPDATE_CODE_INFO)
         break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA)
         break
-      case LockStage.UPDATE_DEV_TOKEN_ID:
-        setStage(LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID)
+      case LockStage.CLAIM_TOKEN_SPONSOR_FUND:
+        setStage(LockStage.CONFIRM_CLAIM_TOKEN_SPONSOR_FUND)
         break
-      case LockStage.UPDATE_BLACKLIST:
-        setStage(LockStage.CONFIRM_UPDATE_BLACKLIST)
+      case LockStage.VOTE:
+        setStage(LockStage.CONFIRM_VOTE)
         break
-      case LockStage.UNLOCK_BOUNTY:
-        setStage(LockStage.CONFIRM_UNLOCK_BOUNTY)
+      case LockStage.DELETE_PROTOCOL:
+        setStage(LockStage.CONFIRM_DELETE_PROTOCOL)
         break
-      case LockStage.UPDATE_BOUNTY:
-        setStage(LockStage.CONFIRM_UPDATE_BOUNTY)
+      case LockStage.TRANSFER_RECEIVABLE_TO_NOTE:
+        setStage(LockStage.CONFIRM_TRANSFER_RECEIVABLE_TO_NOTE)
         break
-      case LockStage.UPDATE_PROTOCOL:
-        setStage(LockStage.CONFIRM_UPDATE_PROTOCOL)
+      case LockStage.CLAIM_NOTE:
+        setStage(LockStage.CONFIRM_CLAIM_NOTE)
         break
-      case LockStage.UPDATE_INDIVIDUAL_PROTOCOL:
-        setStage(LockStage.CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL)
+      case LockStage.UPDATE_TAG_REGISTRATION:
+        setStage(LockStage.CONFIRM_UPDATE_TAG_REGISTRATION)
         break
-      case LockStage.UPDATE_OWNER:
-        setStage(LockStage.CONFIRM_UPDATE_OWNER)
-        break
-      case LockStage.CLAIM:
-        setStage(LockStage.CONFIRM_CLAIM)
-        break
-      case LockStage.CLAIM_REVENUE:
-        setStage(LockStage.CONFIRM_CLAIM_REVENUE)
-        break
-      case LockStage.ADD_EXTRA_TOKEN:
-        setStage(LockStage.CONFIRM_ADD_EXTRA_TOKEN)
-        break
-      case LockStage.ADMIN_WITHDRAW:
-        setStage(LockStage.CONFIRM_ADMIN_WITHDRAW)
+      case LockStage.SPONSOR_TAG:
+        setStage(LockStage.CONFIRM_SPONSOR_TAG)
         break
       case LockStage.DELETE:
         setStage(LockStage.CONFIRM_DELETE)
         break
-      case LockStage.DELETE_RAMP:
-        setStage(LockStage.CONFIRM_DELETE_RAMP)
+      case LockStage.UPDATE_PROTOCOL:
+        setStage(LockStage.CONFIRM_UPDATE_PROTOCOL)
+        break
+      case LockStage.ADMIN_AUTOCHARGE:
+        setStage(LockStage.CONFIRM_ADMIN_AUTOCHARGE)
+        break
+      case LockStage.UPDATE_PENALTY_DIVISOR:
+        setStage(LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR)
+        break
+      case LockStage.UPDATE_DISCOUNT_DIVISOR:
+        setStage(LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR)
         break
       case LockStage.UPDATE_PARAMETERS:
         setStage(LockStage.CONFIRM_UPDATE_PARAMETERS)
         break
-      default:
+      case LockStage.UPDATE_CATEGORY:
+        setStage(LockStage.CONFIRM_UPDATE_CATEGORY)
         break
-    }
-  }
-
-  const onSuccessSale = async (onfirmedTxHash) => {
-    switch (stage) {
-      case LockStage.CONFIRM_MINT:
-        router.push(`/ramps/${router.query.ramp}`)
+      case LockStage.UPDATE_PRICE_PER_MINUTES:
+        setStage(LockStage.CONFIRM_UPDATE_PRICE_PER_MINUTES)
         break
-      case LockStage.CONFIRM_INIT_RAMP:
-        router.push(`/ramps`)
+      case LockStage.UPDATE_EXCLUDED_CONTENT:
+        setStage(LockStage.CONFIRM_UPDATE_EXCLUDED_CONTENT)
+        break
+      case LockStage.UPDATE_WORLD_BOUNTY:
+        setStage(LockStage.CONFIRM_UPDATE_WORLD_BOUNTY)
+        break
+      case LockStage.MINT_PAST_WORLD:
+        setStage(LockStage.CONFIRM_MINT_PAST_WORLD)
+        break
+      case LockStage.MINT_PRESENT_WORLD:
+        setStage(LockStage.CONFIRM_MINT_PRESENT_WORLD)
+        break
+      case LockStage.UPDATE_URI_GENERATOR:
+        setStage(LockStage.CONFIRM_UPDATE_URI_GENERATOR)
         break
       default:
         break
@@ -530,10 +475,14 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
-      return requiresApproval(stakingTokenContract, account, rampHelperContract.address)
+      try {
+        return requiresApproval(stakingTokenContract, account, worldContract.address)
+      } catch (error) {
+        return true
+      }
     },
     onApprove: () => {
-      return callWithGasPrice(stakingTokenContract, 'approve', [rampHelperContract.address, MaxUint256])
+      return callWithGasPrice(stakingTokenContract, 'approve', [worldContract.address, MaxUint256])
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
@@ -543,325 +492,247 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
-      if (stage === LockStage.CONFIRM_CREATE_PROTOCOL) {
-        const args = [state.token, state.tokenId]
-        console.log('CONFIRM_CREATE_PROTOCOL===============>', args)
-        return callWithGasPrice(rampContract, 'createProtocol', args).catch((err) =>
-          console.log('CONFIRM_CREATE_PROTOCOL===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_BLACKLIST) {
-        return callWithGasPrice(rampHelperContract, 'updateBlacklist', [
-          pool?.rampAddress,
-          state.owner,
-          !!state.add,
-        ]).catch((err) => console.log('CONFIRM_UPDATE_BLACKLIST===============>', err))
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_ADMIN) {
-        return callWithGasPrice(rampContract, 'updateAdmin', [state.owner, !!state.add]).catch((err) =>
-          console.log('CONFIRM_UPDATE_ADMIN===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_DEV) {
-        return callWithGasPrice(rampContract, 'updateDev', [state.owner]).catch((err) =>
-          console.log('CONFIRM_UPDATE_DEV===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_MINT) {
-        const amount = getDecimalAmount(state.amountPayable, currency?.decimals)
-        const args = [state.token, account, amount.toString(), state.identityTokenId, state.sessionId || '']
-        console.log('CONFIRM_MINT===============>', args)
-        return callWithGasPrice(rampContract, 'mint', args).catch((err) =>
-          console.log('CONFIRM_MINT===============>', err, rampContract),
-        )
-      }
       if (stage === LockStage.CONFIRM_UPDATE_PROTOCOL) {
-        const amount = getDecimalAmount(state.salePrice, 18)
-        const cap = getDecimalAmount(state.cap, 18)
-        const args = [state.token, state.close, cap.toString(), amount.toString(), state.maxPartners]
-        console.log('CONFIRM_UPDATE_PROTOCOL===============>', args)
-        return callWithGasPrice(rampContract, 'updateProtocol', args).catch((err) =>
+        let args
+        try {
+          const amountReceivable = getDecimalAmount(new BigNumber(state.amountReceivable), currency.decimals)
+          const startReceivable = Math.max(
+            differenceInSeconds(new Date(state.startReceivable), new Date(), {
+              roundingMethod: 'ceil',
+            }),
+            0,
+          )
+          args = [
+            state.owner,
+            currency.address,
+            [amountReceivable.toString(), state.periodReceivable, startReceivable.toString(), state.optionId],
+            state.identityTokenId,
+            state.protocolId,
+            state.rating,
+            state.media.toString(),
+            state.description,
+          ]
+        } catch (err) {
+          console.log('CONFIRM_UPDATE_PROTOCOL===============>', err)
+        }
+        console.log('CONFIRM_UPDATE_PROTOCOL===============>', worldContract, args)
+        return callWithGasPrice(worldContract, 'updateProtocol', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PROTOCOL===============>', err),
         )
       }
-      if (stage === LockStage.CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL) {
-        const amount = getDecimalAmount(state.salePrice, 18)
-        const cap = getDecimalAmount(state.cap, 18)
-        const args = [state.token, state.close, cap.toString(), amount.toString(), state.maxPartners]
-        console.log('CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL===============>', args)
-        return callWithGasPrice(rampContract, 'updateIndividualProtocol', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_BURN) {
-        const amount = getDecimalAmount(state.amountReceivable, currency?.decimals)
-        const args = [state.token, amount.toString(), state.identityTokenId]
-        console.log('CONFIRM_BURN===============>', args)
-        return callWithGasPrice(rampContract, 'burn', args).catch((err) =>
-          console.log('CONFIRM_BURN===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_BUY_ACCOUNT) {
-        const args = [state.token, state.tokenId, state.bountyId]
-        console.log('CONFIRM_BUY_ACCOUNT===============>', args)
-        return callWithGasPrice(rampContract, 'buyAccount', args).catch((err) =>
-          console.log('CONFIRM_BUY_ACCOUNT===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
-        const amount = getDecimalAmount(state.amountReceivable, 18)
-        return callWithGasPrice(rampContract, 'withdraw', [state.token, amount.toString()]).catch((err) =>
-          console.log('CONFIRM_ADMIN_WITHDRAW===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_BUY_RAMP) {
-        const args = [state.token, state.tokenId, state.bountyIds]
-        return callWithGasPrice(rampContract, 'buyRamp', args).catch((err) =>
-          console.log('CONFIRM_BUY_RAMP===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_INIT_RAMP) {
-        const encryptRsa = new EncryptRsa()
-        const pks = state.publishableKeys?.split(',')
-        const sks = state.secretKeys?.split(',')
-        const cIds = state.clientIds?.split(',')
-        const cas = state.channels?.split(',')
-        const pk0 = pks[0]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: pks[0],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const pk1 = pks[1]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: pks[1],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const pk2 = pks[2]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: pks[2],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const pk3 = pks[3]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: pks[3],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const pk4 = pks[4]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: pks[4],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-
-        const sk0 = sks[0]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: sks[0],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const sk1 = sks[1]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: sks[1],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const sk2 = sks[2]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: sks[2],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const sk3 = sks[3]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: sks[3],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const sk4 = sks[4]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: sks[4],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-
-        const cId0 = cIds[0]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: cIds[0],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const cId1 = cIds[1]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: cIds[1],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const cId2 = cIds[2]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: cIds[2],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const cId3 = cIds[3]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: cIds[3],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const cId4 = cIds[4]
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: cIds[4],
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        const args = [
-          pool.rampAddress,
-          state.profileId,
-          state.applicationLink,
-          [pk0, pk1, pk2, pk3, pk4],
-          [sk0, sk1, sk2, sk3, sk4],
-          [cId0, cId1, cId2, cId3, cId4],
-          state.avatar,
-          state.description,
-          [cas[0] || '', cas[1] || '', cas[2] || '', cas[3] || '', cas[4] || ''],
-        ]
-        console.log('CONFIRM_INIT_RAMP===============>', args)
-        return callWithGasPrice(rampHelperContract, 'updateRampInfo', args).catch((err) =>
-          console.log('CONFIRM_INIT_RAMP===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_ADD_EXTRA_TOKEN) {
-        const args = [pool?.rampAddress, currency.address, state.identityTokenId]
-        console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', args)
-        return callWithGasPrice(rampHelperContract, 'addExtratoken', args).catch((err) =>
-          console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_REMOVE_EXTRA_TOKEN) {
-        const args = [pool?.rampAddress, currency.address]
-        console.log('CONFIRM_REMOVE_EXTRA_TOKEN===============>', args)
-        return callWithGasPrice(rampHelperContract, 'removeExtratoken', args).catch((err) =>
-          console.log('CONFIRM_REMOVE_EXTRA_TOKEN===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_CLAIM_REVENUE) {
-        const args = [state.token, state.partnerBountyId]
-        console.log('CONFIRM_CLAIM_REVENUE===============>', args)
-        return callWithGasPrice(rampContract, 'claimPendingRevenue', args).catch((err) =>
-          console.log('CONFIRM_CLAIM_REVENUE===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_PARTNER) {
-        const args = [state.token, state.bountyId]
-        console.log('CONFIRM_PARTNER===============>', args)
-        return callWithGasPrice(rampContract, 'addPartner', args).catch((err) =>
-          console.log('CONFIRM_PARTNER===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_DELETE) {
-        return callWithGasPrice(rampContract, 'deleteProtocol', [state.token]).catch((err) =>
-          console.log('CONFIRM_DELETE===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_DELETE_RAMP) {
-        return callWithGasPrice(rampHelperContract, 'deleteRamp', [pool?.rampAddress]).catch((err) =>
-          console.log('CONFIRM_DELETE_RAMP===============>', err, rampHelperContract),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_BOUNTY) {
-        const args = [state.token, state.bountyId]
-        console.log('CONFIRM_UPDATE_BOUNTY===============>', args)
-        return callWithGasPrice(rampContract, 'updateBounty', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_BOUNTY===============>', err),
-        )
-      }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
-        const amount = getDecimalAmount(state.salePrice, currency.decimals)
-        const args = [
-          parseInt(state.mintFee) * 100,
-          parseInt(state.burnFee) * 100,
-          state.badgeId,
-          amount.toString(),
-          !!state.automatic,
-        ]
-        console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
-        return callWithGasPrice(rampContract, 'updateParameters', args).catch((err) =>
+        return callWithGasPrice(worldContract, 'updateParameters', [!!state.bountyRequired]).catch((err) =>
           console.log('CONFIRM_UPDATE_PARAMETERS===============>', err),
         )
       }
-      if (stage === LockStage.CONFIRM_CLAIM) {
-        const amount = getDecimalAmount(state.amountPayable, 18)
-        const args = [rampContract.address, state.token, amount.toString(), !!state.add, state.title, state.content]
-        console.log('CONFIRM_CLAIM===============>', args)
-        return callWithGasPrice(rampHelperContract, 'createClaim', args).catch((err) =>
-          console.log('CONFIRM_CLAIM===============>', err),
+      if (stage === LockStage.CONFIRM_UPDATE_ADMIN) {
+        return callWithGasPrice(worldContract, 'updateAdmin', [state.owner, !!state.add]).catch((err) =>
+          console.log('CONFIRM_UPDATE_ADMIN===============>', err, worldContract),
         )
       }
-      if (stage === LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE) {
-        console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', [pool?.rampAddress])
-        return callWithGasPrice(rampAdsContract, 'claimPendingRevenueFromSponsors', [pool?.rampAddress]).catch((err) =>
-          console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', err),
+      if (stage === LockStage.CONFIRM_UPDATE_DEV) {
+        return callWithGasPrice(worldContract, 'updateDev', [state.owner]).catch((err) =>
+          console.log('CONFIRM_UPDATE_DEV===============>', err, worldContract),
         )
       }
-      if (stage === LockStage.CONFIRM_UPDATE_TOKEN_ID) {
-        const args = [state.token, state.tokenId]
-        console.log('CONFIRM_UPDATE_TOKEN_ID===============>', args)
-        return callWithGasPrice(rampContract, 'updateTokenId', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_TOKEN_ID===============>', err),
+      if (stage === LockStage.CONFIRM_UPDATE_BOUNTY) {
+        return callWithGasPrice(worldContract, 'updateBounty', [state.bountyId, state.tokenId]).catch((err) =>
+          console.log('CONFIRM_UPDATE_BOUNTY===============>', err, worldContract),
         )
       }
-      if (stage === LockStage.CONFIRM_SPONSOR_TAG) {
-        const amount = getDecimalAmount(state.amountPayable, 18)
-        const args = [state.sponsor, amount?.toString(), state.tag, state.message]
-        console.log('CONFIRM_SPONSOR_TAG===============>', args)
-        return callWithGasPrice(rampAdsContract, 'sponsorTag', args).catch((err) =>
-          console.log('CONFIRM_SPONSOR_TAG===============>', err),
+      if (stage === LockStage.CONFIRM_ADMIN_AUTOCHARGE) {
+        return callWithGasPrice(worldContract, 'autoCharge', [state.accounts?.split(','), state.numPeriods]).catch(
+          (err) => console.log('CONFIRM_ADMIN_AUTOCHARGE===============>', err, worldContract),
         )
       }
-      if (stage === LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA) {
-        const args = [state.tag]
-        console.log('CONFIRM_UPDATE_SPONSOR_MEDIA===============>', args)
-        return callWithGasPrice(rampAdsContract, 'updateSponsorMedia', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_SPONSOR_MEDIA===============>', err),
+      if (stage === LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR) {
+        const args = [state.optionId, state.factor, state.period, state.cap]
+        console.log('CONFIRM_UPDATE_DISCOUNT_DIVISOR===============>', args)
+        return callWithGasPrice(worldContract, 'updateDiscountDivisor', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_DISCOUNT_DIVISOR===============>', err),
         )
       }
-      if (stage === LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID) {
-        const args = [getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()), state.tokenId]
-        console.log('CONFIRM_UPDATE_DEV_TOKEN_ID===============>', args)
-        return callWithGasPrice(rampContract, 'updateDevTokenId', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_DEV_TOKEN_ID===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_BADGE_ID) {
-        const args = [state.token, state.badgeId]
-        console.log('CONFIRM_UPDATE_BADGE_ID===============>', args)
-        return callWithGasPrice(rampContract, 'updateBadgeId', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_BADGE_ID===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UNLOCK_BOUNTY) {
-        const args = [state.token, state.bountyId]
-        console.log('CONFIRM_UNLOCK_BOUNTY===============>', args)
-        return callWithGasPrice(rampContract, 'unlockBounty', args).catch((err) =>
-          console.log('CONFIRM_UNLOCK_BOUNTY===============>', err),
+      if (stage === LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR) {
+        const args = [state.optionId, state.factor, state.period, state.cap]
+        console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', args)
+        return callWithGasPrice(worldContract, 'updatePenaltyDivisor', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PROFILE_ID) {
-        const args = [state.token, state.profileId]
-        console.log('CONFIRM_UPDATE_PROFILE===============>', args)
-        return callWithGasPrice(rampContract, 'updateProfile', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_PROFILE===============>', err),
+        const args = [pool?.worldAddress]
+        console.log('CONFIRM_UPDATE_PROFILE_ID===============>', args)
+        return callWithGasPrice(worldNoteContract, 'updateProfile', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_PROFILE_ID===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_WITHDRAW) {
+        const amount = getDecimalAmount(new BigNumber(state.amountPayable), currency.decimals)
+        return callWithGasPrice(worldContract, 'withdraw', [currency.address, amount.toString()]).catch((err) =>
+          console.log('CONFIRM_WITHDRAW===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_DELETE_PROTOCOL) {
+        return callWithGasPrice(worldContract, 'deleteProtocol', [state.protocolId]).catch((err) =>
+          console.log('CONFIRM_DELETE_PROTOCOL===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_TRANSFER_RECEIVABLE_TO_NOTE) {
+        const args = [pool?.worldAddress, state.toAddress, state.tokenId, state.numPeriods]
+        console.log('CONFIRM_TRANSFER_RECEIVABLE_TO_NOTE==============>', args)
+        return callWithGasPrice(worldHelper3Contract, 'transferDueToNoteReceivable', args).catch((err) =>
+          console.log('CONFIRM_TRANSFER_RECEIVABLE_TO_NOTE===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_CLAIM_NOTE) {
+        const args = [state.tokenId]
+        return callWithGasPrice(worldHelper3Contract, 'claimPendingRevenueFromNote', args).catch((err) =>
+          console.log('CONFIRM_CLAIM_NOTE===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_TAG_REGISTRATION) {
+        const args = [state.tag, !!state.add]
+        return callWithGasPrice(worldHelperContract, 'updateTagRegistration', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_TAG_REGISTRATION===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_SPONSOR_TAG) {
+        const amount = getDecimalAmount(new BigNumber(state.amountReceivable), currency.decimals)
+        const args = [state.sponsor, state.world, amount.toString(), state.tag, state.message]
+        return callWithGasPrice(worldHelperContract, 'sponsorTag', args).catch((err) =>
+          console.log('CONFIRM_SPONSOR_TAG===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_CODE_INFO) {
+        const args = [state.world, state.accounts?.split(','), state.rating]
+        return callWithGasPrice(worldHelperContract, 'updateCodeInfo', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_CODE_INFO===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA) {
+        const args = [state.protocolId, state.tag]
+        return callWithGasPrice(worldHelperContract, 'updateSponsorMedia', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_SPONSOR_MEDIA===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_CLAIM_TOKEN_SPONSOR_FUND) {
+        const args = [state.tokenId]
+        console.log('CONFIRM_CLAIM_TOKEN_SPONSOR_FUND===============>', args)
+        return callWithGasPrice(worldHelperContract, 'claimPendingRevenueFromTokenId', args).catch((err) =>
+          console.log('CONFIRM_CLAIM_TOKEN_SPONSOR_FUND===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_CLAIM_PENDING) {
+        return callWithGasPrice(worldHelperContract, 'claimPendingRevenue', []).catch((err) =>
+          console.log('CONFIRM_CLAIM_PENDING===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_CATEGORY) {
+        const args = [state.world, state.category + 1]
+        return callWithGasPrice(worldHelper2Contract, 'updateCategory', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_CATEGORY===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_PRICE_PER_MINUTES) {
+        const amount = getDecimalAmount(new BigNumber(state.amountReceivable), currency.decimals)
+        const args = [amount.toString()]
+        return callWithGasPrice(worldHelper3Contract, 'updatePricePerAttachMinutes', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_PRICE_PER_MINUTES===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_EXCLUDED_CONTENT) {
+        const args = [state.tag, state.contentType, !!state.add]
+        return callWithGasPrice(worldHelper3Contract, 'updateExcludedContent', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_EXCLUDED_CONTENT===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_WORLD_BOUNTY) {
+        const args = [state.world, state.bountyId]
+        console.log('CONFIRM_UPDATE_WORLD_BOUNTY===============>', args)
+        return callWithGasPrice(worldHelper2Contract, 'updateBounty', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_WORLD_BOUNTY===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_MINT_PAST_WORLD) {
+        try {
+          const startReceivable = Math.max(
+            differenceInSeconds(new Date(state.startReceivable ?? 0), new Date(0), {
+              roundingMethod: 'ceil',
+            }),
+            0,
+          )
+          const args = [
+            state.toAddress,
+            state.world,
+            startReceivable.toString(),
+            state.planet,
+            [state.first4[0], state.first4[1], state.first4[2], state.first4[3]],
+            [state.last4[0], state.last4[1], state.last4[2], state.last4[3]],
+            [state.nfts],
+          ]
+          console.log('CONFIRM_MINT_PAST_WORLD===============>', args)
+          return callWithGasPrice(worldHelper2Contract, 'mintPastWorld', args).catch((err) =>
+            console.log('CONFIRM_MINT_PAST_WORLD===============>', state.startReceivable, err),
+          )
+        } catch (err) {
+          console.log('1CONFIRM_MINT_PAST_WORLD===============>', err)
+        }
+      }
+      if (stage === LockStage.CONFIRM_MINT_PRESENT_WORLD) {
+        try {
+          const args = [
+            state.toAddress,
+            state.world,
+            state.planet,
+            state.first4?.split(',')?.map((first4) => [first4[0], first4[1], first4[2], first4[3]]),
+            state.last4?.split(',')?.map((last4) => [last4[0], last4[1], last4[2], last4[3]]),
+            state.nfts?.split(',')?.map((nft) => [nft]),
+          ]
+          console.log('CONFIRM_MINT_PRESENT_WORLD===============>', args)
+          return callWithGasPrice(worldHelper2Contract, 'batchMint', args).catch((err) =>
+            console.log('CONFIRM_MINT_PRESENT_WORLD===============>', args, err),
+          )
+        } catch (err) {
+          console.log('1CONFIRM_MINT_PRESENT_WORLD===============>', err)
+        }
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_URI_GENERATOR) {
+        const args = [state.world, state.uriGenerator]
+        console.log('CONFIRM_UPDATE_URI_GENERATOR===============>', args)
+        return callWithGasPrice(worldHelper2Contract, 'updateUriGenerator', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_URI_GENERATOR===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_DELETE) {
+        return callWithGasPrice(worldNoteContract, 'deleteWorld', [pool?.worldAddress]).catch((err) =>
+          console.log('CONFIRM_DELETE_PROTOCOL===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_AUTOCHARGE) {
+        console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', [!!state.autoCharge, state.tokenId])
+        return callWithGasPrice(worldContract, 'updateAutoCharge', [!!state.autoCharge, state.tokenId]).catch((err) =>
+          console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_TAX_CONTRACT) {
+        return callWithGasPrice(worldContract, 'updateTaxContract', [state.taxAddress]).catch((err) =>
+          console.log('CONFIRM_UPDATE_TAX_CONTRACT===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_TOKEN_IDS) {
+        return callWithGasPrice(worldContract, 'updateTokenIds', [state.accounts?.split(','), !!state.add]).catch(
+          (err) => console.log('CONFIRM_UPDATE_TOKEN_IDS===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_VOTE) {
+        return callWithGasPrice(worldNoteContract, 'vote', [pool.worldAddress, state.profileId, !!state.like]).catch(
+          (err) => console.log('CONFIRM_VOTE===============>', err),
+        )
+      }
+      return null
     },
     onSuccess: async ({ receipt }) => {
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      dispatch(fetchRampsAsync())
-      onSuccessSale(receipt.transactionHash)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)
     },
@@ -877,308 +748,304 @@ const CreateGaugeModal: React.FC<any> = ({
       onBack={showBackButton ? goBack : null}
       headerBackground={theme.colors.gradientCardHeader}
     >
-      {stage === LockStage.PRE_MINT && (
-        <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
-          {!account ? (
-            <ConnectWalletButton />
-          ) : checked ? (
-            <Button mb="8px" variant="success" onClick={() => setStage(LockStage.CONFIRM_MINT)}>
-              {t('CONFIRM MINT')}
-            </Button>
-          ) : null}
-        </Flex>
-      )}
       {stage === LockStage.SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
-          <Button
-            mb="8px"
-            variant="success"
-            onClick={() => {
-              if (pool?.redirect) {
-                router.push(pool.redirect)
-              } else {
-                setStage(LockStage.MINT)
-              }
-            }}
-          >
-            {t('MINT')}
+          <Flex justifyContent="center" style={{ cursor: 'pointer' }} alignSelf="center" mb="10px">
+            <LinkExternal color="success" href={pool.auditor?.applicationLink} bold>
+              {t('APPLY FOR AN AUDIT')}
+            </LinkExternal>
+          </Flex>
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.VOTE)}>
+            {t('VOTE')}
           </Button>
-          <Button
-            mb="8px"
-            variant="danger"
-            onClick={() => {
-              if (pool?.redirect) {
-                router.push(pool.redirect)
-              } else {
-                setStage(LockStage.BURN)
-              }
-            }}
-          >
-            {t('BURN')}
-          </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.PARTNER)}>
-            {t('PARTNER')}
-          </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.SPONSOR_TAG)}>
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.SPONSOR_TAG)}>
             {t('SPONSOR TAG')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_AUTOCHARGE)}>
+            {t('UPDATE AUTOCHARGE')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_TAX_CONTRACT)}>
+            {t('UPDATE TAX CONTRACT')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_TOKEN_IDS)}>
+            {t('UPDATE TOKEN IDS')}
+          </Button>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
+            {t('UPDATE BOUNTY')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_SPONSOR_MEDIA)}>
             {t('UPDATE SPONSOR MEDIA')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.BUY_ACCOUNT)}>
-            {t('BUY ACCOUNT')}
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM_TOKEN_SPONSOR_FUND)}>
+            {t('CLAIM TOKEN SPONSOR FUND')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_INDIVIDUAL_PROTOCOL)}>
-            {t('UPDATE ACCOUNT')}
-          </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM)}>
-            {t('CLAIM')}
-          </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM_REVENUE)}>
-            {t('CLAIM REVENUE')}
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM_NOTE)}>
+            {t('CLAIM NOTE')}
           </Button>
         </Flex>
       )}
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL)}>
-            {t('CREATE ACCOUNT')}
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
+            {t('CREATE/UPDATE ACCOUNT')}
           </Button>
-          <Button
-            mb="8px"
-            variant="success"
-            disabled={!rampAccount?.isOverCollateralised}
-            onClick={() => {
-              if (pool?.redirect) {
-                router.push(pool.redirect)
-              } else {
-                setStage(LockStage.MINT)
-              }
-            }}
-          >
-            {t('MINT')}
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.MINT_PAST_WORLD)}>
+            {t('MINT PAST WORLD')}
           </Button>
-          <Button
-            mb="8px"
-            variant="danger"
-            disabled={!rampAccount?.isOverCollateralised}
-            onClick={() => {
-              if (pool?.redirect) {
-                router.push(pool.redirect)
-              } else {
-                setStage(LockStage.BURN)
-              }
-            }}
-          >
-            {t('BURN')}
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.MINT_PRESENT_WORLD)}>
+            {t('MINT WORLD')}
+          </Button>
+          <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_WORLD_BOUNTY)}>
+            {t('UPDATE WORLD BOUNTY')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
-            {t('UPDATE PARAMETERS')}
+            {t('UPDATE BOUNTY REQUIRED')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
-            {t('ADD EXTRA TOKEN')}
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_CODE_INFO)}>
+            {t('UPDATE CODE NFO')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.CONFIRM_REMOVE_EXTRA_TOKEN)}>
-            {t('REMOVE EXTRA TOKEN')}
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_CATEGORY)}>
+            {t('UPDATE CATEGORY')}
           </Button>
-          {location !== 'header' ? (
-            <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
-              {t('UPDATE ACCOUNT')}
-            </Button>
-          ) : null}
-          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
-            {t('UPDATE BOUNTY')}
+          <Button mb="8px" variant="text" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
+            {t('AUTO CHARGE')}
           </Button>
-          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.INIT_RAMP)}>
-            {t('UPDATE RAMP INFO')}
+          <Button mb="8px" variant="subtle" onClick={() => setStage(LockStage.UPDATE_DISCOUNT_DIVISOR)}>
+            {t('UPDATE DISCOUNT DIVISOR')}
           </Button>
-          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_DEV_TOKEN_ID)}>
-            {t('UPDATE RAMP veNFT ID')}
+          <Button mb="8px" variant="subtle" onClick={() => setStage(LockStage.UPDATE_PENALTY_DIVISOR)}>
+            {t('UPDATE PENALTY DIVISOR')}
           </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_PROFILE_ID)}>
-            {t('UPDATE PROFILE ID')}
+          <Button mb="8px" variant="subtle" onClick={() => setStage(LockStage.TRANSFER_RECEIVABLE_TO_NOTE)}>
+            {t('TRANSFER RECEIVABLE TO NOTE')}
           </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
-            {t('UPDATE BADGE ID')}
-          </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID)}>
-            {t('UPDATE ACCOUNT TOKEN ID')}
-          </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE)}>
-            {t('CLAIM REVENUE FROM SPONSORS')}
-          </Button>
-          <Button mb="8px" variant="tertiary" onClick={() => setStage(LockStage.UNLOCK_BOUNTY)}>
-            {t('UNLOCK BOUNTY')}
-          </Button>
-          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.UPDATE_BLACKLIST)}>
-            {t('UPDATE BLACKLIST')}
-          </Button>
-          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.UPDATE_ADMIN)}>
+          <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_ADMIN)}>
             {t('UPDATE ADMIN')}
           </Button>
-          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.UPDATE_DEV)}>
-            {t('UPDATE OWNER')}
+          <Button mb="8px" variant="tertiary" onClick={() => setStage(LockStage.UPDATE_DEV)}>
+            {t('UPDATE CONTRACT OWNER')}
           </Button>
-          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
+          <Button mb="8px" variant="tertiary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
+            {t('UPDATE BOUNTY')}
+          </Button>
+          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_PROFILE_ID)}>
+            {t('UPDATE PROFILE ID')}
+          </Button>
+          <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_TAG_REGISTRATION)}>
+            {t('UPDATE TAG REGISTRATION')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_PRICE_PER_MINUTES)}>
+            {t('UPDATE PRICE PER MINUTES')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_EXCLUDED_CONTENT)}>
+            {t('UPDATE EXCLUDED CONTENT')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_URI_GENERATOR)}>
+            {t('UPDATE URI GENERATOR')}
+          </Button>
+          <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_SPONSOR_MEDIA)}>
+            {t('UPDATE SPONSOR MEDIA')}
+          </Button>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.CLAIM_TOKEN_SPONSOR_FUND)}>
+            {t('CLAIM TOKEN SPONSOR FUND')}
+          </Button>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.CONFIRM_CLAIM_PENDING)}>
+            {t('CONFIRM CLAIM PENDING')}
+          </Button>
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
             {t('DELETE PROTOCOL')}
           </Button>
-          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.ADMIN_WITHDRAW)}>
-            {t('WITHDRAW')}
-          </Button>
+          {location === 'fromAuditor' ? (
+            <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
+              {t('DELETE WORLD')}
+            </Button>
+          ) : null}
         </Flex>
       )}
-      {stage === LockStage.UPDATE_PARAMETERS && (
-        <UpdateParametersStage
-          state={state}
-          setState={setState}
-          currency={currency}
-          nftFilters={nftFilters}
-          setNftFilters={setNftFilters}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.UPDATE_DEV && (
-        <UpdateDevStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.UPDATE_ADMIN && (
-        <UpdateAdminStage
-          state={state}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.UPDATE_BLACKLIST && (
-        <UpdateBlacklistStage
-          state={state}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.CLAIM && (
-        <CreateClaimStage
-          state={state}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.CLAIM_REVENUE && (
-        <ClaimRevenueStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.MINT && (
-        <MintStage
-          state={state}
-          pool={pool}
-          currency={currency}
-          handleChange={handleChange}
-          rampAddress={pool?.rampAddress}
-          rampHelperContract={rampHelperContract}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.BURN && (
-        <BurnStage
-          state={state}
-          handleChange={handleChange}
-          rampAddress={pool?.rampAddress}
-          rampHelperContract={rampHelperContract}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.PARTNER && (
-        <PartnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.CREATE_PROTOCOL && (
-        <CreateProtocolStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.UPDATE_PROTOCOL && (
-        <UpdateProtocolStage
+      {/* {stage === LockStage.UPDATE_DEV && 
+      <UpdateDevStage 
+        state={state} 
+        handleChange={handleChange}
+        continueToNextStage={continueToNextStage} 
+      />}
+      {stage === LockStage.UPDATE_ADMIN && 
+      <UpdateAdminStage 
+        state={state} 
+        handleChange={handleChange}
+        handleRawValueChange={handleRawValueChange}
+        continueToNextStage={continueToNextStage} 
+      />}
+      {stage === LockStage.UPDATE_PARAMETERS && 
+      <UpdateParametersStage 
+        state={state}
+        handleRawValueChange={handleRawValueChange}
+        continueToNextStage={continueToNextStage} 
+      />} */}
+      {/* {stage === LockStage.UPDATE_AUTOCHARGE && 
+      <UpdateAutoChargeStage
+        state={state} 
+        handleChange={handleChange}
+        handleRawValueChange={handleRawValueChange}
+        continueToNextStage={continueToNextStage} 
+      />} */}
+      {/* {stage === LockStage.SPONSOR_TAG && 
+          <SponsorTagStage
+            state={state}
+            account={account}
+            currency={currency}
+            handleChange={handleChange} 
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+        />}
+      {stage === LockStage.UPDATE_TAG_REGISTRATION && 
+          <UpdateTagRegistrationStage
+            state={state}
+            handleChange={handleChange} 
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+        />}
+      {stage === LockStage.UPDATE_TAX_CONTRACT && 
+      <UpdateTaxContractStage
+        state={state} 
+        handleChange={handleChange} 
+        handleRawValueChange={handleRawValueChange}
+        continueToNextStage={continueToNextStage} 
+      />}
+        {stage === LockStage.TRANSFER_RECEIVABLE_TO_NOTE &&
+          <UpdateTransferToNoteReceivableStage
+            state={state}
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage}
+          />
+        }
+      {stage === LockStage.CLAIM_NOTE && 
+        <ClaimNoteStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
-      )}
-      {stage === LockStage.UPDATE_INDIVIDUAL_PROTOCOL && (
-        <UpdateProtocolStage
+      }
+      {stage === LockStage.VOTE && 
+      <VoteStage
+        state={state} 
+        handleChange={handleChange}
+        handleRawValueChange={handleRawValueChange}
+        continueToNextStage={continueToNextStage} 
+      />}
+      {stage === LockStage.UPDATE_PROTOCOL && 
+      <UpdateProtocolStage 
+        state={state} 
+        handleChange={handleChange} 
+        handleRawValueChange={handleRawValueChange} 
+        continueToNextStage={continueToNextStage} 
+      />}
+      {stage === LockStage.UPDATE_TOKEN_IDS && 
+      <UpdateTokenIdsStage
+        state={state}
+        handleChange={handleChange} 
+        handleRawValueChange={handleRawValueChange}
+        continueToNextStage={continueToNextStage} 
+      />}
+        {stage === LockStage.UPDATE_BOUNTY && 
+        <UpdateBountyStage 
           state={state}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.BUY_ACCOUNT && (
-        <BuyAccountStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.BUY_RAMP && (
-        <BuyRampStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.ADMIN_WITHDRAW && (
-        <AdminWithdrawStage
-          state={state}
-          currency={currency}
-          pendingRevenue={adminARP?.pendingRevenue}
-          continueToNextStage={continueToNextStage}
-          handleRawValueChange={handleRawValueChange}
-        />
-      )}
-      {stage === LockStage.UPDATE_BADGE_ID && (
-        <UpdateBadgeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.UPDATE_TOKEN_ID && (
-        <UpdateTokenStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.UPDATE_DEV_TOKEN_ID && (
-        <UpdateDevTokenStage
-          state={state}
-          nftFilters={nftFilters}
-          setNftFilters={setNftFilters}
-          handleChange={handleChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.UPDATE_PROFILE_ID && (
-        <UpdateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.UPDATE_BOUNTY && (
-        <UpdateBountyStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.ADD_EXTRA_TOKEN && (
-        <AddExtraTokenStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.UNLOCK_BOUNTY && (
-        <UnlockBountyStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.UPDATE_OWNER && (
-        <UpdateOwnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.INIT_RAMP && (
-        <InitRampStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.SPONSOR_TAG && (
-        <SponsorTagStage
-          state={state}
-          account={account}
-          currency={currency}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
-      {stage === LockStage.UPDATE_SPONSOR_MEDIA && (
-        <UpdateSponsorMediaStage
-          state={state}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
+          handleChange={handleChange} 
+          continueToNextStage={continueToNextStage} 
+        />}
+        {stage === LockStage.ADMIN_AUTOCHARGE && 
+          <AutoChargeStage
+            state={state}
+            handleChange={handleChange} 
+            continueToNextStage={continueToNextStage} 
+        />}
+        {stage === LockStage.UPDATE_DISCOUNT_DIVISOR && 
+          <UpdateDiscountDivisorStage 
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+        {stage === LockStage.UPDATE_PENALTY_DIVISOR && 
+          <UpdatePenaltyDivisorStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.UPDATE_SPONSOR_MEDIA && 
+          <UpdateSponsorMediaStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.CLAIM_TOKEN_SPONSOR_FUND && 
+          <ClaimNoteFromSponsorStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.UPDATE_CODE_INFO && 
+          <UpdateCodeInfoStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.UPDATE_CATEGORY && 
+          <UpdateCategoryStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.UPDATE_PRICE_PER_MINUTES && 
+          <UpdatePricePerMinuteStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.UPDATE_EXCLUDED_CONTENT && 
+          <UpdateExcludedContentStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.UPDATE_WORLD_BOUNTY && 
+          <UpdateWorldBountyStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.MINT_PAST_WORLD && 
+          <UpdateMintPastWorldStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.MINT_PRESENT_WORLD && 
+          <UpdateMintPresentWorldStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />}
+          {stage === LockStage.UPDATE_URI_GENERATOR && 
+          <UpdateUriStage
+            state={state} 
+            handleChange={handleChange}
+            handleRawValueChange={handleRawValueChange}
+            continueToNextStage={continueToNextStage} 
+          />} */}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.DELETE_RAMP && <DeleteRampStage continueToNextStage={continueToNextStage} />}
+      {stage === LockStage.DELETE_PROTOCOL && <DeleteRampStage continueToNextStage={continueToNextStage} />}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"
