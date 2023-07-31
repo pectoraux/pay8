@@ -1,35 +1,30 @@
-import { memo, useMemo } from 'react'
-import { useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
-import { usePool2, useCurrPool } from 'state/ramps/hooks'
+import { memo } from 'react'
+import { Pool } from '@pancakeswap/uikit'
+import { usePool } from 'state/ramps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { useCurrency } from 'hooks/Tokens'
 
 import NameCell from './Cells/NameCell'
+import AccountID from './Cells/AccountID'
 import ActionPanel from './ActionPanel/ActionPanel'
-import TotalUsersCell from './Cells/TotalUsersCell'
-import TotalValueCell from './Cells/TotalValueCell'
+import VaSpecsCell from './Cells/VaSpecsCell'
+import VaSpecs2Cell from './Cells/VaSpecs2Cell'
 
-const PoolRow: React.FC<any> = ({ sousId, account, rampAccount, rampAddress, initialActivity }) => {
-  const { pool } = usePool2(rampAddress)
+const PoolRow: React.FC<any> = ({ id, account, vpAccount, initialActivity }) => {
+  const { pool } = usePool(id)
   const { t } = useTranslation()
+  const vpCurrencyInput = useCurrency(pool?.tokenAddress)
 
+  console.log('valuepool====>', vpAccount, pool)
   return (
-    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} rampAccount={rampAccount} />
-      <TotalValueCell
-        labelText={t('Mintable')}
-        amount={rampAccount?.mintable}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
-      <TotalValueCell
-        labelText={t('Minted Liquidity')}
-        amount={rampAccount?.minted}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
-      <TotalValueCell
-        labelText={t('Burnt Liquidity')}
-        amount={rampAccount?.burnt}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
+    <Pool.ExpandRow
+      initialActivity={initialActivity}
+      panel={<ActionPanel account={account} pool={pool} vpAccount={vpAccount} expanded />}
+    >
+      <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} vpAccount={vpAccount} />
+      <AccountID labelText={t('Token ID')} vpAccount={vpAccount} />
+      <VaSpecsCell pool={pool} nft={vpAccount} vpCurrencyInput={vpCurrencyInput} />
+      <VaSpecs2Cell nft={vpAccount} />
     </Pool.ExpandRow>
   )
 }

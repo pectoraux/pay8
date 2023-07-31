@@ -1,35 +1,36 @@
-import { memo, useMemo } from 'react'
-import { useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
-import { usePool2, useCurrPool } from 'state/ramps/hooks'
+import { memo } from 'react'
+import { Pool } from '@pancakeswap/uikit'
+import { usePool } from 'state/arps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
-import TotalUsersCell from './Cells/TotalUsersCell'
+import EndsInCell from './Cells/EndsInCell'
 import TotalValueCell from './Cells/TotalValueCell'
 
-const PoolRow: React.FC<any> = ({ sousId, account, rampAccount, rampAddress, initialActivity }) => {
-  const { pool } = usePool2(rampAddress)
+const PoolRow: React.FC<any> = ({ id, account, currAccount, initialActivity }) => {
+  const { pool } = usePool(id)
   const { t } = useTranslation()
 
   return (
-    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} rampAccount={rampAccount} />
+    <Pool.ExpandRow
+      initialActivity={initialActivity}
+      panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
+    >
+      <NameCell pool={pool} currAccount={currAccount} />
       <TotalValueCell
-        labelText={t('Mintable')}
-        amount={rampAccount?.mintable}
-        symbol={rampAccount?.token?.symbol ?? ''}
+        labelText={t('Liquidity')}
+        amount={currAccount?.totalLiquidity}
+        symbol={currAccount?.token?.symbol ?? ''}
+        decimals={currAccount?.token?.decimals}
       />
       <TotalValueCell
-        labelText={t('Minted Liquidity')}
-        amount={rampAccount?.minted}
-        symbol={rampAccount?.token?.symbol ?? ''}
+        labelText={t('Amount Due')}
+        amount={currAccount?.amountReceivable}
+        symbol={currAccount?.token?.symbol ?? ''}
+        decimals={currAccount?.token?.decimals}
       />
-      <TotalValueCell
-        labelText={t('Burnt Liquidity')}
-        amount={rampAccount?.burnt}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
+      <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />
     </Pool.ExpandRow>
   )
 }

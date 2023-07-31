@@ -1,9 +1,10 @@
-import { Text, TokenImage, Pool, Flex } from '@pancakeswap/uikit'
+import { Text, TokenImage, Pool, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import SaveIcon from 'views/Info/components/SaveIcon'
 import { useWatchlistTokens } from 'state/user/hooks'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 
 interface NameCellProps {
   pool: Pool.DeserializedPool<Token>
@@ -19,31 +20,35 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
+const NameCell: React.FC<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
-
-  let title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
-  let subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
-
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
-
+  const colors = { 0: 'failure', 1: 'red', 2: 'blue', 3: 'green' }
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.avatar} />
+      <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
       <Pool.CellContent>
-        <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
+        <Text fontSize="12px" bold color={colors[pool?.category]} textTransform="uppercase">
           <Flex flexDirection="row">
-            {title}
+            {truncateHash(currAccount?.id)}
             <SaveIcon
-              fill={watchlistTokens.includes(pool?.id)}
-              onClick={() => addWatchlistToken(pool?.id)}
+              fill={watchlistTokens.includes(currAccount?.owner)}
+              onClick={() => addWatchlistToken(currAccount?.owner)}
               style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
             />
           </Flex>
         </Text>
-        <Text fontSize="12px" color="textSubtle">
-          {subtitle}
-        </Text>
+        {!pool?.category ? (
+          <Text fontSize="12px" color="failure">
+            {t('Undefined Category')}
+          </Text>
+        ) : (
+          <Text fontSize="12px" color={colors[pool?.category]}>
+            {t('%val% World', {
+              val: pool?.category === 1 ? 'Red Pill' : pool?.category === 2 ? 'Blue Pill' : 'Green',
+            })}
+          </Text>
+        )}
       </Pool.CellContent>
     </StyledCell>
   )

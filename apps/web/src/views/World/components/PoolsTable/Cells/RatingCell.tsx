@@ -13,7 +13,7 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-const TotalUsersCell: React.FC<any> = ({ labelText, amount }) => {
+const RatingCell: React.FC<any> = ({ labelText, amount }) => {
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
@@ -28,4 +28,4 @@ const TotalUsersCell: React.FC<any> = ({ labelText, amount }) => {
   )
 }
 
-export default TotalUsersCell
+export default RatingCell

@@ -19,12 +19,8 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
+const NameCell: React.FC<any> = ({ pool }) => {
   const { t } = useTranslation()
-
-  let title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
-  let subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
-
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
 
   return (
@@ -33,7 +29,7 @@ const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
       <Pool.CellContent>
         <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
           <Flex flexDirection="row">
-            {title}
+            {pool?.title}
             <SaveIcon
               fill={watchlistTokens.includes(pool?.id)}
               onClick={() => addWatchlistToken(pool?.id)}
@@ -41,9 +37,11 @@ const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
             />
           </Flex>
         </Text>
-        <Text fontSize="12px" color="textSubtle">
-          {subtitle}
-        </Text>
+        {pool?.vestingTokenSymbol ? (
+          <Text fontSize="12px" color="textSubtle">
+            {t('Earning')} {pool?.vestingTokenSymbol}
+          </Text>
+        ) : null}
       </Pool.CellContent>
     </StyledCell>
   )

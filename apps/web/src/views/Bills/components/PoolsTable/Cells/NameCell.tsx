@@ -1,4 +1,4 @@
-import { Text, TokenImage, Pool, Flex } from '@pancakeswap/uikit'
+import { Text, TokenImage, Pool, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
@@ -19,30 +19,23 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
+const NameCell: React.FC<any> = ({ pool }) => {
   const { t } = useTranslation()
-
-  let title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
-  let subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
-
+  const { isMobile } = useMatchBreakpoints()
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
-
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.avatar} />
+      <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
       <Pool.CellContent>
-        <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
+        <Text bold={!isMobile} small={isMobile}>
           <Flex flexDirection="row">
-            {title}
+            {t(pool?.collection?.name ?? '')}
             <SaveIcon
               fill={watchlistTokens.includes(pool?.id)}
               onClick={() => addWatchlistToken(pool?.id)}
               style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
             />
           </Flex>
-        </Text>
-        <Text fontSize="12px" color="textSubtle">
-          {subtitle}
         </Text>
       </Pool.CellContent>
     </StyledCell>

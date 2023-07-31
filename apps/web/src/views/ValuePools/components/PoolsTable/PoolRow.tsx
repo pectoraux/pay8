@@ -1,42 +1,27 @@
-import { memo, useMemo } from 'react'
-import { useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
-import { usePool, useCurrPool } from 'state/ramps/hooks'
+import { memo } from 'react'
+import { Pool } from '@pancakeswap/uikit'
+import { usePool } from 'state/ramps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { useCurrency } from 'hooks/Tokens'
 
 import NameCell from './Cells/NameCell'
+import VaSpecsCell from './Cells/VaSpecsCell'
+import VaSpecs2Cell from './Cells/VaSpecs2Cell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 
-const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
-  const { isLg, isXl, isXxl, isDesktop } = useMatchBreakpoints()
-  const isLargerScreen = isLg || isXl || isXxl
-  const { pool } = usePool(sousId)
+const PoolRow: React.FC<any> = ({ id, account, initialActivity }) => {
+  const { pool } = usePool(id)
   const { t } = useTranslation()
-  const currState = useCurrPool()
-  const rampAccount = useMemo(
-    () => pool.accounts?.find((acct) => acct.token.address === currState[pool.rampAddress]),
-    [pool, currState],
-  )
-  console.log('ramppool=================>', pool)
-
+  const vpCurrencyInput = useCurrency(pool?.tokenAddress)
   return (
-    <Pool.ExpandRow
-      initialActivity={initialActivity}
-      panel={<ActionPanel account={account} pool={pool} rampAccount={rampAccount} expanded />}
-    >
-      <NameCell pool={pool} rampAccount={rampAccount} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
-      <TotalValueCell
-        labelText={t('Minted Liquidity')}
-        amount={rampAccount?.minted}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
-      <TotalValueCell
-        labelText={t('Burnt Liquidity')}
-        amount={rampAccount?.burnt}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
+    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
+      <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
+      <TotalUsersCell labelText={t('Total Users')} amount={pool?.tokens?.length} />
+      <TotalValueCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
+      <VaSpecsCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
+      <VaSpecs2Cell pool={pool} />
     </Pool.ExpandRow>
   )
 }

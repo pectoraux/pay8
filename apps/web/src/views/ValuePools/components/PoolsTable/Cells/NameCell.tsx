@@ -1,4 +1,4 @@
-import { Text, TokenImage, Pool, Flex } from '@pancakeswap/uikit'
+import { Text, TokenImage, Pool, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
@@ -19,11 +19,14 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
+const NameCell: React.FC<any> = ({ pool, vpCurrencyInput }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
 
-  let title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
-  let subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
+  const title: React.ReactNode = pool?.name
+  const subtitle1: React.ReactNode = `${t('Save')} ${vpCurrencyInput?.symbol ?? ''}`
+  const subtitle2: React.ReactNode = `${t('Receive')} ${pool?.veSymbol}`
+  const showSubtitle = pool?.sousId !== 0 || (pool?.sousId === 0 && !isMobile)
 
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
 
@@ -41,9 +44,11 @@ const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
             />
           </Flex>
         </Text>
-        <Text fontSize="12px" color="textSubtle">
-          {subtitle}
-        </Text>
+        {showSubtitle && (
+          <Text fontSize="12px" color="textSubtle">
+            {subtitle1} {subtitle2}
+          </Text>
+        )}
       </Pool.CellContent>
     </StyledCell>
   )

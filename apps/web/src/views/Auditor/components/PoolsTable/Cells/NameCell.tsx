@@ -1,9 +1,9 @@
-import { Text, TokenImage, Pool, Flex } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Text, TokenImage, Pool, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import SaveIcon from 'views/Info/components/SaveIcon'
 import { useWatchlistTokens } from 'state/user/hooks'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 
 interface NameCellProps {
   pool: Pool.DeserializedPool<Token>
@@ -19,30 +19,22 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
-  const { t } = useTranslation()
-
-  let title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
-  let subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
-
+const NameCell: React.FC<any> = ({ currAccount }) => {
+  const { isMobile } = useMatchBreakpoints()
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
-
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.avatar} />
+      <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
       <Pool.CellContent>
-        <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
+        <Text bold={!isMobile} small={isMobile}>
           <Flex flexDirection="row">
-            {title}
+            {truncateHash(currAccount?.id)}
             <SaveIcon
-              fill={watchlistTokens.includes(pool?.id)}
-              onClick={() => addWatchlistToken(pool?.id)}
+              fill={watchlistTokens.includes(currAccount?.id)}
+              onClick={() => addWatchlistToken(currAccount?.id)}
               style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
             />
           </Flex>
-        </Text>
-        <Text fontSize="12px" color="textSubtle">
-          {subtitle}
         </Text>
       </Pool.CellContent>
     </StyledCell>

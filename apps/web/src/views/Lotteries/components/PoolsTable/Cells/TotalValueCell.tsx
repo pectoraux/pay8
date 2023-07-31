@@ -1,7 +1,9 @@
-import { Flex, Text, Balance, Pool } from '@pancakeswap/uikit'
+import { Flex, Text, Balance, Pool, Box, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
+import { getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { useMemo } from 'react'
 
 interface TotalStakedCellProps {
   totalStakedBalance: number
@@ -13,15 +15,33 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-const TotalValueCell: React.FC<any> = ({ labelText, amount, symbol }) => {
+const TotalValueCell: React.FC<any> = ({ labelText, pool }) => {
+  const { isMobile } = useMatchBreakpoints()
+  const defaultToken = pool?.tokenData?.length ? pool?.tokenData[0] : ''
+  const decimals = defaultToken?.decimals ?? 18
+  const totalStakedBalance = useMemo(() => getFullDisplayBalance(pool?.endAmount, decimals, 5), [pool, decimals])
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
         <Text fontSize="12px" color="textSubtle" textAlign="left">
           {labelText}
         </Text>
-        <Flex height="20px" alignItems="center">
-          <Balance fontSize="16px" value={amount} decimals={0} unit={` ${symbol}`} />
+        <Flex>
+          {defaultToken ? (
+            <Box mr="8px" height="32px">
+              <Balance
+                mt="4px"
+                bold={!isMobile}
+                fontSize={isMobile ? '14px' : '16px'}
+                color={Number(pool?.endAmount) ? 'primary' : 'textDisabled'}
+                decimals={5}
+                unit={` ${defaultToken?.symbol?.toUpperCase() ?? ''}`}
+                value={Number(pool?.endAmount) ? Number(totalStakedBalance) : 0}
+              />
+            </Box>
+          ) : (
+            '-'
+          )}
         </Flex>
       </Pool.CellContent>
     </StyledCell>

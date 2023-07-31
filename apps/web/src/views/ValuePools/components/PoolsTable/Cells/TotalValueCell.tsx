@@ -1,7 +1,9 @@
-import { Flex, Text, Balance, Pool } from '@pancakeswap/uikit'
+import { Flex, Text, Balance, Pool, Box, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
+import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
 
 interface TotalStakedCellProps {
   totalStakedBalance: number
@@ -13,15 +15,37 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-const TotalValueCell: React.FC<any> = ({ labelText, amount, symbol }) => {
+const TotalValueCell: React.FC<any> = ({ pool, vpCurrencyInput }) => {
+  const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
-        <Text fontSize="12px" color="textSubtle" textAlign="left">
-          {labelText}
-        </Text>
         <Flex height="20px" alignItems="center">
-          <Balance fontSize="16px" value={amount} decimals={0} unit={` ${symbol}`} />
+          <Box mr="8px" height="32px">
+            <Balance
+              bold={!isMobile}
+              fontSize="14px"
+              color={Number(pool?.totalLiquidity || 0) ? 'primary' : 'textDisabled'}
+              decimals={5}
+              unit={` ${vpCurrencyInput?.symbol ?? ''}`}
+              value={pool?.totalLiquidity}
+            />
+            <Text fontSize="12px" color="textSubtle" textAlign="left">
+              {t('Total Liquidity')}
+            </Text>
+            <Balance
+              bold={!isMobile}
+              fontSize="14px"
+              color={Number(pool?.vaBalance || 0) ? 'primary' : 'textDisabled'}
+              decimals={5}
+              unit={` ${vpCurrencyInput?.symbol ?? ''}`}
+              value={parseFloat(getBalanceAmount(pool?.vaBalance, pool?.vaDecimals)?.toString())}
+            />
+            <Text fontSize="12px" color="textSubtle" textAlign="left">
+              {t('Total Locked')}
+            </Text>
+          </Box>
         </Flex>
       </Pool.CellContent>
     </StyledCell>
