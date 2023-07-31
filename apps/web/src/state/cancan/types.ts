@@ -1,4 +1,5 @@
-import { BigNumberish } from '@ethersproject/bignumber'
+import { BigintIsh } from '@pancakeswap/swap-sdk-core'
+import { Address } from 'wagmi'
 
 // Collections -> Nfts -> Transactions
 // Users -> Nft tokens IDs
@@ -69,7 +70,7 @@ export interface NftToken {
   name: string
   description: string
   collectionName: string
-  collectionAddress: string
+  collectionAddress: Address
   image: Image
   attributes?: NftAttribute[]
   createdAt?: string // API createdAt
@@ -95,7 +96,7 @@ export interface NftActivityFilter {
 }
 
 export interface TokenIdWithCollectionAddress {
-  collectionAddress: string
+  collectionAddress: Address
   tokenId: string
   nftLocation?: NftLocation
 }
@@ -109,8 +110,8 @@ export interface NftAttribute {
 // Internal type used to refer to a collection
 // Most fields are populated from API (via ApiCollection type)
 export interface Collection {
-  id: string
-  address: string
+  id: Address
+  address: Address
   name: string
   createdAt?: string
   description?: string
@@ -138,10 +139,10 @@ export interface ApiCollections {
 
 export interface User {
   address: string
-  numberTokensListed: BigNumberish
-  numberTokensPurchased: BigNumberish
-  numberTokensSold: BigNumberish
-  nfts: Record<string, BigNumberish> // String is an address, BigNumberish is a tokenID
+  numberTokensListed: BigintIsh
+  numberTokensPurchased: BigintIsh
+  numberTokensSold: BigintIsh
+  nfts: Record<string, BigintIsh> // String is an address, BigNumberish is a tokenID
 }
 
 /**
@@ -150,7 +151,7 @@ export interface User {
 
 export interface ApiCollection {
   id: any
-  address: string
+  address: Address
   owner: string
   name: string
   description: string
