@@ -2,32 +2,58 @@ import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import Divider from 'components/Divider'
 
-const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAccount }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
+  const { days, hours, minutes } = getTimePeriods(Number(pool?.willWithdrawalPeriod ?? '0'))
+  const { days: days2, hours: hours2, minutes: minutes2 } = getTimePeriods(Number(pool?.updatePeriod ?? '0'))
 
   const actionTitle = (
-    <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-      {rampAccount ? (
+    <Flex flexDirection="row">
+      <Flex flex="1" flexDirection="column" alignSelf="flex-center">
         <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
           {t('Current Token')}{' '}
         </Text>
+        <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+          {currToken?.symbol}
+        </Text>
+      </Flex>
+      {currAccount ? (
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+            {t('Current Heir')}{' '}
+          </Text>
+          <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+            {currAccount?.protocolId}
+          </Text>
+        </Flex>
       ) : null}
-      <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {rampAccount?.symbol}
-      </Text>
     </Flex>
   )
 
   if (!account) {
     return (
       <ActionContainer>
-        <ActionTitles>{actionTitle}</ActionTitles>
         <ActionContent>
           <Button disabled>{t('Please Connect Your Wallet')}</Button>
+        </ActionContent>
+      </ActionContainer>
+    )
+  }
+
+  if (!currAccount) {
+    return (
+      <ActionContainer>
+        <ActionContent>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Pick a token')}
+          </Text>
         </ActionContent>
       </ActionContainer>
     )
@@ -38,121 +64,55 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
       <ActionTitles>{actionTitle}</ActionTitles>
       <ActionContent>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          {currToken?.id ? (
+            <>
+              <CopyAddress title={t('Curr Token Address')} account={account} />
+              <Box mr="8px" height="32px">
+                <Balance
+                  lineHeight="1"
+                  color="textSubtle"
+                  fontSize="12px"
+                  decimals={5}
+                  value={getBalanceNumber(currToken?.totalLiquidity, currToken.decimals)}
+                />
+                <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                  {t('Total Liquidity')}
+                </Text>
+              </Box>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {currToken?.tokenType === '0'
+                  ? 'Fugible'
+                  : currToken?.tokenType === '1'
+                  ? 'NFT - ERC721'
+                  : 'NFT - ERC1155'}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Token Type')}
+              </Text>
+            </>
+          ) : null}
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {t(rampAccount?.status || '')}
+            {days} {t('days')} {hours} {t('hours')} {minutes} {t('minutes')}
           </Text>
-          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Account Status')}
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Will Withdrawable Period')}
           </Text>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {pool?.automatic === undefined
-              ? '-'
-              : pool?.automatic
-              ? t('Automatic')
-              : pool?.redirect
-              ? t('Semi-Automatic')
-              : t('Manual')}
+            {days2} {t('days')} {hours2} {t('hours')} {minutes2} {t('minutes')}
           </Text>
-          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Account Type')}
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Update Period')}
           </Text>
-          <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(rampAccount?.minted)}
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Token Minted')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(rampAccount?.burnt)}
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Token Burnt')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(rampAccount?.salePrice)}
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Sale Price')}
-            </Text>
-          </Box>
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={0}
-              value={rampAccount?.maxPartners}
-              prefix="# "
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Maximum Partners')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.tokenId) ? (
+            {parseInt(currAccount?.profileId) ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={rampAccount?.tokenId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached veNFT Token Id')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.bountyId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={rampAccount?.token?.bountyId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Bounty Id')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.profileId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={rampAccount?.token?.profileId}
+                value={currAccount?.profileId}
                 prefix="# "
               />
             ) : (
@@ -164,25 +124,42 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               {t('Attached Profile Id')}
             </Text>
           </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.badgeId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={rampAccount?.token?.profileId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
+          {currAccount?.tokenData?.map((td) => (
+            <>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {td?.tokenType === 0 ? 'Fugible' : td?.tokenType === 1 ? 'NFT - ERC721' : 'NFT - ERC1155'}
               </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Badge Id')}
-            </Text>
-          </Box>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Token Type')}
+              </Text>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {td?.tokenType === '0' ? 'Fugible' : td?.tokenType === '1' ? 'NFT - ERC721' : 'NFT - ERC1155'}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Token Type')}
+              </Text>
+              <Box mr="8px" height="32px">
+                {parseInt(currAccount?.adminBountyId) ? (
+                  <Balance
+                    lineHeight="1"
+                    color="textSubtle"
+                    fontSize="12px"
+                    decimals={0}
+                    value={currAccount?.adminBountyId}
+                    prefix="# "
+                  />
+                ) : (
+                  <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                    N/A
+                  </Text>
+                )}
+                <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                  {t('Admin Bounty Id')}
+                </Text>
+              </Box>
+              <Divider />
+            </>
+          ))}
         </Flex>
       </ActionContent>
     </ActionContainer>

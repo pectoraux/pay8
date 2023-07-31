@@ -5,12 +5,17 @@ import { useERC20 } from 'hooks/useContract'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 
-import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useGetRequiresApproval, usePool } from 'state/valuepools/hooks'
+import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
+
 import CreateGaugeModal from '../../CreateGaugeModal'
+import InitVaModal from '../../InitVaModal'
+import InitValuepoolModal from '../../InitValuepoolModal'
+import { ActionContainer, ActionContent, ActionTitles } from './styles'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -23,27 +28,43 @@ interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
 }
 
-const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSessions }) => {
+const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleScheduledPurchases }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const initialized = pool?.secretKeys?.length > 0 && pool?.clientIds?.length > 0 && pool?.publishableKeys?.length > 0
-  const variant = !initialized ? 'init' : pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
-  console.log('initialized============>', initialized, variant, pool)
-  const currencyId = useMemo(() => rampAccount?.token?.address, [rampAccount])
-  const rampCurrencyInput = useCurrency(currencyId)
-  const [currency, setCurrency] = useState(rampAccount?.address)
-  const stakingTokenContract = useERC20(rampAccount?.token?.address || '')
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  const { pool } = usePool(id)
+  const variant = pool?.devaddr_ !== account ? 'admin' : 'user'
+  const vpCurrencyInput = useCurrency(pool?.tokenAddress)
+  const [currency, setCurrency] = useState(vpCurrencyInput)
+  const stakingTokenContract = useERC20(pool?.tokenAddress || '')
+  const { isRequired: needsApproval, refetch } = useGetRequiresApproval(stakingTokenContract, account, pool?.id ?? '')
+  const { isRequired: needsVaApproval, refetch: refetchVa } = useGetRequiresApproval(
+    stakingTokenContract,
+    account,
+    pool?.ve ?? '',
+  )
+  console.log('pool.id=================>', pool)
+  const { handleApprove: handleVAPoolApprove, pendingTx: pendingVAPoolTx } = useApprovePool(
+    stakingTokenContract,
+    pool?.id,
+    currency?.symbol,
+    refetch,
+  )
+  const { handleApprove: handleVAVAPoolApprove, pendingTx: pendingVAVAPoolTx } = useApprovePool(
+    stakingTokenContract,
+    pool?.ve,
+    currency?.symbol,
+    refetchVa,
+  )
 
   const [openPresentControlPanel] = useModal(
-    <CreateGaugeModal
-      variant={variant}
-      location="staked"
-      pool={pool}
-      currency={currency ?? rampCurrencyInput}
-      rampAccount={rampAccount}
-    />,
+    <CreateGaugeModal variant={variant} location="valuepool" pool={pool} currency={currency} />,
   )
+  const [openPresentSponsors] = useModal(
+    <CreateGaugeModal variant="add_sponsors" location="valuepool" pool={pool} currency={currency} />,
+  )
+  const [onPresentInitVava] = useModal(<InitValuepoolModal pool={pool} />)
+  const [onPresentInitVa] = useModal(<InitVaModal pool={pool} />)
+  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
 
   if (!account) {
     return (
@@ -60,25 +81,73 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSession
     )
   }
 
-  if (!initialized) {
+  if (!pool.initialized) {
     return (
       <ActionContainer>
         <ActionTitles>
           <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-            {t(
-              'Ramp not yet initialized. Please wait a few moments if you already did. Do not reinitialize, keep refreshing!',
-            )}
+            {t('Valuepool not yet initialized')}
           </Text>
         </ActionTitles>
         <ActionContent>
           <Button
             width="100%"
-            onClick={openPresentControlPanel}
+            onClick={onPresentInitVava}
             variant="secondary"
-            disabled={pool?.devaddr_ !== account}
+            disabled={pool?.devaddr_?.toLowerCase() !== account?.toLowerCase()}
           >
-            {t('Initialize Ramp')}
+            {t('Initialize Valuepool')}
           </Button>
+        </ActionContent>
+      </ActionContainer>
+    )
+  }
+
+  if (!pool?.veName) {
+    return (
+      <ActionContainer>
+        <ActionTitles>
+          <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+            {t('Va not yet initialized')}
+          </Text>
+        </ActionTitles>
+        <ActionContent>
+          <Button
+            width="100%"
+            onClick={onPresentInitVa}
+            variant="secondary"
+            disabled={pool?.devaddr_?.toLowerCase() !== account.toLowerCase()}
+          >
+            {t('Initialize Va')}
+          </Button>
+        </ActionContent>
+      </ActionContainer>
+    )
+  }
+
+  if (needsApproval || needsVaApproval) {
+    return (
+      <ActionContainer>
+        <ActionTitles>
+          <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+            {t('Enable %va% pool', {
+              va: needsApproval && needsVaApproval ? 'VA & VAVA' : needsApproval ? 'VA' : 'VAVA',
+            })}
+          </Text>
+        </ActionTitles>
+        <ActionContent>
+          {needsApproval ? (
+            <Button width="100%" disabled={pendingVAPoolTx} onClick={handleVAPoolApprove} variant="secondary">
+              {t('Enable VE')}
+            </Button>
+          ) : null}
+        </ActionContent>
+        <ActionContent>
+          {needsVaApproval ? (
+            <Button width="100%" disabled={pendingVAVAPoolTx} onClick={handleVAVAPoolApprove} variant="secondary">
+              {t('Enable VAVA')}
+            </Button>
+          ) : null}
         </ActionContent>
       </ActionContainer>
     )
@@ -88,44 +157,39 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSession
     <ActionContainer>
       <ActionTitles>
         <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-          {pool?.accounts?.length ? t('Adjust Settings') : t('No Accounts Available Yet')}{' '}
+          {pool?.tokens?.length ? t('Adjust Settings') : t('No Accounts Available Yet')}{' '}
         </Text>
       </ActionTitles>
-      <>
-        <CurrencyInputPanel
-          id={`ramp-stake-${pool?.sousId}`}
-          showUSDPrice
-          showMaxButton
-          showCommonBases
-          showInput={false}
-          showQuickInputButton
-          currency={currency ?? rampCurrencyInput}
-          otherCurrency={currency ?? rampCurrencyInput}
-          onCurrencySelect={handleInputSelect}
-        />
-        <ActionContent>
-          <Button width="100%" onClick={openPresentControlPanel} variant="secondary">
-            {t('Control Panel')}
+      <CurrencyInputPanel
+        showInput={false}
+        currency={currency ?? vpCurrencyInput}
+        onCurrencySelect={handleInputSelect}
+        otherCurrency={currency ?? vpCurrencyInput}
+        id={pool?.id}
+      />
+      <ActionContent>
+        <Button width="100%" onClick={openPresentControlPanel} variant="secondary">
+          {t('Control Panel')}
+        </Button>
+      </ActionContent>
+      <ActionContent>
+        <Button mr="3px" width="100%" onClick={openPresentSponsors} variant="secondary">
+          {t('Sponsor')}
+        </Button>
+        {pool?.sponsors?.length > 0 ? (
+          <Button mr="3px" width="100%" onClick={toggleSponsors} variant="secondary">
+            {t('Toggle Sponsors (#%pos%)', { pos: pool?.sponsors?.length })}
           </Button>
-        </ActionContent>
-        <ActionContent>
-          <Button
-            width="100%"
-            // onClick={onPresentPreviousTx}
-            variant="secondary"
-          >
-            {t('Transaction History')}
-          </Button>
-          {pool?.allSessions?.length ? (
-            <>
-              <Button width="100%" onClick={toggleSessions} variant="secondary">
-                {t('Toggle Sessions (#%pos%)', { pos: pool?.allSessions?.length })}
-              </Button>
-              {/* <Flex mb="40px"><NotificationDot show/></Flex> */}
-            </>
-          ) : null}
-        </ActionContent>
-      </>
+        ) : null}
+        {pool?.queue?.length ? (
+          <>
+            <Button width="100%" onClick={toggleScheduledPurchases} variant="secondary">
+              {t('Toggle Purchases (#%pos%)', { pos: pool?.queue?.length })}
+            </Button>
+            {/* <Flex mb="40px"><NotificationDot show /></Flex> */}
+          </>
+        ) : null}
+      </ActionContent>
     </ActionContainer>
   )
 }

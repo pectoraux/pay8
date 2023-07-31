@@ -23,27 +23,18 @@ interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
 }
 
-const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSessions }) => {
+const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const initialized = pool?.secretKeys?.length > 0 && pool?.clientIds?.length > 0 && pool?.publishableKeys?.length > 0
-  const variant = !initialized ? 'init' : pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
-  console.log('initialized============>', initialized, variant, pool)
-  const currencyId = useMemo(() => rampAccount?.token?.address, [rampAccount])
-  const rampCurrencyInput = useCurrency(currencyId)
-  const [currency, setCurrency] = useState(rampAccount?.address)
-  const stakingTokenContract = useERC20(rampAccount?.token?.address || '')
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
 
+  const variant = pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
+  const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
+  const arpCurrencyInput = useCurrency(currencyId)
+  const [currency, setCurrency] = useState(arpCurrencyInput)
   const [openPresentControlPanel] = useModal(
-    <CreateGaugeModal
-      variant={variant}
-      location="staked"
-      pool={pool}
-      currency={currency ?? rampCurrencyInput}
-      rampAccount={rampAccount}
-    />,
+    <CreateGaugeModal variant={variant} pool={pool} currAccount={currAccount} currency={currency} />,
   )
+  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
 
   if (!account) {
     return (
@@ -60,72 +51,34 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSession
     )
   }
 
-  if (!initialized) {
-    return (
-      <ActionContainer>
-        <ActionTitles>
-          <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-            {t(
-              'Ramp not yet initialized. Please wait a few moments if you already did. Do not reinitialize, keep refreshing!',
-            )}
-          </Text>
-        </ActionTitles>
-        <ActionContent>
-          <Button
-            width="100%"
-            onClick={openPresentControlPanel}
-            variant="secondary"
-            disabled={pool?.devaddr_ !== account}
-          >
-            {t('Initialize Ramp')}
-          </Button>
-        </ActionContent>
-      </ActionContainer>
-    )
-  }
-
   return (
     <ActionContainer>
       <ActionTitles>
         <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-          {pool?.accounts?.length ? t('Adjust Settings') : t('No Accounts Available Yet')}{' '}
+          {t('Adjust Settings')}{' '}
         </Text>
       </ActionTitles>
-      <>
-        <CurrencyInputPanel
-          id={`ramp-stake-${pool?.sousId}`}
-          showUSDPrice
-          showMaxButton
-          showCommonBases
-          showInput={false}
-          showQuickInputButton
-          currency={currency ?? rampCurrencyInput}
-          otherCurrency={currency ?? rampCurrencyInput}
-          onCurrencySelect={handleInputSelect}
-        />
-        <ActionContent>
-          <Button width="100%" onClick={openPresentControlPanel} variant="secondary">
-            {t('Control Panel')}
-          </Button>
-        </ActionContent>
-        <ActionContent>
-          <Button
-            width="100%"
-            // onClick={onPresentPreviousTx}
-            variant="secondary"
-          >
-            {t('Transaction History')}
-          </Button>
-          {pool?.allSessions?.length ? (
-            <>
-              <Button width="100%" onClick={toggleSessions} variant="secondary">
-                {t('Toggle Sessions (#%pos%)', { pos: pool?.allSessions?.length })}
-              </Button>
-              {/* <Flex mb="40px"><NotificationDot show/></Flex> */}
-            </>
-          ) : null}
-        </ActionContent>
-      </>
+      <CurrencyInputPanel
+        showInput={false}
+        currency={currency ?? arpCurrencyInput}
+        onCurrencySelect={handleInputSelect}
+        otherCurrency={currency ?? arpCurrencyInput}
+      />
+      <ActionContent>
+        <Button width="100%" onClick={openPresentControlPanel} variant="secondary">
+          {t('Control Panel')}
+        </Button>
+        {/* <Flex mb="40px"><NotificationDot show={userData?.requests?.length} /></Flex> */}
+      </ActionContent>
+      <ActionContent>
+        <Button
+          width="100%"
+          // onClick={onPresentPreviousTx}
+          variant="secondary"
+        >
+          {t('Transaction History')}
+        </Button>
+      </ActionContent>
     </ActionContainer>
   )
 }

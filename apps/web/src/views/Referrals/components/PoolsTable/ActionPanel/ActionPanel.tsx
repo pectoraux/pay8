@@ -100,7 +100,7 @@ const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) =>
         <ActionContainer>
           <Box width="100%">
             <ActionContainer hasBalance>
-              <Harvest pool={pool} rampAccount={rampAccount} />
+              <Harvest />
               <Stake pool={pool} rampAccount={rampAccount} toggleSessions={toggleSessions} />
             </ActionContainer>
           </Box>
