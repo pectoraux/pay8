@@ -23,10 +23,10 @@ import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
 import { useEffect, useMemo, useState } from 'react'
 import { useAppDispatch } from 'state'
+import CreateGaugeModal from 'views/Wills/components/CreateGaugeModal'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
-import CreateGaugeModal from './components/CreateGaugeModal'
 
 const FinishedTextButton = styled(Button)`
   font-weight: 400;
