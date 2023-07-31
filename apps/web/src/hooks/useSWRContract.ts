@@ -8,6 +8,7 @@ import {
   unstable_serialize,
 } from 'swr'
 import { BlockingData } from 'swr/_internal'
+import { publicClient } from 'utils/wagmi'
 
 declare module 'swr' {
   interface SWRResponse<Data = any, Error = any, Config = any> {
