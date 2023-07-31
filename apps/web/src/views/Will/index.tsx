@@ -17,7 +17,7 @@ import {
   Breadcrumbs,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms } from 'state/ramps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms } from 'state/wills/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'

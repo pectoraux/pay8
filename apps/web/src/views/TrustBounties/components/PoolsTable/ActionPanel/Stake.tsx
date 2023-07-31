@@ -8,7 +8,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallback, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import { useGetRequiresApproval } from 'state/ramps/hooks'
+import { useGetRequiresApproval } from 'state/trustbounties/hooks'
 import { getTrustBountiesAddress } from 'utils/addressHelpers'
 import { getBep20Contract } from 'utils/contractHelpers'
 

@@ -1,7 +1,7 @@
 import { useAccount } from 'wagmi'
 import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/stakemarket/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'

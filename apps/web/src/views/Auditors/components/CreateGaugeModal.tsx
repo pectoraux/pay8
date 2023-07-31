@@ -1,34 +1,19 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex, LinkExternal } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import {
-  useERC20,
-  useRampContract,
-  useRampHelper,
-  useRampAds,
-  useAuditorContract,
-  useAuditorNote,
-  useAuditorHelper,
-  useAuditorHelper2,
-} from 'hooks/useContract'
+import { useERC20, useAuditorContract, useAuditorNote, useAuditorHelper, useAuditorHelper2 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useRouter } from 'next/router'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { useAppDispatch } from 'state'
-import { fetchRampsAsync } from 'state/ramps'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import MintStage from './MintStage'

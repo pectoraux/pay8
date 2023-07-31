@@ -22,10 +22,10 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrPool } from 'state/ramps/hooks'
+import { useCurrPool } from 'state/cards/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
-import { setCurrPoolData } from 'state/ramps'
+import { setCurrPoolData } from 'state/cards'
 import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {

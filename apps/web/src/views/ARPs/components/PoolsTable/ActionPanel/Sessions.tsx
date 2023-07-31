@@ -7,9 +7,8 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { Text, Flex, Balance, Button, Box, Card, Toggle, CopyButton, useModal, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
-// import CreateGaugeModal from 'views/Ramps/components/CreateGaugeModal'
 import { useRampHelper } from 'hooks/useContract'
-import { useGetAccountSg } from 'state/ramps/hooks'
+import { useGetAccountSg } from 'state/arps/hooks'
 
 const CardWrapper = styled(Card)`
   display: inline-block;

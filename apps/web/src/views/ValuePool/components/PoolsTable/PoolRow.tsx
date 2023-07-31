@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Pool } from '@pancakeswap/uikit'
-import { usePool } from 'state/ramps/hooks'
+import { usePool } from 'state/valuepools/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 

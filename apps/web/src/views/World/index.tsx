@@ -17,7 +17,7 @@ import {
   Breadcrumbs,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms } from 'state/ramps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/world/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
@@ -71,10 +71,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   }, [status, sessionId, router.query, openedAlready, openPresentControlPanel])
 
   usePoolsPageFetch()
-
-  useEffect(() => {
-    fetchPoolsDataWithFarms(router.query.ramp, dispatch)
-  }, [router.query, dispatch])
 
   return (
     <>

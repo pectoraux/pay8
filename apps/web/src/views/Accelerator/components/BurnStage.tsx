@@ -3,11 +3,10 @@ import Dots from 'components/Loader/Dots'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useToast } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGetAccountSg } from 'state/ramps/hooks'
+// import { useGetAccountSg } from 'state/accelerator/hooks'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -33,10 +32,10 @@ const BurnStage: React.FC<any> = ({ state, rampAddress, handleChange, rampHelper
   const { account } = useWeb3React()
   const router = useRouter()
   const { toastError, toastSuccess } = useToast()
-  const { data: accountData, refetch } = useGetAccountSg(account, 'stripe')
+  // const { data: accountData, refetch } = useGetAccountSg(account, 'stripe')
   const [linking, setLinking] = useState<boolean>(false)
-  const [linked, setLinked] = useState<boolean>(accountData?.active)
-  console.log('accountData===================>', accountData)
+  const [linked, setLinked] = useState<boolean>(false)
+  console.log('accountData===================>')
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
