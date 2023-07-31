@@ -1,24 +1,7 @@
-import styled from 'styled-components'
-
-import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  Link,
-  FlexLayout,
-  PageHeader,
-  Loading,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-} from '@pancakeswap/uikit'
+import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/accelerator/hooks'
 import Page from 'components/Layout/Page'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
@@ -30,36 +13,12 @@ import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateRampModal from './components/CreateRampModal'
 
-const CardLayout = styled(FlexLayout)`
-  justify-content: center;
-`
-
-const FinishedTextContainer = styled(Flex)`
-  padding-bottom: 32px;
-  flex-direction: column;
-  ${({ theme }) => theme.mediaQueries.md} {
-    flex-direction: row;
-  }
-`
-
-const FinishedTextLink = styled(Link)`
-  font-weight: 400;
-  white-space: nowrap;
-  text-decoration: underline;
-`
-
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
-  // const { pools, userDataLoaded } = usePoolsWithVault()
-  const { pools, userDataLoaded: rampsLoaded } = usePoolsWithFilterSelector()
-  // const { pools: bounties, userDataLoaded: bountiesLoaded } = usePoolsWithFilterSelector()
+  const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
-  const isBounties = useRouter().pathname.includes('bounties')
-  const userDataLoaded = isBounties
-    ? true // bountiesLoaded
-    : rampsLoaded
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
@@ -86,18 +45,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
                   {t('Create a gauge in ')}{' '}
                 </Text>
-                {/* {isBounties && (
-                  <CurrencyInputPanel
-                    id="ramps-currency"
-                    showUSDPrice
-                    showMaxButton
-                    showCommonBases
-                    showInput={false}
-                    showQuickInputButton
-                    currency={currency ?? inputCurency}
-                    onCurrencySelect={handleInputSelect}
-                  />
-                )} */}
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>
@@ -106,7 +53,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       </PageHeader>
       <Page>
         <PoolControls pools={pools}>
-          {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
+          {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (

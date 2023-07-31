@@ -45,7 +45,7 @@ export const useFetchPublicPoolsData = () => {
   }, [dispatch, chainId])
 }
 
-export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean } => {
+export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
   const poolWithUserDataLoadingSelector = useMemo(() => makePoolWithUserDataLoadingSelector(sousId), [sousId])
   return useSelector(poolWithUserDataLoadingSelector)
 }
