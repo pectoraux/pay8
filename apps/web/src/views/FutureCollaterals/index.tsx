@@ -1,7 +1,7 @@
 import { useAccount } from 'wagmi'
 import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/futureCollaterals/hooks'
+import { useFetchPublicPoolsData, usePoolsWithFilterSelector } from 'state/futureCollaterals/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
@@ -23,7 +23,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateRampModal />)
 
-  usePoolsPageFetch()
+  useFetchPublicPoolsData()
 
   return (
     <>

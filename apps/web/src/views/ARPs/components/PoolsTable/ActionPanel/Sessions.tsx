@@ -8,7 +8,7 @@ import { Text, Flex, Balance, Button, Box, Card, Toggle, CopyButton, useModal, A
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 import { useRampHelper } from 'hooks/useContract'
-import { useGetAccountSg } from 'state/arps/hooks'
+import { useGetAccountSg } from 'state/ramps/hooks'
 
 const CardWrapper = styled(Card)`
   display: inline-block;
