@@ -2,7 +2,6 @@ import { useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Text, Flex, Box, Card, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import Badge, { BadgeProps } from '@mui/material/Badge'
 import PreviewImage from 'views/Nft/market/components/CollectibleCard/PreviewImage'
 import { RoundedImage } from 'views/Nft/market/Collection/IndividualNFTPage/shared/styles'
 
@@ -31,15 +30,6 @@ export const ScrollableRow = styled.div`
     display: none;
   }
 `
-
-const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.colors.gradientCardHeader}`,
-    padding: '0 4px',
-  },
-}))
 
 const DataCard: React.FC<any> = ({ sponsor }) => {
   return (
