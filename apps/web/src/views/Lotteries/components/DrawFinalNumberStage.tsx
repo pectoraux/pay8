@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, ButtonMenuItem, ButtonMenu, Input, ErrorIcon } from '@pancakeswap/uikit'
-import CopyAddress from 'components/Menu/UserMenu/CopyAddress2'
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 
