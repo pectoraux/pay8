@@ -22,6 +22,7 @@ import {
   AddIcon,
   ListViewIcon,
 } from "../../../../components/Svg";
+import { formatNumber } from "@pancakeswap/utils/formatBalance";
 
 const CoreTag: React.FC<React.PropsWithChildren<TagProps>> = (props) => {
   const { t } = useTranslation();
