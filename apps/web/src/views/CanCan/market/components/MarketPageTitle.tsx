@@ -9,13 +9,7 @@ interface MarketPageTitleProps extends GridProps {
   address?: string
 }
 
-const MarketPageTitle: React.FC<React.PropsWithChildren<MarketPageTitleProps>> = ({
-  title,
-  description,
-  children,
-  address,
-  ...props
-}) => {
+const MarketPageTitle: React.FC<any> = ({ title, description, children, address, ...props }) => {
   const { t } = useTranslation()
 
   return (
