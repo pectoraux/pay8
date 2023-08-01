@@ -53,7 +53,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
 
   return (
     <>
-      {data &&
+      {/* {data &&
         Object.keys(data).map((traitType, index) => {
           const total = sum(Object.values(data[traitType]))
 
@@ -121,7 +121,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
               </TableWrapper>
             </CollapsibleCard>
           )
-        })}
+        })} */}
     </>
   )
 }
