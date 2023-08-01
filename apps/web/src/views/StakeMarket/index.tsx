@@ -11,7 +11,7 @@ import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
-import CreateRampModal from './components/CreateRampModal'
+import CreateStakeModal from './components/CreateStakeModal'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -21,7 +21,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-  const [onPresentCreateGauge] = useModal(<CreateRampModal />)
+  const [onPresentCreateGauge] = useModal(<CreateStakeModal />)
 
   usePoolsPageFetch()
 
