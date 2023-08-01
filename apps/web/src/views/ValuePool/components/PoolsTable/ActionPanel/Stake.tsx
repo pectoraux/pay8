@@ -3,13 +3,13 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
+import CreateGaugeModal from 'views/ValuePools/components/CreateGaugeModal'
 
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallback, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import CreateGaugeModal from '../../CreateGaugeModal'
 
 const IconButtonWrapper = styled.div`
   display: flex;
