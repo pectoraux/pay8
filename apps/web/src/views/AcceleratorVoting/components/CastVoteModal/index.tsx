@@ -3,7 +3,6 @@ import { Box, Modal, useToast, Input } from '@pancakeswap/uikit'
 import { FetchStatus } from 'config/constants/types'
 import { useStakeMarketVoterContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { useGetVotingPower } from 'state/valuepoolvoting/hooks'
 import { useState, useCallback, useEffect } from 'react'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -12,6 +11,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import MainView from './MainView'
 import { CastVoteModalProps, ConfirmVoteView } from './types'
 import { VotingBoxBorder } from './styles'
+import { useGetVotingPower } from 'state/stakemarketvoting/hooks'
 
 const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, vote, onDismiss }) => {
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
@@ -19,7 +19,7 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, vote, onDismiss }) 
   const [isPending, setIsPending] = useState(false)
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { signer: stakeMarketVoterContract } = useStakeMarketVoterContract()
+  const stakeMarketVoterContract = useStakeMarketVoterContract()
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
