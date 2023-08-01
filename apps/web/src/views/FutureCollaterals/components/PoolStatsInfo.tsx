@@ -44,7 +44,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const currProtocol = pool?.accounts?.find((acct) => acct?.id === currState[pool?.id])
   const tokenAddress = pool?.token?.address || ''
   const dispatch = useAppDispatch()
-  const [onPresentNFT] = useModal(<WebPagesModal height="500px" tokenId={pool.id} metadataUrl={pool?.metadataUrl} />)
+  // const [onPresentNFT] = useModal(<WebPagesModal height="500px" tokenId={pool.id} metadataUrl={pool?.metadataUrl} />)
 
   return (
     <>

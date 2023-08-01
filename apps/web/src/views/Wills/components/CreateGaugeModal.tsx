@@ -25,7 +25,7 @@ import UpdateMediaStage from './UpdateMediaStage'
 import ClaimNoteStage from './ClaimNoteStage'
 import AddBalanceStage from './AddBalanceStage'
 import DeleteStage from './DeleteStage'
-import DeleteRampStage from './DeleteRampStage'
+import DeleteWillStage from './DeleteWillStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import RemoveBalanceStage from './RemoveBalanceStage'
 import UpdateActivePeriodStage from './UpdateActivePeriodStage'
@@ -618,7 +618,7 @@ const CreateGaugeModal: React.FC<any> = ({
         <ClaimNoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.DELETE_PROTOCOL && <DeleteRampStage continueToNextStage={continueToNextStage} />}
+      {stage === LockStage.DELETE_PROTOCOL && <DeleteWillStage continueToNextStage={continueToNextStage} />}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

@@ -7,11 +7,10 @@ import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
-import CreateRampModal from './components/CreateRampModal'
+import CreateBusinessModal from './components/CreateBusinessModal'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -21,7 +20,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-  const [onPresentCreateGauge] = useModal(<CreateRampModal />)
+  const [onPresentCreateGauge] = useModal(<CreateBusinessModal />)
 
   usePoolsPageFetch()
 

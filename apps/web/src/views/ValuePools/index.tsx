@@ -7,21 +7,17 @@ import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
-import CreateRampModal from './components/CreateRampModal'
+import CreateValuepoolModal from './components/CreateValuepoolModal'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
-  const inputCurency = useCurrency(DEFAULT_TFIAT)
-  const [currency, setCurrency] = useState(inputCurency)
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-  const [onPresentCreateGauge] = useModal(<CreateRampModal />)
+  const [onPresentCreateGauge] = useModal(<CreateValuepoolModal />)
 
   usePoolsPageFetch()
 
@@ -44,18 +40,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
                   {t('Create contract ')}{' '}
                 </Text>
-                {/* {(
-                  <CurrencyInputPanel
-                    id="ramps-currency"
-                    showUSDPrice
-                    showMaxButton
-                    showCommonBases
-                    showInput={false}
-                    showQuickInputButton
-                    currency={currency ?? inputCurency}
-                    onCurrencySelect={handleInputSelect}
-                  />
-                )} */}
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>
@@ -64,7 +48,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       </PageHeader>
       <Page>
         <PoolControls pools={pools}>
-          {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
+          {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (

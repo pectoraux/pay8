@@ -18,7 +18,7 @@ export const tokenImageChainNameMapping = {
 }
 
 export const getImageUrlFromToken = (token: Token) => {
-  const address = token?.isNative ? token.wrapped.address : token.address
+  const address = token?.isNative ? token.wrapped.address : token?.address
 
   return `https://tokens.pancakeswap.finance/images/${tokenImageChainNameMapping[token.chainId]}${address}.png`
 }

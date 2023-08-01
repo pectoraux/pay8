@@ -40,7 +40,7 @@ import UpdateMintInfoStage from './UpdateMintInfoStage'
 import UpdateCategoryStage from './UpdateCategoryStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import DeleteStage from './DeleteStage'
-import DeleteRampStage from './DeleteRampStage'
+import DeleteBillStage from './DeleteBillStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import UpdateCapStage from './UpdateCapStage'
 import UpdateNotifyDebitStage from './UpdateNotifyDebitStage'
@@ -1284,7 +1284,7 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.DELETE_PROTOCOL && <DeleteRampStage continueToNextStage={continueToNextStage} />}
+      {stage === LockStage.DELETE_PROTOCOL && <DeleteBillStage continueToNextStage={continueToNextStage} />}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

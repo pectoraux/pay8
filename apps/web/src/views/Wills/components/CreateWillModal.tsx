@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { fetchRampsAsync } from 'state/ramps'
+import { fetchWillsAsync } from 'state/wills'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useRampFactory } from 'hooks/useContract'
+import { useWILLFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { Divider, GreyedOutContainer } from './styles'
+
+import { Divider } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -18,12 +18,12 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
+const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
-  const rampFactoryContract = useRampFactory()
+  const willFactoryContract = useWILLFactory()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
@@ -33,12 +33,12 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('createGauge=================>', [account])
-      return callWithGasPrice(rampFactoryContract, 'createGauge', [account]).catch((err) => {
+      console.log('receipt================>', willFactoryContract)
+      return callWithGasPrice(willFactoryContract, 'createGauge', [account]).catch((err) => {
+        console.log('err================>', err)
         setPendingFb(false)
-        console.log('createGauge=================>', err)
         toastError(
-          t('Issue creating ramp'),
+          t('Issue creating will'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
         )
       })
@@ -46,24 +46,24 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Ramp successfully created'),
+        t('WILL successfully created'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start processing transactions through your Ramp.')}
+          {t('You can now start processing transactions through your WILL contract.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchRampsAsync())
+      dispatch(fetchWillsAsync({ fromWill: true }))
     }
     onDismiss()
   }, [
     t,
     account,
-    onDismiss,
     dispatch,
+    onDismiss,
     toastError,
     toastSuccess,
     callWithGasPrice,
-    rampFactoryContract,
     fetchWithCatchTxError,
+    willFactoryContract,
   ])
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Create Ramp Pool')} onDismiss={onDismiss}>
+    <Modal title={t('Create WILL')} onDismiss={onDismiss}>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -81,7 +81,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new Ramp Pool with you as its Admin. Please read the documentation to learn more about Ramp Pools.',
+              'The will create a new WILL contract with you as its Admin. Please read the documentation to learn more about WILLs.',
             )}
           </Text>
         </Box>
@@ -94,9 +94,8 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
             onClick={handleCreateGauge}
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
-            // disabled={firebaseDone}
           >
-            {t('Create Ramp Contract')}
+            {t('Create WILL')}
           </Button>
         ) : (
           <ConnectWalletButton />
@@ -106,4 +105,4 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
   )
 }
 
-export default CreateRampModal
+export default CreateWILLModal
