@@ -37,6 +37,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onChange={handleChange}
         />
       </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Protocol ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="tokenId"
+          value={state.tokenId}
+          placeholder={t('input your protocol id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -54,7 +67,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Update Bounty')}
+          {t('Update Bounty ID')}
         </Button>
       </Flex>
     </>

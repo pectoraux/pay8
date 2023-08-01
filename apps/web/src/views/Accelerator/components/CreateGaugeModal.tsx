@@ -16,33 +16,12 @@ import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shar
 import { useAppDispatch } from 'state'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
-import PartnerStage from './PartnerStage'
-import BuyRampStage from './BuyRampStage'
-import UpdateDevStage from './UpdateDevStage'
-import BuyAccountStage from './BuyAccountStage'
-import UpdateAdminStage from './UpdateAdminStage'
-import CreateClaimStage from './CreateClaimStage'
-import UpdateBadgeStage from './UpdateBadgeStage'
-import ClaimRevenueStage from './ClaimRevenueStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
-import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
-import UpdateParametersStage from './UpdateParametersStage'
-import DeleteStage from './DeleteStage'
-import InitRampStage from './InitRampStage'
-import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
-import UpdateOwnerStage from './UpdateOwnerStage'
-import UpdateTokenStage from './UpdateTokenStage'
-import UnlockBountyStage from './UnlockBountyStage'
-import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
-import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
+import VoteDownStage from './VoteDownStage'
+import VoteUpStage from './VoteUpStage'
+import BribesStage from './BribesStage'
+import WithdrawStage from './WithdrawStage'
+import DeletePitchStage from './DeletePitchStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
 import { fetchAcceleratorGaugesAsync } from 'state/accelerator'
@@ -303,60 +282,32 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           </Button>
         </Flex>
       )}
-      {/* {stage === LockStage.UPDATE_PARAMETERS && 
-        <UpdateParametersStage 
-          original={original}
-          thumbnail={thumbnail}
-          description={description}
-          setOriginal={setOriginal}
-          setThumbnail={setThumbnail}
-          title={title}
-          setTitle={setTitle}
-          setDescription={setDescription}
-          continueToNextStage={continueToNextStage} 
+      {stage === LockStage.UPDATE_BOUNTY && (
+        <UpdateBountyStage tokenId={tokenId} setTokenId={setTokenId} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_BRIBES && (
+        <BribesStage
+          currency={currency}
+          lockedAmount={lockedAmount}
+          setLockedAmount={setLockedAmount}
+          continueToNextStage={continueToNextStage}
         />
-      }
-      {stage === LockStage.UPDATE_BOUNTY && 
-        <UpdateBountyStage 
-          tokenId={tokenId} 
-          setTokenId={setTokenId} 
-          continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.UPDATE_BRIBES && 
-        <BribesStage 
-          currency={currency} 
-          lockedAmount={lockedAmount} 
-          setLockedAmount={setLockedAmount} 
-          continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.WITHDRAW && 
-        <WithdrawStage 
-          pool={pool} 
+      )}
+      {stage === LockStage.WITHDRAW && (
+        <WithdrawStage
+          pool={pool}
           currBribeAddress={currBribeAddress}
           setCurrBribeAddress={setCurrBribeAddress}
-          continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.ADMIN_WITHDRAW && 
-      <AdminWithdrawStage 
-        pool={pool} 
-        currency={currency} 
-        lockedAmount={lockedAmount} 
-        setLockedAmount={setLockedAmount} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.VOTE_UP && 
-      <VoteUpStage 
-        tokenId={tokenId} 
-        setTokenId={setTokenId} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.VOTE_DOWN && 
-      <VoteDownStage 
-        tokenId={tokenId} 
-        setTokenId={setTokenId} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.DELETE && <DeletePitchStage continueToNextStage={continueToNextStage} />} */}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.VOTE_UP && (
+        <VoteUpStage tokenId={tokenId} setTokenId={setTokenId} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.VOTE_DOWN && (
+        <VoteDownStage tokenId={tokenId} setTokenId={setTokenId} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.DELETE && <DeletePitchStage continueToNextStage={continueToNextStage} />}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

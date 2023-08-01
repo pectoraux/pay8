@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified address or remove as the contract admin. Please read the documentation for more information on this parameter',
+              'The will add or remove the specified address as the contract admin. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

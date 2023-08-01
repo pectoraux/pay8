@@ -1,18 +1,19 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import _toNumber from 'lodash/toNumber'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
+  tokenId?: string
   state: any
-  handleChange?: (any) => void
-  handleRawValueChange?: any
+  setTokenId?: () => void
   continueToNextStage?: () => void
 }
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ tokenId, setTokenId, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -26,15 +27,15 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Bounty ID')}
+          {t('Bounty Id')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="bountyId"
-          value={state.bountyId}
-          placeholder={t('input your bounty id')}
-          onChange={handleChange}
+          value={tokenId}
+          placeholder={t('input your bounty Id')}
+          onChange={(e) => setTokenId(e.target.value)}
         />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
@@ -43,7 +44,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the bounty on this account. Please read the documentation for more information.')}
+            {t(
+              'The will attach a bounty to your gauge. You can only withdraw up to the amount in your bounty each week. Please read the documentation for more details.',
+            )}
           </Text>
         </Box>
       </Grid>
@@ -54,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Update Bounty')}
+          {t('Update')}
         </Button>
       </Flex>
     </>

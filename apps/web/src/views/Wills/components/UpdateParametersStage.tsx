@@ -1,49 +1,21 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
-
-import { useWeb3React } from '@pancakeswap/wagmi'
+import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
-  nftToSell?: any
-  variant?: 'set' | 'adjust'
-  currency?: any
-  currentPrice?: string
-  lowestPrice?: number
   state: any
-  account?: any
   handleChange?: (any) => void
-  handleChoiceChange?: (any) => void
   handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({
-  nftToSell,
-  variant,
-  currency,
-  state,
-  setState,
-  nftFilters,
-  setNftFilters,
-  handleChange,
-  handleRawValueChange,
-  continueToNextStage,
-}) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const { account } = useWeb3React()
-  const [lockedAmount, setLockedAmount] = useState('')
-  // const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-  // const stakingTokenBalance = balance ? new BigNumber(balance.toFixed()) : BIG_ZERO
-  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const [activeButtonIndex2, setActiveButtonIndex2] = useState(0)
-  const [minLockAmount, setMinLockAmount] = useState('')
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -53,71 +25,68 @@ const SetPriceStage: React.FC<any> = ({
 
   return (
     <>
-      <GreyedOutContainer style={{ paddingTop: '50px' }}>
-        <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Automatic')}
-          </Text>
-          <ButtonMenu
-            scale="xs"
-            variant="subtle"
-            activeIndex={state.automatic}
-            onItemClick={handleRawValueChange('automatic')}
-          >
-            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-          </ButtonMenu>
-        </StyledItemRow>
-      </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Mint Fee')}
+          {t('Profile ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="mintFee"
-          value={state.mintFee}
-          placeholder={t('input ramp minting fee')}
+          name="profileId"
+          value={state.profileId}
+          placeholder={t('input profile id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Burn Fee')}
+          {t('Update Period')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="burnFee"
-          value={state.burnFee}
-          placeholder={t('input ramp burn fee')}
+          name="updatePeriod"
+          value={state.updatePeriod}
+          placeholder={t('input update period')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Badge ID')}
+          {t('Minimum Withdrawable Now')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="badgeId"
-          value={state.badgeId}
-          placeholder={t('input badge id')}
+          name="minWithdrawableNow"
+          value={state.minWithdrawableNow}
+          placeholder={t('input min withdrawable now')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Sale Price')}
+          {t('Minimum NFT Withdrawable Now')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="salePrice"
-          value={state.salePrice}
-          placeholder={t('input sale price to sell ramp')}
+          name="minNFTWithdrawableNow"
+          value={state.minNFTWithdrawableNow}
+          placeholder={t('input min nft withdrawable now')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Will Withdrawal Period')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="willWithdrawalPeriod"
+          value={state.willWithdrawalPeriod}
+          placeholder={t('input will withdrawal period')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -128,18 +97,14 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update parameters of the ramp. Please read the documentation for more information on each parameter',
+              'The will update parameters of the will. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Parameters')}
         </Button>
       </Flex>

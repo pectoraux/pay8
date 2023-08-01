@@ -1,42 +1,35 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+//
 import BigNumber from 'bignumber.js'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { useCurrencyBalance } from 'state/wallet/hooks'
 import BribeField from './LockedPool/Common/BribeField'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
-  nftToSell?: any
-  variant?: 'set' | 'adjust'
   currency?: any
-  currentPrice?: string
-  lowestPrice?: number
   state: any
-  account?: any
-  handleChange?: (any) => void
-  handleChoiceChange?: (any) => void
+  account: any
   handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const AdminWithdrawStage: React.FC<any> = ({
-  state,
-  currency,
-  pendingRevenue,
-  handleRawValueChange,
-  continueToNextStage,
-}) => {
+const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const [lockedAmount, setLockedAmount] = useState('')
-  const stakingTokenBalance = pendingRevenue ? new BigNumber(pendingRevenue) : BIG_ZERO
+  const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+  const stakingTokenBalance = balance
+    ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
+    : BIG_ZERO
   const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   useEffect(() => {
@@ -48,11 +41,22 @@ const AdminWithdrawStage: React.FC<any> = ({
   return (
     <>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('From Sponsors')}
+        </Text>
+        <Flex alignSelf="center" justifyContent="center">
+          <ButtonMenu scale="xs" variant="subtle" activeIndex={state.add} onItemClick={handleRawValueChange('add')}>
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </Flex>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <BribeField
           add="withdraw"
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
-          stakingDecimals={18}
+          stakingDecimals={currency?.decimals}
           lockedAmount={state.amountPayable}
           usedValueStaked={usdValueStaked}
           stakingMax={stakingTokenBalance}
@@ -66,7 +70,7 @@ const AdminWithdrawStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will withdraw funds from the ramp. Please read the documentation for more details.')}
+            {t('The will withdraw funds from the pool. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>
@@ -77,11 +81,11 @@ const AdminWithdrawStage: React.FC<any> = ({
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Withdraw from Ramp')}
+          {t('Withdraw')}
         </Button>
       </Flex>
     </>
   )
 }
 
-export default AdminWithdrawStage
+export default SetPriceStage

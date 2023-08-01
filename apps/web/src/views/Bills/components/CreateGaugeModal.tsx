@@ -14,38 +14,48 @@ import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/sh
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { useRouter } from 'next/router'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
-import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
-import PartnerStage from './PartnerStage'
-import BuyRampStage from './BuyRampStage'
-import UpdateDevStage from './UpdateDevStage'
-import BuyAccountStage from './BuyAccountStage'
-import UpdateAdminStage from './UpdateAdminStage'
-import CreateClaimStage from './CreateClaimStage'
-import UpdateBadgeStage from './UpdateBadgeStage'
-import ClaimRevenueStage from './ClaimRevenueStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
-import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
-import UpdateParametersStage from './UpdateParametersStage'
-import DeleteStage from './DeleteStage'
-import InitRampStage from './InitRampStage'
-import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
-import UpdateOwnerStage from './UpdateOwnerStage'
-import UpdateTokenStage from './UpdateTokenStage'
-import UnlockBountyStage from './UnlockBountyStage'
-import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
-import UpdateBountyStage from './UpdateBountyStage'
-import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
+import UpdateUserOwnerStage from './UpdateUserOwnerStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { differenceInSeconds } from 'date-fns'
+
+import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { LockStage } from './types'
+import UpdateParametersStage from './UpdateParametersStage'
+import UpdateAutoChargeStage from './UpdateAutoChargeStage'
+import UpdateBountyStage from './UpdateBountyStage'
+import ClaimNoteStage from './ClaimNoteStage'
+import UpdateUriStage from './UpdateUriStage'
+import VoteStage from './VoteStage'
+import BurnStage from './BurnStage'
+import PayStage from './PayStage'
+import AutoChargeStage from './AutoChargeStage'
+import UpdateWhitelistStage from './UpdateWhitelistStage'
+import UpdatePricePerMinuteStage from './UpdatePricePerMinuteStage'
+import UpdateExcludedContentStage from './UpdateExcludedContentStage'
+import UpdateProtocolStage from './UpdateProtocolStage'
+import SponsorTagStage from './SponsorTagStage'
+import UpdateMintExtraStage from './UpdateMintExtraStage'
+import UpdateMintInfoStage from './UpdateMintInfoStage'
+import UpdateCategoryStage from './UpdateCategoryStage'
+import AdminWithdrawStage from './AdminWithdrawStage'
+import DeleteStage from './DeleteStage'
+import DeleteRampStage from './DeleteRampStage'
+import UpdateOwnerStage from './UpdateOwnerStage'
+import UpdateCapStage from './UpdateCapStage'
+import UpdateNotifyDebitStage from './UpdateNotifyDebitStage'
+import UpdateNotifyCreditStage from './UpdateNotifyCreditStage'
+import UpdateTaxContractStage from './UpdateTaxContractStage'
+import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
+import UpdateTransferToNotePayableStage from './UpdateTransferToNotePayableStage'
+import UpdateTransferToNoteReceivableStage from './UpdateTransferToNoteReceivableStage'
+import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
+import UpdateDueBeforePayableStage from './UpdateDueBeforePayableStage'
+import UpdateMigratePointStage from './UpdateMigratePointStage'
+import UpdateDiscountDivisorStage from './UpdateDiscountDivisorStage'
+import UpdatePenaltyDivisorStage from './UpdatePenaltyDivisorStage'
+import UpdateMigrateStage from './UpdateMigrateStage'
+import UpdateAdminStage from './UpdateAdminStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -1033,242 +1043,248 @@ const CreateGaugeModal: React.FC<any> = ({
           ) : null}
         </Flex>
       )}
-      {/* {stage === LockStage.NOTIFY_CREDIT && 
-      <UpdateNotifyCreditStage 
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.NOTIFY_DEBIT && 
-      <UpdateNotifyDebitStage 
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_AUTOCHARGE && 
-      <UpdateAutoChargeStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.VOTE && 
-      <VoteStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_TAX_CONTRACT && 
-      <UpdateTaxContractStage 
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_USER_OWNER && 
-      <UpdateUserOwnerStage 
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.MINT_EXTRA && 
-      <UpdateMintExtraStage 
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.TRANSFER_TO_NOTE_PAYABLE && 
-        <UpdateTransferToNotePayableStage 
-          state={state} 
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.UPDATE_PROTOCOL && 
-      <UpdateProtocolStage 
-        state={state} 
-        handleChange={handleChange} 
-        handleRawValueChange={handleRawValueChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_SPONSOR_MEDIA && 
-        <UpdateSponsorMediaStage 
-          state={state} 
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.SPONSOR_TAG && 
-          <SponsorTagStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.AUTOCHARGE && 
-        <AutoChargeStage 
-          state={state} 
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.PAY && 
-        <PayStage 
-          state={state} 
-          account={pool.id}
-          currency={currency}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_CAP && 
-          <UpdateCapStage 
-            state={state} 
-            handleChange={handleChange}
-            continueToNextStage={continueToNextStage} 
-          />}
-        {stage === LockStage.UPDATE_ADMIN && 
-        <UpdateAdminStage
-          state={state} 
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_OWNER && 
-          <UpdateOwnerStage 
-            state={state} 
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-          />}
-        {stage === LockStage.UPDATE_WHITELIST && 
-          <UpdateWhitelistStage 
-            state={state} 
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-          />}
-        {stage === LockStage.UPDATE_DISCOUNT_DIVISOR && 
-          <UpdateDiscountDivisorStage 
-            state={state} 
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-          />}
-        {stage === LockStage.UPDATE_PENALTY_DIVISOR && 
-          <UpdatePenaltyDivisorStage
-            state={state} 
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-          />}
-        {stage === LockStage.UPDATE_MIGRATE_POINT && 
-          <UpdateMigratePointStage 
-            state={state} 
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-          />}
-        {stage === LockStage.MIGRATE && 
-        <UpdateMigrateStage 
-          state={state} 
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_PARAMETERS && 
-          <UpdateParametersStage 
-            state={state} 
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-          />}
-        {stage === LockStage.UPDATE_BOUNTY_ID && 
-        <UpdateBountyStage 
+      {stage === LockStage.NOTIFY_CREDIT && (
+        <UpdateNotifyCreditStage
           state={state}
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_URI_GENERATOR && 
-        <UpdateUriStage
-          state={state} 
           handleChange={handleChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_MINT_INFO && 
-          <UpdateMintInfoStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.TRANSFER_TO_NOTE_RECEIVABLE && 
-          <UpdateTransferToNoteReceivableStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.CLAIM_NOTE && 
-          <ClaimNoteStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_DUE_BEFORE_PAYABLE && 
-          <UpdateDueBeforePayableStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_TAG_REGISTRATION && 
-          <UpdateTagRegistrationStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BURN && 
-          <BurnStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_PRICE_PER_MINUTE && 
-          <UpdatePricePerMinuteStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_EXCLUDED_CONTENT && 
-          <UpdateExcludedContentStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_CATEGORY && 
-          <UpdateCategoryStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.WITHDRAW && 
-        <AdminWithdrawStage 
-          state={state} 
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.NOTIFY_DEBIT && (
+        <UpdateNotifyDebitStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_AUTOCHARGE && (
+        <UpdateAutoChargeStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.VOTE && (
+        <VoteStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_TAX_CONTRACT && (
+        <UpdateTaxContractStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_USER_OWNER && (
+        <UpdateUserOwnerStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.MINT_EXTRA && (
+        <UpdateMintExtraStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.TRANSFER_TO_NOTE_PAYABLE && (
+        <UpdateTransferToNotePayableStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_PROTOCOL && (
+        <UpdateProtocolStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_SPONSOR_MEDIA && (
+        <UpdateSponsorMediaStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.SPONSOR_TAG && (
+        <SponsorTagStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.AUTOCHARGE && (
+        <AutoChargeStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.PAY && (
+        <PayStage
+          state={state}
           account={pool.id}
           currency={currency}
-          continueToNextStage={continueToNextStage} 
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
-        />}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_CAP && (
+        <UpdateCapStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_ADMIN && (
+        <UpdateAdminStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_OWNER && (
+        <UpdateOwnerStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_WHITELIST && (
+        <UpdateWhitelistStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_DISCOUNT_DIVISOR && (
+        <UpdateDiscountDivisorStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_PENALTY_DIVISOR && (
+        <UpdatePenaltyDivisorStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_MIGRATE_POINT && (
+        <UpdateMigratePointStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.MIGRATE && (
+        <UpdateMigrateStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_PARAMETERS && (
+        <UpdateParametersStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_BOUNTY_ID && (
+        <UpdateBountyStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_URI_GENERATOR && (
+        <UpdateUriStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_MINT_INFO && (
+        <UpdateMintInfoStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.TRANSFER_TO_NOTE_RECEIVABLE && (
+        <UpdateTransferToNoteReceivableStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.CLAIM_NOTE && (
+        <ClaimNoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_DUE_BEFORE_PAYABLE && (
+        <UpdateDueBeforePayableStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_TAG_REGISTRATION && (
+        <UpdateTagRegistrationStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BURN && (
+        <BurnStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_PRICE_PER_MINUTE && (
+        <UpdatePricePerMinuteStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_EXCLUDED_CONTENT && (
+        <UpdateExcludedContentStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_CATEGORY && (
+        <UpdateCategoryStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.WITHDRAW && (
+        <AdminWithdrawStage
+          state={state}
+          account={pool.id}
+          currency={currency}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
+      )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.DELETE_PROTOCOL && <DeleteRampStage continueToNextStage={continueToNextStage} />} */}
+      {stage === LockStage.DELETE_PROTOCOL && <DeleteRampStage continueToNextStage={continueToNextStage} />}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

@@ -37,6 +37,19 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Protocol ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="protocolId"
+          value={state.protocolId}
+          placeholder={t('input protocol id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Tag Name')}
         </Text>
         <Input

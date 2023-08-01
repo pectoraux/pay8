@@ -26,9 +26,9 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const AdminWithdrawStage: React.FC<any> = ({
-  state,
+const SetPriceStage: React.FC<any> = ({
   currency,
+  state,
   pendingRevenue,
   handleRawValueChange,
   continueToNextStage,
@@ -77,11 +77,11 @@ const AdminWithdrawStage: React.FC<any> = ({
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Withdraw from Ramp')}
+          {t('Withdraw')}
         </Button>
       </Flex>
     </>
   )
 }
 
-export default AdminWithdrawStage
+export default SetPriceStage

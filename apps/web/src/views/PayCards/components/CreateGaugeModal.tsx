@@ -5,54 +5,30 @@ import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useRampContract, useRampHelper, useRampAds, useCardContract } from 'hooks/useContract'
+import { useERC20, useCardContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useRouter } from 'next/router'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { useAppDispatch } from 'state'
-import { fetchRampsAsync } from 'state/ramps'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
-import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
-import PartnerStage from './PartnerStage'
-import BuyRampStage from './BuyRampStage'
-import UpdateDevStage from './UpdateDevStage'
-import BuyAccountStage from './BuyAccountStage'
-import UpdateAdminStage from './UpdateAdminStage'
-import CreateClaimStage from './CreateClaimStage'
-import UpdateBadgeStage from './UpdateBadgeStage'
-import ClaimRevenueStage from './ClaimRevenueStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
-import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
-import UpdateParametersStage from './UpdateParametersStage'
-import DeleteStage from './DeleteStage'
-import InitRampStage from './InitRampStage'
-import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
-import UpdateOwnerStage from './UpdateOwnerStage'
-import UpdateTokenStage from './UpdateTokenStage'
-import UnlockBountyStage from './UnlockBountyStage'
-import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
-import UpdateBountyStage from './UpdateBountyStage'
-import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import NodeRSA from 'encrypt-rsa'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+
+import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { LockStage } from './types'
+import ExecutePurchaseStage from './ExecutePurchaseStage'
+import AddBalanceStage from './AddBalanceStage'
+import TransferBalanceStage from './TransferBalanceStage'
+import RemoveBalanceStage from './RemoveBalanceStage'
+import UpdateOwnerStage from './UpdateOwnerStage'
+import UpdatePasswordStage from './UpdatePasswordStage'
+import UpdateTokenIdStage from './UpdateTokenIdStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -389,53 +365,53 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
         </Flex>
       )}
-      {/* {stage === LockStage.ADD_BALANCE && 
-          <AddBalanceStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.EXECUTE_PURCHASE && 
-          <ExecutePurchaseStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.TRANSFER_BALANCE && 
-          <TransferBalanceStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.REMOVE_BALANCE && 
-          <RemoveBalanceStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_TOKEN_ID && 
-          <UpdateTokenIdStage
-            state={state}
-            handleChange={handleChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_OWNER && 
-          <UpdateOwnerStage
-            state={state}
-            handleChange={handleChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.UPDATE_PASSWORD && <UpdatePasswordStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />} */}
+      {stage === LockStage.ADD_BALANCE && (
+        <AddBalanceStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.EXECUTE_PURCHASE && (
+        <ExecutePurchaseStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.TRANSFER_BALANCE && (
+        <TransferBalanceStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.REMOVE_BALANCE && (
+        <RemoveBalanceStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_TOKEN_ID && (
+        <UpdateTokenIdStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_OWNER && (
+        <UpdateOwnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_PASSWORD && (
+        <UpdatePasswordStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

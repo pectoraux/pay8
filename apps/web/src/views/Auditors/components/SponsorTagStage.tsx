@@ -19,7 +19,7 @@ interface SetPriceStageProps {
   currentPrice?: string
   lowestPrice?: number
   state: any
-  account?: string
+  account?: any
   handleChange?: (any) => void
   handleChoiceChange?: (any) => void
   handleRawValueChange?: any
@@ -55,14 +55,14 @@ const SetPriceStage: React.FC<any> = ({
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Sponsor Address')}
+          {t('Sponsor Contract Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="sponsor"
-          value={state.sponsor}
-          placeholder={t('input sponsor address')}
+          name="contractAddress"
+          value={state.contractAddress}
+          placeholder={t('input sponsor contract address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -98,10 +98,10 @@ const SetPriceStage: React.FC<any> = ({
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={currency?.decimals}
-          lockedAmount={state.amountPayable}
+          lockedAmount={state.amountReceivable}
           usedValueStaked={usdValueStaked}
           stakingMax={stakingTokenBalance}
-          setLockedAmount={handleRawValueChange('amountPayable')}
+          setLockedAmount={handleRawValueChange('amountReceivable')}
           stakingTokenBalance={stakingTokenBalance}
         />
       </GreyedOutContainer>
@@ -111,9 +111,7 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'The will display your media on NFTs from this contract. Please read the documentation for more details.',
-            )}
+            {t('The will display your media on NFTs from this pool. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>

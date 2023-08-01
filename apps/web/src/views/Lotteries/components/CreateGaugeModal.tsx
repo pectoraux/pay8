@@ -1,4 +1,3 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
@@ -7,60 +6,38 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import {
   useERC20,
-  useRampContract,
-  useRampHelper,
-  useRampAds,
   useLotteryContract,
   useLotteryHelperContract,
   useLotteryRandomNumberGenerator,
 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useRouter } from 'next/router'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { useAppDispatch } from 'state'
-import { fetchRampsAsync } from 'state/ramps'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
-import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
-import PartnerStage from './PartnerStage'
-import BuyRampStage from './BuyRampStage'
-import UpdateDevStage from './UpdateDevStage'
-import BuyAccountStage from './BuyAccountStage'
-import UpdateAdminStage from './UpdateAdminStage'
-import CreateClaimStage from './CreateClaimStage'
-import UpdateBadgeStage from './UpdateBadgeStage'
-import ClaimRevenueStage from './ClaimRevenueStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
-import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
-import UpdateParametersStage from './UpdateParametersStage'
-import DeleteStage from './DeleteStage'
-import InitRampStage from './InitRampStage'
-import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
-import UpdateOwnerStage from './UpdateOwnerStage'
-import UpdateTokenStage from './UpdateTokenStage'
-import UnlockBountyStage from './UnlockBountyStage'
-import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
-import UpdateBountyStage from './UpdateBountyStage'
-import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { combineDateAndTime } from 'views/Voting/CreateProposal/helpers'
 import { differenceInSeconds } from 'date-fns'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+
+import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { LockStage } from './types'
+import ClaimTicketStage from './ClaimTicketStage'
+import StartLotteryStage from './StartLotteryStage'
+import RandomNumberFeesStage from './RandomNumberFeesStage'
+import UpdateBurnForCreditStage from './UpdateBurnForCreditStage'
+import ClaimLotteryStage from './ClaimLotteryStage'
+import InjectFundsStage from './InjectFundsStage'
+import WithdrawStage from './WithdrawStage'
+import BurnForCreditStage from './BurnForCreditStage'
+import DrawFinalNumberStage from './DrawFinalNumberStage'
+import AdminWithdrawStage from './AdminWithdrawStage'
+import CloseLotteryStage from './CloseLotteryStage'
+import BuyTicketStage from './BuyTicketStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -516,96 +493,104 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           </Button>
         </Flex>
       )}
-      {/* {stage === LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES && 
-      <RandomNumberFeesStage 
-        state={state} 
-        currency={currency}
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.START_LOTTERY && 
-      <StartLotteryStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT && 
+      {stage === LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES && (
+        <RandomNumberFeesStage
+          state={state}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.START_LOTTERY && (
+        <StartLotteryStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT && (
         <UpdateBurnForCreditStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
-        />}
-      {stage === LockStage.CLAIM_LOTTERY_REVENUE && 
-      <ClaimLotteryStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.CLAIM_TICKETS && 
-      <ClaimTicketStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.INJECT_FUNDS && 
-      <InjectFundsStage 
-        state={state} 
-        currency={currency}
-        handleChange={handleChange} 
-        handleRawValueChange={handleRawValueChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.WITHDRAW && 
-      <WithdrawStage 
-        state={state} 
-        account={pool.id}
-        currency={currency}
-        continueToNextStage={continueToNextStage} 
-        handleRawValueChange={handleRawValueChange}
-      />}
-      {stage === LockStage.ADMIN_WITHDRAW && 
-      <AdminWithdrawStage 
-        state={state} 
-        account={pool.id}
-        currency={currency}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-        handleRawValueChange={handleRawValueChange}
-      />}
-        {stage === LockStage.BURN_TOKEN_FOR_CREDIT && 
+        />
+      )}
+      {stage === LockStage.CLAIM_LOTTERY_REVENUE && (
+        <ClaimLotteryStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.CLAIM_TICKETS && (
+        <ClaimTicketStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.INJECT_FUNDS && (
+        <InjectFundsStage
+          state={state}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.WITHDRAW && (
+        <WithdrawStage
+          state={state}
+          account={pool.id}
+          currency={currency}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
+      )}
+      {stage === LockStage.ADMIN_WITHDRAW && (
+        <AdminWithdrawStage
+          state={state}
+          account={pool.id}
+          currency={currency}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
+      )}
+      {stage === LockStage.BURN_TOKEN_FOR_CREDIT && (
         <BurnForCreditStage
           state={state}
-          handleChange={handleChange} 
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.DRAW_FINAL_NUMBER && 
-          <DrawFinalNumberStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BUY_TICKETS && 
-          <BuyTicketStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.CLOSE_LOTTERY && 
-        <CloseLotteryStage 
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />} */}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.DRAW_FINAL_NUMBER && (
+        <DrawFinalNumberStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.BUY_TICKETS && (
+        <BuyTicketStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.CLOSE_LOTTERY && (
+        <CloseLotteryStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

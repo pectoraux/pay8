@@ -19,7 +19,7 @@ interface SetPriceStageProps {
   currentPrice?: string
   lowestPrice?: number
   state: any
-  account?: string
+  account?: any
   handleChange?: (any) => void
   handleChoiceChange?: (any) => void
   handleRawValueChange?: any
@@ -53,6 +53,19 @@ const SetPriceStage: React.FC<any> = ({
 
   return (
     <>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('World')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="world"
+          value={state.world}
+          placeholder={t('input world address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Sponsor Address')}
@@ -98,10 +111,10 @@ const SetPriceStage: React.FC<any> = ({
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={currency?.decimals}
-          lockedAmount={state.amountPayable}
+          lockedAmount={state.amountReceivable}
           usedValueStaked={usdValueStaked}
           stakingMax={stakingTokenBalance}
-          setLockedAmount={handleRawValueChange('amountPayable')}
+          setLockedAmount={handleRawValueChange('amountReceivable')}
           stakingTokenBalance={stakingTokenBalance}
         />
       </GreyedOutContainer>

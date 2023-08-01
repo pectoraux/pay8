@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, ButtonMenuItem, ButtonMenu, Input, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -25,57 +26,80 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   return (
     <>
       <GreyedOutContainer>
-        <Flex alignSelf="center" justifyContent="center">
-          <Text fontSize="12px" mr="10px" color="secondary" textTransform="uppercase" bold>
-            {t('Account State')}
-          </Text>
-          <ButtonMenu
-            scale="xs"
-            variant="subtle"
-            activeIndex={state.close ? 1 : 0}
-            onItemClick={handleRawValueChange('close')}
-          >
-            <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
-            <ButtonMenuItem>{t('Close')}</ButtonMenuItem>
-          </ButtonMenu>
-        </Flex>
-      </GreyedOutContainer>
-      <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Sale Price')}
+          {t('Account Owner')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="salePrice"
-          value={state.salePrice}
-          placeholder={t('input a price if you want to sell account')}
+          name="owner"
+          value={state.owner}
+          placeholder={t('input account owner address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Fee Cap')}
+          {t('Profile Id')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="cap"
-          value={state.cap}
-          placeholder={t('input fee cap')}
+          name="profileId"
+          value={state.profileId}
+          placeholder={t('input user profile id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Maximum Number of Partners')}
+          {t('Token Addresses')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="maxPartners"
-          value={state.maxPartners}
-          placeholder={t('input max number of partners')}
+          name="tokens"
+          value={state.tokens}
+          placeholder={t('comma seperated token addresses')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Percentages')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="percentages"
+          value={state.percentages}
+          placeholder={t('comma seperated percentages')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Description')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="description"
+          value={state.description}
+          placeholder={t('input rating description')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Link to Attached Media')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="media"
+          value={state.media}
+          placeholder={t('input link to attached media')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -86,7 +110,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update parameters of the account. Please read the documentation for more information on each parameter',
+              'The will create a new account or update parameters of an old one. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>
@@ -98,7 +122,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Update Account')}
+          {t('Create or Update Account')}
         </Button>
       </Flex>
     </>

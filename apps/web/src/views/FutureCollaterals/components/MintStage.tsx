@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { firestore } from 'utils/firebase'
 import { loadStripe } from '@stripe/stripe-js'
 import { useEffect, useRef, useState } from 'react'
 import { Flex, Grid, Box, Text, Button, AutoRenewIcon, Input, ErrorIcon } from '@pancakeswap/uikit'
@@ -25,16 +26,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({
-  state,
-  pool,
-  currency,
-  rampAddress,
-  handleChange,
-  callWithGasPrice,
-  rampHelperContract,
-  continueToNextStage,
-}) => {
+const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -42,30 +34,20 @@ const SetPriceStage: React.FC<any> = ({
 
   const processCharge = async () => {
     setIsLoading(true)
-    console.log('processCharge===============>', currency, state.sk)
-    const { data } = await axios.post('/api/charge', {
-      account,
-      price: state.amountPayable,
-      currency,
-      rampAddress,
-      sk: state.sk,
-    })
+    const { data } = await axios.post('/api/charge', { account, price: state.amountPayable, currency, rampAddress })
     if (data.error) {
       console.log('data.error=====================>', data.error)
     }
-    const stripe = await loadStripe(state.pk)
-    console.log('7stripe=====================>', [
-      rampAddress,
+    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY)
+    await firestore.collection('onramp').doc(data.id).set({
+      amount: state.amountPayable,
+      currency: currency?.address,
+      session_id: data.id,
+      state: 'pending',
       account,
-      currency?.address,
-      state.amountPayable,
-      state.identityTokenId,
-      data.id,
-    ])
-
-    await rampHelperContract
-      .preMint(rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id)
-      .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
+      hash: '',
+    })
+    await stripe.redirectToCheckout({ sessionId: data?.id })
     setIsLoading(false)
   }
 
@@ -79,27 +61,79 @@ const SetPriceStage: React.FC<any> = ({
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount')}
+          {t('Auditor')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="amountPayable"
-          value={state.amountPayable}
-          placeholder={t('input of amount to mint')}
+          name="auditor"
+          value={state.auditor}
+          placeholder={t('input auditor address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Identity Token ID')}
+          {t('Recipient Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="identityTokenId"
-          value={state.identityTokenId}
-          placeholder={t('input your identity token id')}
+          name="owner"
+          value={state.owner}
+          placeholder={t('input recipient address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Stake ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="stakeId"
+          value={state.stakeId}
+          placeholder={t('input your stake id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('User Bounty ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="userBountyId"
+          value={state.userBountyId}
+          placeholder={t('input your bounty id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Auditor Bounty ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="auditorBountyId"
+          value={state.auditorBountyId}
+          placeholder={t('input the bounty id of your lender')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Channel Number')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="channel"
+          value={state.channel}
+          placeholder={t('input channel number')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -109,9 +143,7 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'The will mint the specified amount of token to the recipient. Please read the documentation for more details.',
-            )}
+            {t('The will mint a future collateral for the recipient. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>
@@ -119,15 +151,9 @@ const SetPriceStage: React.FC<any> = ({
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button
           mb="8px"
-          onClick={() => {
-            if (pool?.automatic) {
-              processCharge()
-            } else if (pool?.devaddr_ === account) {
-              continueToNextStage()
-            }
-          }}
+          onClick={continueToNextStage}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-          disabled={!state.pk || !state.sk}
+          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
           {t('Mint')}
         </Button>

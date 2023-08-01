@@ -1,65 +1,29 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import {
-  useERC20,
-  useRampContract,
-  useRampHelper,
-  useRampAds,
-  useReferralVoter,
-  useBribeContract,
-  useGaugeContract,
-} from 'hooks/useContract'
+import { useERC20, useReferralVoter, useBribeContract, useGaugeContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import { useRouter } from 'next/router'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { useAppDispatch } from 'state'
-import { fetchRampsAsync } from 'state/ramps'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
-import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
-import PartnerStage from './PartnerStage'
-import BuyRampStage from './BuyRampStage'
-import UpdateDevStage from './UpdateDevStage'
-import BuyAccountStage from './BuyAccountStage'
-import UpdateAdminStage from './UpdateAdminStage'
-import CreateClaimStage from './CreateClaimStage'
-import UpdateBadgeStage from './UpdateBadgeStage'
-import ClaimRevenueStage from './ClaimRevenueStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
-import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
-import UpdateParametersStage from './UpdateParametersStage'
-import DeleteStage from './DeleteStage'
-import InitRampStage from './InitRampStage'
-import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
-import UpdateOwnerStage from './UpdateOwnerStage'
-import UpdateTokenStage from './UpdateTokenStage'
-import UnlockBountyStage from './UnlockBountyStage'
-import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
-import UpdateBountyStage from './UpdateBountyStage'
-import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
 import { fetchReferralGaugesAsync } from 'state/referrals'
+
+import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { LockStage } from './types'
+import UpdateBountyStage from './UpdateBountyStage'
+import BribesStage from './BribesStage'
+import WithdrawStage from './WithdrawStage'
+import DeletePitchStage from './DeletePitchStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -259,34 +223,28 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           </Button>
         </Flex>
       )}
-      {/* {stage === LockStage.UPDATE_PARAMETERS && 
-        <UpdateParametersStage 
-          original={original}
-          thumbnail={thumbnail}
-          description={description}
-          setOriginal={setOriginal}
-          setThumbnail={setThumbnail}
-          title={title}
-          setTitle={setTitle}
-          setDescription={setDescription}
-          continueToNextStage={continueToNextStage} 
+      {stage === LockStage.UPDATE_BOUNTY && (
+        <UpdateBountyStage tokenId={tokenId} setTokenId={setTokenId} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_BRIBES && (
+        <BribesStage
+          lockedAmount={lockedAmount}
+          setLockedAmount={setLockedAmount}
+          currency={currency}
+          continueToNextStage={continueToNextStage}
         />
-      }
-      {stage === LockStage.UPDATE_BOUNTY && <UpdateBountyStage tokenId={tokenId} setTokenId={setTokenId} continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.UPDATE_BRIBES && <BribesStage lockedAmount={lockedAmount} setLockedAmount={setLockedAmount} currency={currency} continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.WITHDRAW && 
-        <WithdrawStage 
-          pool={pool} 
-          tokenId={tokenId} 
-          setTokenId={setTokenId} 
+      )}
+      {stage === LockStage.WITHDRAW && (
+        <WithdrawStage
+          pool={pool}
+          tokenId={tokenId}
+          setTokenId={setTokenId}
           currBribeAddress={currBribeAddress}
           setCurrBribeAddress={setCurrBribeAddress}
-          continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.ADMIN_WITHDRAW && <AdminWithdrawStage pool={pool} lockedAmount={lockedAmount} setLockedAmount={setLockedAmount} currency={currency} continueToNextStage={continueToNextStage} />}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stage === LockStage.DELETE && <DeletePitchStage continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.VOTE_UP && <VoteUpStage pool={pool} votes={votes} setVotes={setVotes} tokenId={tokenId} setTokenId={setTokenId} currency={currency} continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.VOTE_DOWN && <VoteDownStage pool={pool} votes={votes} setVotes={setVotes} tokenId={tokenId} setTokenId={setTokenId} currency={currency} continueToNextStage={continueToNextStage} />} */}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

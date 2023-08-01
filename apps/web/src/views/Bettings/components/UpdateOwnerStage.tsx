@@ -26,14 +26,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token ID')}
+          {t('New Account Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="tokenId"
-          value={state.tokenId}
-          placeholder={t('input your token id')}
+          name="owner"
+          value={state.owner}
+          placeholder={t('input new owner address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -43,7 +43,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the owner address of the ramp. Please read the documentation for more information.')}
+            {t(
+              'The will update the owner address of the contract. Please read the documentation for more information.',
+            )}
           </Text>
         </Box>
       </Grid>
@@ -51,6 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button
           mb="8px"
+          variant="subtle"
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >

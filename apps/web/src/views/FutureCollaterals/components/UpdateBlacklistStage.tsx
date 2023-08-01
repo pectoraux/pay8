@@ -27,21 +27,21 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Account Address')}
+          {t('Profile ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="owner"
-          value={state.owner}
-          placeholder={t('input user address')}
+          name="profileId"
+          value={state.profileId}
+          placeholder={t('input user profile id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Blacklist ?')}
+            {t('Add ?')}
           </Text>
           <ButtonMenu
             scale="xs"
@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add or remove the specified address from your blacklist. Please read the documentation for more information on this parameter',
+              'The will add the specified profile or remove the specified address from the blacklist. Please read the documentation for more information',
             )}
           </Text>
         </Box>
@@ -69,7 +69,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update')}
+          {t('Update Blacklist')}
         </Button>
       </Flex>
     </>

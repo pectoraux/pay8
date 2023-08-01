@@ -6,7 +6,6 @@ import { GreyedOutContainer, Divider } from './styles'
 interface SetPriceStageProps {
   state: any
   handleChange?: (any) => void
-  handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
@@ -54,7 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Update Bounty')}
+          {t('Update Bounty ID')}
         </Button>
       </Flex>
     </>

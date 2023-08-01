@@ -13,38 +13,22 @@ import { requiresApproval } from 'utils/requiresApproval'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
-import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
-import PartnerStage from './PartnerStage'
-import BuyRampStage from './BuyRampStage'
-import UpdateDevStage from './UpdateDevStage'
-import BuyAccountStage from './BuyAccountStage'
-import UpdateAdminStage from './UpdateAdminStage'
-import CreateClaimStage from './CreateClaimStage'
-import UpdateBadgeStage from './UpdateBadgeStage'
-import ClaimRevenueStage from './ClaimRevenueStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
-import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
-import UpdateParametersStage from './UpdateParametersStage'
-import DeleteStage from './DeleteStage'
-import InitRampStage from './InitRampStage'
-import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
-import UpdateOwnerStage from './UpdateOwnerStage'
-import UpdateTokenStage from './UpdateTokenStage'
-import UnlockBountyStage from './UnlockBountyStage'
-import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
-import UpdateBountyStage from './UpdateBountyStage'
-import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import NodeRSA from 'encrypt-rsa'
 import { convertTimeToSeconds } from 'utils/timeHelper'
+
+import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { LockStage } from './types'
+import UpdateParametersStage from './UpdateParametersStage'
+import MintStage from './MintStage'
+import BurnStage from './BurnStage'
+import NotifyRewardStage from './NotifyRewardStage'
+import SellCollateralStage from './SellCollateralStage'
+import EraseDebtStage from './EraseDebtStage'
+import UpdateAdminStage from './UpdateAdminStage'
+import UpdateEstimationTableStage from './UpdateEstimationTableStage'
+import AddToChannelStage from './AddToChannelStage'
+import UpdateBlacklistStage from './UpdateBlacklistStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -456,81 +440,68 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
           </Button>
         </Flex>
       )}
-      {/* {stage === LockStage.UPDATE_ESTIMATION_TABLE && 
-          <UpdateEstimationTableStage
-            state={state}
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.ADD_TO_CHANNEL && 
-          <AddToChannelStage
-            state={state}
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_BLACKLIST && 
-          <UpdateBlacklistStage
-            state={state}
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_PARAMETERS && 
-          <UpdateParametersStage
-            state={state}
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.SELL_COLLATERAL && 
-          <SellCollateralStage
-            state={state}
-            handleChange={handleChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.WITHDRAW_TREASURY && 
-          <AdminWithdrawStage
-            state={state}
-            handleChange={handleChange}
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-      {stage === LockStage.MINT && 
-        <MintStage 
-          state={state} 
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.NOTIFY_REWARD && 
-        <NotifyRewardStage 
-          state={state} 
+      {stage === LockStage.UPDATE_ESTIMATION_TABLE && (
+        <UpdateEstimationTableStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.ADD_TO_CHANNEL && (
+        <AddToChannelStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_BLACKLIST && (
+        <UpdateBlacklistStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_PARAMETERS && (
+        <UpdateParametersStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.SELL_COLLATERAL && (
+        <SellCollateralStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.MINT && (
+        <MintStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.NOTIFY_REWARD && (
+        <NotifyRewardStage
+          state={state}
           account={account}
           currency={currency}
-          handleChange={handleChange} 
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BURN && 
-        <BurnStage 
-          state={state} 
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.ERASE_DEBT && 
-        <EraseDebtStage 
-          state={state} 
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_ADMIN && 
-        <UpdateAdminStage 
-          state={state} 
-          handleChange={handleChange} 
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BURN && (
+        <BurnStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.ERASE_DEBT && (
+        <EraseDebtStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_ADMIN && (
+        <UpdateAdminStage
+          state={state}
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />} */}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

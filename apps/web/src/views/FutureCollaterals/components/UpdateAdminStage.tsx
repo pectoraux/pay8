@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Input, Text, Button, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -27,14 +27,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Account Address')}
+          {t('New Admin Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="owner"
           value={state.owner}
-          placeholder={t('input user address')}
+          placeholder={t('input new admin address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -61,15 +61,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified address or remove as the contract admin. Please read the documentation for more information on this parameter',
+              'The will either add or remove the specified account as an admin for the collaterals. Please read the documentation for more information.',
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update Admin')}
+        <Button
+          mb="8px"
+          onClick={continueToNextStage}
+          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
+        >
+          {t('Update')}
         </Button>
       </Flex>
     </>

@@ -34,14 +34,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="owner"
           value={state.owner}
-          placeholder={t('input user address')}
+          placeholder={t('input account address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Add ?')}
+            {t('Add')}
           </Text>
           <ButtonMenu
             scale="xs"
@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified address or remove as the contract admin. Please read the documentation for more information on this parameter',
+              'The will add or remove the specified account as contract admin. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

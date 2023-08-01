@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, ButtonMenuItem, ButtonMenu, Input, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -25,57 +26,141 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   return (
     <>
       <GreyedOutContainer>
-        <Flex alignSelf="center" justifyContent="center">
-          <Text fontSize="12px" mr="10px" color="secondary" textTransform="uppercase" bold>
-            {t('Account State')}
-          </Text>
-          <ButtonMenu
-            scale="xs"
-            variant="subtle"
-            activeIndex={state.close ? 1 : 0}
-            onItemClick={handleRawValueChange('close')}
-          >
-            <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
-            <ButtonMenuItem>{t('Close')}</ButtonMenuItem>
-          </ButtonMenu>
-        </Flex>
-      </GreyedOutContainer>
-      <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Sale Price')}
+          {t('Account Owner')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="salePrice"
-          value={state.salePrice}
-          placeholder={t('input a price if you want to sell account')}
+          name="owner"
+          value={state.owner}
+          placeholder={t('input account owner address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Fee Cap')}
+          {t('Identity Token Id')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="cap"
-          value={state.cap}
-          placeholder={t('input fee cap')}
+          name="identityTokenId"
+          value={state.identityTokenId}
+          placeholder={t('input an identity token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Maximum Number of Partners')}
+          {t('Amount Receivable')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="maxPartners"
-          value={state.maxPartners}
-          placeholder={t('input max number of partners')}
+          name="amountReceivable"
+          value={state.amountReceivable}
+          placeholder={t('input an amount receivable')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Amount Payable')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="amountPayable"
+          value={state.amountPayable}
+          placeholder={t('input an amount payable')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Period Receivable')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="periodReceivable"
+          value={state.periodReceivable}
+          placeholder={t('input period receivable')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Period Payable')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="periodPayable"
+          value={state.periodPayable}
+          placeholder={t('input period payable')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Start Receivable')}
+        </Text>
+        <DatePicker
+          onChange={handleRawValueChange('startReceivable')}
+          selected={state.startReceivable}
+          placeholderText="YYYY/MM/DD"
+        />
+        <DatePickerPortal />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Start Payable')}
+        </Text>
+        <DatePicker
+          onChange={handleRawValueChange('startPayable')}
+          selected={state.startPayable}
+          placeholderText="YYYY/MM/DD"
+        />
+        <DatePickerPortal />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Option ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="optionId"
+          value={state.optionId}
+          placeholder={t('input an option id for the protocol')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Description')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="description"
+          value={state.description}
+          placeholder={t('input rating description')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Link to Attached Media')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="media"
+          value={state.media}
+          placeholder={t('input link to attached media')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -86,7 +171,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update parameters of the account. Please read the documentation for more information on each parameter',
+              'The will create a new account or update parameters of an old one. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>
@@ -98,7 +183,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Update Account')}
+          {t('Create or Update Account')}
         </Button>
       </Flex>
     </>

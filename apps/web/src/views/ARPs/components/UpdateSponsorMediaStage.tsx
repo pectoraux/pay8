@@ -1,29 +1,18 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
-  nftToSell?: any
-  variant?: 'set' | 'adjust'
-  currency?: any
-  currentPrice?: string
-  lowestPrice?: number
   state: any
-  account?: any
   handleChange?: (any) => void
-  handleChoiceChange?: (any) => void
-  handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -35,6 +24,19 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
 
   return (
     <>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Protocol ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="protocolId"
+          value={state.protocolId}
+          placeholder={t('input protocol id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Tag Name')}

@@ -6,7 +6,6 @@ import { GreyedOutContainer, Divider } from './styles'
 interface SetPriceStageProps {
   state: any
   handleChange?: (any) => void
-  handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
@@ -26,14 +25,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token ID')}
+          {t('New User Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="tokenId"
-          value={state.tokenId}
-          placeholder={t('input your token id')}
+          name="owner"
+          value={state.owner}
+          placeholder={t('input new user address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -43,7 +42,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the owner address of the ramp. Please read the documentation for more information.')}
+            {t(
+              'The will update the owner address of the specified contract. Please read the documentation for more information.',
+            )}
           </Text>
         </Box>
       </Grid>

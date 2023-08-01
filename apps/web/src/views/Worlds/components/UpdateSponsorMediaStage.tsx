@@ -5,6 +5,10 @@ import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import BribeField from './LockedPool/Common/BribeField'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -35,6 +39,19 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
 
   return (
     <>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('World Profile ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="protocolId"
+          value={state.protocolId}
+          placeholder={t('input world profile id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Tag Name')}

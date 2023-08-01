@@ -1,43 +1,20 @@
-import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
+import { useEffect, useRef } from 'react'
+import { Flex, Grid, Box, Text, Input, Button, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import _toNumber from 'lodash/toNumber'
-
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import BigNumber from 'bignumber.js'
-import BribeField from './LockedPool/Common/BribeField'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
-  nftToSell?: any
-  variant?: 'set' | 'adjust'
-  currency?: any
-  currentPrice?: string
-  lowestPrice?: number
   state: any
-  account?: any
   handleChange?: (any) => void
-  handleChoiceChange?: (any) => void
   handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const AdminWithdrawStage: React.FC<any> = ({
-  state,
-  currency,
-  pendingRevenue,
-  handleRawValueChange,
-  continueToNextStage,
-}) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const [lockedAmount, setLockedAmount] = useState('')
-  const stakingTokenBalance = pendingRevenue ? new BigNumber(pendingRevenue) : BIG_ZERO
-  const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -48,16 +25,29 @@ const AdminWithdrawStage: React.FC<any> = ({
   return (
     <>
       <GreyedOutContainer>
-        <BribeField
-          add="withdraw"
-          stakingAddress={currency?.address}
-          stakingSymbol={currency?.symbol}
-          stakingDecimals={18}
-          lockedAmount={state.amountPayable}
-          usedValueStaked={usdValueStaked}
-          stakingMax={stakingTokenBalance}
-          setLockedAmount={handleRawValueChange('amountPayable')}
-          stakingTokenBalance={stakingTokenBalance}
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="tokenId"
+          value={state.tokenId}
+          placeholder={t('input token id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Identity Token ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="identityTokenId"
+          value={state.identityTokenId}
+          placeholder={t('input identity token id')}
+          onChange={handleChange}
         />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
@@ -66,22 +56,20 @@ const AdminWithdrawStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will withdraw funds from the ramp. Please read the documentation for more details.')}
+            {t(
+              'The will claim pnding revenue for your gaming ticket. Please read the documentation for more information on this parameter',
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
-          {t('Withdraw from Ramp')}
+        <Button mb="8px" variant="success" onClick={continueToNextStage}>
+          {t('Claim')}
         </Button>
       </Flex>
     </>
   )
 }
 
-export default AdminWithdrawStage
+export default SetPriceStage

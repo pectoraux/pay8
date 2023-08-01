@@ -1,4 +1,3 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
@@ -7,9 +6,6 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import {
   useERC20,
-  useRampContract,
-  useRampHelper,
-  useRampAds,
   useGameContract,
   useGameFactory,
   useGameMinter,
@@ -17,52 +13,48 @@ import {
   useGameHelper2,
 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useRouter } from 'next/router'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { useAppDispatch } from 'state'
-import { fetchRampsAsync } from 'state/ramps'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
-import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
-import PartnerStage from './PartnerStage'
-import BuyRampStage from './BuyRampStage'
-import UpdateDevStage from './UpdateDevStage'
-import BuyAccountStage from './BuyAccountStage'
-import UpdateAdminStage from './UpdateAdminStage'
-import CreateClaimStage from './CreateClaimStage'
-import UpdateBadgeStage from './UpdateBadgeStage'
-import ClaimRevenueStage from './ClaimRevenueStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
-import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
-import UpdateParametersStage from './UpdateParametersStage'
-import DeleteStage from './DeleteStage'
-import InitRampStage from './InitRampStage'
-import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
-import UpdateOwnerStage from './UpdateOwnerStage'
-import UpdateTokenStage from './UpdateTokenStage'
-import UnlockBountyStage from './UnlockBountyStage'
-import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
-import UpdateBountyStage from './UpdateBountyStage'
-import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useGetGame } from 'state/games/hooks'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { differenceInSeconds } from 'date-fns'
+
+import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { LockStage } from './types'
+import UpdateTokenIdStage from './UpdateTokenIdStage'
+import UpdateGameStage from './UpdateGameStage'
+import AttachKillDetachStage from './AttachKillDetachStage'
+import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
+import CreateGamingStage from './CreateGamingStage'
+import ProcessScoreStage from './ProcessScoreStage'
+import BurnStage from './BurnStage'
+import UpdateOwnerStage from './UpdateOwnerStage'
+import UpdateObjectStage from './UpdateObjectStage'
+import UpdateBurnForCreditStage from './UpdateBurnForCreditStage'
+import UpdatePricePerMinuteStage from './UpdatePricePerMinuteStage'
+import UpdateDestinationStage from './UpdateDestinationStage'
+import UpdateMaxUseStage from './UpdateMaxUseStage'
+import SponsorTagStage from './SponsorTagStage'
+import UpdateScoreStage from './UpdateScoreStage'
+import MintObjectStage from './MintObjectStage'
+import BurnObjectStage from './BurnObjectStage'
+import AdminWithdrawStage from './AdminWithdrawStage'
+import DeleteStage from './DeleteStage'
+import BuyMinutesStage from './BuyMinutesStage'
+import BurnTokenForCreditStage from './BurnTokenForCreditStage'
+import UpdateUriStage from './UpdateUriStage'
+import UpdateTaskStage from './UpdateTaskStage'
+import BlacklistAuditorStage from './BlacklistAuditorStage'
+import BlacklistTicketStage from './BlacklistTicketStage'
+import UpdateExcludedContentStage from './UpdateExcludedContentStage'
+import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -818,194 +810,220 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           </Button>
         </Flex>
       )}
-      {/* {stage === LockStage.CREATE_GAMING_NFT && 
-      <CreateGamingStage 
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.BUY_MINUTES && 
-      <BuyMinutesStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.BURN_TOKEN_FOR_CREDIT && 
+      {stage === LockStage.CREATE_GAMING_NFT && (
+        <CreateGamingStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BUY_MINUTES && (
+        <BuyMinutesStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BURN_TOKEN_FOR_CREDIT && (
         <BurnTokenForCreditStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
-        />}
-      {stage === LockStage.PROCESS_SCORE && 
-      <ProcessScoreStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_SCORE && 
-      <UpdateScoreStage 
-        state={state} 
-        handleChange={handleChange} 
-        handleRawValueChange={handleRawValueChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.WITHDRAW && 
-      <AdminWithdrawStage 
-        state={state} 
-        account={pool.id}
-        currency={currency}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-        handleRawValueChange={handleRawValueChange}
-      />}
-        {stage === LockStage.MINT_OBJECT && 
-        <MintObjectStage 
+        />
+      )}
+      {stage === LockStage.PROCESS_SCORE && (
+        <ProcessScoreStage
           state={state}
-          handleChange={handleChange} 
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BURN_OBJECT && 
-          <BurnObjectStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_DESTINATION && 
-          <UpdateDestinationStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.SPONSOR_TAG && 
-          <SponsorTagStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_SPONSOR_MEDIA && 
-          <UpdateSponsorMediaStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.ATTACH_KILL_DETACH_TOKEN && 
-          <AttachKillDetachStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BURN_TOKEN && 
-          <BurnStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_GAME && 
-          <UpdateGameStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_TOKEN_ID && 
-          <UpdateTokenIdStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_OWNER && 
-          <UpdateOwnerStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_OBJECT && 
-          <UpdateObjectStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT && 
-          <UpdateBurnForCreditStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_MAX_USE && 
-          <UpdateMaxUseStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_URI_GENERATOR && 
-          <UpdateUriStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_TASK_CONTRACT && 
-          <UpdateTaskStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BLACKLIST_AUDITOR && 
-          <BlacklistAuditorStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BLACKLIST_GAME_NFT_TOKEN && 
-          <BlacklistTicketStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_EXCLUDED_CONTENT && 
-          <UpdateExcludedContentStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_TAG_REGISTRATION && 
-          <UpdateTagRegistrationStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_PRICE_PER_MINUTE && 
-          <UpdatePricePerMinuteStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />} */}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_SCORE && (
+        <UpdateScoreStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.WITHDRAW && (
+        <AdminWithdrawStage
+          state={state}
+          account={pool.id}
+          currency={currency}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
+      )}
+      {stage === LockStage.MINT_OBJECT && (
+        <MintObjectStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BURN_OBJECT && (
+        <BurnObjectStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_DESTINATION && (
+        <UpdateDestinationStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.SPONSOR_TAG && (
+        <SponsorTagStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_SPONSOR_MEDIA && (
+        <UpdateSponsorMediaStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.ATTACH_KILL_DETACH_TOKEN && (
+        <AttachKillDetachStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BURN_TOKEN && (
+        <BurnStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_GAME && (
+        <UpdateGameStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_TOKEN_ID && (
+        <UpdateTokenIdStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_OWNER && (
+        <UpdateOwnerStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_OBJECT && (
+        <UpdateObjectStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT && (
+        <UpdateBurnForCreditStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_MAX_USE && (
+        <UpdateMaxUseStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_URI_GENERATOR && (
+        <UpdateUriStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_TASK_CONTRACT && (
+        <UpdateTaskStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BLACKLIST_AUDITOR && (
+        <BlacklistAuditorStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BLACKLIST_GAME_NFT_TOKEN && (
+        <BlacklistTicketStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_EXCLUDED_CONTENT && (
+        <UpdateExcludedContentStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_TAG_REGISTRATION && (
+        <UpdateTagRegistrationStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_PRICE_PER_MINUTE && (
+        <UpdatePricePerMinuteStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stage === LockStage.DELETE_GAME && (
         <DeleteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}

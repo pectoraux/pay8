@@ -56,7 +56,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Update Token')}
+          {t('Update Token ID')}
         </Button>
       </Flex>
     </>

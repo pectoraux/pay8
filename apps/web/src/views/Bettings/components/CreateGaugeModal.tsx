@@ -14,39 +14,37 @@ import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/sh
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { useRouter } from 'next/router'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
-import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
-import PartnerStage from './PartnerStage'
-import BuyRampStage from './BuyRampStage'
-import UpdateDevStage from './UpdateDevStage'
-import BuyAccountStage from './BuyAccountStage'
-import UpdateAdminStage from './UpdateAdminStage'
-import CreateClaimStage from './CreateClaimStage'
-import UpdateBadgeStage from './UpdateBadgeStage'
-import ClaimRevenueStage from './ClaimRevenueStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
-import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
-import UpdateParametersStage from './UpdateParametersStage'
-import DeleteStage from './DeleteStage'
-import InitRampStage from './InitRampStage'
-import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
-import UpdateOwnerStage from './UpdateOwnerStage'
-import UpdateTokenStage from './UpdateTokenStage'
-import UnlockBountyStage from './UnlockBountyStage'
-import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
-import UpdateBountyStage from './UpdateBountyStage'
-import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { combineDateAndTime } from 'views/ReferralVoting/CreateProposal/helpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+
+import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { LockStage } from './types'
+import UpdateParametersStage from './UpdateParametersStage'
+import InjectFundsStage from './InjectFundsStage'
+import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
+import UpdateAdminStage from './UpdateAdminStage'
+import UpdateUriStage from './UpdateUriStage'
+import UpdatePartnerEventStage from './UpdatePartnerEventStage'
+import UpdateMembershipStage from './UpdateMembershipStage'
+import BuyTicketStage from './BuyTicketStage'
+import BurnStage from './BurnStage'
+import UpdateOwnerStage from './UpdateOwnerStage'
+import UpdateBurnForCreditStage from './UpdateBurnForCreditStage'
+import BurnForCreditStage from './BurnForCreditStage'
+import RegisterTagStage from './RegisterTagStage'
+import UpdatePricePerMinuteStage from './UpdatePricePerMinuteStage'
+import UpdateExcludedContentStage from './UpdateExcludedContentStage'
+import UpdateProtocolStage from './UpdateProtocolStage'
+import SponsorTagStage from './SponsorTagStage'
+import AdminWithdrawStage from './AdminWithdrawStage'
+import WithdrawStage from './WithdrawStage'
+import DeleteStage from './DeleteStage'
+import DeleteBettingEventStage from './DeleteBettingEventStage'
+import SetBettingResultStage from './SetBettingResultStage'
+import ClaimTicketStage from './ClaimTicketStage'
+import CloseBettingStage from './CloseBettingStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -761,158 +759,152 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
         </Flex>
       )}
-      {/* {stage === LockStage.UPDATE_PARAMETERS && 
-      <UpdateParametersStage 
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.INJECT_FUNDS && 
-      <InjectFundsStage 
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_URI_GENERATOR && 
-      <UpdateUriStage
-        state={state} 
-        handleChange={handleChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_MEMBERSHIP_PARAMETERS && 
-      <UpdateMembershipStage
-        state={state} 
-        handleChange={handleChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_PARTNER_EVENT && 
-      <UpdatePartnerEventStage
-        state={state} 
-        handleChange={handleChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.BUY_TICKETS && 
-      <BuyTicketStage
-        state={state} 
-        handleChange={handleChange}
-        handleRawValueChange={handleRawValueChange}
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.UPDATE_PROTOCOL && 
-      <UpdateProtocolStage 
-        state={state} 
-        handleChange={handleChange} 
-        handleRawValueChange={handleRawValueChange} 
-        continueToNextStage={continueToNextStage} 
-      />}
-      {stage === LockStage.WITHDRAW && 
-      <AdminWithdrawStage 
-        state={state} 
-        account={pool.id}
-        currency={currency}
-        handleChange={handleChange} 
-        continueToNextStage={continueToNextStage} 
-        handleRawValueChange={handleRawValueChange}
-      />}
-        {stage === LockStage.CLAIM_TICKETS && 
-        <ClaimTicketStage 
+      {stage === LockStage.UPDATE_PARAMETERS && (
+        <UpdateParametersStage
           state={state}
-          handleChange={handleChange} 
-          continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.SET_BETTING_RESULTS && 
-          <SetBettingResultStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.SPONSOR_TAG && 
-          <SponsorTagStage
-            state={state}
-            account={account}
-            currency={currency}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BURN_FOR_CREDIT && 
-          <BurnForCreditStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.USER_WITHDRAW && 
-          <WithdrawStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_OWNER && 
-          <UpdateOwnerStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.BURN && 
-          <BurnStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_PRICE_PER_MINUTE && 
-          <UpdatePricePerMinuteStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_EXCLUDED_CONTENT && 
-          <UpdateExcludedContentStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_SPONSOR_MEDIA && 
-          <UpdateSponsorMediaStage
-            state={state}
-            handleChange={handleChange} 
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_ADMIN && 
-          <UpdateAdminStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT && 
-          <UpdateBurnForCreditStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.CLOSE_BETTING && 
-          <CloseBettingStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
-        {stage === LockStage.REGISTER_TAG && 
-          <RegisterTagStage
-            state={state}
-            handleChange={handleChange} 
-            handleRawValueChange={handleRawValueChange}
-            continueToNextStage={continueToNextStage} 
-        />}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.INJECT_FUNDS && (
+        <InjectFundsStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_URI_GENERATOR && (
+        <UpdateUriStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_MEMBERSHIP_PARAMETERS && (
+        <UpdateMembershipStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_PARTNER_EVENT && (
+        <UpdatePartnerEventStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.BUY_TICKETS && (
+        <BuyTicketStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_PROTOCOL && (
+        <UpdateProtocolStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.WITHDRAW && (
+        <AdminWithdrawStage
+          state={state}
+          account={pool.id}
+          currency={currency}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
+      )}
+      {stage === LockStage.CLAIM_TICKETS && (
+        <ClaimTicketStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.SET_BETTING_RESULTS && (
+        <SetBettingResultStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.SPONSOR_TAG && (
+        <SponsorTagStage
+          state={state}
+          account={account}
+          currency={currency}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.BURN_FOR_CREDIT && (
+        <BurnForCreditStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.USER_WITHDRAW && (
+        <WithdrawStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_OWNER && (
+        <UpdateOwnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.BURN && (
+        <BurnStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_PRICE_PER_MINUTE && (
+        <UpdatePricePerMinuteStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_EXCLUDED_CONTENT && (
+        <UpdateExcludedContentStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_SPONSOR_MEDIA && (
+        <UpdateSponsorMediaStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_ADMIN && (
+        <UpdateAdminStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT && (
+        <UpdateBurnForCreditStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.CLOSE_BETTING && (
+        <CloseBettingStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.REGISTER_TAG && (
+        <RegisterTagStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.DELETE_PROTOCOL && <DeleteBettingEventStage continueToNextStage={continueToNextStage} />} */}
+      {stage === LockStage.DELETE_PROTOCOL && <DeleteBettingEventStage continueToNextStage={continueToNextStage} />}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"
