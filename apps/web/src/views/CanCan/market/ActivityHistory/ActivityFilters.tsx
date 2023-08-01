@@ -1,11 +1,12 @@
-import { Flex, Text } from '@pancakeswap/uikit'
+import { Flex, Text, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import isEmpty from 'lodash/isEmpty'
-import { MarketEvent } from 'state/nftMarket/types'
+import { MarketEvent } from 'state/cancan/types'
 import styled from 'styled-components'
 import { ListCollectionFilter } from '../components/Filters/ListCollectionFilter'
 import { ActivityFilter } from './ActivityFilter'
 import ClearAllButton from './ClearAllButton'
+import SponsorTagModal from './SponsorTagModal'
 
 export const Container = styled(Flex)`
   gap: 16px;
@@ -19,9 +20,14 @@ export const Container = styled(Flex)`
 const ScrollableFlexContainer = styled(Flex)`
   align-items: center;
   flex: 1;
-  flex-wrap: wrap;
-  overflow-x: revert;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-wrap: wrap;
+    overflow-x: revert;
+  }
 `
 
 interface FiltersProps {
@@ -29,29 +35,47 @@ interface FiltersProps {
   nftActivityFilters: { typeFilters: MarketEvent[]; collectionFilters: string[] }
 }
 
-const ActivityFilters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, nftActivityFilters }) => {
+const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }) => {
   const { t } = useTranslation()
+  const [sponsorTag] = useModal(
+    <SponsorTagModal merchantId={collection?.id} tag={nftActivityFilters.collectionFilters[0]} />,
+  )
 
+  console.log('ActivityFilters============>', collection, nftActivityFilters, nftActivityFilters.collectionFilters[0])
   return (
     <Container justifyContent="space-between" flexDirection={['column', 'column', 'row']}>
       <Text textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
         {t('Filter by')}
       </Text>
       <ScrollableFlexContainer>
-        {address === '' && <ListCollectionFilter nftActivityFilters={nftActivityFilters} />}
-        {[MarketEvent.NEW, MarketEvent.CANCEL, MarketEvent.MODIFY, MarketEvent.SELL].map((eventType) => {
+        <ListCollectionFilter
+          address={collection?.id || ''}
+          products={collection?.products?.split(',')}
+          nftActivityFilters={nftActivityFilters}
+        />
+        {[MarketEvent.SOLD, MarketEvent.LISTED, MarketEvent.MODIFIED, MarketEvent.UNLISTED].map((eventType) => {
           return (
             <ActivityFilter
               key={eventType}
               eventType={eventType}
-              collectionAddress={address}
+              collectionAddress={collection?.id || ''}
               nftActivityFilters={nftActivityFilters}
             />
           )
         })}
       </ScrollableFlexContainer>
       {!isEmpty(nftActivityFilters.typeFilters) || !isEmpty(nftActivityFilters.collectionFilters) ? (
-        <ClearAllButton collectionAddress={address} />
+        <>
+          <Button
+            scale="sm"
+            disabled={isEmpty(nftActivityFilters.collectionFilters)}
+            onClick={sponsorTag}
+            {...(isMd && { width: '100%' })}
+          >
+            {t('Sponsor')}
+          </Button>
+          <ClearAllButton collectionAddress={collection?.id || ''} />
+        </>
       ) : null}
     </Container>
   )

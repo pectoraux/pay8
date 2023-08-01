@@ -24,9 +24,7 @@ interface ListCollectionFilterProps {
   nftActivityFilters: { typeFilters: MarketEvent[]; collectionFilters: string[] }
 }
 
-export const ListCollectionFilter: React.FC<React.PropsWithChildren<ListCollectionFilterProps>> = ({
-  nftActivityFilters,
-}) => {
+export const ListCollectionFilter: React.FC<any> = ({ nftActivityFilters }) => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')

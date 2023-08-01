@@ -68,7 +68,7 @@ export function useCallWithGasPrice() {
         ? GetFunctionArgs<TAbi, _FunctionName>['args']
         : never,
     >(
-      contract: { abi: TAbi; account: Account; chain: Chain; address: Address },
+      contract: any,
       methodName: any,
       methodArgs?: Args extends never ? undefined : Args,
       overrides?: Omit<CallParameters, 'chain' | 'to' | 'data'>,

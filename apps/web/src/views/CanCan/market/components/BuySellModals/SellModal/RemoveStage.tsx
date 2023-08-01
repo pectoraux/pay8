@@ -15,7 +15,7 @@ const RemoveStage: React.FC<React.PropsWithChildren<RemoveStageProps>> = ({ cont
           {t('Remove from Market')}
         </Text>
         <Text mt="24px" color="textSubtle">
-          {t('Removing this NFT from the marketplace will return it to your wallet.')}
+          {t('This will delist the item from the marketplace.')}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}
@@ -23,8 +23,8 @@ const RemoveStage: React.FC<React.PropsWithChildren<RemoveStageProps>> = ({ cont
       </Box>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage}>
-          {t('Confirm')}
+        <Button mb="8px" variant="danger" onClick={continueToNextStage}>
+          {t('Remove')}
         </Button>
       </Flex>
     </>

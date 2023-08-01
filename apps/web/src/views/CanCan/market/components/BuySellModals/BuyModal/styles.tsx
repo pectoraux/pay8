@@ -2,7 +2,11 @@ import styled from 'styled-components'
 import { Modal, Grid, Flex, Text, BinanceIcon, Skeleton } from '@pancakeswap/uikit'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
+import { CurrencyLogo } from 'components/Logo'
+import NumbersIcon from '@mui/icons-material/Numbers'
+
 import { BuyingStage } from './types'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 export const StyledModal = styled(Modal)<{ stage: BuyingStage }>`
   & > div:last-child {
@@ -22,6 +26,26 @@ export const StyledModal = styled(Modal)<{ stage: BuyingStage }>`
   }
 `
 
+export const stagesWithBackButton = [
+  BuyingStage.CONFIRM_REVIEW,
+  BuyingStage.CONFIRM_PAYWALL_REVIEW,
+  BuyingStage.PAYMENT_CREDIT,
+  BuyingStage.CONFIRM_PAYMENT_CREDIT,
+  BuyingStage.CASHBACK,
+  BuyingStage.CONFIRM_CASHBACK,
+  BuyingStage.STAKE,
+  BuyingStage.CONFIRM_STAKE,
+]
+
+export const stagesWithApproveButton = [
+  BuyingStage.CONFIRM_STAKE,
+  BuyingStage.CONFIRM_REVIEW,
+  BuyingStage.CONFIRM_PAYWALL_REVIEW,
+  BuyingStage.CONFIRM_PAYMENT_CREDIT,
+]
+
+export const stagesWithConfirmButton = [BuyingStage.CONFIRM_CASHBACK]
+
 export const BorderedBox = styled(Grid)`
   margin: 16px 0;
   padding: 16px;
@@ -38,11 +62,7 @@ interface BnbAmountCellProps {
   isInsufficient?: boolean
 }
 
-export const BnbAmountCell: React.FC<React.PropsWithChildren<BnbAmountCellProps>> = ({
-  bnbAmount,
-  isLoading,
-  isInsufficient,
-}) => {
+export const BnbAmountCell: React.FC<any> = ({ bnbAmount, isLoading, isInsufficient, currency, secondaryCurrency }) => {
   const bnbBusdPrice = useBNBBusdPrice()
   if (isLoading) {
     return (
@@ -56,18 +76,79 @@ export const BnbAmountCell: React.FC<React.PropsWithChildren<BnbAmountCellProps>
   return (
     <Flex justifySelf="flex-end" flexDirection="column">
       <Flex justifyContent="flex-end">
-        <BinanceIcon height={16} width={16} mr="4px" />
+        <CurrencyLogo currency={currency} size="24px" style={{ marginRight: '8px' }} />
         <Text bold color={isInsufficient ? 'failure' : 'text'}>{`${bnbAmount.toLocaleString(undefined, {
           minimumFractionDigits: 3,
-          maximumFractionDigits: 5,
+          maximumFractionDigits: currency?.decimals,
         })}`}</Text>
       </Flex>
-      <Text small color="textSubtle" textAlign="right">
-        {`($${usdAmount.toLocaleString(undefined, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })})`}
-      </Text>
+      {secondaryCurrency && (
+        <Text small color="textSubtle" textAlign="right">
+          {`(${usdAmount.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: secondaryCurrency?.decimals,
+          })} ${secondaryCurrency?.symbol})`}
+        </Text>
+      )}
+    </Flex>
+  )
+}
+
+export const NumberCell: React.FC<any> = ({
+  bnbAmount,
+  currency,
+  currentCurrency,
+  secondaryCurrency,
+  mainToSecondaryCurrencyFactor,
+  price,
+  isLoading,
+  isInsufficient,
+}) => {
+  const bnbBusdPrice = useBNBBusdPrice()
+  price = getBalanceNumber(price)
+  if (isLoading) {
+    return (
+      <Flex flexDirection="column" justifySelf="flex-end">
+        <Skeleton width="86px" height="20px" mb="6px" />
+        <Skeleton width="86px" height="20px" />
+      </Flex>
+    )
+  }
+  const usdAmount =
+    currency === '#' ? parseFloat(price) : multiplyPriceByAmount(mainToSecondaryCurrencyFactor, bnbAmount)
+  return (
+    <Flex justifySelf="flex-end" flexDirection="column">
+      <Flex justifyContent="flex-end">
+        {currency === '#' ? (
+          <NumbersIcon />
+        ) : (
+          <CurrencyLogo currency={currentCurrency} size="24px" style={{ marginRight: '8px' }} />
+        )}{' '}
+        <Text bold color={isInsufficient ? 'failure' : 'text'}>{`${
+          currency === '#' && Number.isInteger(bnbAmount)
+            ? bnbAmount
+            : bnbAmount.toLocaleString(undefined, {
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 5,
+              })
+        }`}</Text>
+      </Flex>
+      {currency === '#' && usdAmount > 0 && (
+        <Text small color="textSubtle" textAlign="right">
+          {`(${usdAmount.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })} ${currentCurrency?.symbol})`}
+        </Text>
+      )}
+      {currency !== '#' && usdAmount > 0 && (
+        <Text small color="textSubtle" textAlign="right">
+          {`(${usdAmount.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })} ${secondaryCurrency?.symbol})`}
+        </Text>
+      )}
     </Flex>
   )
 }

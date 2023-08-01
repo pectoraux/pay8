@@ -13,7 +13,7 @@ const StyledFlex = styled(Flex)`
   }
 `
 
-const ProfileCell: React.FC<React.PropsWithChildren<{ accountAddress: string }>> = ({ accountAddress }) => {
+const ProfileCell: React.FC<any> = ({ accountAddress }) => {
   const { profile, isFetching } = useProfileForAddress(accountAddress)
   const { domainName } = useDomainNameForAddress(accountAddress)
   const profileName = profile?.username || '-'

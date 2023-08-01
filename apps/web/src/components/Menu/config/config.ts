@@ -15,6 +15,7 @@ import {
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
+import { cancanBaseUrl } from 'views/CanCan/market/constants'
 import { getPerpetualUrl } from 'utils/getPerpetualUrl'
 import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
 import { NewIconButton } from 'views/BuyCrypto/components/NewIcon'
@@ -208,7 +209,7 @@ const config: (
     },
     {
       label: t('CanCan'),
-      href: `${nftsBaseUrl}`,
+      href: `${cancanBaseUrl}`,
       icon: NftIcon,
       fillIcon: NftFillIcon,
       // supportChainIds: SUPPORT_ONLY_BSC,
@@ -216,15 +217,15 @@ const config: (
       items: [
         {
           label: t('Overview'),
-          href: `${nftsBaseUrl}`,
+          href: `${cancanBaseUrl}`,
         },
         {
           label: t('Collections'),
-          href: `${nftsBaseUrl}/collections`,
+          href: `${cancanBaseUrl}/collections`,
         },
         {
           label: t('Activity'),
-          href: `${nftsBaseUrl}/activity`,
+          href: `${cancanBaseUrl}/activity`,
         },
       ],
     },

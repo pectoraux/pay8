@@ -1,4 +1,4 @@
-import { Flex, Grid, Text, Button, BinanceIcon, LinkExternal, useModal, ScanLink } from '@pancakeswap/uikit'
+import { Flex, Grid, Text, Button, Link, BinanceIcon, LinkExternal, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
 import { NftToken } from 'state/nftMarket/types'
@@ -8,7 +8,7 @@ import { useProfile } from 'state/profile/hooks'
 import { Divider, HorizontalDivider, RoundedImage } from '../shared/styles'
 
 interface SellStageProps {
-  nftToSell: NftToken
+  nftToSell?: any
   lowestPrice: number
   continueToNextStage: () => void
   continueToTransferStage: () => void
@@ -64,17 +64,24 @@ const SellStage: React.FC<React.PropsWithChildren<SellStageProps>> = ({
           </Text>
         </Flex>
         <Flex justifyContent="space-between" flex="3">
-          <LinkExternal
+          <Button
+            as={Link}
             p="0px"
             height="16px"
+            external
+            variant="text"
             href={`${nftsBaseUrl}/collections/${nftToSell.collectionAddress}/${itemPageUrlId}`}
           >
             {t('View Item')}
-          </LinkExternal>
+          </Button>
           <HorizontalDivider />
-          <ScanLink p="0px" height="16px" href={getBscScanLinkForNft(nftToSell.collectionAddress, nftToSell.tokenId)}>
+          <LinkExternal
+            p="0px"
+            height="16px"
+            href={getBscScanLinkForNft(nftToSell.collectionAddress, nftToSell.tokenId)}
+          >
             BscScan
-          </ScanLink>
+          </LinkExternal>
         </Flex>
       </Flex>
       <Divider />

@@ -40,11 +40,11 @@ export function useNftStorage() {
   )
 
   const addActivityCollectionFilters = useCallback(
-    ({ collection }: { collection: string }) => {
-      if (nftMarketActivityFilters['']) {
-        nftMarketActivityFilters[''].collectionFilters.push(collection)
+    ({ address, collection }) => {
+      if (nftMarketActivityFilters[address]) {
+        nftMarketActivityFilters[address].collectionFilters.push(collection)
       } else {
-        nftMarketActivityFilters[''] = {
+        nftMarketActivityFilters[address] = {
           ...cloneDeep(initialNftActivityFilterState),
           collectionFilters: [collection],
         }
@@ -67,10 +67,10 @@ export function useNftStorage() {
   )
 
   const removeActivityCollectionFilters = useCallback(
-    ({ collection }: { collection: string }) => {
-      if (nftMarketActivityFilters['']) {
-        nftMarketActivityFilters[collection].collectionFilters = nftMarketActivityFilters[
-          collection
+    ({ address, collection }) => {
+      if (nftMarketActivityFilters[address]) {
+        nftMarketActivityFilters[address].collectionFilters = nftMarketActivityFilters[
+          address
         ].collectionFilters.filter((activeFilter) => activeFilter !== collection)
       }
       setNftMarketActivityFilters({ ...nftMarketActivityFilters })
@@ -87,8 +87,10 @@ export function useNftStorage() {
   )
 
   const removeAllActivityCollectionFilters = useCallback(() => {
-    nftMarketActivityFilters[''].collectionFilters = []
-    setNftMarketActivityFilters({ ...nftMarketActivityFilters })
+    if (nftMarketActivityFilters['']) {
+      nftMarketActivityFilters[''].collectionFilters = []
+      setNftMarketActivityFilters({ ...nftMarketActivityFilters })
+    }
   }, [nftMarketActivityFilters, setNftMarketActivityFilters])
 
   const setShowOnlyOnSale = useCallback(
@@ -99,6 +101,21 @@ export function useNftStorage() {
         nftMarketFilters[collection] = {
           ...cloneDeep(initialNftFilterState),
           showOnlyOnSale,
+        }
+      }
+      setNftMarketFilters({ ...nftMarketFilters })
+    },
+    [setNftMarketFilters, nftMarketFilters],
+  )
+
+  const setShowOnlyUsers = useCallback(
+    ({ collection, showOnlyUsers }: { collection: string; showOnlyUsers: boolean }) => {
+      if (nftMarketFilters[collection]) {
+        nftMarketFilters[collection].showOnlyUsers = showOnlyUsers
+      } else {
+        nftMarketFilters[collection] = {
+          ...cloneDeep(initialNftFilterState),
+          showOnlyUsers,
         }
       }
       setNftMarketFilters({ ...nftMarketFilters })
@@ -164,6 +181,7 @@ export function useNftStorage() {
     removeAllActivityFilters,
     removeAllActivityCollectionFilters,
     setShowOnlyOnSale,
+    setShowOnlyUsers,
     setOrdering,
     setTryVideoNftMedia,
     removeAllItemFilters,

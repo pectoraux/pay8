@@ -18,6 +18,9 @@ import {
   CurrencyIcon,
   BinanceChainIcon,
   EthChainIcon,
+  PrizeIcon,
+  AddIcon,
+  ListViewIcon,
 } from "../../../../components/Svg";
 
 const CoreTag: React.FC<React.PropsWithChildren<TagProps>> = (props) => {
@@ -165,6 +168,58 @@ const SoonTag: React.FC<React.PropsWithChildren<TagProps>> = (props) => {
   );
 };
 
+const PendingTag: React.FC<React.PropsWithChildren<TagProps>> = (props) => {
+  const { t } = useTranslation();
+  return (
+    <Tag variant="binance" startIcon={<TimerIcon width="18px" color="success" mr="4px" />} {...props}>
+      {t("Pending")}
+    </Tag>
+  );
+};
+
+const NormalReviewTag: React.FC<{ rating: string }> = ({ rating }) => {
+  return (
+    <Tag variant="success" startIcon={<VoteIcon width="18px" color="success" mr="4px" />}>
+      {Number(rating) >= 5 ? "5" : Math.floor(Math.max(Number(rating), 0))}
+    </Tag>
+  );
+};
+
+const VotingPowerTag: React.FC<any> = ({ votingPower, tagType }) => {
+  return (
+    <Tag
+      variant="binance"
+      style={{
+        backgroundColor: tagType === 4 ? "binance" : tagType === 3 ? "silver" : tagType === 2 ? "#cd7f32" : "black",
+      }}
+      startIcon={<VoteIcon width="18px" color="secondary" mr="4px" />}
+    >
+      {formatNumber(Number(votingPower))}
+    </Tag>
+  );
+};
+
+const VotesTag: React.FC<any> = ({ votingPower, color }) => {
+  return (
+    <Tag
+      variant="binance"
+      style={{ backgroundColor: color }}
+      startIcon={<VoteIcon width="18px" color="secondary" mr="4px" />}
+    >
+      {formatNumber(Number(votingPower))}
+    </Tag>
+  );
+};
+
+const OpenedTag: React.FC<TagProps> = (props) => {
+  const { t } = useTranslation();
+  return (
+    <Tag variant="binance" startIcon={<TimerIcon width="18px" color="success" mr="4px" />} {...props}>
+      {t("Opened")}
+    </Tag>
+  );
+};
+
 const ClosedTag: React.FC<React.PropsWithChildren<TagProps>> = (props) => {
   const { t } = useTranslation();
   return (
@@ -217,6 +272,45 @@ const BscTag: React.FC<React.PropsWithChildren<TagProps>> = (props) => {
   );
 };
 
+const ExpiredTag: React.FC<TagProps> = (props) => {
+  const { t } = useTranslation();
+  return (
+    <Tag variant="textDisabled" startIcon={<BlockIcon width="18px" color="textDisabled" mr="4px" />} {...props}>
+      {t("Expired")}
+    </Tag>
+  );
+};
+
+const ActiveTag: React.FC<TagProps> = (props) => {
+  const { t } = useTranslation();
+  return (
+    <Tag variant="success" startIcon={<VoteIcon width="18px" color="success" mr="4px" />} {...props}>
+      {t("Active")}
+    </Tag>
+  );
+};
+
+const TypeTag: React.FC<any> = ({ entryType, ...props }) => {
+  const { t } = useTranslation();
+  let startIcon = <VerifiedIcon width="18px" color="secondary" mr="4px" />;
+  if (entryType === "education") {
+    startIcon = <PrizeIcon width="18px" color="failure" mr="4px" />;
+  } else if (entryType === "professional") {
+    startIcon = <CommunityIcon width="18px" color="failure" mr="4px" />;
+  } else if (entryType === "healthcare") {
+    startIcon = <AddIcon width="18px" color="secondary" mr="4px" />;
+  } else if (entryType === "properties") {
+    startIcon = <ListViewIcon width="18px" color="secondary" mr="4px" />;
+  } else if (entryType === "others") {
+    startIcon = <AutoRenewIcon width="18px" color="secondary" mr="4px" />;
+  }
+  return (
+    <Tag variant="secondary" outline startIcon={startIcon} {...props}>
+      {t(entryType)}
+    </Tag>
+  );
+};
+
 const Tags = {
   CoreTag,
   FarmAuctionTag,
@@ -237,6 +331,14 @@ const Tags = {
   V3Tag,
   EthTag,
   BscTag,
+  OpenedTag,
+  TypeTag,
+  ExpiredTag,
+  ActiveTag,
+  VotesTag,
+  PendingTag,
+  VotingPowerTag,
+  NormalReviewTag,
 };
 
 export default Tags;

@@ -13,7 +13,7 @@ const countdownAnimation = keyframes`
 
 const CountdownContainer = styled.div`
   position: relative;
-  margin: auto;
+  margin: 8px;
   height: 40px;
   width: 40px;
   text-align: center;

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Box, ButtonMenu, ButtonMenuItem, Flex, Grid, Text } from '@pancakeswap/uikit'
+import { Box, ButtonMenu, ButtonMenuItem, Flex, Grid, Text, CommunityIcon } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
 import isEmpty from 'lodash/isEmpty'
-import { useGetNftFilters, useGetNftShowOnlyOnSale } from 'state/nftMarket/hooks'
-import { NftAttribute } from 'state/nftMarket/types'
+import { useGetNftFilters, useGetNftShowOnlyOnSale, useGetNftShowOnlyUsers } from 'state/cancan/hooks'
+import { NftAttribute } from 'state/cancan/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { Item, ListTraitFilter } from 'views/Nft/market/components/Filters'
-import { useNftStorage } from 'state/nftMarket/storage'
+import { Item, ListTraitFilter } from 'views/CanCan/market/components/Filters'
+import { useNftStorage } from 'state/cancan/storage'
 import groupBy from 'lodash/groupBy'
+import { FcHome } from 'react-icons/fc'
+import { FaHandshake } from 'react-icons/fa'
 import useGetCollectionDistribution from '../../hooks/useGetCollectionDistribution'
 import ClearAllButton from './ClearAllButton'
 import SortSelect from './SortSelect'
@@ -16,6 +18,7 @@ import SortSelect from './SortSelect'
 interface FiltersProps {
   address: string
   attributes: NftAttribute[]
+  setDisplayText: (string) => void
 }
 
 const GridContainer = styled(Grid)`
@@ -75,24 +78,48 @@ const ScrollableFlexContainer = styled(Flex)`
   grid-area: attributeFilters;
   align-items: center;
   flex: 1;
-  flex-wrap: wrap;
-  overflow-x: revert;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-wrap: wrap;
+    overflow-x: revert;
+  }
 `
 
-const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, attributes }) => {
+const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, attributes, setDisplayText }) => {
   const { data } = useGetCollectionDistribution(address)
   const { t } = useTranslation()
+  const showOnlyNftsUsers = useGetNftShowOnlyUsers(address)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(address)
-  const { setShowOnlyOnSale } = useNftStorage()
-  const [activeButtonIndex, setActiveButtonIndex] = useState(showOnlyNftsOnSale ? 1 : 0)
+  const { setShowOnlyOnSale, setShowOnlyUsers } = useNftStorage()
+  const [, setActiveButtonIndex] = useState(showOnlyNftsOnSale ? 1 : 0)
 
   useEffect(() => {
-    setActiveButtonIndex(showOnlyNftsOnSale ? 1 : 0)
-  }, [showOnlyNftsOnSale])
+    if (showOnlyNftsOnSale && !showOnlyNftsUsers) {
+      setActiveButtonIndex(1)
+      setDisplayText(t('Partners'))
+    } else if (!showOnlyNftsOnSale && showOnlyNftsUsers) {
+      setActiveButtonIndex(2)
+      setDisplayText(t('Users'))
+    } else {
+      setActiveButtonIndex(0)
+      setDisplayText(t('Home'))
+    }
+  }, [setActiveButtonIndex, showOnlyNftsOnSale, showOnlyNftsUsers, setDisplayText, t])
 
   const onActiveButtonChange = (newIndex: number) => {
-    setShowOnlyOnSale({ collection: address, showOnlyOnSale: newIndex === 1 })
+    if (newIndex === 0) {
+      setShowOnlyOnSale({ collection: address, showOnlyOnSale: false })
+      setShowOnlyUsers({ collection: address, showOnlyUsers: false })
+    } else if (newIndex === 1) {
+      setShowOnlyOnSale({ collection: address, showOnlyOnSale: true })
+      setShowOnlyUsers({ collection: address, showOnlyUsers: false })
+    } else if (newIndex === 2) {
+      setShowOnlyOnSale({ collection: address, showOnlyOnSale: false })
+      setShowOnlyUsers({ collection: address, showOnlyUsers: true })
+    }
   }
 
   const nftFilters = useGetNftFilters(address)
@@ -106,9 +133,20 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, att
         {t('Filter by')}
       </FilterByTitle>
       <FilterByControls>
-        <ButtonMenu scale="sm" activeIndex={activeButtonIndex} onItemClick={onActiveButtonChange} variant="subtle">
-          <ButtonMenuItem>{t('All')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('On Sale')}</ButtonMenuItem>
+        <ButtonMenu
+          scale="sm"
+          activeIndex={!showOnlyNftsOnSale && showOnlyNftsUsers ? 2 : showOnlyNftsOnSale && !showOnlyNftsUsers ? 1 : 0}
+          onItemClick={onActiveButtonChange}
+        >
+          <ButtonMenuItem>
+            <FcHome />
+          </ButtonMenuItem>
+          <ButtonMenuItem>
+            <FaHandshake color="#280D5F" />
+          </ButtonMenuItem>
+          <ButtonMenuItem>
+            <CommunityIcon />
+          </ButtonMenuItem>
         </ButtonMenu>
       </FilterByControls>
       <SortByTitle fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600} mb="4px">

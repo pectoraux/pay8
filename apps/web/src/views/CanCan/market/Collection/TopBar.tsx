@@ -1,7 +1,7 @@
 import { Box, ChevronLeftIcon, Flex, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
+import { cancanBaseUrl } from 'views/CanCan/market/constants'
 import SearchBar from '../components/SearchBar'
 
 const BackLink = styled(NextLinkFromReactRouter)`
@@ -16,7 +16,7 @@ const TopBar: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <Flex alignItems="center" justifyContent="space-between" mb="24px">
-      <BackLink to={`${nftsBaseUrl}/collections`}>
+      <BackLink to={`${cancanBaseUrl}/collections`}>
         <ChevronLeftIcon color="primary" width="24px" />
         {t('All Collections')}
       </BackLink>

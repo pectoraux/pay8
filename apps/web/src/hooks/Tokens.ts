@@ -18,6 +18,7 @@ import useUserAddedTokens from '../state/user/hooks/useUserAddedTokens'
 import { isAddress } from '../utils'
 import { useActiveChainId } from './useActiveChainId'
 import useNativeCurrency from './useNativeCurrency'
+import { useGetVeToken } from 'state/cancan/hooks'
 
 const mapWithoutUrls = (tokenMap?: TokenAddressMap<ChainId>, chainId?: number) => {
   if (!tokenMap || !chainId) return {}
@@ -146,7 +147,7 @@ export function useIsUserAddedToken(currency: Currency | undefined | null): bool
 // undefined if invalid or does not exist
 // null if loading
 // otherwise returns the token
-export function useToken(tokenAddress?: string): ERC20Token | undefined | null {
+export function useToken(tokenAddress?: any): ERC20Token | undefined | null {
   const { chainId } = useActiveChainId()
   const tokens = useAllTokens()
 
@@ -205,4 +206,38 @@ export function useOnRampCurrency(currencyId: string | undefined): NativeCurrenc
     currencyId?.toUpperCase() === native.symbol?.toUpperCase() || currencyId?.toLowerCase() === GELATO_NATIVE
   const token = useOnRampToken(currencyId)
   return isNative ? native : token
+}
+
+export function useWorkspaceCurrency(
+  workspaceId: string | undefined,
+  tFIAT: string | undefined,
+  usetFIAT: boolean,
+  currentAskPrice: string | undefined,
+): {
+  mainCurrency: any
+  secondaryCurrency: any
+  currentAskPriceAsNumber: any
+  // mainToSecondaryCurrencyFactor: Price | undefined
+  priceInSecondaryCurrency: any
+  mainToSecondaryCurrencyFactor: any
+} {
+  const veToken = useGetVeToken(workspaceId)
+  const workspaceToken = useToken(veToken)
+  const tFIAToken = useCurrency(tFIAT)
+  const mainCurrency = usetFIAT ? tFIAToken : workspaceToken
+  const secondaryCurrency = usetFIAT ? workspaceToken : tFIAToken
+  const currentAskPriceAsNumber = currentAskPrice ? parseFloat(currentAskPrice) : 0
+  const mainToSecondaryCurrencyFactor = 1 // useBNBBusdPrice()
+  const priceInSecondaryCurrency = currentAskPriceAsNumber
+  // multiplyPriceByAmount(
+  //   mainToSecondaryCurrencyFactor,
+  //   currentAskPriceAsNumber
+  // )
+  return {
+    mainCurrency,
+    secondaryCurrency,
+    currentAskPriceAsNumber,
+    mainToSecondaryCurrencyFactor,
+    priceInSecondaryCurrency,
+  }
 }

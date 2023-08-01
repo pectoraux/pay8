@@ -2,43 +2,31 @@ import { Address, useAccount } from 'wagmi'
 import { FetchStatus } from 'config/constants/types'
 import { useCallback } from 'react'
 import { useErc721CollectionContract } from 'hooks/useContract'
-import { getNftApi, getNftsMarketData, getNftsOnChainMarketData } from 'state/nftMarket/helpers'
+import { getItemSg, getPaywallSg, getNftsMarketData } from 'state/cancan/helpers'
 import { NftLocation, NftToken, TokenMarketData } from 'state/nftMarket/types'
 import { useProfile } from 'state/profile/hooks'
 import useSWR from 'swr'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
 import { isAddress } from 'utils'
 
-const useNftOwn = (collectionAddress: Address, tokenId: string, marketData?: TokenMarketData) => {
+const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: TokenMarketData) => {
   const { address: account } = useAccount()
-  const collectionContract = useErc721CollectionContract(collectionAddress)
   const { isInitialized: isProfileInitialized, profile } = useProfile()
 
-  const { data: tokenOwner } = useSWR(
-    collectionContract ? ['nft', 'ownerOf', collectionAddress, tokenId] : null,
-    async () => collectionContract.read.ownerOf([BigInt(tokenId)]),
-  )
-
   return useSWR(
-    account && isProfileInitialized && tokenOwner
-      ? ['nft', 'own', collectionAddress, tokenId, marketData?.currentSeller]
-      : null,
+    account && isProfileInitialized ? ['nft', 'own', collectionAddress, tokenId, marketData?.currentSeller] : null,
     async () => {
       let isOwn = false
       let nftIsProfilePic = false
       let location: NftLocation
 
       nftIsProfilePic = tokenId === profile?.tokenId?.toString() && collectionAddress === profile?.collectionAddress
-      const nftIsOnSale = marketData ? marketData?.currentSeller !== NOT_ON_SALE_SELLER : false
-      if (nftIsOnSale) {
-        isOwn = isAddress(marketData?.currentSeller) === isAddress(account)
-        location = NftLocation.FORSALE
-      } else if (nftIsProfilePic) {
+      if (nftIsProfilePic) {
         isOwn = true
         location = NftLocation.PROFILE
       } else {
-        isOwn = isAddress(tokenOwner) === isAddress(account)
-        location = NftLocation.WALLET
+        isOwn = isAddress(marketData?.currentSeller) === isAddress(account)
+        location = NftLocation.FORSALE
       }
 
       return {
@@ -50,41 +38,23 @@ const useNftOwn = (collectionAddress: Address, tokenId: string, marketData?: Tok
   )
 }
 
-export const useCompleteNft = (collectionAddress: Address, tokenId: string) => {
+export const useCompleteNft = (collectionAddress: string, tokenId: string, isPaywall = false) => {
   const { data: nft, mutate } = useSWR(
-    collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
+    collectionAddress && tokenId ? ['cancan', collectionAddress, tokenId] : null,
     async () => {
-      const metadata = await getNftApi(collectionAddress, tokenId)
-      if (metadata) {
-        const basicNft: NftToken = {
-          tokenId,
-          collectionAddress,
-          collectionName: metadata.collection.name,
-          name: metadata.name,
-          description: metadata.description,
-          image: metadata.image,
-          attributes: metadata.attributes,
-        }
-        return basicNft
-      }
-      return null
+      return isPaywall ? getPaywallSg(`${collectionAddress}-${tokenId}`) : getItemSg(`${collectionAddress}-${tokenId}`)
     },
   )
 
   const { data: marketData, mutate: refetchNftMarketData } = useSWR(
-    collectionAddress && tokenId ? ['nft', 'marketData', collectionAddress, tokenId] : null,
+    collectionAddress && tokenId ? ['cancan', 'marketData', collectionAddress, tokenId] : null,
     async () => {
-      const [onChainMarketDatas, marketDatas] = await Promise.all([
-        getNftsOnChainMarketData(collectionAddress, [tokenId]),
-        getNftsMarketData({ collection: collectionAddress.toLowerCase(), tokenId }, 1),
-      ])
-      const onChainMarketData = onChainMarketDatas[0]
+      const [marketDatas] = await Promise.all([getNftsMarketData({ collection: collectionAddress, tokenId }, 1)])
+      const marketDat = marketDatas.find((data) => data.tokenId === tokenId)
 
-      if (!marketDatas[0] && !onChainMarketData) return null
+      if (!marketDat) return null
 
-      if (!onChainMarketData) return marketDatas[0]
-
-      return { ...marketDatas[0], ...onChainMarketData }
+      return marketDat
     },
   )
 
@@ -98,7 +68,7 @@ export const useCompleteNft = (collectionAddress: Address, tokenId: string) => {
 
   return {
     combinedNft: nft ? { ...nft, marketData, location: nftOwn?.location ?? NftLocation.WALLET } : undefined,
-    isOwn: nftOwn?.isOwn || false,
+    isOwn: nftOwn,
     isProfilePic: nftOwn?.nftIsProfilePic || false,
     isLoading: status !== FetchStatus.Fetched,
     refetch,

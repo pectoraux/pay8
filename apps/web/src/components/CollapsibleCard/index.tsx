@@ -9,15 +9,20 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
 } from '@pancakeswap/uikit'
+import PaywallDetailsSection from './PaywallDetailsSection'
 
 interface CollapsibleCardProps extends CardProps {
   initialOpenState?: boolean
   title: string
+  paywall: any
+  collection: any
 }
 
-const CollapsibleCard: React.FC<React.PropsWithChildren<CollapsibleCardProps>> = ({
+const CollapsibleCard: React.FC<any> = ({
   initialOpenState = true,
   title,
+  paywall,
+  collection,
   children,
   ...props
 }) => {
@@ -36,6 +41,7 @@ const CollapsibleCard: React.FC<React.PropsWithChildren<CollapsibleCardProps>> =
         </Flex>
       </CardHeader>
       {isOpen && children}
+      {paywall ? <PaywallDetailsSection key={paywall?.id} collection={collection} paywall={paywall} /> : null}
     </Card>
   )
 }

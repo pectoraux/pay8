@@ -998,7 +998,7 @@ export const useBribeContract = (bribeAddress: Address) => {
   return useMemo(() => bribeAddress && getBribeContract(bribeAddress, signer, chainId), [bribeAddress, signer, chainId])
 }
 
-export const useValuepoolContract = (valuepoolAddress: Address) => {
+export const useValuepoolContract = (valuepoolAddress: any) => {
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(
