@@ -79,8 +79,8 @@ export const stagesWithConfirmButton = [
   SellingStage.CONFIRM_ADJUST_OPTIONS,
 ]
 
-export const StyledModal = styled(Modal)<{ stage: SellingStage }>`
-  width: 360px;
+export const StyledModal = styled(Modal)<{ stage: SellingStage; expand?: boolean }>`
+  width: ${({ expand }) => (!expand ? '360px' : '960px')};
   & > div:last-child {
     padding: 0;
   }

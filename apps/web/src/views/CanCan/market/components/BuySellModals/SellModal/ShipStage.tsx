@@ -20,7 +20,6 @@ import {
 } from 'hooks/useContract'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import { AddressZero } from '@ethersproject/constants'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { SellingStage, OptionType, EnlistFormState } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
@@ -78,12 +77,12 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
-  const { signer: marketCollectionsContract } = useMarketCollectionsContract()
-  const { signer: marketOrdersContract } = useMarketOrdersContract()
-  const { signer: marketHelperContract } = useMarketHelperContract()
-  const { signer: paywallMarketOrdersContract } = usePaywallMarketOrdersContract()
-  const { signer: paywallMarketHelperContract } = usePaywallMarketHelperContract()
-  const { signer: paywallARPFactoryContract } = usePaywallARPFactoryContract()
+  const marketCollectionsContract = useMarketCollectionsContract()
+  const marketOrdersContract = useMarketOrdersContract()
+  const marketHelperContract = useMarketHelperContract()
+  const paywallMarketOrdersContract = usePaywallMarketOrdersContract()
+  const paywallMarketHelperContract = usePaywallMarketHelperContract()
+  const paywallARPFactoryContract = usePaywallARPFactoryContract()
   const [nftFilters, setNftFilters] = useState(articleFilters)
   const [state, setState] = useState<any>(() => ({
     tokenId: articleState?.tokenId ?? '',

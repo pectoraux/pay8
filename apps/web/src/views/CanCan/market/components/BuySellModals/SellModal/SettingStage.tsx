@@ -2,7 +2,7 @@ import { differenceInSeconds } from 'date-fns'
 import { useState, ChangeEvent } from 'react'
 import { requiresApproval } from 'utils/requiresApproval'
 import { Flex, Grid, Text, Button, useToast } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Currency, MaxUint256 } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation, ContextApi } from '@pancakeswap/localization'
@@ -20,7 +20,6 @@ import {
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
-import { MaxUint256 } from '@ethersproject/constants'
 import AvatarImage from '../../BannerHeader/AvatarImage'
 import { SellingStage, MarketPlace } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
@@ -66,9 +65,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
-  const { signer: marketCollectionsContract } = useMarketCollectionsContract()
-  const { signer: itemMarketTradesContract } = useMarketTradesContract()
-  const { signer: paywallMarketTradesContract } = usePaywallMarketTradesContract()
+  const marketCollectionsContract = useMarketCollectionsContract()
+  const itemMarketTradesContract = useMarketTradesContract()
+  const paywallMarketTradesContract = usePaywallMarketTradesContract()
   const paywallPath = '/cancan/collections/[collectionAddress]/paywall/[tokenId]'
   console.log('useRouter().asPath==============>', useRouter().pathname === paywallPath, useRouter().asPath)
   const marketTradesContract =
@@ -338,7 +337,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     <StyledModal
       title={t('Channel Settings')}
       stage={stage}
-      expand={false}
+      // expand={false}
       onDismiss={onDismiss}
       onBack={showBackButton ? goBack : null}
       headerBackground={theme.colors.gradientCardHeader}
