@@ -8,7 +8,7 @@ import mapValues from 'lodash/mapValues'
 const useGetCollectionDistribution = (collectionAddress: string) => {
   const { data, status } = useSWRImmutable(
     collectionAddress ? ['distribution', collectionAddress] : null,
-    async () => {}, //(await getCollectionDistributionApi<ApiCollectionDistribution>(collectionAddress)).data,
+    async () => 0, //(await getCollectionDistributionApi<ApiCollectionDistribution>(collectionAddress)).data,
   )
 
   return {
