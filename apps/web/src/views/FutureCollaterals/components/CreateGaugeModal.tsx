@@ -282,6 +282,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
       }
     },
     onApprove: () => {
+      console.log(
+        'handleApprove====================>',
+        stakingTokenContract,
+        cardContract.address,
+        trustBountiesContract.address,
+      )
       return callWithGasPrice(stakingTokenContract, 'approve', [cardContract.address, MaxUint256]).then(() =>
         callWithGasPrice(stakingTokenContract, 'approve', [trustBountiesContract.address, MaxUint256]),
       )

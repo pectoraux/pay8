@@ -23,6 +23,7 @@ export const useApprovePool = (lpContract: ReturnType<typeof useERC20>, address,
 
   const handleApprove = useCallback(async () => {
     const receipt = await fetchWithCatchTxError(() => {
+      console.log('lpContract=====================+>', lpContract, address)
       return callWithGasPrice(lpContract, 'approve', [address, MaxUint256])
     })
     if (receipt?.status) {

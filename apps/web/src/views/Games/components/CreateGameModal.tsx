@@ -57,7 +57,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const args = [
-        currency.address,
+        currency?.address,
         gameContract || ADDRESS_ZERO,
         amount.toString(),
         creatorShare,

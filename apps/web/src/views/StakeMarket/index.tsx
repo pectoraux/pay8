@@ -21,7 +21,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-  const [onPresentCreateGauge] = useModal(<CreateStakeModal />)
+  const [onPresentCreateGauge] = useModal(<CreateStakeModal currency={currency} />)
 
   usePoolsPageFetch()
 

@@ -408,6 +408,7 @@ export const getFarmAuctionContract = (signer?: WalletClient) => {
 export const getNftMarketContract = (signer?: WalletClient) => {
   return getContract({ abi: nftMarketABI, address: getNftMarketAddress(), signer })
 }
+
 export const getNftSaleContract = (signer?: WalletClient) => {
   return getContract({ abi: nftSaleABI, address: getNftSaleAddress(), signer })
 }
@@ -1284,7 +1285,7 @@ export const getValuepoolContract = (valuepoolAddress: Address, signer?: WalletC
 export const getValuepoolFactoryContract = (signer?: WalletClient, chainId?: number) => {
   return getContract({
     abi: valuePoolFactoryABI,
-    address: getValuepoolFactoryAddress(),
+    address: getValuepoolFactoryAddress(chainId),
     signer,
     chainId,
   })

@@ -4,6 +4,10 @@ import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/games/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useCurrency } from 'hooks/Tokens'
+import { useCallback, useState } from 'react'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
@@ -14,7 +18,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
-  const [onPresentCreateGauge] = useModal(<CreateGameModal />)
+  const inputCurency = useCurrency(DEFAULT_TFIAT)
+  const [currency, setCurrency] = useState(inputCurency)
+  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  const [onPresentCreateGauge] = useModal(<CreateGameModal currency={currency} />)
 
   usePoolsPageFetch()
 
@@ -39,6 +46,16 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
                   {t('Create contract ')}{' '}
                 </Text>
+                <CurrencyInputPanel
+                  id="game-currency"
+                  showUSDPrice
+                  showMaxButton
+                  showCommonBases
+                  showInput={false}
+                  showQuickInputButton
+                  currency={currency ?? inputCurency}
+                  onCurrencySelect={handleInputSelect}
+                />
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>

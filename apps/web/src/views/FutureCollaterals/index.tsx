@@ -11,6 +11,7 @@ import { useCallback, useState } from 'react'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateFutureCollateralModal from './components/CreateFutureCollateralModal'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -20,7 +21,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-  const [onPresentCreateGauge] = useModal(<CreateFutureCollateralModal />)
+  const [onPresentCreateGauge] = useModal(<CreateFutureCollateralModal currency={currency} />)
 
   useFetchPublicPoolsData()
 
@@ -45,6 +46,16 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
                   {t('Mint Collateral')}{' '}
                 </Text>
+                <CurrencyInputPanel
+                  id="collaterals-currency"
+                  showUSDPrice
+                  showMaxButton
+                  showCommonBases
+                  showInput={false}
+                  showQuickInputButton
+                  currency={currency ?? inputCurency}
+                  onCurrencySelect={handleInputSelect}
+                />
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>

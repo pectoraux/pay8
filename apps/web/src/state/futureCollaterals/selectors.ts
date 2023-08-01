@@ -2,13 +2,9 @@ import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { createSelector } from '@reduxjs/toolkit'
 import { State, VaultKey } from '../types'
-// import { transformPool, transformVault } from './helpers'
-import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
 const selectPoolsData = (state: State) => state.futureCollaterals?.data
 const selectPoolData = (sousId) => (state: State) => state.futureCollaterals?.data.find((p) => p.sousId === sousId)
-const selectPoolData2 = (address) => (state: State) =>
-  state.futureCollaterals.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.futureCollaterals?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) =>
   key && state.futureCollaterals ? state.futureCollaterals[key] : {}
@@ -53,11 +49,6 @@ export const makePoolWithUserDataLoadingSelector = (sousId) =>
       pool, // : transformPool(pool),
       userDataLoaded,
     }
-  })
-
-export const makePoolWithUserDataLoadingSelector2 = (address) =>
-  createSelector([selectPoolData2(address), selectUserDataLoaded], (pool, userDataLoaded) => {
-    return { pool, userDataLoaded }
   })
 
 export const poolsWithUserDataLoadingSelector = createSelector(

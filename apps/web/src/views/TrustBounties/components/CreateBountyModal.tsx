@@ -14,13 +14,11 @@ import {
   ButtonMenu,
   ButtonMenuItem,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { fetchRampsAsync } from 'state/ramps'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useERC20, useTrustBountiesContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -33,9 +31,11 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { differenceInSeconds } from 'date-fns'
 import { FetchStatus } from 'config/constants/types'
+import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { fetchBountiesAsync } from 'state/trustbounties'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -56,9 +56,10 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const currencyAddress = currency?.address ?? DEFAULT_INPUT_CURRENCY
   const { toastSuccess, toastError } = useToast()
   const [allowing, setAllowing] = useState(false)
+  const { chainId } = useActiveChainId()
   const stakingTokenContract = useERC20(currencyAddress || '')
   const [nftFilters, setNftFilters] = useState<any>({})
-  const { handleApprove: handlePoolApprove, pendingTx: pendingPoolTx } = useApprovePool(
+  const { handleApprove: handlePoolApprove } = useApprovePool(
     stakingTokenContract,
     trustBountiesContract.address,
     currency?.symbol,
@@ -86,8 +87,8 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     bountySource: '',
     token: '',
   })
-
   const handleCreateGauge = useCallback(async () => {
+    console.log('handleCreateGauge==================>')
     setPendingFb(true)
     const endTime = Math.max(
       differenceInSeconds(new Date(state.endTime || 0), new Date(), {
@@ -112,7 +113,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       : state.bountySource
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const ve = getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase())
+      const ve = getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase(), chainId)
       const args = [
         account,
         !state.isNFT ? currencyAddress : state.token,
@@ -158,6 +159,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     }
     onDismiss()
   }, [
+    chainId,
     onDismiss,
     dispatch,
     nftFilters,
@@ -207,13 +209,13 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       {!needsApproval ? (
         <>
           <Flex alignSelf="center" mt={20}>
-            {/* <Filters
-          nftFilters={nftFilters} 
-          setNftFilters={setNftFilters}
-          showCountry={false}
-          showCity={false}
-          showProduct={false}
-        /> */}
+            <Filters
+              nftFilters={nftFilters}
+              setNftFilters={setNftFilters}
+              showCountry={false}
+              showCity={false}
+              showProduct={false}
+            />
           </Flex>
           <GreyedOutContainer>
             <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -447,6 +449,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
             onClick={handleCreateGauge}
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
+            disabled={!currency}
           >
             {t('%text% %symbol%', {
               text: 'Create a bounty with',
