@@ -160,7 +160,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, att
           const attrs = attrsByType[traitType]
           const items: Item[] = attrs.map((attr) => ({
             label: capitalize(attr.value as string),
-            count: data && data[traitType] ? data[traitType][attr.value] : undefined,
+            count: 0, // data && data[traitType] ? data[traitType][attr.value] : undefined,
             attr,
           }))
 
