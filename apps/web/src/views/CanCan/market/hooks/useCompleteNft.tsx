@@ -1,16 +1,14 @@
-import { Address, useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { FetchStatus } from 'config/constants/types'
 import { useCallback } from 'react'
-import { useErc721CollectionContract } from 'hooks/useContract'
 import { getItemSg, getPaywallSg, getNftsMarketData } from 'state/cancan/helpers'
-import { NftLocation, NftToken, TokenMarketData } from 'state/nftMarket/types'
+import { NftLocation, TokenMarketData } from 'state/cancan/types'
 import { useProfile } from 'state/profile/hooks'
 import useSWR from 'swr'
-import { NOT_ON_SALE_SELLER } from 'config/constants'
 import { isAddress } from 'utils'
 
 const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: TokenMarketData) => {
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const { isInitialized: isProfileInitialized, profile } = useProfile()
 
   return useSWR(
@@ -40,16 +38,17 @@ const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: Toke
 
 export const useCompleteNft = (collectionAddress: string, tokenId: string, isPaywall = false) => {
   const { data: nft, mutate } = useSWR(
-    collectionAddress && tokenId ? ['cancan', collectionAddress, tokenId] : null,
+    collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
     async () => {
       return isPaywall ? getPaywallSg(`${collectionAddress}-${tokenId}`) : getItemSg(`${collectionAddress}-${tokenId}`)
     },
   )
 
   const { data: marketData, mutate: refetchNftMarketData } = useSWR(
-    collectionAddress && tokenId ? ['cancan', 'marketData', collectionAddress, tokenId] : null,
+    collectionAddress && tokenId ? ['nft', 'marketData', collectionAddress, tokenId] : null,
     async () => {
       const [marketDatas] = await Promise.all([getNftsMarketData({ collection: collectionAddress, tokenId }, 1)])
+
       const marketDat = marketDatas.find((data) => data.tokenId === tokenId)
 
       if (!marketDat) return null

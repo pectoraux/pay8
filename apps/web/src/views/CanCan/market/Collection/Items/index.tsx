@@ -14,7 +14,6 @@ const Items = () => {
   const { collection, refresh } = useGetCollection(collectionAddress)
   const { isMd } = useMatchBreakpoints()
   const { t } = useTranslation()
-
   return (
     <Box py="32px">
       <Flex flexDirection="row">

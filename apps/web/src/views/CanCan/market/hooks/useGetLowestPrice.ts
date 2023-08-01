@@ -1,8 +1,6 @@
 import { FetchStatus } from 'config/constants/types'
-import { getNftsMarketData, getNftsUpdatedMarketData } from 'state/nftMarket/helpers'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+import { getNftsMarketData } from 'state/cancan/helpers'
 import { NftToken } from 'state/nftMarket/types'
-import { Address } from 'wagmi'
 import useSWR from 'swr'
 import { isAddress } from 'utils'
 import { pancakeBunniesAddress } from '../constants'
@@ -17,22 +15,23 @@ const getBunnyIdFromNft = (nft: NftToken): string => {
   return bunnyId ? bunnyId.toString() : null
 }
 
-export const getLowestUpdatedToken = async (collectionAddress: Address, nftsMarketTokenIds: string[]) => {
-  const updatedMarketData = await getNftsUpdatedMarketData(collectionAddress, nftsMarketTokenIds)
+export const getLowestUpdatedToken = async (collectionAddress: string, nftsMarketTokenIds: string[]) => {
+  // const updatedMarketData = await getNftsUpdatedMarketData(collectionAddress.toLowerCase(), nftsMarketTokenIds)
 
-  if (!updatedMarketData) return null
+  // if (!updatedMarketData) return null
 
-  return updatedMarketData
-    .filter((tokenUpdatedPrice) => {
-      return tokenUpdatedPrice && tokenUpdatedPrice.currentAskPrice > 0 && tokenUpdatedPrice.isTradable
-    })
-    .sort((askInfoA, askInfoB) => {
-      return askInfoA.currentAskPrice > askInfoB.currentAskPrice
-        ? 1
-        : askInfoA.currentAskPrice > askInfoB.currentAskPrice
-        ? 0
-        : -1
-    })[0]
+  // return updatedMarketData
+  //   .filter((tokenUpdatedPrice) => {
+  //     return tokenUpdatedPrice && tokenUpdatedPrice.currentAskPrice.gt(0) && tokenUpdatedPrice.isTradable
+  //   })
+  //   .sort((askInfoA, askInfoB) => {
+  //     return askInfoA.currentAskPrice.gt(askInfoB.currentAskPrice)
+  //       ? 1
+  //       : askInfoA.currentAskPrice.eq(askInfoB.currentAskPrice)
+  //       ? 0
+  //       : -1
+  //   })[0]
+  return null
 }
 
 export const useGetLowestPriceFromBunnyId = (bunnyId?: string): LowestNftPrice => {
@@ -42,10 +41,10 @@ export const useGetLowestPriceFromBunnyId = (bunnyId?: string): LowestNftPrice =
     if (!response.length) return null
 
     const nftsMarketTokenIds = response.map((marketData) => marketData.tokenId)
-    const lowestPriceUpdatedBunny = await getLowestUpdatedToken(pancakeBunniesAddress, nftsMarketTokenIds)
+    const lowestPriceUpdatedBunny = await getLowestUpdatedToken(pancakeBunniesAddress.toLowerCase(), nftsMarketTokenIds)
 
     if (lowestPriceUpdatedBunny) {
-      return parseFloat(formatBigInt(lowestPriceUpdatedBunny.currentAskPrice))
+      return 0 // parseFloat(formatBigNumber(lowestPriceUpdatedBunny.currentAskPrice))
     }
     return null
   })
