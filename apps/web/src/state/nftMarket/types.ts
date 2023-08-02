@@ -20,6 +20,9 @@ export enum AskOrderType {
   NEW = 'New',
   MODIFY = 'Modify',
   CANCEL = 'Cancel',
+  NEWITEM = 'NewItem',
+  MODIFYITEM = 'ModifyItem',
+  CANCELITEM = 'CancelItem',
 }
 
 export interface AskOrder {
