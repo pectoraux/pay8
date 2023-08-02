@@ -1,6 +1,6 @@
 import { LotteryStatus, LotteryTicket } from 'config/constants/types'
 import { lotteryV2ABI } from 'config/abi/lotteryV2'
-import { getLotteryV2Address } from 'utils/addressHelpers'
+import { getLotteryAddress, getLotteryV2Address } from 'utils/addressHelpers'
 import { LotteryResponse } from 'state/types'
 import { getLotteryV2Contract } from 'utils/contractHelpers'
 import { bigIntToSerializedBigNumber } from '@pancakeswap/utils/bigNumber'
@@ -8,6 +8,7 @@ import { NUM_ROUNDS_TO_FETCH_FROM_NODES } from 'config/constants/lottery'
 import { publicClient } from 'utils/wagmi'
 import { ChainId } from '@pancakeswap/sdk'
 import { ContractFunctionResult } from 'viem'
+import { lotteryABI } from 'config/abi/lottery'
 
 const lotteryContract = getLotteryV2Contract()
 
@@ -155,4 +156,20 @@ export const getRoundIdsArray = (currentLotteryId: string): string[] => {
 export const hasRoundBeenClaimed = (tickets: LotteryTicket[]): boolean => {
   const claimedTickets = tickets.filter((ticket) => ticket.status)
   return claimedTickets.length > 0
+}
+
+export const getPendingReward = async (lotteryId, userAddress, tokenAddress) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const [pendingReward] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getLotteryAddress(),
+        abi: lotteryABI,
+        functionName: 'getPendingReward',
+        args: [lotteryId, userAddress, tokenAddress, false],
+      },
+    ],
+  })
+  return pendingReward.toString()
 }

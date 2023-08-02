@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import styled from 'styled-components'
 import { Heading, ModalContainer, ModalHeader, ModalTitle, ModalBody, ModalCloseButton } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import delay from 'lodash/delay'
 import confetti from 'canvas-confetti'
@@ -52,12 +52,9 @@ interface ClaimPrizesModalModalProps {
   onDismiss?: () => void
 }
 
-const ClaimPrizesModal: React.FC<React.PropsWithChildren<ClaimPrizesModalModalProps>> = ({
-  onDismiss,
-  roundsToClaim,
-}) => {
+const ClaimPrizesModal: React.FC<any> = ({ onDismiss, currentTokenId, roundsToClaim }) => {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const { currentLotteryId } = useLottery()
   const dispatch = useAppDispatch()
 
@@ -79,9 +76,10 @@ const ClaimPrizesModal: React.FC<React.PropsWithChildren<ClaimPrizesModalModalPr
       <ModalBody p="24px">
         <ClaimPrizesInner
           onSuccess={() => {
-            dispatch(fetchUserLotteries({ account, currentLotteryId }))
+            // dispatch(fetchUserLotteries({ account, currentLotteryId }))
             onDismiss?.()
           }}
+          currentTokenId={currentTokenId}
           roundsToClaim={roundsToClaim}
         />
       </ModalBody>

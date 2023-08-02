@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Box, Flex, Text, Heading, Link, Image, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
+import { useLottery } from 'state/lottery/hooks'
 import { BallWithNumber, MatchExampleA, MatchExampleB, PoolAllocationChart } from '../svgs'
 
 const Divider = styled.div`
@@ -165,6 +166,9 @@ const AllocationMatch: React.FC<React.PropsWithChildren<{ color: string; text: s
 
 const PoolAllocations = () => {
   const { t } = useTranslation()
+  const {
+    lotteryData: { rewardsBreakdown },
+  } = useLottery()
   return (
     <StyledStepCard width={['280px', '330px', '380px']}>
       <StepCardInner height="auto">
@@ -182,32 +186,32 @@ const PoolAllocations = () => {
         <AllocationGrid>
           <AllocationMatch color="#FFE362" text={t('Matches first %digits%', { digits: 1 })} />
           <Text textAlign="right" bold>
-            2%
+            {rewardsBreakdown[0]}%
           </Text>
           <AllocationMatch color="#85C54E" text={t('Matches first %digits%', { digits: 2 })} />
           <Text textAlign="right" bold>
-            3%
+            {rewardsBreakdown[1]}%
           </Text>
           <AllocationMatch color="#028E75" text={t('Matches first %digits%', { digits: 3 })} />
           <Text textAlign="right" bold>
-            5%
+            {rewardsBreakdown[2]}%
           </Text>
           <AllocationMatch color="#36E8F5" text={t('Matches first %digits%', { digits: 4 })} />
           <Text textAlign="right" bold>
-            10%
+            {rewardsBreakdown[3]}%
           </Text>
           <AllocationMatch color="#A881FC" text={t('Matches first %digits%', { digits: 5 })} />
           <Text textAlign="right" bold>
-            20%
+            {rewardsBreakdown[4]}%
           </Text>
           <AllocationMatch color="#D750B2" text={t('Matches all 6')} />
           <Text textAlign="right" bold>
-            40%
+            {rewardsBreakdown[5]}%
           </Text>
-          <AllocationMatch color="#BDC2C4" text={t('Burn Pool')} />
-          <Text textAlign="right" bold>
+          {/* <AllocationMatch color="#BDC2C4" text={t('Burn Pool')} /> */}
+          {/* <Text textAlign="right" bold>
             20%
-          </Text>
+          </Text> */}
         </AllocationGrid>
       </StepCardInner>
     </StyledStepCard>
@@ -218,19 +222,21 @@ const GappedFlex = styled(Flex)`
   gap: 24px;
 `
 
-const HowToPlay: React.FC<React.PropsWithChildren> = () => {
+const HowToPlay: React.FC<any> = () => {
   const { t } = useTranslation()
 
   const steps: Step[] = [
     {
       label: t('Step %number%', { number: 1 }),
       title: t('Buy Tickets'),
-      subtitle: t('Prices are set when the round starts, equal to 5 USD in CAKE per ticket.'),
+      subtitle: t('Prices are set when the round starts, buying multiple tickets might get you a discount.'),
     },
     {
       label: t('Step %number%', { number: 2 }),
       title: t('Wait for the Draw'),
-      subtitle: t('There is one draw every day alternating between 0 AM UTC and 12 PM UTC.'),
+      subtitle: t(
+        'Some lotteries can be drawned after a certain prize pot goal is reached or after a time specified by the owner has passed.',
+      ),
     },
     {
       label: t('Step %number%', { number: 3 }),
@@ -307,7 +313,7 @@ const HowToPlay: React.FC<React.PropsWithChildren> = () => {
           <BulletList>
             <li>
               <Text display="inline" color="textSubtle">
-                {t('100% of the CAKE paid by people buying tickets that round goes back into the prize pools.')}
+                {t('100% of the tokens paid by people buying tickets that round goes back into the prize pools.')}
               </Text>
             </li>
           </BulletList>
@@ -318,23 +324,8 @@ const HowToPlay: React.FC<React.PropsWithChildren> = () => {
             <li>
               <Text display="inline" color="textSubtle">
                 {t(
-                  'After every round, if nobody wins in one of the prize brackets, the unclaimed CAKE for that bracket rolls over into the next round and are redistributed among the prize pools.',
+                  'After every round, if nobody wins in one of the prize brackets, the unclaimed tokens for that bracket rolls over into the next round and are redistributed among the prize pools.',
                 )}
-              </Text>
-            </li>
-          </BulletList>
-          <Heading my="16px" scale="md">
-            {t('CAKE Injections')}
-          </Heading>
-          <BulletList>
-            <li>
-              <Text display="inline" color="textSubtle">
-                {t(
-                  'An average total of 35,000 CAKE from the treasury is added to lottery rounds over the course of a week. This CAKE is of course also included in rollovers! Read more in our guide to ',
-                )}
-                <InlineLink href="https://docs.pancakeswap.finance/tokenomics/cake/cake-tokenomics">
-                  {t('CAKE Tokenomics')}
-                </InlineLink>
               </Text>
             </li>
           </BulletList>

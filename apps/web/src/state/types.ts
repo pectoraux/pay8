@@ -601,7 +601,7 @@ export interface State {
   farmsV1: SerializedFarmsState
   pools: PoolsState
   predictions: PredictionsState
-  lottery: LotteryState
+  lottery: any
   pottery: any
   accelerator: any
   arps: any

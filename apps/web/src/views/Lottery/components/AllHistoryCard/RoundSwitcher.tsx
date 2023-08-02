@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { IconButton, ArrowForwardIcon, ArrowBackIcon, ArrowLastIcon, Flex, Heading, Input } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { IconButton, ArrowForwardIcon, ArrowBackIcon, ArrowLastIcon, Flex, Heading, Input } from '@pancakeswap/uikit'
 
 const StyledInput = styled(Input)`
   width: 60px;
@@ -51,7 +51,7 @@ const RoundSwitcher: React.FC<React.PropsWithChildren<RoundSwitcherProps>> = ({
   return (
     <Flex alignItems="center" justifyContent="space-between">
       <Flex alignItems="center">
-        <Heading mr="8px">{t('Round')}</Heading>
+        <Heading mr="8px">{t('Lotter ID')}</Heading>
         <StyledInput
           pattern="^[0-9]+$"
           inputMode="numeric"

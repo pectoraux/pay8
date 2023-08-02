@@ -9,10 +9,7 @@ interface PreviousRoundCardFooterProps {
   lotteryId: string
 }
 
-const PreviousRoundCardFooter: React.FC<React.PropsWithChildren<PreviousRoundCardFooterProps>> = ({
-  lotteryNodeData,
-  lotteryId,
-}) => {
+const PreviousRoundCardFooter: React.FC<any> = ({ lotteryNodeData, lotteryId, currentTokenId }) => {
   const { t } = useTranslation()
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -24,7 +21,9 @@ const PreviousRoundCardFooter: React.FC<React.PropsWithChildren<PreviousRoundCar
 
   return (
     <CardFooter p="0">
-      {isExpanded && <FooterExpanded lotteryNodeData={lotteryNodeData} lotteryId={lotteryId} />}
+      {isExpanded && (
+        <FooterExpanded currentTokenId={currentTokenId} lotteryNodeData={lotteryNodeData} lotteryId={lotteryId} />
+      )}
       <Flex p="8px 24px" alignItems="center" justifyContent="center">
         <ExpandableLabel
           expanded={isExpanded}

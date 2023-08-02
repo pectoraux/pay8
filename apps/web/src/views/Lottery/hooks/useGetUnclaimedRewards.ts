@@ -1,32 +1,43 @@
-import { useState, useEffect } from 'react'
-import { useAccount } from 'wagmi'
-import { useGetLotteriesGraphData, useGetUserLotteriesGraphData, useLottery } from 'state/lottery/hooks'
-import fetchUnclaimedUserRewards from 'state/lottery/fetchUnclaimedUserRewards'
-import { FetchStatus, TFetchStatus } from 'config/constants/types'
+import { useState, useEffect, useMemo } from 'react'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { useLottery } from 'state/lottery/hooks'
+import fetchPendingRevenue from 'state/lottery/fetchUnclaimedUserRewards'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
+import { FetchStatus } from 'config/constants/types'
 
-const useGetUnclaimedRewards = () => {
-  const { address: account } = useAccount()
-  const { isTransitioning, currentLotteryId } = useLottery()
-  const userLotteryData = useGetUserLotteriesGraphData()
-  const lotteriesData = useGetLotteriesGraphData()
+const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
+  console.log('useGetUnclaimedRewards=============>1')
+  const { account } = useWeb3React()
+  const {
+    lotteryData: { id: currentLotteryId, tokenData },
+  } = useLottery()
   const [unclaimedRewards, setUnclaimedRewards] = useState([])
-  const [fetchStatus, setFetchStatus] = useState<TFetchStatus>(FetchStatus.Idle)
+  const [fetchStatus, setFetchStatus] = useState<any>(FetchStatus.Idle)
+  const currTokenData = useMemo(
+    () => (tokenData?.length ? tokenData[parseInt(currentTokenId) > 0 ? parseInt(currentTokenId) - 1 : 0] : {}),
+    [currentTokenId, tokenData],
+  )
 
   useEffect(() => {
     // Reset on account change and round transition
     setFetchStatus(FetchStatus.Idle)
-  }, [account, isTransitioning])
+  }, [account])
 
   const fetchAllRewards = async () => {
-    setFetchStatus(FetchStatus.Fetching)
-    const unclaimedRewardsResponse = await fetchUnclaimedUserRewards(
-      account,
-      userLotteryData,
-      lotteriesData,
-      currentLotteryId,
-    )
-    setUnclaimedRewards(unclaimedRewardsResponse)
-    setFetchStatus(FetchStatus.Fetched)
+    try {
+      setFetchStatus(FetchStatus.Fetching)
+      const pendingRevenue = (await fetchPendingRevenue(
+        currentLotteryId,
+        account,
+        currTokenData?.token?.address,
+        !!activeIndex,
+      )) as any
+      setUnclaimedRewards([getBalanceNumber(new BigNumber(pendingRevenue), currTokenData?.token?.decimals)])
+      setFetchStatus(FetchStatus.Fetched)
+    } catch (err) {
+      console.log('fetchPendingRevenue===========>', err)
+    }
   }
 
   return { fetchAllRewards, unclaimedRewards, fetchStatus }

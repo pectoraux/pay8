@@ -33,9 +33,7 @@ export const dateTimeOptions: Intl.DateTimeFormatOptions = {
   ...timeOptions,
 }
 
-export const processLotteryResponse = (
-  lotteryData: LotteryResponse & { userTickets?: LotteryRoundUserTickets },
-): LotteryRound => {
+export const processLotteryResponse = (lotteryData: any & { userTickets?: LotteryRoundUserTickets }): any => {
   const {
     priceTicketInCake: priceTicketInCakeAsString,
     discountDivisor: discountDivisorAsString,
@@ -57,6 +55,7 @@ export const processLotteryResponse = (
     discountDivisor,
     treasuryFee: lotteryData.treasuryFee,
     firstTicketId: lotteryData.firstTicketId,
+    lastTicketId: lotteryData.lastTicketId,
     amountCollectedInCake,
     finalNumber: lotteryData.finalNumber,
     cakePerBracket: lotteryData.cakePerBracket,

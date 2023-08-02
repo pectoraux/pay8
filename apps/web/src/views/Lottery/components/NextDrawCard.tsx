@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import {
   Card,
@@ -15,12 +15,13 @@ import {
   ExpandableLabel,
   Balance,
 } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { Token } from '@pancakeswap/sdk'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePriceCakeUSD } from 'state/farms/hooks'
 import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import RoundSwitcher from './RoundSwitcher'
 import ViewTicketsModal from './ViewTicketsModal'
 import BuyTicketsButton from './BuyTicketsButton'
 import { dateTimeOptions } from '../helpers'
@@ -53,63 +54,43 @@ const NextDrawWrapper = styled.div`
   padding: 24px;
 `
 
-const NextDrawCard = () => {
+const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
   const {
     t,
     currentLanguage: { locale },
   } = useTranslation()
-  const { address: account } = useAccount()
-  const { currentLotteryId, isTransitioning, currentRound } = useLottery()
-  const { endTime, amountCollectedInCake, userTickets, status } = currentRound
-
+  const { account } = useWeb3React()
+  const { lotteryData } = useLottery()
+  const { id: currentLotteryId, endTime, tokenData, status } = lotteryData
+  const userTickets = lotteryData?.users
   const [onPresentViewTicketsModal] = useModal(<ViewTicketsModal roundId={currentLotteryId} roundStatus={status} />)
   const [isExpanded, setIsExpanded] = useState(false)
-  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
-
-  const cakePriceBusd = usePriceCakeUSD()
-  const prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
+  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN
+  // const cakePriceBusd = usePriceCakeBusd()
+  const currTokenData = useMemo(
+    () => (tokenData?.length ? tokenData[parseInt(currentTokenId)] : {}),
+    [tokenData, currentTokenId],
+  )
+  console.log('3currentTokenId===============>', lotteryData, currentTokenId, currTokenData)
+  // const prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
   const endTimeMs = parseInt(endTime, 10) * 1000
   const endDate = new Date(endTimeMs)
   const isLotteryOpen = status === LotteryStatus.OPEN
-  const userTicketCount = userTickets?.tickets?.length || 0
+  const userTicketCount = userTickets?.length || 0
+  const latestRoundId = tokenData?.length
 
   const getPrizeBalances = () => {
-    if (status === LotteryStatus.CLOSE || status === LotteryStatus.CLAIMABLE) {
-      return (
-        <Heading scale="xl" color="secondary" textAlign={['center', null, null, 'left']}>
-          {t('Calculating')}...
-        </Heading>
-      )
-    }
     return (
-      <>
-        {prizeInBusd.isNaN() ? (
-          <Skeleton my="7px" height={40} width={160} />
-        ) : (
-          <Balance
-            fontSize="40px"
-            color="secondary"
-            textAlign={['center', null, null, 'left']}
-            lineHeight="1"
-            bold
-            prefix="~$"
-            value={getBalanceNumber(prizeInBusd)}
-            decimals={0}
-          />
-        )}
-        {prizeInBusd.isNaN() ? (
-          <Skeleton my="2px" height={14} width={90} />
-        ) : (
-          <Balance
-            fontSize="14px"
-            color="textSubtle"
-            textAlign={['center', null, null, 'left']}
-            unit=" CAKE"
-            value={getBalanceNumber(amountCollectedInCake)}
-            decimals={0}
-          />
-        )}
-      </>
+      <Balance
+        fontSize="40px"
+        color="secondary"
+        textAlign={['center', null, null, 'left']}
+        lineHeight="1"
+        bold
+        unit={` ${currTokenData.token?.symbol ?? '$'}`}
+        value={getBalanceNumber(currTokenData?.amountCollected, currTokenData.token?.decimals)}
+        decimals={0}
+      />
     )
   }
 
@@ -120,7 +101,14 @@ const NextDrawCard = () => {
     if (status === LotteryStatus.PENDING) {
       return ''
     }
-    return parseInt(currentLotteryId, 10) + 1
+    return parseInt(currentLotteryId, 10)
+  }
+
+  const getNextToken = () => {
+    if (status === LotteryStatus.OPEN) {
+      return `${t('Token')}: ${currTokenData.token?.symbol ?? ''}`
+    }
+    return ''
   }
 
   const getNextDrawDateTime = () => {
@@ -128,6 +116,35 @@ const NextDrawCard = () => {
       return `${t('Draw')}: ${endDate.toLocaleString(locale, dateTimeOptions)}`
     }
     return ''
+  }
+
+  const handleInputChange = (event) => {
+    const {
+      target: { value },
+    } = event
+    if (value) {
+      setCurrentTokenId(value)
+      if (parseInt(value, 10) <= 0) {
+        setCurrentTokenId('0')
+      }
+      if (parseInt(value, 10) >= latestRoundId) {
+        setCurrentTokenId(latestRoundId - 1)
+      }
+    } else {
+      setCurrentTokenId('0')
+    }
+  }
+
+  const handleArrowButtonPress = (targetRound) => {
+    if (targetRound) {
+      setCurrentTokenId(targetRound.toString())
+      if (parseInt(targetRound, 10) >= latestRoundId) {
+        setCurrentTokenId(latestRoundId - 1)
+      }
+    } else {
+      // targetRound is NaN when the input is empty, the only button press that will trigger this func is 'forward one'
+      setCurrentTokenId('0')
+    }
   }
 
   const ticketRoundText =
@@ -140,11 +157,18 @@ const NextDrawCard = () => {
     <StyledCard>
       <CardHeader p="16px 24px">
         <Flex justifyContent="space-between">
-          <Heading mr="12px">{t('Next Draw')}</Heading>
+          {/* <Heading mr="12px">{t('Next Draw')}</Heading> */}
           <Text>
-            {currentLotteryId && `#${getNextDrawId()}`} {Boolean(endTime) && getNextDrawDateTime()}
+            {currentLotteryId && `#${getNextDrawId()}`} {getNextToken()} {Boolean(endTime) && getNextDrawDateTime()}
           </Text>
         </Flex>
+        <RoundSwitcher
+          isLoading={false}
+          selectedRoundId={currentTokenId}
+          mostRecentRound={latestRoundId}
+          handleInputChange={handleInputChange}
+          handleArrowButtonPress={handleArrowButtonPress}
+        />
       </CardHeader>
       <CardBody>
         <Grid>
@@ -167,15 +191,11 @@ const NextDrawCard = () => {
                 {account && (
                   <Flex justifyContent={['center', null, null, 'flex-start']}>
                     <Text display="inline">{youHaveText} </Text>
-                    {!userTickets.isLoading ? (
-                      <Balance value={userTicketCount} decimals={0} display="inline" bold mx="4px" />
-                    ) : (
-                      <Skeleton mx="4px" height={20} width={40} />
-                    )}
+                    <Balance value={userTicketCount} decimals={0} display="inline" bold mx="4px" />
                     <Text display="inline"> {ticketsThisRoundText}</Text>
                   </Flex>
                 )}
-                {!userTickets.isLoading && userTicketCount > 0 && (
+                {userTicketCount > 0 && (
                   <Button
                     onClick={onPresentViewTicketsModal}
                     height="auto"
@@ -197,7 +217,7 @@ const NextDrawCard = () => {
       <CardFooter p="0">
         {isExpanded && (
           <NextDrawWrapper>
-            <RewardBrackets lotteryNodeData={currentRound} />
+            <RewardBrackets lotteryNodeData={lotteryData} currTokenData={currTokenData} />
           </NextDrawWrapper>
         )}
         {(status === LotteryStatus.OPEN || status === LotteryStatus.CLOSE) && (

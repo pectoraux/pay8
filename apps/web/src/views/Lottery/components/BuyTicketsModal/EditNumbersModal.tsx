@@ -24,21 +24,21 @@ const ScrollableContainer = styled.div`
   padding: 24px;
 `
 
-const EditNumbersModal: React.FC<
-  React.PropsWithChildren<{
-    totalCost: string
-    updateTicket: UpdateTicketAction
-    randomize: () => void
-    tickets: Ticket[]
-    allComplete: boolean
-    onConfirm: () => void
-    isConfirming: boolean
-    onDismiss?: () => void
-  }>
-> = ({ totalCost, updateTicket, randomize, tickets, allComplete, onConfirm, isConfirming, onDismiss }) => {
+const EditNumbersModal: React.FC<any> = ({
+  totalCost,
+  token,
+  updateTicket,
+  randomize,
+  tickets,
+  allComplete,
+  onConfirm,
+  isConfirming,
+  onDismiss,
+}) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
   const handleOnConfirm = useCallback(() => onConfirm(), [onConfirm])
+  console.log('1tickets=============>', tickets)
   return (
     <StyledModal
       title={t('Edit numbers')}
@@ -49,7 +49,9 @@ const EditNumbersModal: React.FC<
       <ScrollableContainer>
         <Flex justifyContent="space-between" mb="16px">
           <Text color="textSubtle">{t('Total cost')}:</Text>
-          <Text>~{totalCost} CAKE</Text>
+          <Text>
+            ~{totalCost} {token?.symbol ?? ''}
+          </Text>
         </Flex>
         <Text fontSize="12px" color="textSubtle" mb="16px">
           {t(

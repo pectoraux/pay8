@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Box, Flex, Heading, Skeleton, PageSection } from '@pancakeswap/uikit'
+import { Box, Flex, Heading, PageSection, Skeleton } from '@pancakeswap/uikit'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { useFetchLottery, useLottery } from 'state/lottery/hooks'
-import { LotterySubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import {
   TITLE_BG,
   GET_TICKETS_BG,
@@ -24,6 +23,7 @@ import AllHistoryCard from './components/AllHistoryCard'
 import CheckPrizesSection from './components/CheckPrizesSection'
 import HowToPlay from './components/HowToPlay'
 import useShowMoreUserHistory from './hooks/useShowMoreUserRounds'
+import { PageMeta } from '../../components/Layout/Page'
 
 const LotteryPage = styled.div`
   min-height: calc(100vh - 64px);
@@ -34,19 +34,21 @@ const Lottery = () => {
   useStatusTransitions()
   const { t } = useTranslation()
   const { isDark, theme } = useTheme()
-  const {
-    currentRound: { status, endTime },
-  } = useLottery()
+  const { lotteryData } = useLottery()
+  const { status, endTime } = lotteryData
+  console.log('lottery=================>', lotteryData)
   const [historyTabMenuIndex, setHistoryTabMenuIndex] = useState(0)
   const endTimeAsInt = parseInt(endTime, 10)
   const { nextEventTime, postCountdownText, preCountdownText } = useGetNextLotteryEvent(endTimeAsInt, status)
   const { numUserRoundsRequested, handleShowMoreUserRounds } = useShowMoreUserHistory()
+  const [currentTokenId, setCurrentTokenId] = useState('0')
 
   return (
     <>
+      <PageMeta />
       <LotteryPage>
         <PageSection background={TITLE_BG} index={1} hasCurvedDivider={false}>
-          <Hero />
+          <Hero lottery={lotteryData} currentTokenId={currentTokenId} />
         </PageSection>
         <PageSection
           containerProps={{ style: { marginTop: '-30px' } }}
@@ -62,25 +64,26 @@ const Lottery = () => {
                 {t('Get your tickets now!')}
               </Heading>
             )}
-            <Flex alignItems="center" justifyContent="center" mb="48px">
-              {nextEventTime && (postCountdownText || preCountdownText) ? (
-                <Countdown
-                  nextEventTime={nextEventTime}
-                  postCountdownText={postCountdownText}
-                  preCountdownText={preCountdownText}
-                />
-              ) : (
-                <Skeleton height="41px" width="250px" />
-              )}
-            </Flex>
-            <NextDrawCard />
+            {status === LotteryStatus.OPEN && (
+              <Flex alignItems="center" justifyContent="center" mb="48px">
+                {nextEventTime && (postCountdownText || preCountdownText) ? (
+                  <Countdown
+                    nextEventTime={nextEventTime}
+                    postCountdownText={postCountdownText}
+                    preCountdownText={preCountdownText}
+                  />
+                ) : (
+                  <Skeleton height="41px" width="250px" />
+                )}
+              </Flex>
+            )}
+            <NextDrawCard currentTokenId={currentTokenId} setCurrentTokenId={setCurrentTokenId} />
           </Flex>
         </PageSection>
         <PageSection background={CHECK_PRIZES_BG} hasCurvedDivider={false} index={2}>
-          <CheckPrizesSection />
+          <CheckPrizesSection currentTokenId={currentTokenId} />
         </PageSection>
         <PageSection
-          position="relative"
           innerProps={{ style: { margin: '0', width: '100%' } }}
           background={isDark ? FINISHED_ROUNDS_BG_DARK : FINISHED_ROUNDS_BG}
           hasCurvedDivider={false}
@@ -97,9 +100,10 @@ const Lottery = () => {
               />
             </Box>
             {historyTabMenuIndex === 0 ? (
-              <AllHistoryCard />
+              <AllHistoryCard currentTokenId={currentTokenId} />
             ) : (
               <YourHistoryCard
+                currentTokenId={currentTokenId}
                 handleShowMoreClick={handleShowMoreUserRounds}
                 numUserRoundsRequested={numUserRoundsRequested}
               />
@@ -114,7 +118,6 @@ const Lottery = () => {
         >
           <HowToPlay />
         </PageSection>
-        <LotterySubgraphHealthIndicator />
       </LotteryPage>
     </>
   )

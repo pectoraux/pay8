@@ -13,11 +13,11 @@ import {
   useModal,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { LotteryTicket, LotteryTicketClaimData } from 'config/constants/types'
 import { fetchLottery } from 'state/lottery/helpers'
-import { getWinningTickets } from 'state/lottery/fetchUnclaimedUserRewards'
-import { fetchUserTicketsForOneRound } from 'state/lottery/getUserTicketsData'
+// import { getWinningTickets } from 'state/lottery/fetchUnclaimedUserRewards'
+// import { fetchUserTicketsForOneRound } from 'state/lottery/getUserTicketsData'
 import { LotteryRound } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
@@ -63,7 +63,7 @@ const PreviousRoundTicketsInner: React.FC<React.PropsWithChildren<{ roundId: str
   }>({ allWinningTickets: null, ticketsWithUnclaimedRewards: null, isFetched: false, claimData: null })
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const [onPresentClaimModal] = useModal(<ClaimPrizesModal roundsToClaim={[userWinningTickets.claimData]} />, false)
 
   const TooltipComponent = () => (
@@ -104,36 +104,34 @@ const PreviousRoundTicketsInner: React.FC<React.PropsWithChildren<{ roundId: str
     }
 
     const fetchData = async () => {
-      const [userTickets, lotteryData] = await Promise.all([
-        fetchUserTicketsForOneRound(account, roundId),
-        fetchLottery(roundId),
-      ])
-      const processedLotteryData = processLotteryResponse(lotteryData)
-      const winningTickets = await getWinningTickets({
-        roundId,
-        userTickets,
-        finalNumber: processedLotteryData.finalNumber.toString(),
-      })
-
-      setUserWinningTickets({
-        isFetched: true,
-        allWinningTickets: winningTickets?.allWinningTickets,
-        ticketsWithUnclaimedRewards: winningTickets?.ticketsWithUnclaimedRewards,
-        claimData: winningTickets,
-      })
-      setLotteryInfo(processedLotteryData)
-
-      // If the user has some winning tickets - modify the userTickets response to include that data
-      if (winningTickets?.allWinningTickets) {
-        const allTicketsWithWinningTicketInfo = addWinningTicketInfoToAllTickets(
-          userTickets,
-          winningTickets.allWinningTickets,
-        )
-        const ticketsSortedByWinners = sortTicketsByWinningBracket(allTicketsWithWinningTicketInfo)
-        setAllUserTickets(ticketsSortedByWinners)
-      } else {
-        setAllUserTickets(userTickets)
-      }
+      // const [userTickets, lotteryData] = await Promise.all([
+      //   fetchUserTicketsForOneRound(account, roundId),
+      //   fetchLottery(roundId),
+      // ])
+      // const processedLotteryData = processLotteryResponse(lotteryData)
+      // const winningTickets = await getWinningTickets({
+      //   roundId,
+      //   userTickets,
+      //   finalNumber: processedLotteryData.finalNumber.toString(),
+      // })
+      // setUserWinningTickets({
+      //   isFetched: true,
+      //   allWinningTickets: winningTickets?.allWinningTickets,
+      //   ticketsWithUnclaimedRewards: winningTickets?.ticketsWithUnclaimedRewards,
+      //   claimData: winningTickets,
+      // })
+      // setLotteryInfo(processedLotteryData)
+      // // If the user has some winning tickets - modify the userTickets response to include that data
+      // if (winningTickets?.allWinningTickets) {
+      //   const allTicketsWithWinningTicketInfo = addWinningTicketInfoToAllTickets(
+      //     userTickets,
+      //     winningTickets.allWinningTickets,
+      //   )
+      //   const ticketsSortedByWinners = sortTicketsByWinningBracket(allTicketsWithWinningTicketInfo)
+      //   setAllUserTickets(ticketsSortedByWinners)
+      // } else {
+      //   setAllUserTickets(userTickets)
+      // }
     }
 
     fetchData()

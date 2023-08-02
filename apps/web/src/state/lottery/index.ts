@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { LotteryTicket, LotteryStatus } from 'config/constants/types'
 import { LotteryState, LotteryRoundGraphEntity, LotteryUserGraphEntity, LotteryResponse } from 'state/types'
 import { fetchLottery, fetchCurrentLotteryIdAndMaxBuy } from './helpers'
+import { fetchLottery as fetchLottery2 } from 'state/lotteries/helpers'
 import getLotteriesData from './getLotteriesData'
 import getUserLotteryData, { getGraphLotteryUser } from './getUserLotteryData'
 import { resetUserState } from '../global/actions'
@@ -12,7 +13,26 @@ interface PublicLotteryData {
   maxNumberTicketsPerBuyOrClaim: string
 }
 
-const initialState: LotteryState = {
+const initialState: any = {
+  data: {
+    countWinnersPerBracket: null,
+    discountDivisor: null,
+    endAmount: '',
+    endTime: '',
+    finalNumber: '',
+    firstTicketId: '',
+    lockDuration: '',
+    owner: '',
+    priceTicket: '',
+    referrerFee: '',
+    rewardsBreakdown: [],
+    startTime: '',
+    status: '',
+    tokenData: [],
+    treasuryFee: '',
+    useNFTicket: false,
+    valuepool: null,
+  },
   currentLotteryId: null,
   isTransitioning: false,
   maxNumberTicketsPerBuyOrClaim: null,
@@ -26,6 +46,7 @@ const initialState: LotteryState = {
     discountDivisor: '',
     treasuryFee: '',
     firstTicketId: '',
+    lastTicketId: '',
     amountCollectedInCake: '',
     finalNumber: null,
     cakePerBracket: [],
@@ -52,6 +73,17 @@ export const fetchCurrentLotteryId = createAsyncThunk<PublicLotteryData>('lotter
   const currentIdAndMaxBuy = await fetchCurrentLotteryIdAndMaxBuy()
   return currentIdAndMaxBuy
 })
+
+export const fetchLotteryAsync = (lotteryAddress) => async (dispatch) => {
+  try {
+    console.log('fetchBusinesses1================>', lotteryAddress)
+    const lottery = await fetchLottery2(lotteryAddress)
+    console.log('fetchBusinesses================>', lottery, lotteryAddress)
+    dispatch(setLotteryPublicData(lottery || {}))
+  } catch (error) {
+    console.error('[Pools Action] =========>', error)
+  }
+}
 
 export const fetchUserTicketsAndLotteries = createAsyncThunk<
   { userTickets: LotteryTicket[]; userLotteries: LotteryUserGraphEntity },
@@ -103,7 +135,11 @@ export const setLotteryIsTransitioning = createAsyncThunk<{ isTransitioning: boo
 export const LotterySlice = createSlice({
   name: 'Lottery',
   initialState,
-  reducers: {},
+  reducers: {
+    setLotteryPublicData: (state, action) => {
+      state.data = action.payload
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(resetUserState, (state) => {
       state.userLotteryData = { ...initialState.userLotteryData }
@@ -144,5 +180,7 @@ export const LotterySlice = createSlice({
     )
   },
 })
+
+export const { setLotteryPublicData } = LotterySlice.actions
 
 export default LotterySlice.reducer

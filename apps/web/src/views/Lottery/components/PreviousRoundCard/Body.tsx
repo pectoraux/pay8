@@ -12,9 +12,6 @@ import {
   BunnyPlaceholderIcon,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
-import { LotteryRound } from 'state/types'
-import { useGetUserLotteriesGraphData, useLottery } from 'state/lottery/hooks'
-import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
 import WinningNumbers from '../WinningNumbers'
 import ViewTicketsModal from '../ViewTicketsModal'
@@ -47,29 +44,18 @@ const StyledCardRibbon = styled(CardRibbon)`
   }
 `
 
-const PreviousRoundCardBody: React.FC<
-  React.PropsWithChildren<{ lotteryNodeData: LotteryRound; lotteryId: string }>
-> = ({ lotteryNodeData, lotteryId }) => {
+const PreviousRoundCardBody: React.FC<any> = ({ lotteryNodeData, lotteryId, latestId }) => {
   const { t } = useTranslation()
-  const {
-    currentLotteryId,
-    currentRound: { status },
-  } = useLottery()
-  const userLotteryData = useGetUserLotteriesGraphData()
-  const userDataForRound = userLotteryData.rounds.find((userLotteryRound) => userLotteryRound.lotteryId === lotteryId)
   const { isLg, isXl, isXxl } = useMatchBreakpoints()
   const isLargerScreen = isLg || isXl || isXxl
 
-  const currentLotteryIdAsInt = parseInt(currentLotteryId)
-  const mostRecentFinishedRoundId =
-    status === LotteryStatus.CLAIMABLE ? currentLotteryIdAsInt : currentLotteryIdAsInt - 1
-  const isLatestRound = mostRecentFinishedRoundId.toString() === lotteryId
+  const isLatestRound = Number(latestId ?? '') === Number(lotteryId ?? '')
 
   const [onPresentViewTicketsModal] = useModal(
     <ViewTicketsModal roundId={lotteryId} roundStatus={lotteryNodeData?.status} />,
   )
 
-  const totalTicketNumber = userDataForRound ? Number(userDataForRound.totalTickets) : 0
+  const totalTicketNumber = lotteryNodeData?.users?.length ?? 0
   const ticketRoundText =
     totalTicketNumber > 1
       ? t('You had %amount% tickets this round', { amount: totalTicketNumber })
@@ -84,11 +70,11 @@ const PreviousRoundCardBody: React.FC<
           <Heading mb="24px">{t('Winning Number')}</Heading>
         </Flex>
         <Flex maxWidth={['240px', null, null, '100%']} justifyContent={['center', null, null, 'flex-start']}>
-          {lotteryId ? (
-            lotteryNodeData?.finalNumber ? (
+          {Number(lotteryId) ? (
+            Number(lotteryNodeData?.finalNumber) ? (
               <WinningNumbers
                 rotateText={isLargerScreen || false}
-                number={lotteryNodeData?.finalNumber.toString()}
+                number={lotteryNodeData?.finalNumber}
                 mr={[null, null, null, '32px']}
                 size="100%"
                 fontSize={isLargerScreen ? '42px' : '16px'}
@@ -109,36 +95,21 @@ const PreviousRoundCardBody: React.FC<
             </>
           )}
         </Flex>
-        {userDataForRound && (
-          <>
-            <Box display={['none', null, null, 'flex']}>
-              <Heading>{t('Your tickets')}</Heading>
-            </Box>
-            <Flex
-              flexDirection="column"
-              mr={[null, null, null, '24px']}
-              alignItems={['center', null, null, 'flex-start']}
-            >
-              <Box mt={['32px', null, null, 0]}>
-                <Text display="inline">{youHadText} </Text>
-                <Text display="inline" bold>
-                  {userDataForRound.totalTickets}
-                </Text>
-                <Text display="inline">{ticketsThisRoundText}</Text>
-              </Box>
-              <Button
-                onClick={onPresentViewTicketsModal}
-                height="auto"
-                width="fit-content"
-                p="0"
-                variant="text"
-                scale="sm"
-              >
-                {t('View your tickets')}
-              </Button>
-            </Flex>
-          </>
-        )}
+        <Box display={['none', null, null, 'flex']}>
+          <Heading>{t('Your tickets')}</Heading>
+        </Box>
+        <Flex flexDirection="column" mr={[null, null, null, '24px']} alignItems={['center', null, null, 'flex-start']}>
+          <Box mt={['32px', null, null, 0]}>
+            <Text display="inline">{youHadText} </Text>
+            <Text display="inline" bold>
+              {totalTicketNumber}
+            </Text>
+            <Text display="inline">{ticketsThisRoundText}</Text>
+          </Box>
+          <Button onClick={onPresentViewTicketsModal} height="auto" width="fit-content" p="0" variant="text" scale="sm">
+            {t('View your tickets')}
+          </Button>
+        </Flex>
       </Grid>
     </StyledCardBody>
   )

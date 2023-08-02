@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import styled from 'styled-components'
 import {
   CardHeader,
@@ -15,15 +15,14 @@ import {
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { LotteryStatus } from 'config/constants/types'
-import { useGetUserLotteriesGraphData, useLottery } from 'state/lottery/hooks'
-import { fetchLottery } from 'state/lottery/helpers'
-import { LotteryRound } from 'state/types'
+import { useLottery } from 'state/lottery/hooks'
+import { fetchLottery } from 'state/lotteries/helpers'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import FinishedRoundTable from './FinishedRoundTable'
 import { WhiteBunny } from '../../svgs'
 import BuyTicketsButton from '../BuyTicketsButton'
 import PreviousRoundCardBody from '../PreviousRoundCard/Body'
-import { processLotteryResponse, getDrawnDate } from '../../helpers'
+import { getDrawnDate } from '../../helpers'
 import PreviousRoundCardFooter from '../PreviousRoundCard/Footer'
 
 interface YourHistoryCardProps {
@@ -47,32 +46,31 @@ const StyledCardBody = styled(CardBody)`
   min-height: 240px;
 `
 
-const YourHistoryCard: React.FC<React.PropsWithChildren<YourHistoryCardProps>> = ({
-  handleShowMoreClick,
-  numUserRoundsRequested,
-}) => {
+const YourHistoryCard: React.FC<any> = ({ currentTokenId, handleShowMoreClick, numUserRoundsRequested }) => {
   const {
     t,
     currentLanguage: { locale },
   } = useTranslation()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const [shouldShowRoundDetail, setShouldShowRoundDetail] = useState(false)
-  const [selectedLotteryNodeData, setSelectedLotteryNodeData] = useState<LotteryRound>(null)
+  const [selectedLotteryNodeData, setSelectedLotteryNodeData] = useState<any>(null)
   const [selectedLotteryId, setSelectedLotteryId] = useState<string>(null)
 
-  const {
-    isTransitioning,
-    currentRound: { status },
-  } = useLottery()
-  const userLotteryData = useGetUserLotteriesGraphData()
-  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
+  // const {
+  //   isTransitioning,
+  //   currentRound: { status },
+  // } = useLottery()
+  const { lotteryData } = useLottery()
+  const { status } = lotteryData
+  // const userLotteryData = useGetUserLotteriesGraphData()
+  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN
 
   const handleHistoryRowClick = async (lotteryId: string) => {
     setShouldShowRoundDetail(true)
     setSelectedLotteryId(lotteryId)
-    const lotteryData = await fetchLottery(lotteryId)
-    const processedLotteryData = processLotteryResponse(lotteryData)
-    setSelectedLotteryNodeData(processedLotteryData)
+    const _lotteryData = await fetchLottery(lotteryId)
+    // const processedLotteryData = processLotteryResponse(lotteryData)
+    setSelectedLotteryNodeData(_lotteryData)
   }
 
   const clearState = useCallback(() => {
@@ -110,9 +108,7 @@ const YourHistoryCard: React.FC<React.PropsWithChildren<YourHistoryCardProps>> =
       return <PreviousRoundCardBody lotteryNodeData={selectedLotteryNodeData} lotteryId={selectedLotteryId} />
     }
 
-    const claimableRounds = userLotteryData?.rounds.filter((round) => {
-      return round.status.toLowerCase() === LotteryStatus.CLAIMABLE
-    })
+    const claimableRounds = lotteryData?.history?.length
 
     if (!account) {
       return (
@@ -141,6 +137,7 @@ const YourHistoryCard: React.FC<React.PropsWithChildren<YourHistoryCardProps>> =
     }
     return (
       <FinishedRoundTable
+        lotteryData={lotteryData}
         handleHistoryRowClick={handleHistoryRowClick}
         handleShowMoreClick={handleShowMoreClick}
         numUserRoundsRequested={numUserRoundsRequested}
@@ -150,13 +147,19 @@ const YourHistoryCard: React.FC<React.PropsWithChildren<YourHistoryCardProps>> =
 
   const getFooter = () => {
     if (selectedLotteryNodeData) {
-      return <PreviousRoundCardFooter lotteryNodeData={selectedLotteryNodeData} lotteryId={selectedLotteryId} />
+      return (
+        <PreviousRoundCardFooter
+          currentTokenId={currentTokenId}
+          lotteryNodeData={selectedLotteryNodeData}
+          lotteryId={selectedLotteryId}
+        />
+      )
     }
     return (
       <CardFooter>
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <Text fontSize="12px" color="textSubtle">
-            {t('Only showing data for Lottery V2')}
+            {t('Only showing your data for the Lottery')}
           </Text>
         </Flex>
       </CardFooter>

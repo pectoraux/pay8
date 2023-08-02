@@ -20,10 +20,10 @@ const CurrentRoundTicketsInner = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const {
-    isTransitioning,
-    currentRound: { status, userTickets },
+    lotteryData: { status, users: userTickets },
   } = useLottery()
-  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
+
+  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN
 
   return (
     <>
@@ -32,16 +32,8 @@ const CurrentRoundTicketsInner = () => {
           {t('Your tickets')}
         </Text>
         <ScrollBox>
-          {userTickets.tickets.map((ticket, index) => {
-            return (
-              <TicketNumber
-                key={ticket.id}
-                localId={index + 1}
-                id={ticket.id}
-                number={ticket.number}
-                status={ticket.status}
-              />
-            )
+          {userTickets?.map((ticket, index) => {
+            return <TicketNumber key={ticket.id} localId={index + 1} id={ticket.id} number={ticket.ticketNumber} />
           })}
         </ScrollBox>
       </Flex>

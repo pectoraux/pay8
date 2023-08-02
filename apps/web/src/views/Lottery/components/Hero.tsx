@@ -2,13 +2,11 @@ import styled, { keyframes } from 'styled-components'
 import { Box, Flex, Heading, Skeleton, Balance } from '@pancakeswap/uikit'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePriceCakeUSD } from 'state/farms/hooks'
-import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { TicketPurchaseCard } from '../svgs'
 import BuyTicketsButton from './BuyTicketsButton'
 
-export const floatingStarsLeft = keyframes`
+const floatingStarsLeft = keyframes`
   from {
     transform: translate(0,  0px);
   }
@@ -20,7 +18,7 @@ export const floatingStarsLeft = keyframes`
   }
 `
 
-export const floatingStarsRight = keyframes`
+const floatingStarsRight = keyframes`
   from {
     transform: translate(0,  0px);
   }
@@ -210,27 +208,27 @@ const StarsDecorations = styled(Box)`
   }
 `
 
-const Hero = () => {
+const Hero = ({ lottery, currentTokenId }) => {
   const { t } = useTranslation()
-  const {
-    currentRound: { amountCollectedInCake, status },
-    isTransitioning,
-  } = useLottery()
-
-  const cakePriceBusd = usePriceCakeUSD()
-  const prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
-  const prizeTotal = getBalanceNumber(prizeInBusd)
-  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
+  // const cakePriceBusd = usePriceCakeBusd()
+  // times(cakePriceBusd)
+  const tokenData = lottery?.tokenData?.length ? lottery?.tokenData[currentTokenId] : {}
+  const prizeInBusd = tokenData.amountCollected ?? 0
+  const prizeTotal = getBalanceNumber(prizeInBusd, tokenData?.decimals ?? 18)
+  const ticketBuyIsDisabled = lottery?.status !== LotteryStatus.OPEN
 
   const getHeroHeading = () => {
-    if (status === LotteryStatus.OPEN) {
+    if (lottery?.status === LotteryStatus.OPEN) {
       return (
         <>
-          {prizeInBusd.isNaN() ? (
-            <Skeleton my="7px" height={60} width={190} />
-          ) : (
-            <PrizeTotalBalance fontSize="64px" bold prefix="$" value={prizeTotal} mb="8px" decimals={0} />
-          )}
+          <PrizeTotalBalance
+            fontSize="64px"
+            bold
+            unit={` ${tokenData.token?.symbol ?? ''}`}
+            value={prizeTotal}
+            mb="8px"
+            decimals={0}
+          />
           <Heading mb="32px" scale="lg" color="#ffffff">
             {t('in prizes!')}
           </Heading>
@@ -254,8 +252,8 @@ const Hero = () => {
         <img src="/images/lottery/ticket-l.png" width="123px" height="83px" alt="" />
         <img src="/images/lottery/ticket-r.png" width="121px" height="72px" alt="" />
       </StarsDecorations>
-      <Heading style={{ zIndex: 1 }} mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
-        {t('The PancakeSwap Lottery')}
+      <Heading mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
+        {t('The PaySwap Lottery')}
       </Heading>
       {getHeroHeading()}
       <TicketContainer

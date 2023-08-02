@@ -115,11 +115,11 @@ const getWinningNumbersForRound = (targetRoundId: string, lotteriesData: Lottery
 }
 
 const fetchUnclaimedUserRewards = async (
-  account: string,
-  userLotteryData: LotteryUserGraphEntity,
-  lotteriesData: LotteryRoundGraphEntity[],
-  currentLotteryId: string,
-): Promise<LotteryTicketClaimData[]> => {
+  account: any,
+  userLotteryData: any,
+  lotteriesData: any,
+  currentLotteryId: any,
+) => {
   const { rounds } = userLotteryData
 
   // If there is no user round history - return an empty array
