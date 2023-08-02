@@ -41,7 +41,7 @@ interface MoreFromThisCollectionProps {
   title?: ReactNode
 }
 
-const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisCollectionProps>> = ({
+const MoreFromThisCollection: React.FC<any> = ({
   collectionAddress,
   currentTokenName = '',
   title = <Trans>More from this collection</Trans>,
