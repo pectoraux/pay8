@@ -1,6 +1,6 @@
 import { Flex, Box, Text, Button, Input } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-// import Filters from 'views/ChannelCreation/Filters'
+import Filters from 'views/ChannelCreation/Filters'
 import { GreyedOutContainer } from './styles'
 import { Divider } from '../shared/styles'
 
@@ -115,7 +115,7 @@ const ModifyCollectionModal: React.FC<any> = ({
             onChange={handleChange}
           />
         </GreyedOutContainer>
-        {/* <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} /> */}
+        <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
       </Box>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
