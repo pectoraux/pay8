@@ -11,10 +11,6 @@ interface VoteDetailsModalProps extends InjectedModalProps {
 const VoteDetailsModal: React.FC<any> = ({ block, onDismiss }) => {
   const { t } = useTranslation()
   const [modalIsOpen, setModalIsOpen] = useState(true)
-  // const {
-  //   isLoading,
-  //   total
-  // } = useGetVotingPower(block, modalIsOpen)
   const { theme } = useTheme()
 
   const handleDismiss = () => {
