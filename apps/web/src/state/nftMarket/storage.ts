@@ -4,7 +4,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { nftMarketFiltersAtom, nftMarketActivityFiltersAtom, tryVideoNftMediaAtom } from 'state/nftMarket/atoms'
 import { useCallback } from 'react'
 
-const initialNftFilterState: NftFilter = {
+const initialNftFilterState: any = {
   activeFilters: {},
   showOnlyOnSale: true,
   ordering: {
@@ -13,7 +13,7 @@ const initialNftFilterState: NftFilter = {
   },
 }
 
-const initialNftActivityFilterState: NftActivityFilter = {
+const initialNftActivityFilterState: any = {
   typeFilters: [],
   collectionFilters: [],
 }
@@ -24,7 +24,7 @@ export function useNftStorage() {
   const [tryVideoNftMedia, setTryVideoNftMedia] = useAtom(tryVideoNftMediaAtom)
 
   const addActivityTypeFilters = useCallback(
-    ({ collection, field }: { collection: string; field: MarketEvent }) => {
+    ({ collection, field }) => {
       if (nftMarketActivityFilters[collection]) {
         nftMarketActivityFilters[collection].typeFilters.push(field)
       } else {
@@ -39,7 +39,7 @@ export function useNftStorage() {
   )
 
   const addActivityCollectionFilters = useCallback(
-    ({ collection }: { collection: string }) => {
+    ({ collection }) => {
       if (nftMarketActivityFilters['']) {
         nftMarketActivityFilters[''].collectionFilters.push(collection)
       } else {
@@ -54,7 +54,7 @@ export function useNftStorage() {
   )
 
   const removeActivityTypeFilters = useCallback(
-    ({ collection, field }: { collection: string; field: MarketEvent }) => {
+    ({ collection, field }) => {
       if (nftMarketActivityFilters[collection]) {
         nftMarketActivityFilters[collection].typeFilters = nftMarketActivityFilters[collection].typeFilters.filter(
           (activeFilter) => activeFilter !== field,
@@ -66,7 +66,7 @@ export function useNftStorage() {
   )
 
   const removeActivityCollectionFilters = useCallback(
-    ({ collection }: { collection: string }) => {
+    ({ collection }) => {
       if (nftMarketActivityFilters['']) {
         nftMarketActivityFilters[collection].collectionFilters = nftMarketActivityFilters[
           collection
@@ -78,7 +78,7 @@ export function useNftStorage() {
   )
 
   const removeAllActivityFilters = useCallback(
-    (collectionAddress: string) => {
+    (collectionAddress: any) => {
       nftMarketActivityFilters[collectionAddress] = cloneDeep(initialNftActivityFilterState)
       setNftMarketActivityFilters({ ...nftMarketActivityFilters })
     },
@@ -91,7 +91,7 @@ export function useNftStorage() {
   }, [nftMarketActivityFilters, setNftMarketActivityFilters])
 
   const setShowOnlyOnSale = useCallback(
-    ({ collection, showOnlyOnSale }: { collection: string; showOnlyOnSale: boolean }) => {
+    ({ collection, showOnlyOnSale }: { collection: any; showOnlyOnSale: any }) => {
       if (nftMarketFilters[collection]) {
         nftMarketFilters[collection].showOnlyOnSale = showOnlyOnSale
       } else {
@@ -106,7 +106,7 @@ export function useNftStorage() {
   )
 
   const setOrdering = useCallback(
-    ({ collection, field, direction }: { collection: string; field: string; direction: 'asc' | 'desc' }) => {
+    ({ collection, field, direction }: { collection: any; field: any; direction: 'asc' | 'desc' }) => {
       if (nftMarketFilters[collection]) {
         nftMarketFilters[collection].ordering = {
           field,
@@ -127,7 +127,7 @@ export function useNftStorage() {
   )
 
   const removeAllItemFilters = useCallback(
-    (collectionAddress: string) => {
+    (collectionAddress: any) => {
       nftMarketFilters[collectionAddress] = { ...cloneDeep(initialNftActivityFilterState) }
       setNftMarketFilters({ ...nftMarketFilters })
     },
@@ -135,7 +135,7 @@ export function useNftStorage() {
   )
 
   const updateItemFilters = useCallback(
-    ({ collectionAddress, nftFilters }: { collectionAddress: string; nftFilters: Record<string, NftAttribute> }) => {
+    ({ collectionAddress, nftFilters }: { collectionAddress: any; nftFilters: any }) => {
       if (nftMarketFilters[collectionAddress]) {
         nftMarketFilters[collectionAddress] = {
           ...nftMarketFilters[collectionAddress],
