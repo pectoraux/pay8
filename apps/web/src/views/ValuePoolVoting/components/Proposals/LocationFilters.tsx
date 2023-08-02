@@ -1,20 +1,14 @@
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Box, ButtonMenu, ButtonMenuItem, Flex, Grid, Text } from '@pancakeswap/uikit'
+import { Box, Flex, Grid, Text } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
 import isEmpty from 'lodash/isEmpty'
 import { useGetNftFilters } from 'state/cancan/hooks'
 import { ListTraitFilter } from 'views/Nft/market/components/Filters/ListTraitFilter'
-// import ClearAllButton from 'views/CanCan/market/components/Collection/Items/ClearAllButton'
-import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { NftAttribute } from 'state/cancan/types'
-import { useTranslation } from '@pancakeswap/localization'
 import { Item } from 'views/CanCan/market/components/Filters'
-import { useAppDispatch } from 'state'
-// import { WORKSPACES, COUNTRIES, CITIES } from 'config'
-import { WORKSPACES, COUNTRIES2, CITIES2, PAYWALLS, PRODUCTS } from 'config'
-import { AddressZero } from '@ethersproject/constants'
+import { COUNTRIES, CITIES, PRODUCTS } from 'config'
 import ClearAllButton from 'views/CanCan/market/ActivityHistory/ClearAllButton'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 interface FiltersProps {
   address: string
@@ -90,8 +84,8 @@ const ScrollableFlexContainer = styled(Flex)`
 `
 
 const Filters: React.FC<any> = () => {
-  const nftFilters = useGetNftFilters(AddressZero)
-  const countries = Object.entries(COUNTRIES2)?.reduce(
+  const nftFilters = useGetNftFilters(ADDRESS_ZERO)
+  const countries = Object.entries(COUNTRIES)?.reduce(
     (accum: any, attr: any) => ({
       ...accum,
       Country: nftFilters.workspace
@@ -110,7 +104,7 @@ const Filters: React.FC<any> = () => {
     }),
     {} as any,
   )
-  const cities = Object.entries(CITIES2)?.reduce(
+  const cities = Object.entries(CITIES)?.reduce(
     (accum: any, attr: any) => ({
       ...accum,
       City: nftFilters.workspace
@@ -174,40 +168,6 @@ const Filters: React.FC<any> = () => {
       }),
       {} as any,
     )
-  const paywallsHome = Object.entries(PAYWALLS)
-    ?.filter((item: any) => (nftFilters.workspace ? item[1].Workspace === nftFilters.workspace?.value : true))
-    .reduce(
-      (accum: any, attr: any) => ({
-        ...accum,
-        Paywall: nftFilters.city
-          ? accum.Paywall
-            ? [...accum.Paywall, { traitType: 'Paywall', value: attr[0], count: attr[1].City[nftFilters.city.value] }]
-            : [
-                {
-                  traitType: 'Paywall',
-                  value: attr[0],
-                  count: nftFilters?.length ? attr[1].City[nftFilters.city.value] : 0,
-                },
-              ]
-          : nftFilters.country
-          ? accum.Paywall
-            ? [
-                ...accum.Paywall,
-                { traitType: 'Paywall', value: attr[0], count: attr[1].Country[nftFilters.country.value] },
-              ]
-            : [
-                {
-                  traitType: 'Paywall',
-                  value: attr[0],
-                  count: nftFilters?.length ? attr[1].Country[nftFilters.country.value] : 0,
-                },
-              ]
-          : accum.Paywall
-          ? [...accum.Paywall, { traitType: 'Paywall', value: attr[0], count: attr[1].Total }]
-          : [{ traitType: 'Paywall', value: attr[0], count: attr[1].Total }],
-      }),
-      {} as any,
-    )
   const countryItems: Item[] = countries.Country.map((attr) => ({
     label: capitalize(attr.value as string),
     count: attr.count ? attr.count : undefined,
@@ -232,23 +192,23 @@ const Filters: React.FC<any> = () => {
           title={capitalize('country')}
           traitType="country"
           items={countryItems}
-          collectionAddress={AddressZero}
+          collectionAddress={ADDRESS_ZERO}
         />
         <ListTraitFilter
           key="city"
           title={capitalize('city')}
           traitType="city"
           items={cityItems}
-          collectionAddress={AddressZero}
+          collectionAddress={ADDRESS_ZERO}
         />
         <ListTraitFilter
           key="tags"
           title={capitalize('tags')}
           traitType="product"
           items={productItems ?? []}
-          collectionAddress={AddressZero}
+          collectionAddress={ADDRESS_ZERO}
         />
-        {!isEmpty(nftFilters) && <ClearAllButton collectionAddress={AddressZero} mb="4px" />}
+        {!isEmpty(nftFilters) && <ClearAllButton collectionAddress={ADDRESS_ZERO} mb="4px" />}
       </ScrollableFlexContainer>
     </>
   )
