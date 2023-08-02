@@ -1,4 +1,4 @@
-import { Flex, Text, Button, ArrowUpIcon, ScanLink } from '@pancakeswap/uikit'
+import { Flex, Text, Button, ArrowUpIcon, LinkExternal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBlockExploreLink } from 'utils'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -9,7 +9,7 @@ interface TransactionConfirmedProps {
   onDismiss: () => void
 }
 
-const TransactionConfirmed: React.FC<React.PropsWithChildren<TransactionConfirmedProps>> = ({ txHash, onDismiss }) => {
+const TransactionConfirmed: React.FC<any> = ({ txHash, onDismiss }) => {
   const { chainId } = useActiveChainId()
   const { t } = useTranslation()
   return (
@@ -17,7 +17,7 @@ const TransactionConfirmed: React.FC<React.PropsWithChildren<TransactionConfirme
       <Flex p="16px" flexDirection="column" alignItems="center" justifyContent="space-between" height="150px">
         <ArrowUpIcon width="64px" height="64px" color="primary" />
         <Text bold>{t('Transaction Confirmed')}</Text>
-        <ScanLink href={getBlockExploreLink(txHash, 'transaction', chainId)}>{t('View on BscScan')}</ScanLink>
+        <LinkExternal href={getBlockExploreLink(txHash, 'transaction', chainId)}>{t('View on BscScan')}</LinkExternal>
       </Flex>
       <Divider />
       <Flex px="16px" pb="16px" justifyContent="center">

@@ -5,22 +5,25 @@ import {
   Td,
   IconButton,
   Link,
-  BscScanIcon,
+  OpenNewIcon,
+  TicketFillIcon,
+  TokenImage,
   useModal,
   Skeleton,
   useMatchBreakpoints,
   NextLinkFromReactRouter,
 } from '@pancakeswap/uikit'
+import { useRouter } from 'next/router'
 import { Activity, NftToken } from 'state/nftMarket/types'
 import { Price, Currency } from '@pancakeswap/sdk'
-import { getBlockExploreLink, isAddress } from 'utils'
+import { getBlockExploreLink } from 'utils'
 import ProfileCell from 'views/Nft/market/components/ProfileCell'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import MobileModal from './MobileModal'
 import ActivityPrice from './ActivityPrice'
 import ActivityEventText from './ActivityEventText'
-import { nftsBaseUrl, pancakeBunniesAddress } from '../../constants'
-import NFTMedia from '../NFTMedia'
+import { nftsBaseUrl } from '../../constants'
+import WebPageModal from './WebPageModal'
 
 interface ActivityRowProps {
   activity: Activity
@@ -30,10 +33,11 @@ interface ActivityRowProps {
   isNftActivity?: boolean
 }
 
-const ActivityRow: React.FC<React.PropsWithChildren<ActivityRowProps>> = ({
+const ActivityRow: React.FC<any> = ({
+  nft,
   activity,
   bnbBusdPrice,
-  nft,
+  collection,
   isUserActivity = false,
   isNftActivity = false,
 }) => {
@@ -41,6 +45,7 @@ const ActivityRow: React.FC<React.PropsWithChildren<ActivityRowProps>> = ({
   const { isXs, isSm } = useMatchBreakpoints()
   const priceAsFloat = parseFloat(activity.price)
   const timestampAsMs = parseFloat(activity.timestamp) * 1000
+  const collectionId = useRouter().query.collectionAddress as string
   const localeTimestamp = new Date(timestampAsMs).toLocaleString(undefined, {
     year: 'numeric',
     month: 'numeric',
@@ -57,13 +62,10 @@ const ActivityRow: React.FC<React.PropsWithChildren<ActivityRowProps>> = ({
       isUserActivity={isUserActivity}
     />,
   )
-  const isPBCollection = nft ? isAddress(nft.collectionAddress) === pancakeBunniesAddress : false
-  const tokenId =
-    nft && isPBCollection
-      ? nft.attributes.find((attribute) => attribute.traitType === 'bunnyId')?.value
-      : nft
-      ? nft.tokenId
-      : null
+  const currNft = nft?.transactionHistory?.find((tx) => tx.id?.toLowerCase() === activity.tx?.toLowerCase())
+  const [onPresentNFTicket] = useModal(<WebPageModal nft={currNft} />)
+  const tokenId = nft ? nft.tokenId : null
+  const item = activity?.nft || activity?.paywall
 
   const onClickProp = nft
     ? {
@@ -87,29 +89,25 @@ const ActivityRow: React.FC<React.PropsWithChildren<ActivityRowProps>> = ({
             ) : (
               <>
                 <Box width={64} height={64} mr={[0, null, '16px']} mb={['8px', null, 0]}>
-                  <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${tokenId}`}>
-                    <NFTMedia nft={nft} width={64} height={64} />
+                  <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${collectionId}/${tokenId}`}>
+                    <TokenImage mr="8px" width={64} height={64} src={collection?.avatar} />
                   </NextLinkFromReactRouter>
                 </Box>
                 <Flex flexDirection="column">
                   <Text
                     as={NextLinkFromReactRouter}
-                    to={`${nftsBaseUrl}/collections/${nft.collectionAddress}`}
-                    textAlign={['center', null, 'left']}
-                    color="textSubtle"
-                    fontSize="14px"
-                  >
-                    {nft.collectionName}
-                  </Text>
-                  <Text
-                    as={NextLinkFromReactRouter}
-                    to={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${tokenId}`}
+                    to={`${nftsBaseUrl}/collections/${collectionId}/${tokenId}`}
                     textAlign={['center', null, 'left']}
                     bold
                   >
-                    {nft.name}
+                    {nft.id}
                   </Text>
                 </Flex>
+                {currNft ? (
+                  <IconButton style={{ cursor: 'pointer' }} as={Link} external onClick={onPresentNFTicket}>
+                    <TicketFillIcon color="primary" width="18px" />
+                  </IconButton>
+                ) : null}
               </>
             )}
           </Flex>
@@ -117,7 +115,13 @@ const ActivityRow: React.FC<React.PropsWithChildren<ActivityRowProps>> = ({
       ) : null}
       <Td>
         <Flex alignItems="center" justifyContent="flex-end">
-          <ActivityEventText marketEvent={activity.marketEvent} />
+          <ActivityEventText
+            marketEvent={
+              ['SELL', 'BUY'].includes(activity.marketEvent)
+                ? activity.marketEvent
+                : item?.askHistory && item?.askHistory[0].orderType
+            }
+          />
         </Flex>
         {isXs || isSm ? <ActivityPrice price={priceAsFloat} bnbBusdPrice={bnbBusdPrice} /> : null}
       </Td>
@@ -129,19 +133,19 @@ const ActivityRow: React.FC<React.PropsWithChildren<ActivityRowProps>> = ({
           {isUserActivity ? (
             <Td>
               <Flex justifyContent="center" alignItems="center">
-                {activity.otherParty ? <ProfileCell accountAddress={activity.otherParty} /> : '-'}
+                {activity.otherParty ? <ProfileCell accountAddress={activity.otherParty} tokenId={tokenId} /> : '-'}
               </Flex>
             </Td>
           ) : (
             <>
               <Td>
                 <Flex justifyContent="center" alignItems="center">
-                  {activity.seller ? <ProfileCell accountAddress={activity.seller} /> : '-'}
+                  {activity.seller ? <ProfileCell accountAddress={activity.seller} tokenId={tokenId} /> : '-'}
                 </Flex>
               </Td>
               <Td>
                 <Flex justifyContent="center" alignItems="center">
-                  {activity.buyer ? <ProfileCell accountAddress={activity.buyer} /> : '-'}
+                  {activity.buyer ? <ProfileCell accountAddress={activity.buyer} tokenId={tokenId} /> : '-'}
                 </Flex>
               </Td>
             </>
@@ -158,8 +162,13 @@ const ActivityRow: React.FC<React.PropsWithChildren<ActivityRowProps>> = ({
       {isXs || isSm ? null : (
         <Td>
           <IconButton as={Link} external href={getBlockExploreLink(activity.tx, 'transaction', chainId)}>
-            <BscScanIcon color="textSubtle" width="18px" />
+            <OpenNewIcon color="textSubtle" width="18px" />
           </IconButton>
+          {currNft ? (
+            <IconButton style={{ cursor: 'pointer' }} as={Link} external onClick={onPresentNFTicket}>
+              <TicketFillIcon color="primary" width="18px" />
+            </IconButton>
+          ) : null}
         </Td>
       )}
     </tr>

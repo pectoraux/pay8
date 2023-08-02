@@ -1,4 +1,4 @@
-import { InjectedModalProps, Modal, Flex, Text, Button, BinanceIcon, Box, BscScanIcon } from '@pancakeswap/uikit'
+import { InjectedModalProps, Modal, Flex, Text, Button, BinanceIcon, Box } from '@pancakeswap/uikit'
 import { Price, Currency } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import { Activity, NftToken } from 'state/nftMarket/types'
@@ -8,7 +8,6 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { getBlockExploreLink } from 'utils'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useDomainNameForAddress } from 'hooks/useDomain'
 import ActivityEventText from './ActivityEventText'
 import NFTMedia from '../NFTMedia'
 
@@ -33,9 +32,6 @@ const MobileModal: React.FC<React.PropsWithChildren<MobileModalProps>> = ({
   const { theme } = useTheme()
   const priceAsFloat = parseFloat(activity.price)
   const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, priceAsFloat)
-  const { domainName: otherPartySidName } = useDomainNameForAddress(activity.otherParty)
-  const { domainName: sellerSidName } = useDomainNameForAddress(activity.seller)
-  const { domainName: buyerSidName } = useDomainNameForAddress(activity.buyer)
 
   return (
     <Modal title={t('Transaction Details')} onDismiss={onDismiss} headerBackground={theme.colors.gradientCardHeader}>
@@ -78,7 +74,7 @@ const MobileModal: React.FC<React.PropsWithChildren<MobileModalProps>> = ({
               <Text fontSize="14px" color="textSubtle">
                 {t('From/To')}
               </Text>
-              <Text>{activity.otherParty ? otherPartySidName || truncateHash(activity.otherParty) : '-'}</Text>
+              <Text>{activity.otherParty ? truncateHash(activity.otherParty) : '-'}</Text>
             </Flex>
           ) : (
             <>
@@ -86,13 +82,13 @@ const MobileModal: React.FC<React.PropsWithChildren<MobileModalProps>> = ({
                 <Text fontSize="14px" color="textSubtle">
                   {t('From')}
                 </Text>
-                <Text>{activity.seller ? sellerSidName || truncateHash(activity.seller) : '-'}</Text>
+                <Text>{activity.seller ? truncateHash(activity.seller) : '-'}</Text>
               </Flex>
               <Flex mb="24px" justifyContent="space-between">
                 <Text fontSize="14px" color="textSubtle">
                   {t('To')}
                 </Text>
-                <Text>{activity.buyer ? buyerSidName || truncateHash(activity.buyer) : '-'}</Text>
+                <Text>{activity.buyer ? truncateHash(activity.buyer) : '-'}</Text>
               </Flex>
             </>
           )}
@@ -106,7 +102,6 @@ const MobileModal: React.FC<React.PropsWithChildren<MobileModalProps>> = ({
         <Flex flexDirection="column" pt="16px" alignItems="center">
           <Button as="a" external href={getBlockExploreLink(activity.tx, 'transaction', chainId)}>
             {t('View on BscScan')}
-            <BscScanIcon color="invertedContrast" ml="4px" />
           </Button>
         </Flex>
       </Flex>

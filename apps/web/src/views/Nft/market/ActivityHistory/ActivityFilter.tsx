@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import { Box, Button, Flex, IconButton, CloseIcon } from '@pancakeswap/uikit'
 import { ContextApi, useTranslation } from '@pancakeswap/localization'
-import { MarketEvent } from '../../../../state/nftMarket/types'
-import { useNftStorage } from '../../../../state/nftMarket/storage'
+import { MarketEvent } from '../../../../state/cancan/types'
+import { useNftStorage } from '../../../../state/cancan/storage'
 
 interface ActivityFilterProps {
   eventType: MarketEvent
@@ -28,14 +28,16 @@ const CloseButton = styled(IconButton)`
 
 const eventName = (t: ContextApi['t'], eventType: string) => {
   switch (eventType) {
-    case MarketEvent.CANCEL:
+    case MarketEvent.UNLISTED:
       return t('Delisted')
-    case MarketEvent.MODIFY:
+    case MarketEvent.MODIFIED:
       return t('Modified')
-    case MarketEvent.NEW:
+    case MarketEvent.LISTED:
       return t('Listed')
-    case MarketEvent.SELL:
+    case MarketEvent.SOLD:
       return t('Sold')
+    case MarketEvent.NEW:
+      return t('New')
     default:
       return ''
   }

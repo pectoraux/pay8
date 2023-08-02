@@ -6,17 +6,22 @@ import { Profile } from 'state/types'
 import { getCompleteAccountNftData } from 'state/nftMarket/helpers'
 import useSWR from 'swr'
 import { FetchStatus } from 'config/constants/types'
+import { laggyMiddleware } from 'hooks/useSWRContract'
 import { usePreviousValue } from '@pancakeswap/hooks'
 import { isAddress } from 'utils'
-import { getAddress } from 'viem'
+import { getProfileHelperContract } from 'utils/contractHelpers'
 
 export const useNftsForAddress = (account: string, profile: Profile, isProfileFetching: boolean) => {
-  const { data: collections } = useGetCollections()
+  const data = useGetCollections()
+  const collections = data as any
 
   const { nfts, isLoading, refresh } = useCollectionsNftsForAddress(account, profile, isProfileFetching, collections)
   return { nfts, isLoading, refresh }
 }
 
+export const getUrl = async (f) => {
+  return f(getProfileHelperContract(), 'tokenURI', [1])
+}
 export const useCollectionsNftsForAddress = (
   account: string,
   profile: Profile,
@@ -37,7 +42,7 @@ export const useCollectionsNftsForAddress = (
     if (hasProfileNft) {
       return {
         tokenId: profileNftTokenId,
-        collectionAddress: getAddress(profileNftCollectionAddress),
+        collectionAddress: profileNftCollectionAddress,
         nftLocation: NftLocation.PROFILE,
       }
     }
@@ -47,13 +52,11 @@ export const useCollectionsNftsForAddress = (
   // @ts-ignore
   const { status, data, mutate, resetLaggy } = useSWR(
     !isProfileFetching && !isEmpty(collections) && isAddress(account) ? [account, 'userNfts'] : null,
-    async () => getCompleteAccountNftData(getAddress(account), collections, profileNftWithCollectionAddress),
-    {
-      keepPreviousData: true,
-    },
+    async () => getCompleteAccountNftData(account, collections, profileNftWithCollectionAddress),
+    { use: [laggyMiddleware] },
   )
 
   resetLaggyRef.current = resetLaggy
-
-  return { nfts: data ?? [], isLoading: status !== FetchStatus.Fetched, refresh: mutate }
+  const nfts = data as any
+  return { nfts, isLoading: status !== FetchStatus.Fetched, refresh: mutate }
 }

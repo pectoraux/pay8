@@ -1,15 +1,11 @@
 import { Button, ChevronRightIcon, Flex, Grid, Heading, Text, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
-import { Collection } from 'state/nftMarket/types'
+import { Collection } from 'state/cancan/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
 
-const Collections: React.FC<React.PropsWithChildren<{ title: string; testId: string; collections: Collection[] }>> = ({
-  title,
-  testId,
-  collections,
-}) => {
+const Collections: React.FC<any> = ({ title, testId, collections }) => {
   const { t } = useTranslation()
 
   return (
@@ -30,20 +26,20 @@ const Collections: React.FC<React.PropsWithChildren<{ title: string; testId: str
         </Button>
       </Flex>
       <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
-        {collections.slice(0, 6).map((collection) => {
+        {collections?.slice(0, 6).map((collection) => {
           return (
             <CollectionCard
-              key={collection.address}
-              bgSrc={collection.banner.small}
-              avatarSrc={collection.avatar}
-              collectionName={collection.name}
-              url={`${nftsBaseUrl}/collections/${collection.address}`}
+              key={collection?.id}
+              bgSrc={collection?.small ?? ''}
+              avatarSrc={collection?.avatar ?? ''}
+              collectionName={collection?.name ?? ''}
+              url={`${nftsBaseUrl}/collections/${collection.id}`}
             >
               <Flex alignItems="center">
                 <Text fontSize="12px" color="textSubtle">
                   {t('Volume')}
                 </Text>
-                <BNBAmountLabel amount={collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0} />
+                <BNBAmountLabel amount={collection?.totalVolumeBNB ? parseFloat(collection?.totalVolumeBNB) : 0} />
               </Flex>
             </CollectionCard>
           )

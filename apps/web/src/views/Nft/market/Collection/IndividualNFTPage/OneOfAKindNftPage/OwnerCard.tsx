@@ -31,27 +31,21 @@ const OwnerRow = styled(Grid)`
 interface OwnerCardProps {
   nft: NftToken
   isOwnNft: boolean
-  nftIsProfilePic: boolean
   onSuccess: () => void
 }
 
-const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
-  nft,
-  isOwnNft,
-  nftIsProfilePic,
-  onSuccess,
-}) => {
+const OwnerCard: React.FC<any> = ({ nft, isOwnNft, isPaywall, onSuccess }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const bnbBusdPrice = useBNBBusdPrice()
 
-  const { owner, isLoadingOwner } = useNftOwner(nft, isOwnNft)
-
+  // const { owner, isLoadingOwner } = useNftOwner(nft, isOwnNft)
+  const owner = nft.currentSeller
   const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, parseFloat(nft?.marketData?.currentAskPrice))
 
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentAdjustPriceModal] = useModal(
-    <SellModal variant={nft.marketData?.isTradable ? 'edit' : 'sell'} nftToSell={nft} onSuccessSale={onSuccess} />,
+    <SellModal variant={isPaywall ? 'paywall' : 'item'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
 
   return (
@@ -108,13 +102,7 @@ const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
             </Box>
             <ButtonContainer>
               {isOwnNft ? (
-                <Button
-                  disabled={nftIsProfilePic}
-                  scale="sm"
-                  variant="secondary"
-                  maxWidth="128px"
-                  onClick={onPresentAdjustPriceModal}
-                >
+                <Button scale="sm" variant="secondary" maxWidth="128px" onClick={onPresentAdjustPriceModal}>
                   {nft.marketData?.isTradable ? t('Manage') : t('Sell')}
                 </Button>
               ) : (
@@ -132,8 +120,7 @@ const OwnerCard: React.FC<React.PropsWithChildren<OwnerCardProps>> = ({
           </OwnerRow>
         </>
       )}
-      {isLoadingOwner && <Skeleton />}
-      {!isLoadingOwner && !owner && (
+      {!owner && (
         <Flex justifyContent="center" alignItems="center" padding="24px">
           <Text>{t('Owner information is not available for this item')}</Text>
         </Flex>

@@ -1,15 +1,25 @@
-import { TokenMarketData, Image } from 'state/nftMarket/types'
+import { TokenMarketData, Image } from 'state/cancan/types'
 
 export enum PaymentCurrency {
   BNB,
   WBNB,
+  CONTRACT,
 }
 
 export enum BuyingStage {
   REVIEW,
+  CONFIRM_REVIEW,
+  PAYWALL_REVIEW,
+  CONFIRM_PAYWALL_REVIEW,
+  TX_CONFIRMED,
+  PAYMENT_CREDIT,
+  CONFIRM_PAYMENT_CREDIT,
+  CASHBACK,
+  CONFIRM_CASHBACK,
+  STAKE,
+  CONFIRM_STAKE,
   APPROVE_AND_CONFIRM,
   CONFIRM,
-  TX_CONFIRMED,
 }
 
 export interface BuyNFT {

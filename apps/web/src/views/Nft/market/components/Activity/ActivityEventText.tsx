@@ -8,17 +8,41 @@ interface ActivityEventTextProps extends TextProps {
 
 const ActivityEventText: React.FC<React.PropsWithChildren<ActivityEventTextProps>> = ({ marketEvent, ...props }) => {
   const { t } = useTranslation()
-
+  console.log('marketEvent==============>', marketEvent)
   const events = {
-    [MarketEvent.NEW]: {
+    NewNFT: {
       text: t('Listed'),
       color: 'textSubtle',
     },
-    [MarketEvent.CANCEL]: {
+    NewItem: {
+      text: t('Listed'),
+      color: 'textSubtle',
+    },
+    NewPaywall: {
+      text: t('Listed'),
+      color: 'textSubtle',
+    },
+    CancelNFT: {
       text: t('Delisted'),
       color: 'textSubtle',
     },
-    [MarketEvent.MODIFY]: {
+    CancelItem: {
+      text: t('Delisted'),
+      color: 'textSubtle',
+    },
+    CancelPaywall: {
+      text: t('Delisted'),
+      color: 'textSubtle',
+    },
+    ModifyNFT: {
+      text: t('Modified'),
+      color: 'textSubtle',
+    },
+    ModifyItem: {
+      text: t('Modified'),
+      color: 'textSubtle',
+    },
+    ModifyPaywall: {
       text: t('Modified'),
       color: 'textSubtle',
     },
@@ -26,15 +50,15 @@ const ActivityEventText: React.FC<React.PropsWithChildren<ActivityEventTextProps
       text: t('Bought'),
       color: 'success',
     },
-    [MarketEvent.SELL]: {
+    SELL: {
       text: t('Sold'),
       color: 'failure',
     },
   }
 
   return (
-    <Text {...props} color={events[marketEvent].color}>
-      {events[marketEvent].text}
+    <Text {...props} color={events[marketEvent]?.color}>
+      {events[marketEvent]?.text}
     </Text>
   )
 }

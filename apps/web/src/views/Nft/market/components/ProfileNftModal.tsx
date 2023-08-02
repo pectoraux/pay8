@@ -1,14 +1,4 @@
-import {
-  InjectedModalProps,
-  Modal,
-  Flex,
-  Text,
-  Button,
-  useModal,
-  Grid,
-  LinkExternal,
-  ScanLink,
-} from '@pancakeswap/uikit'
+import { InjectedModalProps, Modal, Flex, Text, Button, useModal, Link, Grid, LinkExternal } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import styled from 'styled-components'
 import { NftToken } from 'state/nftMarket/types'
@@ -61,17 +51,20 @@ const ProfileNftModal: React.FC<React.PropsWithChildren<ProfileNftModalProps>> =
             </Text>
           </Flex>
           <Flex justifyContent="space-between" flex="3">
-            <LinkExternal
+            <Button
+              as={Link}
               p="0px"
               height="16px"
+              external
+              variant="text"
               href={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${itemPageUrlId}`}
             >
               {t('View Item')}
-            </LinkExternal>
+            </Button>
             <HorizontalDivider />
-            <ScanLink p="0px" height="16px" href={getBscScanLinkForNft(nft.collectionAddress, nft.tokenId)}>
+            <LinkExternal p="0px" height="16px" href={getBscScanLinkForNft(nft.collectionAddress, nft.tokenId)}>
               BscScan
-            </ScanLink>
+            </LinkExternal>
           </Flex>
         </Flex>
         <TextWrapper p="24px 16px" flexDirection="column">

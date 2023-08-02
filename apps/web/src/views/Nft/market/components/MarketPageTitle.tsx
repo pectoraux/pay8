@@ -9,13 +9,7 @@ interface MarketPageTitleProps extends GridProps {
   address?: string
 }
 
-const MarketPageTitle: React.FC<React.PropsWithChildren<MarketPageTitleProps>> = ({
-  title,
-  description,
-  children,
-  address,
-  ...props
-}) => {
+const MarketPageTitle: React.FC<any> = ({ title, description, children, address, ...props }) => {
   const { t } = useTranslation()
 
   return (
@@ -26,7 +20,7 @@ const MarketPageTitle: React.FC<React.PropsWithChildren<MarketPageTitleProps>> =
       {...props}
     >
       <Box>
-        <Heading as="h1" scale="xl" color="secondary" mb="16px" data-test="collection-detail-page-title">
+        <Heading as="h1" scale="xl" color="secondary" mb="16px">
           {title}
         </Heading>
         {DELIST_COLLECTIONS[address] ? (

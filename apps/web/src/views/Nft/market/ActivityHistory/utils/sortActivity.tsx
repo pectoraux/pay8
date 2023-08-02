@@ -10,39 +10,39 @@ export const sortActivity = ({
 }): Activity[] => {
   const getAskOrderEvent = (orderType: AskOrderType): MarketEvent => {
     switch (orderType) {
-      case AskOrderType.CANCEL:
+      case AskOrderType.CANCELITEM:
         return MarketEvent.CANCEL
-      case AskOrderType.MODIFY:
+      case AskOrderType.MODIFYITEM:
         return MarketEvent.MODIFY
-      case AskOrderType.NEW:
+      case AskOrderType.NEWITEM:
         return MarketEvent.NEW
       default:
         return MarketEvent.MODIFY
     }
   }
 
-  const transformTransactions = (transactionsHistory: Transaction[]): Activity[] => {
+  const transformTransactions = (transactionsHistory: any) => {
     const transformedTransactions = transactionsHistory.map((transactionHistory) => {
       const marketEvent = MarketEvent.SELL
-      const { timestamp, nft } = transactionHistory
+      const { timestamp, nft, paywall, item } = transactionHistory
       const price = transactionHistory.askPrice
       const tx = transactionHistory.id
       const buyer = transactionHistory.buyer.id
       const seller = transactionHistory.seller.id
-      return { marketEvent, price, timestamp, nft, tx, buyer, seller }
+      return { marketEvent, price, timestamp, nft, paywall, item, tx, buyer, seller }
     })
 
     return transformedTransactions
   }
 
-  const transformAskOrders = (askOrdersHistory: AskOrder[]): Activity[] => {
+  const transformAskOrders = (askOrdersHistory: any) => {
     const transformedAskOrders = askOrdersHistory.map((askOrderHistory) => {
       const marketEvent = getAskOrderEvent(askOrderHistory.orderType)
       const price = askOrderHistory.askPrice
-      const { timestamp, nft } = askOrderHistory
+      const { timestamp, nft, paywall, item } = askOrderHistory
       const tx = askOrderHistory.id
       const seller = askOrderHistory?.seller.id
-      return { marketEvent, price, timestamp, nft, tx, seller }
+      return { marketEvent, price, timestamp, nft, paywall, item, tx, seller }
     })
 
     return transformedAskOrders

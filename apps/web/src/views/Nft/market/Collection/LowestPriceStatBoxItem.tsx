@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { useTranslation } from '@pancakeswap/localization'
-import { getLeastMostPriceInCollection } from 'state/nftMarket/helpers'
+import { getLeastMostPriceInCollection } from 'state/cancan/helpers'
 import { StatBoxItem, StatBoxItemProps } from '../components/StatBox'
 
 interface LowestPriceStatBoxItemProps extends Omit<StatBoxItemProps, 'title' | 'stat'> {

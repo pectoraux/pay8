@@ -1,4 +1,4 @@
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { NftToken, ApiResponseCollectionTokens } from 'state/nftMarket/types'
 import useSWR from 'swr'
 import {
@@ -8,8 +8,8 @@ import {
   combineApiAndSgResponseToNftToken,
 } from 'state/nftMarket/helpers'
 import { FAST_INTERVAL } from 'config/constants'
-import { FetchStatus, TFetchStatus } from 'config/constants/types'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+import { FetchStatus } from 'config/constants/types'
+import { formatBigNumber } from '@pancakeswap/utils/formatBalance'
 import { pancakeBunniesAddress } from '../constants'
 import { getLowestUpdatedToken } from './useGetLowestPrice'
 
@@ -24,7 +24,7 @@ const fetchCheapestBunny = async (
   if (!nftsMarket.length) return null
 
   const nftsMarketTokenIds = nftsMarket.map((marketData) => marketData.tokenId)
-  const lowestPriceUpdatedBunny = await getLowestUpdatedToken(pancakeBunniesAddress, nftsMarketTokenIds)
+  const lowestPriceUpdatedBunny = await getLowestUpdatedToken(pancakeBunniesAddress.toLowerCase(), nftsMarketTokenIds)
 
   const cheapestBunnyOfAccount = nftsMarket
     .filter((marketData) => marketData.tokenId === lowestPriceUpdatedBunny?.tokenId)
@@ -32,7 +32,7 @@ const fetchCheapestBunny = async (
       const apiMetadata = getMetadataWithFallback(nftMetadata.data, marketData.otherId)
       const attributes = getPancakeBunniesAttributesField(marketData.otherId)
       const bunnyToken = combineApiAndSgResponseToNftToken(apiMetadata, marketData, attributes)
-      const updatedPrice = formatBigInt(lowestPriceUpdatedBunny.currentAskPrice)
+      const updatedPrice = formatBigNumber(lowestPriceUpdatedBunny.currentAskPrice)
       return {
         ...bunnyToken,
         marketData: { ...bunnyToken.marketData, ...lowestPriceUpdatedBunny, currentAskPrice: updatedPrice },
@@ -42,7 +42,7 @@ const fetchCheapestBunny = async (
 }
 
 export const usePancakeBunnyCheapestNft = (bunnyId: string, nftMetadata: ApiResponseCollectionTokens) => {
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const { data, status, mutate } = useSWR(
     nftMetadata && bunnyId ? ['cheapestBunny', bunnyId, account] : null,
     async () => {
@@ -69,7 +69,7 @@ export const usePancakeBunnyCheapestNft = (bunnyId: string, nftMetadata: ApiResp
 
   return {
     data,
-    isFetched: ([FetchStatus.Failed, FetchStatus.Fetched] as TFetchStatus[]).includes(status),
+    isFetched: [FetchStatus.Failed, FetchStatus.Fetched].includes(status),
     refresh: mutate,
   }
 }

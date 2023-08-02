@@ -1,22 +1,26 @@
+import { useRouter } from 'next/router'
 import { NextLinkFromReactRouter } from '@pancakeswap/uikit'
-import { isAddress } from 'utils'
 import { StyledCollectibleCard } from './styles'
 import CardBody from './CardBody'
 import { CollectibleCardProps } from './types'
-import { nftsBaseUrl, pancakeBunniesAddress } from '../../constants'
+import { nftsBaseUrl } from '../../constants'
+import ProductDetailsSection from './ProductDetailsSection'
 
-const CollectibleLinkCard: React.FC<React.PropsWithChildren<CollectibleCardProps>> = ({
-  nft,
-  nftLocation,
-  currentAskPrice,
-  ...props
-}) => {
-  const urlId = isAddress(nft.collectionAddress) === pancakeBunniesAddress ? nft.attributes[0].value : nft.tokenId
+const CollectibleLinkCard: React.FC<any> = ({ nft, referrer, nftLocation, currentAskPrice, ...props }) => {
+  const urlId = nft?.tokenId
+  const collectionAddress = useRouter().query.collectionAddress as string
   return (
     <StyledCollectibleCard {...props}>
-      <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${nft.collectionAddress}/${urlId}`}>
+      <NextLinkFromReactRouter
+        to={
+          referrer
+            ? `/${nftsBaseUrl}/collections/${collectionAddress}/${urlId}?referrer=${referrer}`
+            : `/${nftsBaseUrl}/collections/${collectionAddress}/${urlId}`
+        }
+      >
         <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice} />
       </NextLinkFromReactRouter>
+      <ProductDetailsSection key={nft?.tokenId + nft?.collection?.id} paywall={nft} />
     </StyledCollectibleCard>
   )
 }

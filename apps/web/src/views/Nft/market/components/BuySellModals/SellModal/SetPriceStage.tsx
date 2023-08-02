@@ -1,73 +1,78 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, BinanceIcon, ErrorIcon, useTooltip, Skeleton } from '@pancakeswap/uikit'
-import { multiplyPriceByAmount } from 'utils/prices'
-import { escapeRegExp } from 'utils'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Slider,
+  Button,
+  ButtonMenuItem,
+  ButtonMenu,
+  Input,
+  ErrorIcon,
+  Skeleton,
+} from '@pancakeswap/uikit'
+import { Currency } from '@pancakeswap/sdk'
+import multiplyPriceByAmount from '@pancakeswap/utils/multiplyPriceByAmount'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
-import { NftToken } from 'state/nftMarket/types'
-import { useGetCollection } from 'state/nftMarket/hooks'
-import { Divider } from '../shared/styles'
-import { GreyedOutContainer, BnbAmountCell, RightAlignedInput, FeeAmountCell } from './styles'
+import { NftToken } from 'state/cancan/types'
+import { CurrencyLogo } from 'components/Logo'
+import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
+import { StyledItemRow } from 'views/CanCan/market/components/Filters/ListFilter/styles'
+import { OptionType } from './types'
+import { Divider, RoundedImage } from '../shared/styles'
+import { GreyedOutContainer, RightAlignedInput, FeeAmountCell } from './styles'
 
 interface SetPriceStageProps {
-  nftToSell: NftToken
-  variant: 'set' | 'adjust'
+  nftToSell?: any
+  variant?: 'set' | 'adjust'
+  currency?: any
   currentPrice?: string
-  lowestPrice?: number
-  price: string
-  setPrice: React.Dispatch<React.SetStateAction<string>>
+  state: any
+  handleChange: (any) => void
+  handleChoiceChange: () => void
+  handleRawValueChange?: any
   continueToNextStage: () => void
 }
 
-const MIN_PRICE = 0.005
-const MAX_PRICE = 10000
-
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
-
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
+const SetPriceStage: React.FC<any> = ({
   nftToSell,
   variant,
-  lowestPrice,
+  currency,
+  collectionId,
   currentPrice,
-  price,
-  setPrice,
+  state,
+  handleChange,
+  handleChoiceChange,
+  handleRawValueChange,
   continueToNextStage,
 }) => {
+  console.log('SetPriceStage====================>', nftToSell)
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
+  const {
+    price,
+    bidDuration,
+    minBidIncrementPercentage,
+    transferrable,
+    requireUpfrontPayment,
+    rsrcTokenId,
+    maxSupply,
+    dropinTimer,
+    options,
+  } = state
   const adjustedPriceIsTheSame = variant === 'adjust' && parseFloat(currentPrice) === parseFloat(price)
-  const priceIsValid = !price || Number.isNaN(parseFloat(price)) || parseFloat(price) <= 0
-
-  const { creatorFee = '', tradingFee = '' } = useGetCollection(nftToSell.collectionAddress) || {}
-  const creatorFeeAsNumber = parseFloat(creatorFee)
+  const priceAsFloat = parseFloat(price)
+  const priceIsValid = !price || Number.isNaN(priceAsFloat) || priceAsFloat <= 0
+  const tradingFee = (priceAsFloat / 100)?.toString()
   const tradingFeeAsNumber = parseFloat(tradingFee)
   const bnbPrice = useBNBBusdPrice()
-  const priceAsFloat = parseFloat(price)
   const priceInUsd = multiplyPriceByAmount(bnbPrice, priceAsFloat)
-
-  const priceIsOutOfRange = priceAsFloat > MAX_PRICE || priceAsFloat < MIN_PRICE
-
-  const enforcer = (nextUserInput: string) => {
-    if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
-      setPrice(nextUserInput)
-    }
-  }
-
-  const { tooltip, tooltipVisible, targetRef } = useTooltip(
-    <>
-      <Text>
-        {t(
-          'When selling NFTs from this collection, a portion of the BNB paid will be diverted before reaching the seller:',
-        )}
-      </Text>
-      {creatorFeeAsNumber > 0 && (
-        <Text>{t('%percentage%% royalties to the collection owner', { percentage: creatorFee })}</Text>
-      )}
-      <Text>{t('%percentage%% trading fee will be used to buy & burn CAKE', { percentage: tradingFee })}</Text>
-    </>,
-  )
+  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
+  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -80,39 +85,44 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
       if (adjustedPriceIsTheSame || priceIsValid) {
         return t('Input New Sale Price')
       }
-      return t('Confirm')
+      return t('Adjust')
     }
     return t('Enable Listing')
   }
+
   return (
     <>
       <Text fontSize="24px" bold p="16px">
-        {variant === 'set' ? t('Set Price') : t('Adjust Sale Price')}
+        {t('Adjust Sale Price')}
       </Text>
+      <Flex p="16px">
+        <RoundedImage src={thumbnail} height={68} width={68} mr="8px" />
+        <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
+          <Text bold>{nftToSell?.tokenId}</Text>
+          <Text fontSize="12px" color="textSubtle" textAlign="right">
+            {`Collection #${collectionId}`}
+          </Text>
+        </Grid>
+      </Flex>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Set Price')}
+          {t('Adjust Price')}
         </Text>
         <Flex>
           <Flex flex="1" alignItems="center">
-            <BinanceIcon width={24} height={24} mr="4px" />
-            <Text bold>WBNB</Text>
+            <CurrencyLogo currency={currency} size="24px" style={{ marginRight: '8px' }} />
+            <Text bold>{currency?.symbol}</Text>
           </Flex>
           <Flex flex="2">
             <RightAlignedInput
               scale="sm"
-              type="text"
-              pattern="^[0-9]*[.,]?[0-9]*$"
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck="false"
+              type="number"
               inputMode="decimal"
+              id="price"
+              name="price"
               value={price}
               ref={inputRef}
-              isWarning={priceIsOutOfRange}
-              onChange={(e) => {
-                enforcer(e.target.value.replace(/,/g, '.'))
-              }}
+              onChange={handleChange}
             />
           </Flex>
         </Flex>
@@ -123,27 +133,13 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
             </Text>
           )}
         </Flex>
-        {priceIsOutOfRange && (
-          <Text fontSize="12px" color="failure">
-            {t('Allowed price range is between %minPrice% and %maxPrice% WBNB', {
-              minPrice: MIN_PRICE,
-              maxPrice: MAX_PRICE,
-            })}
-          </Text>
-        )}
         <Flex mt="8px">
-          {Number.isFinite(creatorFeeAsNumber) && Number.isFinite(tradingFeeAsNumber) ? (
-            <>
-              <Text small color="textSubtle" mr="8px">
-                {t('Seller pays %percentage%% platform fee on sale', {
-                  percentage: creatorFeeAsNumber + tradingFeeAsNumber,
-                })}
-              </Text>
-              <span ref={targetRef}>
-                <ErrorIcon />
-              </span>
-              {tooltipVisible && tooltip}
-            </>
+          {Number.isFinite(tradingFeeAsNumber) ? (
+            <Text small color="textSubtle" mr="8px">
+              {t('Seller pays %percentage%% platform fee on sale', {
+                percentage: tradingFeeAsNumber,
+              })}
+            </Text>
           ) : (
             <Skeleton width="70%" />
           )}
@@ -152,20 +148,112 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
           <Text small color="textSubtle">
             {t('Platform fee if sold')}
           </Text>
-          {Number.isFinite(creatorFeeAsNumber) && Number.isFinite(tradingFeeAsNumber) ? (
-            <FeeAmountCell bnbAmount={priceAsFloat} creatorFee={creatorFeeAsNumber} tradingFee={tradingFeeAsNumber} />
+          {Number.isFinite(tradingFeeAsNumber) ? (
+            <FeeAmountCell bnbAmount={tradingFeeAsNumber} currency={currency} tradingFee={1} />
           ) : (
             <Skeleton width={40} />
           )}
         </Flex>
-        {lowestPrice && (
-          <Flex justifyContent="space-between" alignItems="center" mt="16px">
-            <Text small color="textSubtle">
-              {t('Lowest price on market')}
-            </Text>
-            <BnbAmountCell bnbAmount={lowestPrice} />
-          </Flex>
-        )}
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Bid Duration (in minutes)')}
+        </Text>
+        <Input
+          type="number"
+          scale="sm"
+          id="bidDuration"
+          name="bidDuration"
+          value={bidDuration || 0}
+          placeholder="25"
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Min Bid Increment Percentage')}
+        </Text>
+        <Slider
+          min={0}
+          max={100}
+          value={minBidIncrementPercentage ?? 0}
+          id="minBidIncrementPercentage"
+          name="minBidIncrementPercentage"
+          onValueChanged={handleRawValueChange('minBidIncrementPercentage')}
+          valueLabel={`${minBidIncrementPercentage ?? 0}%`}
+          step={1}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <StyledItemRow>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="5px" bold>
+            {t('Make NFTickets Transferrable')}
+          </Text>
+          <ButtonMenu
+            scale="sm"
+            variant="subtle"
+            activeIndex={transferrable ? 1 : 0}
+            onItemClick={handleRawValueChange('transferrable')}
+          >
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <StyledItemRow>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="5px" bold>
+            {t('Require Upfront Payment For Staking')}
+          </Text>
+          <ButtonMenu
+            scale="sm"
+            variant="subtle"
+            activeIndex={requireUpfrontPayment ? 1 : 0}
+            onItemClick={handleRawValueChange('requireUpfrontPayment')}
+          >
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Auditor Badge Id')}
+        </Text>
+        <Input
+          type="number"
+          scale="sm"
+          id="rsrcTokenId"
+          name="rsrcTokenId"
+          value={rsrcTokenId ?? 0}
+          placeholder={t('input badge id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Pick drop-in date')}
+        </Text>
+        <DatePicker
+          onChange={handleRawValueChange('dropinTimer')}
+          selected={dropinTimer ?? 0}
+          placeholderText="YYYY/MM/DD"
+        />
+        <DatePickerPortal />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Maximum Supply')}
+        </Text>
+        <Input
+          type="number"
+          scale="sm"
+          id="maxSupply"
+          name="maxSupply"
+          value={maxSupply}
+          placeholder={t('input max supply')}
+          onChange={handleChange}
+        />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
@@ -173,20 +261,13 @@ const SetPriceStage: React.FC<React.PropsWithChildren<SetPriceStageProps>> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The NFT will be removed from your wallet and put on sale at this price.')}
-          </Text>
-          <Text small color="textSubtle">
-            {t('Sales are in WBNB. You can swap WBNB to BNB 1:1 for free with PancakeSwap.')}
+            {t('This will update the price of the item along with other parameters.')}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {getButtonText()}
         </Button>
       </Flex>

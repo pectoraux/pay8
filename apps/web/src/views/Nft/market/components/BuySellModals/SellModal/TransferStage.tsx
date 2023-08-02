@@ -1,5 +1,5 @@
 import { Flex, Grid, Text, Button, Input, BinanceIcon, ErrorIcon } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/nftMarket/types'
 import { isAddress } from 'utils'
@@ -7,7 +7,7 @@ import { Divider, RoundedImage } from '../shared/styles'
 import { GreyedOutContainer } from './styles'
 
 interface TransferStageProps {
-  nftToSell: NftToken
+  nftToSell?: any
   lowestPrice: number
   transferAddress: string
   setTransferAddress: React.Dispatch<React.SetStateAction<string>>
@@ -24,7 +24,7 @@ const TransferStage: React.FC<React.PropsWithChildren<TransferStageProps>> = ({
   continueToNextStage,
 }) => {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const transferAddressEqualsConnectedAddress = isAddress(transferAddress) === isAddress(account)
   const getErrorText = () => {
     if (isInvalidTransferAddress) {

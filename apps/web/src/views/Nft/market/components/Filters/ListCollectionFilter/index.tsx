@@ -12,11 +12,9 @@ import {
   ArrowUpIcon,
   ArrowDownIcon,
 } from '@pancakeswap/uikit'
-import { Collection, MarketEvent } from 'state/nftMarket/types'
-import { useGetCollections } from 'state/nftMarket/hooks'
+import { MarketEvent } from 'state/cancan/types'
 import { useNftStorage } from 'state/nftMarket/storage'
 import { useTranslation } from '@pancakeswap/localization'
-import { isAddress } from 'utils'
 import { CloseButton, FilterButton, ListOrderState, SearchWrapper, TriggerButton } from '../ListFilter/styles'
 import { CollectionItemRow } from './styles'
 
@@ -24,14 +22,11 @@ interface ListCollectionFilterProps {
   nftActivityFilters: { typeFilters: MarketEvent[]; collectionFilters: string[] }
 }
 
-export const ListCollectionFilter: React.FC<React.PropsWithChildren<ListCollectionFilterProps>> = ({
-  nftActivityFilters,
-}) => {
+export const ListCollectionFilter: React.FC<any> = ({ address, products = [], nftActivityFilters }) => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [orderState, setOrderState] = useState<ListOrderState>({ orderKey: 'label', orderDir: 'asc' })
-  const { data: collections } = useGetCollections()
   const wrapperRef = useRef(null)
   const menuRef = useRef(null)
   const { addActivityCollectionFilters, removeActivityCollectionFilters, removeAllActivityCollectionFilters } =
@@ -42,13 +37,13 @@ export const ListCollectionFilter: React.FC<React.PropsWithChildren<ListCollecti
 
   const filteredCollections = (
     query && query.length > 1
-      ? Object.values(collections).filter((item) => item.name.toLowerCase().indexOf(query.toLowerCase()) !== -1)
-      : Object.values(collections)
-  ).map((item) => {
+      ? Object.values(products).filter((item: any) => item.toLowerCase().indexOf(query.toLowerCase()) !== -1)
+      : Object.values(products)
+  ).map((item: any) => {
     const isItemSelected = nftActivityFilters.collectionFilters.some((collectionAddress) => {
-      return isAddress(item.address) === isAddress(collectionAddress)
+      return item.toLowerCase() === collectionAddress.toLowerCase()
     })
-    return { ...item, isSelected: isItemSelected }
+    return { item, isSelected: isItemSelected }
   })
 
   const handleClearFilter = () => {
@@ -62,11 +57,11 @@ export const ListCollectionFilter: React.FC<React.PropsWithChildren<ListCollecti
     setQuery(value)
   }
 
-  const handleItemClick = (evt: ChangeEvent<HTMLInputElement>, collection: Collection) => {
+  const handleItemClick = (evt: ChangeEvent<HTMLInputElement>, product) => {
     if (evt.target.checked) {
-      addActivityCollectionFilters({ collection: collection.address.toLowerCase() })
+      addActivityCollectionFilters(product)
     } else {
-      removeActivityCollectionFilters({ collection: collection.address.toLowerCase() })
+      removeActivityCollectionFilters(product)
     }
   }
 
@@ -152,14 +147,14 @@ export const ListCollectionFilter: React.FC<React.PropsWithChildren<ListCollecti
             </Flex>
             <Box height="240px" overflowY="auto">
               {filteredCollections.length > 0 ? (
-                orderBy(filteredCollections, orderKey, orderDir).map((collection) => {
-                  const handleClick = (evt: ChangeEvent<HTMLInputElement>) => handleItemClick(evt, collection)
+                orderBy(filteredCollections, orderKey, orderDir).map((tag) => {
+                  const handleClick = (evt: ChangeEvent<HTMLInputElement>) => handleItemClick(evt, tag.item)
 
                   return (
                     <CollectionItemRow
-                      key={collection.address}
-                      item={{ label: collection.name, collectionAddress: collection.address }}
-                      isSelected={collection.isSelected}
+                      key={tag.item}
+                      item={{ label: tag.item, collectionAddress: tag.item }}
+                      isSelected={tag.isSelected}
                       onClick={handleClick}
                     />
                   )

@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useNftStorage } from 'state/nftMarket/storage'
+import { useNftStorage } from 'state/cancan/storage'
 
 interface ClearAllButtonProps extends ButtonProps {
   collectionAddress: string

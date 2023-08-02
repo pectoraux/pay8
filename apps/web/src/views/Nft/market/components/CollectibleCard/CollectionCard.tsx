@@ -1,7 +1,9 @@
 import { Card, CardBody, Flex, Heading, ProfileAvatar, NextLinkFromReactRouter } from '@pancakeswap/uikit'
+
+import Image from 'next/image'
 import styled, { css } from 'styled-components'
 
-interface CollectionCardProps {
+interface HotCollectionCardProps {
   bgSrc: string
   avatarSrc?: string
   collectionName: string
@@ -16,7 +18,7 @@ export const CollectionAvatar = styled(ProfileAvatar)`
   border: 4px white solid;
 `
 
-const StyledCollectionCard = styled(Card)<{ disabled?: boolean }>`
+const StyledHotCollectionCard = styled(Card)<{ disabled?: boolean }>`
   border-radius: 8px;
   border-bottom-left-radius: 56px;
   transition: opacity 200ms;
@@ -39,17 +41,11 @@ const StyledCollectionCard = styled(Card)<{ disabled?: boolean }>`
   }
 `
 
-const StyledImage = styled(Flex)<{ backgroundImageUrl: string }>`
-  width: 100%;
-  height: 125px;
+const StyledImage = styled(Image)`
   border-radius: 4px;
-  background-size: cover;
-  background-repeat: non-repeat;
-  background-position: center;
-  background-image: ${({ backgroundImageUrl }) => `url('${backgroundImageUrl}')`};
 `
 
-const CollectionCard: React.FC<React.PropsWithChildren<CollectionCardProps>> = ({
+const CollectionCard: React.FC<React.PropsWithChildren<HotCollectionCardProps>> = ({
   bgSrc,
   avatarSrc,
   collectionName,
@@ -59,7 +55,7 @@ const CollectionCard: React.FC<React.PropsWithChildren<CollectionCardProps>> = (
 }) => {
   const renderBody = () => (
     <CardBody p="8px">
-      <StyledImage backgroundImageUrl={bgSrc} />
+      <StyledImage src={bgSrc} height={125} width={375} />
       <Flex
         position="relative"
         height="65px"
@@ -78,13 +74,13 @@ const CollectionCard: React.FC<React.PropsWithChildren<CollectionCardProps>> = (
   )
 
   return (
-    <StyledCollectionCard disabled={disabled} data-test="hot-collection-card">
+    <StyledHotCollectionCard disabled={disabled} data-test="hot-collection-card">
       {url ? (
         <NextLinkFromReactRouter to={url}>{renderBody()}</NextLinkFromReactRouter>
       ) : (
         <div style={{ cursor: 'default' }}>{renderBody()}</div>
       )}
-    </StyledCollectionCard>
+    </StyledHotCollectionCard>
   )
 }
 

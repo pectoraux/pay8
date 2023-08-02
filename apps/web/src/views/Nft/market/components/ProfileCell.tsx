@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { Box, Flex, Skeleton, Text, ProfileAvatar, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useProfileForAddress } from 'state/profile/hooks'
-import { useDomainNameForAddress } from 'hooks/useDomain'
 
 const StyledFlex = styled(Flex)`
   align-items: center;
@@ -15,7 +14,6 @@ const StyledFlex = styled(Flex)`
 
 const ProfileCell: React.FC<any> = ({ accountAddress }) => {
   const { profile, isFetching } = useProfileForAddress(accountAddress)
-  const { domainName } = useDomainNameForAddress(accountAddress)
   const profileName = profile?.username || '-'
 
   return (
@@ -33,7 +31,7 @@ const ProfileCell: React.FC<any> = ({ accountAddress }) => {
           <Skeleton variant="circle" width="32px" height="32px" mr={['4px', null, '12px']} />
         )}
         <Box display="inline">
-          <Text lineHeight="1.25">{domainName || truncateHash(accountAddress)}</Text>
+          <Text lineHeight="1.25">{truncateHash(accountAddress)}</Text>
           {isFetching ? <Skeleton /> : <Text lineHeight="1.25">{profileName}</Text>}
         </Box>
       </StyledFlex>

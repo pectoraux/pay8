@@ -1,13 +1,14 @@
 import { useState, useMemo, ReactNode } from 'react'
 import shuffle from 'lodash/shuffle'
 import styled from 'styled-components'
+// eslint-disable-next-line import/no-unresolved
 import { Swiper, SwiperSlide } from 'swiper/react'
-import 'swiper/css'
-import type SwiperCore from 'swiper'
+// eslint-disable-next-line import/no-unresolved
+import 'swiper/css/bundle'
+import SwiperCore from 'swiper'
 import { ArrowBackIcon, ArrowForwardIcon, Box, IconButton, Text, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { isAddress } from 'utils'
 import useSWRImmutable from 'swr/immutable'
-import { Address } from 'wagmi'
 import { getNftsFromCollectionApi, getMarketDataForTokenIds } from 'state/nftMarket/helpers'
 import { NftToken } from 'state/nftMarket/types'
 import Trans from 'components/Trans'
@@ -77,7 +78,7 @@ const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisColle
             name: apiMetadata.name,
             description: apiMetadata.description,
             collectionName: apiMetadata.collection.name,
-            collectionAddress: collectionAddress as Address,
+            collectionAddress,
             image: apiMetadata.image,
             attributes: apiMetadata.attributes,
             marketData,

@@ -1,5 +1,6 @@
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { Flex, Card, Text, Table, Th, useMatchBreakpoints, PaginationButton } from '@pancakeswap/uikit'
+import { Flex, Card, Text, Table, Th, ArrowBackIcon, ArrowForwardIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { Activity, NftToken } from 'state/nftMarket/types'
@@ -7,7 +8,8 @@ import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useAppDispatch } from '../../../../../../state'
 import NoNftsImage from '../../../components/Activity/NoNftsImage'
 import TableLoader from '../../../../../../components/TableLoader'
-import { getTokenActivity } from '../../../../../../state/nftMarket/helpers'
+import { Arrow, PageButtons } from '../../../components/PaginationButtons'
+import { getTokenActivity } from '../../../../../../state/cancan/helpers'
 import { sortActivity } from '../../../ActivityHistory/utils/sortActivity'
 import ActivityRow from '../../../components/Activity/ActivityRow'
 
@@ -17,22 +19,23 @@ interface ActivityCardProps {
 
 const MAX_PER_PAGE = 5
 
-const ActivityCard: React.FC<React.PropsWithChildren<ActivityCardProps>> = ({ nft }) => {
+const ActivityCard: React.FC<any> = ({ nft }) => {
   const dispatch = useAppDispatch()
   const { theme } = useTheme()
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(1)
   const [maxPage, setMaxPages] = useState(1)
-  const [activitiesSlice, setActivitiesSlice] = useState<Activity[]>([])
+  const [activitiesSlice, setActivitiesSlice] = useState<any>([])
   const [sortedTokenActivities, setSortedTokenActivities] = useState<Activity[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const bnbBusdPrice = useBNBBusdPrice()
   const { isXs, isSm } = useMatchBreakpoints()
+  const collectionId = useRouter().query.collectionAddress as string
 
   useEffect(() => {
     const fetchTokenActivity = async () => {
       try {
-        const tokenActivity = await getTokenActivity(nft.tokenId, nft.collectionAddress.toLowerCase())
+        const tokenActivity = await getTokenActivity(nft.tokenId, collectionId)
         setSortedTokenActivities(sortActivity(tokenActivity))
         setIsLoading(false)
       } catch (error) {
@@ -76,7 +79,7 @@ const ActivityCard: React.FC<React.PropsWithChildren<ActivityCardProps>> = ({ nf
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
           <Text pt="8px" bold>
-            {t('No NFT market history found')}
+            {t('No market history found for this item')}
           </Text>
         </Flex>
       ) : (
@@ -88,7 +91,7 @@ const ActivityCard: React.FC<React.PropsWithChildren<ActivityCardProps>> = ({ nf
                 {isXs || isSm ? null : (
                   <>
                     <Th textAlign="right"> {t('Price')}</Th>
-                    <Th textAlign="center"> {t('From')}</Th>
+                    <Th textAlign="center"> {t('From/By')}</Th>
                     <Th textAlign="center"> {t('To')}</Th>
                   </>
                 )}
@@ -104,7 +107,7 @@ const ActivityCard: React.FC<React.PropsWithChildren<ActivityCardProps>> = ({ nf
                 activitiesSlice.map((activity) => {
                   return (
                     <ActivityRow
-                      key={`${activity.nft.tokenId}${activity.timestamp}`}
+                      key={`${activity?.nft?.tokenId}${activity.timestamp}`}
                       activity={activity}
                       nft={nft}
                       bnbBusdPrice={bnbBusdPrice}
@@ -122,12 +125,23 @@ const ActivityCard: React.FC<React.PropsWithChildren<ActivityCardProps>> = ({ nf
             justifyContent="space-between"
             height="100%"
           >
-            <PaginationButton
-              showMaxPageText
-              currentPage={currentPage}
-              maxPage={maxPage}
-              setCurrentPage={setCurrentPage}
-            />
+            <PageButtons>
+              <Arrow
+                onClick={() => {
+                  setCurrentPage(currentPage === 1 ? currentPage : currentPage - 1)
+                }}
+              >
+                <ArrowBackIcon color={currentPage === 1 ? 'textDisabled' : 'primary'} />
+              </Arrow>
+              <Text>{t('Page %page% of %maxPage%', { page: currentPage, maxPage })}</Text>
+              <Arrow
+                onClick={() => {
+                  setCurrentPage(currentPage === maxPage ? currentPage : currentPage + 1)
+                }}
+              >
+                <ArrowForwardIcon color={currentPage === maxPage ? 'textDisabled' : 'primary'} />
+              </Arrow>
+            </PageButtons>
           </Flex>
         </>
       )}

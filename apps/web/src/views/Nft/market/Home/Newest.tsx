@@ -4,7 +4,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/nftMarket/types'
 import { getLatestListedNfts, getNftsFromDifferentCollectionsApi } from 'state/nftMarket/helpers'
 import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
-import { Address } from 'wagmi'
 import { isAddress } from 'utils'
 import { CollectibleLinkCard } from '../components/CollectibleCard'
 import GridPlaceholder from '../components/GridPlaceholder'
@@ -20,18 +19,22 @@ const useNewestNfts = () => {
     const fetchNewestNfts = async () => {
       const nftsFromSg = await getLatestListedNfts(16)
       const nftsFromApi = await getNftsFromDifferentCollectionsApi(
-        nftsFromSg.map((nft) => ({ collectionAddress: nft.collection.id as Address, tokenId: nft.tokenId })),
+        nftsFromSg?.length
+          ? nftsFromSg.map((nft) => ({ collectionAddress: nft.collection.id, tokenId: nft.tokenId }))
+          : [],
       )
 
-      const nfts = nftsFromSg
-        .map((nftFromSg) => {
-          const foundNftFromApi = nftsFromApi.find((nftFromApi) => nftFromApi.tokenId === nftFromSg.tokenId)
-          if (foundNftFromApi) {
-            return { ...foundNftFromApi, marketData: nftFromSg }
-          }
-          return null
-        })
-        .filter(Boolean)
+      const nfts = nftsFromSg?.length
+        ? nftsFromSg
+            .map((nftFromSg) => {
+              const foundNftFromApi = nftsFromApi.find((nftFromApi) => nftFromApi.tokenId === nftFromSg.tokenId)
+              if (foundNftFromApi) {
+                return { ...foundNftFromApi, marketData: nftFromSg }
+              }
+              return null
+            })
+            .filter(Boolean)
+        : []
       setNewestNfts(nfts)
     }
     fetchNewestNfts()
