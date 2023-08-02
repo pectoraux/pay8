@@ -3,13 +3,15 @@ import { State } from 'state/types'
 import { transformPotteryPublicData, transformPotteryUserData } from './helpers'
 
 const selectPotteryPublicData = (state: State) => state.pottery.publicData
+const selectPotteryData = (state: State) => state.pottery.data
 const selectPotteryUserData = (state: State) => state.pottery.userData
-const selectFinishedRoundInfoData = (state: State) => state.pottery.finishedRoundInfo
+const selectfinishedRoundInfoData = (state: State) => state.pottery.finishedRoundInfo
 
-export const potteryDataSelector = createSelector(
-  [selectPotteryPublicData, selectPotteryUserData, selectFinishedRoundInfoData],
-  (publicData, userData, finishedRoundInfo) => {
+export const potterDataSelector = createSelector(
+  [selectPotteryData, selectPotteryPublicData, selectPotteryUserData, selectfinishedRoundInfoData],
+  (data, publicData, userData, finishedRoundInfo) => {
     return {
+      data,
       publicData: transformPotteryPublicData(publicData),
       userData: transformPotteryUserData(userData),
       finishedRoundInfo,

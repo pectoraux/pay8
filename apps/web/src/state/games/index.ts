@@ -1,6 +1,6 @@
 import { isAddress } from 'utils'
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchGames, getGames } from './helpers'
+import { fetchGame, fetchGames, getGames } from './helpers'
 import { resetUserState } from '../global/actions'
 
 export const initialFilterState = Object.freeze({
@@ -51,6 +51,17 @@ export const fetchGamesAsync =
       console.error('[Pools Action]============>', error)
     }
   }
+
+export const fetchGameAsync = (gameAddress) => async (dispatch) => {
+  try {
+    console.log('fetchBusinesses1================>', gameAddress)
+    const game = await fetchGame(gameAddress)
+    console.log('fetchBusinesses================>', game, gameAddress)
+    dispatch(setGamesPublicData([game] || []))
+  } catch (error) {
+    console.error('[Pools Action] error when getting staking limits', error)
+  }
+}
 
 export const PoolsSlice = createSlice({
   name: 'Games',

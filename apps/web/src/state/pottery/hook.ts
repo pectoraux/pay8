@@ -1,38 +1,38 @@
-import { useAccount } from 'wagmi'
+import { useRouter } from 'next/router'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { batch, useSelector } from 'react-redux'
+import { useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
-import { fetchCakeVaultPublicData, fetchCakeVaultUserData } from 'state/pools'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-
-import { fetchLastVaultAddressAsync, fetchPublicPotteryDataAsync, fetchPotteryUserDataAsync } from './index'
-import { potteryDataSelector } from './selectors'
+import { fetchLastVaultAddressAsync, fetchPotteryUserDataAsync } from './index'
+import { potterDataSelector } from './selectors'
 import { State } from '../types'
+import { fetchGameAsync } from 'state/games'
 
 export const usePotteryFetch = () => {
-  const { address: account } = useAccount()
-  const { chainId } = useActiveChainId()
+  const { account } = useWeb3React()
   const dispatch = useAppDispatch()
-  const potteryVaultAddress = useLatestVaultAddress()
+  const router = useRouter()
+  const game = useMemo(() => router.query.game, [router.query.game])
 
   useFastRefreshEffect(() => {
     dispatch(fetchLastVaultAddressAsync())
 
-    if (potteryVaultAddress && chainId) {
+    if (game) {
       batch(() => {
-        dispatch(fetchCakeVaultPublicData(chainId))
-        dispatch(fetchPublicPotteryDataAsync())
-        if (account) {
-          dispatch(fetchPotteryUserDataAsync(account))
-          dispatch(fetchCakeVaultUserData({ account, chainId }))
-        }
+        dispatch(fetchGameAsync(game))
+        // dispatch(fetchPublicPotteryDataAsync())
+        // if (account) {
+        // dispatch(fetchPotteryUserDataAsync(account))
+        // dispatch(fetchCakeVaultUserData({ account }))
+        // }
       })
     }
-  }, [potteryVaultAddress, account, dispatch, chainId])
+  }, [game, account, dispatch])
 }
 
 export const usePotteryData = () => {
-  return useSelector(potteryDataSelector)
+  return useSelector(potterDataSelector)
 }
 
 export const useLatestVaultAddress = () => {

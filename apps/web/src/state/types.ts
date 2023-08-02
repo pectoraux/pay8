@@ -602,7 +602,7 @@ export interface State {
   pools: PoolsState
   predictions: PredictionsState
   lottery: LotteryState
-  pottery: PotteryState
+  pottery: any
   accelerator: any
   arps: any
   auditors: any
