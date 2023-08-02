@@ -5,7 +5,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Incentives, Qualification, RewardInfo } from 'views/TradingReward/hooks/useAllTradingRewardPair'
 import { UserCampaignInfoDetail } from 'views/TradingReward/hooks/useAllUserCampaignInfo'
 import NoConnected from 'views/TradingReward/components/YourTradingReward/NoConnected'
-import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery/components/Hero'
+import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery2/components/Hero'
 import RewardPeriod from 'views/TradingReward/components/TopTraders/YourTradingReward/RewardPeriod'
 
 const BACKGROUND_COLOR = 'radial-gradient(55.22% 134.13% at 57.59% 0%, #F5DF8E 0%, #FCC631 33.21%, #FF9D00 79.02%)'

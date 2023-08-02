@@ -11,7 +11,7 @@ import { useCakeVault, useFetchIfo as useCakeVaultPool } from 'state/pools/hooks
 import { Incentives, Qualification, RewardInfo } from 'views/TradingReward/hooks/useAllTradingRewardPair'
 import { UserCampaignInfoDetail } from 'views/TradingReward/hooks/useAllUserCampaignInfo'
 import NoConnected from 'views/TradingReward/components/YourTradingReward/NoConnected'
-import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery/components/Hero'
+import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery2/components/Hero'
 import NoProfile from 'views/TradingReward/components/YourTradingReward/NoProfile'
 import RewardPeriod from 'views/TradingReward/components/YourTradingReward/RewardPeriod'
 

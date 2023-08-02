@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import useTheme from 'hooks/useTheme'
 // import Calculator from 'views/AffiliatesProgram/components/Overview/Calculator'
 import CommissionStructure from 'views/AffiliatesProgram/components/Overview/CommissionStructure'
-import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery/components/Hero'
+import { floatingStarsLeft, floatingStarsRight } from 'views/Lottery2/components/Hero'
 
 const Decorations = styled(Box)`
   position: absolute;

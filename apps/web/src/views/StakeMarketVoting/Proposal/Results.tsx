@@ -15,7 +15,6 @@ import {
   AutoRenewIcon,
   CheckmarkCircleIcon,
 } from '@pancakeswap/uikit'
-import { Vote } from 'state/types'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import Countdown from 'views/Lottery/components/Countdown'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
