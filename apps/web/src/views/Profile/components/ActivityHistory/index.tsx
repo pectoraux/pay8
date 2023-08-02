@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { isAddress } from 'utils'
 import { useAppDispatch } from 'state'
 import { getUserActivity } from 'state/nftMarket/helpers'
-import { PaginationButton, Card, Flex, Table, Text, Th, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { ArrowBackIcon, ArrowForwardIcon, Card, Flex, Table, Text, Th, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { Activity, NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
 import TableLoader from 'components/TableLoader'
@@ -12,20 +12,21 @@ import useTheme from 'hooks/useTheme'
 import { useRouter } from 'next/router'
 import { sortUserActivity } from '../../utils/sortUserActivity'
 import NoNftsImage from '../../../Nft/market/components/Activity/NoNftsImage'
+import { Arrow, PageButtons } from '../../../Nft/market/components/PaginationButtons'
 import ActivityRow from '../../../Nft/market/components/Activity/ActivityRow'
 import { fetchActivityNftMetadata } from '../../../Nft/market/ActivityHistory/utils/fetchActivityNftMetadata'
 
 const MAX_PER_PAGE = 8
 
 const ActivityHistory = () => {
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const accountAddress = useRouter().query.accountAddress as string
   const { theme } = useTheme()
   const { t } = useTranslation()
   const [currentPage, setCurrentPage] = useState(1)
   const [maxPage, setMaxPages] = useState(1)
-  const [activitiesSlice, setActivitiesSlice] = useState<Activity[]>([])
+  const [activitiesSlice, setActivitiesSlice] = useState<any>([])
   const [nftMetadata, setNftMetadata] = useState<NftToken[]>([])
   const [sortedUserActivities, setSortedUserActivities] = useState<Activity[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -139,12 +140,23 @@ const ActivityHistory = () => {
             justifyContent="space-between"
             height="100%"
           >
-            <PaginationButton
-              showMaxPageText
-              currentPage={currentPage}
-              maxPage={maxPage}
-              setCurrentPage={setCurrentPage}
-            />
+            <PageButtons>
+              <Arrow
+                onClick={() => {
+                  setCurrentPage(currentPage === 1 ? currentPage : currentPage - 1)
+                }}
+              >
+                <ArrowBackIcon color={currentPage === 1 ? 'textDisabled' : 'primary'} />
+              </Arrow>
+              <Text>{t('Page %page% of %maxPage%', { page: currentPage, maxPage })}</Text>
+              <Arrow
+                onClick={() => {
+                  setCurrentPage(currentPage === maxPage ? currentPage : currentPage + 1)
+                }}
+              >
+                <ArrowForwardIcon color={currentPage === maxPage ? 'textDisabled' : 'primary'} />
+              </Arrow>
+            </PageButtons>
           </Flex>
         </>
       )}

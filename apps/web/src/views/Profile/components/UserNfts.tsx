@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { Grid, useModal, Text, Flex } from '@pancakeswap/uikit'
 import { NftLocation, NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { CollectibleActionCard } from '../../Nft/market/components/CollectibleCard'
 import GridPlaceholder from '../../Nft/market/components/GridPlaceholder'
 import ProfileNftModal from '../../Nft/market/components/ProfileNftModal'
 import NoNftsImage from '../../Nft/market/components/Activity/NoNftsImage'
 import SellModal from '../../Nft/market/components/BuySellModals/SellModal'
+import CardBody from './CardBody'
 
 interface ProfileNftProps {
   nft: NftToken
@@ -19,16 +19,10 @@ interface SellNftProps {
   variant: 'sell' | 'edit'
 }
 
-const UserNfts: React.FC<
-  React.PropsWithChildren<{
-    nfts: NftToken[]
-    isLoading: boolean
-    onSuccessSale: () => void
-    onSuccessEditProfile: () => void
-  }>
-> = ({ nfts, isLoading, onSuccessSale, onSuccessEditProfile }) => {
+const UserNfts: React.FC<any> = ({ nfts, isLoading, onSuccessSale, onSuccessEditProfile }) => {
   const [clickedProfileNft, setClickedProfileNft] = useState<ProfileNftProps>({ nft: null, location: null })
   const [clickedSellNft, setClickedSellNft] = useState<SellNftProps>({ nft: null, location: null, variant: null })
+  console.log('UserNfts================>', nfts)
   const [onPresentProfileNftModal] = useModal(
     <ProfileNftModal nft={clickedProfileNft.nft} onSuccess={onSuccessEditProfile} />,
   )
@@ -77,7 +71,7 @@ const UserNfts: React.FC<
   return (
     <>
       {/* User has no NFTs */}
-      {nfts.length === 0 && !isLoading ? (
+      {nfts?.length === 0 ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
           <Text pt="8px" bold>
@@ -85,25 +79,24 @@ const UserNfts: React.FC<
           </Text>
         </Flex>
       ) : // User has NFTs and data has been fetched
-      nfts.length > 0 ? (
+      nfts?.length > 0 ? (
         <Grid
-          gridGap="16px"
-          gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
+          // gridGap="6px"
+          gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
           alignItems="start"
         >
           {nfts.map((nft) => {
-            const { marketData, location } = nft
-
+            // const { marketData, location } = nft
             return (
-              <CollectibleActionCard
-                isUserNft
-                onClick={() => handleCollectibleClick(nft, location)}
+              <CardBody
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}
                 currentAskPrice={
-                  marketData?.currentAskPrice && marketData?.isTradable && parseFloat(marketData?.currentAskPrice)
+                  nft?.marketData?.currentAskPrice &&
+                  nft?.marketData?.isTradable &&
+                  parseFloat((nft?.marketData?.currentAskPrice ?? 0)?.toString())
                 }
-                nftLocation={location}
+                nftLocation={nft?.location}
               />
             )
           })}

@@ -1,14 +1,13 @@
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRouter } from 'next/router'
 import { useProfileForAddress } from 'state/profile/hooks'
 import { NftProfileLayout } from 'views/Profile'
 import SubMenu from 'views/Profile/components/SubMenu'
-import UnconnectedProfileNfts from 'views/Profile/components/UnconnectedProfileNfts'
 import UserNfts from 'views/Profile/components/UserNfts'
 import { useNftsForAddress } from 'views/Nft/market/hooks/useNftsForAddress'
 
 const NftProfilePage = () => {
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const accountAddress = useRouter().query.accountAddress as string
   const isConnectedProfile = account?.toLowerCase() === accountAddress?.toLowerCase()
   const {
@@ -25,23 +24,19 @@ const NftProfilePage = () => {
     isLoading: isNftLoading,
     refresh: refreshUserNfts,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
-
+  console.log('isConnectedProfile================>', isConnectedProfile, profile)
   return (
     <>
       <SubMenu />
-      {isConnectedProfile ? (
-        <UserNfts
-          nfts={nfts}
-          isLoading={isNftLoading}
-          onSuccessSale={refreshUserNfts}
-          onSuccessEditProfile={async () => {
-            await refreshProfile()
-            refreshUserNfts()
-          }}
-        />
-      ) : (
-        <UnconnectedProfileNfts nfts={nfts} isLoading={isNftLoading} />
-      )}
+      <UserNfts
+        nfts={[profile?.metadataUrl]}
+        isLoading={isNftLoading}
+        onSuccessSale={refreshUserNfts}
+        onSuccessEditProfile={async () => {
+          await refreshProfile()
+          refreshUserNfts()
+        }}
+      />
     </>
   )
 }

@@ -1,17 +1,17 @@
 import { Grid, Text, Flex } from '@pancakeswap/uikit'
 import { NftToken } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { CollectibleLinkCard } from '../../Nft/market/components/CollectibleCard'
+import CardBody from './CardBody'
 import GridPlaceholder from '../../Nft/market/components/GridPlaceholder'
 import NoNftsImage from '../../Nft/market/components/Activity/NoNftsImage'
 
-const UserNfts: React.FC<React.PropsWithChildren<{ nfts: NftToken[]; isLoading: boolean }>> = ({ nfts, isLoading }) => {
+const UserNfts: React.FC<React.PropsWithChildren<{ nfts: any; isLoading: boolean }>> = ({ nfts, isLoading }) => {
   const { t } = useTranslation()
 
   return (
     <>
       {/* User has no NFTs */}
-      {nfts.length === 0 && !isLoading ? (
+      {nfts?.length === 0 && !isLoading ? (
         <Flex p="24px" flexDirection="column" alignItems="center">
           <NoNftsImage />
           <Text pt="8px" bold>
@@ -19,17 +19,17 @@ const UserNfts: React.FC<React.PropsWithChildren<{ nfts: NftToken[]; isLoading: 
           </Text>
         </Flex>
       ) : // User has NFTs and data has been fetched
-      nfts.length > 0 ? (
+      nfts?.length > 0 ? (
         <Grid
-          gridGap="16px"
-          gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
+          // gridGap="16px"
+          gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
           alignItems="start"
         >
           {nfts.map((nft) => {
             const { marketData } = nft
 
             return (
-              <CollectibleLinkCard
+              <CardBody
                 key={`${nft?.tokenId}-${nft?.collectionName}`}
                 nft={nft}
                 currentAskPrice={

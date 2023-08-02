@@ -13,7 +13,7 @@ interface EditProfileModalProps extends InjectedModalProps {
 const viewTitle = (t: ContextApi['t'], currentView: Views) => {
   switch (currentView) {
     case Views.START:
-      return t('Edit Profile')
+      return t('Create Profile')
     case Views.CHANGE:
       return t('Change Profile Pic')
     case Views.REMOVE:
@@ -33,20 +33,14 @@ const EditProfileModal: React.FC<React.PropsWithChildren<EditProfileModalProps>>
   const handleBack = isStartView ? null : () => goPrevious()
 
   return (
-    <Modal
-      title={viewTitle(t, currentView)}
-      onBack={handleBack}
-      onDismiss={onDismiss}
-      hideCloseButton={!isStartView}
-      bodyAlignItems="center"
-    >
+    <Modal title={viewTitle(t, currentView)} onBack={handleBack} onDismiss={onDismiss} hideCloseButton={!isStartView}>
       <div style={{ maxWidth: '400px' }}>
-        {currentView === Views.START && (
+        {false && (
           <StartView goToApprove={goToApprove} goToChange={goToChange} goToRemove={goToRemove} onDismiss={onDismiss} />
         )}
         {currentView === Views.REMOVE && <PauseProfileView onDismiss={onDismiss} onSuccess={onSuccess} />}
         {currentView === Views.CHANGE && <ChangeProfilePicView onDismiss={onDismiss} onSuccess={onSuccess} />}
-        {currentView === Views.APPROVE && <ApproveCakeView goToChange={goToChange} onDismiss={onDismiss} />}
+        {true && <ApproveCakeView goToChange={goToChange} onDismiss={onDismiss} />}
       </div>
     </Modal>
   )

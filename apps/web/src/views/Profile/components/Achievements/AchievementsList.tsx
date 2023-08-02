@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-import { Flex, Heading, Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import { Achievement } from 'state/types'
+import { useRouter } from 'next/router'
+import { usePool } from 'state/profile/hooks'
 import AchievementCard from './AchievementCard'
 
 const Grid = styled.div`
@@ -14,34 +13,42 @@ const Grid = styled.div`
   }
 `
 
-const AchievementsList: React.FC<React.PropsWithChildren<{ achievements: Achievement[]; isLoading: boolean }>> = ({
-  achievements,
-  isLoading,
-}) => {
-  const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
-
-  if (isLoading) {
-    if (isMobile) {
-      return <Skeleton width="100%" height="64px" />
-    }
-    return <Skeleton width="540px" height="64px" />
-  }
+const AchievementsList: React.FC<React.PropsWithChildren> = () => {
+  const id = useRouter().query.id as string
+  const { pool } = usePool(id)
 
   return (
     <>
       <Grid>
-        {achievements.map((achievement) => (
-          <AchievementCard key={achievement.id} achievement={achievement} />
-        ))}
+        <AchievementCard
+          key="gold-report"
+          lateSeconds={pool?.goldLateSeconds}
+          lateValue={pool?.goldLateValue}
+          badge="baller.svg"
+          title="Gold Report"
+        />
+        <AchievementCard
+          key="silver-report"
+          lateSeconds={pool?.silverLateSeconds}
+          lateValue={pool?.silverLateValue}
+          badge="clairvoyant.svg"
+          title="Silver Report"
+        />
+        <AchievementCard
+          key="brown-report"
+          lateSeconds={pool?.brownLateSeconds}
+          lateValue={pool?.brownLateValue}
+          badge="1-year.svg"
+          title="Brown Report"
+        />
+        <AchievementCard
+          key="black-report"
+          lateSeconds={pool?.blackLateSeconds}
+          lateValue={pool?.blackLateValue}
+          badge="2-year.svg"
+          title="Black Report"
+        />
       </Grid>
-      {achievements.length === 0 && (
-        <Flex alignItems="center" justifyContent="center" style={{ height: '64px' }}>
-          <Heading as="h5" scale="md" color="textDisabled">
-            {t('No achievements yet!')}
-          </Heading>
-        </Flex>
-      )}
     </>
   )
 }

@@ -3,7 +3,6 @@ import { AutoRenewIcon, Button, Checkbox, Flex, InjectedModalProps, Text, useToa
 import { useTranslation } from '@pancakeswap/localization'
 import useGetProfileCosts from 'views/Profile/hooks/useGetProfileCosts'
 import { useProfile } from 'state/profile/hooks'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
 import { useProfileContract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -28,7 +27,8 @@ const PauseProfilePage: React.FC<React.PropsWithChildren<PauseProfilePageProps>>
   const handleChange = () => setIsAcknowledged(!isAcknowledged)
 
   const handleDeactivateProfile = async () => {
-    const receipt = await fetchWithCatchTxError(() => {
+    // eslint-disable-next-line consistent-return
+    const receipt = await fetchWithCatchTxError(async () => {
       return callWithGasPrice(pancakeProfileContract, 'pauseProfile')
     })
     if (receipt?.status) {
@@ -54,9 +54,9 @@ const PauseProfilePage: React.FC<React.PropsWithChildren<PauseProfilePageProps>>
           "While your profile is suspended, you won't be able to earn points, but your achievements and points will stay associated with your profile",
         )}
       </Text>
-      <Text as="p" color="textSubtle" mb="24px">
-        {t('Cost to reactivate in the future: %cost% CAKE', { cost: formatBigInt(numberCakeToReactivate) })}
-      </Text>
+      {/* <Text as="p" color="textSubtle" mb="24px"> */}
+      {/* {t('Cost to reactivate in the future: %cost% CAKE', { cost: formatBigNumber(numberCakeToReactivate) })} */}
+      {/* </Text> */}
       <label htmlFor="acknowledgement" style={{ cursor: 'pointer', display: 'block', marginBottom: '24px' }}>
         <Flex alignItems="center">
           <Checkbox id="acknowledgement" checked={isAcknowledged} onChange={handleChange} scale="sm" />

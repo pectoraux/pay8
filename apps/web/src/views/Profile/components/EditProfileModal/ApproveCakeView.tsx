@@ -1,13 +1,11 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { AutoRenewIcon, Button, Flex, InjectedModalProps, Text } from '@pancakeswap/uikit'
-import { formatBigInt } from '@pancakeswap/utils/formatBalance'
-import { useWeb3React } from '@pancakeswap/wagmi'
+import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { useCake } from 'hooks/useContract'
 import { useProfile } from 'state/profile/hooks'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import useGetProfileCosts from 'views/Profile/hooks/useGetProfileCosts'
 import { UseEditProfileResponse } from './reducer'
+import { useCake } from 'hooks/useContract'
 
 interface ApproveCakePageProps extends InjectedModalProps {
   goToChange: UseEditProfileResponse['goToChange']
@@ -16,7 +14,6 @@ interface ApproveCakePageProps extends InjectedModalProps {
 const ApproveCakePage: React.FC<React.PropsWithChildren<ApproveCakePageProps>> = ({ goToChange, onDismiss }) => {
   const { profile } = useProfile()
   const { t } = useTranslation()
-  const { account, chain } = useWeb3React()
   const { fetchWithCatchTxError, loading: isApproving } = useCatchTxError()
   const {
     costs: { numberCakeToUpdate, numberCakeToReactivate },
@@ -30,22 +27,20 @@ const ApproveCakePage: React.FC<React.PropsWithChildren<ApproveCakePageProps>> =
   const cost = profile.isActive ? numberCakeToUpdate : numberCakeToReactivate
 
   const handleApprove = async () => {
-    const receipt = await fetchWithCatchTxError(() => {
-      return cakeContract.write.approve([getPancakeProfileAddress(), cost * 2n], {
-        account,
-        chain,
-      })
-    })
-    if (receipt?.status) {
-      goToChange()
-    }
+    // // eslint-disable-next-line consistent-return
+    // const receipt = await fetchWithCatchTxError(async () => {
+    //   return cakeContract.approve(getPancakeProfileAddress(), cost.mul(2).toString())
+    // })
+    // if (receipt?.status) {
+    //   goToChange()
+    // }
   }
 
   return (
     <Flex flexDirection="column">
       <Flex alignItems="center" justifyContent="space-between" mb="24px">
         <Text>{profile.isActive ? t('Cost to update:') : t('Cost to reactivate:')}</Text>
-        <Text>{formatBigInt(cost)} CAKE</Text>
+        <Text>{cost} CAKE</Text>
       </Flex>
       <Button
         disabled={isApproving}

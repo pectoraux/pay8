@@ -1,17 +1,17 @@
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
+import { cancanBaseUrl } from 'views/CanCan/market/constants'
 
 const ProfilePage = () => {
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const router = useRouter()
 
   useEffect(() => {
     if (account) {
       router.push(`/profile/${account.toLowerCase()}`)
     } else {
-      router.push(nftsBaseUrl)
+      router.push(cancanBaseUrl)
     }
   }, [account, router])
 

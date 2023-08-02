@@ -1,7 +1,7 @@
-import { useCallback } from 'react'
+import { FC, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { isAddress } from 'utils'
-import { useAchievementsForAddress, useProfileForAddress } from 'state/profile/hooks'
+import { useProfileForAddress, usePoolsPageFetch } from 'state/profile/hooks'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
@@ -10,7 +10,6 @@ import MarketPageHeader from '../Nft/market/components/MarketPageHeader'
 import ProfileHeader from './components/ProfileHeader'
 import NoNftsImage from '../Nft/market/components/Activity/NoNftsImage'
 import TabMenu from './components/TabMenu'
-import { useNftsForAddress } from '../Nft/market/hooks/useNftsForAddress'
 
 const TabMenuWrapper = styled(Box)`
   position: absolute;
@@ -24,10 +23,10 @@ const TabMenuWrapper = styled(Box)`
   }
 `
 
-const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const accountAddress = useRouter().query.accountAddress as string
   const { t } = useTranslation()
-
+  usePoolsPageFetch()
   const invalidAddress = !accountAddress || isAddress(accountAddress) === false
 
   const {
@@ -40,17 +39,20 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   })
-  const { achievements, isFetching: isAchievementsFetching } = useAchievementsForAddress(accountAddress)
-  const {
-    nfts: userNfts,
-    isLoading: isNftLoading,
-    refresh: refreshUserNfts,
-  } = useNftsForAddress(accountAddress, profile, isProfileValidating)
+
+  // const {
+  //   nfts: userNfts,
+  //   isLoading: isNftLoading,
+  //   refresh: refreshUserNfts,
+  // } = useNftsForAddress(accountAddress, profile, isProfileValidating)
 
   const onSuccess = useCallback(async () => {
     await refreshProfile()
-    refreshUserNfts()
-  }, [refreshProfile, refreshUserNfts])
+    // refreshUserNfts()
+  }, [
+    refreshProfile,
+    // refreshUserNfts
+  ])
 
   if (invalidAddress) {
     return (
@@ -59,10 +61,8 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
           <ProfileHeader
             accountPath={accountAddress}
             profile={null}
-            achievements={null}
             nftCollected={null}
-            isAchievementsLoading={false}
-            isNftLoading={false}
+            isValidating={false}
             isProfileLoading={false}
           />
         </MarketPageHeader>
@@ -84,15 +84,13 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
         <ProfileHeader
           accountPath={accountAddress}
           profile={profile}
-          achievements={achievements}
-          nftCollected={userNfts.length}
+          nftCollected={0}
           isProfileLoading={isProfileFetching}
-          isNftLoading={isNftLoading}
-          isAchievementsLoading={isAchievementsFetching}
+          isValidating={isProfileValidating}
           onSuccess={onSuccess}
         />
         <TabMenuWrapper>
-          <TabMenu />
+          <TabMenu id={profile?.id} />
         </TabMenuWrapper>
       </MarketPageHeader>
       <Page style={{ minHeight: 'auto' }}>{children}</Page>
@@ -100,7 +98,7 @@ const NftProfile: React.FC<React.PropsWithChildren<unknown>> = ({ children }) =>
   )
 }
 
-export const NftProfileLayout: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+export const NftProfileLayout: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   return <NftProfile>{children}</NftProfile>
 }
 

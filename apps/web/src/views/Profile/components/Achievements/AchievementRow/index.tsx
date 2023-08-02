@@ -5,7 +5,6 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { usePointCenterIfoContract } from 'hooks/useContract'
 import { Achievement } from 'state/types'
-import { Address } from 'viem'
 import styled from 'styled-components'
 import AchievementAvatar from 'views/Profile/components/Achievements/AchievementAvatar'
 import AchievementDescription from 'views/Profile/components/Achievements/AchievementDescription'
@@ -59,8 +58,9 @@ const AchievementRow: React.FC<React.PropsWithChildren<AchievementRowProps>> = (
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const handleCollectPoints = async () => {
-    const receipt = await fetchWithCatchTxError(() => {
-      return callWithGasPrice(pointCenterContract, 'getPoints', [achievement.address as Address])
+    // eslint-disable-next-line consistent-return
+    const receipt = await fetchWithCatchTxError(async () => {
+      return callWithGasPrice(pointCenterContract, 'getPoints', [achievement.address])
     })
     if (receipt?.status) {
       onCollectSuccess(achievement)

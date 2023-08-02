@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, InjectedModalProps, Skeleton, Text, useToast } from '@pancakeswap/uikit'
-import { useAccount, useWalletClient } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
@@ -12,7 +12,7 @@ import { NftLocation } from 'state/nftMarket/types'
 import { useProfile } from 'state/profile/hooks'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import { getErc721Contract } from 'utils/contractHelpers'
-import SelectionCard from 'views/ProfileCreation/SelectionCard'
+import SelectionCard from 'views/ChannelCreation/SelectionCard'
 import { useNftsForAddress } from '../../../Nft/market/hooks/useNftsForAddress'
 
 interface ChangeProfilePicPageProps extends InjectedModalProps {
@@ -28,8 +28,8 @@ const ChangeProfilePicPage: React.FC<React.PropsWithChildren<ChangeProfilePicPag
     collectionAddress: null,
   })
   const { t } = useTranslation()
-  const { address: account } = useAccount()
-  const { data: signer } = useWalletClient()
+  const { account } = useWeb3React()
+  // const { data: signer } = useSigner()
   const { isLoading: isProfileLoading, profile, refresh: refreshProfile } = useProfile()
   const { nfts, isLoading } = useNftsForAddress(account, profile, isProfileLoading)
   const profileContract = useProfileContract()
@@ -45,17 +45,12 @@ const ChangeProfilePicPage: React.FC<React.PropsWithChildren<ChangeProfilePicPag
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({
-      onRequiresApproval: async () => {
-        if (!selectedNft.tokenId) return true
-        const contract = getErc721Contract(selectedNft.collectionAddress, signer)
-        const approvedAddress = await contract.read.getApproved([selectedNft.tokenId])
-        return approvedAddress !== getPancakeProfileAddress()
-      },
       onApprove: () => {
-        const contract = getErc721Contract(selectedNft.collectionAddress, signer)
+        const contract = {} // getErc721Contract(selectedNft.collectionAddress, '')
 
         return callWithGasPrice(contract, 'approve', [getPancakeProfileAddress(), selectedNft.tokenId])
       },
+      // eslint-disable-next-line consistent-return
       onConfirm: () => {
         if (!profile.isActive) {
           return callWithGasPrice(profileContract, 'reactivateProfile', [
@@ -75,7 +70,7 @@ const ChangeProfilePicPage: React.FC<React.PropsWithChildren<ChangeProfilePicPag
       },
     })
 
-  const alreadyApproved = isApproved || isAlreadyApproved
+  const alreadyApproved = true
 
   return (
     <>

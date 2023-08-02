@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useAccount } from 'wagmi'
-import BigNumber from 'bignumber.js'
-import { Button, Flex, InjectedModalProps, Message, MessageText } from '@pancakeswap/uikit'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { Button, Flex, Text, InjectedModalProps, Message, MessageText } from '@pancakeswap/uikit'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import { useCake } from 'hooks/useContract'
-import { useBSCCakeBalance } from 'hooks/useTokenBalance'
-import { useCakeEnable } from 'hooks/useCakeEnable'
 import { useTranslation } from '@pancakeswap/localization'
 import useGetProfileCosts from 'views/Profile/hooks/useGetProfileCosts'
 import { FetchStatus } from 'config/constants/types'
 import { requiresApproval } from 'utils/requiresApproval'
 import { useProfile } from 'state/profile/hooks'
 import ProfileAvatarWithTeam from 'components/ProfileAvatarWithTeam'
-import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
 import { UseEditProfileResponse } from './reducer'
 
 interface StartPageProps extends InjectedModalProps {
@@ -45,45 +41,7 @@ const AvatarWrapper = styled.div`
 
 const StartPage: React.FC<React.PropsWithChildren<StartPageProps>> = ({ goToApprove, goToChange, goToRemove }) => {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
-  const cakeContract = useCake()
   const { profile } = useProfile()
-  const { balance: cakeBalance, fetchStatus } = useBSCCakeBalance()
-  const {
-    costs: { numberCakeToUpdate, numberCakeToReactivate },
-    isLoading: isProfileCostsLoading,
-  } = useGetProfileCosts()
-  const [needsApproval, setNeedsApproval] = useState(null)
-  const minimumCakeRequired = profile?.isActive ? numberCakeToUpdate : numberCakeToReactivate
-  const hasMinimumCakeRequired = fetchStatus === FetchStatus.Fetched && cakeBalance >= minimumCakeRequired
-  const { handleEnable, pendingEnableTx } = useCakeEnable(new BigNumber(minimumCakeRequired.toString()))
-  const [showCakeRequireFlow, setShowCakeRequireFlow] = useState(false)
-
-  useEffect(() => {
-    if (!isProfileCostsLoading && !hasMinimumCakeRequired && !showCakeRequireFlow) {
-      setShowCakeRequireFlow(true)
-    }
-  }, [isProfileCostsLoading, hasMinimumCakeRequired, showCakeRequireFlow])
-
-  /**
-   * Check if the wallet has the required CAKE allowance to change their profile pic or reactivate
-   * If they don't, we send them to the approval screen first
-   */
-  useEffect(() => {
-    const checkApprovalStatus = async () => {
-      const approvalNeeded = await requiresApproval(
-        cakeContract,
-        account,
-        getPancakeProfileAddress(),
-        minimumCakeRequired,
-      )
-      setNeedsApproval(approvalNeeded)
-    }
-
-    if (account && !isProfileCostsLoading) {
-      checkApprovalStatus()
-    }
-  }, [account, minimumCakeRequired, setNeedsApproval, cakeContract, isProfileCostsLoading])
 
   if (!profile) {
     return null
@@ -91,66 +49,33 @@ const StartPage: React.FC<React.PropsWithChildren<StartPageProps>> = ({ goToAppr
 
   return (
     <Flex alignItems="center" justifyContent="center" flexDirection="column">
-      <AvatarWrapper>
+      {/* <AvatarWrapper>
         <ProfileAvatarWithTeam profile={profile} />
-      </AvatarWrapper>
-      {profile.isActive ? (
-        <>
-          <Message variant="warning" my="16px">
-            <MessageText>
-              {t(
-                "Before editing your profile, please make sure you've claimed all the unspent CAKE from previous IFOs!",
-              )}
-            </MessageText>
-          </Message>
-          {showCakeRequireFlow ? (
-            <Flex mb="16px" pb="16px">
-              <ApproveConfirmButtons
-                isApproveDisabled={isProfileCostsLoading || hasMinimumCakeRequired}
-                isApproving={pendingEnableTx}
-                isConfirmDisabled={isProfileCostsLoading || !hasMinimumCakeRequired || needsApproval === null}
-                isConfirming={false}
-                onApprove={handleEnable}
-                onConfirm={needsApproval === true ? goToApprove : goToChange}
-                confirmLabel={t('Change Profile Pic')}
-              />
-            </Flex>
-          ) : (
-            <Button
-              width="100%"
-              mb="8px"
-              onClick={needsApproval === true ? goToApprove : goToChange}
-              disabled={isProfileCostsLoading || !hasMinimumCakeRequired || needsApproval === null}
-            >
-              {t('Change Profile Pic')}
-            </Button>
-          )}
-          <DangerOutline width="100%" onClick={goToRemove}>
-            {t('Remove Profile Pic')}
-          </DangerOutline>
-        </>
-      ) : showCakeRequireFlow ? (
-        <Flex mb="8px">
-          <ApproveConfirmButtons
-            isApproveDisabled={isProfileCostsLoading || hasMinimumCakeRequired}
-            isApproving={pendingEnableTx}
-            isConfirmDisabled={isProfileCostsLoading || !hasMinimumCakeRequired || needsApproval === null}
-            isConfirming={false}
-            onApprove={handleEnable}
-            onConfirm={needsApproval === true ? goToApprove : goToChange}
-            confirmLabel={t('Reactivate Profile')}
-          />
-        </Flex>
-      ) : (
-        <Button
-          width="100%"
-          mb="8px"
-          onClick={needsApproval === true ? goToApprove : goToChange}
-          disabled={isProfileCostsLoading || !hasMinimumCakeRequired || needsApproval === null}
-        >
-          {t('Reactivate Profile')}
-        </Button>
-      )}
+      </AvatarWrapper> */}
+      <Message variant="warning" mb="16px">
+        <MessageText>
+          {t("Before editing your profile, please make sure you've claimed all the unspent CAKE from previous IFOs!")}
+        </MessageText>
+      </Message>
+      <Button
+        width="100%"
+        mb="8px"
+        onClick={true ? goToApprove : goToChange}
+        // disabled={isProfileCostsLoading || !hasMinimumCakeRequired || needsApproval === null}
+      >
+        {t('Change Profile Pic')}
+      </Button>
+      <DangerOutline width="100%" onClick={goToRemove}>
+        {t('Remove Profile Pic')}
+      </DangerOutline>
+      <Button
+        width="100%"
+        mb="8px"
+        // onClick={needsApproval === true ? goToApprove : goToChange}
+        // disabled={isProfileCostsLoading || !hasMinimumCakeRequired || needsApproval === null}
+      >
+        {t('Reactivate Profile')}
+      </Button>
     </Flex>
   )
 }

@@ -10,16 +10,31 @@ const SubMenuComponent: React.FC<React.PropsWithChildren> = () => {
 
   const ItemsConfig = [
     {
-      label: t('Items'),
+      label: t('Profile'),
       href: `/profile/${accountAddress}`,
     },
     {
-      label: t('Activity'),
-      href: `/profile/${accountAddress}/activity`,
+      label: t('SSI'),
+      href: `/profile/${accountAddress}/ssi`,
     },
+    {
+      label: t('NFTickets'),
+      href: `/profile/${accountAddress}/nftickets`,
+    },
+    {
+      label: t('Badges'),
+      href: `/profile/${accountAddress}/badges`,
+    },
+    // {
+    //   label: t('Notes'),
+    //   href: `/profile/${accountAddress}/notes`,
+    // },
+    // {
+    //   label: t('Others'),
+    //   href: `/profile/${accountAddress}/others`,
+    // },
   ]
-
-  return <BaseSubMenu items={ItemsConfig} activeItem={asPath} justifyContent="flex-start" mb="18px" />
+  return <BaseSubMenu items={ItemsConfig} activeItem={asPath?.split('?')[0]} justifyContent="flex-start" mb="18px" />
 }
 
 export default SubMenuComponent

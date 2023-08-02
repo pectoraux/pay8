@@ -22,33 +22,46 @@ const Tab = styled.button<{ $active: boolean }>`
   transition: background-color 0.3s ease-out;
 `
 
-const TabMenu = () => {
+const TabMenu = ({ id }) => {
   const { t } = useTranslation()
   const { pathname, query } = useRouter()
   const { accountAddress } = query
-  const [achievementsActive, setIsAchievementsActive] = useState(pathname.includes('achievements'))
+  const [reportActive, setReportActive] = useState(pathname.includes('report'))
+  const [transfersActive, setIsTransfersActive] = useState(pathname.includes('transfers'))
 
   useEffect(() => {
-    setIsAchievementsActive(pathname.includes('achievements'))
+    setReportActive(pathname.includes('report'))
+    setIsTransfersActive(pathname.includes('transfers'))
   }, [pathname])
 
   return (
     <Flex>
       <Tab
-        onClick={() => setIsAchievementsActive(false)}
-        $active={!achievementsActive}
+        onClick={() => {
+          setReportActive(false)
+          setIsTransfersActive(false)
+        }}
+        $active={!reportActive && !transfersActive}
         as={NextLinkFromReactRouter}
         to={`/profile/${accountAddress}`}
       >
         NFTs
       </Tab>
       <Tab
-        onClick={() => setIsAchievementsActive(true)}
-        $active={achievementsActive}
+        onClick={() => setReportActive(true)}
+        $active={reportActive}
         as={NextLinkFromReactRouter}
-        to={`/profile/${accountAddress}/achievements`}
+        to={`/profile/${accountAddress}/report/${id}`}
       >
-        {t('Achievements')}
+        {t('Report')}
+      </Tab>
+      <Tab
+        onClick={() => setIsTransfersActive(false)}
+        $active={transfersActive}
+        as={NextLinkFromReactRouter}
+        to={`/profile/${accountAddress}/transfers`}
+      >
+        {t('Transfers')}
       </Tab>
     </Flex>
   )
