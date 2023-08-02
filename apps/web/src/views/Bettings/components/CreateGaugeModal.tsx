@@ -16,7 +16,7 @@ import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shar
 import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
-import { combineDateAndTime } from 'views/ReferralVoting/CreateProposal/helpers'
+import { combineDateAndTime } from 'views/ReferralsVoting/CreateProposal/helpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
