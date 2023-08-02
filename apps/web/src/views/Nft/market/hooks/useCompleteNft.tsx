@@ -1,7 +1,7 @@
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { FetchStatus } from 'config/constants/types'
 import { useCallback } from 'react'
-import { getNftSg, getPaywallSg, getNftsMarketData, getNftsOnChainMarketData } from 'state/cancan/helpers'
+import { getNftSg, getPaywallSg, getNftsMarketData } from 'state/cancan/helpers'
 import { NftLocation, TokenMarketData } from 'state/cancan/types'
 import { useProfile } from 'state/profile/hooks'
 import useSWR from 'swr'
@@ -47,19 +47,13 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string, isPay
   const { data: marketData, mutate: refetchNftMarketData } = useSWR(
     collectionAddress && tokenId ? ['nft', 'marketData', collectionAddress, tokenId] : null,
     async () => {
-      const [onChainMarketDatas, marketDatas] = await Promise.all([
-        getNftsOnChainMarketData(collectionAddress, [tokenId]),
-        getNftsMarketData({ collection: collectionAddress, tokenId }, 1),
-      ])
-      const onChainMarketData = onChainMarketDatas[0]
+      const [marketDatas] = await Promise.all([getNftsMarketData({ collection: collectionAddress, tokenId }, 1)])
 
       const marketDat = marketDatas.find((data) => data.tokenId === tokenId)
 
-      if (!marketDat && !onChainMarketData) return null
+      if (!marketDat) return null
 
-      if (!onChainMarketData) return marketDat
-
-      return { ...marketDat, ...onChainMarketData }
+      return marketDat
     },
   )
 
