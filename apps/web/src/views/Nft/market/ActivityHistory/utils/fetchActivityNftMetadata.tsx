@@ -12,7 +12,7 @@ export const fetchActivityNftMetadata = async (activities: Activity[]) => {
   )
 
   const activityNftTokenIds = uniqBy(
-    nonPBCollections.map((activity): TokenIdWithCollectionAddress => {
+    nonPBCollections.map((activity): any => {
       return { tokenId: activity.nft.tokenId, collectionAddress: activity.nft.collection.id }
     }),
     (tokenWithCollectionAddress) =>
