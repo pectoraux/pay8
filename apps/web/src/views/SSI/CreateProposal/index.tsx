@@ -9,119 +9,131 @@ import {
   Flex,
   Heading,
   Input,
+  LinkExternal,
   Text,
-  useModal,
+  Select,
   useToast,
-  ReactMarkdown,
-  ScanLink,
 } from '@pancakeswap/uikit'
-import snapshot from '@snapshot-labs/snapshot.js'
-import isEmpty from 'lodash/isEmpty'
+import useSWR from 'swr'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import times from 'lodash/times'
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useCallback, useState } from 'react'
 import { useInitialBlock } from 'state/block/hooks'
 
 import { useTranslation } from '@pancakeswap/localization'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
-import dynamic from 'next/dynamic'
+import { PageMeta } from 'components/Layout/Page'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getBlockExploreLink } from 'utils'
 import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
-import { useAccount, useWalletClient } from 'wagmi'
-import { ChainId } from '@pancakeswap/sdk'
-import Layout from '../components/Layout'
-import VoteDetailsModal from '../components/VoteDetailsModal'
-import { ADMINS, PANCAKE_SPACE, VOTE_THRESHOLD } from '../config'
-import Choices, { ChoiceIdValue, makeChoice, MINIMUM_CHOICES } from './Choices'
+import useCatchTxError from 'hooks/useCatchTxError'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { ToastDescriptionWithTx } from 'components/Toast'
+import { useSSIContract } from 'hooks/useContract'
+import EncryptRsa from 'encrypt-rsa'
+import { getSSIDatum } from 'state/ssi/helpers'
+import Choices, { Choice, makeChoice, MINIMUM_CHOICES } from './Choices'
 import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
-import { FormState } from './types'
-
-const hub = 'https://hub.snapshot.org'
-const client = new snapshot.Client712(hub)
-
-const EasyMde = dynamic(() => import('components/EasyMde'), {
-  ssr: false,
-})
+import Layout from '../components/Layout'
 
 const CreateProposal = () => {
-  const [state, setState] = useState<FormState>(() => ({
+  const [state, setState] = useState<any>(() => ({
+    dataType: null,
     name: '',
-    body: '',
     choices: times(MINIMUM_CHOICES).map(makeChoice),
     startDate: null,
     startTime: null,
     endDate: null,
     endTime: null,
-    snapshot: 0,
+    profileId: '',
+    auditorProfileId: '',
+    searchable: false,
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
-  const { push } = useRouter()
-  const { toastSuccess, toastError } = useToast()
-  const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal block={state.snapshot} />)
+  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { callWithGasPrice } = useCallWithGasPrice()
+  const ssiContract = useSSIContract()
+  const { toastSuccess } = useToast()
+  const { data } = useSWR(['profile-data', state.profileId], async () => getSSIDatum(state.profileId))
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  const { name, body, choices, startDate, startTime, endDate, endTime, snapshot } = state
+  const { name, choices } = state
   const formErrors = getFormErrors(state, t)
 
-  const { data: signer } = useWalletClient()
-
-  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault()
-
+  const handleCreateData = useCallback(async () => {
+    console.log('datadata===========================>', data)
     try {
       setIsLoading(true)
-
-      const web3 = {
-        getSigner: () => {
-          return {
-            _signTypedData: (domain, types, message) =>
-              signer.signTypedData({
-                account,
-                domain,
-                types,
-                message,
-                primaryType: 'Proposal',
-              }),
-          }
-        },
-      }
-
-      const data: any = await client.proposal(web3 as any, account, {
-        space: PANCAKE_SPACE,
-        type: 'single-choice',
-        title: name,
-        body,
-        start: combineDateAndTime(startDate, startTime),
-        end: combineDateAndTime(endDate, endTime),
-        choices: choices
-          .filter((choice) => choice.value)
-          .map((choice) => {
-            return choice.value
-          }),
-        snapshot,
-        discussion: '',
-        plugins: JSON.stringify({}),
-        app: 'snapshot',
+      // eslint-disable-next-line consistent-return
+      const receipt = await fetchWithCatchTxError(async () => {
+        const encryptRsa = new EncryptRsa()
+        console.log('1public===================>', encryptRsa, choices)
+        const questions = state.choices.filter((choice, index) => {
+          return index % 2 === 0 ? choice.value : false
+        })
+        state.choices
+          .filter((choice, index) => {
+            return index % 2 !== 0 ? choice.value : false
+          })
+          .map((choice, index) => {
+            const pk = `-----BEGIN PUBLIC KEY-----${data.publicKey?.replace(/\s/g, '')}-----END PUBLIC KEY-----`
+            console.log('1pk===================>', pk)
+            const encryptedAnswer = choice.value
+              ? encryptRsa.encryptStringWithRsaPublicKey({
+                  text: choice.value,
+                  publicKey: pk,
+                })
+              : ''
+            console.log('public===================>', data?.publicKey, [
+              state.profileId,
+              state.auditorProfileId,
+              state.name,
+              account,
+              combineDateAndTime(state.startDate, state.startTime)?.toString(),
+              combineDateAndTime(state.endDate, state.endTime)?.toString(),
+              state.searchable,
+              questions[index].value.toLowerCase(),
+              state.searchable ? choice.value : encryptedAnswer,
+              state.dataType,
+            ])
+            return callWithGasPrice(ssiContract, 'createData', [
+              state.profileId,
+              state.auditorProfileId,
+              state.name,
+              account,
+              combineDateAndTime(state.startDate, state.startTime)?.toString(),
+              combineDateAndTime(state.endDate, state.endTime)?.toString(),
+              state.searchable,
+              questions[index].value.toLowerCase(),
+              state.searchable ? choice.value : encryptedAnswer,
+              state.dataType,
+            ]).catch((err) => console.log('rerr1====================>', err))
+          })
       })
-
-      // Redirect user to newly created proposal page
-      push(`/voting/proposal/${data.id}`)
-      toastSuccess(t('Proposal created!'))
-    } catch (error) {
-      toastError(t('Error'), (error as Error)?.message)
-      console.error(error)
+      if (receipt?.status) {
+        setIsLoading(false)
+        toastSuccess(
+          t('Data Created'),
+          <ToastDescriptionWithTx txHash={receipt?.transactionHash}>
+            {t('You can now start sharing this data with different services/users')}
+          </ToastDescriptionWithTx>,
+        )
+      }
+    } catch (err) {
+      console.log('try err====================>', err)
+    } finally {
       setIsLoading(false)
     }
-  }
+  }, [t, data, state, choices, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
 
-  const updateValue = (key: string, value: string | ChoiceIdValue[] | Date) => {
+  const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
       [key]: value,
@@ -139,11 +151,7 @@ const CreateProposal = () => {
     updateValue(inputName, value)
   }
 
-  const handleEasyMdeChange = (value: string) => {
-    updateValue('body', value)
-  }
-
-  const handleChoiceChange = (newChoices: ChoiceIdValue[]) => {
+  const handleChoiceChange = (newChoices: Choice[]) => {
     updateValue('choices', newChoices)
   }
 
@@ -151,166 +159,178 @@ const CreateProposal = () => {
     updateValue(key, value)
   }
 
-  const options = useMemo(() => {
-    return {
-      hideIcons:
-        account && ADMINS.includes(account.toLowerCase())
-          ? []
-          : ['guide', 'fullscreen', 'preview', 'side-by-side', 'image'],
-    }
-  }, [account])
+  const handleTypeChange = (dataType_: string) => {
+    updateValue('dataType', dataType_)
+  }
 
   useEffect(() => {
     if (initialBlock > 0) {
       setState((prevState) => ({
         ...prevState,
-        snapshot: Number(initialBlock),
+        snapshot: initialBlock,
       }))
     }
   }, [initialBlock, setState])
 
   return (
     <Container py="40px">
+      <PageMeta />
       <Box mb="48px">
         <Breadcrumbs>
           <Link href="/">{t('Home')}</Link>
-          <Link href="/voting">{t('Voting')}</Link>
-          <Text>{t('Make a Proposal')}</Text>
+          <Link href="/ssi">{t('SSI')}</Link>
+          <Text>{t('Make an Entry')}</Text>
         </Breadcrumbs>
       </Box>
-      <form onSubmit={handleSubmit}>
-        <Layout>
-          <Box>
-            <Box mb="24px">
-              <Label htmlFor="name">{t('Title')}</Label>
-              <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
-              {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
-            </Box>
-            <Box mb="24px">
-              <Label htmlFor="body">{t('Content')}</Label>
-              <Text color="textSubtle" mb="8px">
-                {t('Tip: write in Markdown!')}
-              </Text>
-              <EasyMde
-                id="body"
-                name="body"
-                onTextChange={handleEasyMdeChange}
-                value={body}
-                options={options}
-                required
-              />
-              {formErrors.body && fieldsState.body && <FormErrors errors={formErrors.body} />}
-            </Box>
-            {body && (
+      <Layout>
+        <Box>
+          <Box mb="24px">
+            <Label htmlFor="name">{t('Owner Wallet Address')}</Label>
+            <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
+            {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
+          </Box>
+          <Choices choices={choices} onChange={handleChoiceChange} />
+          {formErrors.choices && fieldsState.choices && <FormErrors errors={formErrors.choices} />}
+        </Box>
+        <Box>
+          <Card>
+            <CardHeader>
+              <Heading as="h3" scale="md">
+                {t('Actions')}
+              </Heading>
+            </CardHeader>
+            <CardBody>
               <Box mb="24px">
-                <Card>
-                  <CardHeader>
-                    <Heading as="h3" scale="md">
-                      {t('Preview')}
-                    </Heading>
-                  </CardHeader>
-                  <CardBody p="0" px="24px">
-                    <ReactMarkdown>{body}</ReactMarkdown>
-                  </CardBody>
-                </Card>
+                <SecondaryLabel>{t('Entry Type')}</SecondaryLabel>
+                <Select
+                  // name="dataType"
+                  options={[
+                    {
+                      label: t('Others'),
+                      value: t('others'),
+                    },
+                    {
+                      label: t('General'),
+                      value: t('general'),
+                    },
+                    {
+                      label: t('HealthCare'),
+                      value: t('healthcare'),
+                    },
+                    {
+                      label: t('Education'),
+                      value: t('education'),
+                    },
+                    {
+                      label: t('Professional'),
+                      value: t('professional'),
+                    },
+                    {
+                      label: t('Properties'),
+                      value: t('properties'),
+                    },
+                  ]}
+                  onOptionChange={(val) => {
+                    handleTypeChange(val.value)
+                  }}
+                />
+                {formErrors.dataType && fieldsState.dataType && <FormErrors errors={formErrors.dataType} />}
               </Box>
-            )}
-            <Choices choices={choices} onChange={handleChoiceChange} />
-            {formErrors.choices && fieldsState.choices && <FormErrors errors={formErrors.choices} />}
-          </Box>
-          <Box>
-            <Card>
-              <CardHeader>
-                <Heading as="h3" scale="md">
-                  {t('Actions')}
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('Start Date')}</SecondaryLabel>
-                  <DatePicker
-                    name="startDate"
-                    onChange={handleDateChange('startDate')}
-                    selected={startDate}
-                    placeholderText="YYYY/MM/DD"
-                  />
-                  {formErrors.startDate && fieldsState.startDate && <FormErrors errors={formErrors.startDate} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('Start Time')}</SecondaryLabel>
-                  <TimePicker
-                    name="startTime"
-                    onChange={handleDateChange('startTime')}
-                    selected={startTime}
-                    placeholderText="00:00"
-                  />
-                  {formErrors.startTime && fieldsState.startTime && <FormErrors errors={formErrors.startTime} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('End Date')}</SecondaryLabel>
-                  <DatePicker
-                    name="endDate"
-                    onChange={handleDateChange('endDate')}
-                    selected={endDate}
-                    placeholderText="YYYY/MM/DD"
-                  />
-                  {formErrors.endDate && fieldsState.endDate && <FormErrors errors={formErrors.endDate} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('End Time')}</SecondaryLabel>
-                  <TimePicker
-                    name="endTime"
-                    onChange={handleDateChange('endTime')}
-                    selected={endTime}
-                    placeholderText="00:00"
-                  />
-                  {formErrors.endTime && fieldsState.endTime && <FormErrors errors={formErrors.endTime} />}
-                </Box>
-                {account && (
-                  <Flex alignItems="center" mb="8px">
-                    <Text color="textSubtle" mr="16px">
-                      {t('Creator')}
-                    </Text>
-                    <ScanLink chainId={ChainId.BSC} href={getBlockExploreLink(account, 'address')}>
-                      {truncateHash(account)}
-                    </ScanLink>
-                  </Flex>
+              <Box mb="24px">
+                <SecondaryLabel>{t('Entry Profile ID')}</SecondaryLabel>
+                <Input
+                  id="profileId"
+                  name="profileId"
+                  value={state.profileId}
+                  scale="lg"
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.profileId && fieldsState.profileId && <FormErrors errors={formErrors.profileId} />}
+              </Box>
+              <Box mb="24px">
+                <SecondaryLabel>{t("Entry Auditor's Profile ID")}</SecondaryLabel>
+                <Input
+                  id="auditorProfileId"
+                  name="auditorProfileId"
+                  value={state.auditorProfileId}
+                  scale="lg"
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.auditorProfileId && fieldsState.auditorProfileId && (
+                  <FormErrors errors={formErrors.auditorProfileId} />
                 )}
-                <Flex alignItems="center" mb="16px">
+              </Box>
+              <Box mb="24px">
+                <SecondaryLabel>{t('Start Date')}</SecondaryLabel>
+                <DatePicker
+                  name="startDate"
+                  onChange={handleDateChange('startDate')}
+                  selected={state.startDate}
+                  placeholderText="YYYY/MM/DD"
+                />
+                {formErrors.startDate && fieldsState.startDate && <FormErrors errors={formErrors.startDate} />}
+              </Box>
+              <Box mb="24px">
+                <SecondaryLabel>{t('Start Time')}</SecondaryLabel>
+                <TimePicker
+                  name="startTime"
+                  onChange={handleDateChange('startTime')}
+                  selected={state.startTime}
+                  placeholderText="00:00"
+                />
+                {formErrors.startTime && fieldsState.startTime && <FormErrors errors={formErrors.startTime} />}
+              </Box>
+              <Box mb="24px">
+                <SecondaryLabel>{t('End Date')}</SecondaryLabel>
+                <DatePicker
+                  name="endDate"
+                  onChange={handleDateChange('endDate')}
+                  selected={state.endDate}
+                  placeholderText="YYYY/MM/DD"
+                />
+                {formErrors.endDate && fieldsState.endDate && <FormErrors errors={formErrors.endDate} />}
+              </Box>
+              <Box mb="24px">
+                <SecondaryLabel>{t('End Time')}</SecondaryLabel>
+                <TimePicker
+                  name="endTime"
+                  onChange={handleDateChange('endTime')}
+                  selected={state.endTime}
+                  placeholderText="00:00"
+                />
+                {formErrors.endTime && fieldsState.endTime && <FormErrors errors={formErrors.endTime} />}
+              </Box>
+              {account && (
+                <Flex alignItems="center" mb="8px">
                   <Text color="textSubtle" mr="16px">
-                    {t('Snapshot')}
+                    {t('Creator')}
                   </Text>
-                  <ScanLink chainId={ChainId.BSC} href={getBlockExploreLink(snapshot, 'block')}>
-                    {snapshot}
-                  </ScanLink>
+                  <LinkExternal href={getBlockExploreLink(account, 'address')}>{truncateHash(account)}</LinkExternal>
                 </Flex>
-                {account ? (
-                  <>
-                    <Button
-                      type="submit"
-                      width="100%"
-                      isLoading={isLoading}
-                      endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
-                      disabled={!isEmpty(formErrors)}
-                      mb="16px"
-                    >
-                      {t('Publish')}
-                    </Button>
-                    <Text color="failure" as="p" mb="4px">
-                      {t('You need at least %count% voting power to publish a proposal.', { count: VOTE_THRESHOLD })}{' '}
-                    </Text>
-                    <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
-                      {t('Check voting power')}
-                    </Button>
-                  </>
-                ) : (
-                  <ConnectWalletButton width="100%" type="button" />
-                )}
-              </CardBody>
-            </Card>
-          </Box>
-        </Layout>
-      </form>
+              )}
+              {account ? (
+                <>
+                  <Button
+                    type="submit"
+                    width="100%"
+                    isLoading={isLoading}
+                    onClick={handleCreateData}
+                    endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
+                    // disabled={!isEmpty(formErrors)}
+                    mb="16px"
+                  >
+                    {t('Publish')}
+                  </Button>
+                </>
+              ) : (
+                <ConnectWalletButton width="100%" type="button" />
+              )}
+            </CardBody>
+          </Card>
+        </Box>
+      </Layout>
       <DatePickerPortal />
     </Container>
   )

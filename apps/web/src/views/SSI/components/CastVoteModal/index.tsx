@@ -1,45 +1,37 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Modal, useToast } from '@pancakeswap/uikit'
-import { useAccount, useWalletClient } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import snapshot from '@snapshot-labs/snapshot.js'
 import useTheme from 'hooks/useTheme'
 import { useState } from 'react'
-import { PANCAKE_SPACE } from 'views/Voting/config'
-import useGetVotingPower from '../../hooks/useGetVotingPower'
 import DetailsView from './DetailsView'
 import MainView from './MainView'
-import { CastVoteModalProps, ConfirmVoteView } from './types'
+import { ConfirmVoteView } from './types'
 
 const hub = 'https://hub.snapshot.org'
 const client = new snapshot.Client712(hub)
 
-const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
-  onSuccess,
-  proposalId,
-  vote,
-  block,
-  onDismiss,
-}) => {
+const CastVoteModal: React.FC<any> = ({ onSuccess, proposalId, vote, block, onDismiss }) => {
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
+  const [modalIsOpen, setModalIsOpen] = useState(true)
   const [isPending, setIsPending] = useState(false)
-  const { address: account } = useAccount()
-  const { data: signer } = useWalletClient()
+  const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastError } = useToast()
   const { theme } = useTheme()
-  const {
-    isLoading,
-    isError,
-    total,
-    cakeBalance,
-    cakeVaultBalance,
-    cakePoolBalance,
-    poolsBalance,
-    cakeBnbLpBalance,
-    ifoPoolBalance,
-    lockedCakeBalance,
-    lockedEndTime,
-  } = useGetVotingPower(block)
+  // const {
+  //   isLoading,
+  //   isError,
+  //   total,
+  //   cakeBalance,
+  //   cakeVaultBalance,
+  //   cakePoolBalance,
+  //   poolsBalance,
+  //   cakeBnbLpBalance,
+  //   ifoPoolBalance,
+  //   lockedCakeBalance,
+  //   lockedEndTime,
+  // } = useGetVotingPower(block, modalIsOpen)
 
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)
@@ -51,35 +43,22 @@ const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
   }
 
   const handleDismiss = () => {
+    setModalIsOpen(false)
     onDismiss()
   }
 
   const handleConfirmVote = async () => {
     try {
       setIsPending(true)
-      const web3 = {
-        getSigner: () => {
-          return {
-            _signTypedData: (domain, types, message) =>
-              signer.signTypedData({
-                account,
-                domain,
-                types,
-                message,
-                primaryType: 'Vote',
-              }),
-          }
-        },
-      }
 
-      await client.vote(web3 as any, account, {
-        space: PANCAKE_SPACE,
-        choice: vote.value,
-        reason: '',
-        type: 'single-choice',
-        proposal: proposalId,
-        app: 'snapshot',
-      })
+      // await client.vote(library as any, account, {
+      //   space: PANCAKE_SPACE,
+      //   choice: vote.value,
+      //   reason: '',
+      //   type: 'single-choice',
+      //   proposal: proposalId,
+      //   app: 'snapshot',
+      // })
 
       await onSuccess()
 
@@ -104,12 +83,12 @@ const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
         {view === ConfirmVoteView.MAIN && (
           <MainView
             vote={vote}
-            isError={isError}
-            isLoading={isLoading}
-            isPending={isPending}
-            total={total}
-            lockedCakeBalance={lockedCakeBalance}
-            lockedEndTime={lockedEndTime}
+            isError={null}
+            isLoading={false}
+            isPending={false}
+            total={0}
+            lockedCakeBalance={0}
+            lockedEndTime={0}
             onConfirm={handleConfirmVote}
             onViewDetails={handleViewDetails}
             onDismiss={handleDismiss}
@@ -117,16 +96,16 @@ const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
         )}
         {view === ConfirmVoteView.DETAILS && (
           <DetailsView
-            total={total}
-            cakeBalance={cakeBalance}
-            ifoPoolBalance={ifoPoolBalance}
-            cakeVaultBalance={cakeVaultBalance}
-            cakePoolBalance={cakePoolBalance}
-            poolsBalance={poolsBalance}
-            cakeBnbLpBalance={cakeBnbLpBalance}
+            total={0}
+            cakeBalance={0}
+            ifoPoolBalance={0}
+            cakeVaultBalance={0}
+            cakePoolBalance={0}
+            poolsBalance={0}
+            cakeBnbLpBalance={0}
             block={block}
-            lockedCakeBalance={lockedCakeBalance}
-            lockedEndTime={lockedEndTime}
+            lockedCakeBalance={0}
+            lockedEndTime={0}
           />
         )}
       </Box>

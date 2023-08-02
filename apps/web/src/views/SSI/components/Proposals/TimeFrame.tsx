@@ -1,12 +1,12 @@
 import { Text } from '@pancakeswap/uikit'
 import { toDate, format } from 'date-fns'
 import { useTranslation } from '@pancakeswap/localization'
-import { ProposalState } from 'state/types'
+import { EntryState } from 'state/types'
 
 interface TimeFrameProps {
   startDate: number
   endDate: number
-  proposalState: ProposalState
+  entryState: EntryState
 }
 
 const getFormattedDate = (timestamp: number) => {
@@ -14,7 +14,7 @@ const getFormattedDate = (timestamp: number) => {
   return format(date, 'MMM do, yyyy HH:mm')
 }
 
-const TimeFrame: React.FC<React.PropsWithChildren<TimeFrameProps>> = ({ startDate, endDate, proposalState }) => {
+const TimeFrame: React.FC<React.PropsWithChildren<TimeFrameProps>> = ({ startDate, endDate, entryState }) => {
   const { t } = useTranslation()
   const textProps = {
     fontSize: '16px',
@@ -22,15 +22,13 @@ const TimeFrame: React.FC<React.PropsWithChildren<TimeFrameProps>> = ({ startDat
     ml: '8px',
   }
 
-  if (proposalState === ProposalState.CLOSED) {
-    return <Text {...textProps}>{t('Ended %date%', { date: getFormattedDate(endDate) })}</Text>
+  if (entryState === EntryState.EXPIRED) {
+    return <Text {...textProps}>{t('Expired %date%', { date: getFormattedDate(startDate) })}</Text>
   }
-
-  if (proposalState === ProposalState.PENDING) {
+  if (entryState === EntryState.PENDING) {
     return <Text {...textProps}>{t('Starts %date%', { date: getFormattedDate(startDate) })}</Text>
   }
-
-  return <Text {...textProps}>{t('Ends %date%', { date: getFormattedDate(endDate) })}</Text>
+  return <Text {...textProps}>{t('Expires %date%', { date: getFormattedDate(endDate) })}</Text>
 }
 
 export default TimeFrame

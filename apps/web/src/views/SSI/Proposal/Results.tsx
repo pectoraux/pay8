@@ -8,28 +8,28 @@ import {
   Heading,
   Progress,
   Skeleton,
-  Farm as FarmUI,
+  Tag,
+  CheckmarkCircleIcon,
 } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { Vote } from 'state/types'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { FetchStatus, TFetchStatus } from 'config/constants/types'
+// import { FetchStatus } from 'config/constants/types'
 import { calculateVoteResults, getTotalFromVotes } from '../helpers'
 import TextEllipsis from '../components/TextEllipsis'
+import { FetchStatus } from 'config/constants/types'
 
-const { VotedTag } = FarmUI.Tags
+// interface ResultsProps {
+//   choices: string[]
+//   votes: Vote[]
+//   votesLoadingStatus: FetchStatus
+// }
 
-interface ResultsProps {
-  choices: string[]
-  votes: Vote[]
-  votesLoadingStatus: TFetchStatus
-}
-
-const Results: React.FC<React.PropsWithChildren<ResultsProps>> = ({ choices, votes, votesLoadingStatus }) => {
+const Results: React.FC<any> = ({ choices, votes, votesLoadingStatus }) => {
   const { t } = useTranslation()
   const results = calculateVoteResults(votes)
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const totalVotes = getTotalFromVotes(votes)
 
   return (
@@ -55,7 +55,11 @@ const Results: React.FC<React.PropsWithChildren<ResultsProps>> = ({ choices, vot
                   <TextEllipsis mb="4px" title={choice}>
                     {choice}
                   </TextEllipsis>
-                  {hasVoted && <VotedTag mr="4px" />}
+                  {hasVoted && (
+                    <Tag variant="success" outline ml="8px">
+                      <CheckmarkCircleIcon mr="4px" /> {t('Voted')}
+                    </Tag>
+                  )}
                 </Flex>
                 <Box mb="4px">
                   <Progress primaryStep={progress} scale="sm" />

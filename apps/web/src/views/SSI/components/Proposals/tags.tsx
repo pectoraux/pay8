@@ -1,38 +1,31 @@
 import { TagProps, Farm as FarmUI } from '@pancakeswap/uikit'
-import { ProposalState } from 'state/types'
+import { EntryState, EntryType } from 'state/types'
 
-const { ClosedTag, CommunityTag, CoreTag, SoonTag, VoteNowTag } = FarmUI.Tags
+const { ActiveTag, CommunityTag, ExpiredTag, PendingTag, TypeTag } = FarmUI.Tags
 
 interface ProposalStateTagProps extends TagProps {
-  proposalState: ProposalState
+  entryState: EntryState
 }
 
 export const ProposalStateTag: React.FC<React.PropsWithChildren<ProposalStateTagProps>> = ({
-  proposalState,
+  entryState,
   ...props
 }) => {
-  if (proposalState === ProposalState.ACTIVE) {
-    return <VoteNowTag {...props} />
+  if (entryState === EntryState.ACTIVE) {
+    return <ActiveTag {...props} />
   }
 
-  if (proposalState === ProposalState.PENDING) {
-    return <SoonTag {...props} />
+  if (entryState === EntryState.EXPIRED) {
+    return <ExpiredTag {...props} />
   }
 
-  return <ClosedTag {...props} />
+  return <PendingTag {...props} />
 }
 
 interface ProposalTypeTagProps extends TagProps {
-  isCoreProposal: boolean
+  entryType: EntryType
 }
 
-export const ProposalTypeTag: React.FC<React.PropsWithChildren<ProposalTypeTagProps>> = ({
-  isCoreProposal,
-  ...props
-}) => {
-  if (isCoreProposal) {
-    return <CoreTag {...props} />
-  }
-
-  return <CommunityTag {...props} />
+export const ProposalTypeTag: React.FC<any> = ({ entryType, ...props }) => {
+  return <TypeTag entryType={entryType.toString()} {...props} />
 }

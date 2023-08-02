@@ -622,3 +622,37 @@ export interface State {
   wills: any
   worlds: any
 }
+
+export enum EntryType {
+  GENERAL = 'general',
+  EDUCATION = 'education',
+  PROFESSIONAL = 'professional',
+  HEALTHCARE = 'healthcare',
+  PROPERTIES = 'properties',
+  OTHERS = 'others',
+  INBOX = 'inbox',
+  SHARED = 'shared',
+  SEARCHABLE = 'searchable',
+}
+
+export enum EntryState {
+  ACTIVE = 'active',
+  EXPIRED = 'expired',
+  PENDING = 'pending',
+  COMPLETE = 'COMPLETE',
+}
+
+export interface Entry {
+  id: string
+  type: string
+  owner: string
+  dataOwner: string
+  pushable: boolean
+  searchable: boolean
+  end: number
+  cid: string
+  start: number
+  question: string
+  answer: string
+  auditor: string
+}

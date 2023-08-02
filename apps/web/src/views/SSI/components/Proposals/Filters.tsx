@@ -2,11 +2,11 @@ import { ChangeEvent } from 'react'
 import { Flex, Radio, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
-import { ProposalState } from 'state/types'
+import { EntryState } from 'state/types'
 
 interface FiltersProps {
-  filterState: ProposalState
-  onFilterChange: (filterState: ProposalState) => void
+  filterState: EntryState
+  onFilterChange: (filterState: EntryState) => void
   isLoading: boolean
 }
 
@@ -23,9 +23,9 @@ const FilterLabel = styled.label`
 `
 
 const options = [
-  { value: ProposalState.ACTIVE, label: 'Vote Now' },
-  { value: ProposalState.PENDING, label: 'Soon' },
-  { value: ProposalState.CLOSED, label: 'Closed' },
+  { value: EntryState.ACTIVE, label: 'Active' },
+  { value: EntryState.EXPIRED, label: 'Expired' },
+  { value: EntryState.PENDING, label: 'Pending' },
 ]
 
 const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ filterState, onFilterChange, isLoading }) => {
@@ -36,7 +36,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ filterState,
       {options.map(({ value, label }) => {
         const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
           const { value: radioValue } = evt.currentTarget
-          onFilterChange(radioValue as ProposalState)
+          onFilterChange(radioValue as EntryState)
         }
 
         return (
