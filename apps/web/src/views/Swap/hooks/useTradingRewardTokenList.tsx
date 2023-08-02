@@ -2,15 +2,15 @@ import { useMemo } from 'react'
 import { ChainId } from '@pancakeswap/sdk'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { farmsV3ConfigChainMap } from '@pancakeswap/farms/constants/v3'
-import useAllTradingRewardPair, { RewardStatus, RewardType } from 'views/TradingReward/hooks/useAllTradingRewardPair'
+// import useAllTradingRewardPair, { RewardStatus, RewardType } from 'views/TradingReward/hooks/useAllTradingRewardPair'
 
 const useTradingRewardTokenList = () => {
   const { chainId } = useActiveChainId()
-  const { data } = useAllTradingRewardPair({
-    status: RewardStatus.ALL,
-    type: RewardType.CAKE_STAKERS,
-  })
-
+  // const { data } = useAllTradingRewardPair({
+  //   status: RewardStatus.ALL,
+  //   type: RewardType.CAKE_STAKERS,
+  // })
+  const data = {} as any
   const uniqueAddressList = useMemo(() => {
     const currentTime = Date.now() / 1000
 
