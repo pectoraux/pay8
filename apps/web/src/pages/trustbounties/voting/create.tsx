@@ -1,4 +1,3 @@
-// import CreateProposal from 'views/TrustBountiesVoting/CreateProposal'
-import CreateProposal from 'views/Voting/CreateProposal'
+import CreateProposal from 'views/TrustBountiesVoting/CreateProposal'
 
 export default CreateProposal

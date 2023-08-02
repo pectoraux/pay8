@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Proposal } from 'state/types'
 import { isCoreProposal } from '../../helpers'
 import TimeFrame from './TimeFrame'
-import { ProposalStateTag, ProposalTypeTag } from './tags'
+import { ProposalStateTag, ProposalTypeTag, ColorTag } from './tags'
 
 interface ProposalRowProps {
   proposal: Proposal
@@ -21,8 +21,8 @@ const StyledProposalRow = styled(NextLinkFromReactRouter)`
   }
 `
 
-const ProposalRow: React.FC<React.PropsWithChildren<ProposalRowProps>> = ({ proposal }) => {
-  const votingLink = `/voting/proposal/${proposal.id}`
+const ProposalRow: React.FC<any> = ({ proposal }) => {
+  const votingLink = `/trustbounties/voting/${proposal.id}`
 
   return (
     <StyledProposalRow to={votingLink}>
@@ -30,11 +30,12 @@ const ProposalRow: React.FC<React.PropsWithChildren<ProposalRowProps>> = ({ prop
         <Text bold mb="8px">
           {proposal.title}
         </Text>
+        <ColorTag votingPower={proposal.percentile} />
         <Flex alignItems="center" mb="8px">
-          <TimeFrame startDate={proposal.start} endDate={proposal.end} proposalState={proposal.state} />
+          <TimeFrame startDate={proposal.creationTime} endDate={proposal.endTime} proposalState={proposal.active} />
         </Flex>
         <Flex alignItems="center">
-          <ProposalStateTag proposalState={proposal.state} />
+          <ProposalStateTag proposalState={proposal.active} />
           <ProposalTypeTag isCoreProposal={isCoreProposal(proposal)} ml="8px" />
         </Flex>
       </Box>

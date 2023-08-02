@@ -1,12 +1,12 @@
 import { Box, Card, CardBody, CardHeader, Flex, Heading, LinkExternal, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Proposal } from 'state/types'
+import { format } from 'util'
 import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { IPFS_GATEWAY } from '../config'
 import { ProposalStateTag } from '../components/Proposals/tags'
-import { format } from 'util'
 
 interface DetailsProps {
   proposal: Proposal

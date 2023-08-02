@@ -12,7 +12,7 @@ import {
   useModal,
   useToast,
 } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { Proposal } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -47,11 +47,11 @@ const ChoiceText = styled.div`
   width: 0;
 `
 
-const Vote: React.FC<React.PropsWithChildren<VoteProps>> = ({ proposal, onSuccess, ...props }) => {
-  const [vote, setVote] = useState<State>(null)
+const Vote: React.FC<any> = ({ proposal, onSuccess, ...props }) => {
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
+  const [isChecked, setIsChecked] = useState<boolean>()
 
   const handleSuccess = async () => {
     toastSuccess(t('Vote cast!'))
@@ -59,7 +59,12 @@ const Vote: React.FC<React.PropsWithChildren<VoteProps>> = ({ proposal, onSucces
   }
 
   const [presentCastVoteModal] = useModal(
-    <CastVoteModal onSuccess={handleSuccess} proposalId={proposal.id} vote={vote} block={Number(proposal.snapshot)} />,
+    <CastVoteModal
+      onSuccess={handleSuccess}
+      proposal={proposal}
+      isChecked={isChecked}
+      block={Number(proposal.attackerId)}
+    />,
   )
 
   return (
@@ -70,36 +75,39 @@ const Vote: React.FC<React.PropsWithChildren<VoteProps>> = ({ proposal, onSucces
         </Heading>
       </CardHeader>
       <CardBody>
-        {proposal.choices.map((choice, index) => {
-          const isChecked = index + 1 === vote?.value
-
-          const handleChange = () => {
-            setVote({
-              label: choice,
-              value: index + 1,
-            })
-          }
-
-          return (
-            <Choice key={choice} isChecked={isChecked} isDisabled={!account}>
-              <div style={{ flexShrink: 0 }}>
-                <Radio scale="sm" value={choice} checked={isChecked} onChange={handleChange} disabled={!account} />
-              </div>
-              <ChoiceText>
-                <Text as="span" title={choice}>
-                  {choice}
-                </Text>
-              </ChoiceText>
-            </Choice>
-          )
-        })}
-        {account ? (
-          <Button onClick={presentCastVoteModal} disabled={vote === null}>
-            {t('Cast Vote')}
-          </Button>
-        ) : (
-          <ConnectWalletButton />
-        )}
+        <Choice key="attacker" isChecked={isChecked} isDisabled={!account}>
+          <div style={{ flexShrink: 0 }}>
+            <Radio
+              scale="sm"
+              value={isChecked ? 1 : 0}
+              checked={isChecked}
+              onChange={() => setIsChecked(true)}
+              disabled={!account}
+            />
+          </div>
+          <ChoiceText>
+            <Text as="span" title="aye">
+              {t('Attacker')}
+            </Text>
+          </ChoiceText>
+        </Choice>
+        <Choice key="defender" isChecked={!isChecked} isDisabled={!account}>
+          <div style={{ flexShrink: 0 }}>
+            <Radio
+              scale="sm"
+              value={isChecked ? 1 : 0}
+              checked={!isChecked}
+              onChange={() => setIsChecked(false)}
+              disabled={!account}
+            />
+          </div>
+          <ChoiceText>
+            <Text as="span" title="nay">
+              {t('Defender')}
+            </Text>
+          </ChoiceText>
+        </Choice>
+        {account ? <Button onClick={presentCastVoteModal}>{t('Cast Vote')}</Button> : <ConnectWalletButton />}
       </CardBody>
     </Card>
   )

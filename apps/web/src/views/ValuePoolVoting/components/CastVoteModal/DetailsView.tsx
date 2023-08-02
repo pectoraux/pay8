@@ -1,15 +1,14 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { Flex, Text, Box, HelpIcon, useTooltip, RocketIcon, Link, ScanLink } from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Text, Box, HelpIcon, useTooltip, RocketIcon, Link } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
-import { ChainId } from '@pancakeswap/sdk'
 import { ModalInner, VotingBoxBorder, VotingBoxCardInner } from './styles'
 
-const StyledScanLink = styled(ScanLink)`
+const StyledLinkExternal = styled(LinkExternal)`
   display: inline-flex;
   font-size: 14px;
   > svg {
@@ -63,7 +62,7 @@ interface DetailsViewProps {
   block: number
 }
 
-const DetailsView: React.FC<React.PropsWithChildren<DetailsViewProps>> = ({
+const DetailsView: React.FC<any> = ({
   total,
   cakeBalance,
   cakeVaultBalance,
@@ -127,9 +126,9 @@ const DetailsView: React.FC<React.PropsWithChildren<DetailsViewProps>> = ({
       </VotingBoxBorder>
       <Text color="secondary" textTransform="uppercase" mb="4px" bold fontSize="14px">
         {t('Your voting power at block')}
-        <StyledScanLink chainId={ChainId.BSC} href={getBlockExploreLink(block, 'block')} ml="8px">
+        <StyledLinkExternal href={getBlockExploreLink(block, 'block')} ml="8px">
           {block}
-        </StyledScanLink>
+        </StyledLinkExternal>
       </Text>
       {Number.isFinite(cakeBalance) && (
         <Flex alignItems="center" justifyContent="space-between" mb="4px">

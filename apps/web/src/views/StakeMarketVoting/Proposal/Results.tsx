@@ -1,3 +1,5 @@
+import { useState, useCallback } from 'react'
+import { useRouter } from 'next/router'
 import {
   Box,
   Text,
@@ -7,30 +9,73 @@ import {
   CardHeader,
   Heading,
   Progress,
-  Skeleton,
-  Farm as FarmUI,
+  Tag,
+  useToast,
+  Button,
+  AutoRenewIcon,
+  CheckmarkCircleIcon,
 } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
 import { Vote } from 'state/types'
+import { ToastDescriptionWithTx } from 'components/Toast'
+import Countdown from 'views/Lottery/components/Countdown'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { FetchStatus, TFetchStatus } from 'config/constants/types'
-import { calculateVoteResults, getTotalFromVotes } from '../helpers'
+import { convertTimeToSeconds } from 'utils/timeHelper'
+import { useStakeMarketVoterContract } from 'hooks/useContract'
+import useCatchTxError from 'hooks/useCatchTxError'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import TextEllipsis from '../components/TextEllipsis'
 
-const { VotedTag } = FarmUI.Tags
+// interface ResultsProps {
+//   choices: string[]
+//   votes: Vote[]
+//   votesLoadingStatus: FetchStatus
+// }
 
-interface ResultsProps {
-  choices: string[]
-  votes: Vote[]
-  votesLoadingStatus: TFetchStatus
-}
-
-const Results: React.FC<React.PropsWithChildren<ResultsProps>> = ({ choices, votes, votesLoadingStatus }) => {
+const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttacker }) => {
   const { t } = useTranslation()
-  const results = calculateVoteResults(votes)
-  const { address: account } = useAccount()
-  const totalVotes = getTotalFromVotes(votes)
+  const totalVotes = litigation?.votes?.length ? litigation.votes.reduce((ac, v) => ac + parseInt(v.votingPower), 0) : 0
+  const total1Votes = litigation?.votes?.length
+    ? litigation.votes.filter((v) => v.choice === 'Attacker').reduce((ac, v) => ac + parseInt(v.votingPower), 0)
+    : 0
+  const total2Votes = litigation?.votes?.length
+    ? litigation.votes.filter((v) => v.choice === 'Defender').reduce((ac, v) => ac + parseInt(v.votingPower), 0)
+    : 0
+  const count1 = litigation?.votes?.length ? litigation.votes.filter((v) => v.choice === 'Attacker')?.length : 0
+  const count2 = litigation?.votes?.length ? litigation.votes.filter((v) => v.choice === 'Defender')?.length : 0
+  const progress1 = (total1Votes * 100) / Math.max(totalVotes, 1)
+  const progress2 = (total2Votes * 100) / Math.max(totalVotes, 1)
+  const afterOneWeek = convertTimeToSeconds(litigation?.endTime || 0) < Date.now()
+  const router = useRouter()
+  const { toastSuccess } = useToast()
+  const [pendingFb, setPendingFb] = useState(false)
+  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { callWithGasPrice } = useCallWithGasPrice()
+  const stakeMarketVoterContract = useStakeMarketVoterContract()
+
+  const handleApplyResults = useCallback(async () => {
+    setPendingFb(true)
+    // eslint-disable-next-line consistent-return
+    const receipt = await fetchWithCatchTxError(async () => {
+      const args = [litigation?.ve, litigation?.id]
+      console.log('stakeMarketVoterContract====================>', args)
+      return callWithGasPrice(stakeMarketVoterContract, 'updateStakeFromVoter', args).catch((err) => {
+        console.log('err====================>', err)
+      })
+    })
+    if (receipt?.status) {
+      setPendingFb(false)
+      toastSuccess(
+        t('Results successfully applied'),
+        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          {t('You can now start receiving votes accordingly.')}
+        </ToastDescriptionWithTx>,
+      )
+      router.push('/stakemarket/voting')
+    } else {
+      setPendingFb(false)
+    }
+  }, [t, router, litigation, stakeMarketVoterContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
 
   return (
     <Card>
@@ -40,51 +85,63 @@ const Results: React.FC<React.PropsWithChildren<ResultsProps>> = ({ choices, vot
         </Heading>
       </CardHeader>
       <CardBody>
-        {votesLoadingStatus === FetchStatus.Fetched &&
-          choices.map((choice, index) => {
-            const choiceVotes = results[choice] || []
-            const totalChoiceVote = getTotalFromVotes(choiceVotes)
-            const progress = totalVotes === 0 ? 0 : (totalChoiceVote / totalVotes) * 100
-            const hasVoted = choiceVotes.some((vote) => {
-              return account && vote.voter.toLowerCase() === account.toLowerCase()
-            })
-
-            return (
-              <Box key={choice} mt={index > 0 ? '24px' : '0px'}>
-                <Flex alignItems="center" mb="8px">
-                  <TextEllipsis mb="4px" title={choice}>
-                    {choice}
-                  </TextEllipsis>
-                  {hasVoted && <VotedTag mr="4px" />}
-                </Flex>
-                <Box mb="4px">
-                  <Progress primaryStep={progress} scale="sm" />
-                </Box>
-                <Flex alignItems="center" justifyContent="space-between">
-                  <Text color="textSubtle">{t('%total% Votes', { total: formatNumber(totalChoiceVote, 0, 2) })}</Text>
-                  <Text>
-                    {progress.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%
-                  </Text>
-                </Flex>
-              </Box>
-            )
-          })}
-
-        {votesLoadingStatus === FetchStatus.Fetching &&
-          choices.map((choice, index) => {
-            return (
-              <Box key={choice} mt={index > 0 ? '24px' : '0px'}>
-                <Flex alignItems="center" mb="8px">
-                  <TextEllipsis mb="4px" title={choice}>
-                    {choice}
-                  </TextEllipsis>
-                </Flex>
-                <Box mb="4px">
-                  <Skeleton height="36px" mb="4px" />
-                </Box>
-              </Box>
-            )
-          })}
+        <Box key="attacker" mt="24px">
+          <Flex alignItems="center" mb="8px">
+            <TextEllipsis mb="4px" title={t('Attacker')}>
+              {t('Attacker')}
+            </TextEllipsis>
+            {hasAccountVoted && hasVotedForAttacker && (
+              <Tag variant="success" outline ml="8px">
+                <CheckmarkCircleIcon mr="4px" /> {t('Voted')}
+              </Tag>
+            )}
+          </Flex>
+          <Box mb="4px">
+            <Progress primaryStep={progress1} scale="sm" />
+          </Box>
+          <Flex alignItems="center" justifyContent="space-between">
+            <Text color="textSubtle">{t('%total% Vote(s)', { total: formatNumber(count1, 0, 2) })}</Text>
+            <Text>{progress1.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%</Text>
+          </Flex>
+        </Box>
+        <Box key="defender" mt="24px">
+          <Flex alignItems="center" mb="8px">
+            <TextEllipsis mb="4px" title={t('Defender')}>
+              {t('Defender')}
+            </TextEllipsis>
+            {hasAccountVoted && !hasVotedForAttacker && (
+              <Tag variant="success" outline ml="8px">
+                <CheckmarkCircleIcon mr="4px" /> {t('Voted')}
+              </Tag>
+            )}
+          </Flex>
+          <Box mb="4px">
+            <Progress primaryStep={progress2} scale="sm" />
+          </Box>
+          <Flex alignItems="center" justifyContent="space-between">
+            <Text color="textSubtle">{t('%total% Vote(s)', { total: formatNumber(count2, 0, 2) })}</Text>
+            <Text>{progress2.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%</Text>
+          </Flex>
+          <Flex mt="8px" mb="8px" justifyContent="center" alignItems="center">
+            {afterOneWeek ? (
+              <Button
+                variant="secondary"
+                onClick={handleApplyResults}
+                scale="sm"
+                endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
+                isLoading={pendingTx || pendingFb}
+              >
+                {t('Apply Results')}
+              </Button>
+            ) : (
+              <Countdown
+                nextEventTime={convertTimeToSeconds(litigation.endTime)}
+                postCountdownText={t('left')}
+                color="#FDAB32"
+              />
+            )}
+          </Flex>
+        </Box>
       </CardBody>
     </Card>
   )

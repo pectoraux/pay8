@@ -1,8 +1,8 @@
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
-// import { getLitigationSg } from 'state/trustbountiesvoting/helpers'
-// import Overview from 'views/TrustBountiesVoting/Proposal/Overview'
+import { getLitigationSg } from 'state/trustbountiesvoting/helpers'
+import Overview from 'views/TrustBountiesVoting/Proposal/Overview'
 
 const ProposalPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
@@ -11,7 +11,7 @@ const ProposalPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStati
         fallback,
       }}
     >
-      {/* <Overview /> */}
+      <Overview />
     </SWRConfig>
   )
 }
@@ -32,7 +32,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   try {
-    const fetchedProposal = {} // await getLitigationSg(id)
+    const fetchedProposal = await getLitigationSg(id)
     if (!fetchedProposal) {
       return {
         notFound: true,
@@ -45,10 +45,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
           [unstable_serialize(['litigation-trustbounties', id])]: fetchedProposal,
         },
       },
-      revalidate: 3,
-      // fetchedProposal?.active === false
-      //   ? 60 * 60 * 12 // 12 hour
-      //   : 3,
+      revalidate:
+        fetchedProposal?.active === false
+          ? 60 * 60 * 12 // 12 hour
+          : 3,
     }
   } catch (error) {
     return {

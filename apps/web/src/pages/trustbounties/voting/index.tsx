@@ -1,4 +1,3 @@
-// import Voting from 'views/TrustBountiesVoting'
-import Voting from 'views/Voting'
+import Voting from 'views/TrustBountiesVoting'
 
 export default Voting

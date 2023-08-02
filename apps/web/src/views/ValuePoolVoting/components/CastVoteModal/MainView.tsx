@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import {
   IconButton,
@@ -35,29 +35,19 @@ interface MainViewProps {
   onDismiss: CastVoteModalProps['onDismiss']
 }
 
-const MainView: React.FC<React.PropsWithChildren<MainViewProps>> = ({
+const MainView: React.FC<any> = ({
   vote,
   total,
   isPending,
   isLoading,
+  proposal,
   isError,
   onConfirm,
   onViewDetails,
   onDismiss,
   disabled,
-  lockedCakeBalance,
-  lockedEndTime,
 }) => {
   const { t } = useTranslation()
-  const blockTimestamp = useCurrentBlockTimestamp()
-
-  const hasLockedCake = lockedCakeBalance > 0
-
-  const isBoostingExpired = useMemo(() => {
-    return lockedEndTime !== 0 && new BigNumber(blockTimestamp?.toString()).gte(lockedEndTime)
-  }, [blockTimestamp, lockedEndTime])
-
-  const hasBoosted = hasLockedCake && !isBoostingExpired
 
   return (
     <>
@@ -79,20 +69,12 @@ const MainView: React.FC<React.PropsWithChildren<MainViewProps>> = ({
           </Message>
         ) : (
           <>
-            <VotingBoxBorder hasBoosted={hasBoosted} onClick={onViewDetails} style={{ cursor: 'pointer' }}>
-              <VotingBoxCardInner hasBoosted={hasBoosted}>
+            <VotingBoxBorder onClick={onViewDetails} style={{ cursor: 'pointer' }}>
+              <VotingBoxCardInner>
                 <Flex flexDirection="column">
                   <Text bold fontSize="20px" color={total === 0 ? 'failure' : 'text'}>
                     {formatNumber(total, 0, 3)}
                   </Text>
-                  {hasLockedCake && (
-                    <Flex>
-                      <RocketIcon color={isBoostingExpired ? 'warning' : 'secondary'} width="15px" height="15px" />
-                      <Text ml="4px" bold color={isBoostingExpired ? 'warning' : 'secondary'} fontSize="14px">
-                        {isBoostingExpired ? t('Boosting Expired') : t('Boosted by vCAKE')}
-                      </Text>
-                    </Flex>
-                  )}
                 </Flex>
                 <IconButton scale="sm" variant="text">
                   <ChevronRightIcon width="24px" />
@@ -103,7 +85,7 @@ const MainView: React.FC<React.PropsWithChildren<MainViewProps>> = ({
               <Message variant="danger" mb="12px">
                 <Text color="danger">
                   {t(
-                    'Hold some CAKE in your wallet or on PancakeSwap at the snapshot block to get voting power for future proposals.',
+                    'Hold some tokens in your wallet or on PaySwap at the snapshot block to get voting power for future proposals.',
                   )}
                 </Text>
               </Message>

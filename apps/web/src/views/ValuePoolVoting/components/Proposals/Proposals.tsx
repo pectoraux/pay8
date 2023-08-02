@@ -1,22 +1,40 @@
-import { Box, Breadcrumbs, Card, Flex, Heading, Text } from '@pancakeswap/uikit'
+import styled from 'styled-components'
+import { Box, Breadcrumbs, Card, Flex, Heading, SearchInput, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Link from 'next/link'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import useSWR from 'swr'
 import { ProposalState, ProposalType } from 'state/types'
-import { getProposals } from 'state/voting/helpers'
 import { FetchStatus } from 'config/constants/types'
 import { useSessionStorage } from 'hooks/useSessionStorage'
-import { filterProposalsByState, filterProposalsByType } from '../../helpers'
+import { getProposalsSg } from 'state/valuepoolvoting/helpers'
+import { filterProposalsByType } from '../../helpers'
 import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
 import ProposalRow from './ProposalRow'
-import Filters from './Filters'
+import LocationFilters from './LocationFilters'
 
 interface State {
   proposalType: ProposalType
   filterState: ProposalState
 }
+
+const FilterContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 0px;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: auto;
+    padding: 0;
+  }
+`
+const LabelWrapper = styled.div`
+  > ${Text} {
+    font-size: 12px;
+  }
+`
 
 const Proposals = () => {
   const { t } = useTranslation()
@@ -27,7 +45,9 @@ const Proposals = () => {
 
   const { proposalType, filterState } = state
 
-  const { status, data } = useSWR(['proposals', filterState], async () => getProposals(1000, 0, filterState))
+  // const { status, data } = useSWR(['proposals', filterState], async () => getProposals(1000, 0, filterState))
+  const { status, data } = useSWR('proposals1', async () => getProposalsSg())
+  console.log('getProposalsSg==============>', data, status)
 
   const handleProposalTypeChange = (newProposalType: ProposalType) => {
     setState((prevState) => ({
@@ -36,33 +56,46 @@ const Proposals = () => {
     }))
   }
 
-  const handleFilterChange = (newFilterState: ProposalState) => {
-    setState((prevState) => ({
-      ...prevState,
-      filterState: newFilterState,
-    }))
-  }
-
-  const filteredProposals = filterProposalsByState(filterProposalsByType(data, proposalType), filterState)
+  const filteredProposals = filterProposalsByType(data, proposalType)
+  const { isMobile } = useMatchBreakpoints()
 
   return (
     <Container py="40px">
       <Box mb="48px">
-        <Breadcrumbs>
-          <Link href="/">{t('Home')}</Link>
-          <Text>{t('Voting')}</Text>
-        </Breadcrumbs>
+        <FilterContainer>
+          <Breadcrumbs>
+            <Link href="/valuepools">{t('ValuePool')}</Link>
+            <Text>{t('Voting')}</Text>
+          </Breadcrumbs>
+          {isMobile && <LocationFilters style={{ paddingTop: 16, maxWidth: '100%', overflow: 'auto' }} />}
+          <LabelWrapper style={{ marginLeft: 100 }}>
+            {!isMobile && (
+              <>
+                <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+                  {t('Filter by')}
+                </Text>
+                <LocationFilters />
+              </>
+            )}
+          </LabelWrapper>
+          <LabelWrapper style={{ marginLeft: 16 }}>
+            <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+              {t('Search')}
+            </Text>
+            <SearchInput
+              onChange={() => {
+                return null
+              }}
+              placeholder={t('Search proposals')}
+            />
+          </LabelWrapper>
+        </FilterContainer>
       </Box>
       <Heading as="h2" scale="xl" mb="32px" id="voting-proposals">
         {t('Proposals')}
       </Heading>
       <Card>
         <TabMenu proposalType={proposalType} onTypeChange={handleProposalTypeChange} />
-        <Filters
-          filterState={filterState}
-          onFilterChange={handleFilterChange}
-          isLoading={status !== FetchStatus.Fetched}
-        />
         {status !== FetchStatus.Fetched && <ProposalsLoading />}
         {status === FetchStatus.Fetched &&
           filteredProposals.length > 0 &&

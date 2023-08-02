@@ -1,49 +1,39 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Modal, useToast } from '@pancakeswap/uikit'
-import { useAccount, useWalletClient } from 'wagmi'
-import snapshot from '@snapshot-labs/snapshot.js'
+import { Box, Modal, useToast, Input } from '@pancakeswap/uikit'
+import { FetchStatus } from 'config/constants/types'
+import { useTrustBountiesVoterContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { useState } from 'react'
-import { PANCAKE_SPACE } from 'views/Voting/config'
-import useGetVotingPower from '../../hooks/useGetVotingPower'
-import DetailsView from './DetailsView'
+import { useGetVotingPower } from 'state/stakemarketvoting/hooks'
+import { useState, useCallback, useEffect } from 'react'
+import useCatchTxError from 'hooks/useCatchTxError'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import MainView from './MainView'
 import { CastVoteModalProps, ConfirmVoteView } from './types'
+import { VotingBoxBorder } from './styles'
 
-const hub = 'https://hub.snapshot.org'
-const client = new snapshot.Client712(hub)
-
-const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
-  onSuccess,
-  proposalId,
-  vote,
-  block,
-  onDismiss,
-}) => {
+const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismiss }) => {
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
+  const [modalIsOpen, setModalIsOpen] = useState(true)
   const [isPending, setIsPending] = useState(false)
-  const { address: account } = useAccount()
-  const { data: signer } = useWalletClient()
   const { t } = useTranslation()
-  const { toastError } = useToast()
   const { theme } = useTheme()
-  const {
-    isLoading,
-    isError,
-    total,
-    cakeBalance,
-    cakeVaultBalance,
-    cakePoolBalance,
-    poolsBalance,
-    cakeBnbLpBalance,
-    ifoPoolBalance,
-    lockedCakeBalance,
-    lockedEndTime,
-  } = useGetVotingPower(block)
-
+  const trustBountiesVoterContract = useTrustBountiesVoterContract()
+  const { toastSuccess } = useToast()
+  const { callWithGasPrice } = useCallWithGasPrice()
+  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const [tokenId, setTokenId] = useState('')
+  const [profileId, setProfileId] = useState('')
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)
-  const handleViewDetails = () => setView(ConfirmVoteView.DETAILS)
+
+  const { data, refetch, status } = useGetVotingPower(proposal?.ve, tokenId ?? '0')
+  const [total, setTotal] = useState<any>()
+
+  useEffect(() => {
+    // const val = getBalanceNumber(data?.balance, data?.decimals)
+    setTotal(parseFloat((data?.percentile).toString()) + parseFloat((proposal?.percentile).toString()))
+  }, [data, proposal])
 
   const title = {
     [ConfirmVoteView.MAIN]: t('Confirm Vote'),
@@ -51,46 +41,47 @@ const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
   }
 
   const handleDismiss = () => {
+    setModalIsOpen(false)
     onDismiss()
   }
 
-  const handleConfirmVote = async () => {
-    try {
-      setIsPending(true)
-      const web3 = {
-        getSigner: () => {
-          return {
-            _signTypedData: (domain, types, message) =>
-              signer.signTypedData({
-                account,
-                domain,
-                types,
-                message,
-                primaryType: 'Vote',
-              }),
-          }
-        },
-      }
-
-      await client.vote(web3 as any, account, {
-        space: PANCAKE_SPACE,
-        choice: vote.value,
-        reason: '',
-        type: 'single-choice',
-        proposal: proposalId,
-        app: 'snapshot',
+  const handleCreateCollection = useCallback(async () => {
+    setIsPending(true)
+    // eslint-disable-next-line consistent-return
+    const receipt = await fetchWithCatchTxError(async () => {
+      const args = [proposal?.id, proposal?.ve, tokenId, profileId, proposal?.attackerId, isChecked ? '1' : '-1']
+      console.log('st2==============>', args)
+      return callWithGasPrice(trustBountiesVoterContract, 'vote', args).catch((err) => {
+        console.log('channel====================>', err)
       })
-
-      await onSuccess()
-
-      handleDismiss()
-    } catch (error) {
-      toastError(t('Error'), (error as Error)?.message ?? t('Error occurred, please try again'))
-      console.error(error)
-    } finally {
-      setIsPending(false)
+    })
+    if (receipt?.status) {
+      onSuccess()
+      toastSuccess(
+        t('Vote Submitted'),
+        <ToastDescriptionWithTx txHash={receipt?.transactionHash}>
+          {t('You have succesfully voted for %choice%', { choice: isChecked ? 'Attacker' : 'Defender' })}
+        </ToastDescriptionWithTx>,
+      )
     }
-  }
+    setIsPending(false)
+    setModalIsOpen(false)
+    onDismiss()
+  }, [
+    t,
+    isChecked,
+    tokenId,
+    profileId,
+    proposal,
+    onSuccess,
+    onDismiss,
+    setIsPending,
+    setModalIsOpen,
+    toastSuccess,
+    callWithGasPrice,
+    fetchWithCatchTxError,
+    trustBountiesVoterContract,
+  ])
 
   return (
     <Modal
@@ -101,34 +92,39 @@ const CastVoteModal: React.FC<React.PropsWithChildren<CastVoteModalProps>> = ({
       headerBackground={theme.colors.gradientCardHeader}
     >
       <Box mb="24px">
-        {view === ConfirmVoteView.MAIN && (
+        <VotingBoxBorder>
+          <Input
+            type="number"
+            onChange={(e) => {
+              setTokenId(e.target.value)
+              refetch()
+            }}
+            placeholder={t('input token id')}
+            value={tokenId}
+          />
+        </VotingBoxBorder>
+        <VotingBoxBorder>
+          <Input
+            type="number"
+            onChange={(e) => setProfileId(e.target.value)}
+            placeholder={t('input your profile id')}
+            value={profileId}
+          />
+        </VotingBoxBorder>
+        {status === FetchStatus.Fetched && Number(tokenId) && view === ConfirmVoteView.MAIN ? (
           <MainView
-            vote={vote}
-            isError={isError}
-            isLoading={isLoading}
+            isChecked={isChecked}
+            isError={false}
+            isLoading={false}
             isPending={isPending}
             total={total}
-            lockedCakeBalance={lockedCakeBalance}
-            lockedEndTime={lockedEndTime}
-            onConfirm={handleConfirmVote}
-            onViewDetails={handleViewDetails}
+            proposal={proposal}
+            lockedCakeBalance={0}
+            lockedEndTime={0}
+            onConfirm={handleCreateCollection}
             onDismiss={handleDismiss}
           />
-        )}
-        {view === ConfirmVoteView.DETAILS && (
-          <DetailsView
-            total={total}
-            cakeBalance={cakeBalance}
-            ifoPoolBalance={ifoPoolBalance}
-            cakeVaultBalance={cakeVaultBalance}
-            cakePoolBalance={cakePoolBalance}
-            poolsBalance={poolsBalance}
-            cakeBnbLpBalance={cakeBnbLpBalance}
-            block={block}
-            lockedCakeBalance={lockedCakeBalance}
-            lockedEndTime={lockedEndTime}
-          />
-        )}
+        ) : null}
       </Box>
     </Modal>
   )

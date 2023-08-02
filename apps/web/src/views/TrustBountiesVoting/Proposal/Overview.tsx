@@ -1,6 +1,17 @@
-import { ArrowBackIcon, Box, Button, Flex, Heading, NotFound, ReactMarkdown } from '@pancakeswap/uikit'
+import {
+  ArrowBackIcon,
+  Box,
+  ReactMarkdown,
+  NotFound,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  IconButton,
+} from '@pancakeswap/uikit'
+import { PageMeta } from 'components/Layout/Page'
 import { getAllVotes, getProposal } from 'state/voting/helpers'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import useSWRImmutable from 'swr/immutable'
 import { ProposalState } from 'state/types'
 import Link from 'next/link'
@@ -9,6 +20,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import PageLoader from 'components/Loader/PageLoader'
 import { FetchStatus } from 'config/constants/types'
+import { getLitigationSg } from 'state/trustbountiesvoting/helpers'
+import { Divider } from 'views/ARPs/components/styles'
 import { isCoreProposal } from '../helpers'
 import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
@@ -21,36 +34,39 @@ const Overview = () => {
   const { query, isFallback } = useRouter()
   const id = query.id as string
   const { t } = useTranslation()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
 
   const {
-    status: proposalLoadingStatus,
-    data: proposal,
+    status: litigationLoadingStatus,
+    data: litigation,
     error,
-  } = useSWRImmutable(id ? ['proposal', id] : null, () => getProposal(id))
-
-  const {
-    status: votesLoadingStatus,
-    data: votes,
     mutate: refetch,
-  } = useSWRImmutable(proposal ? ['proposal', proposal, 'votes'] : null, async () => getAllVotes(proposal))
-  const hasAccountVoted = account && votes && votes.some((vote) => vote.voter.toLowerCase() === account.toLowerCase())
+  } = useSWRImmutable(id ? ['litigation-trustbounties', id] : null, () => getLitigationSg(id))
 
-  const isPageLoading = votesLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching
+  const hasAccountVoted =
+    account && !!litigation?.votes?.find((vote) => vote.voter?.toLowerCase() === account.toLowerCase())
+  const hasVotedForAttacker =
+    account &&
+    !!litigation?.votes?.find(
+      (vote) => vote.voter?.toLowerCase() === account.toLowerCase() && vote.choice?.toLowerCase() === 'attacker',
+    )
+  console.log('getLitigationsSg==============>', litigation, hasAccountVoted)
+  const isPageLoading = litigationLoadingStatus === FetchStatus.Fetching
 
-  if (!proposal && error) {
+  if (!litigation && error) {
     return <NotFound />
   }
 
-  if (isFallback || !proposal) {
+  if (isFallback || !litigation) {
     return <PageLoader />
   }
 
   return (
     <Container py="40px">
+      <PageMeta />
       <Box mb="40px">
-        <Link href="/voting" passHref>
-          <Button variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
+        <Link href="/trustbounties/voting" passHref>
+          <Button as="a" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
             {t('Back to Vote Overview')}
           </Button>
         </Link>
@@ -59,24 +75,45 @@ const Overview = () => {
         <Box>
           <Box mb="32px">
             <Flex alignItems="center" mb="8px">
-              <ProposalStateTag proposalState={proposal.state} />
-              <ProposalTypeTag isCoreProposal={isCoreProposal(proposal)} ml="8px" />
+              <ProposalStateTag isCoreProposal={isCoreProposal(litigation)} />
+              <ProposalTypeTag isCoreProposal={isCoreProposal(litigation)} ml="8px" />
             </Flex>
             <Heading as="h1" scale="xl" mb="16px">
-              {proposal.title}
+              {litigation.title}
             </Heading>
             <Box>
-              <ReactMarkdown>{proposal.body}</ReactMarkdown>
+              <Flex justifyContent="center" alignItems="center">
+                <Text color="failure" fontSize="24px" bold textTransform="uppercase">
+                  {t('Attacker Statement')}
+                </Text>
+              </Flex>
+              <Divider />
+              <ReactMarkdown>{litigation.attackerContent}</ReactMarkdown>
+              {litigation.defenderContent ? (
+                <>
+                  <Flex justifyContent="center" alignItems="center">
+                    <Text color="failure" fontSize="24px" bold textTransform="uppercase">
+                      {t('Defender Statement')}
+                    </Text>
+                  </Flex>
+                  <Divider />
+                  <ReactMarkdown>{litigation.defenderContent}</ReactMarkdown>
+                </>
+              ) : null}
             </Box>
+            <Divider />
           </Box>
-          {!isPageLoading && !hasAccountVoted && proposal.state === ProposalState.ACTIVE && (
-            <Vote proposal={proposal} onSuccess={refetch} mb="16px" />
-          )}
-          <Votes votes={votes} totalVotes={votes?.length ?? proposal.votes} votesLoadingStatus={votesLoadingStatus} />
+          {!isPageLoading && <Vote proposal={litigation} onSuccess={refetch} mb="16px" />}
+          <Votes votes={litigation?.votes} totalVotes={litigation?.votes?.length} />
         </Box>
         <Box position="sticky" top="60px">
-          <Details proposal={proposal} />
-          <Results choices={proposal.choices} votes={votes} votesLoadingStatus={votesLoadingStatus} />
+          <Details proposal={litigation} onSuccess={refetch} />
+          <Results
+            choices={[t('Attacker'), t('Defender')]}
+            litigation={litigation}
+            hasAccountVoted={hasAccountVoted}
+            hasVotedForAttacker={hasVotedForAttacker}
+          />
         </Box>
       </Layout>
     </Container>

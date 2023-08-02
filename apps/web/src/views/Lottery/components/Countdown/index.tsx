@@ -9,11 +9,7 @@ interface CountdownProps {
   postCountdownText?: string
 }
 
-const Countdown: React.FC<React.PropsWithChildren<CountdownProps>> = ({
-  nextEventTime,
-  preCountdownText,
-  postCountdownText,
-}) => {
+const Countdown: React.FC<any> = ({ nextEventTime, preCountdownText, postCountdownText, color = '#ffff' }) => {
   const secondsRemaining = useNextEventCountdown(nextEventTime)
   const { days, hours, minutes } = getTimePeriods(secondsRemaining)
 
@@ -22,7 +18,7 @@ const Countdown: React.FC<React.PropsWithChildren<CountdownProps>> = ({
       {secondsRemaining ? (
         <Flex display="inline-flex" justifyContent="flex-end" alignItems="flex-end">
           {preCountdownText && (
-            <Heading mr="12px" color="#ffff">
+            <Heading mr="12px" color={color}>
               {preCountdownText}
             </Heading>
           )}
@@ -31,7 +27,7 @@ const Countdown: React.FC<React.PropsWithChildren<CountdownProps>> = ({
             hours={hours}
             days={days}
           />
-          {postCountdownText && <Heading color="#ffff">{postCountdownText}</Heading>}
+          {postCountdownText && <Heading color={color}>{postCountdownText}</Heading>}
         </Flex>
       ) : (
         <Skeleton height="41px" width="250px" />

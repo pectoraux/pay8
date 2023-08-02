@@ -9,36 +9,31 @@ import {
   Flex,
   Heading,
   Input,
+  ReactMarkdown,
   Text,
   useModal,
   useToast,
-  ReactMarkdown,
-  ScanLink,
 } from '@pancakeswap/uikit'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import snapshot from '@snapshot-labs/snapshot.js'
-import isEmpty from 'lodash/isEmpty'
-import times from 'lodash/times'
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react'
-import { useInitialBlock } from 'state/block/hooks'
+import { ChangeEvent, useCallback, useMemo, useState } from 'react'
+import useCatchTxError from 'hooks/useCatchTxError'
+import { useStakeMarketContract } from 'hooks/useContract'
+import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 
 import { useTranslation } from '@pancakeswap/localization'
-import truncateHash from '@pancakeswap/utils/truncateHash'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
+import { PageMeta } from 'components/Layout/Page'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { getBlockExploreLink } from 'utils'
-import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
-import { useAccount, useWalletClient } from 'wagmi'
-import { ChainId } from '@pancakeswap/sdk'
+import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import Layout from '../components/Layout'
-import VoteDetailsModal from '../components/VoteDetailsModal'
-import { ADMINS, PANCAKE_SPACE, VOTE_THRESHOLD } from '../config'
-import Choices, { ChoiceIdValue, makeChoice, MINIMUM_CHOICES } from './Choices'
-import { combineDateAndTime, getFormErrors } from './helpers'
-import { FormErrors, Label, SecondaryLabel } from './styles'
-import { FormState } from './types'
+import { ADMINS } from '../config'
+import { Label, SecondaryLabel } from './styles'
 
 const hub = 'https://hub.snapshot.org'
 const client = new snapshot.Client712(hub)
@@ -48,80 +43,65 @@ const EasyMde = dynamic(() => import('components/EasyMde'), {
 })
 
 const CreateProposal = () => {
-  const [state, setState] = useState<FormState>(() => ({
-    name: '',
+  const { push, query } = useRouter()
+  const [state, setState] = useState<any>(() => ({
+    title: '',
     body: '',
-    choices: times(MINIMUM_CHOICES).map(makeChoice),
-    startDate: null,
-    startTime: null,
-    endDate: null,
-    endTime: null,
-    snapshot: 0,
+    limitAmount: '',
+    id: '',
+    tokenId: '',
+    attackerStakeId: '',
+    defenderStakeId: '',
+    choices: ['Up Vote', 'Down Vote'],
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
-  const { address: account } = useAccount()
-  const initialBlock = useInitialBlock()
-  const { push } = useRouter()
+  const { account } = useWeb3React()
   const { toastSuccess, toastError } = useToast()
-  const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal block={state.snapshot} />)
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const { name, body, choices, startDate, startTime, endDate, endTime, snapshot } = state
-  const formErrors = getFormErrors(state, t)
+  const { title, body } = state
+  // const formErrors = getFormErrors(state, t)
+  const [nftFilters, setNftFilters] = useState<any>({})
 
-  const { data: signer } = useWalletClient()
+  // const { status, data } = useSWR([`votes-${pool?.name ?? ''}`, filterState], async () => getVavaVotes(pool?._va ?? ''))
 
-  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault()
+  const { callWithGasPrice } = useCallWithGasPrice()
+  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const stakeMarketContract = useStakeMarketContract()
 
-    try {
-      setIsLoading(true)
-
-      const web3 = {
-        getSigner: () => {
-          return {
-            _signTypedData: (domain, types, message) =>
-              signer.signTypedData({
-                account,
-                domain,
-                types,
-                message,
-                primaryType: 'Proposal',
-              }),
-          }
-        },
-      }
-
-      const data: any = await client.proposal(web3 as any, account, {
-        space: PANCAKE_SPACE,
-        type: 'single-choice',
-        title: name,
-        body,
-        start: combineDateAndTime(startDate, startTime),
-        end: combineDateAndTime(endDate, endTime),
-        choices: choices
-          .filter((choice) => choice.value)
-          .map((choice) => {
-            return choice.value
-          }),
-        snapshot,
-        discussion: '',
-        plugins: JSON.stringify({}),
-        app: 'snapshot',
+  const handleSubmit = useCallback(async () => {
+    setIsLoading(true)
+    // eslint-disable-next-line consistent-return
+    const receipt = await fetchWithCatchTxError(async () => {
+      const args = [
+        state.attackerStakeId,
+        state.defenderStakeId,
+        state.title,
+        state.body,
+        nftFilters.product?.toString(),
+      ]
+      console.log('createGauge============>', args)
+      return callWithGasPrice(stakeMarketContract, 'createGauge', args).catch((err) => {
+        setIsLoading(false)
+        console.log('err==================>', err)
+        toastError(
+          t('Issue creating proposal'),
+          <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
+        )
       })
-
-      // Redirect user to newly created proposal page
-      push(`/voting/proposal/${data.id}`)
-      toastSuccess(t('Proposal created!'))
-    } catch (error) {
-      toastError(t('Error'), (error as Error)?.message)
-      console.error(error)
+    })
+    if (receipt?.status) {
       setIsLoading(false)
+      toastSuccess(
+        t('Litigation successfully created'),
+        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          {t('You can now start receiving votes on your litigation.')}
+        </ToastDescriptionWithTx>,
+      )
     }
-  }
+  }, [t, state, nftFilters, toastError, toastSuccess, callWithGasPrice, stakeMarketContract, fetchWithCatchTxError])
 
-  const updateValue = (key: string, value: string | ChoiceIdValue[] | Date) => {
+  const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
       [key]: value,
@@ -143,14 +123,6 @@ const CreateProposal = () => {
     updateValue('body', value)
   }
 
-  const handleChoiceChange = (newChoices: ChoiceIdValue[]) => {
-    updateValue('choices', newChoices)
-  }
-
-  const handleDateChange = (key: string) => (value: Date) => {
-    updateValue(key, value)
-  }
-
   const options = useMemo(() => {
     return {
       hideIcons:
@@ -160,157 +132,108 @@ const CreateProposal = () => {
     }
   }, [account])
 
-  useEffect(() => {
-    if (initialBlock > 0) {
-      setState((prevState) => ({
-        ...prevState,
-        snapshot: Number(initialBlock),
-      }))
-    }
-  }, [initialBlock, setState])
-
   return (
     <Container py="40px">
+      <PageMeta />
       <Box mb="48px">
         <Breadcrumbs>
-          <Link href="/">{t('Home')}</Link>
-          <Link href="/voting">{t('Voting')}</Link>
+          <Link href="/stakemarket">{t('Stake Market')}</Link>
+          <Link href="/stakemarket/voting">{t('Voting')}</Link>
           <Text>{t('Make a Proposal')}</Text>
         </Breadcrumbs>
       </Box>
-      <form onSubmit={handleSubmit}>
-        <Layout>
-          <Box>
+      <Layout>
+        <Box>
+          <Box mb="24px">
+            <Label htmlFor="title">{t('Title')}</Label>
+            <Input id="title" name="title" value={title} scale="lg" onChange={handleChange} required />
+            {/* {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />} */}
+          </Box>
+          {body && (
             <Box mb="24px">
-              <Label htmlFor="name">{t('Title')}</Label>
-              <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
-              {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
+              <Card>
+                <CardHeader>
+                  <Heading as="h3" scale="md">
+                    {t('Preview')}
+                  </Heading>
+                </CardHeader>
+                <CardBody p="0" px="24px">
+                  <ReactMarkdown>{body}</ReactMarkdown>
+                </CardBody>
+              </Card>
             </Box>
-            <Box mb="24px">
-              <Label htmlFor="body">{t('Content')}</Label>
-              <Text color="textSubtle" mb="8px">
-                {t('Tip: write in Markdown!')}
-              </Text>
-              <EasyMde
-                id="body"
-                name="body"
-                onTextChange={handleEasyMdeChange}
-                value={body}
-                options={options}
-                required
-              />
-              {formErrors.body && fieldsState.body && <FormErrors errors={formErrors.body} />}
-            </Box>
-            {body && (
+          )}
+          <Box mb="24px">
+            <Label htmlFor="body">{t('Content')}</Label>
+            <Text color="textSubtle" mb="8px">
+              {t('Tip: write in Markdown!')}
+            </Text>
+            <EasyMde id="body" name="body" onTextChange={handleEasyMdeChange} value={body} options={options} required />
+            {/* {formErrors.body && fieldsState.body && <FormErrors errors={formErrors.body} />} */}
+          </Box>
+        </Box>
+        <Box>
+          <Card>
+            <CardHeader>
+              <Heading as="h3" scale="md">
+                {t('Actions')}
+              </Heading>
+            </CardHeader>
+            <CardBody>
               <Box mb="24px">
-                <Card>
-                  <CardHeader>
-                    <Heading as="h3" scale="md">
-                      {t('Preview')}
-                    </Heading>
-                  </CardHeader>
-                  <CardBody p="0" px="24px">
-                    <ReactMarkdown>{body}</ReactMarkdown>
-                  </CardBody>
-                </Card>
+                <SecondaryLabel>{t('Attacker Stake ID')}</SecondaryLabel>
+                <Input
+                  type="text"
+                  scale="sm"
+                  name="attackerStakeId"
+                  value={state.attackerStakeId}
+                  placeholder={t('input your stake id')}
+                  onChange={handleChange}
+                />
               </Box>
-            )}
-            <Choices choices={choices} onChange={handleChoiceChange} />
-            {formErrors.choices && fieldsState.choices && <FormErrors errors={formErrors.choices} />}
-          </Box>
-          <Box>
-            <Card>
-              <CardHeader>
-                <Heading as="h3" scale="md">
-                  {t('Actions')}
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('Start Date')}</SecondaryLabel>
-                  <DatePicker
-                    name="startDate"
-                    onChange={handleDateChange('startDate')}
-                    selected={startDate}
-                    placeholderText="YYYY/MM/DD"
-                  />
-                  {formErrors.startDate && fieldsState.startDate && <FormErrors errors={formErrors.startDate} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('Start Time')}</SecondaryLabel>
-                  <TimePicker
-                    name="startTime"
-                    onChange={handleDateChange('startTime')}
-                    selected={startTime}
-                    placeholderText="00:00"
-                  />
-                  {formErrors.startTime && fieldsState.startTime && <FormErrors errors={formErrors.startTime} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('End Date')}</SecondaryLabel>
-                  <DatePicker
-                    name="endDate"
-                    onChange={handleDateChange('endDate')}
-                    selected={endDate}
-                    placeholderText="YYYY/MM/DD"
-                  />
-                  {formErrors.endDate && fieldsState.endDate && <FormErrors errors={formErrors.endDate} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('End Time')}</SecondaryLabel>
-                  <TimePicker
-                    name="endTime"
-                    onChange={handleDateChange('endTime')}
-                    selected={endTime}
-                    placeholderText="00:00"
-                  />
-                  {formErrors.endTime && fieldsState.endTime && <FormErrors errors={formErrors.endTime} />}
-                </Box>
-                {account && (
-                  <Flex alignItems="center" mb="8px">
-                    <Text color="textSubtle" mr="16px">
-                      {t('Creator')}
-                    </Text>
-                    <ScanLink chainId={ChainId.BSC} href={getBlockExploreLink(account, 'address')}>
-                      {truncateHash(account)}
-                    </ScanLink>
-                  </Flex>
-                )}
-                <Flex alignItems="center" mb="16px">
-                  <Text color="textSubtle" mr="16px">
-                    {t('Snapshot')}
-                  </Text>
-                  <ScanLink chainId={ChainId.BSC} href={getBlockExploreLink(snapshot, 'block')}>
-                    {snapshot}
-                  </ScanLink>
-                </Flex>
-                {account ? (
-                  <>
-                    <Button
-                      type="submit"
-                      width="100%"
-                      isLoading={isLoading}
-                      endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
-                      disabled={!isEmpty(formErrors)}
-                      mb="16px"
-                    >
-                      {t('Publish')}
-                    </Button>
-                    <Text color="failure" as="p" mb="4px">
-                      {t('You need at least %count% voting power to publish a proposal.', { count: VOTE_THRESHOLD })}{' '}
-                    </Text>
-                    <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
+              <Box mb="24px">
+                <SecondaryLabel>{t('Defender Stake ID')}</SecondaryLabel>
+                <Input
+                  type="text"
+                  scale="sm"
+                  name="defenderStakeId"
+                  value={state.defenderStakeId}
+                  placeholder={t('input defender stake id')}
+                  onChange={handleChange}
+                />
+              </Box>
+              <Filters
+                showWorkspace={false}
+                showCountry={false}
+                showCity={false}
+                nftFilters={nftFilters}
+                setNftFilters={setNftFilters}
+              />
+              {account ? (
+                <>
+                  <Button
+                    type="submit"
+                    width="100%"
+                    isLoading={isLoading}
+                    endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
+                    onClick={handleSubmit}
+                    // disabled={!isEmpty(formErrors)}
+                    mb="16px"
+                  >
+                    {t('Publish')}
+                  </Button>
+                  {/* <SecondaryLabel>{t('Voting Power: %vp%', { vp: balances.find((balance) => balance.id === state.tokenId)?.lockValue})}</SecondaryLabel> */}
+                  {/* <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
                       {t('Check voting power')}
-                    </Button>
-                  </>
-                ) : (
-                  <ConnectWalletButton width="100%" type="button" />
-                )}
-              </CardBody>
-            </Card>
-          </Box>
-        </Layout>
-      </form>
+                    </Button> */}
+                </>
+              ) : (
+                <ConnectWalletButton width="100%" type="button" />
+              )}
+            </CardBody>
+          </Card>
+        </Box>
+      </Layout>
       <DatePickerPortal />
     </Container>
   )

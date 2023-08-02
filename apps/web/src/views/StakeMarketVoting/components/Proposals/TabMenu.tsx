@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { TabMenu as UIKitTabMenu, Tab, Flex, VerifiedIcon, CommunityIcon } from '@pancakeswap/uikit'
+import { TabMenu as UIKitTabMenu, Tab, Flex, BlockIcon, CommunityIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { ProposalType } from 'state/types'
 
@@ -47,18 +47,18 @@ const TabMenu: React.FC<React.PropsWithChildren<TabMenuProps>> = ({ proposalType
       <UIKitTabMenu activeIndex={getIndexFromType(proposalType)} onItemClick={handleItemClick}>
         <Tab>
           <Flex alignItems="center">
-            <VerifiedIcon color="currentColor" mr="4px" />
-            {t('Core')}
+            <CommunityIcon color="currentColor" mr="4px" />
+            {t('Opened')}
           </Flex>
         </Tab>
         <Tab>
           {' '}
           <Flex alignItems="center">
-            <CommunityIcon color="currentColor" mr="4px" />
-            {t('Community')}
+            <BlockIcon color="currentColor" mr="4px" />
+            {t('Closed')}
           </Flex>
         </Tab>
-        <Tab>All</Tab>
+        <Tab>{t('All')}</Tab>
       </UIKitTabMenu>
     </StyledTabMenu>
   )

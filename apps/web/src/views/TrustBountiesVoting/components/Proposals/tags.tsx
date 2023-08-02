@@ -1,38 +1,41 @@
 import { TagProps, Farm as FarmUI } from '@pancakeswap/uikit'
-import { ProposalState } from 'state/types'
 
-const { ClosedTag, CommunityTag, CoreTag, SoonTag, VoteNowTag } = FarmUI.Tags
-
-interface ProposalStateTagProps extends TagProps {
-  proposalState: ProposalState
-}
-
-export const ProposalStateTag: React.FC<React.PropsWithChildren<ProposalStateTagProps>> = ({
-  proposalState,
-  ...props
-}) => {
-  if (proposalState === ProposalState.ACTIVE) {
-    return <VoteNowTag {...props} />
-  }
-
-  if (proposalState === ProposalState.PENDING) {
-    return <SoonTag {...props} />
-  }
-
-  return <ClosedTag {...props} />
-}
+const { ClosedTag, OpenedTag, VoteNowTag } = FarmUI.Tags
 
 interface ProposalTypeTagProps extends TagProps {
   isCoreProposal: boolean
 }
 
-export const ProposalTypeTag: React.FC<React.PropsWithChildren<ProposalTypeTagProps>> = ({
-  isCoreProposal,
-  ...props
-}) => {
-  if (isCoreProposal) {
-    return <CoreTag {...props} />
+export const ProposalStateTag: React.FC<any> = ({ isCoreProposal, ...props }) => {
+  if (!isCoreProposal) {
+    return <VoteNowTag {...props} />
+  }
+  return <></>
+}
+
+export const ProposalTypeTag: React.FC<any> = ({ isCoreProposal, ...props }) => {
+  if (!isCoreProposal) {
+    return <ClosedTag {...props} />
   }
 
-  return <CommunityTag {...props} />
+  return <OpenedTag {...props} />
+}
+
+export const ColorTag: React.FC<any> = ({ votingPower }) => {
+  const [BROWN, SILVER, GOLD] = [25, 50, 75]
+  const { VotingPowerTag } = FarmUI.Tags
+
+  if (Number(votingPower) >= GOLD) {
+    return <VotingPowerTag votingPower={votingPower} tagType={4} />
+  }
+
+  if (Number(votingPower) >= SILVER) {
+    return <VotingPowerTag votingPower={votingPower} tagType={3} />
+  }
+
+  if (Number(votingPower) >= BROWN) {
+    return <VotingPowerTag votingPower={votingPower} tagType={2} />
+  }
+
+  return <VotingPowerTag votingPower={votingPower} tagType={1} />
 }

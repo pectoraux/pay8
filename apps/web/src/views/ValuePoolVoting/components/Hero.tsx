@@ -20,12 +20,12 @@ const Hero = () => {
         <Flex alignItems="center" justifyContent="space-between">
           <Box pr="32px">
             <Heading as="h1" scale="xxl" color="secondary" mb="16px">
-              {t('Voting')}
+              {t('Proposals')}
             </Heading>
             <Heading as="h3" scale="lg" mb="16px">
-              {t('Have your say in the future of the PancakeSwap Ecosystem')}
+              {t('Have your say in the future of your valuepool')}
             </Heading>
-            <Link href="/voting/proposal/create" passHref prefetch={false}>
+            <Link href="/valuepools/voting/create" passHref prefetch={false}>
               <Button startIcon={<ProposalIcon color="currentColor" width="24px" />}>{t('Make a Proposal')}</Button>
             </Link>
           </Box>

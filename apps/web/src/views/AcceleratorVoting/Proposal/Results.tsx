@@ -24,11 +24,15 @@ import TextEllipsis from '../components/TextEllipsis'
 
 const Results: React.FC<any> = ({ pitch, accountVote, hasAccountVoted }) => {
   const { t } = useTranslation()
-  const totalVotes = pitch.votes.reduce((ac, v) => ac + parseInt(v.votingPower), 0)
-  const total1Votes = pitch.votes.filter((v) => v.like).reduce((ac, v) => ac + parseInt(v.votingPower), 0)
-  const total2Votes = pitch.votes.filter((v) => !v.like).reduce((ac, v) => ac + parseInt(v.votingPower), 0)
-  const count1 = pitch.votes.filter((v) => v.like)?.length
-  const count2 = pitch.votes.filter((v) => !v.like)?.length
+  const totalVotes = pitch?.votes?.length ? pitch.votes.reduce((ac, v) => ac + parseInt(v.votingPower), 0) : 0
+  const total1Votes = pitch?.votes?.length
+    ? pitch.votes.filter((v) => v.like).reduce((ac, v) => ac + parseInt(v.votingPower), 0)
+    : 0
+  const total2Votes = pitch?.votes?.length
+    ? pitch.votes.filter((v) => !v.like).reduce((ac, v) => ac + parseInt(v.votingPower), 0)
+    : 0
+  const count1 = pitch?.votes?.filter((v) => v.like)?.length ?? 0
+  const count2 = pitch?.votes?.filter((v) => !v.like)?.length ?? 0
   const progress1 = (total1Votes * 100) / Math.max(totalVotes, 1)
   const progress2 = (total2Votes * 100) / Math.max(totalVotes, 1)
 
