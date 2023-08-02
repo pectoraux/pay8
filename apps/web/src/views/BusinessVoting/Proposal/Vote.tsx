@@ -1,22 +1,11 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  CardProps,
-  Heading,
-  Radio,
-  Text,
-  useModal,
-  useToast,
-} from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { Button, Card, CardBody, CardHeader, CardProps, Heading, Radio, Text, useModal } from '@pancakeswap/uikit'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { Proposal } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import CastVoteModal from '../components/CastVoteModal'
+import CreateGaugeModal from 'views/Accelerator/components/CreateGaugeModal'
 
 interface VoteProps extends CardProps {
   proposal: Proposal
@@ -47,20 +36,11 @@ const ChoiceText = styled.div`
   width: 0;
 `
 
-const Vote: React.FC<React.PropsWithChildren<VoteProps>> = ({ proposal, onSuccess, ...props }) => {
-  const [vote, setVote] = useState<State>(null)
+const Vote: React.FC<any> = ({ proposal, ...props }) => {
+  const [variant, setVariant] = useState('')
   const { t } = useTranslation()
-  const { toastSuccess } = useToast()
-  const { address: account } = useAccount()
-
-  const handleSuccess = async () => {
-    toastSuccess(t('Vote cast!'))
-    onSuccess?.()
-  }
-
-  const [presentCastVoteModal] = useModal(
-    <CastVoteModal onSuccess={handleSuccess} proposalId={proposal.id} vote={vote} block={Number(proposal.snapshot)} />,
-  )
+  const { account } = useWeb3React()
+  const [openPresentSettings] = useModal(<CreateGaugeModal variant={variant} pool={proposal} />)
 
   return (
     <Card {...props}>
@@ -70,31 +50,40 @@ const Vote: React.FC<React.PropsWithChildren<VoteProps>> = ({ proposal, onSucces
         </Heading>
       </CardHeader>
       <CardBody>
-        {proposal.choices.map((choice, index) => {
-          const isChecked = index + 1 === vote?.value
-
-          const handleChange = () => {
-            setVote({
-              label: choice,
-              value: index + 1,
-            })
-          }
-
-          return (
-            <Choice key={choice} isChecked={isChecked} isDisabled={!account}>
-              <div style={{ flexShrink: 0 }}>
-                <Radio scale="sm" value={choice} checked={isChecked} onChange={handleChange} disabled={!account} />
-              </div>
-              <ChoiceText>
-                <Text as="span" title={choice}>
-                  {choice}
-                </Text>
-              </ChoiceText>
-            </Choice>
-          )
-        })}
+        <Choice key="like" isChecked={variant === 'like'} isDisabled={!account}>
+          <div style={{ flexShrink: 0 }}>
+            <Radio
+              scale="sm"
+              value="like"
+              checked={variant === 'like'}
+              onChange={() => setVariant('like')}
+              disabled={!account}
+            />
+          </div>
+          <ChoiceText>
+            <Text as="span" title="attacker">
+              {t('Like')}
+            </Text>
+          </ChoiceText>
+        </Choice>
+        <Choice key="dislike" isChecked={variant === 'dislike'} isDisabled={!account}>
+          <div style={{ flexShrink: 0 }}>
+            <Radio
+              scale="sm"
+              value="dislike"
+              checked={variant === 'dislike'}
+              onChange={() => setVariant('dislike')}
+              disabled={!account}
+            />
+          </div>
+          <ChoiceText>
+            <Text as="span" title="dislike">
+              {t('Dislike')}
+            </Text>
+          </ChoiceText>
+        </Choice>
         {account ? (
-          <Button onClick={presentCastVoteModal} disabled={vote === null}>
+          <Button onClick={openPresentSettings} disabled={!account}>
             {t('Cast Vote')}
           </Button>
         ) : (

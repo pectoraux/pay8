@@ -1,57 +1,52 @@
 import { ArrowBackIcon, Box, Button, Flex, Heading, NotFound, ReactMarkdown } from '@pancakeswap/uikit'
-import { getAllVotes, getProposal } from 'state/voting/helpers'
-import { useAccount } from 'wagmi'
+import { PageMeta } from 'components/Layout/Page'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import useSWRImmutable from 'swr/immutable'
-import { ProposalState } from 'state/types'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import PageLoader from 'components/Loader/PageLoader'
-import { FetchStatus } from 'config/constants/types'
-import { isCoreProposal } from '../helpers'
-import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
+import { getCollectionSg } from 'state/businessvoting/helpers'
+import { Divider } from 'views/ARPs/components/styles'
+import { ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
 import Details from './Details'
 import Results from './Results'
-import Vote from './Vote'
 import Votes from './Votes'
 
 const Overview = () => {
   const { query, isFallback } = useRouter()
   const id = query.id as string
   const { t } = useTranslation()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
 
   const {
-    status: proposalLoadingStatus,
-    data: proposal,
+    data: business,
     error,
-  } = useSWRImmutable(id ? ['proposal', id] : null, () => getProposal(id))
-
-  const {
-    status: votesLoadingStatus,
-    data: votes,
     mutate: refetch,
-  } = useSWRImmutable(proposal ? ['proposal', proposal, 'votes'] : null, async () => getAllVotes(proposal))
-  const hasAccountVoted = account && votes && votes.some((vote) => vote.voter.toLowerCase() === account.toLowerCase())
+  } = useSWRImmutable(id ? ['business-gauge', id] : null, () => getCollectionSg(id))
 
-  const isPageLoading = votesLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching
+  const accountVote = business?.votes?.find((vote) => vote.voter?.toLowerCase() === account?.toLowerCase())
+  const hasAccountVoted = account && !!accountVote
 
-  if (!proposal && error) {
+  console.log('getCollectionSg==============>', business, hasAccountVoted)
+
+  if (!business && error) {
     return <NotFound />
   }
 
-  if (isFallback || !proposal) {
+  if (isFallback || !business) {
     return <PageLoader />
   }
 
   return (
     <Container py="40px">
+      <PageMeta />
       <Box mb="40px">
-        <Link href="/voting" passHref>
-          <Button variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
-            {t('Back to Vote Overview')}
+        <Link href="/businesses" passHref>
+          <Button as="a" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
+            {t('Back to Businesses')}
           </Button>
         </Link>
       </Box>
@@ -59,24 +54,22 @@ const Overview = () => {
         <Box>
           <Box mb="32px">
             <Flex alignItems="center" mb="8px">
-              <ProposalStateTag proposalState={proposal.state} />
-              <ProposalTypeTag isCoreProposal={isCoreProposal(proposal)} ml="8px" />
+              {/* <ProposalStateTag isCoreProposal={isCoreProposal(business)} /> */}
+              <ProposalTypeTag isCoreProposal ml="8px" />
             </Flex>
             <Heading as="h1" scale="xl" mb="16px">
-              {proposal.title}
+              {business?.name}
             </Heading>
             <Box>
-              <ReactMarkdown>{proposal.body}</ReactMarkdown>
+              <ReactMarkdown>{business?.description}</ReactMarkdown>
             </Box>
+            <Divider />
           </Box>
-          {!isPageLoading && !hasAccountVoted && proposal.state === ProposalState.ACTIVE && (
-            <Vote proposal={proposal} onSuccess={refetch} mb="16px" />
-          )}
-          <Votes votes={votes} totalVotes={votes?.length ?? proposal.votes} votesLoadingStatus={votesLoadingStatus} />
+          <Votes votes={business?.votes} totalVotes={business?.votes?.length} />
         </Box>
         <Box position="sticky" top="60px">
-          <Details proposal={proposal} />
-          <Results choices={proposal.choices} votes={votes} votesLoadingStatus={votesLoadingStatus} />
+          <Details proposal={business} onSuccess={refetch} />
+          <Results business={business} accountVote={accountVote} hasAccountVoted={hasAccountVoted} />
         </Box>
       </Layout>
     </Container>

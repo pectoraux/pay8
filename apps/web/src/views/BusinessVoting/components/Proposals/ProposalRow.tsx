@@ -21,7 +21,7 @@ const StyledProposalRow = styled(NextLinkFromReactRouter)`
   }
 `
 
-const ProposalRow: React.FC<React.PropsWithChildren<ProposalRowProps>> = ({ proposal }) => {
+const ProposalRow: React.FC<any> = ({ proposal }) => {
   const votingLink = `/voting/proposal/${proposal.id}`
 
   return (

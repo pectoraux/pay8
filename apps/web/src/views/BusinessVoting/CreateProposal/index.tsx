@@ -9,46 +9,46 @@ import {
   Flex,
   Heading,
   Input,
+  LinkExternal,
   Text,
-  useModal,
   useToast,
   ReactMarkdown,
-  ScanLink,
 } from '@pancakeswap/uikit'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import snapshot from '@snapshot-labs/snapshot.js'
-import isEmpty from 'lodash/isEmpty'
+import useCatchTxError from 'hooks/useCatchTxError'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { ToastDescriptionWithTx } from 'components/Toast'
+import { useRouter } from 'next/router'
 import times from 'lodash/times'
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { useInitialBlock } from 'state/block/hooks'
 
 import { useTranslation } from '@pancakeswap/localization'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
+import { PageMeta } from 'components/Layout/Page'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { getBlockExploreLink } from 'utils'
-import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
-import { useAccount, useWalletClient } from 'wagmi'
-import { ChainId } from '@pancakeswap/sdk'
+import { DatePickerPortal } from 'views/Voting/components/DatePicker'
+import { useAcceleratorContract } from 'hooks/useContract'
+import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import Layout from '../components/Layout'
 import VoteDetailsModal from '../components/VoteDetailsModal'
-import { ADMINS, PANCAKE_SPACE, VOTE_THRESHOLD } from '../config'
-import Choices, { ChoiceIdValue, makeChoice, MINIMUM_CHOICES } from './Choices'
+import { ADMINS, VOTE_THRESHOLD } from '../config'
+import Choices, { Choice, makeChoice, MINIMUM_CHOICES } from './Choices'
 import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
 import { FormState } from './types'
-
-const hub = 'https://hub.snapshot.org'
-const client = new snapshot.Client712(hub)
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
 })
 
 const CreateProposal = () => {
-  const [state, setState] = useState<FormState>(() => ({
+  const [state, setState] = useState<any>(() => ({
     name: '',
     body: '',
     choices: times(MINIMUM_CHOICES).map(makeChoice),
@@ -57,71 +57,58 @@ const CreateProposal = () => {
     endDate: null,
     endTime: null,
     snapshot: 0,
+    mediaLink: '',
+    original: '',
+    thumbnail: '',
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
-  const { push } = useRouter()
+  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess, toastError } = useToast()
-  const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal block={state.snapshot} />)
+  const [pendingFb, setPendingFb] = useState(false)
+  const acceleratorContract = useAcceleratorContract()
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  const { name, body, choices, startDate, startTime, endDate, endTime, snapshot } = state
+  const { name, body } = state
   const formErrors = getFormErrors(state, t)
 
-  const { data: signer } = useWalletClient()
-
-  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault()
-
-    try {
-      setIsLoading(true)
-
-      const web3 = {
-        getSigner: () => {
-          return {
-            _signTypedData: (domain, types, message) =>
-              signer.signTypedData({
-                account,
-                domain,
-                types,
-                message,
-                primaryType: 'Proposal',
-              }),
-          }
-        },
-      }
-
-      const data: any = await client.proposal(web3 as any, account, {
-        space: PANCAKE_SPACE,
-        type: 'single-choice',
-        title: name,
-        body,
-        start: combineDateAndTime(startDate, startTime),
-        end: combineDateAndTime(endDate, endTime),
-        choices: choices
-          .filter((choice) => choice.value)
-          .map((choice) => {
-            return choice.value
-          }),
-        snapshot,
-        discussion: '',
-        plugins: JSON.stringify({}),
-        app: 'snapshot',
+  const handleCreatePitch = useCallback(async () => {
+    setPendingFb(true)
+    // eslint-disable-next-line consistent-return
+    const receipt = await fetchWithCatchTxError(async () => {
+      console.log('createClaim===============>', acceleratorContract, [
+        ['', '', '', state.original, state.thumbnail],
+        state.name,
+        state.body,
+      ])
+      return callWithGasPrice(acceleratorContract, 'updateContent', [
+        ['', '', '', state.original, state.thumbnail],
+        state.name,
+        state.body,
+      ]).catch((err) => {
+        setPendingFb(false)
+        console.log('err0=================>', err)
+        toastError(
+          t('Issue creating or updating pitch'),
+          <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
+        )
       })
-
-      // Redirect user to newly created proposal page
-      push(`/voting/proposal/${data.id}`)
-      toastSuccess(t('Proposal created!'))
-    } catch (error) {
-      toastError(t('Error'), (error as Error)?.message)
-      console.error(error)
-      setIsLoading(false)
+    })
+    if (receipt?.status) {
+      setPendingFb(false)
+      toastSuccess(
+        t('Pitch successfully updated'),
+        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          {t('You can now start receiving votes on your pitch.')}
+        </ToastDescriptionWithTx>,
+      )
     }
-  }
+  }, [t, state, toastError, toastSuccess, callWithGasPrice, acceleratorContract, fetchWithCatchTxError])
 
-  const updateValue = (key: string, value: string | ChoiceIdValue[] | Date) => {
+  const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
       [key]: value,
@@ -143,11 +130,7 @@ const CreateProposal = () => {
     updateValue('body', value)
   }
 
-  const handleChoiceChange = (newChoices: ChoiceIdValue[]) => {
-    updateValue('choices', newChoices)
-  }
-
-  const handleDateChange = (key: string) => (value: Date) => {
+  const handleRawValueChange = (key: string) => (value: string) => {
     updateValue(key, value)
   }
 
@@ -164,153 +147,107 @@ const CreateProposal = () => {
     if (initialBlock > 0) {
       setState((prevState) => ({
         ...prevState,
-        snapshot: Number(initialBlock),
+        snapshot: initialBlock,
       }))
     }
   }, [initialBlock, setState])
 
   return (
     <Container py="40px">
+      <PageMeta />
       <Box mb="48px">
         <Breadcrumbs>
-          <Link href="/">{t('Home')}</Link>
-          <Link href="/voting">{t('Voting')}</Link>
-          <Text>{t('Make a Proposal')}</Text>
+          <Link href="/accelerator">{t('Accelerator')}</Link>
+          <Link href="/accelerator/voting">{t('Voting')}</Link>
+          <Text>{t('Create or Update pitch')}</Text>
         </Breadcrumbs>
       </Box>
-      <form onSubmit={handleSubmit}>
-        <Layout>
-          <Box>
+      <Layout>
+        <Box>
+          <Box mb="24px">
+            <Label htmlFor="name">{t('Title')}</Label>
+            <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
+            {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
+          </Box>
+          <Box mb="24px">
+            <Label htmlFor="body">{t('Content')}</Label>
+            <Text color="textSubtle" mb="8px">
+              {t('Tip: write in Markdown!')}
+            </Text>
+            <EasyMde id="body" name="body" onTextChange={handleEasyMdeChange} value={body} options={options} required />
+            {formErrors.body && fieldsState.body && <FormErrors errors={formErrors.body} />}
+          </Box>
+          {body && (
             <Box mb="24px">
-              <Label htmlFor="name">{t('Title')}</Label>
-              <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
-              {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
+              <Card>
+                <CardHeader>
+                  <Heading as="h3" scale="md">
+                    {t('Preview')}
+                  </Heading>
+                </CardHeader>
+                <CardBody p="0" px="24px">
+                  <ReactMarkdown>{body}</ReactMarkdown>
+                </CardBody>
+              </Card>
             </Box>
-            <Box mb="24px">
-              <Label htmlFor="body">{t('Content')}</Label>
-              <Text color="textSubtle" mb="8px">
-                {t('Tip: write in Markdown!')}
-              </Text>
-              <EasyMde
-                id="body"
-                name="body"
-                onTextChange={handleEasyMdeChange}
-                value={body}
-                options={options}
-                required
-              />
-              {formErrors.body && fieldsState.body && <FormErrors errors={formErrors.body} />}
-            </Box>
-            {body && (
+          )}
+        </Box>
+        <Box>
+          <Card>
+            <CardHeader>
+              <Heading as="h3" scale="md">
+                {t('Actions')}
+              </Heading>
+            </CardHeader>
+            <CardBody>
               <Box mb="24px">
-                <Card>
-                  <CardHeader>
-                    <Heading as="h3" scale="md">
-                      {t('Preview')}
-                    </Heading>
-                  </CardHeader>
-                  <CardBody p="0" px="24px">
-                    <ReactMarkdown>{body}</ReactMarkdown>
-                  </CardBody>
-                </Card>
+                <SecondaryLabel>{t('Media Link')}</SecondaryLabel>
+                <Input
+                  type="text"
+                  scale="sm"
+                  name="original"
+                  value={state.original}
+                  placeholder={t('input media link')}
+                  onChange={handleChange}
+                />
               </Box>
-            )}
-            <Choices choices={choices} onChange={handleChoiceChange} />
-            {formErrors.choices && fieldsState.choices && <FormErrors errors={formErrors.choices} />}
-          </Box>
-          <Box>
-            <Card>
-              <CardHeader>
-                <Heading as="h3" scale="md">
-                  {t('Actions')}
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('Start Date')}</SecondaryLabel>
-                  <DatePicker
-                    name="startDate"
-                    onChange={handleDateChange('startDate')}
-                    selected={startDate}
-                    placeholderText="YYYY/MM/DD"
-                  />
-                  {formErrors.startDate && fieldsState.startDate && <FormErrors errors={formErrors.startDate} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('Start Time')}</SecondaryLabel>
-                  <TimePicker
-                    name="startTime"
-                    onChange={handleDateChange('startTime')}
-                    selected={startTime}
-                    placeholderText="00:00"
-                  />
-                  {formErrors.startTime && fieldsState.startTime && <FormErrors errors={formErrors.startTime} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('End Date')}</SecondaryLabel>
-                  <DatePicker
-                    name="endDate"
-                    onChange={handleDateChange('endDate')}
-                    selected={endDate}
-                    placeholderText="YYYY/MM/DD"
-                  />
-                  {formErrors.endDate && fieldsState.endDate && <FormErrors errors={formErrors.endDate} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('End Time')}</SecondaryLabel>
-                  <TimePicker
-                    name="endTime"
-                    onChange={handleDateChange('endTime')}
-                    selected={endTime}
-                    placeholderText="00:00"
-                  />
-                  {formErrors.endTime && fieldsState.endTime && <FormErrors errors={formErrors.endTime} />}
-                </Box>
-                {account && (
-                  <Flex alignItems="center" mb="8px">
-                    <Text color="textSubtle" mr="16px">
-                      {t('Creator')}
-                    </Text>
-                    <ScanLink chainId={ChainId.BSC} href={getBlockExploreLink(account, 'address')}>
-                      {truncateHash(account)}
-                    </ScanLink>
-                  </Flex>
-                )}
-                <Flex alignItems="center" mb="16px">
+              <Box mb="24px">
+                <SecondaryLabel>{t('Thumbnail')}</SecondaryLabel>
+                <Input
+                  type="text"
+                  scale="sm"
+                  name="thumbnail"
+                  value={state.thumbnail}
+                  placeholder={t('input thumbnail link')}
+                  onChange={handleChange}
+                />
+              </Box>
+              {account && (
+                <Flex alignItems="center" mb="8px">
                   <Text color="textSubtle" mr="16px">
-                    {t('Snapshot')}
+                    {t('Creator')}
                   </Text>
-                  <ScanLink chainId={ChainId.BSC} href={getBlockExploreLink(snapshot, 'block')}>
-                    {snapshot}
-                  </ScanLink>
+                  <LinkExternal href={getBlockExploreLink(account, 'address')}>{truncateHash(account)}</LinkExternal>
                 </Flex>
-                {account ? (
-                  <>
-                    <Button
-                      type="submit"
-                      width="100%"
-                      isLoading={isLoading}
-                      endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
-                      disabled={!isEmpty(formErrors)}
-                      mb="16px"
-                    >
-                      {t('Publish')}
-                    </Button>
-                    <Text color="failure" as="p" mb="4px">
-                      {t('You need at least %count% voting power to publish a proposal.', { count: VOTE_THRESHOLD })}{' '}
-                    </Text>
-                    <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
-                      {t('Check voting power')}
-                    </Button>
-                  </>
-                ) : (
-                  <ConnectWalletButton width="100%" type="button" />
-                )}
-              </CardBody>
-            </Card>
-          </Box>
-        </Layout>
-      </form>
+              )}
+              {account ? (
+                <Button
+                  type="submit"
+                  width="100%"
+                  isLoading={isLoading}
+                  onClick={handleCreatePitch}
+                  endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
+                  mb="16px"
+                >
+                  {t('Publish')}
+                </Button>
+              ) : (
+                <ConnectWalletButton width="100%" type="button" />
+              )}
+            </CardBody>
+          </Card>
+        </Box>
+      </Layout>
       <DatePickerPortal />
     </Container>
   )

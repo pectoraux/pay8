@@ -3,18 +3,18 @@ import uniqueId from 'lodash/uniqueId'
 import { useTranslation } from '@pancakeswap/localization'
 import Choice from './Choice'
 
-export interface ChoiceIdValue {
+export interface Choice {
   id: string
   value: string
 }
 
 interface ChoicesProps {
-  choices: ChoiceIdValue[]
-  onChange: (newChoices: ChoiceIdValue[]) => void
+  choices: Choice[]
+  onChange: (newChoices: Choice[]) => void
 }
 
 export const MINIMUM_CHOICES = 2
-export const makeChoice = (): ChoiceIdValue => ({ id: uniqueId(), value: '' })
+export const makeChoice = (): Choice => ({ id: uniqueId(), value: '' })
 
 const Choices: React.FC<React.PropsWithChildren<ChoicesProps>> = ({ choices, onChange }) => {
   const { t } = useTranslation()

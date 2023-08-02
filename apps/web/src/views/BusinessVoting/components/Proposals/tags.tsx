@@ -11,14 +11,9 @@ export const ProposalStateTag: React.FC<React.PropsWithChildren<ProposalStateTag
   proposalState,
   ...props
 }) => {
-  if (proposalState === ProposalState.ACTIVE) {
+  if (proposalState) {
     return <VoteNowTag {...props} />
   }
-
-  if (proposalState === ProposalState.PENDING) {
-    return <SoonTag {...props} />
-  }
-
   return <ClosedTag {...props} />
 }
 
@@ -26,10 +21,7 @@ interface ProposalTypeTagProps extends TagProps {
   isCoreProposal: boolean
 }
 
-export const ProposalTypeTag: React.FC<React.PropsWithChildren<ProposalTypeTagProps>> = ({
-  isCoreProposal,
-  ...props
-}) => {
+export const ProposalTypeTag: React.FC<any> = ({ isCoreProposal, ...props }) => {
   if (isCoreProposal) {
     return <CoreTag {...props} />
   }
