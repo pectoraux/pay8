@@ -38,7 +38,7 @@ const evmNativeStableLpMap: Record<
     stable: 'BUSD',
   },
   [ChainId.FANTOM_TESTNET]: {
-    address: '0x4E96D2e92680Ca65D58A0e2eB5bd1c0f44cAB897',
+    address: '0xbE04187288D198ed6F0d90eCAAca0fE42Dd434Fe',
     wNative: 'WBNB',
     stable: 'BUSD',
   },

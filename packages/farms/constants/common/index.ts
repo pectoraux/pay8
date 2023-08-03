@@ -6,6 +6,7 @@ import {
   goerliTestnetTokens,
   zkSyncTestnetTokens,
   polygonZkEvmTokens,
+  fantomTestnetTokens,
 } from '@pancakeswap/tokens'
 import type { CommonPrice } from '../../src/fetchFarmsV3'
 import type { FarmV3SupportedChainId } from '../../src'
@@ -57,10 +58,8 @@ export const DEFAULT_COMMON_PRICE: Record<FarmV3SupportedChainId, CommonPrice> =
     [bscTestnetTokens.usdc.address]: '1',
   },
   [ChainId.FANTOM_TESTNET]: {
-    [bscTestnetTokens.mockA.address]: '10',
-    [bscTestnetTokens.usdt.address]: '1',
-    [bscTestnetTokens.busd.address]: '1',
-    [bscTestnetTokens.usdc.address]: '1',
+    [fantomTestnetTokens.cake.address]: '1',
+    [fantomTestnetTokens.busd.address]: '1',
   },
   [ChainId.ZKSYNC_TESTNET]: {
     [zkSyncTestnetTokens.mock.address]: '10',

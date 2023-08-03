@@ -14,6 +14,7 @@ import {
   zksyncTokens,
   zkSyncTestnetTokens,
   lineaTestnetTokens,
+  fantomTestnetTokens,
 } from '@pancakeswap/tokens'
 
 import { ChainMap, ChainTokenList } from '../types'
@@ -77,7 +78,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     bscTokens.usdc,
   ],
   [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
-  [ChainId.FANTOM_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd],
+  [ChainId.FANTOM_TESTNET]: [fantomTestnetTokens.wbnb, fantomTestnetTokens.cake, fantomTestnetTokens.busd],
   [ChainId.ARBITRUM_ONE]: [arbitrumTokens.weth, arbitrumTokens.usdt, arbitrumTokens.usdc],
   [ChainId.ARBITRUM_GOERLI]: [arbitrumGoerliTokens.weth, arbitrumGoerliTokens.usdc],
   [ChainId.POLYGON_ZKEVM]: [polygonZkEvmTokens.weth, polygonZkEvmTokens.usdt],

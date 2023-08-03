@@ -175,10 +175,10 @@ export const WBNB = {
   ),
   [4002 /* FANTOM_TESTNET */]: new ERC20Token(
     4002 /* FANTOM_TESTNET */,
-    '0xbE04187288D198ed6F0d90eCAAca0fE42Dd434Fe', // 0xB8406F928784221b2dDD72a50Cf7563C45e8Ed9c
+    '0xB8406F928784221b2dDD72a50Cf7563C45e8Ed9c',
     18,
-    'WBNB',
-    'Wrapped BNB',
+    'WFTM',
+    'Wrapped FTM',
     'https://www.binance.org'
   ),
 }
@@ -214,7 +214,7 @@ export const NATIVE = {
     decimals: 18,
   },
   [ChainId.FANTOM_TESTNET]: {
-    name: 'Binance Chain Native Token',
+    name: 'Fantom Chain Native Token',
     symbol: 'tBNB',
     decimals: 18,
   },

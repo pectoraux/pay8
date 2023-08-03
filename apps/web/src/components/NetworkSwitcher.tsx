@@ -138,7 +138,7 @@ const SHORT_SYMBOL = {
   [ChainId.ETHEREUM]: 'ETH',
   [ChainId.BSC]: 'BNB',
   [ChainId.BSC_TESTNET]: 'tBNB',
-  [ChainId.FANTOM_TESTNET]: 'tBNB',
+  [ChainId.FANTOM_TESTNET]: 'tFTM',
   [ChainId.GOERLI]: 'GOR',
   [ChainId.ARBITRUM_ONE]: 'ARB',
   [ChainId.ARBITRUM_GOERLI]: 'tARB',

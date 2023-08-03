@@ -37,7 +37,7 @@ const SWAP_INFO_BY_CHAIN = {
     v3: V3_SUBGRAPH_URLS[ChainId.BSC_TESTNET],
   },
   [ChainId.FANTOM_TESTNET]: {
-    v3: V3_SUBGRAPH_URLS[ChainId.BSC_TESTNET],
+    v3: V3_SUBGRAPH_URLS[ChainId.FANTOM_TESTNET],
   },
   [ChainId.GOERLI]: {},
   [ChainId.ARBITRUM_ONE]: {

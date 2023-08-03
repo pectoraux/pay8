@@ -58,7 +58,7 @@ export default function Swap() {
   } = useSwapState()
   const inputCurrency = useCurrency(inputCurrencyId)
   const outputCurrency = useCurrency(outputCurrencyId)
-
+  console.log('inputCurrencyId====================>', inputCurrencyId, outputCurrencyId)
   const currencies: { [field in Field]?: Currency } = {
     [Field.INPUT]: inputCurrency ?? undefined,
     [Field.OUTPUT]: outputCurrency ?? undefined,

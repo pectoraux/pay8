@@ -18,6 +18,15 @@ export const CAKE_TESTNET = new ERC20Token(
   'https://pancakeswap.finance/',
 )
 
+export const CAKE_FANTOM_TESTNET = new ERC20Token(
+  ChainId.FANTOM_TESTNET,
+  '0xbE04187288D198ed6F0d90eCAAca0fE42Dd434Fe',
+  18,
+  'CAKE',
+  'PancakeSwap Token',
+  'https://pancakeswap.finance/',
+)
+
 export const USDC_BSC = new ERC20Token(
   ChainId.BSC,
   '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
@@ -88,6 +97,15 @@ export const BUSD_TESTNET = new ERC20Token(
   'https://www.paxos.com/busd/',
 )
 
+export const BUSD_FANTOM_TESTNET = new ERC20Token(
+  ChainId.FANTOM_TESTNET,
+  '0x7eB9763f5eF3bFb84CE6f31b324e7619bFA1ca37',
+  18,
+  'BUSD',
+  'Fantom USD',
+  'https://www.paxos.com/busd/',
+)
+
 export const BUSD_ETH = new ERC20Token(
   ChainId.ETHEREUM,
   '0x4Fabb145d64652a948d72533023f6E7A623C7C53',
@@ -111,6 +129,7 @@ export const BUSD = {
   [ChainId.GOERLI]: BUSD_GOERLI,
   [ChainId.BSC]: BUSD_BSC,
   [ChainId.BSC_TESTNET]: BUSD_TESTNET,
+  [ChainId.FANTOM_TESTNET]: BUSD_FANTOM_TESTNET,
   [ChainId.ZKSYNC]: new ERC20Token(
     ChainId.ZKSYNC,
     '0x2039bb4116B4EFc145Ec4f0e2eA75012D6C0f181',
@@ -139,6 +158,7 @@ export const CAKE = {
   ),
   [ChainId.BSC]: CAKE_MAINNET,
   [ChainId.BSC_TESTNET]: CAKE_TESTNET,
+  [ChainId.FANTOM_TESTNET]: CAKE_FANTOM_TESTNET,
   [ChainId.POLYGON_ZKEVM]: new ERC20Token(
     ChainId.POLYGON_ZKEVM,
     '0x0D1E753a25eBda689453309112904807625bEFBe',
@@ -254,7 +274,7 @@ export const STABLE_COIN = {
   [ChainId.GOERLI]: USDC[ChainId.GOERLI],
   [ChainId.BSC]: USDT[ChainId.BSC],
   [ChainId.BSC_TESTNET]: BUSD[ChainId.BSC_TESTNET],
-  [ChainId.FANTOM_TESTNET]: BUSD[ChainId.BSC_TESTNET],
+  [ChainId.FANTOM_TESTNET]: BUSD[ChainId.FANTOM_TESTNET],
   [ChainId.ARBITRUM_ONE]: USDC[ChainId.ARBITRUM_ONE],
   [ChainId.ARBITRUM_GOERLI]: USDC[ChainId.ARBITRUM_GOERLI],
   [ChainId.ZKSYNC]: USDC[ChainId.ZKSYNC],
