@@ -17,12 +17,10 @@ import {
   Breadcrumbs,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms } from 'state/ramps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/valuepools/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
-import { useEffect, useMemo, useState } from 'react'
-import { useAppDispatch } from 'state'
 import CreateGaugeModal from 'views/ValuePools/components/CreateGaugeModal'
 
 import PoolControls from './components/PoolControls'
@@ -40,41 +38,20 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
-  const { ramp, session_id: sessionId, state: status, userCurrency } = router.query
-  const ogRamp = useMemo(() => pools?.length && pools[0], [pools])
-  const isOwner = ogRamp?.devaddr_ === account
-  const dispatch = useAppDispatch()
-  const [openedAlready, setOpenedAlready] = useState(false)
-  const currency = useCurrency((userCurrency ?? undefined)?.toString())
-  const [onPresentCreateGauge] = useModal(
-    <CreateGaugeModal variant="buy" pool={ogRamp} currency={currency ?? userCurrency} />,
-  )
+  const valuepool = router.query.valuepool as string
+  const ogValuepool = pools.find((pool) => pool?.id?.toLowerCase() === valuepool?.toLowerCase())
+  const isOwner = ogValuepool?.devaddr_ === account
+  const currency = useCurrency(ogValuepool?.tokenAddress)
   const [onPresentAdminSettings] = useModal(
-    <CreateGaugeModal variant="admin" currency={currency ?? userCurrency} location="header" pool={ogRamp} />,
+    <CreateGaugeModal variant="admin" currency={currency} location="header" pool={ogValuepool} />,
   )
-  const [onPresentDeleteContract] = useModal(<CreateGaugeModal variant="delete" currency={currency ?? userCurrency} />)
-  const [openPresentControlPanel] = useModal(
-    <CreateGaugeModal
-      location="home"
-      pool={pools?.length && pools[0]}
-      currency={currency ?? userCurrency}
-      status={status}
-      sessionId={sessionId}
-    />,
+  const [onPresentUserSettings] = useModal(
+    <CreateGaugeModal variant="user" currency={currency} location="header" pool={ogValuepool} />,
   )
-
-  useEffect(() => {
-    if (sessionId && status === 'success' && !openedAlready) {
-      openPresentControlPanel()
-      setOpenedAlready(true)
-    }
-  }, [status, sessionId, router.query, openedAlready, openPresentControlPanel])
+  const [onPresentDeleteVP] = useModal(<CreateGaugeModal variant="delete" currency={currency} />)
+  console.log('ogValuepool======================>', ogValuepool, pools, currency)
 
   usePoolsPageFetch()
-
-  useEffect(() => {
-    fetchPoolsDataWithFarms(router.query.ramp, dispatch)
-  }, [router.query, dispatch])
 
   return (
     <>
@@ -82,13 +59,13 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Decentralized Ramp')}
+              {ogValuepool?.name ?? ''}
             </Heading>
             <Heading scale="md" color="text">
-              {t('%ramp%', { ramp: (ramp ?? '')?.toString() })}
+              {t('%vp%', { vp: valuepool ?? '' })}
             </Heading>
             <Heading scale="md" color="text">
-              {t(ogRamp?.description ?? '')}
+              {ogValuepool?.description}
             </Heading>
             {isOwner ? (
               <Flex pt="17px">
@@ -101,9 +78,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               </Flex>
             ) : (
               <Flex>
-                <Button p="0" onClick={onPresentCreateGauge} variant="text">
+                <Button p="0" onClick={onPresentUserSettings} variant="text">
                   <Text color="primary" bold fontSize="16px" mr="4px">
-                    {t('Buy Ramp')}
+                    {t('Settings')}
                   </Text>
                   <ArrowForwardIcon color="primary" />
                 </Button>
@@ -115,8 +92,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       <Page>
         <Box mb="48px">
           <Breadcrumbs>
-            <Link href="/ramps">{t('Ramps')}</Link>
-            <Text>{ramp}</Text>
+            <Link href="/valuepools">{t('Valuepools')}</Link>
+            <Text>{valuepool}</Text>
           </Breadcrumbs>
         </Box>
         <PoolControls pools={pools}>
@@ -125,12 +102,12 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {isOwner ? (
                 <FinishedTextButton
                   as={Link}
-                  onClick={onPresentDeleteContract}
+                  onClick={onPresentDeleteVP}
                   fontSize={['16px', null, '20px']}
                   color="failure"
                   pl={17}
                 >
-                  {t('Delete Ramp!')}
+                  {t('Delete Valuepool!')}
                 </FinishedTextButton>
               ) : null}
               <Pool.PoolsTable>

@@ -43,18 +43,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
                   {t('Create contract ')}{' '}
                 </Text>
-                {/* {(
-                  <CurrencyInputPanel
-                    id="ramps-currency"
-                    showUSDPrice
-                    showMaxButton
-                    showCommonBases
-                    showInput={false}
-                    showQuickInputButton
-                    currency={currency ?? inputCurency}
-                    onCurrencySelect={handleInputSelect}
-                  />
-                )} */}
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>

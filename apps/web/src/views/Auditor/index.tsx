@@ -17,16 +17,18 @@ import {
   Breadcrumbs,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms } from 'state/ramps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/auditors/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAppDispatch } from 'state'
 import CreateGaugeModal from 'views/Auditors/components/CreateGaugeModal'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 const FinishedTextButton = styled(Button)`
   font-weight: 400;
@@ -37,44 +39,21 @@ const FinishedTextButton = styled(Button)`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
-  const { t } = useTranslation()
   const { address: account } = useAccount()
+  const { t } = useTranslation()
+  const { auditor } = router.query as any
   const { pools } = usePoolsWithFilterSelector()
-  const { ramp, session_id: sessionId, state: status, userCurrency } = router.query
-  const ogRamp = useMemo(() => pools?.length && pools[0], [pools])
-  const isOwner = ogRamp?.devaddr_ === account
-  const dispatch = useAppDispatch()
-  const [openedAlready, setOpenedAlready] = useState(false)
-  const currency = useCurrency((userCurrency ?? undefined)?.toString())
-  const [onPresentCreateGauge] = useModal(
-    <CreateGaugeModal variant="buy" pool={ogRamp} currency={currency ?? userCurrency} />,
-  )
+  const ogAuditor = pools?.find((pool) => pool?.id?.toLowerCase() === auditor?.toLowerCase())
+  const isOwner = ogAuditor?.devaddr_ === account
+  const inputCurency = useCurrency(DEFAULT_TFIAT ?? undefined)
+  const [currency, setCurrency] = useState(inputCurency)
   const [onPresentAdminSettings] = useModal(
-    <CreateGaugeModal variant="admin" currency={currency ?? userCurrency} location="header" pool={ogRamp} />,
+    <CreateGaugeModal variant="admin" location="fromAuditor" currency={currency} pool={ogAuditor} />,
   )
-  const [onPresentDeleteContract] = useModal(<CreateGaugeModal variant="delete" currency={currency ?? userCurrency} />)
-  const [openPresentControlPanel] = useModal(
-    <CreateGaugeModal
-      location="home"
-      pool={pools?.length && pools[0]}
-      currency={currency ?? userCurrency}
-      status={status}
-      sessionId={sessionId}
-    />,
-  )
-
-  useEffect(() => {
-    if (sessionId && status === 'success' && !openedAlready) {
-      openPresentControlPanel()
-      setOpenedAlready(true)
-    }
-  }, [status, sessionId, router.query, openedAlready, openPresentControlPanel])
+  const [onPresentDeleteContract] = useModal(<CreateGaugeModal variant="delete" currency={currency ?? inputCurency} />)
+  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
 
   usePoolsPageFetch()
-
-  useEffect(() => {
-    fetchPoolsDataWithFarms(router.query.ramp, dispatch)
-  }, [router.query, dispatch])
 
   return (
     <>
@@ -82,41 +61,42 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Decentralized Ramp')}
+              {t('Auditor')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('%ramp%', { ramp: (ramp ?? '')?.toString() })}
+              {t('%a%', { a: auditor ?? '' })}
             </Heading>
             <Heading scale="md" color="text">
-              {t(ogRamp?.description ?? '')}
+              {t(ogAuditor?.collection?.description ?? '')}
             </Heading>
-            {isOwner ? (
-              <Flex pt="17px">
-                <Button p="0" onClick={onPresentAdminSettings} variant="text">
-                  <Text color="primary" bold fontSize="16px" mr="4px">
-                    {t('Admin Settings')}
-                  </Text>
-                  <ArrowForwardIcon color="primary" />
-                </Button>
-              </Flex>
-            ) : (
+            {ogAuditor?.devaddr_?.toLowerCase() === account?.toLowerCase() ? (
               <Flex>
-                <Button p="0" onClick={onPresentCreateGauge} variant="text">
-                  <Text color="primary" bold fontSize="16px" mr="4px">
-                    {t('Buy Ramp')}
+                <Button p="0" variant="text">
+                  <Text color="primary" onClick={onPresentAdminSettings} bold fontSize="16px" mr="4px">
+                    {t('Admin Settings')}{' '}
                   </Text>
-                  <ArrowForwardIcon color="primary" />
+                  <CurrencyInputPanel
+                    id="auditor-currency"
+                    showUSDPrice
+                    showMaxButton
+                    showCommonBases
+                    showInput={false}
+                    showQuickInputButton
+                    currency={currency ?? inputCurency}
+                    onCurrencySelect={handleInputSelect}
+                  />
                 </Button>
+                <ArrowForwardIcon onClick={onPresentAdminSettings} color="primary" />
               </Flex>
-            )}
+            ) : null}
           </Flex>
         </Flex>
       </PageHeader>
       <Page>
         <Box mb="48px">
           <Breadcrumbs>
-            <Link href="/ramps">{t('Ramps')}</Link>
-            <Text>{ramp}</Text>
+            <Link href="/auditors">{t('Auditors')}</Link>
+            <Text>{auditor}</Text>
           </Breadcrumbs>
         </Box>
         <PoolControls pools={pools}>
@@ -130,7 +110,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   color="failure"
                   pl={17}
                 >
-                  {t('Delete Ramp!')}
+                  {t('Delete Auditor!')}
                 </FinishedTextButton>
               ) : null}
               <Pool.PoolsTable>

@@ -1,5 +1,3 @@
-import styled from 'styled-components'
-
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 import {
@@ -21,54 +19,24 @@ import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/worlds/hook
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
-import { useEffect, useMemo, useState } from 'react'
-import { useAppDispatch } from 'state'
+import { useMemo } from 'react'
 import CreateGaugeModal from 'views/Worlds/components/CreateGaugeModal'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
-
-const FinishedTextButton = styled(Button)`
-  font-weight: 400;
-  white-space: nowrap;
-  text-decoration: underline;
-  cursor: pointer;
-`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { address: account } = useAccount()
+  const world = router.query.world as string
   const { pools } = usePoolsWithFilterSelector()
-  const { ramp, session_id: sessionId, state: status, userCurrency } = router.query
-  const ogRamp = useMemo(() => pools?.length && pools[0], [pools])
-  const isOwner = ogRamp?.devaddr_ === account
-  const dispatch = useAppDispatch()
-  const [openedAlready, setOpenedAlready] = useState(false)
-  const currency = useCurrency((userCurrency ?? undefined)?.toString())
-  const [onPresentCreateGauge] = useModal(
-    <CreateGaugeModal variant="buy" pool={ogRamp} currency={currency ?? userCurrency} />,
-  )
+  const ogWorld = useMemo(() => pools?.length && pools[0], [pools])
+  const currency = useCurrency(DEFAULT_TFIAT ?? undefined)
   const [onPresentAdminSettings] = useModal(
-    <CreateGaugeModal variant="admin" currency={currency ?? userCurrency} location="header" pool={ogRamp} />,
+    <CreateGaugeModal variant="admin" location="fromWorld" currency={currency} pool={ogWorld} />,
   )
-  const [onPresentDeleteContract] = useModal(<CreateGaugeModal variant="delete" currency={currency ?? userCurrency} />)
-  const [openPresentControlPanel] = useModal(
-    <CreateGaugeModal
-      location="home"
-      pool={pools?.length && pools[0]}
-      currency={currency ?? userCurrency}
-      status={status}
-      sessionId={sessionId}
-    />,
-  )
-
-  useEffect(() => {
-    if (sessionId && status === 'success' && !openedAlready) {
-      openPresentControlPanel()
-      setOpenedAlready(true)
-    }
-  }, [status, sessionId, router.query, openedAlready, openPresentControlPanel])
 
   usePoolsPageFetch()
 
@@ -78,57 +46,37 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Decentralized Ramp')}
+              {t('World')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('%ramp%', { ramp: (ramp ?? '')?.toString() })}
+              {t('%a%', { a: world ?? '' })}
             </Heading>
             <Heading scale="md" color="text">
-              {t(ogRamp?.description ?? '')}
+              {t(ogWorld?.collection?.description ?? '')}
             </Heading>
-            {isOwner ? (
-              <Flex pt="17px">
-                <Button p="0" onClick={onPresentAdminSettings} variant="text">
-                  <Text color="primary" bold fontSize="16px" mr="4px">
-                    {t('Admin Settings')}
-                  </Text>
-                  <ArrowForwardIcon color="primary" />
-                </Button>
-              </Flex>
-            ) : (
+            {ogWorld?.devaddr_ === account ? (
               <Flex>
-                <Button p="0" onClick={onPresentCreateGauge} variant="text">
-                  <Text color="primary" bold fontSize="16px" mr="4px">
-                    {t('Buy Ramp')}
+                <Button p="0" variant="text">
+                  <Text color="primary" onClick={onPresentAdminSettings} bold fontSize="16px" mr="4px">
+                    {t('Admin Settings')}{' '}
                   </Text>
-                  <ArrowForwardIcon color="primary" />
                 </Button>
+                <ArrowForwardIcon onClick={onPresentAdminSettings} color="primary" />
               </Flex>
-            )}
+            ) : null}
           </Flex>
         </Flex>
       </PageHeader>
       <Page>
         <Box mb="48px">
           <Breadcrumbs>
-            <Link href="/ramps">{t('Ramps')}</Link>
-            <Text>{ramp}</Text>
+            <Link href="/worlds">{t('Worlds')}</Link>
+            <Text>{world}</Text>
           </Breadcrumbs>
         </Box>
         <PoolControls pools={pools}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
-              {isOwner ? (
-                <FinishedTextButton
-                  as={Link}
-                  onClick={onPresentDeleteContract}
-                  fontSize={['16px', null, '20px']}
-                  color="failure"
-                  pl={17}
-                >
-                  {t('Delete Ramp!')}
-                </FinishedTextButton>
-              ) : null}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow
