@@ -2,7 +2,7 @@ import { Flex, Text, Box, Pool } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
-import { format } from 'util'
+import { format } from 'date-fns'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 
 interface TotalStakedCellProps {

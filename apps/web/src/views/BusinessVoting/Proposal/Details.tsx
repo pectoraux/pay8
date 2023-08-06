@@ -1,7 +1,7 @@
 import { Box, Card, CardBody, CardHeader, Flex, Heading, LinkExternal, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Proposal } from 'state/types'
-import { format } from 'util'
+import { format } from 'date-fns'
 import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
 import truncateHash from '@pancakeswap/utils/truncateHash'

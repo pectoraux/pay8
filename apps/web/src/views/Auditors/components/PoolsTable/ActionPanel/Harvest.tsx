@@ -5,7 +5,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import { format } from 'util'
+import { format } from 'date-fns'
 
 const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
   const { t } = useTranslation()

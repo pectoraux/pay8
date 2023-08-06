@@ -12,7 +12,7 @@ import {
   Farm as FarmUI,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
-import { format } from 'util'
+import { format } from 'date-fns'
 import { Proposal } from 'state/types'
 import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'

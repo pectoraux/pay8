@@ -127,7 +127,6 @@ export const fetchContributors = async () => {
                 },
               ],
             })
-
             return {
               businessBribe: gauge.bribe,
               tokenAddress: tokenAddress.result,

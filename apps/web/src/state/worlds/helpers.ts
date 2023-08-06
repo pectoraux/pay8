@@ -1,7 +1,7 @@
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_WORLDS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-// import { getCollection } from 'state/cancan/helpers'
+import { getCollection } from 'state/cancan/helpers'
 import { worldFields, protocolFields } from './queries'
 import { getWorldHelper2Address, getWorldHelper3Address, getWorldNoteAddress } from 'utils/addressHelpers'
 import { worldHelper2ABI } from 'config/abi/worldHelper2'
@@ -154,17 +154,17 @@ export const fetchWorld = async (worldAddress) => {
         address: getWorldNoteAddress(),
         abi: worldNoteABI,
         functionName: 'getGaugeNColor',
-        args: [BigInt(profileId?.toString()), Number(category?.toString())],
+        args: [BigInt(profileId.result?.toString()), Number(category?.toString())],
       },
       {
         address: getWorldHelper3Address(),
         abi: worldHelper3ABI,
         functionName: 'pricePerAttachMinutes',
-        args: [BigInt(profileId?.toString())],
+        args: [BigInt(profileId.result?.toString())],
       },
     ],
   })
-  const collection = {} // await getCollection(new BigNumber(collectionId._hex).toJSON())
+  const collection = await getCollection(collectionId.result?.toString())
   const accounts = await Promise.all(
     protocols.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
@@ -226,7 +226,7 @@ export const fetchWorld = async (worldAddress) => {
         ...fromSg,
         owner,
         protocolId,
-        isAutoChargeable,
+        isAutoChargeable: isAutoChargeable.result,
         optionId: optionId.toString(),
         bountyId: _bountyId.toString(),
         amountReceivable: amountReceivable.toString(),
@@ -263,7 +263,7 @@ export const fetchWorld = async (worldAddress) => {
     bountyId: bountyId.toString(),
     pricePerAttachMinutes: pricePerAttachMinutes.toString(),
     tradingFee: tradingFee.toString(),
-    profileId: profileId.toString(),
+    profileId: profileId.result.toString(),
     collectionId: collectionId.toString(),
   }
 }

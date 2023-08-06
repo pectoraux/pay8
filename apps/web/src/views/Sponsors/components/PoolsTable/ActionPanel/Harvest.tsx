@@ -4,7 +4,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { convertTimeToSeconds } from 'utils/timeHelper'
-import { format } from 'util'
+import { format } from 'date-fns'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 

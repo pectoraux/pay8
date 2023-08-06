@@ -4,7 +4,7 @@ import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from '@pancakeswap/localization'
 import { convertTimeToSeconds } from 'utils/timeHelper'
-import { format } from 'util'
+import { format } from 'date-fns'
 
 interface TotalStakedCellProps {
   totalStakedBalance: number

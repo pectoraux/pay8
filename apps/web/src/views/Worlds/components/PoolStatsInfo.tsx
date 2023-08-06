@@ -54,10 +54,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
 
   return (
     <>
+      <Box>
+        <ReactMarkdown>{pool?.collection?.description}</ReactMarkdown>
+      </Box>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <Box>
-          <ReactMarkdown>{pool?.collection?.description}</ReactMarkdown>
-        </Box>
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <Button
             as={Link}

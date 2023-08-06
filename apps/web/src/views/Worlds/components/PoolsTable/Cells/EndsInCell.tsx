@@ -2,7 +2,7 @@ import { Flex, Text, Box, Pool } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
-import { format } from 'util'
+import { format } from 'date-fns'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 
 interface TotalStakedCellProps {
@@ -16,9 +16,10 @@ const StyledCell = styled(Pool.BaseCell)`
 `
 
 const EndsInCell: React.FC<any> = ({ labelText, currAccount }) => {
+  console.log('currAccount===============>', currAccount)
   const getDate = () => {
     try {
-      return format(convertTimeToSeconds(currAccount?.nextDueReceivable), 'MMM do, yyyy HH:mm')
+      return format(convertTimeToSeconds('1982182712'), 'MMM do, yyyy HH:mm')
     } catch (err) {
       return '-'
     }
