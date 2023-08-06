@@ -1,11 +1,8 @@
 import {
   Flex,
   LinkExternal,
-  AutoRenewIcon,
-  ArrowForwardIcon,
   Pool,
   ScanLink,
-  useModal,
   Button,
   Link,
   FlexGap,
@@ -19,14 +16,12 @@ import {
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrBribe, useCurrPool } from 'state/contributors/hooks'
+import { useCurrBribe } from 'state/contributors/hooks'
 import { useAppDispatch } from 'state'
-import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/contributors'
-import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -38,13 +33,11 @@ interface ExpandedFooterProps {
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
   const { vestingTokenAddress } = pool
   const tokenAddress = vestingTokenAddress || ''
-  const earningToken = pool?.token
   const dispatch = useAppDispatch()
   const currState = useCurrBribe()
-
+  console.log('PoolStatsInfo===============>', pool)
   return (
     <>
       {pool?.owner && (
@@ -88,8 +81,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             marginTextBetweenLogo="4px"
             textOptions={AddToWalletTextOptions.TEXT}
             tokenAddress={tokenAddress}
-            tokenSymbol={earningToken.symbol}
-            tokenDecimals={earningToken.decimals}
+            tokenSymbol={pool?.vestingTokenSymbol}
+            tokenDecimals={pool?.vestingTokenDecimals}
             tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
           />
         </Flex>

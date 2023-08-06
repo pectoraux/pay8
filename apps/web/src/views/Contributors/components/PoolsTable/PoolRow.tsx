@@ -22,7 +22,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
     if (pool?.userDataLoaded) {
       return pool?.userData?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
     }
-    return pool.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
+    return pool?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
   }, [currState, tokenAddress, pool])
   console.log('ramppool=================>', pool)
 
