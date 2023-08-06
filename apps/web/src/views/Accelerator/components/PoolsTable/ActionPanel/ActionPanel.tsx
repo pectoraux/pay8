@@ -5,7 +5,6 @@ import { useState } from 'react'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import PoolStatsInfo from '../../PoolStatsInfo'
-import Sessions from './Sessions'
 
 const expandAnimation = keyframes`
   from {
