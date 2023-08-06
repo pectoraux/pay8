@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js'
 import { getProfileAddress, getReferralVoterAddress } from 'utils/addressHelpers'
 import { gql, request } from 'graphql-request'
 import { GRAPH_API_REFERRAL } from 'config/constants/endpoints'
-// import { getCollectionApi } from 'state/cancan/helpers'
 import { collectionFields } from 'state/referralsvoting/queries'
 import { publicClient } from 'utils/wagmi'
 import { referralVoterABI } from 'config/abi/referralVoter'
@@ -11,6 +10,7 @@ import { gaugeABI } from 'config/abi/gauge'
 import { erc20ABI } from 'wagmi'
 import { bribeABI } from 'config/abi/bribe'
 import { profileABI } from 'config/abi/profile'
+import { getCollection } from 'state/cancan/helpers'
 
 export const getReferralsData = async () => {
   try {
@@ -38,7 +38,7 @@ export const fetchReferrals = async () => {
   const referrals = await Promise.all(
     gauges
       .map(async (gauge) => {
-        const collection = {} // await getCollectionApi(gauge.id)
+        const collection = await getCollection(gauge.id)
         const [totalWeight, gaugeWeight, vestingTokenAddress] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -130,11 +130,11 @@ export const fetchReferrals = async () => {
             })
             return {
               businessBribe: gauge.bribe,
-              tokenAddress,
-              decimals,
-              symbol,
+              tokenAddress: tokenAddress.result,
+              decimals: decimals.result,
+              symbol: symbol.result,
               rewardRate: rewardRate.toString(),
-              rewardAmount: new BigNumber(rewardRate.toString()).times(604800).toJSON(),
+              rewardAmount: new BigNumber(rewardRate.result.toString()).times(604800).toJSON(),
             }
           }),
         )
@@ -151,7 +151,7 @@ export const fetchReferrals = async () => {
           vestingTokenName: vestingTokenName.result,
           vestingTokenDecimals: vestingTokenDecimals.result,
           vestingTokenSymbol: vestingTokenSymbol.result,
-          gaugeWeight: gaugeWeight.toString(),
+          gaugeWeight: gaugeWeight.result.toString(),
           weightPercent: weightPercent === 'NaN' ? '0' : weightPercent,
           gaugeEarned: gaugeEarned.result.toString(),
           ...gauge,

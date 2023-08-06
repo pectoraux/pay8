@@ -10,6 +10,7 @@ import { collectionFields } from 'state/businessvoting/queries'
 import { getBusinessVoterAddress, getProfileAddress } from 'utils/addressHelpers'
 import { businessVoterABI } from 'config/abi/businessVoter'
 import { profileABI } from 'config/abi/profile'
+import { getCollection } from 'state/cancan/helpers'
 
 export const getBusinessesData = async () => {
   try {
@@ -35,7 +36,7 @@ export const fetchBusinesses = async () => {
   const businesses = await Promise.all(
     gauges
       .map(async (gauge) => {
-        const collection = {} // await getCollectionApi(gauge.id)
+        const collection = await getCollection(gauge.id)
         const bscClient = publicClient({ chainId: 4002 })
         const [totalWeight, gaugeWeight, vestingTokenAddress] = await bscClient.multicall({
           allowFailure: true,
@@ -129,11 +130,11 @@ export const fetchBusinesses = async () => {
 
             return {
               businessBribe: gauge.bribe,
-              tokenAddress,
-              decimals,
-              symbol,
-              rewardRate: rewardRate.toString(),
-              rewardAmount: new BigNumber(rewardRate.toString()).times(604800).toJSON(),
+              tokenAddress: tokenAddress.result,
+              decimals: decimals.result,
+              symbol: symbol.result,
+              rewardRate: rewardRate.result.toString(),
+              rewardAmount: new BigNumber(rewardRate.result.toString()).times(604800).toJSON(),
             }
           }),
         )

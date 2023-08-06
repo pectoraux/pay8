@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { Pool } from '@pancakeswap/uikit'
-import { usePool } from 'state/ramps/hooks'
+import { usePool } from 'state/stakemarket/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 // import ActionPanel as BountiesPanel from 'views/TrustBounties/components/PoolsTable/ActionPanel/ActionPanel'

@@ -20,7 +20,6 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useGetTokenData } from 'state/ramps/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { ProposalStateTag } from '../components/Proposals/tags'
-import CreateContentModal from './CreateContentModal'
 
 interface DetailsProps {
   proposal: Proposal

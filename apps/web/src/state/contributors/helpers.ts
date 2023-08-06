@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js'
-import { getContributorsVoterContract } from 'utils/contractHelpers'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_CONTRIBUTORS_VOTER } from 'config/constants/endpoints'
 import { publicClient } from 'utils/wagmi'
@@ -9,8 +8,9 @@ import { vestingABI } from 'config/abi/vesting'
 import { gaugeABI } from 'config/abi/gauge'
 import { bribeABI } from 'config/abi/bribe'
 import { contributorsVoterABI } from 'config/abi/contributorsVoter'
-import { getProfileAddress } from 'utils/addressHelpers'
+import { getContributorsVoterAddress, getProfileAddress } from 'utils/addressHelpers'
 import { profileABI } from 'config/abi/profile'
+import { getCollection } from 'state/cancan/helpers'
 
 export const getContributorsData = async () => {
   try {
@@ -32,30 +32,29 @@ export const getContributorsData = async () => {
 }
 
 export const fetchContributors = async () => {
-  const contributorsVoterContract = getContributorsVoterContract()
   const gauges = await getContributorsData()
   const businesses = await Promise.all(
     gauges
       .map(async (gauge) => {
-        const collection = {} // await getCollectionApi(gauge.id)
+        const collection = await getCollection(gauge.id)
         const bscClient = publicClient({ chainId: 4002 })
         const [totalWeight, gaugeWeight, claimable, vestingTokenAddress] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
-              address: contributorsVoterContract.address,
+              address: getContributorsVoterAddress(),
               abi: contributorsVoterABI,
               functionName: 'totalWeight',
               args: [gauge.ve],
             },
             {
-              address: contributorsVoterContract.address,
+              address: getContributorsVoterAddress(),
               abi: contributorsVoterABI,
               functionName: 'weights',
               args: [BigInt(gauge.id), gauge.owner],
             },
             {
-              address: contributorsVoterContract.address,
+              address: getContributorsVoterAddress(),
               abi: contributorsVoterABI,
               functionName: 'claimable',
               args: [gauge.gauge],
@@ -126,11 +125,11 @@ export const fetchContributors = async () => {
 
             return {
               businessBribe: gauge.bribe,
-              tokenAddress,
-              decimals,
-              symbol,
-              rewardRate: rewardRate.toString(),
-              rewardAmount: new BigNumber(rewardRate.toString()).times(604800).toJSON(),
+              tokenAddress: tokenAddress.result,
+              decimals: decimals.result,
+              symbol: symbol.result,
+              rewardRate: rewardRate.result.toString(),
+              rewardAmount: new BigNumber(rewardRate.result.toString()).times(604800).toJSON(),
             }
           }),
         )
@@ -230,7 +229,7 @@ export const fetchContributorsUserData = async (account, pools) => {
         return {
           ...pool,
           tokenIds,
-          profileId,
+          profileId: profileId.result,
           augmentedBribes,
         }
       })

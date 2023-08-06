@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
-import { useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
-import { usePool2, useCurrPool } from 'state/ramps/hooks'
+import { Pool } from '@pancakeswap/uikit'
+import { usePool2 } from 'state/ramps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 import NameCell from './Cells/NameCell'

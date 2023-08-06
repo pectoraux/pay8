@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { Pool } from '@pancakeswap/uikit'
-import { usePool, useCurrBribe } from 'state/ramps/hooks'
+import { usePool, useCurrBribe } from 'state/businesses/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 import NameCell from './Cells/NameCell'

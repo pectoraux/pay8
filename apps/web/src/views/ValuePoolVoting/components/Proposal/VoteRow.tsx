@@ -1,11 +1,11 @@
 import { Flex, LinkExternal, Text, Tag, CheckmarkCircleIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { Vote } from 'state/types'
-import { useGetTokenData } from 'state/ramps/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { IPFS_GATEWAY } from '../../config'
 import TextEllipsis from '../TextEllipsis'
 import Row, { AddressColumn, ChoiceColumn, VotingPowerColumn } from './Row'
+import { useGetTokenData } from 'state/ramps/hooks'
 
 interface VoteRowProps {
   vote: Vote

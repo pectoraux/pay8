@@ -39,7 +39,7 @@ interface ExpandedFooterProps {
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const tokenAddress = pool.vestingTokenAddress || ''
+  const tokenAddress = pool?.vestingTokenAddress || ''
   const earningToken = useToken(tokenAddress)
   const dispatch = useAppDispatch()
   const currState = useCurrBribe()

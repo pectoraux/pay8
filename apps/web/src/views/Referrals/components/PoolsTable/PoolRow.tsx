@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { Pool } from '@pancakeswap/uikit'
-import { usePool, useCurrBribe } from 'state/ramps/hooks'
+import { usePool, useCurrBribe } from 'state/referrals/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 import NameCell from './Cells/NameCell'
@@ -19,9 +19,10 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
     if (pool?.userDataLoaded) {
       return pool?.userData?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
     }
-    return pool.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
+    return pool?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
   }, [currState, tokenAddress, pool])
   console.log('currBribe====================>', currBribe, tokenAddress, currState)
+  console.log('referralpool1================>', pool)
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
       <NameCell pool={pool} />
