@@ -58,7 +58,17 @@ export function V3SubmitButton({
   depositBDisabled,
 }: V3SubmitButtonProps) {
   const { t } = useTranslation()
-
+  console.log(
+    'approvalA=============>',
+    approvalA,
+    approvalB,
+    showApprovalA,
+    showApprovalB,
+    ApprovalState.APPROVED,
+    ApprovalState.PENDING,
+    ApprovalState.NOT_APPROVED,
+    ApprovalState.PENDING,
+  )
   let buttons = null
   if (addIsUnsupported || addIsWarning) {
     buttons = (

@@ -207,7 +207,7 @@ export default function V3FormView({
   // check whether the user has approved the router on the tokens
   const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], nftPositionManagerAddress)
   const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], nftPositionManagerAddress)
-
+  console.log('nftPositionManagerAddress============>', nftPositionManagerAddress)
   const [allowedSlippage] = useUserSlippage() // custom from users
 
   const onAdd = useCallback(async () => {
