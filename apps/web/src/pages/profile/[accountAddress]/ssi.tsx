@@ -24,7 +24,7 @@ const NftProfilePage = () => {
     <>
       <SubMenu />
       <UserNfts
-        nfts={nfts?.map((nft) => nft.metadataUrl)}
+        nfts={nfts?.map((nft) => nft.metadataUrl) || []}
         isLoading={isProfileFetching}
         onSuccessSale={refreshProfile}
         onSuccessEditProfile={async () => {

@@ -77,7 +77,7 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
       </>
     )
   }
-
+  console.log('TabMenu================>', profile)
   return (
     <>
       <MarketPageHeader position="relative">

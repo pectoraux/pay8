@@ -1,6 +1,5 @@
 import { ChainId } from '@pancakeswap/sdk'
 
-export const GRAPH_API_PROFILE = 'https://api.thegraph.com/subgraphs/name/pancakeswap/profile'
 export const GRAPH_API_PREDICTION_BNB = 'https://api.thegraph.com/subgraphs/name/pancakeswap/prediction-v2'
 export const GRAPH_API_PREDICTION_CAKE = 'https://api.thegraph.com/subgraphs/name/pancakeswap/prediction-cake'
 
@@ -110,3 +109,4 @@ export const GRAPH_API_TRUSTBOUNTIES = 'https://api.thegraph.com/subgraphs/name/
 export const GRAPH_API_WORLDS = 'https://api.thegraph.com/subgraphs/name/pectoraux/worlds'
 export const GRAPH_API_SPONSORS = 'https://api.thegraph.com/subgraphs/name/pectoraux/sponsors'
 export const GRAPH_API_PAIRS = 'https://api.thegraph.com/subgraphs/name/pectoraux/pools'
+export const GRAPH_API_PROFILE = 'https://api.thegraph.com/subgraphs/name/pectoraux/profile'

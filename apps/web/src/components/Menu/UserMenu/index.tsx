@@ -24,6 +24,7 @@ import { useDomainNameForAddress } from 'hooks/useDomain'
 import ProfileUserMenuItem from './ProfileUserMenuItem'
 import WalletModal, { WalletView } from './WalletModal'
 import WalletUserMenuItem from './WalletUserMenuItem'
+import CanCanUserMenuItem from './CanCanUserMenuItem'
 
 const UserMenuItems = () => {
   const { t } = useTranslation()
@@ -36,7 +37,7 @@ const UserMenuItems = () => {
   const [onPresentTransactionModal] = useModal(<WalletModal initialView={WalletView.TRANSACTIONS} />)
   const [onPresentWrongNetworkModal] = useModal(<WalletModal initialView={WalletView.WRONG_NETWORK} />)
   const hasProfile = isInitialized && !!profile
-
+  console.log('profile==============>', profile, isInitialized)
   const onClickWalletMenu = useCallback((): void => {
     if (isWrongNetwork) {
       onPresentWrongNetworkModal()
@@ -54,12 +55,17 @@ const UserMenuItems = () => {
       </UserMenuItem>
       <UserMenuDivider />
       <NextLink href={`/profile/${account?.toLowerCase()}`} passHref>
-        <UserMenuItem disabled={isWrongNetwork || chainId !== ChainId.BSC}>{t('Your NFTs')}</UserMenuItem>
+        <UserMenuItem disabled={isWrongNetwork || chainId !== ChainId.FANTOM_TESTNET}>{t('Your NFTs')}</UserMenuItem>
       </NextLink>
       <ProfileUserMenuItem
         isLoading={isLoading}
         hasProfile={hasProfile}
         disabled={isWrongNetwork || chainId !== ChainId.BSC}
+      />
+      <CanCanUserMenuItem
+        isLoading={isLoading}
+        hasChannel={!!Number(profile?.collectionId)}
+        disabled={isWrongNetwork || chainId !== ChainId.FANTOM_TESTNET}
       />
       <UserMenuDivider />
       <UserMenuItem as="button" onClick={logout}>

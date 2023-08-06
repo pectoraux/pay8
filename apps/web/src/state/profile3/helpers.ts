@@ -1,16 +1,20 @@
-import BigNumber from 'bignumber.js'
 import { gql, request } from 'graphql-request'
 import { GRAPH_API_PROFILE, GRAPH_API_SSI } from 'config/constants/endpoints'
+// import { getCollectionApi } from 'state/cancan/helpers'
 import { identityTokenFields } from 'state/ssi/queries'
-import { getCollection } from 'state/cancan/helpers'
-import { blacklistFields, registrationFields, accountFields, tokenFields, profileFields } from './queries'
 import { publicClient } from 'utils/wagmi'
-import { profileABI } from 'config/abi/profile'
 import { getProfileAddress, getProfileHelperAddress, getTrustBountiesAddress } from 'utils/addressHelpers'
-import { Address } from 'viem'
+import { profileABI } from 'config/abi/profile'
 import { profileHelperABI } from 'config/abi/profileHelper'
 import { erc20ABI } from 'wagmi'
 import { trustBountiesABI } from 'config/abi/trustBounties'
+
+import { blacklistFields, registrationFields, accountFields, tokenFields, profileFields } from './queries'
+
+export interface GetProfileResponse {
+  hasRegistered: boolean
+  profile?: any
+}
 
 export const getProfileData = async (profileId) => {
   try {
@@ -41,8 +45,8 @@ export const getProfileData = async (profileId) => {
       `,
       { profileId },
     )
-    console.log('fetch profile===========>', res)
-    return res
+    console.log('fetched profile===========>', res.profile)
+    return res.profile
   } catch (error) {
     console.error('Failed to fetch profile===========>', error)
   }
@@ -88,23 +92,23 @@ export const getProfilesData = async (first = 5, skip = 0, where = {}) => {
 
 export const getSharedEmail = async (accountAddress) => {
   const bscClient = publicClient({ chainId: 4002 })
-  const [shared] = await bscClient.multicall({
+  const [sharedEmail] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
         address: getProfileAddress(),
         abi: profileABI,
         functionName: 'sharedEmail',
-        args: [accountAddress as Address],
+        args: [accountAddress?.toLowerCase()],
       },
     ],
   })
-  return shared.toString()
+  return sharedEmail
 }
 
 export const getIsNameUsed = async (name) => {
   const bscClient = publicClient({ chainId: 4002 })
-  const [isNameTaken] = await bscClient.multicall({
+  const [getIsNameTaken] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -115,10 +119,11 @@ export const getIsNameUsed = async (name) => {
       },
     ],
   })
-  return isNameTaken
+  return getIsNameTaken
 }
 
 export const getProfileDataFromUser = async (address) => {
+  console.log('2getProfilesData=================>', address)
   const bscClient = publicClient({ chainId: 4002 })
   const [profileId] = await bscClient.multicall({
     allowFailure: true,
@@ -127,11 +132,14 @@ export const getProfileDataFromUser = async (address) => {
         address: getProfileAddress(),
         abi: profileABI,
         functionName: 'addressToProfileId',
-        args: [address as Address],
+        args: [address],
       },
     ],
   })
-  return getProfileData(profileId.result?.toString())
+  const profileData = await getProfileData(profileId?.toString())
+  return {
+    ...profileData,
+  }
 }
 
 export const getSSIDatum = async (account: string) => {
@@ -159,10 +167,10 @@ export const getSSIDatum = async (account: string) => {
 
 export const fetchProfiles = async () => {
   const gauges = await getProfilesData()
+  const bscClient = publicClient({ chainId: 4002 })
   const profiles = await Promise.all(
     gauges
       .map(async (gauge) => {
-        const bscClient = publicClient({ chainId: 4002 })
         const [profileInfo, _badgeIds, broadcast] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -192,7 +200,7 @@ export const fetchProfiles = async () => {
         const createdAt = profileInfo.result[3]
         const activePeriod = profileInfo.result[4]
         const paidPayable = profileInfo.result[5]
-        const _collectionId = profileInfo.result[6]
+        // const _collectionId = profileInfo.result[6]
         const blackLateSeconds = profileInfo.result[7][0]
         const blackLateValue = profileInfo.result[7][1]
         const brownLateSeconds = profileInfo.result[8][0]
@@ -204,7 +212,7 @@ export const fetchProfiles = async () => {
 
         let collection
         if (Number(gauge.collectionId)) {
-          collection = await getCollection(gauge.collectionId)
+          collection = {} // await getCollectionApi(gauge.collectionId);
         }
         const badgeIds = _badgeIds.result.map((badgeId) => badgeId.toString())
         const tokens = await Promise.all(
@@ -231,7 +239,7 @@ export const fetchProfiles = async () => {
                   address: getTrustBountiesAddress(),
                   abi: trustBountiesABI,
                   functionName: 'getBalance',
-                  args: [BigInt(token.bountyId ?? 0)],
+                  args: [BigInt(token.bountyId)],
                 },
               ],
             })
@@ -255,7 +263,7 @@ export const fetchProfiles = async () => {
           collection,
           ssid,
           name,
-          ssidAuditorProfileId,
+          ssidAuditorProfileId: ssidAuditorProfileId.toString(),
           createdAt: createdAt.toString(),
           activePeriod: activePeriod.toString(),
           paidPayable: paidPayable.toString(),
@@ -284,13 +292,12 @@ export const getProfile = async (address) => {
           address: getProfileAddress(),
           abi: profileABI,
           functionName: 'addressToProfileId',
-          args: [address as Address],
+          args: [address],
         },
       ],
     })
     let profileInfo
-    console.log('1profileContract==================>', profileId, BigInt(profileId.result.toString()))
-    if (BigInt(profileId.result.toString()) > 0) {
+    if (parseInt(profileId.toString()) > 0) {
       const [_profileInfo] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
@@ -298,35 +305,11 @@ export const getProfile = async (address) => {
             address: getProfileAddress(),
             abi: profileABI,
             functionName: 'profileInfo',
-            args: [BigInt(profileId.result.toString())],
+            args: [BigInt(profileId.toString())],
           },
         ],
       })
-      profileInfo = {
-        ssid: _profileInfo.result[0],
-        name: _profileInfo.result[1],
-        ssidAuditorProfileId: _profileInfo.result[2]?.toString(),
-        createdAt: _profileInfo.result[3]?.toString(),
-        activePeriod: _profileInfo.result[4]?.toString(),
-        paidPayable: _profileInfo.result[5]?.toString(),
-        collectionId: _profileInfo.result[6]?.toString(),
-        black: {
-          lateSeconds: _profileInfo.result[7][0]?.toString(),
-          lateValue: _profileInfo.result[7][1]?.toString(),
-        },
-        brown: {
-          lateSeconds: _profileInfo.result[8][0]?.toString(),
-          lateValue: _profileInfo.result[8][1]?.toString(),
-        },
-        silver: {
-          lateSeconds: _profileInfo.result[9][0]?.toString(),
-          lateValue: _profileInfo.result[9][0]?.toString(),
-        },
-        gold: {
-          lateSeconds: _profileInfo.result[10][0]?.toString(),
-          lateValue: _profileInfo.result[10][1]?.toString(),
-        },
-      }
+      profileInfo = _profileInfo
     }
     const res = {
       profile: profileInfo,
@@ -335,7 +318,7 @@ export const getProfile = async (address) => {
     console.log('profileContract================>', res)
     return res
   } catch (e) {
-    console.log('4profileContract==================>', e)
+    console.log('profileCallsResult4==================>', e)
     console.error(e)
     return null
   }

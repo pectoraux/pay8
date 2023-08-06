@@ -1,22 +1,13 @@
-import { firestore } from 'utils/firebase'
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_LOTTERIES } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-// import { getCollection } from 'state/cancan/helpers'
+import { getCollection } from 'state/cancan/helpers'
 import { lotteryFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { getLotteryAddress } from 'utils/addressHelpers'
 import { lotteryABI } from 'config/abi/lottery'
 import { erc20ABI } from 'wagmi'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
-
-export const fetchRampData = async (rampAddress) => {
-  return (await firestore.collection('ramps').doc(rampAddress).get()).data()
-}
-
-export const fetchSessionInfo = async (sessionId) => {
-  return (await firestore.collection('onramp').doc(sessionId).get()).data()
-}
 
 export const getLottery = async (lotteryId) => {
   try {
@@ -210,7 +201,7 @@ export const fetchLotteries = async ({ fromLottery }) => {
     _lotteries
       .map(async (lottery, index) => {
         const data = await fetchLottery(lottery.id)
-        const collection = {} // await getCollection(lottery.collectionId)
+        const collection = await getCollection(lottery.collectionId)
         return {
           sousId: index,
           ...lottery,

@@ -16,7 +16,6 @@ const initialState: any = {
   currBribe: {},
   currPool: {},
 }
-
 const pools = []
 
 export const fetchProfilesAsync = () => async (dispatch) => {
@@ -32,14 +31,14 @@ export const fetchProfilesAsync = () => async (dispatch) => {
 }
 
 export const PoolsSlice = createSlice({
-  name: 'Referrals',
+  name: 'Profiles',
   initialState,
   reducers: {
     setProfilesPublicData: (state, action) => {
       console.log('setProfilesPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
-    setPoolsUserData: (state, action) => {
+    setProfileUserData: (state, action) => {
       const { sousId } = action.payload
       state.data = state.data.map((pool) => {
         if (pool.sousId === sousId) {
@@ -67,6 +66,6 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setProfilesPublicData, setPoolsUserData, setCurrBribeData, setCurrPoolData } = PoolsSlice.actions
+export const { setProfilesPublicData, setProfileUserData, setCurrBribeData, setCurrPoolData } = PoolsSlice.actions
 
 export default PoolsSlice.reducer

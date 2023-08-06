@@ -204,24 +204,16 @@ export function PoolControls<T>({
               <Select
                 options={[
                   {
-                    label: t("Hot"),
+                    label: t("Profile ID"),
+                    value: "id",
+                  },
+                  {
+                    label: t("Follower Count"),
                     value: "hot",
                   },
                   {
-                    label: t("APR"),
+                    label: t("Followee Count"),
                     value: "apr",
-                  },
-                  {
-                    label: t("Earned"),
-                    value: "earned",
-                  },
-                  {
-                    label: t("Total staked"),
-                    value: "totalStaked",
-                  },
-                  {
-                    label: t("Latest"),
-                    value: "latest",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}

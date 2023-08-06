@@ -603,6 +603,7 @@ export interface State {
   predictions: PredictionsState
   lottery: any
   pottery: any
+  profile: any
   accelerator: any
   arps: any
   auditors: any

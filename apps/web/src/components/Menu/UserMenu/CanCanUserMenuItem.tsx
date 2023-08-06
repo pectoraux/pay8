@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 import NextLink from 'next/link'
 import { Flex, Skeleton, UserMenuItem } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 
-interface ProfileUserMenuItemProps {
+interface CanCanUserMenuItemProps {
   isLoading: boolean
-  hasProfile: boolean
+  hasChannel: boolean
   disabled: boolean
 }
 
@@ -17,12 +17,12 @@ const Dot = styled.div`
   width: 8px;
 `
 
-const ProfileUserMenuItem: React.FC<React.PropsWithChildren<ProfileUserMenuItemProps>> = ({
+const CanCanUserMenuItem: React.FC<React.PropsWithChildren<CanCanUserMenuItemProps>> = ({
   isLoading,
-  hasProfile,
+  hasChannel,
   disabled,
 }) => {
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const { t } = useTranslation()
 
   if (isLoading) {
@@ -33,12 +33,12 @@ const ProfileUserMenuItem: React.FC<React.PropsWithChildren<ProfileUserMenuItemP
     )
   }
 
-  if (!hasProfile) {
+  if (!hasChannel) {
     return (
-      <NextLink href="/profile" passHref>
-        <UserMenuItem disabled={disabled}>
+      <NextLink href="/create-channel" passHref>
+        <UserMenuItem as="a" disabled={disabled}>
           <Flex alignItems="center" justifyContent="space-between" width="100%">
-            {t('Make a Profile')}
+            {t('Make a Channel')}
             <Dot />
           </Flex>
         </UserMenuItem>
@@ -47,12 +47,12 @@ const ProfileUserMenuItem: React.FC<React.PropsWithChildren<ProfileUserMenuItemP
   }
 
   return (
-    <NextLink href={`/profile/${account?.toLowerCase()}/transfers`} passHref>
+    <NextLink href={`/cancan/${account?.toLowerCase()}`} passHref>
       <UserMenuItem as="a" disabled={disabled}>
-        {t('Your Profile')}
+        {t('Your Channel')}
       </UserMenuItem>
     </NextLink>
   )
 }
 
-export default ProfileUserMenuItem
+export default CanCanUserMenuItem

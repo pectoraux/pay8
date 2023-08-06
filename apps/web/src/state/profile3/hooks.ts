@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { getAchievements } from 'state/achievements/helpers'
 import { FetchStatus } from 'config/constants/types'
 import useSWR, { KeyedMutator } from 'swr'
 import { localStorageMiddleware } from 'hooks/useSWRContract'
@@ -9,7 +8,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { getProfile } from './helpers'
+import { getProfile, GetProfileResponse } from './helpers'
 import { Profile } from '../types'
 import { fetchProfilesAsync } from '.'
 import {
@@ -67,17 +66,15 @@ export const useProfileForAddress = (
   profile?: any
   isFetching: boolean
   isValidating: boolean
-  refresh: KeyedMutator<any>
+  refresh: KeyedMutator<GetProfileResponse>
 } => {
-  console.log('useProfileForAddress=============>1')
   const { data, status, mutate, isValidating } = useSWR(
-    address ? [address, 'profile7'] : null,
+    address ? [address, 'profile1'] : null,
     () => getProfileDataFromUser(address),
     fetchConfiguration,
   )
-  console.log('useProfileForAddress=============>', data)
   return {
-    profile: data?.profile,
+    profile: data,
     isFetching: status === FetchStatus.Fetching,
     isValidating,
     refresh: mutate,
@@ -95,7 +92,7 @@ export const useSSIForAddress = (
   nfts?: any
   isFetching: boolean
   isValidating: boolean
-  refresh: KeyedMutator<any>
+  refresh: KeyedMutator<GetProfileResponse>
 } => {
   console.log('getSSIDatum===============>1')
   const { data, status, mutate, isValidating } = useSWR(
@@ -113,7 +110,7 @@ export const useSSIForAddress = (
 }
 
 export const useProfile = (): {
-  profile?: any
+  profile?: Profile
   hasProfile: boolean
   hasActiveProfile: boolean
   isInitialized: boolean
@@ -121,11 +118,12 @@ export const useProfile = (): {
   refresh: KeyedMutator<any>
 } => {
   const { account } = useWeb3React()
-  const { data, status, mutate } = useSWRImmutable(account ? [account, 'profile38'] : null, () => getProfile(account), {
+  const { data, status, mutate } = useSWRImmutable(account ? [account, 'profile'] : null, () => getProfile(account), {
     use: [localStorageMiddleware],
   })
 
   const { profile, profileId } = data ?? { profile: null, profileId: 0 }
+
   const isLoading = status === FetchStatus.Fetching
   const isInitialized = status === FetchStatus.Fetched || status === FetchStatus.Failed
   const hasProfile = isInitialized && Number(profileId) > 0

@@ -27,12 +27,13 @@ const NftProfilePage = () => {
     refresh: refreshUserNfts,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
   const transactions = useGetTransactions(account?.toLowerCase())
+  console.log('transactions===================>', transactions, isConnectedProfile)
   return (
     <>
       <SubMenu />
       {isConnectedProfile ? (
         <UserNfts
-          nfts={transactions?.data?.length && transactions?.data?.map((tx) => tx.metadataUrl)}
+          nfts={(transactions?.data?.length && transactions?.data?.map((tx) => tx.metadataUrl)) || []}
           isLoading={isNftLoading}
           onSuccessSale={refreshUserNfts}
           onSuccessEditProfile={async () => {
