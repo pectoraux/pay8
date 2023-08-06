@@ -137,22 +137,22 @@ export const fetchBusinesses = async () => {
             }
           }),
         )
-
+        const weightPercent = new BigNumber(gaugeWeight.result.toString())
+          .times(100)
+          .div(new BigNumber(totalWeight.result.toString()))
+          .toFixed(2)
         // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
         return {
           sousId: gauge.id,
           bribes,
           collection,
-          vestingTokenAddress,
-          vestingTokenSymbol,
-          vestingTokenName,
-          vestingTokenDecimals,
-          gaugeWeight: gaugeWeight.toString(),
-          weightPercent: new BigNumber(gaugeWeight.toString())
-            .times(100)
-            .div(new BigNumber(totalWeight.toString()))
-            .toFixed(2),
-          gaugeEarned: gaugeEarned.toString(),
+          vestingTokenAddress: vestingTokenAddress.result,
+          vestingTokenSymbol: vestingTokenSymbol.result,
+          vestingTokenName: vestingTokenName.result,
+          vestingTokenDecimals: vestingTokenDecimals.result,
+          gaugeWeight: gaugeWeight.result.toString(),
+          weightPercent: weightPercent === 'NaN' ? '0' : weightPercent,
+          gaugeEarned: gaugeEarned.result.toString(),
           ...gauge,
         }
       })

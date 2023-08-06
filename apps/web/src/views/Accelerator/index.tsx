@@ -16,7 +16,6 @@ import CreateAcceleratorModal from './components/CreateAcceleratorModal'
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const { chainId } = useActiveChainId()
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const inputCurency = useCurrency(DEFAULT_TFIAT)

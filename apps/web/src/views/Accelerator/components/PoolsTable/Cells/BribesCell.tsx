@@ -19,6 +19,7 @@ const BribesCell: React.FC<any> = ({ currBribe }) => {
   const { t } = useTranslation()
   const fullBalance = getBalanceNumber(currBribe?.rewardAmount, currBribe?.decimals)
   const earned = getBalanceNumber(currBribe?.earned, currBribe?.decimals)
+  console.log('currBribe=============>', currBribe)
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
