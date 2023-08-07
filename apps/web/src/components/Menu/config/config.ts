@@ -91,7 +91,7 @@ const config: (
         },
         {
           label: t('Leviathans'),
-          href: '/vesting',
+          href: '/leviathans',
         },
         {
           label: t('Referrals'),

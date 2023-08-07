@@ -79,7 +79,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
 
   const isExact = router.pathname.includes("stakemarket");
   const isBounty = router.pathname.includes("trustbounties");
-  const isVP = router.pathname.includes("valuepools");
+  const isVP = router.pathname.includes("valuepools") || router.pathname.includes("leviathans");
   const isFromContracts =
     router.asPath.includes("#stakemarket") ||
     router.asPath.includes("#trustbounties") ||

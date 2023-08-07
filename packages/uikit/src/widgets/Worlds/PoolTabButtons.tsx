@@ -72,11 +72,11 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
   const liveOrFinishedSwitch = (
     <Wrapper>
       <ButtonMenu activeIndex={isExact ? 0 : 1} scale="sm" variant="subtle">
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/ramps" replace>
-          {t("Automatic")}
+        <ButtonMenuItem as={NextLinkFromReactRouter} to="/worlds" replace>
+          {t("Worlds")}
         </ButtonMenuItem>
         <ButtonMenuItem as={NextLinkFromReactRouter} to="/ramps/manual" replace>
-          {t("Manual")}
+          {t("Bounties")}
         </ButtonMenuItem>
       </ButtonMenu>
     </Wrapper>

@@ -33,6 +33,7 @@ export * as Profile from "./widgets/Profile";
 export * as Referrals from "./widgets/Referrals";
 export * as Sponsors from "./widgets/Sponsors";
 export * as Wills from "./widgets/Wills";
+export * as World from "./widgets/World";
 export * as Worlds from "./widgets/Worlds";
 export * as TrustBounties from "./widgets/TrustBounties";
 export * as PoolHelpers from "./widgets/Pool/helpers";

@@ -1,7 +1,7 @@
 {
-  "short_name": "PancakeSwap",
-  "name": "PancakeSwap",
-  "description": "Farm CAKE with Pancake LP Tokens",
+  "short_name": "PaySwap",
+  "name": "PaySwap",
+  "description": "Farm tokens with Pay LP Tokens",
   "homepage_url": "https://aptos.pancakeswap.finance",
   "start_url": ".",
   "display": "standalone",
