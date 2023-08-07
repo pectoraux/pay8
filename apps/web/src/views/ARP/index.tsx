@@ -22,7 +22,6 @@ import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
 import { useEffect, useMemo, useState } from 'react'
-import { useAppDispatch } from 'state'
 import CreateGaugeModal from 'views/ARPs/components/CreateGaugeModal'
 
 import PoolControls from './components/PoolControls'
@@ -41,16 +40,15 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   const { arp, session_id: sessionId, state: status, userCurrency } = router.query
-  const ogRamp = useMemo(() => pools?.length && pools[0], [pools])
-  const isOwner = ogRamp?.devaddr_ === account
-  const dispatch = useAppDispatch()
+  const ogARP = useMemo(() => pools?.length && pools[0], [pools])
+  const isOwner = ogARP?.devaddr_?.toLowerCase() === account?.toLowerCase()
   const [openedAlready, setOpenedAlready] = useState(false)
   const currency = useCurrency((userCurrency ?? undefined)?.toString())
   const [onPresentCreateGauge] = useModal(
-    <CreateGaugeModal variant="buy" pool={ogRamp} currency={currency ?? userCurrency} />,
+    <CreateGaugeModal variant="buy" pool={ogARP} currency={currency ?? userCurrency} />,
   )
   const [onPresentAdminSettings] = useModal(
-    <CreateGaugeModal variant="admin" currency={currency ?? userCurrency} location="header" pool={ogRamp} />,
+    <CreateGaugeModal variant="admin" currency={currency ?? userCurrency} location="header" pool={ogARP} />,
   )
   const [onPresentDeleteContract] = useModal(<CreateGaugeModal variant="delete" currency={currency ?? userCurrency} />)
   const [openPresentControlPanel] = useModal(
@@ -62,7 +60,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       sessionId={sessionId}
     />,
   )
-
+  console.log('ogARP=======================>', ogARP)
   useEffect(() => {
     if (sessionId && status === 'success' && !openedAlready) {
       openPresentControlPanel()
@@ -84,7 +82,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('%arp%', { arp: (arp ?? '')?.toString() })}
             </Heading>
             <Heading scale="md" color="text">
-              {t(ogRamp?.description ?? '')}
+              {t(ogARP?.description ?? '')}
             </Heading>
             {isOwner ? (
               <Flex pt="17px">
@@ -115,7 +113,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{arp}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools}>
+        <PoolControls pools={pools?.length && pools[0]?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (

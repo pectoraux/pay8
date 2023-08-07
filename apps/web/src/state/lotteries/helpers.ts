@@ -117,13 +117,13 @@ export const fetchLottery = async (lotteryId) => {
         ],
       })
       return {
-        amountCollected: amountCollected?.toString(),
+        amountCollected: amountCollected.result?.toString(),
         token: new Token(
           56,
           token,
           decimals.result,
-          symbol?.toString()?.toUpperCase(),
-          name?.toString(),
+          symbol.result?.toString()?.toUpperCase(),
+          name.result?.toString(),
           'https://www.trueusd.com/',
         ),
       }
@@ -157,13 +157,13 @@ export const fetchLottery = async (lotteryId) => {
       ],
     })
     tokenData.push({
-      amountCollected: amountCollected.toString(),
+      amountCollected: amountCollected.result.toString(),
       token: new Token(
         56,
         DEFAULT_TFIAT,
         decimals.result,
-        symbol?.toString()?.toUpperCase(),
-        name?.toString(),
+        symbol.result?.toString()?.toUpperCase(),
+        name.result?.toString(),
         'https://www.trueusd.com/',
       ),
     })

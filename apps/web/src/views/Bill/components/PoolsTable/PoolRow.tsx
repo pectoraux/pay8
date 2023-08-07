@@ -12,7 +12,7 @@ import TotalValueCell from './Cells/TotalValueCell'
 const PoolRow: React.FC<any> = ({ id, account, currAccount, initialActivity }) => {
   const { pool } = usePool(id)
   const { t } = useTranslation()
-
+  console.log('billpool==========>', pool)
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
       <NameCell pool={pool} currAccount={currAccount} />

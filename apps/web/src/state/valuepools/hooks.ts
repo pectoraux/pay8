@@ -11,7 +11,7 @@ import {
   currPoolSelector,
   currBribeSelector,
   poolsWithFilterSelector,
-  makePoolWithUserDataLoadingSelector,
+  makePoolWithUserDataLoadingSelector2,
 } from './selectors'
 
 export const useFetchPublicPoolsData = () => {
@@ -34,7 +34,7 @@ export const useFetchPublicPoolsData = () => {
 }
 
 export const usePool = (id): { pool?: any; userDataLoaded: boolean } => {
-  const poolWithUserDataLoadingSelector = useMemo(() => makePoolWithUserDataLoadingSelector(id), [id])
+  const poolWithUserDataLoadingSelector = useMemo(() => makePoolWithUserDataLoadingSelector2(id), [id])
   return useSelector(poolWithUserDataLoadingSelector)
 }
 

@@ -622,6 +622,7 @@ export interface State {
   valuepools: any
   wills: any
   worlds: any
+  trustbounties: any
 }
 
 export enum EntryType {

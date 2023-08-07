@@ -220,7 +220,7 @@ export function PoolControls<T>({
             <SearchInput
               initialValue={searchQuery}
               onChange={handleChangeSearchQuery}
-              placeholder={t("Search Will Addresses")}
+              placeholder={t("Search by will addresses")}
             />
           </LabelWrapper>
         </FilterContainer>

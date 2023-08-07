@@ -2,7 +2,6 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_ARPS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-// import { getCollection } from 'state/cancan/helpers'
 import { arpFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { arpABI } from 'config/abi/arp'
@@ -10,6 +9,7 @@ import { erc20ABI } from 'wagmi'
 import { getARPHelperAddress, getARPNoteAddress } from 'utils/addressHelpers'
 import { arpNoteABI } from 'config/abi/arpNote'
 import { arpHelperABI } from 'config/abi/arpHelper'
+import { getCollection } from 'state/cancan/helpers'
 
 export const getProtocols = async (first = 5, skip = 0, where = {}) => {
   try {
@@ -218,12 +218,12 @@ export const fetchArp = async (arpAddress) => {
       return {
         ...protocol,
         protocolId,
-        isAutoChargeable,
-        adminBountyId: adminBountyId.toString(),
+        isAutoChargeable: isAutoChargeable.result,
+        adminBountyId: adminBountyId.result.toString(),
         bountyId: bountyId.toString(),
         profileId: profileId.toString(),
         tokenId: tokenId.toString(),
-        optionId: optionId.toString(),
+        optionId: optionId.result.toString(),
         amountReceivable: amountReceivable.toString(),
         amountPayable: amountPayable.toString(),
         paidReceivable: paidReceivable.toString(),
@@ -232,32 +232,32 @@ export const fetchArp = async (arpAddress) => {
         periodPayable: periodPayable.toString(),
         startPayable: startPayable.toString(),
         startReceivable: startReceivable.toString(),
-        totalLiquidity: totalLiquidity.toString(),
+        totalLiquidity: totalLiquidity.result.toString(),
         nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
         token: new Token(
           56,
           _token,
           decimals.result,
-          symbol?.toString()?.toUpperCase() ?? 'symbol',
-          name?.toString(),
+          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+          name.result?.toString(),
           'https://www.trueusd.com/',
         ),
         // allTokens.find((tk) => tk.address === token),
       }
     }),
   )
-  const collection = {} // await getCollection(new BigNumber(collectionId._hex).toJSON())
+  const collection = await getCollection(collectionId.result.toString())
 
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...arp,
     arpAddress,
     accounts,
-    profileRequired,
-    devaddr_,
     collection,
-    collectionId: collectionId.toString(),
-    bountyRequired: bountyRequired.toString(),
+    profileRequired: profileRequired.result,
+    devaddr_: devaddr_.result,
+    collectionId: collectionId.result.toString(),
+    bountyRequired: bountyRequired.result.toString(),
   }
 }
 

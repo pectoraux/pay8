@@ -1,11 +1,12 @@
 import { Token } from '@pancakeswap/sdk'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_STAKES } from 'config/constants/endpoints'
-// import { getItemSg } from 'state/cancan/helpers'
+import { getItemSg } from 'state/cancan/helpers'
 import { publicClient } from 'utils/wagmi'
 import { getStakeMarketAddress, getStakeMarketNoteAddress } from 'utils/addressHelpers'
 import { stakeMarketABI } from 'config/abi/stakeMarket'
 import { stakeMarketNoteABI } from 'config/abi/stakeMarketNote'
+import { erc20ABI } from 'wagmi'
 
 const stakeField = `
 id,
@@ -78,7 +79,7 @@ export const fetchStakes = async (collectionId) => {
     stakesFromSg
       .map(async (stake) => {
         const { id: stakeId } = stake
-        const [getStake, nextDuePayable, nextDueReceivable, applications, partnerStakeIds, waitingDuration] =
+        const [_getStake, nextDuePayable, nextDueReceivable, applications, partnerStakeIds, waitingDuration] =
           await bscClient.multicall({
             allowFailure: true,
             contracts: [
@@ -120,35 +121,36 @@ export const fetchStakes = async (collectionId) => {
               },
             ],
           })
-        const ve = getStake.result[0]
-        const token = getStake.result[1]
-        const tokenId = getStake.result[2]
-        const owner = getStake.result[3]
-        const startPayable = getStake.result[4][0]
-        const startReceivable = getStake.result[4][1]
-        const amountPayable = getStake.result[4][2]
-        const amountReceivable = getStake.result[4][3]
-        const periodPayable = getStake.result[4][4]
-        const periodReceivable = getStake.result[4][5]
-        const paidPayable = getStake.result[4][6]
-        const paidReceivable = getStake.result[4][7]
-        const gasPercent = getStake.result[4][8]
-        const waitingPeriod = getStake.result[4][9]
-        const stakeRequired = getStake.result[4][10]
-        const profileId = getStake.result[5]
-        const bountyId = getStake.result[6]
-        const parentStakeId = getStake.result[7]
-        const profileRequired = getStake.result[8]
-        const bountyRequired = getStake.result[9]
-        const source = getStake.result[10]
-        const collection = getStake.result[11]
-        const referrer = getStake.result[12]
-        const userTokenId = getStake.result[13]
-        const identityTokenId = getStake.result[14]
-        const options = getStake.result[15]
-        const ownerAgreement = getStake.result[16]
-
-        const [status, totalLiquidity] = await bscClient.multicall({
+        const getStake = _getStake as any
+        console.log('getStake================>', getStake)
+        const ve = getStake.result.ve
+        const token = getStake.result.token
+        const tokenId = getStake.result.tokenId
+        const owner = getStake.result.owner
+        const startPayable = getStake.result.bank.startPayable
+        const startReceivable = getStake.result.bank.startReceivable
+        const amountPayable = getStake.result.bank.amountPayable
+        const amountReceivable = getStake.result.bank.amountReceivable
+        const periodPayable = getStake.result.bank.periodPayable
+        const periodReceivable = getStake.result.bank.periodReceivable
+        const paidPayable = getStake.result.bank.paidPayable
+        const paidReceivable = getStake.result.bank.paidReceivable
+        const gasPercent = getStake.result.bank.gasPercent
+        const waitingPeriod = getStake.result.bank.waitingPeriod
+        const stakeRequired = getStake.result.bank.stakeRequired
+        const profileId = getStake.result.profileId
+        const bountyId = getStake.result.bountyId
+        const parentStakeId = getStake.result.parentStakeId
+        const profileRequired = getStake.result.profileRequired
+        const bountyRequired = getStake.result.bountyRequired
+        const source = getStake.result.metadata.source
+        const collection = getStake.result.metadata.collection
+        const referrer = getStake.result.metadata.referrer
+        const userTokenId = getStake.result.metadata.userTokenId
+        const identityTokenId = getStake.result.metadata.identityTokenId
+        const options = getStake.result.metadata.options
+        const ownerAgreement = getStake.result.ownerAgreement
+        const [status, totalLiquidity, name, symbol, decimals] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -163,9 +165,24 @@ export const fetchStakes = async (collectionId) => {
               functionName: 'stakesBalances',
               args: [BigInt(parentStakeId)],
             },
+            {
+              address: token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            {
+              address: token,
+              abi: erc20ABI,
+              functionName: 'decimals',
+            },
           ],
         })
-        const item = {} as any // await getItemSg(`${collectionId}-${tokenId}`)
+        const item = await getItemSg(`${collectionId}-${tokenId}`)
         if (item?.countries || item?.cities || item?.products) {
           // eslint-disable-next-line no-param-reassign
           if (!stake.countries) stake.countries = item?.countries
@@ -174,8 +191,8 @@ export const fetchStakes = async (collectionId) => {
           // eslint-disable-next-line no-param-reassign
           if (!stake.products) stake.products = item?.products
         }
-        const duePayable = nextDuePayable[0].toString()
-        const dueReceivable = nextDuePayable[0].toString()
+        const duePayable = nextDuePayable.result[0].toString()
+        const dueReceivable = nextDueReceivable.result[0].toString()
 
         const applicationsConverted =
           applications.result?.map((application) => {
@@ -192,11 +209,13 @@ export const fetchStakes = async (collectionId) => {
           ...stake,
           sousId: stakeId,
           ve,
-          status,
+          status: status.result?.map((rs) => rs?.toString()),
           source,
           collection,
           tokenAddress: token,
-          token: new Token(56, token, 18, 'TUSD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
+          tokenSymbol: symbol.result,
+          tokenName: name.result,
+          tokenDecimals: decimals.result,
           tokenId,
           owner,
           referrer,
@@ -216,7 +235,7 @@ export const fetchStakes = async (collectionId) => {
           gasPercent: gasPercent.toString(),
           waitingPeriod: waitingPeriod.toString(),
           stakeRequired: stakeRequired.toString(),
-          waitingDuration: waitingDuration.toString(),
+          waitingDuration: waitingDuration.result.toString(),
           profileId: profileId.toString(),
           bountyId: bountyId.toString(),
           profileRequired,
@@ -225,9 +244,9 @@ export const fetchStakes = async (collectionId) => {
           applicationsConverted,
           duePayable,
           dueReceivable,
-          nextDuePayable: nextDuePayable[1].toString(),
-          nextDueReceivable: nextDueReceivable[1].toString(),
-          totalLiquidity: totalLiquidity.toString(),
+          nextDuePayable: nextDuePayable.result[1].toString(),
+          nextDueReceivable: nextDueReceivable.result[1].toString(),
+          totalLiquidity: totalLiquidity.result.toString(),
         }
       })
       .flat(),

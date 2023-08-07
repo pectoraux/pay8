@@ -49,7 +49,6 @@ export function useAllTokens(): { [address: string]: ERC20Token } {
   const { chainId } = useActiveChainId()
   const tokenMap = useAtomValue(combinedTokenMapFromActiveUrlsAtom)
   const userAddedTokens = useUserAddedTokens()
-  console.log('tokenMap===================>', tokenMap, userAddedTokens)
   return useMemo(() => {
     return (
       userAddedTokens
@@ -162,7 +161,6 @@ export function useToken(tokenAddress?: any): ERC20Token | undefined | null {
     enabled: Boolean(!!address && !token),
     // consider longer stale time
   })
-  console.log('useToken_==================>', tokenAddress, address, token)
   return useMemo(() => {
     if (token) return token
     if (!chainId || !address) return undefined

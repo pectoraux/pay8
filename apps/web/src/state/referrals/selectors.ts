@@ -18,16 +18,16 @@ const selectCurrBribe = (state: State) => state.referrals?.currBribe
 const selectCurrPool = (state: State) => state.referrals?.currPool
 const selectFilteredData = (state: State) => {
   return state.referrals?.data.filter(
-    (ramp) =>
+    (referral) =>
       (!state.referrals.filters.workspace ||
         state.referrals.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.referrals.filters.workspace?.toLowerCase()) &&
+        referral?.workspace?.toLowerCase() === state.referrals.filters.workspace?.toLowerCase()) &&
       (!state.referrals.filters.country ||
         state.referrals.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.referrals.filters.country?.toLowerCase()) &&
+        referral?.country?.toLowerCase() === state.referrals.filters.country?.toLowerCase()) &&
       (!state.referrals.filters.city ||
         state.referrals.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.referrals.filters.city?.toLowerCase()),
+        referral?.city?.toLowerCase() === state.referrals.filters.city?.toLowerCase()),
   )
 }
 

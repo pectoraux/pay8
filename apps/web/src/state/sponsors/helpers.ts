@@ -1,18 +1,14 @@
-import BigNumber from 'bignumber.js'
-import { firestore } from 'utils/firebase'
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_SPONSORS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-// import { getCollection } from 'state/cancan/helpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { getSponsorHelperContract, getSponsorContract, getBep20Contract } from '../../utils/contractHelpers'
 import { sponsorFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { sponsorABI } from 'config/abi/sponsor'
 import { erc20ABI } from 'wagmi'
 import { sponsorNoteABI } from 'config/abi/sponsorNote'
 import { getSponsorHelperAddress } from 'utils/addressHelpers'
+import { getCollection } from 'state/cancan/helpers'
 
 export const getProtocols = async (first = 5, skip = 0, where = {}) => {
   try {
@@ -159,7 +155,7 @@ export const fetchSponsor = async (sponsorAddress) => {
         },
       ],
     })
-  const collection = {} // await getCollection(new BigNumber(collectionId._hex).toJSON())
+  const collection = await getCollection(collectionId.result.toString())
   console.log('nextDuePayable0=================>', sponsor, sponsor.protocols)
   const accounts = await Promise.all(
     sponsor?.protocols?.map(async (protocol) => {
@@ -228,22 +224,22 @@ export const fetchSponsor = async (sponsorAddress) => {
         ...protocol,
         owner,
         protocolId,
-        adminBountyId: adminBountyId.toString(),
+        adminBountyId: adminBountyId.result.toString(),
         tokenId: tokenId.toString(),
         bountyId: bountyId.toString(),
         amountPayable: amountPayable.toString(),
-        totalLiquidity: totalLiquidity.toString(),
+        totalLiquidity: totalLiquidity.result.toString(),
         paidPayable: paidPayable.toString(),
         periodPayable: periodPayable.toString(),
         startPayable: startPayable.toString(),
-        duePayable: nextDuePayable[0].toString(),
-        nextDuePayable: nextDuePayable[1].toString(),
+        duePayable: nextDuePayable.result[0].toString(),
+        nextDuePayable: nextDuePayable.result[1].toString(),
         token: new Token(
           56,
           _token,
           decimals.result,
-          symbol?.toString()?.toUpperCase() ?? 'symbol',
-          name?.toString() ?? 'name',
+          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+          name.result?.toString() ?? 'name',
           'https://www.trueusd.com/',
         ),
         // allTokens.find((tk) => tk.address === token),
@@ -254,17 +250,17 @@ export const fetchSponsor = async (sponsorAddress) => {
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...sponsor,
+    collection,
     sponsorAddress,
     accounts: accounts.filter((acct) => !!acct),
-    bountyRequired,
-    devaddr_,
-    cosignEnabled,
-    collection,
-    collectionId: collectionId.toString(),
-    minCosigners: minCosigners.toString(),
-    requiredIndentity,
-    valueName,
-    _ve,
+    bountyRequired: bountyRequired.result,
+    devaddr_: devaddr_.result,
+    cosignEnabled: cosignEnabled.result,
+    collectionId: collectionId.result.toString(),
+    minCosigners: minCosigners.result.toString(),
+    requiredIndentity: requiredIndentity.result,
+    valueName: valueName.result,
+    _ve: _ve.result,
   }
 }
 

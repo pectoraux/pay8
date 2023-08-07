@@ -1,7 +1,7 @@
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_BETTINGS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-// import { getCollection } from 'state/cancan/helpers'
+import { getCollection } from 'state/cancan/helpers'
 import { bettingFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { bettingABI } from 'config/abi/betting'
@@ -132,7 +132,7 @@ export const fetchBetting = async (bettingAddress) => {
       },
     ],
   })
-  const collection = {} // await getCollection(new BigNumber(collectionId._hex).toJSON())
+  const collection = await getCollection(collectionId.result.toString())
   console.log('2bettingFromSg===================>', bettingFromSg, collection, collectionId)
   const bettingEvents = await Promise.all(
     bettingFromSg?.bettingEvents?.map(async (bettingEvent) => {
@@ -205,7 +205,7 @@ export const fetchBetting = async (bettingAddress) => {
         id: bettingAddress,
         ...bettingEvent,
         alphabetEncoding,
-        ticketSize: ticketSize.toString(),
+        ticketSize: ticketSize.result.toString(),
         startTime: startTime.toString(),
         nextToClose: nextToClose.toString(),
         adminShare: adminShare.toString(),
@@ -216,15 +216,22 @@ export const fetchBetting = async (bettingAddress) => {
         discountDivisor: discountDivisor.toString(),
         newTicketRange: newTicketRange.toString(),
         newMinTicketNumber: newMinTicketNumber.toString(),
-        token: new Token(56, _token, decimals.result, symbol?.toString(), name?.toString(), 'https://www.trueusd.com/'),
+        token: new Token(
+          56,
+          _token,
+          decimals.result,
+          symbol.result?.toString(),
+          name.result?.toString(),
+          'https://www.trueusd.com/',
+        ),
       }
     }),
   )
   return {
     ...bettingFromSg,
     collection,
-    devaddr_,
-    collectionId: collectionId.toString(),
+    devaddr_: devaddr_.result,
+    collectionId: collectionId.result.toString(),
     bettingEvents,
   }
 }

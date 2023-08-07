@@ -1,6 +1,6 @@
 import { SUPPORTED_CHAIN_IDS } from '@pancakeswap/pools'
 
-import Pools from 'views/Wills'
+import Pools from 'views/Will'
 
 const PoolsPage = () => <Pools />
 

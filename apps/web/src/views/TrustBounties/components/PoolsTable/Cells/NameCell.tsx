@@ -25,14 +25,14 @@ const NameCell: React.FC<any> = ({ pool, symbol }) => {
   const { sousId } = pool
 
   const title: React.ReactNode = `#${pool?.id}`
-  const subtitle: React.ReactNode = `${t('Stake')} ${symbol} ${t('Claim')} ${symbol}`
+  const subtitle: React.ReactNode = `${t('Stake')} ${symbol ?? '_'} ${t('Claim')} ${symbol ?? '_'}`
   const showSubtitle = sousId !== 0 || (sousId === 0 && !isMobile)
 
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
 
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.avatar} />
+      <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
       <Pool.CellContent>
         <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
           <Flex flexDirection="row">

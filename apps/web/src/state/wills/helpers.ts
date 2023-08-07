@@ -1,9 +1,7 @@
-import BigNumber from 'bignumber.js'
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_WILLS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-// import { getCollection } from 'state/cancan/helpers'
-import { getWillContract, getWillNoteContract, getBep20Contract } from '../../utils/contractHelpers'
+import { getCollection } from 'state/cancan/helpers'
 import { willFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { erc20ABI } from 'wagmi'
@@ -134,10 +132,10 @@ export const fetchWill = async (willAddress) => {
       })
       return {
         ...token,
-        name,
-        decimals,
-        symbol: symbol?.toString()?.toUpperCase(),
-        totalLiquidity: totalLiquidity.toString(),
+        name: name.result,
+        decimals: decimals.result,
+        symbol: symbol.result?.toString()?.toUpperCase(),
+        totalLiquidity: totalLiquidity.result?.toString(),
       }
     }),
   )
@@ -207,7 +205,7 @@ export const fetchWill = async (willAddress) => {
       },
     ],
   })
-  const collection = {} // await getCollection(new BigNumber(collectionId._hex).toJSON())
+  const collection = await getCollection(collectionId.result.toString())
   const accounts = await Promise.all(
     will?.protocols?.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
@@ -328,19 +326,19 @@ export const fetchWill = async (willAddress) => {
             ],
           })
           return {
-            willActivePeriod: willActivePeriod.toString(),
-            balanceOf: balanceOf.toString(),
-            totalRemoved: totalRemoved.toString(),
-            adminBountyId: _adminBountyId.toString(),
-            totalProcessed: totalProcessed.toString(),
-            totalLiquidity: totalLiquidity.toString(),
-            tokenType,
+            willActivePeriod: willActivePeriod.result.toString(),
+            balanceOf: balanceOf.result.toString(),
+            totalRemoved: totalRemoved.result.toString(),
+            adminBountyId: _adminBountyId.result.toString(),
+            totalProcessed: totalProcessed.result.toString(),
+            totalLiquidity: totalLiquidity.result.toString(),
+            tokenType: tokenType.result,
             token: new Token(
               56,
               token,
               decimals.result,
-              symbol?.toString(),
-              tokenName?.toString(),
+              symbol.result?.toString(),
+              tokenName.result?.toString(),
               'https://www.trueusd.com/',
             ),
           }
@@ -354,8 +352,8 @@ export const fetchWill = async (willAddress) => {
         percentages,
         media,
         description,
-        locked,
-        collectionId: collectionId.toString(),
+        locked: locked.result,
+        collectionId: collectionId.result.toString(),
         createdAt: createdAt.toString(),
         updatedAt: updatedAt.toString(),
         // allTokens.find((tk) => tk.address === token),
@@ -369,16 +367,16 @@ export const fetchWill = async (willAddress) => {
     tokens,
     willAddress,
     accounts,
-    unlocked,
+    unlocked: unlocked.result,
     collection,
-    contractMedia,
-    willWithdrawalPeriod: willWithdrawalPeriod.toString(),
-    minWithdrawableNow: minWithdrawableNow.toString(),
-    minNFTWithdrawableNow: minNFTWithdrawableNow.toString(),
-    updatePeriod: updatePeriod.toString(),
-    devaddr_,
-    profileId: _profileId.toString(),
-    bountyRequired: bountyRequired.toString(),
+    contractMedia: contractMedia.result,
+    willWithdrawalPeriod: willWithdrawalPeriod.result.toString(),
+    minWithdrawableNow: minWithdrawableNow.result.toString(),
+    minNFTWithdrawableNow: minNFTWithdrawableNow.result.toString(),
+    updatePeriod: updatePeriod.result.toString(),
+    devaddr_: devaddr_.result,
+    profileId: _profileId.result.toString(),
+    bountyRequired: bountyRequired.result.toString(),
   }
 }
 

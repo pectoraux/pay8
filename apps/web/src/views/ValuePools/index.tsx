@@ -62,14 +62,14 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       </PageHeader>
       <Page>
         <PoolControls pools={pools}>
-          {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
+          {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
                     key={pool.sousId}
-                    sousId={pool.sousId}
+                    id={pool.id}
                     account={account}
                   />
                 ))}

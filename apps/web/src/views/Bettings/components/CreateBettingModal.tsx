@@ -79,7 +79,7 @@ const CreateBettingModal: React.FC<any> = ({ currency, onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Create Betting')} onDismiss={onDismiss}>
+    <Modal title={t('Create Betting Contract')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Profile ID')}
@@ -125,7 +125,7 @@ const CreateBettingModal: React.FC<any> = ({ currency, onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create Betting')}
+            {t('Create Betting Contract')}
           </Button>
         ) : (
           <ConnectWalletButton />

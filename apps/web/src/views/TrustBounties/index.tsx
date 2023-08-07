@@ -50,7 +50,7 @@ const FinishedTextLink = styled(Link)`
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
+  const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)

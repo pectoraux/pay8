@@ -2,7 +2,6 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_AUDITORS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-// import { getCollection } from 'state/cancan/helpers'
 import { auditorFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { auditorABI } from 'config/abi/auditor'
@@ -10,6 +9,7 @@ import { erc20ABI } from 'wagmi'
 import { getAuditorHelper2Address, getAuditorNoteAddress } from 'utils/addressHelpers'
 import { auditorHelper2ABI } from 'config/abi/auditorHelper2'
 import { auditorNoteABI } from 'config/abi/auditorNote'
+import { getCollection } from 'state/cancan/helpers'
 
 export const getProtocolsSg = async (userAddress: string): Promise<any> => {
   try {
@@ -154,7 +154,7 @@ export const fetchAuditor = async (auditorAddress) => {
       },
     ],
   })
-  const collection = {} // await getCollection(new BigNumber(collectionId._hex).toJSON())
+  const collection = await getCollection(collectionId.result.toString())
   const accounts = await Promise.all(
     auditor?.protocols?.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
@@ -227,8 +227,8 @@ export const fetchAuditor = async (auditorAddress) => {
       return {
         ...protocol,
         protocolId,
-        isAutoChargeable,
-        adminBountyId: adminBountyId.toString(),
+        isAutoChargeable: isAutoChargeable.result,
+        adminBountyId: adminBountyId.result.toString(),
         esgRating: esgRating.toString(),
         bountyId: bountyId.toString(),
         optionId: optionId.toString(),
@@ -236,14 +236,14 @@ export const fetchAuditor = async (auditorAddress) => {
         paidReceivable: paidReceivable.toString(),
         periodReceivable: periodReceivable.toString(),
         startReceivable: startReceivable.toString(),
-        totalLiquidity: totalLiquidity.toString(),
+        totalLiquidity: totalLiquidity.result.toString(),
         nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
         token: new Token(
           56,
           _token,
           decimals.result,
-          symbol?.toString()?.toUpperCase() ?? 'symbol',
-          name?.toString() ?? 'name',
+          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+          name.result?.toString() ?? 'name',
           'https://www.trueusd.com/',
         ),
         // allTokens.find((tk) => tk.address === token),
@@ -257,8 +257,8 @@ export const fetchAuditor = async (auditorAddress) => {
     collection,
     auditorAddress,
     accounts,
-    bountyRequired,
-    devaddr_,
+    bountyRequired: bountyRequired.result,
+    devaddr_: devaddr_.result,
     collectionId: collectionId.toString(),
   }
 }

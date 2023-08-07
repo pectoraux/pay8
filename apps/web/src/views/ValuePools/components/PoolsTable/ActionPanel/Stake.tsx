@@ -81,7 +81,7 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
     )
   }
 
-  if (!pool.initialized) {
+  if (!pool?.initialized) {
     return (
       <ActionContainer>
         <ActionTitles>

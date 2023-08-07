@@ -1,19 +1,14 @@
-import axios from 'axios'
-import NodeRSA from 'encrypt-rsa'
-import BigNumber from 'bignumber.js'
 import { Token } from '@pancakeswap/sdk'
-import { getBep20Contract, getRampAdsContract, getRampContract, getTrustBountiesContract } from 'utils/contractHelpers'
-import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_TRUSTBOUNTIES } from 'config/constants/endpoints'
 import { publicClient } from 'utils/wagmi'
 import { bountyField, approvalField } from './queries'
-import { rampABI } from 'config/abi/ramp'
-import { erc20ABI } from 'wagmi'
-import { rampAdsABI } from 'config/abi/rampAds'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import { trustBountiesABI } from 'config/abi/trustBounties'
+import { getCollection } from 'state/cancan/helpers'
+import { getTrustBountiesAddress } from 'utils/addressHelpers'
+import { erc20ABI } from 'wagmi'
 
 export const getBounties = async (first: number, skip: number, where) => {
   try {
@@ -44,14 +39,29 @@ export const getBounties = async (first: number, skip: number, where) => {
 }
 
 export const getTokenData = async (tokenAddress) => {
-  const tokenContract = getBep20Contract(tokenAddress)
-  const [name, symbol, decimals] = await Promise.all([
-    tokenContract.read.name(),
-    tokenContract.read.symbol(),
-    tokenContract.read.decimals(),
-  ])
+  const bscClient = publicClient({ chainId: 4002 })
+  const [name, symbol, decimals] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: tokenAddress,
+        abi: erc20ABI,
+        functionName: 'name',
+      },
+      {
+        address: tokenAddress,
+        abi: erc20ABI,
+        functionName: 'symbol',
+      },
+      {
+        address: tokenAddress,
+        abi: erc20ABI,
+        functionName: 'decimals',
+      },
+    ],
+  })
   console.log('tokenAddress================>', tokenAddress, name, symbol)
-  return { name, symbol, decimals }
+  return { name: name.result, symbol: symbol.result, decimals: decimals.result }
 }
 
 export const fetchBounties = async (
@@ -64,7 +74,6 @@ export const fetchBounties = async (
   fromRamps = false,
   fromTransfers = false,
 ) => {
-  const trustbountiesContract = getTrustBountiesContract()
   const whereClause = Number(collectionId)
     ? {
         collectionId,
@@ -119,13 +128,13 @@ export const fetchBounties = async (
           allowFailure: true,
           contracts: [
             {
-              address: trustbountiesContract.address,
+              address: getTrustBountiesAddress(),
               abi: trustBountiesABI,
               functionName: 'bountyInfo',
               args: [BigInt(bountyId)],
             },
             {
-              address: trustbountiesContract.address,
+              address: getTrustBountiesAddress(),
               abi: trustBountiesABI,
               functionName: 'getBalance',
               args: [BigInt(bountyId)],
@@ -142,14 +151,14 @@ export const fetchBounties = async (
         const parentBountyId = bountyInfo.result[7]
         const isNFT = bountyInfo.result[7]
 
-        const collection = {} // await getCollection(bounty.collectionId)
+        const collection = await getCollection(bounty.collectionId)
         const claims = await Promise.all(
           bounty.claims.map(async (claim) => {
             const [fromBc] = await bscClient.multicall({
               allowFailure: true,
               contracts: [
                 {
-                  address: trustbountiesContract.address,
+                  address: getTrustBountiesAddress(),
                   abi: trustBountiesABI,
                   functionName: 'claims',
                   args: [BigInt(bountyId), BigInt(parseInt(claim.id) - 1)],
@@ -183,7 +192,7 @@ export const fetchBounties = async (
           endTime: endTime?.toString(),
           minToClaim: minToClaim?.toString(),
           isNFT,
-          totalLiquidity: totalLiquidity?.toString(),
+          totalLiquidity: totalLiquidity.result?.toString(),
         }
       })
       .flat(),

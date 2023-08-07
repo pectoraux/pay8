@@ -45,7 +45,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const [onPresentNFT] = useModal(<WebPagesModal height="500px" pool={pool} />)
-
   return (
     <>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -62,7 +61,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
               <ArrowForwardIcon
                 onClick={() => {
                   setPendingTx(true)
-                  router.push(`/games/${gameAddress}`)
+                  router.push(`/games/${pool?.id}`)
                 }}
                 color="primary"
               />
@@ -71,7 +70,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           isLoading={pendingTx}
           onClick={() => {
             setPendingTx(true)
-            router.push(`/games/${gameAddress}`)
+            router.push(`/games/${pool?.id}`)
           }}
         >
           {t('View All Accounts')}

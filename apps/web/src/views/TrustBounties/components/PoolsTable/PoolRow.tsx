@@ -19,7 +19,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
 
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} />
+      <NameCell pool={pool} symbol={pool?.token?.symbol} />
       <TotalUsersCell labelText={t('Total Users')} amount={parseInt(pool?.partnerStakeId) ? 2 : 1} />
       <TotalValueCell labelText={t('Total Liquidity')} amount={pool?.totalLiquidity} symbol={token?.symbol ?? ''} />
       <DateInfoCell labelText={t('Next Payable/Receivable')} pool={pool} />

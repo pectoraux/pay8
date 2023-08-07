@@ -85,14 +85,14 @@ const InfoSection = styled(Box)`
   }
 `
 
-const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) => {
+const ActionPanel: React.FC<any> = ({ account, pool, expanded }) => {
   const { isMobile } = useMatchBreakpoints()
   const [showSponsors, setShowSponsors] = useState(false)
   const toggleSponsors = () => setShowSponsors(!showSponsors)
 
   const [showScheduledPurchases, setShowScheduledPurchases] = useState(false)
   const toggleScheduledPurchases = () => setShowScheduledPurchases(!showScheduledPurchases)
-
+  console.log('ActionPanel===========>', pool)
   return (
     <>
       <StyledActionPanel expanded={expanded}>
@@ -106,8 +106,8 @@ const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) =>
             <ActionContainer hasBalance>
               <Harvest />
               <Stake
-                sousId={pool.sousId}
-                id={pool.id}
+                sousId={pool?.sousId}
+                id={pool?.id}
                 toggleSponsors={toggleSponsors}
                 toggleScheduledPurchases={toggleScheduledPurchases}
               />

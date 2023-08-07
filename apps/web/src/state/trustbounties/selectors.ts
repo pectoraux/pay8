@@ -2,32 +2,30 @@ import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { createSelector } from '@reduxjs/toolkit'
 import { State, VaultKey } from '../types'
-// import { transformPool, transformVault } from './helpers'
-import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
-const selectPoolsData = (state: State) => state.ramps?.data
-const selectPoolData = (sousId) => (state: State) => state.ramps?.data.find((p) => p.sousId === sousId)
+const selectPoolsData = (state: State) => state.trustbounties?.data
+const selectPoolData = (sousId) => (state: State) => state.trustbounties?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.ramps.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
-const selectUserDataLoaded = (state: State) => state.ramps?.userDataLoaded
-const selectVault = (key: VaultKey) => (state: State) => key && state.ramps ? state.ramps[key] : {}
-const selectIfo = (state: State) => state.ramps.ifo
-const selectIfoUserCredit = (state: State) => state.ramps.ifo.credit ?? BIG_ZERO
+  state.trustbounties.data.find((p) => p.tbAddress?.toLowerCase() === address?.toLowerCase())
+const selectUserDataLoaded = (state: State) => state.trustbounties?.userDataLoaded
+const selectVault = (key: VaultKey) => (state: State) => key && state.trustbounties ? state.trustbounties[key] : {}
+const selectIfo = (state: State) => state.trustbounties.ifo
+const selectIfoUserCredit = (state: State) => state.trustbounties.ifo.credit ?? BIG_ZERO
 
-const selectCurrBribe = (state: State) => state.ramps?.currBribe
-const selectCurrPool = (state: State) => state.ramps?.currPool
+const selectCurrBribe = (state: State) => state.trustbounties?.currBribe
+const selectCurrPool = (state: State) => state.trustbounties?.currPool
 const selectFilteredData = (state: State) => {
-  return state.ramps?.data.filter(
-    (ramp) =>
-      (!state.ramps.filters.workspace ||
-        state.ramps.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.ramps.filters.workspace?.toLowerCase()) &&
-      (!state.ramps.filters.country ||
-        state.ramps.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.ramps.filters.country?.toLowerCase()) &&
-      (!state.ramps.filters.city ||
-        state.ramps.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.ramps.filters.city?.toLowerCase()),
+  return state.trustbounties?.data.filter(
+    (tb) =>
+      (!state.trustbounties.filters.workspace ||
+        state.trustbounties.filters.workspace === 'All' ||
+        tb?.workspace?.toLowerCase() === state.trustbounties.filters.workspace?.toLowerCase()) &&
+      (!state.trustbounties.filters.country ||
+        state.trustbounties.filters.country === 'All' ||
+        tb?.country?.toLowerCase() === state.trustbounties.filters.country?.toLowerCase()) &&
+      (!state.trustbounties.filters.city ||
+        state.trustbounties.filters.city === 'All' ||
+        tb?.city?.toLowerCase() === state.trustbounties.filters.city?.toLowerCase()),
   )
 }
 

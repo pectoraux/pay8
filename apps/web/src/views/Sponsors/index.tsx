@@ -13,7 +13,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
-  console.log('pools=============>', pools)
+  console.log('7pools=============>', pools)
   const [onPresentCreateGauge] = useModal(<CreateSponsorModal />)
 
   usePoolsPageFetch()

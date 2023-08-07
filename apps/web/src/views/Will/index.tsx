@@ -87,7 +87,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{will}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools}>
+        <PoolControls pools={pools?.length && pools[0]?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>

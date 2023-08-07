@@ -18,16 +18,16 @@ const selectCurrBribe = (state: State) => state.arps?.currBribe
 const selectCurrPool = (state: State) => state.arps?.currPool
 const selectFilteredData = (state: State) => {
   return state.arps?.data.filter(
-    (ramp) =>
+    (arp) =>
       (!state.arps.filters.workspace ||
         state.arps.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.arps.filters.workspace?.toLowerCase()) &&
+        arp?.workspace?.toLowerCase() === state.arps.filters.workspace?.toLowerCase()) &&
       (!state.arps.filters.country ||
         state.arps.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.arps.filters.country?.toLowerCase()) &&
+        arp?.country?.toLowerCase() === state.arps.filters.country?.toLowerCase()) &&
       (!state.arps.filters.city ||
         state.arps.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.arps.filters.city?.toLowerCase()),
+        arp?.city?.toLowerCase() === state.arps.filters.city?.toLowerCase()),
   )
 }
 

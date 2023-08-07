@@ -3,7 +3,7 @@ import { firestore } from 'utils/firebase'
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_GAMES } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-// import { getCollection } from 'state/cancan/helpers'
+import { getCollection } from 'state/cancan/helpers'
 import { gameFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { getGameFactoryAddress, getGameHelperAddress, getGameMinterAddress } from 'utils/addressHelpers'
@@ -148,7 +148,7 @@ export const fetchGame = async (gameId) => {
   const totalPaid = ticketInfo_.result[9]
   const claimable = ticketInfo_.result[10]
 
-  const collection = {} // await getCollection(gameId)
+  const collection = await getCollection(gameId)
   console.log('9collection================>', collection)
   const [name, decimals, symbol] = await bscClient.multicall({
     allowFailure: true,
@@ -280,8 +280,15 @@ export const fetchGame = async (gameId) => {
     // percentile: percentile.toString(),
     totalPaid: totalPaid.toString(),
     totalScore: totalScore.toString(),
-    totalEarned: totalEarned.toString(),
-    token: new Token(56, _token, decimals.result, symbol?.toString(), name?.toString(), 'https://www.trueusd.com/'),
+    totalEarned: totalEarned.result.toString(),
+    token: new Token(
+      56,
+      _token,
+      decimals.result,
+      symbol.result?.toString(),
+      name.result?.toString(),
+      'https://www.trueusd.com/',
+    ),
   }
 }
 
@@ -304,7 +311,7 @@ export const getTokenIds = async (objectTokenIds, name, gameId) => {
 
     return {
       category,
-      tokenId: new BigNumber(tokenId._hex).toJSON(),
+      tokenId,
       ratings,
     }
   })

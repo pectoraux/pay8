@@ -21,8 +21,7 @@ import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/auditors/ho
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAppDispatch } from 'state'
+import { useCallback, useState } from 'react'
 import CreateGaugeModal from 'views/Auditors/components/CreateGaugeModal'
 
 import PoolControls from './components/PoolControls'
@@ -99,7 +98,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{auditor}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools}>
+        <PoolControls pools={pools?.length && pools?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (

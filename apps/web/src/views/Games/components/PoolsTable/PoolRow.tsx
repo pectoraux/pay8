@@ -2,6 +2,7 @@ import { memo, useMemo } from 'react'
 import { Pool } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/games/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
@@ -24,14 +25,14 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalValueCell
         decimals={5}
         labelText={t('Total Earnings')}
-        amount={pool?.totalEarned}
+        amount={getBalanceNumber(pool?.totalEarned, pool?.token?.decimals)}
         symbol={pool?.token?.symbol?.toUpperCase() ?? ''}
       />
       <TotalValueCell symbol="" decimals={0} labelText={t('Total Score')} amount={pool?.totalScore} />
       <TotalValueCell
         decimals={5}
         labelText={t('Price Per Minute')}
-        amount={pool?.pricePerMinutes}
+        amount={getBalanceNumber(pool?.pricePerMinutes, pool?.token?.decimals)}
         symbol={pool?.token?.symbol?.toUpperCase() ?? ''}
       />
     </Pool.ExpandRow>

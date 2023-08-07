@@ -1,5 +1,5 @@
 import { useAccount } from 'wagmi'
-import { Sponsors } from '@pancakeswap/uikit'
+import { Sponsor } from '@pancakeswap/uikit'
 import { useUserPoolStakedOnly, useUserPoolsViewMode } from 'state/user/hooks'
 import { useInitialBlockTimestamp } from 'state/block/hooks'
 import { Token } from '@pancakeswap/sdk'
@@ -14,7 +14,7 @@ export default function PoolControlsContainer(props) {
   const threshHold = Number(initialBlockTimestamp) > 0 ? Number(initialBlockTimestamp) + POOL_START_THRESHOLD : 0
 
   return (
-    <Sponsors.PoolControls<Token>
+    <Sponsor.PoolControls<Token>
       {...props}
       stakedOnly={stakedOnly}
       setStakedOnly={setStakedOnly}

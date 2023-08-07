@@ -40,72 +40,6 @@ export const fetchBountiesAsync =
     }
   }
 
-export const fetchBountiesUserDataAsync = createAsyncThunk<{ sousId: number; allowance: any }[], string>(
-  'pool/fetchPoolsUserData',
-  async (account, { rejectWithValue }) => {
-    try {
-      console.log('allProtocolIds1==============>')
-      const allProtocolIds = [] // await fetchBountiesUserData(account)
-      console.log('allProtocolIds==============>', allProtocolIds)
-      return allProtocolIds
-    } catch (e) {
-      return rejectWithValue(e)
-    }
-  },
-)
-
-export const updateUserAllowance = createAsyncThunk<
-  { value: any; sousId: any; field: any },
-  { value: any; sousId: any; field: any }
->('pool/updateUserAllowance', async ({ value, sousId, field }) => {
-  // const allowances = await fetchPoolsAllowance(account)
-  // return { sousId, field: 'allowance', value: allowances[sousId] }
-  return {
-    value,
-    sousId,
-    field,
-  }
-})
-
-export const updateUserBalance = createAsyncThunk<{ value: any; sousId: any; field: any }, { value: any; sousId: any }>(
-  'pool/updateUserBalance',
-  async ({ value, sousId }) => {
-    // const allowances = await fetchPoolsAllowance(account)
-    // return { sousId, field: 'allowance', value: allowances[sousId] }
-    return {
-      value,
-      sousId,
-      field: 'user',
-    }
-  },
-)
-
-export const updateUserStakedBalance = createAsyncThunk<
-  { value: any; sousId: any; field: any },
-  { value: any; sousId: any; field: any }
->('pool/updateUserStakedBalance', async ({ value, sousId, field }) => {
-  // const allowances = await fetchPoolsAllowance(account)
-  // return { sousId, field: 'allowance', value: allowances[sousId] }
-  return {
-    value,
-    sousId,
-    field,
-  }
-})
-
-export const updateUserPendingReward = createAsyncThunk<
-  { value: any; sousId: any; field: any },
-  { value: any; sousId: any; field: any }
->('pool/updateUserPendingReward', async ({ value, sousId, field }) => {
-  // const allowances = await fetchPoolsAllowance(account)
-  // return { sousId, field: 'allowance', value: allowances[sousId] }
-  return {
-    value,
-    sousId,
-    field,
-  }
-})
-
 export const PoolsSlice = createSlice({
   name: 'Bounties',
   initialState,
@@ -129,35 +63,6 @@ export const PoolsSlice = createSlice({
       })
       state.userDataLoaded = false
     })
-    builder.addCase(fetchBountiesUserDataAsync.fulfilled, (state, action) => {
-      const userData = action.payload
-      const userDataSousIdMap = keyBy(userData, 'sousId')
-      state.data = state.data.map((pool) => ({
-        ...pool,
-        userDataLoaded: true,
-        userData: userDataSousIdMap[pool.sousId],
-      }))
-      state.userDataLoaded = true
-    })
-    builder.addCase(fetchBountiesUserDataAsync.rejected, (state, action) => {
-      console.error('[Pools Action] Error fetching pool user data', action.payload)
-    })
-    builder.addMatcher(
-      isAnyOf(
-        updateUserAllowance.fulfilled,
-        updateUserBalance.fulfilled,
-        updateUserStakedBalance.fulfilled,
-        updateUserPendingReward.fulfilled,
-      ),
-      (state, action: PayloadAction<{ sousId: number; field: string; value: any }>) => {
-        const { field, value, sousId } = action.payload
-        const index = state.data.findIndex((p) => p.sousId === sousId)
-
-        if (index >= 0) {
-          state.data[index] = { ...state.data[index], userData: { ...state.data[index].userData, [field]: value } }
-        }
-      },
-    )
   },
 })
 

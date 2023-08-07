@@ -59,7 +59,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('BILL')}
+              {t('Bill')}
             </Heading>
             <Heading scale="md" color="text">
               {t('%a%', { a: bill ?? '' })}
@@ -97,7 +97,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{bill}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools}>
+        <PoolControls pools={pools?.length && pools[0]?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (

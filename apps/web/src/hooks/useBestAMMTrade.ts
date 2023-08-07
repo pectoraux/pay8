@@ -58,7 +58,6 @@ interface useBestAMMTradeOptions extends Options {
 export function useBestAMMTrade({ type = 'quoter', ...params }: useBestAMMTradeOptions) {
   const { amount, baseCurrency, currency, autoRevalidate, enabled = true } = params
   const isWrapping = useIsWrapping(baseCurrency, currency, amount?.toExact())
-  console.log('params=======================>', params)
   const isQuoterEnabled = useMemo(
     () => Boolean(!isWrapping && (type === 'quoter' || type === 'auto')),
     [type, isWrapping],

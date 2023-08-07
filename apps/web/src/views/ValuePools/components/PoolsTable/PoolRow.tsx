@@ -15,6 +15,7 @@ const PoolRow: React.FC<any> = ({ id, account, initialActivity }) => {
   const { pool } = usePool(id)
   const { t } = useTranslation()
   const vpCurrencyInput = useCurrency(pool?.tokenAddress)
+  console.log('PoolRow==============>', id, pool)
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
       <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} />

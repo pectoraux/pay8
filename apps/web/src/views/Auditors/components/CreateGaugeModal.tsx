@@ -186,9 +186,9 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const [nftFilters, setNewFilters] = useState({
     workspace: pool?.workspaces,
-    country: pool.countries,
-    city: pool.cities,
-    product: pool.products,
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
   })
 
   const updateValue = (key: any, value: any) => {

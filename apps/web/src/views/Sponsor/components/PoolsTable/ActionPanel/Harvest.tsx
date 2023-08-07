@@ -23,7 +23,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
         {t('Sponsor Contract Uses')}{' '}
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {currAccount?.token?.symbol}
+        {currAccount?.token?.symbol ?? ''}
       </Text>
     </>
   )
@@ -50,7 +50,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               fontSize="12px"
               decimals={5}
               value={getBalanceNumber(currAccount?.paidPayable, currAccount?.token?.decimals)}
-              unit={` ${currAccount?.token?.symbol}`}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Paid Payable')}
@@ -63,7 +62,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               fontSize="12px"
               decimals={5}
               value={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
-              unit={` ${currAccount?.token?.symbol}`}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Due Payable')}
@@ -76,7 +74,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               fontSize="12px"
               decimals={5}
               value={getBalanceNumber(currAccount?.amountPayable, currAccount?.token?.decimals)}
-              unit={` ${currAccount?.token?.symbol}`}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Amount Payable')}
@@ -89,7 +86,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
             {t('Period Payable')}
           </Text>
           <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
-            {format(convertTimeToSeconds(currAccount?.startPayable), 'yyyy-MM-dd HH:mm')}
+            {format(convertTimeToSeconds(currAccount?.startPayable ?? 0), 'yyyy-MM-dd HH:mm')}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Start Payable')}

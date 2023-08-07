@@ -3,7 +3,6 @@ import request, { gql } from 'graphql-request'
 import { LEVIATHANS } from 'config/constants/exchange'
 import { GRAPH_API_VALUEPOOLS } from 'config/constants/endpoints'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-// import { getItemsSg } from 'state/cancan/helpers'
 import { valuePoolABI } from 'config/abi/valuePool'
 import { publicClient } from 'utils/wagmi'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
@@ -262,7 +261,7 @@ export const fetchValuepool = async (valuepoolContract) => {
       })
     console.log('totalLiquidity==================>', totalLiquidity)
     console.log('valuepoolsFromSg34=============>', _va)
-    const supply = initialized ? vaParams.result[0] : BIG_ZERO
+    const supply = initialized ? vaParams.result[0] : '0'
     console.log('valuepoolsFromSg4=============>', totalLiquidity, supply, vaName, vaDecimals)
     const colors = {
       '3': 'Gold',
@@ -270,32 +269,37 @@ export const fetchValuepool = async (valuepoolContract) => {
       '1': 'Brown',
       '0': 'Black',
     }
+    const _totalLiquidity = new BigNumber(totalLiquidity.result.toString())
+      .div(10 ** Number(decimals.result))
+      .toFixed(Number(decimals.result))
+    const _treasuryShare = new BigNumber(treasuryShare.result.toString()).div(100).toString()
+    const _maxWithdrawable = new BigNumber(100)
+      .minus(new BigNumber(maxWithdrawable.result.toString()).div(100))
+      .toJSON()
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
-      _va,
+      _va: _va.result,
       // queue: augmentedQ,
-      name,
-      symbol,
-      vaName,
+      name: name.result,
+      symbol: symbol.result,
+      vaName: vaName.result,
       sponsors,
-      vaSymbol,
-      vaDecimals,
+      vaSymbol: vaSymbol.result,
+      vaDecimals: vaDecimals.result,
       valuepoolAddress,
-      tokenAddress,
+      tokenAddress: tokenAddress.result,
       initialized,
       supply, // : supply.(10**vaDecimals),
-      totalLiquidity: new BigNumber(totalLiquidity.toString())
-        .div(10 ** Number(decimals.result))
-        .toFixed(Number(decimals.result)),
-      devaddr_,
+      totalLiquidity: _totalLiquidity === 'NaN' ? '0' : _totalLiquidity,
+      devaddr_: devaddr_.result,
       requiredIndentity,
       valueName,
-      riskpool,
-      totalpaidBySponsors: totalpaidBySponsors.toString(),
-      treasuryShare: new BigNumber(treasuryShare.toString()).div(100).toString(),
-      maxWithdrawable: new BigNumber(100).minus(new BigNumber(maxWithdrawable.toString()).div(100)).toJSON(),
-      merchantMinIDBadgeColor: colors[new BigNumber(merchantMinIDBadgeColor.toString()).toJSON()],
-      merchantValueName,
+      riskpool: riskpool.result,
+      totalpaidBySponsors: totalpaidBySponsors.result.toString(),
+      treasuryShare: _treasuryShare === 'NaN' ? '0' : _treasuryShare,
+      maxWithdrawable: _maxWithdrawable === 'NaN' ? '0' : _maxWithdrawable,
+      merchantMinIDBadgeColor: colors[merchantMinIDBadgeColor.result.toString()],
+      merchantValueName: merchantValueName.result,
       maxDueReceivable: maxDueReceivable.toString(),
       queueDuration: queueDuration.toString(),
     }

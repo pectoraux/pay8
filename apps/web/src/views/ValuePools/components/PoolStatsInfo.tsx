@@ -40,8 +40,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, id: valuepoolAddress } = pool
-  const tokenAddress = valuepoolAddress || ''
+  const tokenAddress = pool?.id || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.tokens} />)
@@ -63,7 +62,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
               <ArrowForwardIcon
                 onClick={() => {
                   setPendingTx(true)
-                  router.push(`/valuepools/${valuepoolAddress}`)
+                  router.push(`/valuepools/${pool?.id}`)
                 }}
                 color="primary"
               />
@@ -72,7 +71,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           isLoading={pendingTx}
           onClick={() => {
             setPendingTx(true)
-            router.push(`/valuepools/${valuepoolAddress}`)
+            router.push(`/valuepools/${pool?.id}`)
           }}
         >
           {t('View All Accounts')}
@@ -119,8 +118,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             marginTextBetweenLogo="4px"
             textOptions={AddToWalletTextOptions.TEXT}
             tokenAddress={tokenAddress}
-            tokenSymbol={earningToken.symbol}
-            tokenDecimals={earningToken.decimals}
+            tokenSymbol={pool?.token?.symbol}
+            tokenDecimals={pool?.token?.decimals}
             tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
           />
         </Flex>

@@ -73,7 +73,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Create Sponsor Pool')} onDismiss={onDismiss}>
+    <Modal title={t('Create Sponsor Contract')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Profile Id')}
@@ -108,7 +108,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
             isLoading={pendingTx || pendingFb}
             // disabled={firebaseDone}
           >
-            {t('Create Sponsor Pool')}
+            {t('Create Sponsor Contract')}
           </Button>
         ) : (
           <ConnectWalletButton />

@@ -3,7 +3,6 @@ import { Pool } from '@pancakeswap/uikit'
 import { usePool } from 'state/stakemarket/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
-// import ActionPanel as BountiesPanel from 'views/TrustBounties/components/PoolsTable/ActionPanel/ActionPanel'
 
 import NameCell from './Cells/NameCell'
 import DateInfoCell from './Cells/DateInfoCell'
@@ -16,7 +15,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, variant, initialActivity }) =
   const { t } = useTranslation()
   const token = useCurrency(pool.tokenAddress)
   const [currPool, setCurrPool] = useState(pool)
-  return variant === 'stakemarket' ? (
+  return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currPool={currPool} setCurrPool={setCurrPool} expanded />}
@@ -29,19 +28,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, variant, initialActivity }) =
         labelText={parseFloat(currPool?.waitingDuration) ? t('Countdown to litigations') : t('Next Payable/Receivable')}
       />
     </Pool.ExpandRow>
-  ) : null
-  // <Pool.ExpandRow
-  //   initialActivity={initialActivity}
-  //   panel={<BountiesPanel account={account} pool={pool} expanded />}
-  // >
-  //   <NameCell pool={pool} symbol='' />
-  //   <TotalUsersCell labelText={t('Total Users')} amount={pool?.partnerStakeIds?.length} />
-  //   <TotalValueCell
-  //     labelText={t('Total Liquidity')}
-  //     amount={pool.totalLiquidity}
-  //     symbol=''
-  //   />
-  // </Pool.ExpandRow>
+  )
 }
 
 export default memo(PoolRow)

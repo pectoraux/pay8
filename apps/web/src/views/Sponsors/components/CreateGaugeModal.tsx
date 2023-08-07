@@ -137,12 +137,6 @@ const CreateGaugeModal: React.FC<any> = ({
     owner: currAccount?.owner || account,
     content: pool?.content,
   }))
-  const [nftFilters, setNewFilters] = useState({
-    workspace: pool?.workspaces,
-    country: pool.countries,
-    city: pool.cities,
-    product: pool.products,
-  })
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -459,7 +453,7 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.VOTE)}>
             {t('VOTE')}
           </Button>
-          {pool._ve !== ADDRESS_ZERO ? (
+          {pool?._ve !== ADDRESS_ZERO ? (
             <>
               <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_OWNER)}>
                 {t('UPDATE OWNER')}

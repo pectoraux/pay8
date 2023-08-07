@@ -11,6 +11,7 @@ import transactions from './transactions/reducer'
 import user from './user/reducer'
 import potteryReducer from './pottery'
 import rampsReducer from './ramps'
+import stakemarketReducer from './stakemarket'
 import trustbountiesReducer from './trustbounties'
 import acceleratorReducer from './accelerator'
 import businessesReducer from './businesses'
@@ -27,6 +28,7 @@ import sponsorsReducer from './sponsors'
 import valuepoolsReducer from './valuepools'
 import willsReducer from './wills'
 import worldsReducer from './worlds'
+import arpsReducer from './arps'
 import globalReducer from './global/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions']
@@ -48,6 +50,7 @@ const persistedReducer = persistReducer(
     lottery: lotteryReducer,
     pottery: potteryReducer,
     ramps: rampsReducer,
+    stakemarket: stakemarketReducer,
     trustbounties: trustbountiesReducer,
     accelerator: acceleratorReducer,
     auditors: auditorsReducer,
@@ -64,6 +67,7 @@ const persistedReducer = persistReducer(
     valuepools: valuepoolsReducer,
     wills: willsReducer,
     worlds: worldsReducer,
+    arps: arpsReducer,
 
     // Exchange
     user,

@@ -4,7 +4,6 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_BILLS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-// import { getCollection } from 'state/cancan/helpers'
 import {
   getBILLNoteContract,
   getBILLMinterContract,
@@ -18,6 +17,7 @@ import { erc20ABI } from 'wagmi'
 import { getBILLMinterAddress, getBILLNoteAddress } from 'utils/addressHelpers'
 import { billNoteABI } from 'config/abi/billNote'
 import { billMinterABI } from 'config/abi/billMinter'
+import { getCollection } from 'state/cancan/helpers'
 
 export const getProtocols = async (first = 5, skip = 0, where = {}) => {
   try {
@@ -117,6 +117,7 @@ export const getBills = async (first = 5, skip = 0, where) => {
 
 export const fetchBill = async (billAddress) => {
   const bill = await getBill(billAddress.toLowerCase())
+  console.log('billAddress==================>', billAddress)
   const bscClient = publicClient({ chainId: 4002 })
   const [devaddr_, bountyRequired, profileRequired, collectionId] = await bscClient.multicall({
     allowFailure: true,
@@ -143,7 +144,9 @@ export const fetchBill = async (billAddress) => {
       },
     ],
   })
-  const collection = {} // await getCollection(new BigNumber(collectionId._hex).toJSON())
+  console.log('1billAddress==================>', billAddress)
+  const collection = await getCollection(collectionId.result.toString())
+  console.log('2billAddress==================>', billAddress, bill)
   const accounts = await Promise.all(
     bill?.protocols?.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
@@ -170,6 +173,7 @@ export const fetchBill = async (billAddress) => {
           },
         ],
       })
+      console.log('3billAddress==================>', protocolInfo)
       const _token = protocolInfo.result[0]
       const version = protocolInfo.result[1]
       const bountyId = protocolInfo.result[2]
@@ -231,12 +235,12 @@ export const fetchBill = async (billAddress) => {
       return {
         ...protocol,
         protocolId,
-        isAutoChargeable,
-        adminBountyId: adminBountyId.toString(),
+        isAutoChargeable: isAutoChargeable.result,
+        adminBountyId: adminBountyId.result.toString(),
         bountyId: bountyId.toString(),
         profileId: profileId.toString(),
         version: version.toString(),
-        optionId: optionId.toString(),
+        optionId: optionId.result.toString(),
         credit: credit.toString(),
         debit: debit.toString(),
         creditFactor: creditFactor.toString(),
@@ -245,34 +249,34 @@ export const fetchBill = async (billAddress) => {
         periodPayable: periodPayable.toString(),
         startPayable: startPayable.toString(),
         startReceivable: startReceivable.toString(),
-        totalLiquidity: totalLiquidity.toString(),
-        dueReceivable: receivables[0].toString(),
-        nextDueReceivable: receivables[1].toString(),
-        duePayable: payables[0].toString(),
-        nextDuePayable: payables[1].toString(),
+        totalLiquidity: totalLiquidity.result.toString(),
+        dueReceivable: receivables.result[0].toString(),
+        nextDueReceivable: receivables.result[1].toString(),
+        duePayable: payables.result[0].toString(),
+        nextDuePayable: payables.result[1].toString(),
         token: new Token(
           56,
           _token,
           decimals.result,
-          symbol?.toString()?.toUpperCase() ?? 'symbol',
-          name?.toString() ?? 'name',
+          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+          name.result?.toString() ?? 'name',
           'https://www.payswap.org/',
         ),
         // allTokens.find((tk) => tk.address === token),
       }
     }),
   )
-
+  console.log('4billAddress==================>', billAddress)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...bill,
     billAddress,
     accounts,
-    profileRequired,
-    devaddr_,
     collection,
-    collectionId: collectionId.toString(),
-    bountyRequired: bountyRequired.toString(),
+    profileRequired: profileRequired.result,
+    devaddr_: devaddr_.result,
+    collectionId: collectionId.result.toString(),
+    bountyRequired: bountyRequired.result.toString(),
   }
 }
 
