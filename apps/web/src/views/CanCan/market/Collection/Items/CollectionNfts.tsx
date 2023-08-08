@@ -42,6 +42,7 @@ import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import NoNftsImage from '../../components/Activity/NoNftsImage'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -60,13 +61,24 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   const [onPresentUnregister] = useModal(
     <UnregisterModal collectionId={id} userBountyId={userBountyId} userCollectionId={userCollectionId} />,
   )
-  console.log('nfts=================>', nfts, collection)
+  console.log('nfts=================>', nfts, collection, isFetchingNfts)
   const handleLoadMore = useCallback(() => {
     setPage(page + 1)
   }, [setPage, page])
 
-  if ((!nfts || nfts?.length === 0) && isFetchingNfts) {
+  if (isFetchingNfts) {
     return <GridPlaceholder />
+  }
+
+  if (!nfts || nfts?.length === 0) {
+    return (
+      <Flex p="24px" flexDirection="column" alignItems="center">
+        <NoNftsImage />
+        <Text pt="8px" bold>
+          {t('No Item listed yet')}
+        </Text>
+      </Flex>
+    )
   }
 
   return (

@@ -26,7 +26,9 @@ import { useCurrPool } from 'state/valuepools/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/valuepools'
+
 import WebPagesModal from './WebPagesModal'
+import WebPagesModal2 from './WebPagesModal2'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -44,7 +46,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.tokens} />)
-  // const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />,)
+  const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />)
 
   return (
     <>
@@ -125,21 +127,37 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((balance) => (
+        {pool?.tokens?.length
+          ? pool.tokens
+              .filter((token) => account?.toLowerCase() === token?.owner?.toLowerCase())
+              .map((balance) => (
+                <Button
+                  key={balance.id}
+                  onClick={() => {
+                    const newState = { ...currState, [pool?.id]: balance.id }
+                    dispatch(setCurrPoolData(newState))
+                    onPresentNFT()
+                  }}
+                  mt="4px"
+                  mr={['2px', '2px', '4px', '4px']}
+                  scale="sm"
+                  variant={currState[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+                >
+                  {balance.tokenId}
+                </Button>
+              ))
+          : null}
+        {pool?.tokens?.length ? (
           <Button
-            key={balance.token.address}
-            onClick={() => {
-              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
-              dispatch(setCurrPoolData(newState))
-            }}
-            mt="4px"
-            mr={['2px', '2px', '4px', '4px']}
+            key="clear-all"
+            variant="text"
             scale="sm"
-            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+            onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
           >
-            {balance.token.symbol}
+            {t('Clear')}
           </Button>
-        ))}
+        ) : null}
       </Flex>
       <Flex>
         <FlexGap gap="16px" pt="24px" pl="4px">

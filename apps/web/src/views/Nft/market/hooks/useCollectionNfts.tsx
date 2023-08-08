@@ -90,7 +90,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
       if (pageIndex !== 0 && previousPageData && !previousPageData.length) return null
       return [collectionAddress, itemListingSettingsJson, pageIndex, 'collectionNfts']
     },
-    async (address, settingsJson, page) => {
+    async ([, settingsJson, page]) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson.toString())
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsUsers) {

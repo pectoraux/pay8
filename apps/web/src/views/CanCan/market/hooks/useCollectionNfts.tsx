@@ -88,11 +88,11 @@ export const useCollectionNfts = (collectionAddress: string) => {
   } = useSWRInfinite(
     (pageIndex, previousPageData) => {
       if (pageIndex !== 0 && previousPageData && !previousPageData.length) return null
-      return [collectionAddress, itemListingSettingsJson, pageIndex, 'collectionNfts']
+      return [collectionAddress, itemListingSettingsJson, pageIndex, 'collectionNfts'] as const
     },
-    async (address, settingsJson, page) => {
-      const settings: ItemListingSettings = JSON.parse(settingsJson.toString())
-      let newNfts: NftToken[] = []
+    async ([, settingsJson, page]) => {
+      let newNfts = []
+      const settings = JSON.parse(settingsJson.toString())
       if (settings.showOnlyNftsUsers) {
         newNfts = collection.registrations?.filter((reg) => !reg.unregister)
       } else if (settings.showOnlyNftsOnSale) {
@@ -114,6 +114,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
   )
   fetchedNfts.current = uniqueNftList
   const paywallMirrorsCount = collection?.paywalls?.reduce((acc, cur) => acc + cur?.mirrors?.length, 0)
+  console.log('status=================>', status, FetchStatus.Fetched)
   return {
     nfts: uniqueNftList,
     isFetchingNfts: status !== FetchStatus.Fetched,
