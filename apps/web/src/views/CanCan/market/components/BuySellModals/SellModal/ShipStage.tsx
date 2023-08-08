@@ -344,12 +344,12 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             state.period,
             variant === 'product' || variant === 'article' ? '0' : '1',
             !!state.isTradable,
-            `${state.thumbnail},${state.thumbnail}`,
+            state.thumbnail,
             nftFilters?.country?.toString(),
             nftFilters?.city?.toString(),
             [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
           ]
-          console.log('CONFIRM_ADD_LOCATION==============>', marketCollectionsContract, args)
+          console.log('11CONFIRM_ADD_LOCATION==============>', marketCollectionsContract, args)
         } catch (err) {
           console.log('1CONFIRM_ADD_LOCATION============>', err)
         }

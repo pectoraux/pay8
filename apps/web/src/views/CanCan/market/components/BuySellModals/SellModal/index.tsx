@@ -464,12 +464,12 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
             state.period,
             variant === 'item' ? 0 : 1,
             !!state.isTradable,
-            `${state.thumbnail}, ${state.original}`,
+            state.thumbnail,
             nftFilters?.country?.toString(),
             nftFilters?.city?.toString(),
             nftFilters?.product?.toString() + delim + state.customTags,
           ]
-          console.log('CONFIRM_ADD_LOCATION==============>', args)
+          console.log('12CONFIRM_ADD_LOCATION==============>', args, state.thumbnail)
         } catch (err) {
           console.log('1CONFIRM_ADD_LOCATION============>', err)
         }

@@ -1,4 +1,4 @@
-import Activity from 'views/Nft/market/Activity'
+import Activity from 'views/Nft2/market/Activity'
 
 const ActivityPage = () => {
   return <Activity />

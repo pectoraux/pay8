@@ -1,4 +1,4 @@
-import NftMarket from 'views/Nft/market/Home'
+import NftMarket from 'views/Nft2/market/Home'
 
 const NftMarketPage = () => {
   return <NftMarket />

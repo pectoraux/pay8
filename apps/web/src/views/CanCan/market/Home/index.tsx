@@ -112,9 +112,6 @@ const Home = () => {
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
               {t('Buy and Sell Products and Services on the Blockchain')}
             </Heading>
-            <Heading scale="lg" color="text">
-              {t('Buy and Sell NFTs on BNB Smart Chain')}
-            </Heading>
             {account && (
               <Button as={NextLinkFromReactRouter} to={`/profile/${account.toLowerCase()}`} mt="32px">
                 {t('Manage/Sell')}
