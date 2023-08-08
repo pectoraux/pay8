@@ -96,7 +96,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{valuepool}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools}>
+        <PoolControls pools={pools?.length && pools?.tokens}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (
@@ -114,6 +114,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 {chosenPools.map((pool) => (
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
+                    id={pool?.id}
                     key={pool.sousId}
                     sousId={pool.sousId}
                     account={account}

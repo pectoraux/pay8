@@ -5,7 +5,6 @@ import {
   ArrowForwardIcon,
   Pool,
   ScanLink,
-  useModal,
   Button,
   Link,
   FlexGap,
@@ -26,7 +25,6 @@ import { useCurrPool } from 'state/lotteries/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/lotteries'
-import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -40,11 +38,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, lotteryAddress } = pool
+  const { earningToken } = pool
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
-
   return (
     <>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -61,7 +58,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
               <ArrowForwardIcon
                 onClick={() => {
                   setPendingTx(true)
-                  router.push(`/lottery/${lotteryAddress}`)
+                  router.push(`/lotteries/${pool?.id}`)
                 }}
                 color="primary"
               />
@@ -70,10 +67,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           isLoading={pendingTx}
           onClick={() => {
             setPendingTx(true)
-            router.push(`/lottery/${lotteryAddress}`)
+            router.push(`/lotteries/${pool?.id}`)
           }}
         >
-          {t('View All Accounts')}
+          {t('View Lottery')}
         </Button>
       </Flex>
       {pool?.owner && (

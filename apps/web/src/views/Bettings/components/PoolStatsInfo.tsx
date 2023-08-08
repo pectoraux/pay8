@@ -74,7 +74,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             router.push(`/bettings/${pool?.id}`)
           }}
         >
-          {t('View All Accounts')}
+          {t('View Betting')}
         </Button>
       </Flex>
       {pool?.owner && (

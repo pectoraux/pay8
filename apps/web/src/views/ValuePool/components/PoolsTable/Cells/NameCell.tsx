@@ -22,11 +22,10 @@ const StyledCell = styled(Pool.BaseCell)`
 const NameCell: React.FC<any> = ({ pool, vpAccount, vpCurrencyInput }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
-  const { sousId } = pool
 
   const title: React.ReactNode = `${t('Save')} ${vpCurrencyInput?.symbol ?? ''}`
   const subtitle: React.ReactNode = `${t('Receive')} ${pool?.vaSymbol ?? ''}`
-  const showSubtitle = sousId !== 0 || (sousId === 0 && !isMobile)
+  const showSubtitle = pool?.sousId !== 0 || (pool?.sousId === 0 && !isMobile)
 
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
 
