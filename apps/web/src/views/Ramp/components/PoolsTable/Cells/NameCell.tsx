@@ -29,7 +29,7 @@ const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
 
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.avatar} />
+      <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
       <Pool.CellContent>
         <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
           <Flex flexDirection="row">

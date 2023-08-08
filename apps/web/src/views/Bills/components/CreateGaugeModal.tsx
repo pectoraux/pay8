@@ -165,7 +165,7 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const [state, setState] = useState<any>(() => ({
     owner: pool?.owner ?? '',
-    avatar: pool?.avatar,
+    avatar: pool?.collection?.avatar,
     bountyId: pool?.bountyId ?? '',
     profileId: pool?.profileId,
     bill: pool?.billAddress ?? '',

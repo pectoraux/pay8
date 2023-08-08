@@ -133,7 +133,7 @@ const CreateGaugeModal: React.FC<any> = ({
     callsInterval: '',
     times: '',
     bettingId2: '',
-    avatar: pool?.avatar,
+    avatar: pool?.collection?.avatar,
     collectionId: pool?.collectionId,
     profileId: pool?.profileId,
     tokenId: pool?.tokenId,

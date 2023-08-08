@@ -99,7 +99,7 @@ const CreateGaugeModal: React.FC<any> = ({
   // const { state: status, userAccount, session_id, userCurrency, amount } = router.query
   const [state, setState] = useState<any>(() => ({
     owner: pool?.owner ?? '',
-    avatar: pool?.avatar,
+    avatar: pool?.collection?.avatar,
     bountyId: pool?.bountyId ?? '',
     protocolId: currAccount?.id,
     extraMint: '',

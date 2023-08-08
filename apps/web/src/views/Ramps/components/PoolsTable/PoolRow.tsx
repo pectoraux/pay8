@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
+import { Pool } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/ramps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -9,8 +9,6 @@ import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
-  const { isLg, isXl, isXxl, isDesktop } = useMatchBreakpoints()
-  const isLargerScreen = isLg || isXl || isXxl
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()

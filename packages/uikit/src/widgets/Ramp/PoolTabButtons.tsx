@@ -73,11 +73,9 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
         <ButtonMenuItem as={NextLinkFromReactRouter} to={`/ramps/${router.query.ramp}`} replace>
           {t("Over")}
         </ButtonMenuItem>
-        <NotificationDot show>
-          <ButtonMenuItem as={NextLinkFromReactRouter} to={`/ramps/${router.query.ramp}?under`} replace>
-            {t("Under")}
-          </ButtonMenuItem>
-        </NotificationDot>
+        <ButtonMenuItem as={NextLinkFromReactRouter} to={`/ramps/${router.query.ramp}?under`} replace>
+          {t("Under")}
+        </ButtonMenuItem>
       </ButtonMenu>
     </Wrapper>
   );
@@ -99,7 +97,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
   return (
     <ViewControls>
       {/* {viewModeToggle} */}
-      {stakedOnlySwitch}
+      {/* {stakedOnlySwitch} */}
       {favoritesOnlySwitch}
       {liveOrFinishedSwitch}
     </ViewControls>

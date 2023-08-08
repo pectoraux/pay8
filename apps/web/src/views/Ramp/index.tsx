@@ -119,7 +119,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{ramp}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools}>
+        <PoolControls pools={pools?.length && pools[0]?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (
@@ -133,6 +133,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   {t('Delete Ramp!')}
                 </FinishedTextButton>
               ) : null}
+              {console.log('9chosenPools================>', chosenPools, pools?.length && pools[0]?.accounts)}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow
@@ -140,6 +141,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                     key={pool.sousId}
                     sousId={pool.sousId}
                     account={account}
+                    rampAddress={pools[0]?.id}
                   />
                 ))}
               </Pool.PoolsTable>

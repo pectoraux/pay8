@@ -127,7 +127,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
     minToClaim: '',
     ownerAddress: '',
     collectionId: pool?.collectionId,
-    avatar: pool?.avatar,
+    avatar: pool?.collection?.avatar,
     terms: pool?.terms,
     title: '',
     content: '',

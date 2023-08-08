@@ -98,7 +98,7 @@ const CreateGaugeModal: React.FC<any> = ({
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
 
   const [state, setState] = useState<any>(() => ({
-    avatar: pool?.avatar,
+    avatar: pool?.collection?.avatar,
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
     tokenId: pool?.tokenId,

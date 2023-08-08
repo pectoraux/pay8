@@ -29,11 +29,11 @@ const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
 
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.avatar} />
+      <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
       <Pool.CellContent>
         <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
           <Flex flexDirection="row">
-            {title}
+            {!rampAccount ? t('Pick a token') : title}
             <SaveIcon
               fill={watchlistTokens.includes(pool?.id)}
               onClick={() => addWatchlistToken(pool?.id)}
@@ -41,9 +41,11 @@ const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
             />
           </Flex>
         </Text>
-        <Text fontSize="12px" color="textSubtle">
-          {subtitle}
-        </Text>
+        {rampAccount && (
+          <Text fontSize="12px" color="textSubtle">
+            {subtitle}
+          </Text>
+        )}
       </Pool.CellContent>
     </StyledCell>
   )

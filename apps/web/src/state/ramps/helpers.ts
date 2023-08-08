@@ -1,8 +1,7 @@
 import axios from 'axios'
 import NodeRSA from 'encrypt-rsa'
-import BigNumber from 'bignumber.js'
 import { Token } from '@pancakeswap/sdk'
-import { getBep20Contract, getRampAdsContract, getRampContract } from 'utils/contractHelpers'
+import { getBep20Contract } from 'utils/contractHelpers'
 import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_RAMPS } from 'config/constants/endpoints'
@@ -11,6 +10,8 @@ import { rampFields, accountFields, sessionFields } from './queries'
 import { rampABI } from 'config/abi/ramp'
 import { erc20ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
+import { getRampAdsAddress } from 'utils/addressHelpers'
+import { getCollection } from 'state/cancan/helpers'
 
 export const fetchRampData = async (rampAddress) => {
   return (await firestore.collection('ramps').doc(rampAddress).get()).data()
@@ -146,14 +147,29 @@ export const getAccountSg = async (address: string, channel: string) => {
 }
 
 export const getTokenData = async (tokenAddress) => {
-  const tokenContract = getBep20Contract(tokenAddress)
-  const [name, symbol, decimals] = await Promise.all([
-    tokenContract.read.name(),
-    tokenContract.read.symbol(),
-    tokenContract.read.decimals(),
-  ])
+  const bscClient = publicClient({ chainId: 4002 })
+  const [name, symbol, decimals] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: tokenAddress,
+        abi: erc20ABI,
+        functionName: 'name',
+      },
+      {
+        address: tokenAddress,
+        abi: erc20ABI,
+        functionName: 'symbol',
+      },
+      {
+        address: tokenAddress,
+        abi: erc20ABI,
+        functionName: 'decimals',
+      },
+    ],
+  })
   console.log('tokenAddress================>', tokenAddress, name, symbol)
-  return { name, symbol, decimals }
+  return { name: name.result, symbol: symbol.result, decimals: decimals.result }
 }
 
 // eslint-disable-next-line consistent-return
@@ -161,9 +177,7 @@ export const fetchRamp = async (address) => {
   try {
     const rampAddress = address?.toLowerCase()
     const gauge = await getRampSg(rampAddress)
-    const rampContract = getRampContract(rampAddress)
-    const rampAdsContract = getRampAdsContract()
-    console.log('fetchRamp=========>', rampAddress, gauge, rampContract)
+    console.log('fetchRamp=========>', rampAddress, gauge)
     // const serializedTokens = serializeTokens()
     const bscClient = publicClient({ chainId: 4002 })
     const [devaddr_, tokens, params] = await bscClient.multicall({
@@ -252,9 +266,9 @@ export const fetchRamp = async (address) => {
             token: new Token(
               56,
               session?.tokenAddress,
-              Number(decimals),
-              symbol?.toString()?.toUpperCase() ?? 'symbol',
-              name?.toString() ?? 'name',
+              decimals.result,
+              symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+              name.result?.toString() ?? 'name',
               'https://www.trueusd.com/',
             ),
           }
@@ -262,12 +276,12 @@ export const fetchRamp = async (address) => {
     )
     console.log('fetchRamp2=========>', allSessions, rampAddress, tokens)
     let accounts = []
-    const _tokens = tokens as any
+    const _tokens = tokens.result as any
     try {
       accounts = await Promise.all(
         !_tokens?.length
           ? []
-          : _tokens.map(async (token) => {
+          : _tokens.map(async (token, index) => {
               const [protocolInfo, mintAvailable] = await bscClient.multicall({
                 allowFailure: true,
                 contracts: [
@@ -278,34 +292,29 @@ export const fetchRamp = async (address) => {
                     args: [token],
                   },
                   {
-                    address: rampAddress,
+                    address: getRampAdsAddress(),
                     abi: rampAdsABI,
                     functionName: 'mintAvailable',
                     args: [rampAddress, token],
                   },
                 ],
               })
-              // const [
-              //   [status, tokenId, bountyId, profileId, badgeId, minted, burnt, salePrice, maxPartners, cap],
-              //   [mintable, balance, collateralStatus],
-              // ] = await Promise.all([
-              //   rampContract.read.protocolInfo(token) as any,
-              //   rampAdsContract.read.mintAvailable(rampAddress, token) as any,
-              // ])
+              console.log('1mintAvailable==========>', mintAvailable)
               return {
-                status: protocolInfo[0] === 0 ? 'Sold' : protocolInfo[0] === 1 ? 'Open' : 'Close',
-                isOverCollateralised: mintAvailable[2] === 0,
-                backingBalance: mintAvailable[1]?.toString(),
-                mintable: mintAvailable[0]?.toString(),
-                tokenId: protocolInfo[1]?.toString(),
-                bountyId: protocolInfo[2]?.toString(),
-                profileId: protocolInfo[3]?.toString(),
-                badgeId: protocolInfo[4]?.toString(),
-                minted: protocolInfo[5]?.toString(),
-                burnt: protocolInfo[6]?.toString(),
-                salePrice: protocolInfo[7]?.toString(),
-                maxPartners: protocolInfo[8]?.toString(),
-                cap: protocolInfo[9]?.toString(),
+                sousId: index,
+                status: protocolInfo.result[0] === 0 ? 'Sold' : protocolInfo.result[0] === 1 ? 'Open' : 'Close',
+                isOverCollateralised: mintAvailable.result[2] === 0,
+                backingBalance: mintAvailable.result[1]?.toString(),
+                mintable: mintAvailable.result[0]?.toString(),
+                tokenId: protocolInfo.result[1]?.toString(),
+                bountyId: protocolInfo.result[2]?.toString(),
+                profileId: protocolInfo.result[3]?.toString(),
+                badgeId: protocolInfo.result[4]?.toString(),
+                minted: protocolInfo.result[5]?.toString(),
+                burnt: protocolInfo.result[6]?.toString(),
+                salePrice: protocolInfo.result[7]?.toString(),
+                maxPartners: protocolInfo.result[8]?.toString(),
+                cap: protocolInfo.result[9]?.toString(),
                 token: new Token(56, token, 18, 'TUSD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
                 // allTokens.find((tk) => tk.address === token),
               }
@@ -411,6 +420,7 @@ export const fetchRamp = async (address) => {
         })
       : ''
     console.log('secretKeys================>', [sk0, sk1, sk2, sk3, sk4], rampBadgeId.toString())
+    const collection = await getCollection(rest.collectionId)
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
       ...rest,
@@ -420,7 +430,7 @@ export const fetchRamp = async (address) => {
       allSessions,
       rampAddress,
       accounts,
-      // devaddr_,
+      devaddr_: devaddr_.result,
       automatic,
       _ve,
       rampBadgeId: rampBadgeId.toString(),
@@ -429,6 +439,7 @@ export const fetchRamp = async (address) => {
       burnFee: burnFee.toString(),
       rampSalePrice: rampSalePrice.toString(),
       soldAccounts: soldAccounts.toString(),
+      collection,
     }
   } catch (err) {
     console.log('fetchRamp err================>', err, address)

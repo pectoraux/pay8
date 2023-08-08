@@ -183,7 +183,7 @@ const CreateGaugeModal: React.FC<any> = ({
     clientIds: pool?.clientIds?.toString() || '',
     accountId: pool?.userData?.active && pool?.userData?.id,
     description: pool?.description || '',
-    avatar: pool?.avatar || '',
+    avatar: pool?.collection?.avatar || '',
     channels: pool?.channels?.toString() || '',
     moreInfo: '',
     amountPayable: session ? session.amount : '',

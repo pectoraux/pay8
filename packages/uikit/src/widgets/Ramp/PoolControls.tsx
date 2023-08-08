@@ -1,16 +1,15 @@
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState, ReactElement } from "react";
 import styled from "styled-components";
-import BigNumber from "bignumber.js";
 import partition from "lodash/partition";
 import { useTranslation } from "@pancakeswap/localization";
 import { useIntersectionObserver } from "@pancakeswap/hooks";
 import latinise from "@pancakeswap/utils/latinise";
-import { useWatchlistTokens } from "../../../../../apps/web/src/state/user/hooks";
+import { useRouter } from "next/router";
 
 import PoolTabButtons from "./PoolTabButtons";
 import { ViewMode } from "../../components/ToggleView/ToggleView";
 import { Flex, Text, SearchInput, Select, OptionProps } from "../../components";
+import { useWatchlistTokens } from "../../../../../apps/web/src/state/user/hooks";
 
 import { DeserializedPool } from "./types";
 import { sortPools } from "./helpers";
@@ -76,6 +75,7 @@ interface PoolControlsPropsType<T> {
   setViewMode: (s: ViewMode) => void;
   account: string;
   threshHold: number;
+  hideViewMode?: boolean;
 }
 
 export function PoolControls<T>({
@@ -87,10 +87,11 @@ export function PoolControls<T>({
   setViewMode,
   account,
   threshHold,
+  hideViewMode = false,
 }: any) {
   const router = useRouter();
   const { t } = useTranslation();
-  const isBounty = router.pathname.includes("bounties");
+
   const [numberOfPoolsVisible, setNumberOfPoolsVisible] = useState(NUMBER_OF_POOLS_VISIBLE);
   const { observerRef, isIntersecting } = useIntersectionObserver();
   const normalizedUrlSearch = useMemo(
@@ -101,31 +102,29 @@ export function PoolControls<T>({
   const searchQuery = normalizedUrlSearch && !_searchQuery ? normalizedUrlSearch : _searchQuery;
   const [sortOption, setSortOption] = useState("hot");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
-  const chosenPoolsLength = useRef(0);
   const [watchlistTokens] = useWatchlistTokens();
+  const chosenPoolsLength = useRef(0);
 
-  const [finishedPools, openPools] = useMemo(
-    () => partition(pools && pools[0]?.accounts, (acct) => !acct.isOverCollateralised),
-    [pools]
-  );
-  const finishedPools2 = isBounty ? pools : finishedPools;
+  const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool?.isFinished), [pools]);
   const openPoolsWithStartBlockFilter = useMemo(
-    () => openPools.filter((pool) => (threshHold > 0 && pool.startBlock ? Number(pool.startBlock) < threshHold : true)),
+    () =>
+      openPools.filter((pool) =>
+        threshHold > 0 && pool?.startTimestamp ? Number(pool.startTimestamp) < threshHold : true
+      ),
     [threshHold, openPools]
   );
   const stakedOnlyFinishedPools = useMemo(
     () =>
-      finishedPools2.filter((pool: { userData: { stakedBalance: BigNumber.Value } }) => {
-        return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0);
+      finishedPools.filter((pool) => {
+        return pool?.owner?.toLowerCase() === account?.toLowerCase();
       }),
-    [finishedPools2]
+    [finishedPools]
   );
   const stakedOnlyOpenPools = useCallback(() => {
     return openPoolsWithStartBlockFilter.filter((pool) => {
-      return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0);
+      return pool?.owner?.toLowerCase() === account?.toLowerCase();
     });
   }, [openPoolsWithStartBlockFilter]);
-  const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0;
 
   useEffect(() => {
     if (isIntersecting) {
@@ -137,7 +136,7 @@ export function PoolControls<T>({
       });
     }
   }, [isIntersecting]);
-  const showFinishedPools = router.asPath.includes("under");
+  const showFinishedPools = router.pathname.includes("manual");
 
   const handleChangeSearchQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),
@@ -148,7 +147,7 @@ export function PoolControls<T>({
 
   let chosenPools: any;
   if (showFinishedPools) {
-    chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools2;
+    chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools;
   } else {
     chosenPools = stakedOnly ? stakedOnlyOpenPools() : openPoolsWithStartBlockFilter;
   }
@@ -156,13 +155,11 @@ export function PoolControls<T>({
   chosenPools = useMemo(() => {
     const sortedPools = sortPools<T>(sortOption, chosenPools)
       .slice(0, numberOfPoolsVisible)
-      .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.token?.address) : true));
+      .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.id) : true));
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
-      return sortedPools.filter((pool: any) =>
-        latinise(pool?.earningToken?.symbol?.toLowerCase() || "").includes(lowercaseQuery)
-      );
+      return sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
     }
     return sortedPools;
   }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
@@ -182,9 +179,9 @@ export function PoolControls<T>({
           setStakedOnly={setStakedOnly}
           favoritesOnly={favoritesOnly}
           setFavoritesOnly={setFavoritesOnly}
-          hasStakeInFinishedPools={hasStakeInFinishedPools}
           viewMode={viewMode}
           setViewMode={setViewMode}
+          hideViewMode={hideViewMode}
         />
         <FilterContainer>
           <LabelWrapper>
@@ -195,24 +192,28 @@ export function PoolControls<T>({
               <Select
                 options={[
                   {
-                    label: t("Hot"),
-                    value: "hot",
+                    label: t("Status"),
+                    value: "status",
                   },
                   {
-                    label: t("APR"),
-                    value: "apr",
+                    label: t("Mintable"),
+                    value: "mintable",
                   },
                   {
-                    label: t("Earned"),
-                    value: "earned",
+                    label: t("Minted Liquidity"),
+                    value: "minted",
                   },
                   {
-                    label: t("Total staked"),
-                    value: "totalStaked",
+                    label: t("Burnt Liquidity"),
+                    value: "burnt",
                   },
                   {
-                    label: t("Latest"),
-                    value: "latest",
+                    label: t("Max Partners"),
+                    value: "maxPartners",
+                  },
+                  {
+                    label: t("Sale Price"),
+                    value: "salePrice",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}

@@ -10,14 +10,14 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { address: account } = useAccount()
 
   const actionTitle = (
-    <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+    <Flex flex="1" flexDirection="row" alignSelf="flex-center">
       {rampAccount ? (
-        <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+        <Text fontSize="12px" bold mr="2px" color="textSubtle" as="span" textTransform="uppercase">
           {t('Current Token')}{' '}
         </Text>
       ) : null}
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {rampAccount?.symbol}
+        {rampAccount?.token?.symbol ?? ''}
       </Text>
     </Flex>
   )
@@ -127,13 +127,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.bountyId) ? (
+            {parseInt(rampAccount?.bountyId) ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={rampAccount?.token?.bountyId}
+                value={rampAccount?.bountyId}
                 prefix="# "
               />
             ) : (
@@ -146,13 +146,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.profileId) ? (
+            {parseInt(rampAccount?.profileId) ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={rampAccount?.token?.profileId}
+                value={rampAccount?.profileId}
                 prefix="# "
               />
             ) : (
@@ -165,13 +165,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.token?.badgeId) ? (
+            {parseInt(rampAccount?.badgeId) ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={rampAccount?.token?.profileId}
+                value={rampAccount?.profileId}
                 prefix="# "
               />
             ) : (
