@@ -831,7 +831,13 @@ export const getCollectionActivity = async (
             ${transactionHistoryFields}
             item {
                 ${itemFields}
-              }
+            }
+            paywall {
+              ${paywallFields}
+            }
+            nft {
+              ${nftFields}
+            }
           }`
     : ``
 

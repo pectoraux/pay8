@@ -13,7 +13,7 @@ import {
   ArrowDownIcon,
 } from '@pancakeswap/uikit'
 import { Collection, MarketEvent } from 'state/nftMarket/types'
-import { useGetCollections } from 'state/nftMarket/hooks'
+import { useGetCollections } from 'state/cancan/hooks'
 import { useNftStorage } from 'state/nftMarket/storage'
 import { useTranslation } from '@pancakeswap/localization'
 import { isAddress } from 'utils'

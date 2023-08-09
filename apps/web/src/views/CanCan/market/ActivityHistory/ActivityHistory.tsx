@@ -65,6 +65,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
         setIsLoading(true)
         const nftActivityFiltersParsed = JSON.parse(nftActivityFiltersString)
         const collectionActivity = await getCollectionActivity(collectionId, nftActivityFiltersParsed, MAX_PER_QUERY)
+        console.log('collectionActivity==========================>', collectionActivity)
         const activity = sortActivity(collectionActivity)
         setPaginationData({
           activity,
@@ -232,6 +233,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
                 ) : (
                   activitiesSlice.map((activity) => {
                     const nft = activity?.item ?? activity?.paywall
+                    console.log('activity=====================>', activity, nft)
                     return (
                       <ActivityRow
                         key={`${activity.marketEvent}#${nft?.tokenId}#${activity.timestamp}#${activity.tx}`}
