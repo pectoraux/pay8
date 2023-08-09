@@ -10,11 +10,12 @@ const CollectibleLinkCard: React.FC<any> = ({
   referrer,
   nftLocation,
   currentAskPrice,
+  collectionId,
   isPaywall = false,
   ...props
 }) => {
   const urlId = nft?.tokenId
-  const collectionAddress = useRouter().query.collectionAddress as string
+  const collectionAddress = collectionId ?? (useRouter().query.collectionAddress as string)
   const link = isPaywall
     ? `${cancanBaseUrl}/collections/${collectionAddress}/paywall/${urlId}`
     : `${cancanBaseUrl}/collections/${collectionAddress}/${urlId}`

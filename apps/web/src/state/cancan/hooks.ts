@@ -22,6 +22,8 @@ import {
   getTokenForCredit,
   getNFTMarketTokenForCredit,
   getVeToken,
+  getItemSg,
+  getCollectionId,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 
@@ -145,25 +147,40 @@ export const useGetCollectionContracts = (collectionAddress: string) => {
 }
 
 export const useGetPaymentCredits = (collectionAddress: string, tokenId: string, address: string) => {
-  const { data } = useSWRImmutable(['cancan', 'paymentCredits2'], async () =>
+  const { data } = useSWRImmutable(['cancan', 'paymentCredits'], async () =>
     getPaymentCredits(collectionAddress, tokenId, address),
   )
   return data?.length === 0 ? 0 : data
 }
 
-export const useGetItem = (collectionAddress: string, tokenId: string, address) => {
-  const { data, status } = useSWR(
-    ['cancan', 'getItem'],
-    async () => getPaymentCredits(collectionAddress, tokenId, address),
+export const useGetItem = (collectionAddress: string, tokenId: string) => {
+  const { data } = useSWR(
+    ['cancan-getItem1', collectionAddress, tokenId],
+    async () => getItemSg(`${collectionAddress}-${tokenId}`),
     {
       revalidateIfStale: true,
       revalidateOnFocus: true,
       revalidateOnReconnect: false,
     },
   )
-  return {
-    item: data,
-    status,
+  return data
+}
+
+export const useGetCollectionId = (collectionAddress) => {
+  try {
+    const { data } = useSWR(
+      ['cancan-getCollectionId4', collectionAddress],
+      async () => getCollectionId(collectionAddress),
+      {
+        revalidateIfStale: true,
+        revalidateOnFocus: true,
+        revalidateOnReconnect: false,
+      },
+    )
+    console.log('useGetCollectionId==========>', data)
+    return data
+  } catch (err) {
+    console.log('useGetCollectionId err=============+>', err)
   }
 }
 

@@ -2,6 +2,12 @@ import Trans from 'components/Trans'
 import { VaultKey } from 'state/types'
 import { bscTokens } from '@pancakeswap/tokens'
 
+export const WEEKS_IN_FOUR_YEARS = 52 * 4
+export const MAX_LOCK_DURATION = WEEKS_IN_FOUR_YEARS * 7 * 86400
+export const MAX_TIME = 4 * 365 * 86400
+export const UNLOCK_FREE_DURATION = 604800
+export const ONE_WEEK_DEFAULT = 604800
+
 export const vaultPoolConfig = {
   [VaultKey.CakeVaultV1]: {
     name: <Trans>Auto CAKE</Trans>,

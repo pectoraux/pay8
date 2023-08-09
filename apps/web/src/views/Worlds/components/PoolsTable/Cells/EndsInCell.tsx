@@ -19,12 +19,12 @@ const EndsInCell: React.FC<any> = ({ labelText, currAccount }) => {
   console.log('currAccount===============>', currAccount)
   const getDate = () => {
     try {
-      return format(convertTimeToSeconds('1982182712'), 'MMM do, yyyy HH:mm')
+      return Number('1982182712') ? format(convertTimeToSeconds('1982182712'), 'MMM do, yyyy HH:mm') : '-'
     } catch (err) {
       return '-'
     }
-    return '-'
   }
+
   return (
     <StyledCell role="cell">
       <Pool.CellContent>

@@ -11,15 +11,15 @@ import {
   TelegramIcon,
   ProposalIcon,
   SmartContractIcon,
+  ReactMarkdown,
+  Box,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useAppDispatch } from 'state'
-import { useRouter } from 'next/router'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -36,6 +36,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
 
   return (
     <>
+      {currAccount?.description ? (
+        <Box>
+          <ReactMarkdown>{currAccount.description}</ReactMarkdown>
+        </Box>
+      ) : null}
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
@@ -50,18 +55,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
+      {pool?.collectionId ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
-          </ScanLink>
+          <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
+            {t('See Admin Channel')}
+          </LinkExternal>
         </Flex>
-      )}
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
-          {t('See Admin Channel')}
-        </LinkExternal>
-      </Flex>
+      ) : null}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

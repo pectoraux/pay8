@@ -72,6 +72,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE]: t('Back'),
   [LockStage.CONFIRM_START_WAITING_PERIOD]: t('Back'),
   [LockStage.CONFIRM_APPLY]: t('Back'),
+  [LockStage.CONFIRM_ACCEPT]: t('Back'),
   [LockStage.CONFIRM_DEPOSIT]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_MINT_NOTE]: t('Back'),
@@ -94,7 +95,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const dispatch = useAppDispatch()
-  const adminPool = usePool(sousId) as any
+  const _adminPool = usePool(sousId)
+  const adminPool = _adminPool?.pool as any
   const { toastSuccess } = useToast()
   // const _adminARP = useGetAdminARP()
   const adminARP = pool
@@ -326,14 +328,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
         break
     }
   }
-
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
-      try {
-        return requiresApproval(stakingTokenContract, account, stakeMarketContract.address)
-      } catch (error) {
-        return true
-      }
+      // try {
+      //   console.log("stakingTokenContract============>", stakingTokenContract, account, stakeMarketContract.address, await requiresApproval(stakingTokenContract, account, stakeMarketContract.address))
+      //   return requiresApproval(stakingTokenContract, account, stakeMarketContract.address)
+      // } catch (error) {
+      //   return true
+      // }
+      return true
     },
     onApprove: () => {
       return callWithGasPrice(stakingTokenContract, 'approve', [stakeMarketContract.address, MaxUint256])

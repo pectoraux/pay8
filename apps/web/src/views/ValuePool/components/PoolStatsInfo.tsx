@@ -36,13 +36,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
 
   return (
     <>
-      {pool?.owner && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
-            {t('View Owner Info')}
-          </ScanLink>
-        </Flex>
-      )}
       {pool?.devaddr_ && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.devaddr_, 'address', chainId)} bold={false} small>
@@ -50,18 +43,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
+      {pool?.collection ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
-          </ScanLink>
+          <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
+            {t('See Admin Channel')}
+          </LinkExternal>
         </Flex>
-      )}
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
-          {t('See Admin Channel')}
-        </LinkExternal>
-      </Flex>
+      ) : null}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

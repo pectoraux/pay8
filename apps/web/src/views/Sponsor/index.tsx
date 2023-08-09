@@ -42,6 +42,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     <CreateGaugeModal variant="admin" location="fromSponsor" currency={currency} pool={ogSponsor} />,
   )
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  console.log('pools========>', pools)
 
   usePoolsPageFetch()
 
@@ -89,7 +90,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{sponsor}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools}>
+        <PoolControls pools={pools?.length && ogSponsor?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>
@@ -97,8 +98,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
                     key={pool.sousId}
-                    sousId={pool.sousId}
                     account={account}
+                    id={ogSponsor.id}
+                    protocolId={pool.protocolId}
                   />
                 ))}
               </Pool.PoolsTable>

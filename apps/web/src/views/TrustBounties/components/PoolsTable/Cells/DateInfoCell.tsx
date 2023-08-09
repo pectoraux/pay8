@@ -18,7 +18,7 @@ const StyledCell = styled(Pool.BaseCell)`
 const DateInfoCell: React.FC<any> = ({ labelText, pool }) => {
   const getDate = () => {
     try {
-      return format(convertTimeToSeconds(pool?.endTime), 'MMM do, yyyy HH:mm')
+      return Number(pool?.endTime) ? format(convertTimeToSeconds(pool?.endTime), 'MMM do, yyyy HH:mm') : '-'
     } catch (err) {
       return '-'
     }

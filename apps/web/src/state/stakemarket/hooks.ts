@@ -16,11 +16,24 @@ export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const collectionId = useRouter().query.collectionAddress as string
 
-  useSWR('stakes', async () => {
-    batch(() => {
-      dispatch(fetchStakesAsync(collectionId ?? 0))
-    })
-  })
+  useSWR(
+    ['/stakes'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchStakesAsync(collectionId ?? 0))
+        })
+      }
+
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean } => {

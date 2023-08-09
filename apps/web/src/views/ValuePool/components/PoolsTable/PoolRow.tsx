@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Pool } from '@pancakeswap/uikit'
-import { usePool } from 'state/valuepools/hooks'
+import { usePool2 } from 'state/valuepools/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 
@@ -11,11 +11,11 @@ import VaSpecsCell from './Cells/VaSpecsCell'
 import VaSpecs2Cell from './Cells/VaSpecs2Cell'
 
 const PoolRow: React.FC<any> = ({ id, account, vpAccount, initialActivity }) => {
-  const { pool } = usePool(id)
+  const { pool } = usePool2(id)
   const { t } = useTranslation()
   const vpCurrencyInput = useCurrency(pool?.tokenAddress)
 
-  console.log('valuepool====>', vpAccount, pool)
+  console.log('valuepool====>', vpAccount, pool, id)
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
       <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} vpAccount={vpAccount} />

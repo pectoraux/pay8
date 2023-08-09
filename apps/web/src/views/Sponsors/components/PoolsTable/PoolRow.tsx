@@ -9,13 +9,17 @@ import EndsInCell from './Cells/EndsInCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
-  const currAccount = useMemo(() => pool?.accounts?.find((n) => n.id === currState[pool?.id]), [pool, currState])
-  console.log('sponsorpool====>', pool, currAccount)
+  const currAccount = useMemo(
+    () => pool?.accounts?.find((n) => n.protocolId === currState[pool?.id]),
+    [pool, currState],
+  )
+  console.log('sponsorpool====>', pool, currAccount, currState)
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
@@ -25,7 +29,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
       <TotalValueCell
         labelText={t('Due Now')}
-        amount={currAccount?.duePayable}
+        amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
         symbol={currAccount?.token?.symbol ?? ''}
       />
       <VotesCell pool={pool} />

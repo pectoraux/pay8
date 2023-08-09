@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
-import { Text, Link, AutoColumn } from '@pancakeswap/uikit'
-import { isAddress } from 'utils'
+import { Text, Link, AutoColumn, ScanLink } from '@pancakeswap/uikit'
+import { getBlockExploreLink, isAddress } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { RowBetween } from 'components/Layout/Row'
@@ -100,9 +100,9 @@ export default function AddressInputPanel({
             <RowBetween>
               <Text>{t('Funding Contract')}</Text>
               {address && chainId && (
-                <Link external href={`/info/token/${address}`} small>
-                  ({t('View on BscScan')})
-                </Link>
+                <ScanLink href={getBlockExploreLink(address, 'address', chainId)} small>
+                  ({t('View on Blockchain Scan')})
+                </ScanLink>
               )}
             </RowBetween>
             <Input

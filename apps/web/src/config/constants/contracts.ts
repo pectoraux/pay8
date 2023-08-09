@@ -469,23 +469,23 @@ export default {
     56: '0x',
   },
   valuepoolVoter: {
-    4002: '0x7c6b04D94232FB98b44F4C91EBe7b3AaE60fe55D',
+    4002: '0x312B3E91e01D87F46B45A23368B0fDE988aFdddD',
     56: '0x',
   },
   vaFactory: {
-    4002: '0x1fb4E32FDA61810D159afD6B637167670949c94B',
+    4002: '0xd01A8bb066Ee9cb795366b91a632eFD492B200Bc',
     56: '0x',
   },
   valuepoolFactory: {
-    4002: '0x300C09Bf6f68D52Bf633df75E681d5f27e4f8002',
+    4002: '0x183D70a3cf5e467049A82e79f7C50B488A46D477',
     56: '0x',
   },
   valuepoolHelper: {
-    4002: '0xB006b694E29Ab31c8892774725d5e7fd0079328B',
+    4002: '0x350499C782d15Df1839E74A3E8999FbC86A49c33',
     56: '0x',
   },
   valuepoolHelper2: {
-    4002: '0x776B2cE7C144e3958a50FFE084C587038d0E7e90',
+    4002: '0x55B4098BF974fec1387aBE50329027142Bf1f7c9',
     56: '0x',
   },
   businessVoter: {

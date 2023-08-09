@@ -1,12 +1,15 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { Text, Flex, Box, Card, LinkExternal, Button, useToast, AutoRenewIcon } from '@pancakeswap/uikit'
+import { Text, Flex, Box, Card, Button, useToast, AutoRenewIcon, ScanLink } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { CollectibleLinkCard } from 'views/CanCan/market/components/CollectibleCard'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useValuepoolContract } from 'hooks/useContract'
+import { getBlockExploreLink } from 'utils'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useGetCollectionId, useGetItem } from 'state/cancan/hooks'
 
 const CardWrapper = styled(Box)`
   display: inline-block;
@@ -28,24 +31,29 @@ export const ScrollableRow = styled.div`
   }
 `
 
-const DataCard = ({ t, nft, schedulePurchase }) => {
+const DataCard = ({ t, schedulePurchase }) => {
+  const collectionId = useGetCollectionId(schedulePurchase.collection) as any
+  const nft = useGetItem(collectionId, schedulePurchase.productId) as any
+  console.log('DataCard===================>', collectionId, nft, schedulePurchase)
   const currentAskPriceAsNumber = nft && parseFloat(nft?.currentAskPrice)
-
+  const { chainId } = useActiveChainId()
   return (
     <CardWrapper style={{ whiteSpace: 'break-spaces' }}>
       <Flex mb="2px" justifyContent="center" alignSelf="center">
-        <LinkExternal href={schedulePurchase?.owner} bold={false} small>
+        <ScanLink href={getBlockExploreLink(schedulePurchase?.from, 'address', chainId)} bold={false} small>
           {t('See Owner Channel')}
-        </LinkExternal>
+        </ScanLink>
       </Flex>
-      <Flex flexDirection="column" justifyContent="center" alignSelf="center">
-        <CollectibleLinkCard
-          key={nft.tokenId}
-          nft={nft}
-          referrer={nft?.owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase() && nft?.currentSeller}
-          currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
-        />
-      </Flex>
+      {nft ? (
+        <Flex flexDirection="column" justifyContent="center" alignSelf="center">
+          <CollectibleLinkCard
+            key={nft?.tokenId}
+            nft={nft}
+            collectionId={collectionId}
+            currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
+          />
+        </Flex>
+      ) : null}
     </CardWrapper>
   )
 }
@@ -119,7 +127,7 @@ const Cart: React.FC<any> = ({ queue, valuepoolAddress }) => {
       ) : null}
       <ScrollableRow ref={increaseRef}>
         {queue.map((entry) => (
-          <DataCard t={t} nft={entry[0]} schedulePurchase={entry[0]} />
+          <DataCard t={t} schedulePurchase={entry} />
         ))}
       </ScrollableRow>
     </Card>

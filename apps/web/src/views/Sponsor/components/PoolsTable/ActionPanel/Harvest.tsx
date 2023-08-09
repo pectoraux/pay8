@@ -16,7 +16,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
     hours: hoursPayable,
     minutes: minutesPayable,
   } = getTimePeriods(Number(currAccount?.periodPayable ?? '0'))
-
+  console.log('currAccount=================>', currAccount)
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">

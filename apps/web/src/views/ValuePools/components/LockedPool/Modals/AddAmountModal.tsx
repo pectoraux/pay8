@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import { differenceInSeconds } from 'date-fns'
 import { convertTimeToSeconds } from 'utils/timeHelper'
-import { Modal, Box, MessageText, Message, Checkbox, Flex, Text } from '@pancakeswap/uikit'
+import { Modal, Box, MessageText, Message, Checkbox, Flex, Text, Button, Skeleton } from '@pancakeswap/uikit'
 import _noop from 'lodash/noop'
 import { useTranslation } from '@pancakeswap/localization'
 import BigNumber from 'bignumber.js'
@@ -20,21 +20,26 @@ import BalanceField from '../Common/BalanceField'
 import LockedBodyModal from '../Common/LockedModalBody'
 import Overview from '../Common/Overview'
 import { AddAmountModalProps } from '../types'
+import { setCurrPoolData } from 'state/valuepools'
+import { useAppDispatch } from 'state'
+import { useCurrPool } from 'state/valuepools/hooks'
 
 const RenewDuration = ({ setCheckedState, checkedState }) => {
   const { t } = useTranslation()
 
   return (
     <>
-      {!checkedState && (
-        <Message variant="warning" mb="16px">
-          <MessageText maxWidth="320px">
-            {t(
-              'Adding more CAKE will renew your lock, setting it to remaining duration. Due to shorter lock period, benefits decrease. To keep similar benefits, extend your lock.',
-            )}
-          </MessageText>
-        </Message>
-      )}
+      <Flex alignItems="center" maxWidth="420px">
+        {!checkedState && (
+          <Message variant="warning" mb="16px">
+            <MessageText>
+              {t(
+                'Adding more token will renew your lock, setting it to remaining duration. Due to shorter lock period, benefits decrease. To keep similar benefits, extend your lock.',
+              )}
+            </MessageText>
+          </Message>
+        )}
+      </Flex>
       <Flex alignItems="center">
         <Checkbox checked={checkedState} onChange={() => setCheckedState((prev) => !prev)} scale="sm" />
         <Text ml="8px" color="text">
@@ -47,66 +52,54 @@ const RenewDuration = ({ setCheckedState, checkedState }) => {
 // add 60s buffer in order to make sure minimum duration by pass on renew extension
 const MIN_DURATION_BUFFER = 60
 
-const AddAmountModal: React.FC<React.PropsWithChildren<AddAmountModalProps>> = ({
+const AddAmountModal: React.FC<any> = ({
+  pool,
   onDismiss,
   currentBalance,
   currentLockedAmount,
   stakingToken,
-  lockStartTime,
   lockEndTime,
   stakingTokenBalance,
-  customLockAmount,
 }) => {
-  const { theme } = useTheme()
-  const ceiling = useIfoCeiling()
+  const ceiling = new BigNumber(1460).toJSON()
   const [lockedAmount, setLockedAmount] = useState('')
+  const dispatch = useAppDispatch()
+  const currState = useCurrPool()
   const [checkedState, setCheckedState] = useState(false)
   const { t } = useTranslation()
-
-  useEffect(() => {
-    if (customLockAmount) {
-      setLockedAmount(customLockAmount)
-    }
-  }, [customLockAmount])
-
-  const lockedAmountAsBigNumber = useMemo(
-    () => (!Number.isNaN(new BigNumber(lockedAmount).toNumber()) ? new BigNumber(lockedAmount) : BIG_ZERO),
-    [lockedAmount],
-  )
-
+  const { tokenAddress, userData } = pool
+  const lockedAmountAsBigNumber = !Number.isNaN(new BigNumber(lockedAmount).toNumber())
+    ? new BigNumber(lockedAmount)
+    : BIG_ZERO
   const totalLockedAmount: number = getBalanceNumber(
     currentLockedAmount.plus(getDecimalAmount(lockedAmountAsBigNumber)),
   )
-  const currentLockedAmountAsBalance = getBalanceAmount(currentLockedAmount)
-
   const usdValueStaked = useBUSDCakeAmount(lockedAmountAsBigNumber.toNumber())
   const usdValueNewStaked = useBUSDCakeAmount(totalLockedAmount)
-
   const remainingDuration = differenceInSeconds(new Date(convertTimeToSeconds(lockEndTime)), new Date(), {
-    roundingMethod: 'ceil',
-  })
-  const passedDuration = differenceInSeconds(new Date(), new Date(convertTimeToSeconds(lockStartTime)), {
     roundingMethod: 'ceil',
   })
 
   // if you locked for 1 week, then add cake without renew the extension, it's possible that remainingDuration + passedDuration less than 1 week.
-  const atLeastOneWeekNewDuration = Math.max(ONE_WEEK_DEFAULT + MIN_DURATION_BUFFER, remainingDuration + passedDuration)
-
+  const atLeastOneWeekNewDuration = Math.max(ONE_WEEK_DEFAULT + MIN_DURATION_BUFFER, remainingDuration)
   const prepConfirmArg = useCallback(() => {
     const extendDuration = atLeastOneWeekNewDuration - remainingDuration
     return {
       finalDuration: checkedState ? extendDuration : 0,
+      methodName: 'increase_amount',
+      checkedState,
     }
   }, [atLeastOneWeekNewDuration, checkedState, remainingDuration])
 
   const customOverview = useCallback(
-    () => (
+    ({ duration }) => (
       <Overview
         isValidDuration
         openCalculator={_noop}
+        stakingToken={stakingToken}
         duration={remainingDuration}
-        newDuration={checkedState ? atLeastOneWeekNewDuration : null}
-        lockedAmount={currentLockedAmountAsBalance.toNumber()}
+        newDuration={checkedState ? duration : null}
+        lockedAmount={currentLockedAmount.toNumber()}
         newLockedAmount={totalLockedAmount}
         usdValueStaked={usdValueNewStaked}
         lockEndTime={lockEndTime}
@@ -114,10 +107,10 @@ const AddAmountModal: React.FC<React.PropsWithChildren<AddAmountModalProps>> = (
       />
     ),
     [
+      stakingToken,
       remainingDuration,
       checkedState,
-      currentLockedAmountAsBalance,
-      atLeastOneWeekNewDuration,
+      currentLockedAmount,
       totalLockedAmount,
       usdValueNewStaked,
       lockEndTime,
@@ -125,38 +118,55 @@ const AddAmountModal: React.FC<React.PropsWithChildren<AddAmountModalProps>> = (
     ],
   )
 
-  const { allowance } = useCheckVaultApprovalStatus(VaultKey.CakeVault)
-  const needApprove = useMemo(() => {
-    const amount = getDecimalAmount(new BigNumber(lockedAmount))
-    return amount.gt(allowance)
-  }, [allowance, lockedAmount])
-
   return (
     <RoiCalculatorModalProvider lockedAmount={lockedAmount}>
-      <Modal title={t('Add CAKE')} onDismiss={onDismiss} headerBackground={theme.colors.gradientCardHeader}>
-        <Box mb="16px">
-          <BalanceField
-            stakingAddress={stakingToken.address}
-            stakingSymbol={stakingToken.symbol}
-            stakingDecimals={stakingToken.decimals}
-            lockedAmount={lockedAmount}
-            usedValueStaked={usdValueStaked}
-            stakingMax={currentBalance}
-            setLockedAmount={setLockedAmount}
-            stakingTokenBalance={stakingTokenBalance}
-            needApprove={needApprove}
-          />
-        </Box>
-        <LockedBodyModal
-          currentBalance={currentBalance}
-          stakingToken={stakingToken}
-          onDismiss={onDismiss}
-          lockedAmount={lockedAmountAsBigNumber}
-          editAmountOnly={<RenewDuration checkedState={checkedState} setCheckedState={setCheckedState} />}
-          prepConfirmArg={prepConfirmArg}
-          customOverview={customOverview}
+      <Text color="textSubtle" textTransform="uppercase" bold fontSize="12px">
+        {t('Pick a token ID')}
+      </Text>
+      <Flex flexWrap="wrap" justifyContent="center" alignItems="center">
+        {userData.nfts?.length ? (
+          userData.nfts.map((balance) => (
+            <Button
+              key={balance.id}
+              onClick={() => {
+                const newState = { ...currState, [pool?.valuepoolAddress]: balance.id }
+                dispatch(setCurrPoolData(newState))
+              }}
+              mt="4px"
+              mr={['2px', '2px', '4px', '4px']}
+              scale="sm"
+              variant={currState[pool?.valuepoolAddress] === balance.id ? 'subtle' : 'tertiary'}
+            >
+              {balance.id}
+            </Button>
+          ))
+        ) : (
+          <Skeleton width={180} height="32px" mb="2px" />
+        )}
+      </Flex>
+      <Box mb="16px">
+        <BalanceField
+          stakingAddress={stakingToken.address}
+          stakingSymbol={stakingToken.symbol}
+          stakingDecimals={stakingToken.decimals}
+          lockedAmount={lockedAmount}
+          usedValueStaked={usdValueStaked}
+          stakingMax={currentBalance}
+          setLockedAmount={setLockedAmount}
+          stakingTokenBalance={stakingTokenBalance}
         />
-      </Modal>
+      </Box>
+      <LockedBodyModal
+        pool={pool}
+        currentBalance={currentBalance}
+        stakingToken={stakingToken}
+        onDismiss={onDismiss}
+        lockedAmount={lockedAmountAsBigNumber}
+        editAmountOnly={<RenewDuration checkedState={checkedState} setCheckedState={setCheckedState} />}
+        checkedState={checkedState}
+        prepConfirmArg={prepConfirmArg}
+        customOverview={customOverview}
+      />
     </RoiCalculatorModalProvider>
   )
 }

@@ -1,24 +1,22 @@
-import { useState, useCallback, Dispatch, SetStateAction } from 'react'
-import { useAccount } from 'wagmi'
-import { useSWRConfig } from 'swr'
+import { useState, useCallback, Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
+import { ONE_WEEK_DEFAULT, MAX_TIME } from '@pancakeswap/pools'
 import { useAppDispatch } from 'state'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
-import { useVaultPoolContract } from 'hooks/useContract'
+import { useVaContract } from 'hooks/useContract'
 import BigNumber from 'bignumber.js'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useToast } from '@pancakeswap/uikit'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { fetchCakeVaultUserData } from 'state/pools'
 import { Token } from '@pancakeswap/sdk'
-import { vaultPoolConfig } from 'config/constants/pools'
 import { VaultKey } from 'state/types'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { PrepConfirmArg } from '../types'
+import { useCurrPool } from 'state/valuepools/hooks'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { vaultPoolConfig } from 'config/constants/pools'
 
 interface HookArgs {
   lockedAmount: BigNumber
@@ -36,68 +34,92 @@ interface HookReturn {
   handleConfirmClick: () => Promise<void>
 }
 
-export default function useLockedPool(hookArgs: HookArgs): HookReturn {
-  const { lockedAmount, stakingToken, onDismiss, prepConfirmArg, defaultDuration = ONE_WEEK_DEFAULT } = hookArgs
-
+export default function useLockedPool(hookArgs: any): any {
+  const { pool, lockedAmount, identityTokenId, stakingToken, onDismiss, prepConfirmArg } = hookArgs
   const dispatch = useAppDispatch()
-  const { chainId } = useActiveChainId()
+  const currState = useCurrPool()
 
-  const { address: account } = useAccount()
+  const { account } = useWeb3React()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const vaultPoolContract = useVaultPoolContract(VaultKey.CakeVault)
+  const vaContract = useVaContract(pool?.ve ?? '')
   const { callWithGasPrice } = useCallWithGasPrice()
-
+  const methodName = typeof prepConfirmArg === 'function' ? prepConfirmArg().methodName : 'create_lock_for'
+  const checkedState = typeof prepConfirmArg === 'function' ? prepConfirmArg().checkedState : true
+  const tokenId = currState[pool?.valuepoolAddress]
+  const nft = useMemo(
+    () => pool?.userData?.nfts?.find((n) => n.id === currState[pool?.valuepoolAddress]),
+    [pool, currState],
+  )
   const { t } = useTranslation()
-  const { mutate } = useSWRConfig()
   const { toastSuccess } = useToast()
-  const [duration, setDuration] = useState(() => defaultDuration)
+  const [duration, setDuration] = useState(ONE_WEEK_DEFAULT)
   const usdValueStaked = useBUSDCakeAmount(lockedAmount.toNumber())
-
+  console.log('9vaContract====================>', hookArgs)
   const handleDeposit = useCallback(
     async (convertedStakeAmount: BigNumber, lockDuration: number) => {
       const callOptions = {
-        gas: vaultPoolConfig[VaultKey.CakeVault].gasLimit,
+        gasLimit: vaultPoolConfig[VaultKey.CakeVault].gasLimit,
       }
-
-      const receipt = await fetchWithCatchTxError(() => {
-        const methodArgs = [BigInt(convertedStakeAmount.toString()), BigInt(lockDuration)] as const
-        return callWithGasPrice(vaultPoolContract, 'deposit', methodArgs, callOptions)
+      // eslint-disable-next-line consistent-return
+      const receipt = await fetchWithCatchTxError(async () => {
+        // .toString() being called to fix a BigNumber error in prod
+        // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
+        const methodArgs =
+          methodName === 'create_lock_for'
+            ? [convertedStakeAmount.toString(), lockDuration, Number(identityTokenId) ?? 0, account]
+            : methodName === 'increase_amount'
+            ? [tokenId, convertedStakeAmount.toString()]
+            : [tokenId]
+        console.log('1useLockedPool==============>', vaContract, methodName, methodArgs)
+        return callWithGasPrice(vaContract, methodName, methodArgs, callOptions)
+          .then(() => {
+            if (methodName === 'increase_amount') {
+              callWithGasPrice(
+                vaContract,
+                'increase_unlock_time',
+                [tokenId, Math.min(lockDuration + parseInt(nft.lockEnds), MAX_TIME)],
+                callOptions,
+              )
+            }
+          })
+          .catch((err) => console.log('useLockedPool==============>', methodName, methodArgs, err))
       })
 
       if (receipt?.status) {
         toastSuccess(
-          t('Staked!'),
+          t('Lock successfully created!'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
             {t('Your funds have been staked in the pool')}
           </ToastDescriptionWithTx>,
         )
+        // dispatch(fetchValuepoolsUserDataAsync(account))
         onDismiss?.()
-        dispatch(fetchCakeVaultUserData({ account, chainId }))
-        mutate(['userCakeLockStatus', account])
       }
     },
     [
+      nft,
       fetchWithCatchTxError,
       toastSuccess,
       dispatch,
       onDismiss,
       account,
-      vaultPoolContract,
+      vaContract,
+      identityTokenId,
       t,
       callWithGasPrice,
-      mutate,
-      chainId,
+      methodName,
+      tokenId,
     ],
   )
 
   const handleConfirmClick = useCallback(async () => {
-    const { finalLockedAmount = lockedAmount, finalDuration = duration } =
-      typeof prepConfirmArg === 'function' ? prepConfirmArg({ duration }) : {}
+    const { finalLockedAmount = lockedAmount, finalDuration = checkedState ? duration : 0 } = {}
+    // typeof prepConfirmArg === 'function' ? prepConfirmArg({ duration }) : {}
 
     const convertedStakeAmount: BigNumber = getDecimalAmount(new BigNumber(finalLockedAmount), stakingToken.decimals)
 
     handleDeposit(convertedStakeAmount, finalDuration)
-  }, [prepConfirmArg, stakingToken, handleDeposit, duration, lockedAmount])
+  }, [checkedState, stakingToken, handleDeposit, duration, lockedAmount])
 
   return { usdValueStaked, duration, setDuration, pendingTx, handleConfirmClick }
 }

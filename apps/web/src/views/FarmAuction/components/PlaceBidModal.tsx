@@ -89,7 +89,7 @@ const PlaceBidModal: React.FC<React.PropsWithChildren<PlaceBidModalProps>> = ({
 
   useEffect(() => {
     if (userNotEnoughCake) {
-      setErrorText(t('Insufficient CAKE balance'))
+      setErrorText(t('insufficient balance'))
     } else if (!isMoreThanInitialBidAmount && isFirstBid) {
       setErrorText(t('First bid must be %initialBidAmount% CAKE or more.', { initialBidAmount }))
     } else if (!isMultipleOfTen) {

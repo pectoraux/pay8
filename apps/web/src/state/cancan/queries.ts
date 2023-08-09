@@ -183,9 +183,6 @@ likes
 disLikes
 superLikes
 superDisLikes
-reviews
-reviewers
-reviewTimes
 options {
   ${optionFields}
 }
@@ -210,7 +207,7 @@ priceReductor {
 identityProof {
   ${identityProofFields}
 }
-superReviews {
+reviews {
   ${reviewFields}
 }
 transactionHistory {

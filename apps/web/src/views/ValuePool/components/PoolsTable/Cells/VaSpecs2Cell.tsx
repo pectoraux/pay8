@@ -19,6 +19,11 @@ const StyledCell = styled(Pool.BaseCell)`
 const VaSpecs2Cell: React.FC<any> = ({ nft }) => {
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
+  console.log(
+    'VaSpecs2Cell===================>',
+    nft,
+    parseInt(nft.vavaPercentile ?? '0') + parseInt(nft.vePercentile ?? '0'),
+  )
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
@@ -31,7 +36,7 @@ const VaSpecs2Cell: React.FC<any> = ({ nft }) => {
                   fontSize="14px"
                   color="primary"
                   decimals={0}
-                  value={(parseInt(nft.vavaPercentile ?? '0') + parseInt(nft.vaPercentile ?? '0')) / 2}
+                  value={(parseInt(nft.vavaPercentile ?? '0') + parseInt(nft.vePercentile ?? '0')) / 2}
                   unit="%"
                 />
                 <Text fontSize="12px" color="textSubtle" textAlign="left">

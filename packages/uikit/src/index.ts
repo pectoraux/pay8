@@ -26,6 +26,7 @@ export * as Auditors from "./widgets/Auditors";
 export * as Bettings from "./widgets/Bettings";
 export * as Bills from "./widgets/Bills";
 export * as Bill from "./widgets/Bill";
+export * as ValuePool from "./widgets/ValuePool";
 export * as Businesses from "./widgets/Businesses";
 export * as Contributors from "./widgets/Contributors";
 export * as FutureCollaterals from "./widgets/FutureCollaterals";

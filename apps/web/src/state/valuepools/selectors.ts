@@ -9,6 +9,8 @@ const selectPoolsData = (state: State) => state.valuepools?.data
 const selectPoolData = (sousId) => (state: State) => state.valuepools?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
   state.valuepools.data.find((p) => p.id?.toLowerCase() === address?.toLowerCase())
+const selectPoolData3 = (address) => (state: State) =>
+  state.valuepools.data.find((p) => !!p.tokens.map((tk) => tk.id.toLowerCase() === address?.toLowerCase()))
 const selectUserDataLoaded = (state: State) => state.valuepools?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.valuepools ? state.valuepools[key] : {}
 const selectIfo = (state: State) => state.valuepools.ifo
@@ -56,6 +58,11 @@ export const makePoolWithUserDataLoadingSelector = (sousId) =>
 
 export const makePoolWithUserDataLoadingSelector2 = (address) =>
   createSelector([selectPoolData2(address), selectUserDataLoaded], (pool, userDataLoaded) => {
+    return { pool, userDataLoaded }
+  })
+
+export const makePoolWithUserDataLoadingSelector3 = (address) =>
+  createSelector([selectPoolData3(address), selectUserDataLoaded], (pool, userDataLoaded) => {
     return { pool, userDataLoaded }
   })
 

@@ -8,7 +8,7 @@ import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 const selectPoolsData = (state: State) => state.sponsors?.data
 const selectPoolData = (sousId) => (state: State) => state.sponsors?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.sponsors.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.sponsors.data.find((p) => p.id?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.sponsors?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.sponsors ? state.sponsors[key] : {}
 const selectIfo = (state: State) => state.sponsors.ifo

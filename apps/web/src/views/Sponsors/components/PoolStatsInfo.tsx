@@ -125,19 +125,19 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((balance) => (
+        {pool?.accounts?.map((acct) => (
           <Button
-            key={balance.token.address}
+            key={acct.protocolId}
             onClick={() => {
-              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
+              const newState = { ...currState, [pool?.id]: acct.protocolId }
               dispatch(setCurrPoolData(newState))
             }}
             mt="4px"
             mr={['2px', '2px', '4px', '4px']}
             scale="sm"
-            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+            variant={currState[pool?.id] === acct.protocolId ? 'subtle' : 'tertiary'}
           >
-            {balance.token.symbol}
+            {acct.protocolId}
           </Button>
         ))}
       </Flex>

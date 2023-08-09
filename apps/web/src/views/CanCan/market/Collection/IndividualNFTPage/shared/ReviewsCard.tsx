@@ -20,9 +20,11 @@ import {
   useMatchBreakpoints,
   Input,
   ReactMarkdown,
+  ScanLink,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import useCatchTxError from 'hooks/useCatchTxError'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { toDate, format } from 'date-fns'
@@ -35,6 +37,7 @@ import { useMarketCollectionsContract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ProposalStateTag } from './tags'
 import ExpandableCard from './ExpandableCard'
+import { getBlockExploreLink } from 'utils'
 
 interface ReviewsCardProps {
   reviews: any
@@ -65,24 +68,25 @@ const getFormattedDate = (timestamp: number) => {
   return format(date, 'MMM do, yyyy HH:mm')
 }
 
-const NormalReview: React.FC<any> = ({ body, reviewer, reviewTime = 0 }) => {
+const NormalReview: React.FC<any> = ({ review }) => {
   const { t } = useTranslation()
-  const { NormalReviewTag } = Farm.Tags
+  // const { NormalReviewTag } = Farm.Tags
+  const { chainId } = useActiveChainId()
   return (
-    <StyledProposalRow to={`/info/token/${reviewer}`}>
+    <StyledProposalRow to={getBlockExploreLink(review.reviewer, 'address', chainId)}>
       <Box as="span" style={{ flex: 1 }}>
-        <Text bold mb="8px">
-          {truncateHash(reviewer ?? '')}
-        </Text>
+        <ScanLink href={getBlockExploreLink(review.reviewer, 'address', chainId)} bold={false} small>
+          {truncateHash(review.reviewer ?? '')}
+        </ScanLink>
         <CardBody p="0" px="24px" color="textSubtle">
-          <ReactMarkdown>{body}</ReactMarkdown>
+          <ReactMarkdown>{review.body}</ReactMarkdown>
         </CardBody>
-        {reviewTime ? (
+        {review.reviewTime ? (
           <Flex alignItems="center" mb="8px">
-            <Text>{t('Posted on %date%', { date: getFormattedDate(Number(reviewTime)) })}</Text>
+            <Text>{t('Posted on %date%', { date: getFormattedDate(Number(review.reviewTime)) })}</Text>
           </Flex>
         ) : null}
-        <NormalReviewTag rating="0" />
+        {/* <NormalReviewTag rating="0" /> */}
       </Box>
       <IconButton variant="text">
         <ArrowForwardIcon width="24px" />
@@ -93,9 +97,9 @@ const NormalReview: React.FC<any> = ({ body, reviewer, reviewTime = 0 }) => {
 
 const SuperReview: React.FC<any> = ({ review }) => {
   const { t } = useTranslation()
-
+  const { chainId } = useActiveChainId()
   return (
-    <StyledProposalRow to={`/info/token/${review?.reviewer}`}>
+    <StyledProposalRow to={getBlockExploreLink(review?.reviewer, 'address', chainId)}>
       <Box as="span" style={{ flex: 1 }}>
         <Text bold mb="8px">
           {truncateHash(review?.reviewer ?? '')}
@@ -197,15 +201,12 @@ const ReviewsCard: React.FC<any> = ({ nft }) => {
         {activeButtonIndex > 0 ? (
           <Box style={{ overflow: 'hidden' }}>
             {activeButtonIndex === 1
-              ? nft?.superReviews?.map((review) => <SuperReview key={review?.id} review={review} />)
-              : nft?.reviews?.map((review, idx) => (
-                  <NormalReview
-                    key="normal-review"
-                    body={review}
-                    reviewer={nft?.reviewers[idx]}
-                    reviewerTime={nft?.reviewerTimes[idx]}
-                  />
-                ))}
+              ? nft?.reviews
+                  ?.filter((review) => !review.normalReview)
+                  ?.map((review) => <SuperReview key={review?.id} review={review} />)
+              : nft?.reviews
+                  ?.filter((review) => review.normalReview)
+                  ?.map((review, idx) => <NormalReview key="normal-review" review={review} />)}
           </Box>
         ) : (
           <>
@@ -244,8 +245,8 @@ const ReviewsCard: React.FC<any> = ({ nft }) => {
                           activeIndex={superLike}
                           onItemClick={setSuperLike}
                         >
-                          <ButtonMenuItem>{t('Super Dislike')}</ButtonMenuItem>
-                          <ButtonMenuItem>{t('Super Like')}</ButtonMenuItem>
+                          <ButtonMenuItem>{t('Dislike')}</ButtonMenuItem>
+                          <ButtonMenuItem>{t('Like')}</ButtonMenuItem>
                         </ButtonMenu>
                       </Flex>
                     </Flex>

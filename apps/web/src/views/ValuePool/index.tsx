@@ -40,7 +40,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { pools } = usePoolsWithFilterSelector()
   const valuepool = router.query.valuepool as string
   const ogValuepool = pools.find((pool) => pool?.id?.toLowerCase() === valuepool?.toLowerCase())
-  const isOwner = ogValuepool?.devaddr_ === account
+  const isOwner = ogValuepool?.devaddr_?.toLowerCase() === account?.toLowerCase()
   const currency = useCurrency(ogValuepool?.tokenAddress)
   const [onPresentAdminSettings] = useModal(
     <CreateGaugeModal variant="admin" currency={currency} location="header" pool={ogValuepool} />,
@@ -96,7 +96,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{valuepool}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools?.length && pools?.tokens}>
+        <PoolControls pools={pools?.length && pools[0]?.tokens}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (
@@ -115,9 +115,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
                     id={pool?.id}
-                    key={pool.sousId}
-                    sousId={pool.sousId}
+                    key={pool.tokenId}
                     account={account}
+                    vpAccount={pool}
                   />
                 ))}
               </Pool.PoolsTable>

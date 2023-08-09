@@ -42,6 +42,7 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
     account,
     pool?.ve ?? '',
   )
+  const numOfScheduledPurchases = pool?.purchaseHistory?.filter((ph) => ph.active)?.length
   console.log('pool.id=================>', pool)
   const { handleApprove: handleVAPoolApprove, pendingTx: pendingVAPoolTx } = useApprovePool(
     stakingTokenContract,
@@ -181,10 +182,10 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
             {t('Toggle Sponsors (#%pos%)', { pos: pool?.sponsors?.length })}
           </Button>
         ) : null}
-        {pool?.queue?.length ? (
+        {numOfScheduledPurchases ? (
           <>
             <Button width="100%" onClick={toggleScheduledPurchases} variant="secondary">
-              {t('Toggle Purchases (#%pos%)', { pos: pool?.queue?.length })}
+              {t('Toggle Purchases (#%pos%)', { pos: numOfScheduledPurchases })}
             </Button>
             {/* <Flex mb="40px"><NotificationDot show /></Flex> */}
           </>

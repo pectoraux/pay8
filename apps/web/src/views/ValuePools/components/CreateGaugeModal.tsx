@@ -1008,7 +1008,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               {t('REMOVE SPONSORS')}
             </Button>
           ) : null}
-          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.HISTORY)}>
+          <Button variant="secondary" mb="8px" disabled onClick={() => setStage(LockStage.HISTORY)}>
             {t('ALL TRANSACTION HISTORY')}
           </Button>
         </Flex>
@@ -1089,7 +1089,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
       )}
       {stage === LockStage.DEPOSIT && (
         <AddAmountModal
-          // pool={pool}
+          pool={pool}
           stakingToken={currency}
           currentBalance={stakingTokenBalance}
           currentLockedAmount={new BigNumber(tokenBalance?.lockAmount ?? '')}

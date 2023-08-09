@@ -8,11 +8,13 @@ import { publicClient } from 'utils/wagmi'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { erc20ABI } from 'wagmi'
 import { vaABI } from 'config/abi/va'
-import { getValuepoolHelperAddress } from 'utils/addressHelpers'
+import { getValuepoolHelperAddress, getValuepoolVoterAddress } from 'utils/addressHelpers'
 import { valuePoolHelperABI } from 'config/abi/valuePoolHelper'
 import { isAddress } from 'utils'
 import { getSponsors } from 'state/sponsors/helpers'
 import { getValuepoolContract } from '../../utils/contractHelpers'
+import { valuePoolVoterABI } from 'config/abi/valuePoolVoter'
+import { getCollection } from 'state/cancan/helpers'
 
 const valuepoolField = `
 id
@@ -190,6 +192,17 @@ export const fetchValuepool = async (valuepoolContract) => {
         },
       ],
     })
+    const [collectionId] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getValuepoolVoterAddress(),
+          abi: valuePoolVoterABI,
+          functionName: 'collectionId',
+          args: [_va.result],
+        },
+      ],
+    })
     const maxUse = getParams.result[0]
     const queueDuration = getParams.result[1]
     const minReceivable = getParams.result[2]
@@ -269,6 +282,7 @@ export const fetchValuepool = async (valuepoolContract) => {
       '1': 'Brown',
       '0': 'Black',
     }
+    const collection = await getCollection(collectionId.result.toString())
     const _totalLiquidity = new BigNumber(totalLiquidity.result.toString())
       .div(10 ** Number(decimals.result))
       .toFixed(Number(decimals.result))
@@ -302,6 +316,7 @@ export const fetchValuepool = async (valuepoolContract) => {
       merchantValueName: merchantValueName.result,
       maxDueReceivable: maxDueReceivable.toString(),
       queueDuration: queueDuration.toString(),
+      collection,
     }
   } catch (err) {
     console.log('rerr==============>', err)

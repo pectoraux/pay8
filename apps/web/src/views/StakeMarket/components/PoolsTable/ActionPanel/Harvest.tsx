@@ -200,6 +200,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               {t('Token Id')}
             </Text>
           </Box>
+          <Box mr="8px" height="32px">
+            <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currPool?.ownerAgreement} />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Agreement State')}
+            </Text>
+          </Box>
           <Flex flexDirection="row">
             <IconButton as={Link} style={{ cursor: 'pointer' }} onClick={onPresentArticle}>
               <Text color="primary" fontSize="12px" bold textTransform="uppercase">

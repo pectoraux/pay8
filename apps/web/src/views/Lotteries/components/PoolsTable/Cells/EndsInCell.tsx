@@ -18,11 +18,10 @@ const StyledCell = styled(Pool.BaseCell)`
 const EndsInCell: React.FC<any> = ({ labelText, value }) => {
   const getDate = () => {
     try {
-      return format(convertTimeToSeconds(value), 'MMM do, yyyy HH:mm')
+      return Number(value) ? format(convertTimeToSeconds(value), 'MMM do, yyyy HH:mm') : '-'
     } catch (err) {
       return '-'
     }
-    return '-'
   }
   return (
     <StyledCell role="cell">

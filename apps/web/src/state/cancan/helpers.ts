@@ -3,6 +3,7 @@ import { gql, request } from 'graphql-request'
 import { isAddress } from 'utils'
 import { erc20ABI } from 'wagmi'
 import {
+  getMarketCollectionsAddress,
   getMarketHelperAddress,
   getMarketOrdersAddress,
   getNftMarketHelper3Address,
@@ -40,6 +41,7 @@ import { marketOrdersABI } from 'config/abi/marketOrders'
 import { nftMarketHelperABI } from 'config/abi/nftMarketHelper'
 import { nftMarketHelper3ABI } from 'config/abi/nftMarketHelper3'
 import { veABI } from 'config/abi/ve'
+import { marketCollectionsABI } from 'config/abi/marketCollections'
 
 /**
  * API HELPERS
@@ -985,7 +987,7 @@ export const getPaymentCredits = async (collectionAddress, tokenId, address) => 
         },
       ],
     })
-    return credits.toString()
+    return credits.result.toString()
   } catch (error) {
     console.error('===========>Failed to fetch payment credits', error)
     return []
@@ -1071,4 +1073,20 @@ export const getVeToken = async (veAddress) => {
     ],
   })
   return tokenAddress
+}
+
+export const getCollectionId = async (address) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const [collectionId] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getMarketCollectionsAddress(),
+        abi: marketCollectionsABI,
+        functionName: 'addressToCollectionId',
+        args: [address],
+      },
+    ],
+  })
+  return collectionId.result
 }

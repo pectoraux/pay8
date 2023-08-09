@@ -371,7 +371,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
               </Button>
             </>
           )}
-          <Button variant="secondary" mb="8px" onClick={() => setStage(SellingStage.UPDATE_AUDITORS)}>
+          <Button variant="secondary" mb="8px" disabled onClick={() => setStage(SellingStage.UPDATE_AUDITORS)}>
             {t('Download Email List')}
           </Button>
         </Flex>

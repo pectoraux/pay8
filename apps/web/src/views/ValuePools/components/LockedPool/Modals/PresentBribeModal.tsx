@@ -31,8 +31,8 @@ const PresentBribeModal: React.FC<any> = ({ pool, stakingToken, stakingTokenBala
         />
       </Box>
       <LockedModalBody
-        // pool={pool}
-        // checkedState
+        pool={pool}
+        checkedState
         currentBalance={currentBalance}
         stakingToken={stakingToken}
         onDismiss={onDismiss}

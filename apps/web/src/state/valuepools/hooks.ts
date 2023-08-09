@@ -1,3 +1,4 @@
+import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import useSWRImmutable from 'swr/immutable'
@@ -12,6 +13,7 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector2,
+  makePoolWithUserDataLoadingSelector3,
 } from './selectors'
 
 export const useFetchPublicPoolsData = () => {
@@ -21,20 +23,34 @@ export const useFetchPublicPoolsData = () => {
   const fromVesting = router.pathname.includes('vesting')
   const fromValuepool = router.query.valuepool
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchValuepoolSgAsync({ fromVesting, fromValuepool }))
-        dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool }))
-      })
-    }
+  useSWR(
+    ['/stakes', chainId],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchValuepoolSgAsync({ fromVesting, fromValuepool }))
+          dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool }))
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch, chainId, fromValuepool, fromVesting])
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (id): { pool?: any; userDataLoaded: boolean } => {
   const poolWithUserDataLoadingSelector = useMemo(() => makePoolWithUserDataLoadingSelector2(id), [id])
+  return useSelector(poolWithUserDataLoadingSelector)
+}
+
+export const usePool2 = (address): { pool?: any; userDataLoaded: boolean } => {
+  const poolWithUserDataLoadingSelector = useMemo(() => makePoolWithUserDataLoadingSelector3(address), [address])
   return useSelector(poolWithUserDataLoadingSelector)
 }
 
