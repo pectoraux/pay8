@@ -12,7 +12,12 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import useCakeApprove from 'hooks/useCakeApprove'
 import useCakeApprovalStatus from 'hooks/useCakeApprovalStatus'
 
-export const useApprovePool = (lpContract: ReturnType<typeof useERC20>, address, earningTokenSymbol, onSuccess) => {
+export const useApprovePool = (
+  lpContract: ReturnType<typeof useERC20>,
+  address,
+  earningTokenSymbol,
+  onSuccess?: any,
+) => {
   const { toastSuccess } = useToast()
   const { chainId } = useActiveChainId()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
