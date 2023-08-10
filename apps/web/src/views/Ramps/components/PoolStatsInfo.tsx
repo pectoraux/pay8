@@ -8,6 +8,8 @@ import {
   useModal,
   Button,
   Link,
+  Text,
+  Box,
   FlexGap,
   IconButton,
   LanguageIcon,
@@ -15,6 +17,7 @@ import {
   TelegramIcon,
   ProposalIcon,
   SmartContractIcon,
+  ReactMarkdown,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -49,6 +52,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
 
   return (
     <>
+      {pool?.description ? (
+        <Box>
+          <ReactMarkdown>{pool?.description}</ReactMarkdown>
+        </Box>
+      ) : null}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Button
           as={Link}
@@ -77,6 +85,36 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         >
           {t('View All Accounts')}
         </Button>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Profile')} {`->`} {pool?.profileId}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Likes')} {`->`} {pool?.likes}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Dislikes')} {`->`} {pool?.dislikes}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Mint Fee')} {`->`} {Number(pool?.mintFee ?? 0) / 100}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Burn Fee')} {`->`} {Number(pool?.burnFee ?? 0) / 100}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Channels')} {`->`} {pool?.channels}
+        </Text>
       </Flex>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

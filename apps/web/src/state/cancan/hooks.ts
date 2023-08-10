@@ -237,7 +237,7 @@ export const useGetSubscriptionStatus = (
   tokenId: string,
 ): any => {
   const { data, status } = useSWR(
-    ['subscription2', account?.toLowerCase()],
+    ['subscription3', paywallAddress, nfticketId, tokenId, account?.toLowerCase()],
     async () => getSubscriptionStatus(paywallAddress, account?.toLowerCase(), nfticketId, tokenId),
     {
       revalidateIfStale: true,
@@ -245,7 +245,7 @@ export const useGetSubscriptionStatus = (
       revalidateOnReconnect: false,
     },
   )
-  console.log('useGetSubscriptionStatus===================>', status, paywallAddress, account)
+  console.log('useGetSubscriptionStatus===================>', status, paywallAddress, account, data, nfticketId)
   return {
     ongoingSubscription: data,
     status,

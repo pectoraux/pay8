@@ -830,6 +830,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID) {
+        console.log('CONFIRM_UPDATE_DEV_TOKEN_ID1===============>', nftFilters?.workspace?.value?.toLowerCase())
         const args = [getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()), state.tokenId]
         console.log('CONFIRM_UPDATE_DEV_TOKEN_ID===============>', args)
         return callWithGasPrice(rampContract, 'updateDevTokenId', args).catch((err) =>
@@ -1077,6 +1078,7 @@ const CreateGaugeModal: React.FC<any> = ({
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
           rampHelperContract={rampHelperContract}
+          callWithGasPrice={callWithGasPrice}
           continueToNextStage={continueToNextStage}
         />
       )}

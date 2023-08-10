@@ -9,6 +9,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 import { useRampHelper } from 'hooks/useContract'
 import { useGetAccountSg } from 'state/ramps/hooks'
+import CreateGaugeModal from '../../CreateGaugeModal'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 
 const CardWrapper = styled(Card)`
   display: inline-block;
@@ -80,11 +82,12 @@ const DataCard = ({ session, pool }) => {
   const csId = session?.id ? `${truncateHash(session?.id, 10, 10)}` : null
   const address = session?.token?.address ? `${truncateHash(session?.token?.address, 10, 10)}` : null
   const currency = useCurrency(address)
+  const { callWithGasPrice } = useCallWithGasPrice()
   const rampHelperContract = useRampHelper()
   const variant = !session?.mintSession ? 'transfer' : session?.ppDataFound ? 'mint' : 'charge'
+  console.log('variant=============>', variant)
   const [openPresentControlPanel] = useModal(
-    <></>,
-    // <CreateGaugeModal variant={variant} session={session} location="staked" pool={pool} currency={currency} />
+    <CreateGaugeModal variant={variant} session={session} location="staked" pool={pool} currency={currency} />,
   )
 
   const processCharge = async () => {
@@ -116,14 +119,10 @@ const DataCard = ({ session, pool }) => {
         const stripe = await loadStripe(pool?.publishableKeys?.length && pool?.publishableKeys[0])
         await stripe.redirectToCheckout({ sessionId: data?.id })
       } else {
-        // await rampHelperContract.postMint(session?.id).then(() =>
-        //   setIsLoading(false)
-        // )
+        return callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => setIsLoading(false))
       }
     } else {
-      // await rampHelperContract.postMint(session?.id).then(() =>
-      //   setIsLoading(false)
-      // )
+      return callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => setIsLoading(false))
     }
   } // acct_1MRgIdAcbvYb7YlN
   return (

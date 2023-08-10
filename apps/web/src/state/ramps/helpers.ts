@@ -327,98 +327,115 @@ export const fetchRamp = async (address) => {
     const cIds = clientIds || ['', '', '', '', '']
     const sks = secretKeys || ['', '', '', '', '']
     const pks = publishableKeys || ['', '', '', '', '']
-    const pk0 = pks[0]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[0],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    console.log('pks=======================>', pks[0], pk0)
-    const pk1 = pks[1]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[1],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const pk2 = pks[2]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[2],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const pk3 = pks[3]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[3],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const pk4 = pks[4]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: pks[4],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk0 = sks[0]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[0],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk1 = sks[1]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[1],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk2 = sks[2]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[2],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk3 = sks[3]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[3],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const sk4 = sks[4]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sks[4],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
+    let pk0
+    let pk1
+    let pk2
+    let pk3
+    let pk4
+    let sk0
+    let sk1
+    let sk2
+    let sk3
+    let sk4
+    let cId0
+    let cId1
+    let cId2
+    let cId3
+    let cId4
+    try {
+      pk0 = pks[0]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: pks[0],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      console.log('pks=======================>', pks[0], pk0)
+      pk1 = pks[1]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: pks[1],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      pk2 = pks[2]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: pks[2],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      pk3 = pks[3]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: pks[3],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      pk4 = pks[4]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: pks[4],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      sk0 = sks[0]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: sks[0],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      sk1 = sks[1]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: sks[1],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      sk2 = sks[2]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: sks[2],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      sk3 = sks[3]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: sks[3],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      sk4 = sks[4]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: sks[4],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
 
-    const cId0 = cIds[0]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[0],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const cId1 = cIds[1]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[1],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const cId2 = cIds[2]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[2],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const cId3 = cIds[3]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[3],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const cId4 = cIds[4]
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: cIds[4],
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
+      cId0 = cIds[0]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: cIds[0],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      cId1 = cIds[1]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: cIds[1],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      cId2 = cIds[2]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: cIds[2],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      cId3 = cIds[3]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: cIds[3],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+      cId4 = cIds[4]
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: cIds[4],
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+        : ''
+    } catch (err) {}
     console.log('secretKeys================>', [sk0, sk1, sk2, sk3, sk4], rampBadgeId.toString())
     const collection = await getCollection(rest.collectionId)
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.

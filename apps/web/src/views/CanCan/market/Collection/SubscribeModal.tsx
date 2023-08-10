@@ -34,26 +34,26 @@ interface FormState {
   gameName: string
 }
 
-const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss }) => {
+const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
   const [state, setState] = useState<any>(() => ({
     nfticketId: '',
     pickedOption: '',
     partnerCollectionId: '',
   }))
-  console.log('1PartnerModal=================>', collection)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [isDone, setIsDone] = useState(false)
-  const paywallARPAddress = useGetPaywallARP(collection?.id ?? '')
-  const paywallContract = usePaywallContract(paywallARPAddress ?? '')
+  const paywallARP = useGetPaywallARP(collection?.id ?? '')
+  const paywallContract = usePaywallContract(paywallARP?.paywallAddress ?? '')
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const item = useMemo(
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
     [collection, state],
   )
+  console.log('1SubscribeModal=================>', paywallARP, paywallARP?.paywallAddress, collection, paywallContract)
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -76,7 +76,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
   const handleSubscribe = useCallback(async () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('handleSubscribe====================>', [
+      console.log('handleSubscribe====================>', paywallContract, [
         state.nfticketId,
         state.pickedOption ? Number(state.pickedOption) + 1 : 0,
         [account],
@@ -153,4 +153,4 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
   )
 }
 
-export default PartnerModal
+export default SubscribeModal

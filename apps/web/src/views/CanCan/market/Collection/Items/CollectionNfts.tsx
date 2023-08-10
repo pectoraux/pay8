@@ -70,17 +70,6 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
     return <GridPlaceholder />
   }
 
-  if (!nfts || nfts?.length === 0) {
-    return (
-      <Flex p="24px" flexDirection="column" alignItems="center">
-        <NoNftsImage />
-        <Text pt="8px" bold>
-          {t('No Item listed yet')}
-        </Text>
-      </Flex>
-    )
-  }
-
   return (
     <>
       <Flex p="16px">
@@ -315,7 +304,6 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
   console.log('paywall======================>', paywall)
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  // const paywallARP = useGetPaywallARP(collection?.id ?? '', paywall?.id ?? '')
   const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any
   console.log('paywallARP======================>', paywallARP)
   const [nfticketId, setNfticketId] = useState('')
@@ -357,19 +345,21 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     )
   }
 
-  return isAdmin && paywall?.mirrors?.length > 0 ? (
+  return (isAdmin || ongoingSubscription) && paywall?.mirrors?.length > 0 ? (
     <Flex flexDirection="column">
-      <Flex flexDirection="row" justifyContent="center">
-        <Button mt="5px" onClick={onPresentAddItem}>
-          {t('Add')}
-        </Button>
-        <Button mt="5px" ml="5px" variant="success" onClick={onPresentPartner}>
-          {t('Add Partner')}
-        </Button>
-        <Button mt="5px" ml="5px" variant="danger" onClick={onPresentRemoveItem}>
-          {t('Remove')}
-        </Button>
-      </Flex>
+      {isAdmin ? (
+        <Flex flexDirection="row" justifyContent="center">
+          <Button mt="5px" onClick={onPresentAddItem}>
+            {t('Add')}
+          </Button>
+          <Button mt="5px" ml="5px" variant="success" onClick={onPresentPartner}>
+            {t('Add Partner')}
+          </Button>
+          <Button mt="5px" ml="5px" variant="danger" onClick={onPresentRemoveItem}>
+            {t('Remove')}
+          </Button>
+        </Flex>
+      ) : null}
       <Grid
         style={{ padding: '20px' }}
         gridGap="16px"
@@ -398,39 +388,45 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     </Flex>
   ) : !isAdmin ? (
     <Flex alignItems="center" py="48px" flexDirection="column">
-      <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
-        <NFTMedia key={paywall.tokenId} nft={paywall} width={440} height={440} />
-        <Divider />
-        <Input
-          type="text"
-          scale="sm"
-          value={nfticketId}
-          placeholder={t('input your nfticket id')}
-          onChange={(e) => setNfticketId(e.target.value)}
-        />
-        <LinkExternal mt="8px" href={`${cancanBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
-          {t('View Paywall')}
-        </LinkExternal>
-      </Flex>
       {!ongoingSubscription ? (
-        <Flex alignItems="center" flexDirection="column">
-          {paywall?.options?.length ? (
-            <>
-              <Text textTransform="uppercase" textAlign="center" color="textSubtle" fontSize="12px" bold>
-                {t('Customize your order')}
-              </Text>
-              <Flex justifyContent="center" alignItems="center">
-                <OptionFilters address={account} options={options} />
-              </Flex>
-            </>
-          ) : null}
-          <Flex alignItems="center" flexDirection="row">
-            <Button mr="18px" variant="success" onClick={onPresentBuySubscription}>
-              {t('Buy Subscription')}
-            </Button>
-            <Button onClick={onPresentSubscribe}>{t('Start Subscription')}</Button>
+        <>
+          <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
+            <NFTMedia key={paywall.tokenId} nft={paywall} width={440} height={440} />
+            <Divider />
+            <Input
+              type="text"
+              scale="sm"
+              value={nfticketId}
+              placeholder={t('input your nfticket id')}
+              onChange={(e) => setNfticketId(e.target.value)}
+            />
+            <LinkExternal
+              mt="8px"
+              href={`${cancanBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`}
+              bold
+            >
+              {t('View Paywall')}
+            </LinkExternal>
           </Flex>
-        </Flex>
+          <Flex alignItems="center" flexDirection="column">
+            {paywall?.options?.length ? (
+              <>
+                <Text textTransform="uppercase" textAlign="center" color="textSubtle" fontSize="12px" bold>
+                  {t('Customize your order')}
+                </Text>
+                <Flex justifyContent="center" alignItems="center">
+                  <OptionFilters address={account} options={options} />
+                </Flex>
+              </>
+            ) : null}
+            <Flex alignItems="center" flexDirection="row">
+              <Button mr="18px" variant="success" onClick={onPresentBuySubscription}>
+                {t('Buy Subscription')}
+              </Button>
+              <Button onClick={onPresentSubscribe}>{t('Start Subscription')}</Button>
+            </Flex>
+          </Flex>
+        </>
       ) : null}
       {!paywall?.canPublish ? (
         <Flex alignItems="center" mt="18px" flexDirection="row">

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
-// import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
+import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -25,15 +25,15 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
 
   return (
     <>
-      {/* <Flex alignSelf='center' mt={20}>
-      <Filters
-        nftFilters={nftFilters} 
-        setNftFilters={setNftFilters}
-        showCountry={false}
-        showCity={false}
-        showProduct={false}
-      />
-    </Flex> */}
+      <Flex alignSelf="center" mt={20}>
+        <Filters
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          showCountry={false}
+          showCity={false}
+          showProduct={false}
+        />
+      </Flex>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Token ID')}

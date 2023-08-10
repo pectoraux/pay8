@@ -6,6 +6,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalValueCell from './Cells/TotalValueCell'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 const PoolRow: React.FC<any> = ({ sousId, account, rampAddress, initialActivity }) => {
   const { pool } = usePool2(rampAddress)
@@ -20,17 +21,17 @@ const PoolRow: React.FC<any> = ({ sousId, account, rampAddress, initialActivity 
       <NameCell pool={pool} rampAccount={rampAccount} />
       <TotalValueCell
         labelText={t('Mintable')}
-        amount={rampAccount?.mintable}
+        amount={getBalanceNumber(rampAccount?.mintable, rampAccount?.token?.decimals)}
         symbol={rampAccount?.token?.symbol ?? ''}
       />
       <TotalValueCell
         labelText={t('Minted Liquidity')}
-        amount={rampAccount?.minted}
+        amount={getBalanceNumber(rampAccount?.minted, rampAccount?.token?.decimals)}
         symbol={rampAccount?.token?.symbol ?? ''}
       />
       <TotalValueCell
         labelText={t('Burnt Liquidity')}
-        amount={rampAccount?.burnt}
+        amount={getBalanceNumber(rampAccount?.burnt, rampAccount?.token?.decimals)}
         symbol={rampAccount?.token?.symbol ?? ''}
       />
     </Pool.ExpandRow>

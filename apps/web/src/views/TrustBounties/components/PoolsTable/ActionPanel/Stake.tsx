@@ -9,18 +9,12 @@ import { useCallback, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useGetRequiresApproval } from 'state/trustbounties/hooks'
-import { getTrustBountiesAddress } from 'utils/addressHelpers'
-import { getBep20Contract } from 'utils/contractHelpers'
+import { getTrustBountiesHelperAddress } from 'utils/addressHelpers'
+import { useApprovePool } from 'views/TrustBounties/hooks/useApprove'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-
-const IconButtonWrapper = styled.div`
-  display: flex;
-`
-const HelpIconWrapper = styled.div`
-  align-self: center;
-`
+import { useERC20 } from 'hooks/useContract'
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
@@ -29,10 +23,14 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  console.log('stakemarketAddress====================>', pool)
   const token = useCurrency(pool?.tokenAddress ?? '')
-  const stakingTokenContract = getBep20Contract(pool?.tokenAddress ?? '')
-  const { needsApproval } = useGetRequiresApproval(stakingTokenContract, account, getTrustBountiesAddress())
+  const stakingTokenContract = useERC20(pool?.tokenAddress || '')
+  const { needsApproval, refetch } = useGetRequiresApproval(
+    stakingTokenContract,
+    account,
+    getTrustBountiesHelperAddress(),
+  )
+  console.log('stakemarketAddress====================>', pool, stakingTokenContract, needsApproval)
   const currencyA = token
   const [currency, setCurrency] = useState(currencyA)
   const handleInputSelect = useCallback((currencyInput) => {
@@ -43,6 +41,12 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
     <CreateGaugeModal variant={variant} pool={pool} currency={currency ?? token} />,
   )
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
+  const { handleApprove, pendingTx } = useApprovePool(
+    stakingTokenContract,
+    getTrustBountiesHelperAddress(),
+    currency?.symbol,
+    refetch,
+  )
 
   if (!account) {
     return (
@@ -68,12 +72,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
           </Text>
         </ActionTitles>
         <ActionContent>
-          <Button
-            width="100%"
-            // disabled={pendingPoolTx}
-            // onClick={handlePoolApprove}
-            variant="secondary"
-          >
+          <Button width="100%" disabled={pendingTx} onClick={handleApprove} variant="secondary">
             {t('Enable')}
           </Button>
         </ActionContent>
@@ -104,6 +103,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
       <ActionContent>
         <Button
           width="100%"
+          disabled
           // onClick={onPresentPreviousTx}
           variant="secondary"
         >

@@ -8,6 +8,9 @@ import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
 
 import { GreyedOutContainer, Divider } from './styles'
+import { publicClient } from 'utils/wagmi'
+import useCatchTxError from 'hooks/useCatchTxError'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -39,6 +42,7 @@ const SetPriceStage: React.FC<any> = ({
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
+  const [pendingFb, setPendingFb] = useState(false)
 
   const processCharge = async () => {
     setIsLoading(true)
@@ -62,11 +66,22 @@ const SetPriceStage: React.FC<any> = ({
       state.identityTokenId,
       data.id,
     ])
-
-    await rampHelperContract
-      .preMint(rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id)
+    return callWithGasPrice(rampHelperContract, 'preMint', [
+      rampAddress,
+      account,
+      currency?.address,
+      state.amountPayable,
+      state.identityTokenId,
+      data.id,
+    ])
       .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
-    setIsLoading(false)
+      .catch((err) => {
+        console.log('createGauge=================>', err)
+        setIsLoading(false)
+      })
+    // await rampHelperContract
+    //   .preMint(rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id)
+    //   .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
   }
 
   useEffect(() => {

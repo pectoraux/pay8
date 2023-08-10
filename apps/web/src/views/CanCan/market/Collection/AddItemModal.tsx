@@ -35,14 +35,13 @@ interface FormState {
   partner: boolean
 }
 
-const PartnerModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }) => {
+const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }) => {
   const [state, setState] = useState<any>(() => ({
     productId: '',
     bountyId: '',
     referrerFee: '',
     partnerCollectionId: '',
   }))
-  console.log('1PartnerModal=================>', collection)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
@@ -56,6 +55,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
     [collection, state],
   )
+  console.log('1AddItemModal=================>', collection, item)
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -208,4 +208,4 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
   )
 }
 
-export default PartnerModal
+export default AddItemModal
