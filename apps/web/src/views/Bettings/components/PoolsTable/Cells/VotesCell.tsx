@@ -21,7 +21,7 @@ const VotesCell: React.FC<any> = ({ pool }) => {
     <StyledCell role="cell">
       <Pool.CellContent>
         <Flex flexDirection="column">
-          <Flex flexDirection="row">
+          <Flex flexDirection="row" mb="16px">
             <Text mr="8px" mt="4px" fontSize="12px" color="primary" textAlign="left">
               {t('Min. Ticket #')}
             </Text>

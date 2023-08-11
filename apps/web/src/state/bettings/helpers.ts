@@ -79,10 +79,10 @@ export const getAmountCollected = async (bettingAddress, bettingId, period) => {
       },
     ],
   })
-  return amountCollected.toString()
+  return amountCollected.result.toString()
 }
 
-export const getSubjects = async (bettingAddress, bettingId, idx) => {
+export const getSubjects = async (bettingAddress, bettingId) => {
   const bscClient = publicClient({ chainId: 4002 })
   const [subjects] = await bscClient.multicall({
     allowFailure: true,
@@ -91,7 +91,7 @@ export const getSubjects = async (bettingAddress, bettingId, idx) => {
         address: bettingAddress,
         abi: bettingABI,
         functionName: 'subjects',
-        args: [BigInt(bettingId), BigInt(idx)],
+        args: [BigInt(bettingId)],
       },
     ],
   })

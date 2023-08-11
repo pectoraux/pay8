@@ -27,9 +27,7 @@ export const useGetAmountCollected = (bettingAddress, bettingId, period) => {
 export const useGetSubjects = (bettingAddress, bettingId, ticketSize) => {
   const { data: subjects } = useSWRImmutable(['subjects', bettingAddress, bettingId, ticketSize], async () => {
     try {
-      const arr = Array.from({ length: Number(ticketSize) }, (v, i) => i)
-      const res = await Promise.all(arr?.map(async (idx) => getSubjects(bettingAddress, bettingId, idx)))
-      return res
+      return getSubjects(bettingAddress, bettingId)
     } catch (err) {
       console.log('rerr==========>', err)
     }

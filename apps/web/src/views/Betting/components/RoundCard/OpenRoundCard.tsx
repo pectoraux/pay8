@@ -106,7 +106,7 @@ const OpenRoundCard: React.FC<any> = ({
                   overflow="auto"
                   maxHeight="200px"
                 >
-                  {betting?.subjects?.map((subject, index) => (
+                  {betting?.subjects?.split(',')?.map((subject, index) => (
                     <Button
                       // variant={variants[index % 6]}
                       width="150px"

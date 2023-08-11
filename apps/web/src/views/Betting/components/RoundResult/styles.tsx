@@ -31,6 +31,7 @@ const Row = ({ children, ...props }) => {
 export const PrizePoolRow: React.FC<any> = ({ betting, ...props }) => {
   const { t } = useTranslation()
   const totalAmount = getBalanceAmount(betting?.amountCollected || 0, betting?.token?.decimals ?? 18)
+  console.log('PrizePoolRow==================>', betting)
   return (
     <Row {...props}>
       <Text bold>{t('Prize Pool')}:</Text>

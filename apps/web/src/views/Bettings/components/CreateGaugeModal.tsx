@@ -459,7 +459,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [
           currency?.address,
           !!state.alphabetEncoding,
-          startReceivable.toString(),
+          parseInt(startReceivable.toString()),
           state.numberOfPeriods,
           state.bettingId,
           [
@@ -476,7 +476,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state.action,
           state.media,
           state.description,
-          state.subjects?.split(',')?.map((sbj) => sbj.trim()),
+          state.subjects,
         ]
         console.log('CONFIRM_UPDATE_PROTOCOL===============>', bettingContract, args)
         return callWithGasPrice(bettingContract, 'updateBettingEvent', args).catch((err) =>

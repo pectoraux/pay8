@@ -125,21 +125,34 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((balance) => (
+        {pool?.bettingEvents?.length
+          ? pool?.bettingEvents.map((balance) => (
+              <Button
+                key={balance.id}
+                onClick={() => {
+                  const newState = { ...currState, [pool?.id]: balance.id }
+                  dispatch(setCurrPoolData(newState))
+                }}
+                mt="4px"
+                mr={['2px', '2px', '4px', '4px']}
+                scale="sm"
+                variant={currState[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+              >
+                {t('Event #%val%', { val: balance?.bettingId ?? '0' })}
+              </Button>
+            ))
+          : null}
+        {pool?.bettingEvents?.length ? (
           <Button
-            key={balance.token.address}
-            onClick={() => {
-              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
-              dispatch(setCurrPoolData(newState))
-            }}
-            mt="4px"
-            mr={['2px', '2px', '4px', '4px']}
+            key="clear-all"
+            variant="text"
             scale="sm"
-            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+            onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
           >
-            {balance.token.symbol}
+            {t('Clear')}
           </Button>
-        ))}
+        ) : null}
       </Flex>
       <Flex>
         <FlexGap gap="16px" pt="24px" pl="4px">

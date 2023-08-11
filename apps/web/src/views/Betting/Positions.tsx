@@ -3,13 +3,10 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css/bundle'
-// import { useGetSubjects } from 'state/bettings/hooks'
 import delay from 'lodash/delay'
 import RoundCard from './components/RoundCard'
 import useSwiper from './hooks/useSwiper'
-// import useOnNextRound from './hooks/useOnNextRound'
 import useOnViewChange from './hooks/useOnViewChange'
-// import { PageView } from './types'
 import { CHART_DOT_CLICK_EVENT } from './helpers'
 
 const StyledSwiper = styled.div`
@@ -42,9 +39,10 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
   }, [swiper?.el])
   const [isChangeTransition, setIsChangeTransition] = useState(false)
   const { bettingId } = useRouter().query
-  const currEvent = ogBetting?.bettingEvents?.length && ogBetting?.bettingEvents[Number(bettingId || 1) - 1]
-  const arr2 = Array.from({ length: Number(currEvent?.currPeriod || 0) + 2 }, (v, i) => i)
-  console.log('bettingId===========>', bettingId, arr2)
+  const currEvent =
+    ogBetting?.bettingEvents?.length && ogBetting?.bettingEvents[parseInt(bettingId?.toString() || '1') - 1]
+  const arr2 = Array.from({ length: parseInt(currEvent?.currPeriod || 0) + 2 }, (v, i) => i)
+  console.log('bettingId===========>', allBettings, bettingId, arr2)
 
   return (
     <StyledSwiper>
@@ -77,10 +75,9 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
           ))}
         {!allBettings &&
           arr2.map((idx) => {
-            const currPeriod = currEvent?.periods?.find((period) => Number(period.period) === idx)
-            console.log('currEvent==============>', currEvent, currPeriod)
+            const currPeriod = currEvent?.periods?.find((period) => parseInt(period.period) === idx)
             const betting =
-              Number(currEvent?.currPeriod || 0) > idx
+              parseInt(currEvent?.currPeriod || 0) > idx
                 ? {
                     idx,
                     rewardsBreakDown: currEvent?.rewardsBreakDown,
@@ -94,7 +91,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     ...currEvent,
                     status: 'Past',
                   }
-                : Number(currEvent?.currPeriod || 0) === idx
+                : parseInt(currEvent?.currPeriod || 0) === idx
                 ? {
                     idx,
                     rewardsBreakDown: currEvent?.rewardsBreakDown,
@@ -121,6 +118,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     ...currEvent,
                     status: 'Next',
                   }
+            console.log('currEvent==============>', currEvent, currPeriod, arr2, betting)
             return (
               <SwiperSlide key={betting.id}>
                 {({ isActive }) => (

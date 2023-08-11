@@ -67,7 +67,7 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
             overflow="auto"
             maxHeight="200px"
           >
-            {betting?.subjects?.map((subject, index) => (
+            {betting?.subjects?.split(',')?.map((subject, index) => (
               <Button width="150px" height="200px" onClick={onPresentBuyTicketsModal} mb="4px">
                 <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
                   {subject} ({index + 1})

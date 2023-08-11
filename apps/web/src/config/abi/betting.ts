@@ -717,11 +717,6 @@ export const bettingABI = [
         name: '',
         type: 'uint256',
       },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
     ],
     name: 'subjects',
     outputs: [
@@ -729,25 +724,6 @@ export const bettingABI = [
         internalType: 'string',
         name: '',
         type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_bettingId',
-        type: 'uint256',
-      },
-    ],
-    name: 'subjectsLength',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -940,9 +916,9 @@ export const bettingABI = [
         type: 'string',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: '_subjects',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'updateBettingEvent',

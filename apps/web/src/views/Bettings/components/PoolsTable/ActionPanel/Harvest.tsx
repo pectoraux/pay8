@@ -1,33 +1,49 @@
 import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
+import { format } from 'date-fns'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
-const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
-
+  const { account } = useWeb3React()
+  const {
+    days: daysReceivable,
+    hours: hoursReceivable,
+    minutes: minutesReceivable,
+  } = getTimePeriods(Number(currAccount?.bracketDuration ?? '0'))
+  console.log('currAccount==================>', currAccount)
   const actionTitle = (
-    <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-      {currAccount ? (
-        <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-          {t('Current Token')}{' '}
-        </Text>
-      ) : null}
-      <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {currAccount?.symbol}
+    <>
+      <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+        {t('Betting Uses')}{' '}
       </Text>
-    </Flex>
+      <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+        {currAccount?.token?.symbol ?? '...'}
+      </Text>
+    </>
   )
 
   if (!account) {
     return (
       <ActionContainer>
-        <ActionTitles>{actionTitle}</ActionTitles>
         <ActionContent>
           <Button disabled>{t('Please Connect Your Wallet')}</Button>
+        </ActionContent>
+      </ActionContainer>
+    )
+  }
+
+  if (!currAccount) {
+    return (
+      <ActionContainer>
+        <ActionContent>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Pick an event to display its data')}
+          </Text>
         </ActionContent>
       </ActionContainer>
     )
@@ -38,83 +54,123 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       <ActionTitles>{actionTitle}</ActionTitles>
       <ActionContent>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={5}
+              value={getBalanceNumber(currAccount?.pricePerTicket, currAccount?.token?.decimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Price Per Ticket')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={1}
+              value={parseInt(currAccount?.adminShare) / 100}
+              unit="%"
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Admin Share')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={1}
+              value={parseInt(currAccount?.referrerShare) / 100}
+              unit="%"
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Referrer Share')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={1}
+              value={parseInt(currAccount?.discountDivisor) / 100}
+              unit="%"
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Discount Divisor')}
+            </Text>
+          </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {t(currAccount?.status || '')}
+            {currAccount?.alphabetEncoding ? 'Yes' : 'No'}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Account Status')}
+            {t('Alphabet Encoding')}
           </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {pool?.automatic === undefined
-              ? '-'
-              : pool?.automatic
-              ? t('Automatic')
-              : pool?.redirect
-              ? t('Semi-Automatic')
-              : t('Manual')}
+          <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
+            {Number(currAccount?.numOfPeriods || 0) === 0 ? 'Infinity' : currAccount?.numOfPeriods}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Account Type')}
+            {t('Number of Periods')}
           </Text>
-          <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(currAccount?.minted)}
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Token Minted')}
+          <Flex mr="8px" height="32px" mt="4px" flexDirection="column" justifyContent="space-between">
+            <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+              {daysReceivable} {t('days')} {hoursReceivable} {t('hours')} {minutesReceivable} {t('minutes')}
             </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(currAccount?.burnt)}
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Token Burnt')}
+            <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+              {t('Bracket Duration')}
             </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
-              value={getBalanceNumber(currAccount?.salePrice)}
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Sale Price')}
-            </Text>
-          </Box>
+          </Flex>
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.action ?? ''}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Action')}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.description ?? ''}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Description')}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.rewardsBreakdown?.length ? currAccount?.rewardsBreakdown.map((rwb) => `${rwb}%, `) : 'N/A'}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Rewards BreakDown')}
+          </Text>
+          <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
+            {format(new Date(parseInt(currAccount?.startTime || 0) * 1000), 'yyyy-MM-dd HH:mm')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Start Time')}
+          </Text>
+          <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
+            {format(new Date(parseInt(currAccount?.currStart || 0) * 1000), 'yyyy-MM-dd HH:mm')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Latest Period Start Time')}
+          </Text>
+          <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
+            {format(new Date(parseInt(currAccount?.currEnd || 0) * 1000), 'yyyy-MM-dd HH:mm')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Latest Period End Time')}
+          </Text>
           <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={0}
-              value={currAccount?.maxPartners}
-              prefix="# "
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Maximum Partners')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.tokenId) ? (
+            {parseInt(currAccount?.currPeriod) || parseInt(currAccount?.currPeriod) === 0 ? (
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={0}
-                value={currAccount?.tokenId}
+                value={currAccount?.currPeriod}
                 prefix="# "
               />
             ) : (
@@ -123,64 +179,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached veNFT Token Id')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.token?.bountyId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.token?.bountyId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Bounty Id')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.token?.profileId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.token?.profileId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Profile Id')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.token?.badgeId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.token?.profileId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Badge Id')}
+              {t('Current Period')}
             </Text>
           </Box>
         </Flex>
