@@ -113,7 +113,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
         0,
       )
       const args = partner
-        ? [state.partnerCollectionId, paywall?.tokenId, state.productId, numOfSeconds]
+        ? [state.partnerCollectionId, paywall?.tokenId, state.productId, numOfSeconds, false]
         : [state.productId, paywall?.id, true, false, `${img0},${img1}`]
       console.log('handleAddPartner====================>', contract, method, args)
       return callWithGasPrice(contract, method, args).catch((err) => {

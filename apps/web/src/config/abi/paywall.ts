@@ -320,6 +320,11 @@ export const paywallABI = [
         name: '_numOfSeconds',
         type: 'uint256',
       },
+      {
+        internalType: 'bool',
+        name: '_secondCall',
+        type: 'bool',
+      },
     ],
     name: 'partner',
     outputs: [],
@@ -339,21 +344,11 @@ export const paywallABI = [
         type: 'string',
       },
     ],
-    name: 'partners',
+    name: 'partnershipEnds',
     outputs: [
       {
         internalType: 'uint256',
-        name: 'partnerCollectionId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: 'tokenId',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'endTime',
+        name: '',
         type: 'uint256',
       },
     ],

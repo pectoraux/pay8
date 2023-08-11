@@ -27,6 +27,8 @@ import CollapsibleCard from 'components/CollapsibleCard'
 import { FetchStatus } from 'config/constants/types'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
 import Divider from 'components/Divider'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+
 import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard, CollectionCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
@@ -41,8 +43,7 @@ import AddPartnerModal from '../AddPartnerModal'
 import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import NoNftsImage from '../../components/Activity/NoNftsImage'
+import Partners from './Partners'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -99,16 +100,22 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
       {!showOnlyNftsOnSale &&
         !showOnlyNftsUsers &&
         collection?.paywalls?.map((paywall) => {
+          const mirrors = paywall?.mirrors.filter(
+            (mirror) => !!mirror.sharedPaywall && Number(mirror.endTime) * 1000 > Date.now(),
+          )
           return (
-            <CollapsibleCard
-              key={paywall.id}
-              paywall={paywall}
-              collection={collection}
-              title={`${paywall?.tokenId} -> ${paywall.mirrors?.length} ${t('Result(s)')}`}
-              mb="32px"
-            >
-              <Paywall collection={collection} paywall={paywall} />
-            </CollapsibleCard>
+            <>
+              <CollapsibleCard
+                key={paywall.id}
+                paywall={paywall}
+                collection={collection}
+                title={`${paywall?.tokenId} -> ${paywall.mirrors?.length} ${t('Result(s)')}`}
+                mb="32px"
+              >
+                <Paywall collection={collection} paywall={paywall} />
+                {mirrors?.length ? <Partners mirrors={mirrors} /> : null}
+              </CollapsibleCard>
+            </>
           )
         })}
       {nfts.length > 0 && !showOnlyNftsOnSale && !showOnlyNftsUsers ? (

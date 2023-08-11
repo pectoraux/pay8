@@ -197,6 +197,10 @@ images
 collection {
   id
   avatar
+  name
+  large
+  small
+  totalVolumeBNB
 }
 tasks {
   ${taskFields}
@@ -356,6 +360,7 @@ active
 createdAt
 updatedAt
 partner
+endTime
 item {
   ${itemFields}
 }
@@ -363,7 +368,7 @@ nft {
   ${nftFields}
 }  
 paywall {
-  id
+  ${baseFields}
 }
 partnerPaywall {
   id
@@ -377,6 +382,9 @@ partnerPaywall {
     name
     totalVolumeBNB
   }
+}
+sharedPaywall {
+  ${baseFields}
 }
 `
 
