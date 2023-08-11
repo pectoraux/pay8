@@ -2,12 +2,14 @@ import styled from 'styled-components'
 import { useCallback, useState } from 'react'
 import { Flex, CogIcon, Button, Text, useModal } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
-import { useGetCollection } from 'state/cancan/hooks'
+import { useGetCollection, useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
 import PageLoader from 'components/Loader/PageLoader'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useTranslation } from '@pancakeswap/localization'
 import { useWeb3React } from '@pancakeswap/wagmi'
+import { decryptContent, getThumbnailNContent } from 'utils/cancan'
+
 import MainNFTCard from './MainNFTCard'
 import { TwoColumnsContainer } from '../shared/styles'
 import DetailsCard from '../shared/DetailsCard'
@@ -41,8 +43,24 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
   const { mainCurrency } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   const [currency, setCurrency] = useState(mainCurrency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  let { mp4, thumbnail } = getThumbnailNContent(nft)
+  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
+  const { ongoingSubscription } = useGetSubscriptionStatus(
+    paywallARP?.paywallAddress ?? '',
+    account ?? '',
+    '0',
+    nft?.tokenId,
+  )
+  const { thumbnail: _thumbnail, mp4: _mp4 } = decryptContent(nft, thumbnail, mp4, ongoingSubscription, account)
   const [onPresentSellModal] = useModal(
-    <SellModal variant={isPaywall ? 'paywall' : 'item'} nftToSell={nft} currency={currency} onSuccessSale={refetch} />,
+    <SellModal
+      variant={isPaywall ? 'paywall' : 'item'}
+      nftToSell={nft}
+      thumbnail={_thumbnail}
+      mp4={_mp4}
+      currency={currency}
+      onSuccessSale={refetch}
+    />,
   )
   const [onPresentSettings] = useModal(
     <SettingStage variant="ProductPage" collection={collection} mainCurrency={currency ?? mainCurrency} />,

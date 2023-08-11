@@ -22,7 +22,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/cancan/types'
 import { getBscScanLinkForNft, isAddress } from 'utils'
 import { FetchStatus } from 'config/constants/types'
-// import { ethersToBigNumber } from '@pancakeswap/utils/bigNumber'
+import { formatEther } from 'ethers/lib/utils'
 import { FaEquals } from 'react-icons/fa'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useGetNftFilters, useGetCollectionContracts } from 'state/cancan/hooks'
@@ -33,7 +33,6 @@ import { BorderedBox, BnbAmountCell, NumberCell } from './styles'
 import { PaymentCurrency } from './types'
 import { GreyedOutContainer } from '../SellModal/styles'
 import CountdownCircle from './CountdownCircle'
-import { formatEther } from 'ethers/lib/utils'
 
 interface ReviewStageProps {
   nftToBuy: NftToken
@@ -76,6 +75,7 @@ const ExpandingWrapper = styled.div`
 `
 
 const ReviewStage: React.FC<any> = ({
+  thumbnail,
   status,
   isPaywall,
   nftToBuy,
@@ -143,9 +143,6 @@ const ReviewStage: React.FC<any> = ({
     if (curr?.symbol === secondaryCurrency?.symbol) return mainCurrency
     return secondaryCurrency
   }
-  const chunks = nftToBuy?.images && nftToBuy?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToBuy?.images?.split(',')[0]
-
   return (
     <>
       <Flex px="24px" pt="24px" flexDirection="column">

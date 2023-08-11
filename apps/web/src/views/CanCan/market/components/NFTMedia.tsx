@@ -8,6 +8,8 @@ import styled from 'styled-components'
 import { useAppDispatch } from 'state'
 import { useIntersectionObserver } from '@pancakeswap/hooks'
 import { useNftStorage } from 'state/nftMarket/storage'
+import { decryptContent, getThumbnailNContent } from 'utils/cancan'
+
 import { RoundedImage } from '../Collection/IndividualNFTPage/shared/styles'
 
 const StyledAspectRatio = styled(Box)`
@@ -21,11 +23,10 @@ export const AspectRatio = ({ ratio, children, ...props }) => (
   </Box>
 )
 
-const NFTMedia: FC<any> = ({ width, height, nft, borderRadius = 'default', as, ...props }) => {
+const NFTMedia: FC<any> = ({ width, height, nft, showThumbnail = true, borderRadius = 'default', as, ...props }) => {
   const dispatch = useAppDispatch()
   const { setTryVideoNftMedia } = useNftStorage()
   const { account } = useWeb3React()
-  // const paywallARP = useGetPaywallARP(collection?.id ?? '', paywall?.id ?? '')
   const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
@@ -49,51 +50,13 @@ const NFTMedia: FC<any> = ({ width, height, nft, borderRadius = 'default', as, .
       }
     }
   }, [dispatch, isIntersecting, setTryVideoNftMedia])
-  // [gif, mp4, webm, original, thumbnail]
-  console.log('nft?.images================>', nft?.images)
-  let mp4
-  let chunks
-  let thumbnail
-  try {
-    chunks = nft?.images && nft?.images?.split(',')
-    thumbnail = chunks?.length > 0 && nft?.images?.split(',')[0]
-    mp4 = chunks?.length > 1 && nft?.images?.split(',').slice(1).join(',')
-  } catch (err) {
-    chunks = nft?.images
-    thumbnail = nft?.images?.length > 0 && nft?.images[0]
-    mp4 = nft?.images?.length > 1 && nft?.images?.slice(1).join(',')
-  }
-  console.log('1NFTMedia===================>', nft)
-  console.log('2NFTMedia===================>', mp4)
-  console.log('3NFTMedia===================>', thumbnail)
 
-  if (
-    Number(nft?.behindPaywall ?? 0) &&
-    (ongoingSubscription || nft?.currentSeller?.toLowerCase() === account?.toLowerCase())
-  ) {
-    console.log('ongoingSubscription================>Done')
-    const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-    try {
-      mp4 = mp4
-        ? nodeRSA.decryptStringWithRsaPrivateKey({
-            text: mp4,
-            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-          })
-        : ''
-      thumbnail = thumbnail
-        ? nodeRSA.decryptStringWithRsaPrivateKey({
-            text: thumbnail,
-            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-          })
-        : ''
-    } catch (err) {
-      console.log('nftmedia==============>', err, nft)
-    }
+  let { mp4, thumbnail, isArticle } = getThumbnailNContent(nft)
+  const { thumbnail: _thumbnail, mp4: _mp4 } = decryptContent(nft, thumbnail, mp4, ongoingSubscription, account)
+  if (isArticle && !showThumbnail) {
+    return <RichTextEditor value={_mp4} readOnly id="rte" />
   }
-  if (mp4.length > 400) {
-    return <RichTextEditor value={mp4} readOnly id="rte" />
-  }
-  return <RoundedImage width={width} height={height} src={thumbnail} alt={nft?.name} as={as} {...props} />
+  return <RoundedImage width={width} height={height} src={_thumbnail} alt={nft?.name} as={as} {...props} />
 }
 
 export default NFTMedia

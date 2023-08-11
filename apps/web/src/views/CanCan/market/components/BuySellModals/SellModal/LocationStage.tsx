@@ -8,6 +8,7 @@ import {
   AutoRenewIcon,
   ButtonMenu,
   ButtonMenuItem,
+  Grid,
 } from '@pancakeswap/uikit'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
@@ -17,7 +18,7 @@ import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/st
 import RichTextEditor from 'components/RichText'
 import Filters from './Filters'
 import { GreyedOutContainer } from './styles'
-import { Divider } from '../shared/styles'
+import { Divider, RoundedImage } from '../shared/styles'
 
 interface RemoveStageProps {
   variant: 'product' | 'paywall'
@@ -26,6 +27,9 @@ interface RemoveStageProps {
 
 const LocationStage: React.FC<any> = ({
   state,
+  thumbnail,
+  nftToSell,
+  collectionId,
   variant,
   updateValue,
   nftFilters,
@@ -74,6 +78,15 @@ const LocationStage: React.FC<any> = ({
         <Text fontSize="24px" bold>
           {t('%variantName% Location Data', { variantName })}
         </Text>
+        <Flex p="16px">
+          <RoundedImage src={thumbnail} height={68} width={68} mr="8px" />
+          <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
+            <Text bold>{nftToSell?.tokenId}</Text>
+            <Text fontSize="12px" color="textSubtle" textAlign="right">
+              {`Collection #${collectionId}`}
+            </Text>
+          </Grid>
+        </Flex>
         {variantName !== 'Paywall' ? (
           <Flex justifyContent="center" alignItems="center" mb="10px">
             <ButtonMenu scale="sm" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>

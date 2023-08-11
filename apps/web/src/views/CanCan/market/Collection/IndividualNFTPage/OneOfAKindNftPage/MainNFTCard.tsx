@@ -32,6 +32,7 @@ import SellModal from '../../../components/BuySellModals/SellModal'
 import { cancanBaseUrl } from '../../../constants'
 import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
+import { getThumbnailNContent } from 'utils/cancan'
 
 interface MainNFTCardProps {
   nft: NftToken
@@ -63,9 +64,7 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
     priceInSecondaryCurrency,
   } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   const { isMobile } = useMatchBreakpoints()
-  const chunks = nft?.images && nft?.images?.split(',')
-  const mp4 = chunks?.length > 1 && nft?.images?.split(',').slice(1).join(',')
-  const original = mp4?.length > 400 ? mp4 : ''
+  let { mp4, isArticle } = getThumbnailNContent(nft)
   const { itemColor, textColor } = useColor(nft?.superLikes ?? '0', nft?.superDisLikes ?? '0')
   const [onPresentBuyModal] = useModal(<BuyModal variant={isPaywall ? 'paywall' : 'item'} nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
@@ -105,67 +104,69 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
               <Text fontSize="40px" bold mt="12px">
                 {nft.tokenId}
               </Text>
-              {original ? (
+              {isArticle ? (
                 <Flex flex="2" justifyContent={['center', null, 'flex-end']} alignItems="center">
-                  <RichTextEditor value={original} readOnly style={{ width: '120%' }} id="rte" />
+                  <RichTextEditor value={mp4} readOnly style={{ width: '120%' }} id="rte" />
                 </Flex>
               ) : null}
-              {nft.description && <Text mt={['16px', '16px', '48px']}>{t(nft.description)}</Text>}
-              {!account ? (
-                <ConnectWalletButton mt={['16px', '16px', '48px']} />
-              ) : nft?.options?.length ? (
-                <Text
-                  textTransform="uppercase"
-                  mt={['16px', '16px', '48px']}
-                  textAlign="center"
-                  color="textSubtle"
-                  fontSize="12px"
-                  bold
-                >
-                  {t('Customize your order')}
-                </Text>
-              ) : null}
-              <Flex justifyContent="center" alignItems="center">
-                {account && <OptionFilters address={account} options={options} />}
-              </Flex>
-              {nft?.isTradable ? (
-                <>
-                  <Text color="textSubtle" mt={['16px', '16px', '48px']}>
-                    {t('Price')}
-                  </Text>
-                  <Flex alignItems="center" mt="8px">
-                    <CurrencyLogo currency={mainCurrency} size="24px" style={{ marginRight: '8px' }} />
-                    <Text fontSize="24px" bold mr="4px">
-                      {formatNumber(currentAskPriceAsNumber, 0, 18)}
+              <Flex flexDirection="row">
+                <Flex flexDirection="column">
+                  {nft.description && <Text mt={['16px', '16px', '48px']}>{t(nft.description)}</Text>}
+                  {!account ? (
+                    <ConnectWalletButton mt={['16px', '16px', '48px']} />
+                  ) : nft?.options?.length ? (
+                    <Text
+                      textTransform="uppercase"
+                      mt={['16px', '16px', '48px']}
+                      textAlign="center"
+                      color="textSubtle"
+                      fontSize="12px"
+                      bold
+                    >
+                      {t('Customize your order')}
                     </Text>
-                    {mainToSecondaryCurrencyFactor && secondaryCurrency ? (
-                      <Text color="textSubtle">{`(~${priceInSecondaryCurrency.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })} ${secondaryCurrency?.symbol})`}</Text>
-                    ) : (
-                      <Skeleton width="64px" />
-                    )}
+                  ) : null}
+                  <Flex justifyContent="center" alignItems="center">
+                    {account && <OptionFilters address={account} options={options} />}
                   </Flex>
-                </>
-              ) : null}
+                  {nft?.isTradable ? (
+                    <>
+                      <Text color="textSubtle" mt={['16px', '16px', '48px']}>
+                        {t('Price')}
+                      </Text>
+                      <Flex alignItems="center" mt="8px">
+                        <CurrencyLogo currency={mainCurrency} size="24px" style={{ marginRight: '8px' }} />
+                        <Text fontSize="24px" bold mr="4px">
+                          {formatNumber(currentAskPriceAsNumber, 0, 18)}
+                        </Text>
+                        {mainToSecondaryCurrencyFactor && secondaryCurrency ? (
+                          <Text color="textSubtle">{`(~${priceInSecondaryCurrency.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })} ${secondaryCurrency?.symbol})`}</Text>
+                        ) : (
+                          <Skeleton width="64px" />
+                        )}
+                      </Flex>
+                    </>
+                  ) : null}
 
-              {isOwnNft && ownerButtons}
-              {isOwnNft && nft?.isTradable && (
-                // {!isOwnNft && nft?.isTradable && (
-                <Flex flexDirection="row" mt="24px">
-                  <Button
-                    minWidth="168px"
-                    disabled={!dropInDatePassed || !account}
-                    mr="16px"
-                    width={['100%', null, 'max-content']}
-                    onClick={onPresentBuyModal}
-                  >
-                    {isAuction ? t('Bid') : !dropInDatePassed ? t('Drop Pending') : t('Buy')}
-                  </Button>
-                  {isAuction && <Countdown nextEventTime={Number(nft?.firstBidTime) + Number(nft?.bidDuration)} />}
-                  {!dropInDatePassed && <Countdown nextEventTime={Number(nft?.dropinTimer)} />}
-                  {/* <Button
+                  {isOwnNft && ownerButtons}
+                  {nft?.isTradable && (
+                    // {!isOwnNft && nft?.isTradable && (
+                    <Flex flexDirection="row" mt="24px">
+                      <Button
+                        minWidth="168px"
+                        disabled={!dropInDatePassed || !account}
+                        mr="16px"
+                        width={['100%', null, 'max-content']}
+                        onClick={onPresentBuyModal}
+                      >
+                        {isAuction ? t('Bid') : !dropInDatePassed ? t('Drop Pending') : t('Buy')}
+                      </Button>
+                      {isAuction && <Countdown nextEventTime={Number(nft?.firstBidTime) + Number(nft?.bidDuration)} />}
+                      {!dropInDatePassed && <Countdown nextEventTime={Number(nft?.dropinTimer)} />}
+                      {/* <Button
                   minWidth="168px"
                   mr="16px"
                   width={['100%', null, 'max-content']}
@@ -173,15 +174,30 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
                 >
                   {t('Register')}
                 </Button> */}
+                    </Flex>
+                  )}
                 </Flex>
-              )}
+                {isArticle ? (
+                  <NFTMedia
+                    key={nft.tokenId}
+                    ml={500}
+                    style={{ paddingTop: '40%' }}
+                    nft={nft}
+                    width={240}
+                    height={240}
+                  />
+                ) : null}
+              </Flex>
             </Box>
           </Flex>
-          {!original ? (
+          {!isArticle ? (
             <Flex flex="2" justifyContent={['center', null, 'flex-end']} alignItems="center" maxWidth={440}>
               <NFTMedia key={nft.tokenId} nft={nft} width={440} height={440} />
             </Flex>
           ) : null}
+
+          {/* <Flex flex="2" ml="50%" style={{ position: 'relative', bottom: '40%'}} justifyContent='flex-end' alignItems="flex-end"  maxWidth={440}> */}
+          {/* </Flex> */}
         </Container>
         <MarketPageTitle>
           <StatBox style={{ backgroundColor: itemColor }}>

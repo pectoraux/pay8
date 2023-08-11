@@ -21,7 +21,13 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { requiresApproval } from 'utils/requiresApproval'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { NftToken } from 'state/cancan/types'
-import { useGetDiscounted, useGetPaymentCredits, useGetNftFilters } from 'state/cancan/hooks'
+import {
+  useGetDiscounted,
+  useGetPaymentCredits,
+  useGetNftFilters,
+  useGetPaywallARP,
+  useGetSubscriptionStatus,
+} from 'state/cancan/hooks'
 import { stagesWithBackButton, stagesWithApproveButton, stagesWithConfirmButton, StyledModal } from './styles'
 import ReviewStage from './ReviewStage'
 import PaywallReviewStage from './PaywallReviewStage'
@@ -33,6 +39,7 @@ import PaymentCreditStage from './PaymentCreditStage'
 import CashbackStage from './CashbackStage'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { decryptContent, getThumbnailNContent } from 'utils/cancan'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
@@ -134,6 +141,16 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
   )
   const totalPayment = Math.max(Number(discount ?? 0) - paymentCredits, 0)
   console.log('1res112==================>', totalPayment)
+
+  let { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
+  const paywallARP = useGetPaywallARP(nftToBuy?.collection?.id ?? '')
+  const { ongoingSubscription } = useGetSubscriptionStatus(
+    paywallARP?.paywallAddress ?? '',
+    account ?? '',
+    '0',
+    nftToBuy?.tokenId,
+  )
+  const { thumbnail: _thumbnail } = decryptContent(nftToBuy, thumbnail, mp4, ongoingSubscription, account)
 
   // BNB - returns ethers.BigNumber
   const stakeMarketContract = useStakeMarketContract()
@@ -307,6 +324,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
       {(stage === BuyingStage.REVIEW || stage === BuyingStage.PAYWALL_REVIEW) && (
         <ReviewStage
           isPaywall={variant === 'paywall'}
+          thumbnail={_thumbnail}
           status={status}
           nftToBuy={nftToBuy}
           checkRank={checkRank}
@@ -339,6 +357,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
       )}
       {stage === BuyingStage.PAYMENT_CREDIT && (
         <PaymentCreditStage
+          thumbnail={_thumbnail}
           nftToBuy={nftToBuy}
           isPaywall={variant === 'paywall'}
           collectionId={collectionId}
@@ -347,6 +366,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
       )}
       {stage === BuyingStage.CASHBACK && (
         <CashbackStage
+          thumbnail={_thumbnail}
           nftToBuy={nftToBuy}
           collectionId={collectionId}
           credit={credit}

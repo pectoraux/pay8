@@ -21,6 +21,7 @@ interface TransferStageProps {
 }
 
 const CashbackStage: React.FC<any> = ({
+  thumbnail,
   nftToBuy,
   collectionId,
   tokenId,
@@ -37,9 +38,6 @@ const CashbackStage: React.FC<any> = ({
     Number(nftToBuy?.marketData.priceReductor?.discountStatus) === 1 && numbersElligibilityCriteria?.cursor
   const costCashbackAvailable =
     Number(nftToBuy?.marketData.priceReductor?.cashbackStatus) === 1 && costElligibilityCriteria?.cursor
-
-  const chunks = nftToBuy?.images && nftToBuy?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToBuy?.images?.split(',')[0]
 
   return (
     <>

@@ -24,6 +24,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const SetPriceStage: React.FC<any> = ({
   nftToSell,
+  thumbnail,
   state,
   addValue,
   collectionId,
@@ -34,8 +35,6 @@ const SetPriceStage: React.FC<any> = ({
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { options } = state
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
 
   useEffect(() => {
     if (inputRef && inputRef.current) {

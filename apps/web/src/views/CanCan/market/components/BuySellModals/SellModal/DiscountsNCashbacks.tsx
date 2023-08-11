@@ -26,6 +26,7 @@ interface TransferStageProps {
 }
 
 const DiscountsNCashbacks: React.FC<any> = ({
+  thumbnail,
   nftToSell,
   state,
   collectionId,
@@ -51,9 +52,6 @@ const DiscountsNCashbacks: React.FC<any> = ({
     cashbackNumbers,
     cashbackCost,
   } = state
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
-
   const discountSection = (
     <>
       <GreyedOutContainer style={{ paddingTop: '50px' }}>

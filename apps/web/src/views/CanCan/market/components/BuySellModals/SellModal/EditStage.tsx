@@ -25,6 +25,7 @@ interface EditStageProps {
 
 // Initial stage when user wants to edit already listed NFT (i.e. adjust price or remove from sale)
 const EditStage: React.FC<any> = ({
+  thumbnail,
   nftToSell,
   currency,
   collectionId,
@@ -41,8 +42,6 @@ const EditStage: React.FC<any> = ({
   continueToReinitializeCashbackLimitsStage,
 }) => {
   const { t } = useTranslation()
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
   const inputCurrency = nftToSell?.usetFIAT ? nftToSell?.tFIAT.toLowerCase() : nftToSell?.ve?.toLowerCase()
   const itemCurrency = useCurrency(inputCurrency)
 

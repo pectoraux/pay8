@@ -25,6 +25,7 @@ interface TransferStageProps {
 }
 
 const BurnTokenForCreditStage: React.FC<any> = ({
+  thumbnail,
   nftToSell,
   collectionId,
   state,
@@ -33,8 +34,6 @@ const BurnTokenForCreditStage: React.FC<any> = ({
   continueToNextStage,
 }) => {
   const { t } = useTranslation()
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
 
   return (
     <>

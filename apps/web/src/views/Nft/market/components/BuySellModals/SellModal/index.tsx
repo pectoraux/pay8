@@ -99,7 +99,7 @@ interface SellModalProps extends InjectedModalProps {
   onSuccessSale: () => void
 }
 
-const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) => {
+const SellModal: React.FC<any> = ({ variant, currency, thumbnail, mp4, nftToSell, onDismiss }) => {
   const collectionId = useRouter().query.collectionAddress as string
   const options =
     nftToSell?.option_categories?.map((cat, index) => {
@@ -115,9 +115,6 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
         currency: `${nftToSell?.option_currencies && nftToSell?.option_currencies[index]}`,
       }
     }) || []
-  const mp4 = nftToSell?.images?.length > 1 && nftToSell?.images[1]
-  const original = nftToSell?.images?.length > 3 && nftToSell?.images[3]
-  const thumbnail = nftToSell?.images?.length > 4 && nftToSell?.images[4]
 
   const [state, setState] = useState<any>(() => ({
     // adjust price variables
@@ -156,7 +153,6 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
     customTags: '',
     thumbnail: thumbnail ?? '',
     description: nftToSell?.description ?? '',
-    original: original ?? '',
     webm: '',
     gif: '',
     mp4: mp4 ?? '',
@@ -456,9 +452,6 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
         )
       }
       if (stage === SellingStage.CONFIRM_ADD_LOCATION) {
-        const isImage = !!state.thumbnail
-        const isVideo = !!state.mp4 && !isImage
-        const isArticle = !isVideo && !isImage
         try {
           console.log('CONFIRM_ADD_LOCATION==============>', [
             nftToSell.tokenId,
@@ -468,7 +461,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
             state.period,
             variant === 'item' ? 2 : 1,
             !!state.isTradable,
-            ['', isVideo ? state.mp4 : '', '', isArticle ? state.original : '', isImage ? state.thumbnail : ''],
+            `${state.thumbnail},${state.mp4}`,
             nftFilters?.country?.reduce((accum, attr) => [...accum, attr], []),
             nftFilters?.city?.reduce((accum, attr) => [...accum, attr], []),
             [...nftFilters?.product, ...state.customTags.split(',')]
@@ -486,7 +479,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           state.period,
           variant === 'item' ? 2 : 1,
           !!state.isTradable,
-          ['', isVideo ? state.mp4 : '', '', isArticle ? state.original : '', isImage ? state.thumbnail : ''],
+          `${state.thumbnail},${state.mp4}`,
           nftFilters?.country?.reduce((accum, attr) => [...accum, attr], []),
           nftFilters?.city?.reduce((accum, attr) => [...accum, attr], []),
           [...nftFilters?.product, ...state.customTags.split(',')]

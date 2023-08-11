@@ -36,6 +36,9 @@ import ResetIdentityLimits from './ResetIdentityLimits'
 import ResetDiscountLimits from './ResetDiscountLimits'
 import ResetCashbackLimits from './ResetCashbackLimits'
 import LocationStage from './LocationStage'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { decryptContent, getThumbnailNContent } from 'utils/cancan'
+import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
 
 const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
@@ -99,7 +102,7 @@ interface SellModalProps extends InjectedModalProps {
   onSuccessSale: () => void
 }
 
-const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) => {
+const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) => {
   const collectionId = useRouter().query.collectionAddress as string
   const options = nftToSell?.options?.map((option, index) => {
     return {
@@ -107,10 +110,16 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       ...option,
     }
   })
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
-  const original = chunks?.length > 1 && nftToSell?.images?.split(',').slice(1).join(',')
-
+  const { account } = useWeb3React()
+  let { mp4, thumbnail } = getThumbnailNContent(nftToSell)
+  const paywallARP = useGetPaywallARP(nftToSell?.collection?.id ?? '')
+  const { ongoingSubscription } = useGetSubscriptionStatus(
+    paywallARP?.paywallAddress ?? '',
+    account ?? '',
+    '0',
+    nftToSell?.tokenId,
+  )
+  const { thumbnail: _thumbnail, mp4: _mp4 } = decryptContent(nftToSell, thumbnail, mp4, ongoingSubscription, account)
   const [state, setState] = useState<any>(() => ({
     // adjust price variables
     productId: nftToSell?.tokenId ?? '',
@@ -147,10 +156,9 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
     requiredIndentity: nftToSell?.identityProof?.requiredIndentity ?? '',
     usetFIAT: nftToSell?.usetFIAT ? 1 : 0,
     customTags: '',
-    thumbnail: thumbnail ?? '',
+    thumbnail: _thumbnail ?? '',
     description: nftToSell?.description ?? '',
-    original: original ?? '',
-    webm: '',
+    mp4: _mp4 ?? '',
     gif: '',
     checker: '',
     discountNumber: '',
@@ -464,7 +472,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
             state.period,
             variant === 'item' ? 0 : 1,
             !!state.isTradable,
-            state.thumbnail,
+            `${state.thumbnail},${state.mp4}`,
             nftFilters?.country?.toString(),
             nftFilters?.city?.toString(),
             nftFilters?.product?.toString() + delim + state.customTags,
@@ -634,6 +642,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           lowestPrice={lowestPrice}
           currency={currency}
           collectionId={collectionId}
+          thumbnail={_thumbnail}
           continueToAdjustPriceStage={continueToNextStage}
           continueToAdjustOptions={continueToAdjustOptions}
           continueToLocationStage={continueToLocationStage}
@@ -649,6 +658,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       )}
       {stage === SellingStage.ADJUST_PRICE && (
         <SetPriceStage
+          thumbnail={_thumbnail}
           nftToSell={nftToSell}
           variant="adjust"
           currentPrice={nftToSell?.currentAskPrice}
@@ -663,6 +673,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       )}
       {stage === SellingStage.ADJUST_OPTIONS && (
         <SetOptionsStage
+          thumbnail={_thumbnail}
           nftToSell={nftToSell}
           state={state}
           addValue={variant === 'paywall'}
@@ -673,6 +684,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       )}
       {stage === SellingStage.UPDATE_IDENTITY_REQUIREMENTS && (
         <IdentityRequirementStage
+          thumbnail={_thumbnail}
           nftToSell={nftToSell}
           state={state}
           collectionId={collectionId}
@@ -683,6 +695,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       )}
       {stage === SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS && (
         <BurnTokenForCreditStage
+          thumbnail={_thumbnail}
           nftToSell={nftToSell}
           lowestPrice={lowestPrice}
           collectionId={collectionId}
@@ -694,6 +707,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       )}
       {stage === SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS && (
         <DiscountsNCashbacks
+          thumbnail={_thumbnail}
           nftToSell={nftToSell}
           lowestPrice={lowestPrice}
           state={state}
@@ -707,6 +721,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       )}
       {stage === SellingStage.ADD_USERS_PAYMENT_CREDIT && (
         <UserPaymentCredits
+          thumbnail={_thumbnail}
           state={state}
           nftToSell={nftToSell}
           collectionId={collectionId}
@@ -721,6 +736,9 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       )}
       {stage === SellingStage.ADD_LOCATION && (
         <LocationStage
+          thumbnail={_thumbnail}
+          nftToSell={nftToSell}
+          collectionId={collectionId}
           state={state}
           variant={variant}
           nftFilters={nftFilters}
