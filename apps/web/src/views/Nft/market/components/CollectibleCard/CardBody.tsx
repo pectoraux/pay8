@@ -4,12 +4,11 @@ import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
-import { CollectibleCardProps } from './types'
 import NFTMedia from '../NFTMedia'
 
 const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice, isUserNft }) => {
   const { t } = useTranslation()
-  const { tokenId: name } = nft
+  const name = nft?.name
   const bnbBusdPrice = useBNBBusdPrice()
 
   return (

@@ -30,6 +30,7 @@ import willsReducer from './wills'
 import worldsReducer from './worlds'
 import arpsReducer from './arps'
 import globalReducer from './global/reducer'
+import profileReducer from './profile'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions']
 
@@ -68,6 +69,7 @@ const persistedReducer = persistReducer(
     wills: willsReducer,
     worlds: worldsReducer,
     arps: arpsReducer,
+    profile: profileReducer,
 
     // Exchange
     user,

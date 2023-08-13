@@ -22,15 +22,15 @@ import {
 } from '@pancakeswap/uikit'
 import useSWRImmutable from 'swr/immutable'
 import orderBy from 'lodash/orderBy'
-import { getLeastMostPriceInCollection } from 'state/nftMarket/helpers'
+import { getLeastMostPriceInCollection } from 'state/cancan/helpers'
 import { ViewMode } from 'state/user/actions'
-import { Collection } from 'state/nftMarket/types'
+import { Collection } from 'state/cancan/types'
 import styled from 'styled-components'
 import { FetchStatus } from 'config/constants/types'
-import { useGetShuffledCollections } from 'state/nftMarket/hooks'
+import { useGetShuffledCollections } from 'state/cancan/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import Page from 'components/Layout/Page'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
+import { nftsBaseUrl } from 'views/CanCan/market/constants'
 import PageLoader from 'components/Loader/PageLoader'
 import DELIST_COLLECTIONS from 'config/constants/nftsCollections/delist'
 import CollectionCardWithVolume from '../components/CollectibleCard/CollectionCardWithVolume'
@@ -116,7 +116,7 @@ const Collectible = () => {
       },
     ]
   }, [t])
-
+  console.log('shuffledCollections=================>', shuffledCollections)
   const { data: collections = [], status } = useSWRImmutable<
     (Collection & Partial<{ lowestPrice: number; highestPrice: number }>)[]
   >(
@@ -125,7 +125,7 @@ const Collectible = () => {
       if (viewMode === ViewMode.CARD && sortField !== SORT_FIELD.lowestPrice && sortField !== SORT_FIELD.highestPrice)
         return shuffledCollections
       return Promise.all(
-        shuffledCollections.map(async (collection) => {
+        shuffledCollections.map(async (collection: any) => {
           const [lowestPrice, highestPrice] = await Promise.all([
             getLeastMostPriceInCollection(collection.address, 'asc'),
             getLeastMostPriceInCollection(collection.address, 'desc'),
@@ -330,11 +330,11 @@ const Collectible = () => {
                 mb="32px"
                 data-test="nft-collection-row"
               >
-                {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection) => {
+                {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection: any) => {
                   return (
                     <CollectionCardWithVolume
                       key={collection.address}
-                      bgSrc={collection.banner.small}
+                      bgSrc={collection.small}
                       avatarSrc={collection.avatar}
                       collectionName={collection.name}
                       url={`${nftsBaseUrl}/collections/${collection.address}`}

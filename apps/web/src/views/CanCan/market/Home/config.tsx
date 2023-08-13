@@ -4,35 +4,32 @@ import { ContextApi } from '@pancakeswap/localization'
 const config = (t: ContextApi['t']) => {
   return [
     {
-      title: t('I sold an NFT, where’s my BNB?'),
+      title: t('How much does it cost to list a product?'),
       description: [
         t(
-          'Trades are settled in WBNB, which is a wrapped version of BNB used on BNB Smart Chain. That means that when you sell an item, WBNB is sent to your wallet instead of BNB.',
+          'It is completely free, create a profile, click on the *Make a channel* link in the top right drop down menu and create your own channel.',
         ),
-        t('You can instantly swap your WBNB for BNB with no trading fees on PancakeSwap.'),
+        t('Once you have a channel, you can list as many products or paywalls as you want.'),
       ],
     },
     {
-      title: t('How can I list my NFT collection on the Market?'),
+      title: t('How can I list my product on the Market?'),
       description: [
-        t('In Phase 2 of the NFT Marketplace, collections must be whitelisted before they may be listed.'),
-        t('We are now accepting applications from NFT collection owners seeking to list their collections.'),
-        <LinkExternal href="https://docs.pancakeswap.finance/contact-us/nft-market-applications">
-          {t('Please apply here')}
-        </LinkExternal>,
+        t('You can find a step by step guide on listing products and paywalls on CanCan in the documentation.'),
+        <LinkExternal href="">{t('Click here for more')}</LinkExternal>,
       ],
     },
-    {
-      title: t('What are the fees?'),
-      description: [
-        t(
-          '100% of all platform fees taken by PancakeSwap from sales are used to buy back and BURN CAKE tokens in our weekly CAKE burns.',
-        ),
-        t(
-          'Platform fees: 2% is subtracted from NFT sales on the market. Subject to change.Collection fees: Additional fees may be taken by collection creators, once those collections are live. These will not contribute to the CAKE burns.',
-        ),
-      ],
-    },
+    // {
+    //   title: t('What are the fees?'),
+    //   description: [
+    //     t(
+    //       '100% of all platform fees taken by PancakeSwap from sales are used to buy back and BURN CAKE tokens in our weekly CAKE burns.',
+    //     ),
+    //     t(
+    //       'Platform fees: 2% is subtracted from NFT sales on the market. Subject to change.Collection fees: Additional fees may be taken by collection creators, once those collections are live. These will not contribute to the CAKE burns.',
+    //     ),
+    //   ],
+    // },
   ]
 }
 

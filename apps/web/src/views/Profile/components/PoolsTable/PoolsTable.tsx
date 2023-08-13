@@ -44,7 +44,7 @@ const PoolsTable: React.FC<any> = ({ account }) => {
   const { pools: bounties, userDataLoaded: bountiesLoaded } = useBountiesWithFilterSelector()
   const isBounties = router.asPath.includes('bounties')
   const userDataLoaded = isBounties ? bountiesLoaded : userPitchesLoaded
-
+  console.log('profilepool====================>', pools)
   useBountiesPageFetch()
 
   return (

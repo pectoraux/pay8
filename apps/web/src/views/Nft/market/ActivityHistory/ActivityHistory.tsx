@@ -58,6 +58,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
   const { isXs, isSm, isMd } = useMatchBreakpoints()
 
   const nftActivityFiltersString = JSON.stringify(nftActivityFilters)
+  console.log('!nftActivityFilters============>', nftActivityFilters, nftActivityFiltersString)
 
   useEffect(() => {
     const fetchCollectionActivity = async () => {

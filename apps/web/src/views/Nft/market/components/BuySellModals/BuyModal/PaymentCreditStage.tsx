@@ -22,7 +22,7 @@ interface TransferStageProps {
   continueToNextStage: () => void
 }
 
-const PaymentCreditStage: React.FC<any> = ({ nftToBuy, collectionId, continueToNextStage }) => {
+const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, continueToNextStage }) => {
   const { t } = useTranslation()
   const [amount, setAmount] = useState<any>(0)
   const [burnForCreditToken, setBurnForCreditToken] = useState<any>('')
@@ -41,8 +41,6 @@ const PaymentCreditStage: React.FC<any> = ({ nftToBuy, collectionId, continueToN
     '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
     '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
   ]
-  const chunks = nftToBuy?.images && nftToBuy?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToBuy?.images?.split(',')[0]
 
   return (
     <>

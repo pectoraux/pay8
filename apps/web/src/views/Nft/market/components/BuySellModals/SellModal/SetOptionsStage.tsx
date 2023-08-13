@@ -25,6 +25,7 @@ interface SetPriceStageProps {
 const SetPriceStage: React.FC<any> = ({
   nftToSell,
   state,
+  thumbnail,
   addValue,
   collectionId,
   handleChoiceChange,
@@ -34,8 +35,6 @@ const SetPriceStage: React.FC<any> = ({
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { options } = state
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
 
   useEffect(() => {
     if (inputRef && inputRef.current) {

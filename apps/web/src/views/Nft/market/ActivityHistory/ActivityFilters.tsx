@@ -50,7 +50,7 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
       <ScrollableFlexContainer>
         <ListCollectionFilter
           address={collection?.id || ''}
-          products={collection?.products}
+          products={collection?.products?.split(',')}
           nftActivityFilters={nftActivityFilters}
         />
         {[MarketEvent.NEW, MarketEvent.CANCEL, MarketEvent.MODIFY, MarketEvent.SELL].map((eventType) => {

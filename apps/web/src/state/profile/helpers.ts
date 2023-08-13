@@ -193,15 +193,15 @@ export const fetchProfiles = async () => {
         const activePeriod = profileInfo.result[4]
         const paidPayable = profileInfo.result[5]
         const _collectionId = profileInfo.result[6]
-        const blackLateSeconds = profileInfo.result[7][0]
-        const blackLateValue = profileInfo.result[7][1]
-        const brownLateSeconds = profileInfo.result[8][0]
-        const brownLateValue = profileInfo.result[8][1]
-        const silverLateSeconds = profileInfo.result[9][0]
-        const silverLateValue = profileInfo.result[9][1]
-        const goldLateSeconds = profileInfo.result[10][0]
-        const goldLateValue = profileInfo.result[10][1]
-
+        const blackLateSeconds = profileInfo.result[7]?.lateSeconds
+        const blackLateValue = profileInfo.result[7]?.lateValue
+        const brownLateSeconds = profileInfo.result[8]?.lateSeconds
+        const brownLateValue = profileInfo.result[8]?.lateValue
+        const silverLateSeconds = profileInfo.result[9]?.lateSeconds
+        const silverLateValue = profileInfo.result[9]?.lateValue
+        const goldLateSeconds = profileInfo.result[10]?.lateSeconds
+        const goldLateValue = profileInfo.result[10]?.lateValue
+        console.log('profileInfo=======================>', profileInfo)
         let collection
         if (Number(gauge.collectionId)) {
           collection = await getCollection(gauge.collectionId)
@@ -251,11 +251,11 @@ export const fetchProfiles = async () => {
           ...gauge,
           tokens,
           badgeIds,
-          broadcast,
+          broadcast: broadcast.result,
           collection,
           ssid,
           name,
-          ssidAuditorProfileId,
+          ssidAuditorProfileId: ssidAuditorProfileId.toString(),
           createdAt: createdAt.toString(),
           activePeriod: activePeriod.toString(),
           paidPayable: paidPayable.toString(),

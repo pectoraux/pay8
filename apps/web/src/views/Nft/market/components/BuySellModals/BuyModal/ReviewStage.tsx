@@ -77,6 +77,7 @@ const ExpandingWrapper = styled.div`
 
 const ReviewStage: React.FC<any> = ({
   status,
+  thumbnail,
   isPaywall,
   nftToBuy,
   paymentCurrency,
@@ -143,8 +144,6 @@ const ReviewStage: React.FC<any> = ({
     if (curr?.symbol === secondaryCurrency?.symbol) return mainCurrency
     return secondaryCurrency
   }
-  const chunks = nftToBuy?.images && nftToBuy?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToBuy?.images?.split(',')[0]
 
   return (
     <>

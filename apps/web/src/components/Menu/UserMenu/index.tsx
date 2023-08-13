@@ -37,7 +37,7 @@ const UserMenuItems = () => {
   const [onPresentTransactionModal] = useModal(<WalletModal initialView={WalletView.TRANSACTIONS} />)
   const [onPresentWrongNetworkModal] = useModal(<WalletModal initialView={WalletView.WRONG_NETWORK} />)
   const hasProfile = isInitialized && !!profile
-  console.log('profile==============>', profile, isInitialized)
+  console.log('profile==============>', profile, hasProfile)
   const onClickWalletMenu = useCallback((): void => {
     if (isWrongNetwork) {
       onPresentWrongNetworkModal()
@@ -60,7 +60,7 @@ const UserMenuItems = () => {
       <ProfileUserMenuItem
         isLoading={isLoading}
         hasProfile={hasProfile}
-        disabled={isWrongNetwork || chainId !== ChainId.BSC}
+        disabled={isWrongNetwork || chainId !== ChainId.FANTOM_TESTNET}
       />
       <CanCanUserMenuItem
         isLoading={isLoading}

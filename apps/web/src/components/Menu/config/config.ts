@@ -223,10 +223,10 @@ const config: (
           label: t('Collections'),
           href: `${cancanBaseUrl}/collections`,
         },
-        {
-          label: t('Activity'),
-          href: `${cancanBaseUrl}/activity`,
-        },
+        // {
+        //   label: t('Activity'),
+        //   href: `${cancanBaseUrl}/activity`,
+        // },
       ],
     },
     {
@@ -245,10 +245,10 @@ const config: (
           label: t('Collections'),
           href: `${nftsBaseUrl}/collections`,
         },
-        {
-          label: t('Activity'),
-          href: `${nftsBaseUrl}/activity`,
-        },
+        // {
+        //   label: t('Activity'),
+        //   href: `${nftsBaseUrl}/activity`,
+        // },
       ],
     },
     {

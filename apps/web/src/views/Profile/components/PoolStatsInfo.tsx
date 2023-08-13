@@ -16,6 +16,7 @@ import {
   FlexGap,
   ProposalIcon,
   SmartContractIcon,
+  useModal,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -23,7 +24,9 @@ import { useToken } from 'hooks/Tokens'
 import { useAppDispatch } from 'state'
 import { setCurrPoolData } from 'state/profile'
 import { useCurrPool } from 'state/profile/hooks'
+
 import ClearAllButton from './ClearAllButton'
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool?: any
@@ -38,6 +41,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const earningToken = useToken(currState[tokenAddress])
+  const [onPresentNFT] = useModal(<WebPagesModal height="500px" pool={pool} />)
 
   // const [onPresentPayChat] = useModal(<QuizModal title="PayChat" link="https://matrix.to/#/!aGnoPysxAyEOUwXcJW:matrix.org?via=matrix.org" />)
 
@@ -46,34 +50,16 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       <Box>
         <ReactMarkdown>{pool?.collection?.description}</ReactMarkdown>
       </Box>
-      <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-        <Text color="primary" fontSize="14px">
-          {t('Cosign Enabled')} {`->`} {pool?.cosignEnabled ? t('True') : t('False')}
-        </Text>
-        {pool.cosignEnabled ? (
-          <Text color="primary" fontSize="14px">
-            {t('Minimum Cosigners')} {`->`} {pool?.minCosigners}
-          </Text>
-        ) : null}
-        {pool?.country ? (
-          <Text color="primary" fontSize="14px">
-            {t('Country')} {`->`} {pool.country}
-          </Text>
-        ) : null}
-        {pool?.city ? (
-          <Text color="primary" fontSize="14px">
-            {t('City')} {`->`} {pool.city}
-          </Text>
-        ) : null}
-      </Flex>
+      {pool?.collection ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
+            {t('View Admin Channel')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/info/token/${earningToken?.address}`} bold={false} small>
-          {t('See Token Info')}
-        </LinkExternal>
-      </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={earningToken?.projectLink} bold={false} small>
-          {t('View Business Channel')}
+        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFT} bold={false} small>
+          {t('View Profile NFT')}
         </LinkExternal>
       </Flex>
       {account && tokenAddress && (

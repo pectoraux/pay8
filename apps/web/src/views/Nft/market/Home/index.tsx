@@ -1,15 +1,6 @@
 import styled from 'styled-components'
 import { useState, useCallback, useMemo } from 'react'
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  LinkExternal,
-  PageHeader,
-  NextLinkFromReactRouter,
-  PageSection,
-} from '@pancakeswap/uikit'
+import { Box, Button, Flex, Heading, PageHeader, NextLinkFromReactRouter, PageSection } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import SectionsWithFoldableText from 'components/FoldableSection/SectionsWithFoldableText'
@@ -156,9 +147,6 @@ const Home = () => {
       )}
       <Gradient p="64px 0">
         <SectionsWithFoldableText header={t('FAQs')} config={config(t)} m="auto" />
-        <LinkExternal href="https://docs.pancakeswap.finance/contact-us/nft-market-applications" mx="auto" mt="16px">
-          {t('Create a Channel!')}
-        </LinkExternal>
       </Gradient>
     </>
   )

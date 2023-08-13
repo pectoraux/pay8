@@ -21,19 +21,17 @@ interface TransferStageProps {
   continueToNextStage: () => void
 }
 
-const CashbackStage: React.FC<any> = ({ nftToBuy, collectionId, continueToNextStage }) => {
+const CashbackStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, continueToNextStage }) => {
   const { t } = useTranslation()
   const [tokenId, setTokenId] = useState<any>(null)
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const numbersElligibilityCriteria = nftToBuy?.marketData.priceReductor?.cashbackNumbers
-  const costElligibilityCriteria = nftToBuy?.marketData.priceReductor?.cashbackCost
-  const cashNotCredit = nftToBuy?.marketData.priceReductor?.cashNotCredit
+  const numbersElligibilityCriteria = nftToBuy?.marketData?.priceReductor?.cashbackNumbers
+  const costElligibilityCriteria = nftToBuy?.marketData?.priceReductor?.cashbackCost
+  const cashNotCredit = nftToBuy?.marketData?.priceReductor?.cashNotCredit
   const numbersCashbackAvailable =
-    Number(nftToBuy?.marketData.priceReductor?.discountStatus) === 1 && numbersElligibilityCriteria?.cursor
+    Number(nftToBuy?.marketData?.priceReductor?.discountStatus) === 1 && numbersElligibilityCriteria?.cursor
   const costCashbackAvailable =
-    Number(nftToBuy?.marketData.priceReductor?.cashbackStatus) === 1 && costElligibilityCriteria?.cursor
-  const chunks = nftToBuy?.images && nftToBuy?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToBuy?.images?.split(',')[0]
+    Number(nftToBuy?.marketData?.priceReductor?.cashbackStatus) === 1 && costElligibilityCriteria?.cursor
 
   return (
     <>

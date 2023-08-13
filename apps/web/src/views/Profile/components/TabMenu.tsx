@@ -61,7 +61,7 @@ const TabMenu = ({ id }) => {
         as={NextLinkFromReactRouter}
         to={`/profile/${accountAddress}/transfers`}
       >
-        {t('Transfers')}
+        {t('Profiles')}
       </Tab>
     </Flex>
   )

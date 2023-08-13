@@ -28,6 +28,7 @@ interface TransferStageProps {
 const DiscountsNCashbacks: React.FC<any> = ({
   nftToSell,
   state,
+  thumbnail,
   collectionId,
   activeButtonIndex,
   setActiveButtonIndex,
@@ -51,8 +52,6 @@ const DiscountsNCashbacks: React.FC<any> = ({
     cashbackCost,
     checkItemOnly,
   } = state
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
 
   const discountSection = (
     <>

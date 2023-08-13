@@ -315,17 +315,19 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             Number(state.nftTokenId),
           )
           if (!!state.customMinter && !!Number(state.nftTokenId)) {
-            return callWithGasPrice(tokenContract, 'approve', [marketHelper3Contract.address, state.nftTokenId])
-              .then(() => callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs))
-              .catch((err) => console.log('rerr=============>', err))
+            callWithGasPrice(tokenContract, 'approve', [marketHelper3Contract.address, state.nftTokenId])
+            return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
+              console.log('rerr=============>', err),
+            )
           }
           return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
             console.log('rerr=============>', err),
           )
         }
-        return callWithGasPrice(minterFactoryContract, 'createGauge', [state.tokenId, state.name, state.symbol])
-          .then(() => callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs))
-          .catch((err) => console.log('rerr001=============>', err))
+        callWithGasPrice(minterFactoryContract, 'createGauge', [state.tokenId, state.name, state.symbol])
+        return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
+          console.log('rerr001=============>', err),
+        )
       }
       if (stage === SellingStage.CONFIRM_ADD_LOCATION || stage === SellingStage.CONFIRM_ADD_LOCATION2) {
         let args

@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Heading, Flex, Button, Grid, ChevronRightIcon, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { NftToken } from 'state/nftMarket/types'
-import { getLatestListedNfts, getNftsFromDifferentCollectionsApi } from 'state/nftMarket/helpers'
-import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
-import { Address } from 'wagmi'
+import { getLatestListedNfts } from 'state/cancan/helpers'
+import { nftsBaseUrl } from 'views/CanCan/market/constants'
 import { isAddress } from 'utils'
+
 import { CollectibleLinkCard } from '../components/CollectibleCard'
 import GridPlaceholder from '../components/GridPlaceholder'
 
@@ -14,24 +13,13 @@ import GridPlaceholder from '../components/GridPlaceholder'
  * @returns Array of NftToken
  */
 const useNewestNfts = () => {
-  const [newestNfts, setNewestNfts] = useState<NftToken[]>(null)
+  const [newestNfts, setNewestNfts] = useState<any>(null)
 
   useEffect(() => {
     const fetchNewestNfts = async () => {
       const nftsFromSg = await getLatestListedNfts(16)
-      const nftsFromApi = await getNftsFromDifferentCollectionsApi(
-        nftsFromSg.map((nft) => ({ collectionAddress: nft.collection.id as Address, tokenId: nft.tokenId })),
-      )
-
-      const nfts = nftsFromSg
-        .map((nftFromSg) => {
-          const foundNftFromApi = nftsFromApi.find((nftFromApi) => nftFromApi.tokenId === nftFromSg.tokenId)
-          if (foundNftFromApi) {
-            return { ...foundNftFromApi, marketData: nftFromSg }
-          }
-          return null
-        })
-        .filter(Boolean)
+      console.log('nftsFromSg================>', Object.values(nftsFromSg))
+      const nfts = nftsFromSg?.length ? Object.values(nftsFromSg) : []
       setNewestNfts(nfts)
     }
     fetchNewestNfts()
@@ -46,18 +34,20 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <>
-      <Flex justifyContent="space-between" alignItems="center" mb="26px">
-        <Heading data-test="nfts-newest">{t('Newest Arrivals')}</Heading>
-        <Button
-          as={NextLinkFromReactRouter}
-          to={`${nftsBaseUrl}/activity/`}
-          variant="secondary"
-          scale="sm"
-          endIcon={<ChevronRightIcon color="primary" />}
-        >
-          {t('View All')}
-        </Button>
-      </Flex>
+      {nfts?.length ? (
+        <Flex justifyContent="space-between" alignItems="center" mb="26px">
+          <Heading data-test="nfts-newest">{t('Newest Arrivals')}</Heading>
+          <Button
+            as={NextLinkFromReactRouter}
+            to={`${nftsBaseUrl}/activity/`}
+            variant="secondary"
+            scale="sm"
+            endIcon={<ChevronRightIcon color="primary" />}
+          >
+            {t('View All')}
+          </Button>
+        </Flex>
+      ) : null}
       {nfts ? (
         <Grid
           gridRowGap="24px"
@@ -65,9 +55,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
         >
           {nfts.map((nft) => {
-            const isPBCollection = isAddress(nft.collectionAddress) === pancakeBunniesAddress
-            const currentAskPrice =
-              !isPBCollection && nft.marketData?.isTradable ? parseFloat(nft.marketData?.currentAskPrice) : undefined
+            const currentAskPrice = nft.marketData?.isTradable ? parseFloat(nft.marketData?.currentAskPrice) : undefined
             return (
               <CollectibleLinkCard
                 data-test="newest-nft-card"

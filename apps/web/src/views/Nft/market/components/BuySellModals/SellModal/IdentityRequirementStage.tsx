@@ -25,6 +25,7 @@ interface TransferStageProps {
 const IdentityRequirementStage: React.FC<any> = ({
   nftToSell,
   state,
+  thumbnail,
   collectionId,
   handleChange,
   handleRawValueChange,
@@ -33,8 +34,6 @@ const IdentityRequirementStage: React.FC<any> = ({
   const { t } = useTranslation()
   const isInvalidField1 = false
   const isInvalidField2 = false
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
   return (
     <>
       <Text fontSize="24px" bold px="16px" pt="16px">

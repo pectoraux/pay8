@@ -17,6 +17,7 @@ interface TransferStageProps {
 const BurnTokenForCreditStage: React.FC<any> = ({
   state,
   nftToSell,
+  thumbnail,
   paymentCredits,
   setPaymentCredits,
   collectionId,
@@ -28,8 +29,6 @@ const BurnTokenForCreditStage: React.FC<any> = ({
   const { t } = useTranslation()
   const isInvalidField1 = false
   const isInvalidField2 = false
-  const chunks = nftToSell?.images && nftToSell?.images?.split(',')
-  const thumbnail = chunks?.length > 0 && nftToSell?.images?.split(',')[0]
   const getErrorText = () => {
     // if (isInvalidField1) {
     //   return t('This address is invalid')

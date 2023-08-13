@@ -325,94 +325,94 @@ export default {
   },
   paywallARPHelper: {
     56: '0x',
-    4002: '0xC14F82dC05cb692C2F082eeE95C53fDd3765D65A',
+    4002: '0x75d802791F0B1974cf64827c5807d908DD6A7E28',
   },
   paywallARPFactory: {
     56: '0x',
-    4002: '0xc1a0b48e056b136C6567D4e3A543FFDf250f9c66',
+    4002: '0x86F775CD9EA6200e4C61ABC450D8b7491D4fa880',
   },
   minterFactory: {
-    4002: '0xDD4ef326a423226a01533081b6aAa0c0cAf07594',
-    56: '0x',
-  },
-  marketEvents: {
-    4002: '0x5DbA44D1074bff70A979D7954003ADC2462197b6',
-    56: '0x',
-  },
-  marketCollections: {
-    4002: '0x5eda65Bc02607d7f91abC44bBfdA492706D6de85',
-    56: '0x0000000000000000000000000000000000000000',
-  },
-  marketOrders: {
-    4002: '0xda79E66AA64c7b7EC93Ae9adE91560AAb47C70Ae',
-    56: '0x',
-  },
-  marketTrades: {
-    4002: '0x2CFA9faDfc967542902F4D6fC313a24da99f20a2',
-    56: '0x',
-  },
-  marketHelper: {
-    4002: '0xDE123977f3E7d0f78e77345c5D5B67EC76A0e120',
-    56: '0x',
-  },
-  marketHelper2: {
-    4002: '0x338A9C97bab016fd7350754fFFcB929FD9c7A3dB',
-    56: '0x',
-  },
-  marketHelper3: {
-    4002: '0xF3b10866e35B054f2F65bBA7913d7f1fD39E120A',
-    56: '0x',
-  },
-  nftMarketOrders: {
-    4002: '0x0Be3eA43561241a45109Dc5C3F5f76E73bA558aC',
-    56: '0x',
-  },
-  nftMarketTrades: {
-    4002: '0xAeaCE2a9376aAf4066EeE36B1D84F89947c4639C',
-    56: '0x',
-  },
-  nftMarketHelper: {
-    4002: '0xd125796BE0B69E0930845089104dD1D2E4c28fac',
-    56: '0x',
-  },
-  nftMarketHelper2: {
-    4002: '0x81b3c903cFdFDe5f4c72264c637A489478e8Eee0',
-    56: '0x',
-  },
-  nftMarketHelper3: {
-    4002: '0x65E680424C927799973663f5fA150248972be7AB',
-    56: '0x',
-  },
-  paywallMarketOrders: {
-    4002: '0x5c172aaB7733D9C731B8789292688F03e0DB4e1C',
-    56: '0x',
-  },
-  paywallMarketTrades: {
-    4002: '0xd6D268BceC68ff3CD1E4c42fac07ED9414f25D63',
-    56: '0x',
-  },
-  paywallMarketHelper: {
-    4002: '0x009fB63770DaD06c249f6B7cffd8501C434Cc049',
-    56: '0x',
-  },
-  paywallMarketHelper2: {
-    4002: '0x6a1eAabB19131a63fDa4A9FCa70e805e969D4A2E',
-    56: '0x',
-  },
-  paywallMarketHelper3: {
-    4002: '0x62FaB271Dc341674939DD8Bc5A30a4b54deAe8A9',
+    4002: '0x0c5B5dBa4893277440d13FFf3Dd273f8b7A7a580',
     56: '0x',
   },
   nfticket: {
-    4002: '0x4bcb5d69694F8968c3D7c534C9DebeE799579Fea',
+    4002: '0x3A05ea8F22940769745d5ea656Be1E6C35Aec5a2',
     56: '0x',
   },
   nfticketHelper: {
-    4002: '0x8fd2039895CE73a19a01C8F2c235ED87e3665483',
+    4002: '0xE976C7932F28105F065f90a73706299F66185219',
     56: '0x',
   },
   nfticketHelper2: {
-    4002: '0xe3ed414D44f5eC44e20e5b285185122DAe75CC99',
+    4002: '0xA1eCa5aC14274ad02F04b62F8620B2767e350d47',
+    56: '0x',
+  },
+  marketEvents: {
+    4002: '0xc8990a7A65360785Cabc5f5543adB901c8E0e58e',
+    56: '0x',
+  },
+  marketCollections: {
+    4002: '0xd6C2ab767fbc268Dae92843f7efa31cE0E96535E',
+    56: '0x0000000000000000000000000000000000000000',
+  },
+  marketOrders: {
+    4002: '0x2c55aaCB688D8d4F5Bd9dF45A40bF856871F6255',
+    56: '0x',
+  },
+  marketTrades: {
+    4002: '0xcA601fFaA2CeA3E9ADCe8487294966633BCEE8ed',
+    56: '0x',
+  },
+  marketHelper: {
+    4002: '0xEc9e1fc04f0a6F4A5fFCE6Cd77E0788487cE6366',
+    56: '0x',
+  },
+  marketHelper2: {
+    4002: '0x4C5FF05F3b66132b14faDC60942B64c9f5C568C8',
+    56: '0x',
+  },
+  marketHelper3: {
+    4002: '0xbf659F592BEe5505D08Bf49F6A7532F35DdC0bAC',
+    56: '0x',
+  },
+  nftMarketOrders: {
+    4002: '0xC5C9c4b254cE2Cfab00f79557A26dEa764027d94',
+    56: '0x',
+  },
+  nftMarketTrades: {
+    4002: '0xeA96ac3F3a509bAeB9E9C77d4823789BB3Bb90BB',
+    56: '0x',
+  },
+  nftMarketHelper: {
+    4002: '0x32DE3407C4921B8A4da4C80131DCb55f64Ab2FF8',
+    56: '0x',
+  },
+  nftMarketHelper2: {
+    4002: '0x0a05c01FD0686F95D0977F66916FB4791d04E0bb',
+    56: '0x',
+  },
+  nftMarketHelper3: {
+    4002: '0x959bfE6e3285f981fb40641272f7d891Dc3260AD',
+    56: '0x',
+  },
+  paywallMarketOrders: {
+    4002: '0x1698119e5a012720e9e07e457bDDAd8128b6cfDf',
+    56: '0x',
+  },
+  paywallMarketTrades: {
+    4002: '0xdF7eC193e256be3D43173e0908db697700d661DB',
+    56: '0x',
+  },
+  paywallMarketHelper: {
+    4002: '0xc64161384CdCf691CF6448668afA4c96f513A904',
+    56: '0x',
+  },
+  paywallMarketHelper2: {
+    4002: '0x20c4Aeb567E2f9553A67084C8B85fAa784FE1862',
+    56: '0x',
+  },
+  paywallMarketHelper3: {
+    4002: '0xA006FfC14C034938E3cC11dc558D92E800c1b4e6',
     56: '0x',
   },
   stakemarket: {

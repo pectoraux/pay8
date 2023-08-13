@@ -30,24 +30,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     }
   }
-  const collection = await getCollection(collectionAddress)
-  const nft = await getNftSg(`${collectionAddress}-${tokenId}`)
-
-  // const nft: NftToken = {
-  //   tokenId,
-  //   collectionAddress,
-  //   collectionName: collection.name,
-  //   attributes: [],
-  // }
+  // const collection = await getCollection(collectionAddress)
+  // const nft = await getNftSg(`${collectionAddress}-${tokenId}`)
   return {
-    props: {
-      fallback: {
-        [unstable_serialize(['nft', collectionAddress, tokenId])]: nft,
-        ...(collection && {
-          [unstable_serialize(['nft', 'collections', collectionAddress])]: collection,
-        }),
-      },
-    },
+    props: {},
+    // {
+    //   fallback: {
+    //     [unstable_serialize(['nft', collectionAddress?.toString(), tokenId?.toString()])]: nft,
+    //     ...(collection && {
+    //       [unstable_serialize(['nft-item', 'collections', collectionAddress?.toString()])]: collection,
+    //     }),
+    //   },
+    // },
     revalidate: 60 * 60 * 6, // 6 hours
   }
 }

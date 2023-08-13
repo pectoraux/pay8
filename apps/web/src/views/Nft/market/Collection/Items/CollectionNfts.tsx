@@ -261,7 +261,7 @@ const Content: React.FC<any> = ({ owner, registration }) => {
   const { t } = useTranslation()
   const [onPresentAddReferral] = useModal(<AddReferralModal registration={registration} />)
   const [onPresentCloseReferral] = useModal(<CloseReferralModal registration={registration} />)
-
+  console.log('Content========================>', registration)
   return registration.mirrors?.length > 0 ? (
     <Flex flexDirection="column">
       <Flex flexDirection="row" justifyContent="center">
@@ -278,18 +278,20 @@ const Content: React.FC<any> = ({ owner, registration }) => {
         gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
         alignItems="start"
       >
-        {registration.mirrors?.map((reg) => {
-          const nft = reg.item
-          const currentAskPriceAsNumber = nft && parseFloat(nft?.currentAskPrice)
-          return (
-            <CollectibleLinkCard
-              key={nft?.tokenId}
-              nft={nft}
-              referrer={owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase() && nft?.currentSeller}
-              currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
-            />
-          )
-        })}
+        {registration.mirrors
+          ?.filter((reg) => !!reg.nft)
+          ?.map((reg) => {
+            const nft = reg.item
+            const currentAskPriceAsNumber = nft && parseFloat(nft?.currentAskPrice)
+            return (
+              <CollectibleLinkCard
+                key={nft?.tokenId}
+                nft={nft}
+                referrer={owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase() && nft?.currentSeller}
+                currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
+              />
+            )
+          })}
       </Grid>
     </Flex>
   ) : (
@@ -302,7 +304,7 @@ const Content: React.FC<any> = ({ owner, registration }) => {
 }
 
 const Paywall: React.FC<any> = ({ collection, paywall }) => {
-  console.log('paywall======================>', paywall)
+  console.log('99paywall======================>', paywall)
   const { t } = useTranslation()
   const { account } = useWeb3React()
   // const paywallARP = useGetPaywallARP(collection?.id ?? '', paywall?.id ?? '')

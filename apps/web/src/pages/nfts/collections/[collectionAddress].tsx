@@ -38,7 +38,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       return {
         props: {
           fallback: {
-            [unstable_serialize(['cancan', 'collections', collectionAddress])]: { ...collectionData },
+            [unstable_serialize(['nfts', 'collections', collectionAddress])]: { ...collectionData },
           },
         },
         revalidate: 60 * 60 * 6, // 6 hours
