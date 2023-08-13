@@ -159,6 +159,8 @@ import { VaultKey } from 'state/types'
 import { erc721CollectionABI } from 'config/abi/erc721collection'
 import { infoStableSwapABI } from 'config/abi/infoStableSwap'
 import { wethABI } from 'config/abi/weth'
+import { Wallet } from 'ethers'
+
 /**
  * Helper hooks to get specific contracts (by ABI)
  */
@@ -505,9 +507,12 @@ export const useRampAds = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) =>
   return useMemo(() => getRampAdsContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }
 
-export const useRampContract = (rampAddress: Address) => {
+export const useRampContract = (rampAddress: Address, withPayswapSigner = false) => {
   const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
+  let { data: signer } = useWalletClient()
+  if (withPayswapSigner) {
+    signer = new Wallet(process.env.NEXT_PUBLIC_PAYSWAP_SIGNER) as any
+  }
   return useMemo(() => rampAddress && getRampContract(rampAddress, signer, chainId), [rampAddress, signer, chainId])
 }
 
@@ -728,10 +733,13 @@ export const useBettingContract = (bettingAddress: Address) => {
   )
 }
 
-export const useCardContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+export const useCardContract = (withPayswapSigner) => {
   const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getCardContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+  let { data: signer } = useWalletClient()
+  if (withPayswapSigner) {
+    signer = new Wallet(process.env.NEXT_PUBLIC_PAYSWAP_SIGNER) as any
+  }
+  return useMemo(() => getCardContract(signer, chainId), [signer, chainId])
 }
 
 export const useFutureCollateralContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
@@ -857,10 +865,13 @@ export const useGameFactory = ({ chainId: chainId_ }: { chainId?: ChainId } = {}
   return useMemo(() => getGameFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }
 
-export const useGameMinter = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+export const useGameMinter = (withPayswapSigner = false) => {
   const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getGameMinterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+  let { data: signer } = useWalletClient()
+  if (withPayswapSigner) {
+    signer = new Wallet(process.env.NEXT_PUBLIC_PAYSWAP_SIGNER) as any
+  }
+  return useMemo(() => getGameMinterContract(signer, chainId), [signer, chainId])
 }
 
 export const useGameHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
