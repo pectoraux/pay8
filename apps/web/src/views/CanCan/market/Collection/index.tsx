@@ -19,7 +19,10 @@ const Activity = dynamic(() => import('./Activity'), {
 const Requests = dynamic(() => import('./Requests'), {
   loading: () => <PageLoader />,
 })
-const Contracts = dynamic(() => import('views/StakeMarket'), {
+const StakeMarket = dynamic(() => import('views/StakeMarket'), {
+  loading: () => <PageLoader />,
+})
+const TrustBounties = dynamic(() => import('views/TrustBounties'), {
   loading: () => <PageLoader />,
 })
 const ValuePools = dynamic(() => import('views/ValuePools'), {
@@ -56,8 +59,12 @@ const Collection = () => {
     content = <Requests />
   }
 
-  if (hash === '#stakemarket' || hash === '#trustbounties') {
-    content = <Contracts />
+  if (hash === '#stakemarket') {
+    content = <StakeMarket />
+  }
+
+  if (hash === '#trustbounties') {
+    content = <TrustBounties />
   }
 
   if (hash === '#valuepools') {
