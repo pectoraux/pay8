@@ -93,26 +93,20 @@ const InfoSection = styled(Box)`
   }
 `
 
-const ActionPanel: React.FC<any> = ({ account, pool, expanded }) => {
-  const { userData } = pool
+const ActionPanel: React.FC<any> = ({ account, pool, token, expanded }) => {
   const { isMobile } = useMatchBreakpoints()
-
-  const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
-  const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-  const poolStakingTokenBalance = stakedBalance.plus(stakingTokenBalance)
-
   return (
     <StyledActionPanel expanded={expanded}>
       <InfoSection>
         <Flex flexDirection="column" mb="8px">
-          <PoolStatsInfo pool={pool} account={account} showTotalStaked={isMobile} alignLinksToRight={isMobile} />
+          <PoolStatsInfo pool={pool} account={account} currAccount={token} alignLinksToRight={isMobile} />
         </Flex>
       </InfoSection>
       <ActionContainer>
         <Box width="100%">
-          <ActionContainer hasBalance={poolStakingTokenBalance.gt(0)}>
-            <Harvest pool={pool} />
-            <Stake pool={pool} />
+          <ActionContainer>
+            <Harvest pool={pool} currAccount={token} />
+            <Stake pool={pool} currAccount={token} />
           </ActionContainer>
         </Box>
       </ActionContainer>

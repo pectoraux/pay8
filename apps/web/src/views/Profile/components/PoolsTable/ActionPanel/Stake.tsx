@@ -16,11 +16,11 @@ interface StackedActionProps {
   pool?: any
 }
 
-const Staked: React.FunctionComponent<any> = ({ pool }) => {
+const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
 
-  const currencyA = useCurrency(DEFAULT_TFIAT)
+  const currencyA = useCurrency(currAccount?.tokenAddress ?? '')
   const [currency, setCurrency] = useState(currencyA)
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)

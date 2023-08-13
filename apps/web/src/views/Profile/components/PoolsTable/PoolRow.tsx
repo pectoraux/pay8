@@ -19,7 +19,13 @@ const PoolRow: React.FC<any> = ({ sousId, account }) => {
   return (
     <ExpandRow
       panel={
-        <ActionPanel account={account} pool={pool} expanded breakpoints={{ isXs, isSm, isMd, isLg, isXl, isXxl }} />
+        <ActionPanel
+          account={account}
+          pool={pool}
+          token={token}
+          expanded
+          breakpoints={{ isXs, isSm, isMd, isLg, isXl, isXxl }}
+        />
       }
     >
       <NameCell pool={pool} />

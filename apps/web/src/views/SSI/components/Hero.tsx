@@ -34,7 +34,7 @@ const Hero = () => {
               {t('Create a Self Sovereign Identity and own your data')}
             </Heading>
             <Flex>
-              {status === FetchStatus.Fetched && !!data.publicKey ? (
+              {status === FetchStatus.Fetched && !!data?.publicKey ? (
                 <Flex flexDirection="column">
                   <Flex mb="19px">
                     <Link href="/ssi/proposal/create" passHref prefetch={false}>

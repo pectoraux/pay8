@@ -1,35 +1,38 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
+import { Button, Text, Flex, Box, Balance, ScanLink } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBlockExploreLink } from 'utils'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
-const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
+  const { chainId } = useActiveChainId()
 
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
       <Text fontSize="12px" bold mr="2px" color="textSubtle" as="span" textTransform="uppercase">
-        {t('Profile Data')}{' '}
+        {t('Profile Token: ')}{' '}
       </Text>
-      {/* <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {rampAccount?.token?.symbol ?? ''}
-      </Text> */}
+      <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+        {currAccount?.token?.symbol ?? ''}
+      </Text>
     </Flex>
   )
 
-  // if (!account) {
-  //   return (
-  //     <ActionContainer>
-  //       <ActionTitles>{actionTitle}</ActionTitles>
-  //       <ActionContent>
-  //         <Button disabled>{t('Please Connect Your Wallet')}</Button>
-  //       </ActionContent>
-  //     </ActionContainer>
-  //   )
-  // }
+  if (!account) {
+    return (
+      <ActionContainer>
+        <ActionTitles>{actionTitle}</ActionTitles>
+        <ActionContent>
+          <Button disabled>{t('Please Connect Your Wallet')}</Button>
+        </ActionContent>
+      </ActionContainer>
+    )
+  }
 
   return (
     <ActionContainer>
@@ -111,6 +114,11 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
               {t('SSID Auditor Profile ID')}
             </Text>
           </Box>
+          {pool?.accounts?.map((acct) => (
+            <ScanLink href={getBlockExploreLink(acct?.ownerAddress, 'address', chainId)} bold={false} small>
+              {truncateHash(acct?.ownerAddress)}
+            </ScanLink>
+          ))}
         </Flex>
       </ActionContent>
     </ActionContainer>

@@ -16,7 +16,7 @@ import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/Confi
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { requiresApproval } from 'utils/requiresApproval'
-import { useGetIsNameUsed, useGetProfileData } from 'state/profile/hooks'
+import { useGetIsNameUsed } from 'state/profile/hooks'
 import BigNumber from 'bignumber.js'
 import PayProfileStage from './PayProfileStage'
 import UpdateLateDaysStage from './UpdateLateDaysStage'

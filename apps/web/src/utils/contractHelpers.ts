@@ -114,6 +114,7 @@ import {
   getLotteryHelperAddress,
   getRandomNumberGeneratorAddress,
   getLotteryRandomNumberGeneratorAddress,
+  getProfileAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -331,7 +332,7 @@ export const getCakeContract = (chainId?: number) => {
 }
 
 export const getProfileContract = (signer?: WalletClient) => {
-  return getContract({ abi: pancakeProfileABI, address: getPancakeProfileAddress(), signer })
+  return getContract({ abi: profileABI, address: getProfileAddress(), signer })
 }
 
 export const getBunnyFactoryContract = (signer?: WalletClient) => {

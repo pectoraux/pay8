@@ -237,10 +237,10 @@ export const fetchProfiles = async () => {
             })
             return {
               ...token,
-              tokenName,
-              decimals,
-              symbol,
-              bountyBalance: bountyBalance.toString(),
+              tokenName: tokenName.result,
+              decimals: decimals.result,
+              symbol: symbol.result?.toUpperCase(),
+              bountyBalance: bountyBalance.result.toString(),
             }
           }),
         )

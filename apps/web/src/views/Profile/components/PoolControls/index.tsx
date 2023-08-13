@@ -1,13 +1,16 @@
+import { useState } from 'react'
 import { useAccount } from 'wagmi'
-import { Profile } from '@pancakeswap/uikit'
-import { useUserPoolStakedOnly, useUserPoolsViewMode } from 'state/user/hooks'
-import { useInitialBlockTimestamp } from 'state/block/hooks'
 import { Token } from '@pancakeswap/sdk'
+import { Profile } from '@pancakeswap/uikit'
+import { useUserPoolsViewMode } from 'state/user/hooks'
+import { useInitialBlockTimestamp } from 'state/block/hooks'
 
 const POOL_START_THRESHOLD = 60 * 4
 
 export default function PoolControlsContainer(props) {
-  const [stakedOnly, setStakedOnly] = useUserPoolStakedOnly()
+  const [mineOnly, setMineOnly] = useState(false)
+  const [followingOnly, setFollowingOnly] = useState(false)
+  const [followersOnly, setFollowersOnly] = useState(false)
   const [viewMode, setViewMode] = useUserPoolsViewMode()
   const { address: account } = useAccount()
   const initialBlockTimestamp = useInitialBlockTimestamp()
@@ -16,8 +19,12 @@ export default function PoolControlsContainer(props) {
   return (
     <Profile.PoolControls<Token>
       {...props}
-      stakedOnly={stakedOnly}
-      setStakedOnly={setStakedOnly}
+      mineOnly={mineOnly}
+      setMineOnly={setMineOnly}
+      followingOnly={followingOnly}
+      followersOnly={followersOnly}
+      setFollowersOnly={setFollowersOnly}
+      setFollowingOnly={setFollowingOnly}
       viewMode={viewMode}
       setViewMode={setViewMode}
       account={account}

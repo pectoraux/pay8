@@ -1,59 +1,71 @@
-import { memo } from 'react'
 import {
   Flex,
-  Link,
   LinkExternal,
-  Button,
-  Text,
-  ReactMarkdown,
-  Svg,
   Pool,
-  Box,
+  ScanLink,
+  Link,
+  FlexGap,
+  IconButton,
+  LanguageIcon,
   TwitterIcon,
   TelegramIcon,
-  LanguageIcon,
-  IconButton,
-  FlexGap,
   ProposalIcon,
   SmartContractIcon,
   useModal,
+  Text,
+  Button,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
-import { useToken } from 'hooks/Tokens'
-import { useAppDispatch } from 'state'
+import { Token } from '@pancakeswap/sdk'
+import { memo } from 'react'
+import { useDispatch } from 'react-redux'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { getBlockExploreLink } from 'utils'
 import { setCurrPoolData } from 'state/profile'
 import { useCurrPool } from 'state/profile/hooks'
 
-import ClearAllButton from './ClearAllButton'
 import WebPagesModal from './WebPagesModal'
+import ClearAllButton from './ClearAllButton'
+import { useToken } from 'hooks/Tokens'
 
 interface ExpandedFooterProps {
-  pool?: any
+  pool: Pool.DeserializedPool<Token>
   account: string
+  showTotalStaked?: boolean
   alignLinksToRight?: boolean
-  showTotalStaked?: any
 }
 
-const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
+const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksToRight = true }) => {
   const { t } = useTranslation()
-  const tokenAddress = pool?.id || ''
-  const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
+  const dispatch = useDispatch()
   const currState = useCurrPool()
+  const tokenAddress = pool?.id || ''
   const earningToken = useToken(currState[tokenAddress])
+  console.log('currAccount=============>', currAccount)
   const [onPresentNFT] = useModal(<WebPagesModal height="500px" pool={pool} />)
 
-  // const [onPresentPayChat] = useModal(<QuizModal title="PayChat" link="https://matrix.to/#/!aGnoPysxAyEOUwXcJW:matrix.org?via=matrix.org" />)
-
   return (
-    <Flex flexDirection="column" maxHeight="200px" overflow="auto">
-      <Box>
-        <ReactMarkdown>{pool?.collection?.description}</ReactMarkdown>
-      </Box>
-      {pool?.collection ? (
+    <>
+      {pool?.owner && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
+            {t('View Owner Info')}
+          </ScanLink>
+        </Flex>
+      )}
+      {pool?.devaddr_ && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?.devaddr_, 'address', chainId)} bold={false} small>
+            {t('View Admin Info')}
+          </ScanLink>
+        </Flex>
+      )}
+      {pool?.collectionId ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
-            {t('View Admin Channel')}
+            {t('See Admin Channel')}
           </LinkExternal>
         </Flex>
       ) : null}
@@ -62,7 +74,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('View Profile NFT')}
         </LinkExternal>
       </Flex>
-      {account && tokenAddress && (
+      {account && currAccount?.tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
             variant="text"
@@ -72,8 +84,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             marginTextBetweenLogo="4px"
             textOptions={AddToWalletTextOptions.TEXT}
             tokenAddress={tokenAddress}
-            tokenSymbol={earningToken?.symbol}
-            tokenDecimals={earningToken?.decimals}
+            tokenSymbol={currAccount?.symbol}
+            tokenDecimals={currAccount?.decimals}
             tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
           />
         </Flex>
@@ -146,7 +158,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           )}
         </FlexGap>
       </Flex>
-    </Flex>
+    </>
   )
 }
 
