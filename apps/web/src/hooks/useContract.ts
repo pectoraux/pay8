@@ -733,7 +733,7 @@ export const useBettingContract = (bettingAddress: Address) => {
   )
 }
 
-export const useCardContract = (withPayswapSigner) => {
+export const useCardContract = (withPayswapSigner = false) => {
   const { chainId } = useActiveChainId()
   let { data: signer } = useWalletClient()
   if (withPayswapSigner) {
