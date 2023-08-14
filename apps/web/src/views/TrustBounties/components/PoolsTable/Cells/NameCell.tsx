@@ -32,7 +32,6 @@ const NameCell: React.FC<any> = ({ pool, symbol }) => {
 
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
       <Pool.CellContent>
         <Flex flexDirection="column">
           <SaveIcon
