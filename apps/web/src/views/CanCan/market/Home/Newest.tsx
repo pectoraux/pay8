@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Heading, Flex, Button, Grid, ChevronRightIcon, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { getLatestListedNfts } from 'state/cancan/helpers'
+import { getLatestListedItems } from 'state/cancan/helpers'
 import { nftsBaseUrl } from 'views/CanCan/market/constants'
 import { isAddress } from 'utils'
 
@@ -17,9 +17,9 @@ const useNewestNfts = () => {
 
   useEffect(() => {
     const fetchNewestNfts = async () => {
-      const nftsFromSg = await getLatestListedNfts(16)
+      const nftsFromSg = await getLatestListedItems(16)
       console.log('nftsFromSg================>', Object.values(nftsFromSg))
-      const nfts = nftsFromSg?.length ? Object.values(nftsFromSg) : []
+      const nfts = Object.values(nftsFromSg)
       setNewestNfts(nfts)
     }
     fetchNewestNfts()

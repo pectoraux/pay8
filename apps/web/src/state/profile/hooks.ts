@@ -153,9 +153,7 @@ export const useGetProfileData = (profileId) => {
 }
 
 export const useGetIsNameUsed = (name) => {
-  const { data, status, mutate } = useSWR(['isNameUsed', name?.toLowerCase()], async () =>
-    getIsNameUsed(name?.toLowerCase()),
-  )
+  const { data, status, mutate } = useSWR(['isNameUsed', name], async () => getIsNameUsed(name))
   return {
     status,
     refetch: mutate,

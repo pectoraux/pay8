@@ -901,13 +901,40 @@ export const getTokenActivity = async (
  * @param first Number of nfts to retrieve
  * @returns NftTokenSg[]
  */
-export const getLatestListedNfts = async (first: number): Promise<TokenMarketData[]> => {
+export const getLatestListedItems = async (first: number): Promise<TokenMarketData[]> => {
   try {
     const res = await request(
       GRAPH_API_CANCAN,
       gql`
         query getLatestNftMarketData($first: Int) {
           items(orderBy: updatedAt , orderDirection: desc, first: $first) {
+            ${itemFields}
+            collection {
+              id
+            }
+          }
+        }
+      `,
+      { first },
+    )
+
+    return {
+      ...res.items,
+      // images: res.items?.map((item) => getImages(item.images)),
+    }
+  } catch (error) {
+    console.error('3Failed to fetch Items market data========>', error)
+    return []
+  }
+}
+
+export const getLatestListedNfts = async (first: number): Promise<TokenMarketData[]> => {
+  try {
+    const res = await request(
+      GRAPH_API_CANCAN,
+      gql`
+        query getLatestNftMarketData($first: Int) {
+          nfts(orderBy: updatedAt , orderDirection: desc, first: $first) {
             ${itemFields}
             collection {
               id

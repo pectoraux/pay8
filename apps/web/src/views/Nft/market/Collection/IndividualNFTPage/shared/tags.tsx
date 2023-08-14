@@ -4,7 +4,7 @@ interface ProposalStateTagProps extends TagProps {
   votingPower: string
 }
 
-export const ProposalStateTag: React.FC<ProposalStateTagProps> = ({ votingPower, ...props }) => {
+export const ProposalStateTag: React.FC<any> = ({ votingPower, ...props }) => {
   const [BROWN, SILVER, GOLD] = [2000, 3000, 4000]
   const { VotingPowerTag } = Farm.Tags
 

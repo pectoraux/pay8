@@ -169,6 +169,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
     webm: '',
     gif: '',
     mp4: _mp4 ?? '',
+    isArticle: 0,
     prices: nftToSell?.prices?.toString() ?? '',
     start: nftToSell?.start ?? '0',
     period: nftToSell?.period ?? '0',
@@ -474,7 +475,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
             state.period,
             variant === 'item' ? 2 : 1,
             !!state.isTradable,
-            `${state.thumbnail},${state.mp4}`,
+            state.isArticle ? `${state.thumbnail},${state.mp4}` : `${state.thumbnail},${state.thumbnail}`,
             nftFilters?.country?.reduce((accum, attr) => [...accum, attr], []),
             nftFilters?.city?.reduce((accum, attr) => [...accum, attr], []),
             [...nftFilters?.product, ...state.customTags.split(',')]

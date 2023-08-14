@@ -20,7 +20,7 @@ import { NftToken } from 'state/cancan/types'
 import { CurrencyLogo } from 'components/Logo'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
+import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import Countdown from 'views/Lottery/components/Countdown'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
@@ -90,7 +90,7 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
       ...option,
     }
   })
-
+  console.log('MainNFTCard========================+>', nft)
   return (
     <Card mb="40px">
       <CardBody>
@@ -205,13 +205,13 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
               variant={textColor}
               statType="super"
               title={t('SuperLikes')}
-              stat={nft?.superLikes ? formatNumber(Number(nft?.superLikes), 0, 0) : '0'}
+              stat={nft?.superLikes ? formatNumber(getBalanceNumber(nft?.superLikes, 18), 0, 5) : '0'}
             />
             <StatBoxItem
               variant={textColor}
               statType="super"
               title={t('SuperDislikes')}
-              stat={nft?.superDislikes ? formatNumber(Number(nft?.superDislikes), 0, 0) : '0'}
+              stat={nft?.superDisLikes ? formatNumber(getBalanceNumber(nft?.superDisLikes, 18), 0, 5) : '0'}
             />
             {!isMobile && (
               <StatBoxItem

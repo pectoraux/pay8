@@ -284,10 +284,11 @@ const Collectible = () => {
                               maximumFractionDigits: 3,
                             })
                           : '0'
+                        console.log('collection===============>', collection)
                         return (
-                          <tr key={collection.address} data-test="nft-collection-row">
+                          <tr key={collection.id} data-test="nft-collection-row">
                             <Td style={{ cursor: 'pointer', minWidth: '200px' }}>
-                              <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${collection.address}`}>
+                              <NextLinkFromReactRouter to={`${nftsBaseUrl}/collections/${collection.id}`}>
                                 <Flex alignItems="center">
                                   <ProfileAvatar src={collection.avatar} width={48} height={48} mr="16px" />
                                   {collection.name}
@@ -333,11 +334,11 @@ const Collectible = () => {
                 {sortedCollections.slice(ITEMS_PER_PAGE * (page - 1), page * ITEMS_PER_PAGE).map((collection: any) => {
                   return (
                     <CollectionCardWithVolume
-                      key={collection.address}
+                      key={collection.id}
                       bgSrc={collection.small}
                       avatarSrc={collection.avatar}
                       collectionName={collection.name}
-                      url={`${nftsBaseUrl}/collections/${collection.address}`}
+                      url={`${nftsBaseUrl}/collections/${collection.id}`}
                       volume={collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0}
                     />
                   )

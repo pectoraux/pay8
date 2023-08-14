@@ -38,6 +38,7 @@ import { ProposalStateTag } from './tags'
 import ExpandableCard from './ExpandableCard'
 import { getBlockExploreLink } from 'utils'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 interface ReviewsCardProps {
   reviews: any
@@ -97,13 +98,13 @@ const NormalReview: React.FC<any> = ({ review }) => {
 
 const SuperReview: React.FC<any> = ({ review }) => {
   const { t } = useTranslation()
-
+  const { chainId } = useActiveChainId()
   return (
-    <StyledProposalRow to={`/info/token/${review?.reviewer}`}>
+    <StyledProposalRow to={getBlockExploreLink(review.reviewer, 'address', chainId)}>
       <Box as="span" style={{ flex: 1 }}>
-        <Text bold mb="8px">
-          {truncateHash(review?.reviewer ?? '')}
-        </Text>
+        <ScanLink href={getBlockExploreLink(review.reviewer, 'address', chainId)} bold={false} small>
+          {truncateHash(review.reviewer ?? '')}
+        </ScanLink>
         <CardBody p="0" px="24px" color="textSubtle">
           <ReactMarkdown>{review.body}</ReactMarkdown>
         </CardBody>
@@ -113,7 +114,7 @@ const SuperReview: React.FC<any> = ({ review }) => {
           </Flex>
         ) : null}
         <Flex alignItems="center">
-          <ProposalStateTag votingPower={review?.power} />
+          <ProposalStateTag votingPower={getBalanceNumber(review?.power, 18)} />
         </Flex>
       </Box>
       <IconButton variant="text">

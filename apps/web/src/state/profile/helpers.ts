@@ -115,7 +115,7 @@ export const getIsNameUsed = async (name) => {
       },
     ],
   })
-  return isNameTaken
+  return isNameTaken.result
 }
 
 export const getProfileDataFromUser = async (address) => {

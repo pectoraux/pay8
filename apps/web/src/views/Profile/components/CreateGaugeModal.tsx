@@ -133,8 +133,6 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
     name: '',
     referrerProfileId: '0',
   }))
-  const { isNameUsed } = useGetIsNameUsed(state.name)
-
   console.log('pppoool================>', pool, profile)
 
   const updateValue = (key: any, value: any) => {
@@ -570,12 +568,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         />
       )}
       {stage === LockStage.CREATE && (
-        <CreateProfileStage
-          state={state}
-          isNameUsed={isNameUsed}
-          handleChange={handleChange}
-          continueToNextStage={continueToNextStage}
-        />
+        <CreateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage

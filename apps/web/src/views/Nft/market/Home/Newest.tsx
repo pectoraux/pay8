@@ -18,7 +18,7 @@ const useNewestNfts = () => {
     const fetchNewestNfts = async () => {
       const nftsFromSg = await getLatestListedNfts(16)
 
-      const nfts = nftsFromSg?.length ? Object.values(nftsFromSg) : []
+      const nfts = Object.values(nftsFromSg)
       setNewestNfts(nfts)
     }
     fetchNewestNfts()

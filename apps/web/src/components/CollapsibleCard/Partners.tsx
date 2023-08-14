@@ -90,9 +90,11 @@ const Cart = ({ paywall, collection }) => {
 
   return (
     <>
-      <Text ml="16px" mt="8px" color="primary">
-        {t('Partners')}
-      </Text>
+      {paywall?.mirrors?.filter((mirror) => !!mirror.partnerPaywall)?.length ? (
+        <Text ml="16px" mt="8px" color="primary">
+          {t('Partners')}
+        </Text>
+      ) : null}
       <ScrollableRow ref={increaseRef}>
         {paywall?.mirrors
           ?.filter((mirror) => !!mirror.partnerPaywall)

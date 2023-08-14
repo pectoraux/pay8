@@ -51,7 +51,7 @@ const ProductDetailsSection: React.FC<ExpandableSectionProps> = ({ paywall, coll
       />
       {showExpandableSection ? (
         <>
-          <Partners paywall={paywall} collection={collection} />
+          {/* <Partners paywall={paywall} collection={collection} /> */}
           <Wrapper>
             <Flex justifyContent="space-between">
               <Text color="secondary">{t('SuperLikes')}:</Text>

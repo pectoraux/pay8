@@ -178,6 +178,22 @@ const LocationStage: React.FC<any> = ({
             )}
             <GreyedOutContainer>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Product is article')}
+              </Text>
+              <StyledItemRow>
+                <ButtonMenu
+                  scale="xs"
+                  variant="subtle"
+                  activeIndex={state.isArticle}
+                  onItemClick={handleRawValueChange('isArticle')}
+                >
+                  <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+                  <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+                </ButtonMenu>
+              </StyledItemRow>
+            </GreyedOutContainer>
+            <GreyedOutContainer>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
                 {t('Description')}
               </Text>
               <Input
