@@ -1,5 +1,4 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 

@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool, useCurrBribe } from 'state/referrals/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -25,16 +25,22 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   console.log('referralpool1================>', pool)
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} />
-      <BribesCell currBribe={currBribe} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
-      <TotalValueCell labelText={t('To Distribute')} amount={pool?.claimable} symbol={pool?.vestingTokenSymbol || ''} />
-      <TotalValueCell
-        labelText={t('Rewards Claimed')}
-        amount={pool?.gaugeEarned}
-        symbol={pool?.vestingTokenSymbol || ''}
-      />
-      <TotalVotesCell pool={pool} account={account} />
+      <TabMenu>
+        <NameCell pool={pool} />
+        <BribesCell currBribe={currBribe} />
+        <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
+        <TotalValueCell
+          labelText={t('To Distribute')}
+          amount={pool?.claimable}
+          symbol={pool?.vestingTokenSymbol || ''}
+        />
+        <TotalValueCell
+          labelText={t('Rewards Claimed')}
+          amount={pool?.gaugeEarned}
+          symbol={pool?.vestingTokenSymbol || ''}
+        />
+        <TotalVotesCell pool={pool} account={account} />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

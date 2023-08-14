@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool } from 'state/stakemarket/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
@@ -21,17 +21,21 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currPool={currPool} setCurrPool={setCurrPool} expanded />}
     >
-      <NameCell pool={pool} symbol={pool?.tokenSymbol} />
-      <TotalUsersCell labelText={t('Total Users')} amount={pool?.partnerStakeIds?.length} />
-      <TotalValueCell
-        labelText={t('Total Liquidity')}
-        amount={getBalanceNumber(pool.totalLiquidity, pool.tokenDecimals)}
-        symbol={pool?.tokenSymbol ?? ''}
-      />
-      <DateInfoCell
-        sousId={sousId}
-        labelText={parseFloat(currPool?.waitingDuration) ? t('Countdown to litigations') : t('Next Payable/Receivable')}
-      />
+      <TabMenu>
+        <NameCell pool={pool} symbol={pool?.tokenSymbol} />
+        <TotalUsersCell labelText={t('Total Users')} amount={pool?.partnerStakeIds?.length} />
+        <TotalValueCell
+          labelText={t('Total Liquidity')}
+          amount={getBalanceNumber(pool.totalLiquidity, pool.tokenDecimals)}
+          symbol={pool?.tokenSymbol ?? ''}
+        />
+        <DateInfoCell
+          sousId={sousId}
+          labelText={
+            parseFloat(currPool?.waitingDuration) ? t('Countdown to litigations') : t('Next Payable/Receivable')
+          }
+        />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

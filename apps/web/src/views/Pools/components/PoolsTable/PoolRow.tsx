@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
+import { useMatchBreakpoints, Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool, useDeserializedPoolByVaultKey, useVaultPoolByKey } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
@@ -30,17 +30,19 @@ export const VaultPoolRow: React.FC<
 
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} />
-      {isXLargerScreen && <AutoEarningsCell pool={pool} account={account} />}
-      {isXLargerScreen ? <StakedCell pool={pool} account={account} /> : null}
-      <AutoAprCell pool={pool} />
-      {isLargerScreen && (
-        <TotalStakedCell
-          stakingToken={stakingToken}
-          totalStaked={totalStaked}
-          totalStakedBalance={totalStakedBalance}
-        />
-      )}
+      <TabMenu>
+        <NameCell pool={pool} />
+        {isXLargerScreen && <AutoEarningsCell pool={pool} account={account} />}
+        {isXLargerScreen ? <StakedCell pool={pool} account={account} /> : null}
+        <AutoAprCell pool={pool} />
+        {isLargerScreen && (
+          <TotalStakedCell
+            stakingToken={stakingToken}
+            totalStaked={totalStaked}
+            totalStakedBalance={totalStakedBalance}
+          />
+        )}
+      </TabMenu>
     </Pool.ExpandRow>
   )
 })

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/profile/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -28,21 +28,23 @@ const PoolRow: React.FC<any> = ({ sousId, account }) => {
         />
       }
     >
-      <NameCell pool={pool} />
-      <TotalUsersCell labelText={t('Followers')} numCount={pool?.followers?.length} />
-      <TotalUsersCell labelText={t('Following')} numCount={pool?.followees?.length} />
-      <TotalValueCell
-        labelText={t('Total Liquidity')}
-        value={token?.amount}
-        symbol={token?.symbol}
-        decimals={token?.decimals}
-      />
-      <TotalValueCell
-        labelText={t('Total Bounty')}
-        value={token?.bountyBalance}
-        symbol={token?.symbol}
-        decimals={token?.decimals}
-      />
+      <TabMenu>
+        <NameCell pool={pool} />
+        <TotalUsersCell labelText={t('Followers')} numCount={pool?.followers?.length} />
+        <TotalUsersCell labelText={t('Following')} numCount={pool?.followees?.length} />
+        <TotalValueCell
+          labelText={t('Total Liquidity')}
+          value={token?.amount}
+          symbol={token?.symbol}
+          decimals={token?.decimals}
+        />
+        <TotalValueCell
+          labelText={t('Total Bounty')}
+          value={token?.bountyBalance}
+          symbol={token?.symbol}
+          decimals={token?.decimals}
+        />
+      </TabMenu>
     </ExpandRow>
   )
 }

@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/cards/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -19,15 +19,17 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
     >
-      <NameCell pool={pool} />
-      <TotalUsersCell labelText={t('Total Balances')} amount={pool?.balances?.length} />
-      <TotalValueCell
-        labelText={t('Balance')}
-        amount={currAccount?.balance}
-        decimals={currAccount?.decimals ?? 18}
-        symbol={currAccount?.token?.symbol ?? ''}
-      />
-      <TotalValueCell labelText={t('Token ID')} amount={pool?.tokenId} decimals={0} symbol="" />
+      <TabMenu>
+        <NameCell pool={pool} />
+        <TotalUsersCell labelText={t('Total Balances')} amount={pool?.balances?.length} />
+        <TotalValueCell
+          labelText={t('Balance')}
+          amount={currAccount?.balance}
+          decimals={currAccount?.decimals ?? 18}
+          symbol={currAccount?.token?.symbol ?? ''}
+        />
+        <TotalValueCell labelText={t('Token ID')} amount={pool?.tokenId} decimals={0} symbol="" />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/ramps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -24,18 +24,20 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} rampAccount={rampAccount} expanded />}
     >
-      <NameCell pool={pool} rampAccount={rampAccount} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
-      <TotalValueCell
-        labelText={t('Minted Liquidity')}
-        amount={getBalanceNumber(rampAccount?.minted, rampAccount?.token?.decimals)}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
-      <TotalValueCell
-        labelText={t('Burnt Liquidity')}
-        amount={getBalanceNumber(rampAccount?.burnt, rampAccount?.token?.decimals)}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
+      <TabMenu>
+        <NameCell pool={pool} rampAccount={rampAccount} />
+        <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
+        <TotalValueCell
+          labelText={t('Minted Liquidity')}
+          amount={getBalanceNumber(rampAccount?.minted, rampAccount?.token?.decimals)}
+          symbol={rampAccount?.token?.symbol ?? ''}
+        />
+        <TotalValueCell
+          labelText={t('Burnt Liquidity')}
+          amount={getBalanceNumber(rampAccount?.burnt, rampAccount?.token?.decimals)}
+          symbol={rampAccount?.token?.symbol ?? ''}
+        />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

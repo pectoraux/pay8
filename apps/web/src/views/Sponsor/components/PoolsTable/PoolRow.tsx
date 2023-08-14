@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool2 } from 'state/sponsors/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
@@ -22,18 +22,20 @@ const PoolRow: React.FC<any> = ({ id, protocolId, account, initialActivity }) =>
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
     >
-      <NameCell currAccount={currAccount} />
-      <TotalValueCell
-        labelText={t('Liquidity')}
-        amount={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
-        symbol={currAccount?.token?.symbol ?? ''}
-      />
-      <TotalValueCell
-        labelText={t('Amount Due')}
-        amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
-        symbol={currAccount?.token?.symbol ?? ''}
-      />
-      <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />
+      <TabMenu>
+        <NameCell currAccount={currAccount} />
+        <TotalValueCell
+          labelText={t('Liquidity')}
+          amount={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
+          symbol={currAccount?.token?.symbol ?? ''}
+        />
+        <TotalValueCell
+          labelText={t('Amount Due')}
+          amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
+          symbol={currAccount?.token?.symbol ?? ''}
+        />
+        <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

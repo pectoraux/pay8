@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool, useCurrPool, useCurrBribe } from 'state/wills/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -25,11 +25,13 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currToken={currToken} currAccount={currAccount} expanded />}
     >
-      <NameCell pool={pool} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.protocols?.length} />
-      <VotesCell pool={pool} />
-      <TotalValueCell labelText={t('Min. NFT Wthdrawable')} amount={pool?.minNFTWithdrawableNow} symbol=" NFT" />
-      <TotalValueCell labelText={t('Min. FT Wthdrawable')} amount={pool?.minWithdrawableNow} symbol="%" />
+      <TabMenu>
+        <NameCell pool={pool} />
+        <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.protocols?.length} />
+        <VotesCell pool={pool} />
+        <TotalValueCell labelText={t('Min. NFT Wthdrawable')} amount={pool?.minNFTWithdrawableNow} symbol=" NFT" />
+        <TotalValueCell labelText={t('Min. FT Wthdrawable')} amount={pool?.minWithdrawableNow} symbol="%" />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

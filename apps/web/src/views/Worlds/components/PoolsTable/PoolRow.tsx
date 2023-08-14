@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/worlds/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -24,16 +24,18 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
     >
-      <NameCell pool={pool} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
-      <VotesCell pool={pool} />
-      <TotalValueCell
-        labelText={t('Amount Due')}
-        amount={currAccount?.dueReceivable}
-        decimals={currAccount?.token?.decimals}
-        symbol={currAccount?.token?.symbol ?? ''}
-      />
-      <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />
+      <TabMenu>
+        <NameCell pool={pool} />
+        <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
+        <VotesCell pool={pool} />
+        <TotalValueCell
+          labelText={t('Amount Due')}
+          amount={currAccount?.dueReceivable}
+          decimals={currAccount?.token?.decimals}
+          symbol={currAccount?.token?.symbol ?? ''}
+        />
+        <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

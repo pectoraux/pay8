@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool } from 'state/auditors/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -15,21 +15,23 @@ const PoolRow: React.FC<any> = ({ id, account, currAccount, initialActivity }) =
   console.log('billpool==========>', pool)
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} currAccount={currAccount} />
-      <TotalUsersCell labelText={t('ESG Rating')} amount={currAccount?.esgRating ?? 0} />
-      <TotalValueCell
-        labelText={t('Amount Due')}
-        amount={currAccount?.amountReceivable}
-        decimals={currAccount?.token?.decimals}
-        symbol={currAccount?.token?.symbol ?? ''}
-      />
-      <TotalValueCell
-        labelText={t('Liquidity')}
-        amount={currAccount?.totalLiquidity}
-        decimals={currAccount?.token?.decimals}
-        symbol={currAccount?.token?.symbol ?? ''}
-      />
-      <EndsInCell currAccount={currAccount} labelText={t('Next Due')} />
+      <TabMenu>
+        <NameCell pool={pool} currAccount={currAccount} />
+        <TotalUsersCell labelText={t('ESG Rating')} amount={currAccount?.esgRating ?? 0} />
+        <TotalValueCell
+          labelText={t('Amount Due')}
+          amount={currAccount?.amountReceivable}
+          decimals={currAccount?.token?.decimals}
+          symbol={currAccount?.token?.symbol ?? ''}
+        />
+        <TotalValueCell
+          labelText={t('Liquidity')}
+          amount={currAccount?.totalLiquidity}
+          decimals={currAccount?.token?.decimals}
+          symbol={currAccount?.token?.symbol ?? ''}
+        />
+        <EndsInCell currAccount={currAccount} labelText={t('Next Due')} />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

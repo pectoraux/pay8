@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/games/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
@@ -20,21 +20,23 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
     >
-      <NameCell pool={pool} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={Number(pool?.numPlayers)} />
-      <TotalValueCell
-        decimals={5}
-        labelText={t('Total Earnings')}
-        amount={getBalanceNumber(pool?.totalEarned, pool?.token?.decimals)}
-        symbol={pool?.token?.symbol?.toUpperCase() ?? ''}
-      />
-      <TotalValueCell symbol="" decimals={0} labelText={t('Total Score')} amount={pool?.totalScore} />
-      <TotalValueCell
-        decimals={5}
-        labelText={t('Price Per Minute')}
-        amount={getBalanceNumber(pool?.pricePerMinutes, pool?.token?.decimals)}
-        symbol={pool?.token?.symbol?.toUpperCase() ?? ''}
-      />
+      <TabMenu>
+        <NameCell pool={pool} />
+        <TotalUsersCell labelText={t('Total Accounts')} amount={Number(pool?.numPlayers)} />
+        <TotalValueCell
+          decimals={5}
+          labelText={t('Total Earnings')}
+          amount={getBalanceNumber(pool?.totalEarned, pool?.token?.decimals)}
+          symbol={pool?.token?.symbol?.toUpperCase() ?? ''}
+        />
+        <TotalValueCell symbol="" decimals={0} labelText={t('Total Score')} amount={pool?.totalScore} />
+        <TotalValueCell
+          decimals={5}
+          labelText={t('Price Per Minute')}
+          amount={getBalanceNumber(pool?.pricePerMinutes, pool?.token?.decimals)}
+          symbol={pool?.token?.symbol?.toUpperCase() ?? ''}
+        />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

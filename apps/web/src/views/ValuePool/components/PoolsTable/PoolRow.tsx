@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool2 } from 'state/valuepools/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
@@ -18,10 +18,12 @@ const PoolRow: React.FC<any> = ({ id, account, vpAccount, initialActivity }) => 
   console.log('valuepool====>', vpAccount, pool, id)
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} vpAccount={vpAccount} />
-      <AccountID labelText={t('Token ID')} vpAccount={vpAccount} />
-      <VaSpecsCell pool={pool} nft={vpAccount} vpCurrencyInput={vpCurrencyInput} />
-      <VaSpecs2Cell nft={vpAccount} />
+      <TabMenu>
+        <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} vpAccount={vpAccount} />
+        <AccountID labelText={t('Token ID')} vpAccount={vpAccount} />
+        <VaSpecsCell pool={pool} nft={vpAccount} vpCurrencyInput={vpCurrencyInput} />
+        <VaSpecs2Cell nft={vpAccount} />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }

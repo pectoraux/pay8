@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool } from '@pancakeswap/uikit'
+import { Pool, TabMenu } from '@pancakeswap/uikit'
 import { usePool, useCurrBribe } from 'state/businesses/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -24,15 +24,21 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
 
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} />
-      <BribesCell pool={pool} currBribe={currBribe} account={account} />
-      <TotalValueCell labelText={t('To Distribute')} amount={pool?.claimable} symbol={pool?.vestingTokenSymbol ?? ''} />
-      <TotalValueCell
-        labelText={t('Rewards Claimed')}
-        amount={pool?.gaugeEarned}
-        symbol={pool?.vestingTokenSymbol ?? ''}
-      />
-      <TotalVotesCell pool={pool} />
+      <TabMenu>
+        <NameCell pool={pool} />
+        <BribesCell pool={pool} currBribe={currBribe} account={account} />
+        <TotalValueCell
+          labelText={t('To Distribute')}
+          amount={pool?.claimable}
+          symbol={pool?.vestingTokenSymbol ?? ''}
+        />
+        <TotalValueCell
+          labelText={t('Rewards Claimed')}
+          amount={pool?.gaugeEarned}
+          symbol={pool?.vestingTokenSymbol ?? ''}
+        />
+        <TotalVotesCell pool={pool} />
+      </TabMenu>
     </Pool.ExpandRow>
   )
 }
