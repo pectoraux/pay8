@@ -7,7 +7,7 @@ import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
-const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const {
@@ -32,6 +32,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
       <ActionContainer>
         <ActionContent>
           <Button disabled>{t('Please Connect Your Wallet')}</Button>
+        </ActionContent>
+      </ActionContainer>
+    )
+  }
+
+  if (!pool?.accounts?.length) {
+    return (
+      <ActionContainer>
+        <ActionContent>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('No protocols created yet')}
+          </Text>
         </ActionContent>
       </ActionContainer>
     )

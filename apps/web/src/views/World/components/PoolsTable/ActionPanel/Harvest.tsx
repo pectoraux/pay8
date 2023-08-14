@@ -22,7 +22,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
         {t('World Protocol Uses')}{' '}
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {currAccount?.token?.symbol}
+        {currAccount?.token?.symbol ?? ''}
       </Text>
     </>
   )
@@ -47,7 +47,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={currAccount?.token?.decimals}
               value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -59,7 +59,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={currAccount?.token?.decimals}
               value={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -71,7 +71,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={currAccount?.token?.decimals}
               value={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -135,6 +135,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Option ID')}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.media ?? ''}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Media Link')}
           </Text>
         </Flex>
       </ActionContent>

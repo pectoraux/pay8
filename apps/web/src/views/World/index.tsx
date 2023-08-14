@@ -32,12 +32,15 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const world = router.query.world as string
   const { pools } = usePoolsWithFilterSelector()
-  const ogWorld = useMemo(() => pools?.length && pools[0], [pools])
+  const ogWorld = useMemo(
+    () => pools?.find((pool) => pool?.worldAddress?.toLowerCase() === world?.toLowerCase()),
+    [pools],
+  )
   const currency = useCurrency(DEFAULT_TFIAT ?? undefined)
   const [onPresentAdminSettings] = useModal(
     <CreateGaugeModal variant="admin" location="fromWorld" currency={currency} pool={ogWorld} />,
   )
-
+  console.log('pools==============>', pools, ogWorld, world)
   usePoolsPageFetch()
 
   return (
@@ -74,16 +77,18 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{world}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools?.length ? pools.accounts : []}>
+        <PoolControls pools={ogWorld?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
+              {console.log('chosenPools================>', chosenPools)}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
-                    key={pool.sousId}
-                    sousId={pool.sousId}
+                    key={pool.id}
+                    sousId={ogWorld.sousId}
                     account={account}
+                    currAccount={pool}
                   />
                 ))}
               </Pool.PoolsTable>

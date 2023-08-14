@@ -43,7 +43,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       <ActionContainer>
         <ActionContent>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('No data to display')}
+            {t('No protocols created yet')}
           </Text>
         </ActionContent>
       </ActionContainer>

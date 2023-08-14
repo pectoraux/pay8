@@ -61,6 +61,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.SETTINGS]: t('Control Panel'),
   [LockStage.UPDATE_ADMIN]: t('Update Admin'),
   [LockStage.UPDATE_PARAMETERS]: t('Update Bounty Required'),
+  [LockStage.UPDATE_PROTOCOL]: t('Update Protocol'),
   [LockStage.VOTE]: t('Vote'),
   [LockStage.UPDATE_AUTOCHARGE]: t('Update Autocharge'),
   [LockStage.UPDATE_TAX_CONTRACT]: t('Update Tax Contract'),

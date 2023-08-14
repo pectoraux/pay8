@@ -147,6 +147,7 @@ export const fetchWorld = async (worldAddress) => {
       ],
     },
   )
+  console.log('category==========>', category)
   const [gaugeNColor, pricePerAttachMinutes] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -154,7 +155,7 @@ export const fetchWorld = async (worldAddress) => {
         address: getWorldNoteAddress(),
         abi: worldNoteABI,
         functionName: 'getGaugeNColor',
-        args: [BigInt(profileId.result?.toString()), Number(category?.toString())],
+        args: [BigInt(profileId.result?.toString()), Number(category.result?.toString())],
       },
       {
         address: getWorldHelper3Address(),
@@ -240,31 +241,38 @@ export const fetchWorld = async (worldAddress) => {
           56,
           _token,
           decimals.result ?? 18,
-          symbol?.toString()?.toUpperCase() ?? 'symbol',
-          name?.toString(),
+          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+          name.result?.toString(),
           'https://www.payswap.org/',
         ),
         // allTokens.find((tk) => tk.address === token),
       }
     }),
   )
-
+  console.log('gaugeNColor=========>', gaugeNColor)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     worldAddress,
     ...world,
     worldNFTs,
     accounts,
-    bountyRequired,
-    devaddr_,
+    bountyRequired: bountyRequired.result,
+    devaddr_: devaddr_.result,
     collection,
-    category,
-    color: gaugeNColor[1] === 0 ? 'Black' : gaugeNColor[1] === 1 ? 'Brown' : gaugeNColor[1] === 2 ? 'Silver' : 'Gold',
-    bountyId: bountyId.toString(),
-    pricePerAttachMinutes: pricePerAttachMinutes.toString(),
-    tradingFee: tradingFee.toString(),
+    category: category.result,
+    color:
+      gaugeNColor.result[1] === 0
+        ? 'Black'
+        : gaugeNColor.result[1] === 1
+        ? 'Brown'
+        : gaugeNColor.result[1] === 2
+        ? 'Silver'
+        : 'Gold',
+    bountyId: bountyId.result.toString(),
+    pricePerAttachMinutes: pricePerAttachMinutes.result.toString(),
+    tradingFee: tradingFee.result.toString(),
     profileId: profileId.result.toString(),
-    collectionId: collectionId.toString(),
+    collectionId: collectionId.result.toString(),
   }
 }
 

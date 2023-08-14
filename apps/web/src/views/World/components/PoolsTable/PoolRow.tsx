@@ -8,9 +8,10 @@ import EndsInCell from './Cells/EndsInCell'
 import RatingCell from './Cells/RatingCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalValueCell from './Cells/TotalValueCell'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
-const PoolRow: React.FC<any> = ({ id, account, currAccount, initialActivity }) => {
-  const { pool } = usePool(id)
+const PoolRow: React.FC<any> = ({ sousId, account, currAccount, initialActivity }) => {
+  const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   console.log('worldpool====>', pool, currAccount)
@@ -20,8 +21,7 @@ const PoolRow: React.FC<any> = ({ id, account, currAccount, initialActivity }) =
       <RatingCell labelText={t('Rating')} amount={currAccount?.rating} />
       <TotalValueCell
         labelText={t('Amount Due')}
-        amount={currAccount?.amountReceivable}
-        decimals={currAccount?.token?.decimals}
+        amount={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals)}
         symbol={currAccount?.token?.symbol ?? ''}
       />
       <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />
