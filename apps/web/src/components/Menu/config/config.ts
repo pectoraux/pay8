@@ -11,6 +11,12 @@ import {
   NftFillIcon,
   MoreIcon,
   DropdownMenuItems,
+  ResourcesIcon,
+  RocketIcon,
+  SafePalIcon,
+  SellIcon,
+  WalletIcon,
+  WalletFilledIcon,
 } from '@pancakeswap/uikit'
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
@@ -210,9 +216,9 @@ const config: (
     {
       label: t('CanCan'),
       href: `${cancanBaseUrl}`,
-      icon: NftIcon,
-      fillIcon: NftFillIcon,
-      // supportChainIds: SUPPORT_ONLY_BSC,
+      icon: WalletIcon,
+      fillIcon: WalletFilledIcon,
+      supportChainIds: SUPPORT_ONLY_BSC,
       image: '/images/decorations/nft.png',
       items: [
         {

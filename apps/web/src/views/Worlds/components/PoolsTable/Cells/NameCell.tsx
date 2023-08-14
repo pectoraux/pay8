@@ -20,22 +20,22 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<any> = ({ pool, currAccount }) => {
+const NameCell: React.FC<any> = ({ pool }) => {
   const { t } = useTranslation()
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
   const colors = { 0: 'failure', 1: 'red', 2: 'blue', 3: 'green' }
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
       <Pool.CellContent>
         <Text fontSize="12px" bold color={colors[pool?.category]} textTransform="uppercase">
-          <Flex flexDirection="row">
-            {pool?.collection?.name ?? ''}
+          <Flex flexDirection="column">
             <SaveIcon
               fill={watchlistTokens.includes(pool?.worldAddress)}
               onClick={() => addWatchlistToken(pool?.worldAddress)}
-              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
+              style={{ marginRight: '20px', position: 'relative' }}
             />
+            <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
+            {pool?.collection?.name ?? ''}
           </Flex>
         </Text>
         {!pool?.category ? (

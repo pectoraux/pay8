@@ -29,19 +29,17 @@ const NameCell: React.FC<any> = ({ pool }) => {
 
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.images && pool?.collection?.images[4]} />
       <CellContent>
         <Text bold={!isMobile} small={isMobile}>
-          <Flex flexDirection="row">
+          <Flex flexDirection="column">
             <SaveIcon
               fill={watchlistTokens.includes(pool?.id)}
               onClick={() => addWatchlistToken(pool?.id)}
-              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
+              style={{ marginRight: '20px', position: 'relative' }}
             />
-          </Flex>
-          <Text fontSize="12px" bold color="textSubtle">
+            <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.images && pool?.collection?.images[4]} />
             {t('Profile ID')}
-          </Text>
+          </Flex>
           <Text fontSize="18px" bold>
             #{pool?.id}
           </Text>

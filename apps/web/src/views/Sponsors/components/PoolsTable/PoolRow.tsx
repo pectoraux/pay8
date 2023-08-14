@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react'
-import { Flex, Pool, TabMenu, Card, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Flex, Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/sponsors/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
 import NameCell from './Cells/NameCell'
@@ -9,17 +10,13 @@ import EndsInCell from './Cells/EndsInCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
   const { isMobile } = useMatchBreakpoints()
-  const currAccount = useMemo(
-    () => pool?.accounts?.find((n) => n.protocolId === currState[pool?.id]),
-    [pool, currState],
-  )
+  const currAccount = useMemo(() => pool?.accounts?.find((n) => n.id === currState[pool?.id]), [pool, currState])
   console.log('sponsorpool====>', pool, currAccount, currState)
   const tabs = (
     <>

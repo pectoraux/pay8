@@ -25,18 +25,16 @@ const NameCell: React.FC<any> = ({ pool }) => {
 
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
       <Pool.CellContent>
-        <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
-          <Flex flexDirection="row">
-            {pool?.title}
-            <SaveIcon
-              fill={watchlistTokens.includes(pool?.id)}
-              onClick={() => addWatchlistToken(pool?.id)}
-              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
-            />
-          </Flex>
-        </Text>
+        <Flex flexDirection="column">
+          <SaveIcon
+            fill={watchlistTokens.includes(pool?.id)}
+            onClick={() => addWatchlistToken(pool?.id)}
+            style={{ marginRight: '20px', position: 'relative' }}
+          />
+          <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
+          {pool?.title}
+        </Flex>
         {pool?.vestingTokenSymbol ? (
           <Text fontSize="12px" color="textSubtle">
             {t('Earning')} {pool?.vestingTokenSymbol}

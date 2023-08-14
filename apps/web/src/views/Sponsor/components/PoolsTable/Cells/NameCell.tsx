@@ -26,16 +26,16 @@ const NameCell: React.FC<any> = ({ currAccount }) => {
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
       <Pool.CellContent>
         <Text bold={!isMobile} small={isMobile}>
-          <Flex flexDirection="row">
-            {truncateHash(currAccount?.id)}
+          <Flex flexDirection="column">
             <SaveIcon
               fill={watchlistTokens.includes(currAccount?.owner)}
               onClick={() => addWatchlistToken(currAccount?.owner)}
-              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
+              style={{ marginRight: '20px', position: 'relative' }}
             />
+            <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
+            {truncateHash(currAccount?.id)}
           </Flex>
         </Text>
       </Pool.CellContent>

@@ -26,18 +26,16 @@ const NameCell: React.FC<any> = ({ pool, currAccount }) => {
   const colors = { 0: 'failure', 1: 'red', 2: 'blue', 3: 'green' }
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
       <Pool.CellContent>
-        <Text fontSize="12px" bold color={colors[pool?.category]} textTransform="uppercase">
-          <Flex flexDirection="row">
-            {truncateHash(currAccount?.id)}
-            <SaveIcon
-              fill={watchlistTokens.includes(currAccount?.owner)}
-              onClick={() => addWatchlistToken(currAccount?.owner)}
-              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
-            />
-          </Flex>
-        </Text>
+        <Flex flexDirection="column">
+          <SaveIcon
+            fill={watchlistTokens.includes(currAccount?.owner)}
+            onClick={() => addWatchlistToken(currAccount?.owner)}
+            style={{ marginRight: '20px', position: 'relative' }}
+          />
+          <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
+          {truncateHash(currAccount?.id)}
+        </Flex>
         {!pool?.category ? (
           <Text fontSize="12px" color="failure">
             {t('Undefined Category')}

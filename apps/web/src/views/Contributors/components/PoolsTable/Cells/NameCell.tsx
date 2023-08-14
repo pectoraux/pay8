@@ -28,13 +28,14 @@ const NameCell: React.FC<any> = ({ pool }) => {
       <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
       <Pool.CellContent>
         <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
-          <Flex flexDirection="row">
-            {pool?.title}
+          <Flex flexDirection="column">
             <SaveIcon
               fill={watchlistTokens.includes(pool?.id)}
               onClick={() => addWatchlistToken(pool?.id)}
-              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
+              style={{ marginRight: '20px', position: 'relative' }}
             />
+            <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
+            {pool?.title}
           </Flex>
         </Text>
         {pool?.vestingTokenSymbol ? (

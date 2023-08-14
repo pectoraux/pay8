@@ -24,18 +24,16 @@ const NameCell: React.FC<any> = ({ currAccount }) => {
 
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
       <Pool.CellContent>
-        <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
-          <Flex flexDirection="row">
-            {truncateHash(currAccount?.id)}
-            <SaveIcon
-              fill={watchlistTokens.includes(currAccount?.id)}
-              onClick={() => addWatchlistToken(currAccount?.id)}
-              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
-            />
-          </Flex>
-        </Text>
+        <Flex flexDirection="column">
+          <SaveIcon
+            fill={watchlistTokens.includes(currAccount?.id)}
+            onClick={() => addWatchlistToken(currAccount?.id)}
+            style={{ marginRight: '20px', position: 'relative' }}
+          />
+          <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
+          {truncateHash(currAccount?.id)}
+        </Flex>
       </Pool.CellContent>
     </StyledCell>
   )

@@ -125,21 +125,41 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((acct) => (
+        {pool?.accounts?.length
+          ? pool?.accounts
+              .filter(
+                (protocol) =>
+                  account?.toLowerCase() === pool?.owner?.toLowerCase() ||
+                  account?.toLowerCase() === protocol?.owner?.toLowerCase(),
+              )
+              .map((balance) => (
+                <Button
+                  key={balance.id}
+                  onClick={() => {
+                    const newState = { ...currState, [pool?.id]: balance.id }
+                    dispatch(setCurrPoolData(newState))
+                    if (balance.notes.length) onPresentNotes()
+                  }}
+                  mt="4px"
+                  mr={['2px', '2px', '4px', '4px']}
+                  scale="sm"
+                  variant={currState[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+                >
+                  {balance.id?.split('_')[0]}
+                </Button>
+              ))
+          : null}
+        {pool?.accounts?.length ? (
           <Button
-            key={acct.protocolId}
-            onClick={() => {
-              const newState = { ...currState, [pool?.id]: acct.protocolId }
-              dispatch(setCurrPoolData(newState))
-            }}
-            mt="4px"
-            mr={['2px', '2px', '4px', '4px']}
+            key="clear-all"
+            variant="text"
             scale="sm"
-            variant={currState[pool?.id] === acct.protocolId ? 'subtle' : 'tertiary'}
+            onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
           >
-            {acct.protocolId}
+            {t('Clear')}
           </Button>
-        ))}
+        ) : null}
       </Flex>
       <Flex>
         <FlexGap gap="16px" pt="24px" pl="4px">

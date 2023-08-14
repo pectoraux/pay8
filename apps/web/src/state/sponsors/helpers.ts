@@ -156,7 +156,7 @@ export const fetchSponsor = async (sponsorAddress) => {
       ],
     })
   const collection = await getCollection(collectionId.result.toString())
-  console.log('nextDuePayable0=================>', sponsor, sponsor.protocols)
+  console.log('nextDuePayable0=================>', sponsor, sponsor.protocols, collection)
   const accounts = await Promise.all(
     sponsor?.protocols?.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
@@ -250,7 +250,6 @@ export const fetchSponsor = async (sponsorAddress) => {
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...sponsor,
-    collection,
     sponsorAddress,
     accounts: accounts.filter((acct) => !!acct),
     bountyRequired: bountyRequired.result,
@@ -261,6 +260,7 @@ export const fetchSponsor = async (sponsorAddress) => {
     requiredIndentity: requiredIndentity.result,
     valueName: valueName.result,
     _ve: _ve.result,
+    collection,
   }
 }
 

@@ -8,7 +8,7 @@ import { format } from 'date-fns'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
-const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const {
@@ -33,6 +33,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
       <ActionContainer>
         <ActionContent>
           <Button disabled>{t('Please Connect Your Wallet')}</Button>
+        </ActionContent>
+      </ActionContainer>
+    )
+  }
+
+  if (!pool?.protocols?.length) {
+    return (
+      <ActionContainer>
+        <ActionContent>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('No data to display')}
+          </Text>
         </ActionContent>
       </ActionContainer>
     )
