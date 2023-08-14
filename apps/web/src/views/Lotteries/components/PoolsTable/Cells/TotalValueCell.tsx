@@ -2,7 +2,7 @@ import { Flex, Text, Balance, Pool, Box, useMatchBreakpoints } from '@pancakeswa
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
-import { getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useMemo } from 'react'
 
 interface TotalStakedCellProps {
@@ -19,7 +19,7 @@ const TotalValueCell: React.FC<any> = ({ labelText, pool }) => {
   const { isMobile } = useMatchBreakpoints()
   const defaultToken = pool?.tokenData?.length ? pool?.tokenData[0] : ''
   const decimals = defaultToken?.decimals ?? 18
-  const totalStakedBalance = useMemo(() => getFullDisplayBalance(pool?.endAmount, decimals, 5), [pool, decimals])
+  const totalStakedBalance = useMemo(() => getBalanceNumber(pool?.endAmount, decimals), [pool, decimals])
   return (
     <StyledCell role="cell">
       <Pool.CellContent>

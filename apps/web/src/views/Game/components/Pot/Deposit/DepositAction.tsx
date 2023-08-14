@@ -65,7 +65,7 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
   const pricePerMinutes = getBalanceAmount(gameData?.pricePerMinutes, gameData?.token?.decimals)
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t(
-      'CAKE deposit will be diverted to the fixed-term staking pool. Please note that CAKE deposited can ONLY be withdrawn after 10 weeks.',
+      'Token deposit will be diverted to the fixed-term staking pool. Please note that CAKE deposited can ONLY be withdrawn after 10 weeks.',
     ),
     {
       placement: 'bottom',
@@ -82,11 +82,10 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
     () => new BigNumber(depositAmount).multipliedBy(gameData?.token?.decimals).eq(userCake),
     [depositAmount, userCake, gameData],
   )
-  const gameFactoryAddress = getGameFactoryAddress()
-  const { isRequired: needsApproval, refetch } = useGetRequiresApproval(tokenContract, account, gameFactoryAddress)
-  console.log('needsApproval================>', needsApproval, tokenContract, account, gameFactoryAddress)
+  const { isRequired: needsApproval, refetch } = useGetRequiresApproval(tokenContract, account, getGameFactoryAddress())
+  console.log('needsApproval================>', needsApproval, tokenContract)
   if (needsApproval) {
-    return <EnableButton refetch={refetch} tokenContract={tokenContract} gameFactoryAddress={gameFactoryAddress} />
+    return <EnableButton refetch={refetch} tokenContract={tokenContract} />
   }
 
   // if (publicData.getStatus !== PotteryDepositStatus.BEFORE_LOCK) {

@@ -64,11 +64,11 @@ const BalanceStyle = styled(Balance)`
   text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2), 0px 4px 12px rgba(14, 14, 44, 0.1);
 `
 
-const Pot: React.FC<any> = ({ collection, tokenId, setTokenId }) => {
+const Pot: React.FC<any> = ({ collection, data, tokenId, setTokenId }) => {
   const { t } = useTranslation()
   // const cakePriceBusd = usePriceCakeBusd()
   const { isMobile } = useMatchBreakpoints()
-  const { data } = usePotteryData()
+  // const { data } = usePotteryData()
   console.log('1data============>', data)
   const [activeTab, setIndex] = useState<POT_CATEGORY>(POT_CATEGORY.Deposit)
   const handleClick = useCallback((tabType: POT_CATEGORY) => setIndex(tabType), [])
@@ -104,9 +104,9 @@ const Pot: React.FC<any> = ({ collection, tokenId, setTokenId }) => {
                   secondarySrc="/images/tokens/pot-icon.svg"
                 />
                 {activeTab === POT_CATEGORY.Deposit ? (
-                  <Deposit tokenId={tokenId} setTokenId={setTokenId} />
+                  <Deposit data={data} tokenId={tokenId} setTokenId={setTokenId} />
                 ) : (
-                  <Claim tokenId={tokenId} setTokenId={setTokenId} />
+                  <Claim data={data} tokenId={tokenId} setTokenId={setTokenId} />
                 )}
               </Box>
             </Card>

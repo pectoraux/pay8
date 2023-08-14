@@ -42,6 +42,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
+  console.log('PoolStatsInfo==========>', pool)
   return (
     <>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -121,21 +122,34 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((balance) => (
+        {pool?.tokenData?.length
+          ? pool?.tokenData.map((balance) => (
+              <Button
+                key={balance.token.address}
+                onClick={() => {
+                  const newState = { ...currState, [pool?.id]: balance.token.address }
+                  dispatch(setCurrPoolData(newState))
+                }}
+                mt="4px"
+                mr={['2px', '2px', '4px', '4px']}
+                scale="sm"
+                variant={currState[pool?.id] === balance.token.address ? 'subtle' : 'tertiary'}
+              >
+                {balance.token?.symbol?.toUpperCase()}
+              </Button>
+            ))
+          : null}
+        {pool?.tokenData?.length ? (
           <Button
-            key={balance.token.address}
-            onClick={() => {
-              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
-              dispatch(setCurrPoolData(newState))
-            }}
-            mt="4px"
-            mr={['2px', '2px', '4px', '4px']}
+            key="clear-all"
+            variant="text"
             scale="sm"
-            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+            onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
           >
-            {balance.token.symbol}
+            {t('Clear')}
           </Button>
-        ))}
+        ) : null}
       </Flex>
       <Flex>
         <FlexGap gap="16px" pt="24px" pl="4px">

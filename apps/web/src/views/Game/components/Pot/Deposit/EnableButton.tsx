@@ -1,14 +1,15 @@
 import { Button, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useApprovePottery } from 'views/Game/hooks/useApprovePottery'
+import { getGameFactoryAddress } from 'utils/addressHelpers'
 
 interface Props {
   potteryVaultAddress: string
 }
 
-const EnableButton: React.FC<any> = ({ refetch, tokenContract, gameFactoryAddress }) => {
+const EnableButton: React.FC<any> = ({ refetch, tokenContract }) => {
   const { t } = useTranslation()
-  const { isPending, onApprove } = useApprovePottery(refetch, tokenContract, gameFactoryAddress)
+  const { isPending, onApprove } = useApprovePottery(refetch, tokenContract, getGameFactoryAddress())
 
   return (
     <Button

@@ -24,7 +24,7 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromGame = router.query.game
 
-  useSWR('games', () => {
+  useSWRImmutable('games', () => {
     const fetchPoolsDataWithFarms = async () => {
       batch(() => {
         dispatch(fetchGameSgAsync({ fromGame }))

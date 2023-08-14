@@ -15,7 +15,6 @@ import PrizeFunds from './components/PrizeFunds'
 import FAQ from './components/FAQ'
 
 const Pottery: React.FC<React.PropsWithChildren> = () => {
-  usePotteryFetch()
   const potWrapperEl = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const collectionAddress = router.query.game as string
@@ -38,7 +37,7 @@ const Pottery: React.FC<React.PropsWithChildren> = () => {
       <PageMeta />
       <Banner collection={collection} handleScroll={handleScroll} />
       <Box ref={potWrapperEl}>
-        <Pot collection={collection} tokenId={tokenId} setTokenId={setTokenId} />
+        <Pot collection={collection} data={pool} tokenId={tokenId} setTokenId={setTokenId} />
       </Box>
       <FinishedRounds tokenId={tokenId} />
       <HowToPlay pool={pool} />

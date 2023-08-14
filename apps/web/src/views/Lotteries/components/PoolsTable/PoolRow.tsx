@@ -13,7 +13,10 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
-  const currAccount = useMemo(() => pool?.accounts?.find((n) => n.id === currState[pool?.id]), [pool, currState])
+  const currAccount = useMemo(
+    () => pool?.tokenData?.find((n) => n.token.address === currState[pool?.id]),
+    [pool, currState],
+  )
   console.log('lotterypool1====>', pool, currAccount)
   return (
     <Pool.ExpandRow

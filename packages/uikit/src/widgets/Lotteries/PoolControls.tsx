@@ -191,24 +191,28 @@ export function PoolControls<T>({
               <Select
                 options={[
                   {
-                    label: t("Hot"),
-                    value: "hot",
+                    label: t("Price Per Ticket"),
+                    value: "pricePerTicket",
                   },
                   {
-                    label: t("APR"),
-                    value: "apr",
+                    label: t("End Time"),
+                    value: "endTime",
                   },
                   {
-                    label: t("Earned"),
-                    value: "earned",
+                    label: t("Start Time"),
+                    value: "startTime",
                   },
                   {
-                    label: t("Total staked"),
-                    value: "totalStaked",
+                    label: t("User Count"),
+                    value: "userCount",
                   },
                   {
-                    label: t("Latest"),
-                    value: "latest",
+                    label: t("Treasury Fee"),
+                    value: "treasuryFee",
+                  },
+                  {
+                    label: t("Referrer Fee"),
+                    value: "referrerFee",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}
@@ -219,7 +223,11 @@ export function PoolControls<T>({
             <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
               {t("Search")}
             </Text>
-            <SearchInput initialValue={searchQuery} onChange={handleChangeSearchQuery} placeholder="Search Pools" />
+            <SearchInput
+              initialValue={searchQuery}
+              onChange={handleChangeSearchQuery}
+              placeholder={t("Search Lotteries")}
+            />
           </LabelWrapper>
         </FilterContainer>
       </PoolControlsView>

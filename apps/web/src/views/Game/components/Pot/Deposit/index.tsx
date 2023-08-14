@@ -26,10 +26,10 @@ const CardAction = styled(Flex)`
   padding: 26px 24px 36px 24px;
 `
 
-const Deposit: React.FC<any> = ({ tokenId, setTokenId }) => {
+const Deposit: React.FC<any> = ({ tokenId, data, setTokenId }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { data } = usePotteryData()
+  // const { data } = usePotteryData()
   const symb = ` ${data?.token?.symbol?.toUpperCase() ?? '$'}`
 
   // const { targetRef, tooltip, tooltipVisible } = useTooltip(t('Pottery draws on each Friday at 12 PM UTC!'), {
@@ -57,20 +57,6 @@ const Deposit: React.FC<any> = ({ tokenId, setTokenId }) => {
             <WinRate />
           </Flex>
         </GreyCard>
-        {/* {getStatus !== PotteryDepositStatus.BEFORE_LOCK && (
-          <Flex justifyContent="space-between">
-            <Text color="textSubtle">{t('Next draw date')}</Text>
-            {tooltipVisible && tooltip}
-            <TooltipText ref={targetRef}>
-              <Text bold as="span">
-                {t('in')}
-              </Text>
-              {days ? <Text bold as="span" ml="2px">{`${days}${t('d')}`}</Text> : null}
-              {hours ? <Text bold as="span" ml="2px">{`${hours}${t('h')}`}</Text> : null}
-              {minutes ? <Text bold as="span" ml="2px">{`${minutes}${t('m')}`}</Text> : null}
-            </TooltipText>
-          </Flex>
-        )} */}
         <Flex justifyContent="space-between">
           <Text color="textSubtle">{t('Total Spent')}</Text>
           <Balance

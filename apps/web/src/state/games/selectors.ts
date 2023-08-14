@@ -2,13 +2,11 @@ import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { createSelector } from '@reduxjs/toolkit'
 import { State, VaultKey } from '../types'
-// import { transformPool, transformVault } from './helpers'
-import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
 const selectPoolsData = (state: State) => state.games?.data
 const selectPoolData = (sousId) => (state: State) => state.games?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.games.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.games.data.find((p) => p.gameAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.games?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.games ? state.games[key] : {}
 const selectIfo = (state: State) => state.games.ifo
@@ -18,16 +16,16 @@ const selectCurrBribe = (state: State) => state.games?.currBribe
 const selectCurrPool = (state: State) => state.games?.currPool
 const selectFilteredData = (state: State) => {
   return state.games?.data.filter(
-    (ramp) =>
+    (game) =>
       (!state.games.filters.workspace ||
         state.games.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.games.filters.workspace?.toLowerCase()) &&
+        game?.workspace?.toLowerCase() === state.games.filters.workspace?.toLowerCase()) &&
       (!state.games.filters.country ||
         state.games.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.games.filters.country?.toLowerCase()) &&
+        game?.country?.toLowerCase() === state.games.filters.country?.toLowerCase()) &&
       (!state.games.filters.city ||
         state.games.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.games.filters.city?.toLowerCase()),
+        game?.city?.toLowerCase() === state.games.filters.city?.toLowerCase()),
   )
 }
 

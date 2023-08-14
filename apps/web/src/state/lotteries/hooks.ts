@@ -5,6 +5,7 @@ import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { fetchLotteriesAsync, fetchLotteriesSgAsync } from '.'
+import useSWRImmutable from 'swr/immutable'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -18,7 +19,7 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromLottery = router.query.lottery
 
-  useSlowRefreshEffect(() => {
+  useSWRImmutable('lotteries', () => {
     const fetchPoolsDataWithFarms = async () => {
       batch(() => {
         dispatch(fetchLotteriesSgAsync({ fromLottery }))
@@ -27,7 +28,7 @@ export const useFetchPublicPoolsData = () => {
     }
 
     fetchPoolsDataWithFarms()
-  }, [dispatch, chainId, fromLottery])
+  })
 }
 
 export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {

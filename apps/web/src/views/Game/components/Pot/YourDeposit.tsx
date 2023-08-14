@@ -45,32 +45,23 @@ const YourDeposit: React.FC<any> = ({ tokenId, setTokenId }) => {
           {t('Score')}
         </Text>
       </Box>
-      {account && userData.isLoading ? (
-        <>
-          <Skeleton width="100px" height="35px" />
-          <Skeleton width="40px" height="18px" />
-        </>
-      ) : (
-        <>
-          <Balance bold decimals={3} fontSize={['20px', '20px', '24px']} lineHeight="110%" value={tokenData?.score} />
-          <Balance
-            unit={symb}
-            prefix={t('Score Percentile: ')}
-            decimals={2}
-            value={tokenData?.scorePercentile || 0}
-            fontSize="12px"
-            color="textSubtle"
-          />
-          <Balance
-            unit={symb}
-            prefix={t('Price Percentile: ')}
-            decimals={2}
-            value={tokenData?.pricePercentile || 0}
-            fontSize="12px"
-            color="textSubtle"
-          />
-        </>
-      )}
+      <Balance bold decimals={3} fontSize={['20px', '20px', '24px']} lineHeight="110%" value={tokenData?.score} />
+      <Balance
+        // unit={symb}
+        prefix={t('Score Percentile: ')}
+        decimals={2}
+        value={tokenData?.scorePercentile || 0}
+        fontSize="12px"
+        color="textSubtle"
+      />
+      <Balance
+        unit={symb}
+        prefix={t('Price Percentile: ')}
+        decimals={2}
+        value={tokenData?.pricePercentile || 0}
+        fontSize="12px"
+        color="textSubtle"
+      />
     </Box>
   )
 }

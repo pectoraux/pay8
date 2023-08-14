@@ -20,7 +20,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
         {t('Lottery Uses')}{' '}
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {currAccount?.token?.symbol ?? t('No Tokens Yet')}
+        {currAccount?.token?.symbol ?? ''}
       </Text>
     </>
   )
@@ -149,7 +149,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             {pool?.countWinnersPerBracket?.length ? pool?.countWinnersPerBracket.map((cwb) => `${cwb}, `) : 'N/A'}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Count Of Winners Per Bracket')}
+            {t('Winners Per Bracket')}
           </Text>
         </Flex>
       </ActionContent>

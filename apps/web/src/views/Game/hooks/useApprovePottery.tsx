@@ -15,7 +15,7 @@ export const useApprovePottery = (refetch, tokenContract, gameFactoryAddress: st
   const onApprove = useCallback(async () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      return callWithGasPrice(tokenContract, 'approve', [gameFactoryAddress, MaxUint256]).then(() => refetch())
+      return callWithGasPrice(tokenContract, 'approve', [gameFactoryAddress, MaxUint256])
     })
 
     if (receipt?.status) {
@@ -25,6 +25,7 @@ export const useApprovePottery = (refetch, tokenContract, gameFactoryAddress: st
           {t('Please progress to the next step.')}
         </ToastDescriptionWithTx>,
       )
+      refetch()
     }
   }, [fetchWithCatchTxError, callWithGasPrice, tokenContract, gameFactoryAddress, refetch, toastSuccess, t])
 

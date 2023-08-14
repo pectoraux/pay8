@@ -57,7 +57,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               value={getBalanceNumber(pool?.pricePerMinutes, pool?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Price Per Paper Minutes')}
+              {t('Price Per Minutes')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">

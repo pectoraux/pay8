@@ -15,10 +15,10 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-const EndsInCell: React.FC<any> = ({ labelText, value }) => {
+const EndsInCell: React.FC<any> = ({ labelText, amount }) => {
   const getDate = () => {
     try {
-      return Number(value) ? format(convertTimeToSeconds(value), 'MMM do, yyyy HH:mm') : '-'
+      return Number(amount) ? format(convertTimeToSeconds(amount), 'MMM do, yyyy HH:mm') : '-'
     } catch (err) {
       return '-'
     }
