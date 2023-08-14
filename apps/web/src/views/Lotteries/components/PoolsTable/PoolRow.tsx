@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool, TabMenu } from '@pancakeswap/uikit'
+import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/lotteries/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -13,23 +13,34 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
+  const { isMobile } = useMatchBreakpoints()
   const currAccount = useMemo(
     () => pool?.tokenData?.find((n) => n.token.address === currState[pool?.id]),
     [pool, currState],
   )
   console.log('lotterypool1====>', pool, currAccount)
+  const tabs = (
+    <>
+      <NameCell pool={pool} />
+      <TotalUsersCell labelText={t('Total Users')} amount={pool?.users?.length} />
+      <TotalValueCell pool={pool} labelText={t('End Amount')} />
+      <EndsInCell labelText={t('Start Time')} amount={pool?.startTime} />
+      <EndsInCell labelText={t('End Time')} amount={pool?.endTime} />
+    </>
+  )
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
     >
-      <TabMenu>
-        <NameCell pool={pool} />
-        <TotalUsersCell labelText={t('Total Users')} amount={pool?.users?.length} />
-        <TotalValueCell pool={pool} labelText={t('End Amount')} />
-        <EndsInCell labelText={t('Start Time')} amount={pool?.startTime} />
-        <EndsInCell labelText={t('End Time')} amount={pool?.endTime} />
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </Pool.ExpandRow>
   )
 }

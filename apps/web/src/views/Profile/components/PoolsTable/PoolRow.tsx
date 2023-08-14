@@ -13,9 +13,28 @@ const PoolRow: React.FC<any> = ({ sousId, account }) => {
   const { isXs, isSm, isMd, isLg, isXl, isXxl } = useMatchBreakpoints()
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   const currState = useCurrPool()
   const token = pool?.tokens?.find((tk) => tk.tokenAddress?.toLowerCase() === currState[pool?.id]?.toLowerCase())
-
+  const tabs = (
+    <>
+      <NameCell pool={pool} />
+      <TotalUsersCell labelText={t('Followers')} numCount={pool?.followers?.length} />
+      <TotalUsersCell labelText={t('Following')} numCount={pool?.followees?.length} />
+      <TotalValueCell
+        labelText={t('Total Liquidity')}
+        value={token?.amount}
+        symbol={token?.symbol}
+        decimals={token?.decimals}
+      />
+      <TotalValueCell
+        labelText={t('Total Bounty')}
+        value={token?.bountyBalance}
+        symbol={token?.symbol}
+        decimals={token?.decimals}
+      />
+    </>
+  )
   return (
     <ExpandRow
       panel={
@@ -28,23 +47,14 @@ const PoolRow: React.FC<any> = ({ sousId, account }) => {
         />
       }
     >
-      <TabMenu>
-        <NameCell pool={pool} />
-        <TotalUsersCell labelText={t('Followers')} numCount={pool?.followers?.length} />
-        <TotalUsersCell labelText={t('Following')} numCount={pool?.followees?.length} />
-        <TotalValueCell
-          labelText={t('Total Liquidity')}
-          value={token?.amount}
-          symbol={token?.symbol}
-          decimals={token?.decimals}
-        />
-        <TotalValueCell
-          labelText={t('Total Bounty')}
-          value={token?.bountyBalance}
-          symbol={token?.symbol}
-          decimals={token?.decimals}
-        />
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </ExpandRow>
   )
 }

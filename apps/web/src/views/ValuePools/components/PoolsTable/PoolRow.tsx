@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Pool, TabMenu } from '@pancakeswap/uikit'
+import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool } from 'state/valuepools/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
@@ -14,17 +14,28 @@ import TotalValueCell from './Cells/TotalValueCell'
 const PoolRow: React.FC<any> = ({ id, account, initialActivity }) => {
   const { pool } = usePool(id)
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   const vpCurrencyInput = useCurrency(pool?.tokenAddress)
   console.log('PoolRow==============>', id, pool)
+  const tabs = (
+    <>
+      <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
+      <TotalUsersCell labelText={t('Total Users')} amount={pool?.tokens?.length} />
+      <TotalValueCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
+      <VaSpecsCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
+      <VaSpecs2Cell pool={pool} />
+    </>
+  )
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <TabMenu>
-        <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
-        <TotalUsersCell labelText={t('Total Users')} amount={pool?.tokens?.length} />
-        <TotalValueCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
-        <VaSpecsCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
-        <VaSpecs2Cell pool={pool} />
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </Pool.ExpandRow>
   )
 }

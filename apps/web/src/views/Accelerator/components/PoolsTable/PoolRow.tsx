@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool, TabMenu } from '@pancakeswap/uikit'
+import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrBribe } from 'state/accelerator/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -15,6 +15,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
 
   const { t } = useTranslation()
   const currState = useCurrBribe()
+  const { isMobile } = useMatchBreakpoints()
   const tokenAddress = pool?.vestingTokenAddress || ''
   const currBribe = useMemo(() => {
     if (pool?.userDataLoaded) {
@@ -22,24 +23,29 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
     }
     return pool?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
   }, [currState, tokenAddress, pool])
-
+  const tabs = (
+    <>
+      <NameCell pool={pool} />
+      <BribesCell pool={pool} currBribe={currBribe} account={account} />
+      <TotalValueCell labelText={t('To Distribute')} amount={pool?.claimable} symbol={pool?.vestingTokenSymbol || ''} />
+      <TotalValueCell
+        labelText={t('Rewards Claimed')}
+        amount={pool?.gaugeEarned}
+        symbol={pool?.vestingTokenSymbol || ''}
+      />
+      <TotalVotesCell pool={pool} account={account} />
+    </>
+  )
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <TabMenu>
-        <NameCell pool={pool} />
-        <BribesCell pool={pool} currBribe={currBribe} account={account} />
-        <TotalValueCell
-          labelText={t('To Distribute')}
-          amount={pool?.claimable}
-          symbol={pool?.vestingTokenSymbol || ''}
-        />
-        <TotalValueCell
-          labelText={t('Rewards Claimed')}
-          amount={pool?.gaugeEarned}
-          symbol={pool?.vestingTokenSymbol || ''}
-        />
-        <TotalVotesCell pool={pool} account={account} />
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </Pool.ExpandRow>
   )
 }

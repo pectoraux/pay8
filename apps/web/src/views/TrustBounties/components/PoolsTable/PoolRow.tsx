@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Pool, TabMenu } from '@pancakeswap/uikit'
+import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool } from 'state/trustbounties/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
@@ -14,22 +14,31 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   const token = useCurrency(pool?.tokenAddress)
-
   console.log('bountiespool=================>', pool)
-
+  const tabs = (
+    <>
+      <NameCell pool={pool} symbol={pool?.token?.symbol} />
+      <TotalUsersCell labelText={t('Total Users')} amount={parseInt(pool?.partnerStakeId) ? 2 : 1} />
+      <TotalValueCell
+        labelText={t('Total Liquidity')}
+        amount={getBalanceNumber(pool?.totalLiquidity, token?.decimals)}
+        symbol={token?.symbol ?? ''}
+      />
+      <DateInfoCell labelText={t('Next Payable/Receivable')} pool={pool} />
+    </>
+  )
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <TabMenu>
-        <NameCell pool={pool} symbol={pool?.token?.symbol} />
-        <TotalUsersCell labelText={t('Total Users')} amount={parseInt(pool?.partnerStakeId) ? 2 : 1} />
-        <TotalValueCell
-          labelText={t('Total Liquidity')}
-          amount={getBalanceNumber(pool?.totalLiquidity, token?.decimals)}
-          symbol={token?.symbol ?? ''}
-        />
-        <DateInfoCell labelText={t('Next Payable/Receivable')} pool={pool} />
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </Pool.ExpandRow>
   )
 }

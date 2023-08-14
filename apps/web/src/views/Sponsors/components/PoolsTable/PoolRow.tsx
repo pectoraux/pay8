@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool, TabMenu } from '@pancakeswap/uikit'
+import { Flex, Pool, TabMenu, Card, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/sponsors/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -15,27 +15,39 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
+  const { isMobile } = useMatchBreakpoints()
   const currAccount = useMemo(
     () => pool?.accounts?.find((n) => n.protocolId === currState[pool?.id]),
     [pool, currState],
   )
   console.log('sponsorpool====>', pool, currAccount, currState)
+  const tabs = (
+    <>
+      <NameCell mr="100px" pool={pool} />
+      <TotalUsersCell pr="200px" labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
+      <TotalValueCell
+        pr="200px"
+        labelText={t('Due Now')}
+        amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
+        symbol={currAccount?.token?.symbol ?? ''}
+      />
+      <VotesCell pr="200px" pool={pool} />
+      <EndsInCell pr="200px" currAccount={currAccount} />
+    </>
+  )
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
     >
-      <TabMenu>
-        <NameCell pool={pool} />
-        <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
-        <TotalValueCell
-          labelText={t('Due Now')}
-          amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
-          symbol={currAccount?.token?.symbol ?? ''}
-        />
-        <VotesCell pool={pool} />
-        <EndsInCell currAccount={currAccount} />
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </Pool.ExpandRow>
   )
 }

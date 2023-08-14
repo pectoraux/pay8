@@ -16,7 +16,7 @@ import StakedCell from './Cells/StakedCell'
 export const VaultPoolRow: React.FC<
   React.PropsWithChildren<{ vaultKey: VaultKey; account: string; initialActivity?: boolean }>
 > = memo(({ vaultKey, account, initialActivity }) => {
-  const { isLg, isXl, isXxl } = useMatchBreakpoints()
+  const { isLg, isXl, isXxl, isMobile } = useMatchBreakpoints()
   const isLargerScreen = isLg || isXl || isXxl
   const isXLargerScreen = isXl || isXxl
   const pool = useDeserializedPoolByVaultKey(vaultKey)
@@ -27,22 +27,31 @@ export const VaultPoolRow: React.FC<
   const totalStakedBalance = useMemo(() => {
     return getBalanceNumber(totalCakeInVault, stakingToken.decimals)
   }, [stakingToken.decimals, totalCakeInVault])
-
+  const tabs = (
+    <>
+      <NameCell pool={pool} />
+      {isXLargerScreen && <AutoEarningsCell pool={pool} account={account} />}
+      {isXLargerScreen ? <StakedCell pool={pool} account={account} /> : null}
+      <AutoAprCell pool={pool} />
+      {isLargerScreen && (
+        <TotalStakedCell
+          stakingToken={stakingToken}
+          totalStaked={totalStaked}
+          totalStakedBalance={totalStakedBalance}
+        />
+      )}
+    </>
+  )
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <TabMenu>
-        <NameCell pool={pool} />
-        {isXLargerScreen && <AutoEarningsCell pool={pool} account={account} />}
-        {isXLargerScreen ? <StakedCell pool={pool} account={account} /> : null}
-        <AutoAprCell pool={pool} />
-        {isLargerScreen && (
-          <TotalStakedCell
-            stakingToken={stakingToken}
-            totalStaked={totalStaked}
-            totalStakedBalance={totalStakedBalance}
-          />
-        )}
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </Pool.ExpandRow>
   )
 })

@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool, TabMenu } from '@pancakeswap/uikit'
+import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool2 } from 'state/sponsors/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
@@ -12,30 +12,41 @@ import TotalValueCell from './Cells/TotalValueCell'
 const PoolRow: React.FC<any> = ({ id, protocolId, account, initialActivity }) => {
   const { pool } = usePool2(id)
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   const currAccount = useMemo(
     () => pool?.accounts?.find((acct) => acct.protocolId === protocolId),
     [id, pool, protocolId],
   )
   console.log('sponsorpool1===========>', id, protocolId, currAccount, pool)
+  const tabs = (
+    <>
+      <NameCell currAccount={currAccount} />
+      <TotalValueCell
+        labelText={t('Liquidity')}
+        amount={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
+        symbol={currAccount?.token?.symbol ?? ''}
+      />
+      <TotalValueCell
+        labelText={t('Amount Due')}
+        amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
+        symbol={currAccount?.token?.symbol ?? ''}
+      />
+      <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />
+    </>
+  )
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
     >
-      <TabMenu>
-        <NameCell currAccount={currAccount} />
-        <TotalValueCell
-          labelText={t('Liquidity')}
-          amount={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
-          symbol={currAccount?.token?.symbol ?? ''}
-        />
-        <TotalValueCell
-          labelText={t('Amount Due')}
-          amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
-          symbol={currAccount?.token?.symbol ?? ''}
-        />
-        <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </Pool.ExpandRow>
   )
 }

@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Pool, TabMenu } from '@pancakeswap/uikit'
+import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/cards/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -12,24 +12,35 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
+  const { isMobile } = useMatchBreakpoints()
   const currAccount = useMemo(() => pool?.balances?.find((n) => n.id === currState[pool?.id]), [pool, currState])
   console.log('cardpool1====>', pool, currAccount, currState)
+  const tabs = (
+    <>
+      <NameCell pool={pool} />
+      <TotalUsersCell labelText={t('Total Balances')} amount={pool?.balances?.length} />
+      <TotalValueCell
+        labelText={t('Balance')}
+        amount={currAccount?.balance}
+        decimals={currAccount?.decimals ?? 18}
+        symbol={currAccount?.token?.symbol ?? ''}
+      />
+      <TotalValueCell labelText={t('Token ID')} amount={pool?.tokenId} decimals={0} symbol="" />
+    </>
+  )
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
       panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
     >
-      <TabMenu>
-        <NameCell pool={pool} />
-        <TotalUsersCell labelText={t('Total Balances')} amount={pool?.balances?.length} />
-        <TotalValueCell
-          labelText={t('Balance')}
-          amount={currAccount?.balance}
-          decimals={currAccount?.decimals ?? 18}
-          symbol={currAccount?.token?.symbol ?? ''}
-        />
-        <TotalValueCell labelText={t('Token ID')} amount={pool?.tokenId} decimals={0} symbol="" />
-      </TabMenu>
+      {isMobile ? (
+        <TabMenu>
+          {tabs}
+          <></>
+        </TabMenu>
+      ) : (
+        tabs
+      )}
     </Pool.ExpandRow>
   )
 }
