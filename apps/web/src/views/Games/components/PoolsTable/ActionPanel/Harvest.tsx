@@ -142,7 +142,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Score')}
             </Text>
           </Box>
-          <CopyAddress title={truncateHash(currAccount?.receiver)} account={currAccount?.receiver} />
+          <CopyAddress title={truncateHash(currAccount?.receiver ?? '')} account={currAccount?.receiver} />
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Receiver')}
           </Text>
