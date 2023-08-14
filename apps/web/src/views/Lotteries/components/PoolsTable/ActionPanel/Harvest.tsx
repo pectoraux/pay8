@@ -100,6 +100,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
+              decimals={pool?.tokenData?.length && pool?.tokenData[0]?.decimals ? pool?.tokenData[0]?.decimals : 18}
+              value={pool?.endAmount}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('End Amount')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
               decimals={0}
               value={pool?.tokenData?.length}
               prefix="#"
