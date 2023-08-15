@@ -1,7 +1,5 @@
 import { useCallback } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { Contract } from '@ethersproject/contracts'
-import { useAppDispatch } from 'state'
 import { VaultKey } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { useVaultPoolContract } from 'hooks/useContract'
