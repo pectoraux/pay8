@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useAccount } from 'wagmi'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { useAppDispatch } from 'state'
-import { updateUserAllowance } from 'state/actions'
+
 import { VaultKey } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { useERC20, useSousChef, useVaultPoolContract } from 'hooks/useContract'
