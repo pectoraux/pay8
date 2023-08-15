@@ -3,9 +3,9 @@ import { Flex } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
 import { NftAttribute } from 'state/cancan/types'
 import { Item } from 'views/Nft/market/components/Filters'
-import { WORKSPACES, COUNTRIES, CITIES, PRODUCTS2 } from 'config'
-import { AddressZero } from '@ethersproject/constants'
+import { WORKSPACES, COUNTRIES, CITIES, PRODUCTS } from 'config'
 import { ListTraitFilter } from './ListTraitFilter'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const ScrollableFlexContainer = styled(Flex)`
   grid-area: attributeFilters;
@@ -47,7 +47,7 @@ const Filters: React.FC<any> = ({ nftFilters, setNewFilters, country = false, ci
     }),
     {} as any,
   )
-  const productsHome = Object.entries(PRODUCTS2)?.reduce(
+  const productsHome = Object.entries(PRODUCTS)?.reduce(
     (accum: any, attr: any) => ({
       ...accum,
       Product: accum.Product
@@ -85,7 +85,7 @@ const Filters: React.FC<any> = ({ nftFilters, setNewFilters, country = false, ci
         setNewFilters={setNewFilters}
         traitType="workspace"
         items={workspaceItems}
-        collectionAddress={AddressZero}
+        collectionAddress={ADDRESS_ZERO}
       />
       {country && (
         <ListTraitFilter
@@ -95,7 +95,7 @@ const Filters: React.FC<any> = ({ nftFilters, setNewFilters, country = false, ci
           setNewFilters={setNewFilters}
           traitType="country"
           items={countryItems}
-          collectionAddress={AddressZero}
+          collectionAddress={ADDRESS_ZERO}
         />
       )}
       {city && (
@@ -106,7 +106,7 @@ const Filters: React.FC<any> = ({ nftFilters, setNewFilters, country = false, ci
           title={capitalize('city')}
           traitType="city"
           items={cityItems}
-          collectionAddress={AddressZero}
+          collectionAddress={ADDRESS_ZERO}
         />
       )}
       {product && (
@@ -117,7 +117,7 @@ const Filters: React.FC<any> = ({ nftFilters, setNewFilters, country = false, ci
           title={capitalize('product tags')}
           traitType="product"
           items={productItems ?? []}
-          collectionAddress={AddressZero}
+          collectionAddress={ADDRESS_ZERO}
         />
       )}
     </ScrollableFlexContainer>

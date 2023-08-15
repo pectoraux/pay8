@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, ButtonMenuItem, ButtonMenu, Input, ErrorIcon } from '@pancakeswap/uikit'
-import CopyAddress from 'components/Menu/UserMenu/CopyAddress2'
+// import CopyAddress from 'components/Menu/UserMenu/CopyAddress2'
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -78,7 +78,7 @@ const SetPriceStage: React.FC<any> = ({
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>
         <Box>
-          {!activeButtonIndex &&
+          {/* {!activeButtonIndex &&
             state.requests.map((request, index) => (
               <CopyAddress
                 title={t('%amount% %symbol% Requested by %sender%', {
@@ -88,7 +88,7 @@ const SetPriceStage: React.FC<any> = ({
                 })}
                 account={request}
               />
-            ))}
+            ))} */}
           <Divider />
           <Text small color="textSubtle">
             {t(

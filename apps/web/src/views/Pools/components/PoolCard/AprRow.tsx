@@ -18,9 +18,10 @@ const AprRow: React.FC<React.PropsWithChildren<AprRowProps>> = ({
   showIcon = true,
 }) => {
   return (
-    <Pool.AprRowWithToolTip isVaultKey={Boolean(pool.vaultKey)}>
-      <Apr pool={pool} stakedBalance={stakedBalance} performanceFee={performanceFee} showIcon={showIcon} />
-    </Pool.AprRowWithToolTip>
+    <></>
+    // <Pool.AprRowWithToolTip isVaultKey={Boolean(pool.vaultKey)}>
+    //   <Apr pool={pool} stakedBalance={stakedBalance} performanceFee={performanceFee} showIcon={showIcon} />
+    // </Pool.AprRowWithToolTip>
   )
 }
 

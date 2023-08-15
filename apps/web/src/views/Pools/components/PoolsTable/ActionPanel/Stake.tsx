@@ -4,8 +4,6 @@ import { useCallback, useState, useMemo } from 'react'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { Token } from '@pancakeswap/sdk'
-import { useCurrency } from 'hooks/Tokens'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
 

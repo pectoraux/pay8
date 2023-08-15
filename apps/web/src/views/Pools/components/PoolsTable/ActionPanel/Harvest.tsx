@@ -2,8 +2,6 @@ import { Button, Text, Flex, Box, Balance, Pool } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
-import getTimePeriods from 'utils/getTimePeriods'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 

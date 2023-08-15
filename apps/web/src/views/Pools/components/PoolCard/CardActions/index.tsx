@@ -47,7 +47,7 @@ const CardActions: React.FC<React.PropsWithChildren<CardActionsProps>> = ({ pool
               {t('Earned')}
             </InlineText>
           </Box>
-          <HarvestActions
+          {/* <HarvestActions
             earnings={earnings}
             earningTokenSymbol={earningToken.symbol}
             earningTokenDecimals={earningToken.decimals}
@@ -55,7 +55,7 @@ const CardActions: React.FC<React.PropsWithChildren<CardActionsProps>> = ({ pool
             earningTokenPrice={earningTokenPrice}
             isBnbPool={isBnbPool}
             isLoading={isLoading}
-          />
+          /> */}
         </>
         <Box display="inline">
           <InlineText color={isStaked ? 'secondary' : 'textSubtle'} textTransform="uppercase" bold fontSize="12px">
