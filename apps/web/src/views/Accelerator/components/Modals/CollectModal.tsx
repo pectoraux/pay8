@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useAppDispatch } from 'state'
-import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance } from 'state/pools'
+// import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance } from 'state/pools'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import useHarvestPool from '../../hooks/useHarvestPool'
@@ -36,9 +36,9 @@ export const CollectModalContainer = ({
           {t('Your %symbol% earnings have been sent to your wallet!', { symbol: earningTokenSymbol })}
         </ToastDescriptionWithTx>,
       )
-      dispatch(updateUserStakedBalance({ sousId, account, chainId }))
-      dispatch(updateUserPendingReward({ sousId, account, chainId }))
-      dispatch(updateUserBalance({ sousId, account, chainId }))
+      // dispatch(updateUserStakedBalance({ sousId, account, chainId }))
+      // dispatch(updateUserPendingReward({ sousId, account, chainId }))
+      // dispatch(updateUserBalance({ sousId, account, chainId }))
       onDismiss?.()
     }
   }, [

@@ -3,7 +3,6 @@ import { Box, Text, Flex, MessageText, Message } from '@pancakeswap/uikit'
 
 import { LightGreyCard } from 'components/Card'
 import { addSeconds } from 'date-fns'
-import { useVaultApy } from 'hooks/useVaultApy'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { convertTimeToSeconds } from 'utils/timeHelper'
@@ -28,21 +27,20 @@ const Overview: React.FC<React.PropsWithChildren<OverviewPropsType>> = ({
   showLockWarning,
   ceiling,
 }) => {
-  const { getLockedApy, getBoostFactor } = useVaultApy()
   const { t } = useTranslation()
 
-  const lockedApy = useMemo(() => getLockedApy(duration), [getLockedApy, duration])
-  const boostFactor = useMemo(() => getBoostFactor(duration), [getBoostFactor, duration])
-  const newLockedApy = useMemo(() => (newDuration && getLockedApy(newDuration)) || 0, [getLockedApy, newDuration])
-  const newBoost = useMemo(() => (newDuration && getBoostFactor(newDuration)) || 0, [getBoostFactor, newDuration])
+  const lockedApy = 0
+  const boostFactor = 0
+  const newLockedApy = 0
+  const newBoost = 0
 
-  const formattedRoi = useMemo(() => {
-    return formatRoi({ usdValueStaked, lockedApy, duration })
-  }, [lockedApy, usdValueStaked, duration])
+  // const formattedRoi = useMemo(() => {
+  //   return formatRoi({ usdValueStaked, lockedApy, duration })
+  // }, [lockedApy, usdValueStaked, duration])
 
-  const newFormattedRoi = useMemo(() => {
-    return newLockedApy && formatRoi({ usdValueStaked, lockedApy: newLockedApy, duration: newDuration })
-  }, [newLockedApy, usdValueStaked, newDuration])
+  // const newFormattedRoi = useMemo(() => {
+  //   return newLockedApy && formatRoi({ usdValueStaked, lockedApy: newLockedApy, duration: newDuration })
+  // }, [newLockedApy, usdValueStaked, newDuration])
 
   const now = new Date()
 
@@ -77,16 +75,6 @@ const Overview: React.FC<React.PropsWithChildren<OverviewPropsType>> = ({
         <LightGreyCard>
           <BalanceRow title={t('Cake to be locked')} value={lockedAmount} newValue={newLockedAmount} decimals={2} />
           <BalanceRow title="iCake" decimals={2} value={formattediCake} newValue={newFormattediCake} />
-          <BalanceRow
-            title="apr"
-            unit="%"
-            value={_toNumber(lockedApy)}
-            decimals={2}
-            newValue={_toNumber(newLockedApy)}
-            tooltipContent={t(
-              'Calculated based on current rates and subject to change based on pool conditions. It is an estimate provided for your convenience only, and by no means represents guaranteed returns.',
-            )}
-          />
           <TextRow
             title={t('duration')}
             value={isValidDuration && formatSecondsToWeeks(duration)}
@@ -109,8 +97,8 @@ const Overview: React.FC<React.PropsWithChildren<OverviewPropsType>> = ({
           />
           <BalanceRow
             title={t('Expected ROI')}
-            value={formattedRoi}
-            newValue={newFormattedRoi}
+            value={0}
+            newValue={0}
             prefix="$"
             decimals={2}
             suffix={<CalculatorButton />}

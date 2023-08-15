@@ -1,21 +1,21 @@
 import { useCallback } from 'react'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useSousChef } from 'hooks/useContract'
-import { DEFAULT_GAS_LIMIT } from 'config'
+import { BOOSTED_FARM_GAS_LIMIT } from 'config'
 import { useGasPrice } from 'state/user/hooks'
 
 const options = {
-  gas: DEFAULT_GAS_LIMIT,
+  gasLimit: BOOSTED_FARM_GAS_LIMIT,
 }
 
 const harvestPool = async (sousChefContract, gasPrice) => {
-  return sousChefContract.write.deposit(['0'], { ...options, gasPrice })
+  return sousChefContract.deposit('0', { ...options, gasPrice })
 }
 
 const harvestPoolBnb = async (sousChefContract, gasPrice) => {
-  return sousChefContract.write.deposit({
+  return sousChefContract.deposit({
     ...options,
-    value: BIG_ZERO.toString(),
+    value: BIG_ZERO,
     gasPrice,
   })
 }

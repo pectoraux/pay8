@@ -17,7 +17,6 @@ const LockedActions: React.FC<React.PropsWithChildren<LockedActionsPropsType>> =
   lockStartTime,
   stakingToken,
   stakingTokenBalance,
-  stakingTokenPrice,
   lockedAmount,
 }) => {
   const position = useMemo(
@@ -48,7 +47,6 @@ const LockedActions: React.FC<React.PropsWithChildren<LockedActionsPropsType>> =
             stakingToken={stakingToken}
             currentBalance={currentBalance}
             stakingTokenBalance={stakingTokenBalance}
-            stakingTokenPrice={stakingTokenPrice}
           />
         </Box>
         <Box width="100%" ml="4px">
@@ -56,7 +54,6 @@ const LockedActions: React.FC<React.PropsWithChildren<LockedActionsPropsType>> =
             lockEndTime={lockEndTime}
             lockStartTime={lockStartTime}
             stakingToken={stakingToken}
-            stakingTokenPrice={stakingTokenPrice}
             currentBalance={currentBalance}
             currentLockedAmount={lockedAmountAsNumber}
           >
@@ -74,7 +71,6 @@ const LockedActions: React.FC<React.PropsWithChildren<LockedActionsPropsType>> =
       position={position}
       currentLockedAmount={lockedAmountAsNumber}
       stakingToken={stakingToken}
-      stakingTokenPrice={stakingTokenPrice}
     />
   )
 }

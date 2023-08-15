@@ -1,13 +1,15 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { Modal, Box } from '@pancakeswap/uikit'
 import _noop from 'lodash/noop'
 import useTheme from 'hooks/useTheme'
-import { MAX_LOCK_DURATION } from '@pancakeswap/pools'
+import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
+import { MAX_LOCK_DURATION } from 'config/constants/pools'
 import { useTranslation } from '@pancakeswap/localization'
 import BigNumber from 'bignumber.js'
-import { useIfoCeiling } from 'state/pools/hooks'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+// import { useIfoCeiling } from 'state/pools/hooks'
 
-import { getBalanceAmount, getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
 import StaticAmount from '../Common/StaticAmount'
 import LockedBodyModal from '../Common/LockedModalBody'
 import Overview from '../Common/Overview'
@@ -18,7 +20,6 @@ import { ENABLE_EXTEND_LOCK_AMOUNT } from '../../../helpers'
 const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
   modalTitle,
   stakingToken,
-  stakingTokenPrice,
   onDismiss,
   currentLockedAmount,
   currentDuration,
@@ -26,20 +27,12 @@ const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
   currentBalance,
   lockStartTime,
   isRenew,
-  customLockWeekInSeconds,
 }) => {
   const { theme } = useTheme()
-  const ceiling = useIfoCeiling()
+  const ceiling = BIG_ZERO
   const { t } = useTranslation()
 
-  const usdValueStaked = useMemo(
-    () =>
-      getBalanceNumber(
-        getDecimalAmount(new BigNumber(currentLockedAmount), stakingToken.decimals).multipliedBy(stakingTokenPrice),
-        stakingToken.decimals,
-      ),
-    [currentLockedAmount, stakingTokenPrice, stakingToken.decimals],
-  )
+  const usdValueStaked = useBUSDCakeAmount(currentLockedAmount)
 
   const validator = useCallback(
     ({ duration }) => {
@@ -69,15 +62,7 @@ const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
   )
 
   const customOverview = useCallback(
-    ({
-      isValidDuration,
-      duration,
-      isMaxSelected,
-    }: {
-      isValidDuration: boolean
-      duration: number
-      isMaxSelected?: boolean
-    }) => (
+    ({ isValidDuration, duration }) => (
       <Overview
         lockStartTime={
           currentDuration + duration > MAX_LOCK_DURATION ? Math.floor(Date.now() / 1000).toString() : lockStartTime
@@ -86,11 +71,7 @@ const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
         openCalculator={_noop}
         duration={currentDuration || duration}
         newDuration={
-          isMaxSelected
-            ? MAX_LOCK_DURATION
-            : currentDuration + duration > MAX_LOCK_DURATION
-            ? currentDurationLeft + duration
-            : currentDuration + duration
+          currentDuration + duration > MAX_LOCK_DURATION ? currentDurationLeft + duration : currentDuration + duration
         }
         lockedAmount={currentLockedAmount}
         usdValueStaked={usdValueStaked}
@@ -118,7 +99,6 @@ const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
         </Box>
         <LockedBodyModal
           stakingToken={stakingToken}
-          stakingTokenPrice={stakingTokenPrice}
           currentBalance={currentBalance}
           currentDuration={currentDuration}
           currentDurationLeft={currentDurationLeft}
@@ -128,7 +108,6 @@ const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
           prepConfirmArg={prepConfirmArg}
           customOverview={customOverview}
           isRenew={isRenew}
-          customLockWeekInSeconds={customLockWeekInSeconds}
         />
       </Modal>
     </RoiCalculatorModalProvider>

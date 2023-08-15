@@ -17,7 +17,7 @@ const InlineText = styled(Text)`
 `
 
 interface CardActionsProps {
-  pool: Pool.DeserializedPool<Token>
+  pool?: any
   stakedBalance: BigNumber
 }
 
@@ -40,7 +40,7 @@ const CardActions: React.FC<React.PropsWithChildren<CardActionsProps>> = ({ pool
       <Flex flexDirection="column">
         <>
           <Box display="inline">
-            <InlineText color="secondary" bold fontSize="12px">
+            <InlineText color="secondary" textTransform="uppercase" bold fontSize="12px">
               {`${earningToken.symbol} `}
             </InlineText>
             <InlineText color="textSubtle" textTransform="uppercase" bold fontSize="12px">
@@ -67,7 +67,7 @@ const CardActions: React.FC<React.PropsWithChildren<CardActionsProps>> = ({ pool
         </Box>
         {notMeetRequired || notMeetThreshold ? (
           <ProfileRequirementWarning profileRequirement={profileRequirement} />
-        ) : needsApproval && !isStaked ? (
+        ) : needsApproval ? (
           <ApprovalAction pool={pool} isLoading={isLoading} />
         ) : (
           <StakeActions

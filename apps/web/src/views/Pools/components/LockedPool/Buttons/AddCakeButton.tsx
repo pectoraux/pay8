@@ -1,23 +1,18 @@
 import { useCallback, memo } from 'react'
-import { Button, useModal, Skeleton, ButtonProps } from '@pancakeswap/uikit'
+import { Button, useModal, Skeleton } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePool } from 'state/pools/hooks'
 import AddAmountModal from '../Modals/AddAmountModal'
 import { AddButtonProps } from '../types'
 import NotEnoughTokensModal from '../../Modals/NotEnoughTokensModal'
 
-interface AddButtonPropsType extends AddButtonProps, ButtonProps {}
-
-const AddCakeButton: React.FC<React.PropsWithChildren<AddButtonPropsType>> = ({
+const AddCakeButton: React.FC<React.PropsWithChildren<AddButtonProps>> = ({
   currentBalance,
   stakingToken,
   currentLockedAmount,
   lockEndTime,
   lockStartTime,
   stakingTokenBalance,
-  stakingTokenPrice,
-  customLockAmount,
-  ...props
 }) => {
   const {
     pool: { userDataLoaded },
@@ -33,8 +28,6 @@ const AddCakeButton: React.FC<React.PropsWithChildren<AddButtonPropsType>> = ({
       lockStartTime={lockStartTime}
       lockEndTime={lockEndTime}
       stakingTokenBalance={stakingTokenBalance}
-      stakingTokenPrice={stakingTokenPrice}
-      customLockAmount={customLockAmount}
     />,
     true,
     true,
@@ -48,12 +41,7 @@ const AddCakeButton: React.FC<React.PropsWithChildren<AddButtonPropsType>> = ({
   }, [currentBalance, openAddAmountModal, onPresentTokenRequired])
 
   return userDataLoaded ? (
-    <Button
-      onClick={handleClicked}
-      width="100%"
-      style={{ whiteSpace: 'nowrap', paddingLeft: 0, paddingRight: 0 }}
-      {...props}
-    >
+    <Button onClick={handleClicked} width="100%" style={{ whiteSpace: 'nowrap', paddingLeft: 0, paddingRight: 0 }}>
       {t('Add CAKE')}
     </Button>
   ) : (

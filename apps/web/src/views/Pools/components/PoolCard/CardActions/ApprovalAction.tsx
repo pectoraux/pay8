@@ -5,14 +5,14 @@ import { Token } from '@pancakeswap/sdk'
 import { useApprovePool } from '../../../hooks/useApprove'
 
 interface ApprovalActionProps {
-  pool: Pool.DeserializedPool<Token>
+  pool?: any
   isLoading?: boolean
 }
 
-const ApprovalAction: React.FC<React.PropsWithChildren<ApprovalActionProps>> = ({ pool, isLoading = false }) => {
+const ApprovalAction: React.FC<any> = ({ pool, isLoading = false }) => {
   const { sousId, stakingToken, earningToken } = pool
   const { t } = useTranslation()
-  const stakingTokenContract = useERC20(stakingToken.address)
+  const stakingTokenContract = useERC20(stakingToken.address || '')
   const { handleApprove, pendingTx } = useApprovePool(stakingTokenContract, sousId, earningToken.symbol)
 
   return (

@@ -1,21 +1,18 @@
-import { Text, TokenPairImage as UITokenPairImage, useMatchBreakpoints, Skeleton, Pool } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
-import { TokenPairImage } from 'components/TokenImage'
-import { vaultPoolConfig } from 'config/constants/pools'
+import { Flex, Text, TokenImage, useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { memo, useMemo } from 'react'
-import { useVaultPoolByKey } from 'state/pools/hooks'
-import { VaultKey, DeserializedLockedCakeVault } from 'state/types'
+import { memo } from 'react'
 import styled from 'styled-components'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import SaveIcon from 'views/Info/components/SaveIcon'
 import { getVaultPosition, VaultPosition, VaultPositionParams } from 'utils/cakePool'
 import { Token } from '@pancakeswap/sdk'
+import { useWatchlistTokens } from 'state/user/hooks'
+import BaseCell, { CellContent } from './BaseCell'
 
 interface NameCellProps {
-  pool: Pool.DeserializedPool<Token>
+  pool?: any
 }
 
-const StyledCell = styled(Pool.BaseCell)`
+const StyledCell = styled(BaseCell)`
   flex: 5;
   flex-direction: row;
   padding-left: 12px;
@@ -25,95 +22,31 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<React.PropsWithChildren<NameCellProps>> = ({ pool }) => {
+const NameCell: React.FC<any> = ({ pool }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
-  const { sousId, stakingToken, earningToken, userData, isFinished, vaultKey, totalStaked } = pool
-  const vaultData = useVaultPoolByKey(pool.vaultKey)
-  const {
-    userData: { userShares },
-    totalCakeInVault,
-  } = vaultData
-  const hasVaultShares = userShares.gt(0)
-
-  const stakingTokenSymbol = stakingToken.symbol
-  const earningTokenSymbol = earningToken.symbol
-
-  const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-  const isStaked = stakedBalance.gt(0)
-
-  const showStakedTag = vaultKey ? hasVaultShares : isStaked
-
-  let title: React.ReactNode = `${t('Earn')} ${earningTokenSymbol}`
-  let subtitle: React.ReactNode = `${t('Stake')} ${stakingTokenSymbol}`
-  const showSubtitle = sousId !== 0 || (sousId === 0 && !isMobile)
-
-  if (vaultKey) {
-    title = vaultPoolConfig[vaultKey].name
-    subtitle = vaultPoolConfig[vaultKey].description
-  }
-
-  const isLoaded = useMemo(() => {
-    if (pool.vaultKey) {
-      return totalCakeInVault && totalCakeInVault.gte(0)
-    }
-    return totalStaked && totalStaked.gte(0)
-  }, [pool.vaultKey, totalCakeInVault, totalStaked])
+  const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
 
   return (
     <StyledCell role="cell">
-      {isLoaded ? (
-        <>
-          {vaultKey ? (
-            <UITokenPairImage
-              {...vaultPoolConfig[vaultKey].tokenImage}
-              mr="8px"
-              width={40}
-              height={40}
-              style={{ minWidth: 40 }}
+      <TokenImage mr="8px" width={40} height={40} src={pool?.auditor?.avatar} />
+      <CellContent>
+        <Text bold={!isMobile} small={isMobile}>
+          <Flex flexDirection="row">
+            {t(pool.symbol ?? '')}
+            <SaveIcon
+              fill={watchlistTokens.includes(pool?.id)}
+              onClick={() => addWatchlistToken(pool?.id)}
+              style={{ marginLeft: '10px', position: 'relative', top: '-5px' }}
             />
-          ) : (
-            <TokenPairImage
-              primaryToken={earningToken}
-              secondaryToken={stakingToken}
-              mr="8px"
-              width={40}
-              height={40}
-              style={{ minWidth: 40 }}
-            />
-          )}
-          <Pool.CellContent>
-            {showStakedTag &&
-              (vaultKey === VaultKey.CakeVault ? (
-                <StakedCakeStatus
-                  userShares={userShares}
-                  locked={(vaultData as DeserializedLockedCakeVault).userData.locked}
-                  lockEndTime={(vaultData as DeserializedLockedCakeVault).userData.lockEndTime}
-                />
-              ) : (
-                <Text fontSize="12px" bold color={isFinished ? 'failure' : 'secondary'} textTransform="uppercase">
-                  {t('Staked')}
-                </Text>
-              ))}
-            <Text bold={!isMobile} small={isMobile}>
-              {title}
-            </Text>
-            {showSubtitle && (
-              <Text fontSize="12px" color="textSubtle">
-                {subtitle}
-              </Text>
-            )}
-          </Pool.CellContent>
-        </>
-      ) : (
-        <>
-          <Skeleton mr="8px" width={36} height={36} variant="circle" />
-          <Pool.CellContent>
-            <Skeleton width={30} height={12} mb="4px" />
-            <Skeleton width={65} height={12} />
-          </Pool.CellContent>
-        </>
-      )}
+          </Flex>
+        </Text>
+        {pool?.auditor?.auditorDescription && (
+          <Text fontSize="12px" color="textSubtle">
+            {pool?.auditor?.auditorDescription.slice(0, 100)}
+          </Text>
+        )}
+      </CellContent>
     </StyledCell>
   )
 }

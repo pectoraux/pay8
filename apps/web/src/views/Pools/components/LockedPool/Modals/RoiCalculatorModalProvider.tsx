@@ -3,8 +3,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { usePool } from 'state/pools/hooks'
 import _toString from 'lodash/toString'
 
-import { VaultRoiCalculatorModal } from '../../Vault/VaultRoiCalculatorModal'
-
 export const RoiCalculatorModalContext = createContext(null)
 
 const RoiCalculatorModalProvider: React.FC<
@@ -19,15 +17,16 @@ const RoiCalculatorModalProvider: React.FC<
 
   if (showRoiCalculator) {
     return (
-      <VaultRoiCalculatorModal
-        pool={pool}
-        linkLabel={t('Get %symbol%', { symbol: 'CAKE' })}
-        linkHref={stakingTokenAddress ? `/swap?outputCurrency=${stakingTokenAddress}` : '/swap'}
-        stakingTokenBalance={pool?.userData?.stakingTokenBalance}
-        onBack={() => setShowRoiCalculator(false)}
-        initialValue={_toString(lockedAmount)}
-        initialView={1}
-      />
+      <></>
+      // <VaultRoiCalculatorModal
+      //   pool={pool}
+      //   linkLabel={t('Get %symbol%', { symbol: 'CAKE' })}
+      //   linkHref={stakingTokenAddress ? `/swap?outputCurrency=${stakingTokenAddress}` : '/swap'}
+      //   stakingTokenBalance={pool?.userData?.stakingTokenBalance}
+      //   onBack={() => setShowRoiCalculator(false)}
+      //   initialValue={_toString(lockedAmount)}
+      //   initialView={1}
+      // />
     )
   }
 

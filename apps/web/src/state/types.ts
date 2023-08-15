@@ -599,7 +599,7 @@ export interface PotteryWithdrawAbleData {
 export interface State {
   farms: SerializedFarmsState
   farmsV1: SerializedFarmsState
-  pools: PoolsState
+  pools: any
   predictions: PredictionsState
   lottery: any
   pottery: any

@@ -4,7 +4,7 @@ import Apr from 'views/Pools/components/Apr'
 import { Token } from '@pancakeswap/sdk'
 
 interface AprRowProps {
-  pool: Pool.DeserializedPool<Token>
+  pool?: any
   stakedBalance: BigNumber
   performanceFee?: number
   showIcon?: boolean
@@ -18,7 +18,7 @@ const AprRow: React.FC<React.PropsWithChildren<AprRowProps>> = ({
   showIcon = true,
 }) => {
   return (
-    <Pool.AprRowWithToolTip>
+    <Pool.AprRowWithToolTip isVaultKey={Boolean(pool.vaultKey)}>
       <Apr pool={pool} stakedBalance={stakedBalance} performanceFee={performanceFee} showIcon={showIcon} />
     </Pool.AprRowWithToolTip>
   )
