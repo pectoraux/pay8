@@ -45,7 +45,7 @@ const useGetTopPoolsByApr = (isIntersecting: boolean, chainId: number) => {
   //   }
   // }, [setTopPools, pools, isValidating, fetchStatus])
 
-  return { topPools: null }
+  return { topPools: [] }
 }
 
 export default useGetTopPoolsByApr
