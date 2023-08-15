@@ -1,9 +1,7 @@
 import { useCallback } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { Contract } from '@ethersproject/contracts'
-import { MaxUint256 } from '@ethersproject/constants'
 import { useAppDispatch } from 'state'
-import { updateUserAllowance } from 'state/actions'
 import { VaultKey } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { useVaultPoolContract } from 'hooks/useContract'
@@ -13,8 +11,9 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useCakeApprovalStatus from 'hooks/useCakeApprovalStatus'
 import useCakeApprove from 'hooks/useCakeApprove'
+import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 
-export const useApprovePool = (lpContract: Contract, address, earningTokenSymbol) => {
+export const useApprovePool = (lpContract: any, address, earningTokenSymbol) => {
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
