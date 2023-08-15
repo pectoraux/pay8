@@ -115,6 +115,14 @@ export const useVaultPoolByKey = (key: any) => {
   // const vaultPoolByKey = useMemo(() => makeVaultPoolByKey(key), [key])
 
   return {
+    totalCakeInVault: BIG_ZERO,
+    totalLockedAmount: BIG_ZERO,
+    isLoading: BIG_ZERO,
+    locked: BIG_ZERO,
+    lockedEnd: BIG_ZERO,
+    lockedAmount: BIG_ZERO,
+    lockBalance: BIG_ZERO,
+    lockedStart: BIG_ZERO,
     userData: {
       balance: { cakeAsBigNumber: BIG_ZERO },
       lockedAmount: BIG_ZERO,

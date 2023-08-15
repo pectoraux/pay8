@@ -1,8 +1,8 @@
 import { useVaultPoolByKey } from 'state/pools/hooks'
-import { DeserializedLockedCakeVault, VaultKey } from 'state/types'
+import { VaultKey } from 'state/types'
 
 export const useUserLockedCakeStatus = () => {
-  const vaultPool = useVaultPoolByKey(VaultKey.CakeVault) as DeserializedLockedCakeVault
+  const vaultPool = useVaultPoolByKey(VaultKey.CakeVault) as any
 
   return {
     totalCakeInVault: vaultPool?.totalCakeInVault,
