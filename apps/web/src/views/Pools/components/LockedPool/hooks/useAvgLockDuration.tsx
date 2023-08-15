@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { BOOST_WEIGHT, DURATION_FACTOR } from 'config/constants/pools'
+import { DURATION_FACTOR } from 'config/constants/pools'
 import BigNumber from 'bignumber.js'
 import _toNumber from 'lodash/toNumber'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'

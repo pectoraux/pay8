@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { BOOST_WEIGHT, DURATION_FACTOR } from '@pancakeswap/pools'
+import { DURATION_FACTOR } from '@pancakeswap/pools'
 import BigNumber from 'bignumber.js'
 import { useCakeVault } from 'state/pools/hooks'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
@@ -22,7 +22,7 @@ export default function useAvgLockDuration() {
         avgBoostRatio
           .minus(1)
           .times(new BigNumber(DURATION_FACTOR.toString()))
-          .div(new BigNumber(BOOST_WEIGHT.toString()).div(getFullDecimalMultiplier(12)))
+          .div(new BigNumber('0').div(getFullDecimalMultiplier(12)))
           .toNumber(),
       ) || 0
     )

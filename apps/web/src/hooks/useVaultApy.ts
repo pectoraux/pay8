@@ -7,7 +7,7 @@ import useSWRImmutable from 'swr/immutable'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
 import { getMasterChefV2Address } from 'utils/addressHelpers'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { BOOST_WEIGHT, DURATION_FACTOR, MAX_LOCK_DURATION } from '@pancakeswap/pools'
+import { DURATION_FACTOR, MAX_LOCK_DURATION } from '@pancakeswap/pools'
 import { publicClient } from 'utils/wagmi'
 import { ChainId } from '@pancakeswap/sdk'
 
@@ -84,14 +84,14 @@ export function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: numbe
     [pricePerFullShareAsEtherBN, totalCakePoolEmissionPerYear, totalSharesAsEtherBN],
   )
 
-  const boostFactor = useMemo(() => _getBoostFactor(BOOST_WEIGHT, duration, DURATION_FACTOR), [duration])
+  const boostFactor = BIG_ZERO // useMemo(() => _getBoostFactor( duration, DURATION_FACTOR), [duration])
 
   const lockedApy = useMemo(() => {
     return flexibleApy && getLockedApy(flexibleApy, boostFactor).toString()
   }, [boostFactor, flexibleApy])
 
   const getBoostFactor = useCallback(
-    (adjustDuration: number) => _getBoostFactor(BOOST_WEIGHT, adjustDuration, DURATION_FACTOR),
+    (adjustDuration: number) => BIG_ZERO, // _getBoostFactor( adjustDuration, DURATION_FACTOR),
     [],
   )
 
@@ -107,7 +107,7 @@ export function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: numbe
 
   return {
     flexibleApy: flexibleApyNoFee,
-    lockedApy,
+    lockedApy: null,
     getLockedApy: useCallback(
       (adjustDuration: number) => flexibleApy && getLockedApy(flexibleApy, getBoostFactor(adjustDuration)).toString(),
       [flexibleApy, getBoostFactor],
