@@ -9,7 +9,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useVaultPoolContract } from 'hooks/useContract'
 import { useAppDispatch } from 'state'
-import { fetchCakeVaultUserData } from 'state/pools'
+
 import { VaultKey } from 'state/types'
 import { useSWRConfig } from 'swr'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -43,7 +43,7 @@ const ConvertToFlexibleButton: React.FC<React.PropsWithChildren<ButtonProps>> = 
           {t('Your funds have been staked in the pool')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchCakeVaultUserData({ account, chainId }))
+      // dispatch(fetchCakeVaultUserData({ account, chainId }))
       mutate(['userCakeLockStatus', account])
     }
   }, [t, toastSuccess, account, callWithGasPrice, dispatch, fetchWithCatchTxError, vaultPoolContract, mutate, chainId])

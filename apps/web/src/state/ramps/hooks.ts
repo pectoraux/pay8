@@ -109,7 +109,11 @@ export const useGetSessionInfoSg = (sessionId, rampAddress) => {
 }
 
 export const useGetTokenData = (tokenAddress) => {
-  const { data, status, mutate: refetch } = useSWR(['token-data', tokenAddress], async () => getTokenData(tokenAddress))
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['token-data2', tokenAddress], async () => getTokenData(tokenAddress))
   return { data, refetch, status }
 }
 
@@ -182,7 +186,7 @@ export const useCakeVaultUserData = () => {
 
   useFastRefreshEffect(() => {
     if (account && chainId) {
-      // dispatch(fetchCakeVaultUserData({ account, chainId }))
+      // // dispatch(fetchCakeVaultUserData({ account, chainId }))
     }
   }, [account, dispatch, chainId])
 }
@@ -224,7 +228,7 @@ export const useFetchIfo = () => {
   //   async () => {
   //     batch(() => {
   //       dispatch(fetchCakePoolUserDataAsync({ account, chainId }))
-  //       dispatch(fetchCakeVaultUserData({ account, chainId }))
+  //       // dispatch(fetchCakeVaultUserData({ account, chainId }))
   //       dispatch(fetchUserIfoCreditDataAsync({ account, chainId }))
   //     })
   //   },

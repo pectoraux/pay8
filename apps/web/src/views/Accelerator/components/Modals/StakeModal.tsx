@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallback, useState, useMemo } from 'react'
 import { useAppDispatch } from 'state'
-import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance, updateUserAllowance } from 'state/pools'
+
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { Token } from '@pancakeswap/sdk'
@@ -62,9 +62,9 @@ const StakeModalContainer = ({
   )
 
   const onDone = useCallback(() => {
-    dispatch(updateUserStakedBalance({ sousId, account, chainId }))
-    dispatch(updateUserPendingReward({ sousId, account, chainId }))
-    dispatch(updateUserBalance({ sousId, account, chainId }))
+    // dispatch(updateUserStakedBalance({ sousId, account, chainId }))
+    // dispatch(updateUserPendingReward({ sousId, account, chainId }))
+    //     // dispatch(updateUserBalance({ sousId, account, chainId }))
   }, [dispatch, sousId, account, chainId])
 
   const handleConfirmClick = useCallback(
@@ -125,7 +125,7 @@ const StakeModalContainer = ({
 
   const handleEnableApprove = async () => {
     await handleApprove()
-    dispatch(updateUserAllowance({ sousId, account, chainId }))
+    // dispatch(updateUserAllowance({ sousId, account, chainId }))
   }
 
   return (

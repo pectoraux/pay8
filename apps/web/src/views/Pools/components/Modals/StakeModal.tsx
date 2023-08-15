@@ -3,7 +3,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallback } from 'react'
 import { useAppDispatch } from 'state'
-// import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance } from 'state/pools'
+//
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { Token } from '@pancakeswap/sdk'

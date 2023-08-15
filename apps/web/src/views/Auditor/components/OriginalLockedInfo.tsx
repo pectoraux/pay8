@@ -21,7 +21,7 @@ const OriginalLockedInfo: React.FC<React.PropsWithChildren<OriginalLockedInfoPro
   const originalUsdValue = useBUSDCakeAmount(getBalanceNumber(userData?.lockedAmount))
   const originalLockedAmountText = originalLockedAmount > 0.01 ? originalLockedAmount.toFixed(2) : '<0.01'
   const originalUsdValueText = originalUsdValue > 0.01 ? `~${originalUsdValue.toFixed(2)}` : '<0.01'
-  const lastActionInMs = userData?.lastUserActionTime ? parseInt(userData?.lastUserActionTime) * 1000 : 0
+  const lastActionInMs = userData?.lastUserActionTime ? 0 * 1000 : 0
 
   return (
     <>

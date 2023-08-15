@@ -5,7 +5,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useAppDispatch } from 'state'
-// import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance } from 'state/pools'
+//
 import useHarvestPool from '../../hooks/useHarvestPool'
 
 export const CollectModalContainer = ({

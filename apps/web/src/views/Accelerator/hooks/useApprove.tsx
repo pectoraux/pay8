@@ -35,7 +35,7 @@ export const useApprovePool = (lpContract: ReturnType<typeof useERC20>, sousId, 
           {t('You can now stake in the %symbol% pool!', { symbol: earningTokenSymbol })}
         </ToastDescriptionWithTx>,
       )
-      dispatch(updateUserAllowance({ sousId, account, chainId }))
+      // dispatch(updateUserAllowance({ sousId, account, chainId }))
     }
   }, [
     chainId,

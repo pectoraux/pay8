@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useAppDispatch } from 'state'
-// import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance } from 'state/pools'
+//
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import useHarvestPool from '../../hooks/useHarvestPool'
@@ -38,7 +38,8 @@ export const CollectModalContainer = ({
       )
       // dispatch(updateUserStakedBalance({ sousId, account, chainId }))
       // dispatch(updateUserPendingReward({ sousId, account, chainId }))
-      // dispatch(updateUserBalance({ sousId, account, chainId }))
+      //     // dispatch(updateUserBalance({ sousId, account, chainId }))
+
       onDismiss?.()
     }
   }, [

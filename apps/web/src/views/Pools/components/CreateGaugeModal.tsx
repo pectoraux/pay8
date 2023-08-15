@@ -1,8 +1,7 @@
 import { useMemo, useState, ChangeEvent } from 'react'
 import { differenceInSeconds } from 'date-fns'
 import { InjectedModalProps, Button, Flex, useToast, Pool, LinkExternal } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
-import { MaxUint256 } from '@ethersproject/constants'
+import { Currency, MaxUint256 } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
 import useTheme from 'hooks/useTheme'
 import { fetchPairsAsync } from 'state/pools'
@@ -91,7 +90,7 @@ const getToastText = (stage: LockStage, t: ContextApi['t']) => {
   // }
 }
 
-const BuyModal: React.FC<any> = ({ variant = 'user', location = 'fromStake', pool, currency, onDismiss }) => {
+const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, onDismiss }) => {
   const [stage, setStage] = useState(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const { t } = useTranslation()

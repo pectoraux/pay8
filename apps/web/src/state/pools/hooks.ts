@@ -15,6 +15,7 @@ import {
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
 } from './selectors'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 
 export const useFetchPublicPoolsStats = () => {
   const [data, setData] = useState(null)
@@ -84,4 +85,48 @@ export const useGetRequiresApproval = (c, a, s) => {
     requiresApproval(c, a, s),
   )
   return { needsApproval: data, refetch }
+}
+
+export const useCakeVaultUserData = () => {
+  // const { address: account } = useAccount()
+  // const dispatch = useAppDispatch()
+  // const { chainId } = useActiveChainId()
+  // useFastRefreshEffect(() => {
+  //   if (account && chainId) {
+  //     // dispatch(fetchCakeVaultUserData({ account, chainId }))
+  //   }
+  // }, [account, dispatch, chainId])
+}
+
+export const useCakeVaultPublicData = () => {}
+
+export const useFetchIfo = () => {}
+
+export const useCakeVault = () => {
+  return {
+    totalLockedAmount: BIG_ZERO,
+    totalShares: BIG_ZERO,
+    totalCakeInVault: BIG_ZERO,
+    pricePerFullShare: BIG_ZERO,
+  } // useVaultPoolByKey(VaultKey.CakeVault)
+}
+
+export const useVaultPoolByKey = (key: any) => {
+  // const vaultPoolByKey = useMemo(() => makeVaultPoolByKey(key), [key])
+
+  return {
+    userData: {
+      balance: { cakeAsBigNumber: BIG_ZERO },
+      lockedAmount: BIG_ZERO,
+      lastUserActionTime: 0,
+    },
+  } // useSelector(vaultPoolByKey)
+}
+
+export const useIfoCredit = () => {
+  return BIG_ZERO // useSelector(ifoCreditSelector)
+}
+
+export const useIfoCeiling = () => {
+  return BIG_ZERO // useSelector(ifoCeilingSelector)
 }

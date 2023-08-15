@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
@@ -20,6 +19,7 @@ import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
 import { Divider, GreyedOutContainer } from './styles'
 import BribeField from './LockedPool/Common/BribeField'
 import { useApprovePool } from '../hooks/useApprove'
+import { useGetTokenData } from 'state/ramps/hooks'
 
 interface SetPriceStageProps {
   currency?: any
@@ -37,7 +37,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const [_ve, setVe] = useState('')
-  const [pairAddress, setPairAddress] = useState('')
+  const [pairAddress, setPairAddress] = useState<any>('')
   const [allowing, setAllowing] = useState(false)
   const [tokenId, setTokenId] = useState('')
   const [amount, setAmount] = useState('')
@@ -55,13 +55,13 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const balance = useCurrencyBalance(account ?? undefined, pair ?? undefined)
   const stakingTokenBalance = balance ? getDecimalAmount(new BigNumber(balance?.toExact()), pair?.decimals) : BIG_ZERO
   const stakingTokenContract = useERC20(pairAddress || '')
-
+  const { data } = useGetTokenData(pairAddress || '')
   const { handleApprove, pendingTx: pendingPoolTx } = useApprovePool(
     stakingTokenContract,
     poolGaugeContract.address,
     pair?.symbol,
   )
-
+  console.log('tokenData================>', data)
   const { needsApproval, refetch } = useGetRequiresApproval(stakingTokenContract, account, poolGaugeContract.address)
   useEffect(() => {
     if (pendingPoolTx) {
@@ -74,8 +74,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
-    const tokenContract = getBep20Contract(pairAddress)
-    const decimals = await tokenContract.decimals()
+    const decimals = data.decimals
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const amountDecimals = getDecimalAmount(new BigNumber(amount), decimals)
@@ -108,6 +107,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   }, [
     t,
     _ve,
+    data,
     amount,
     tokenId,
     dispatch,

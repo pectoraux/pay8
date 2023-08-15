@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi'
 import BigNumber from 'bignumber.js'
 import { Ifo, PoolIds } from 'config/constants/types'
 import { useERC20, useIfoV3Contract } from 'hooks/useContract'
-import { fetchCakeVaultUserData } from 'state/pools'
+
 import { useAppDispatch } from 'state'
 import { useIfoCredit } from 'state/pools/hooks'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
@@ -192,7 +192,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
       unlimitedReleasableAmount = unlimitedReleasableAmountResult.result
     }
 
-    dispatch(fetchCakeVaultUserData({ account, chainId }))
+    // dispatch(fetchCakeVaultUserData({ account, chainId }))
 
     setState((prevState) => ({
       ...prevState,
