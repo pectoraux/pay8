@@ -49,10 +49,10 @@ const StakeModalContainer = ({
     async (stakeAmount: string) => {
       // eslint-disable-next-line consistent-return
       const receipt = await fetchWithCatchTxError(async () => {
-        if (isRemovingStake) {
-          return onUnstake(stakeAmount, stakingToken.decimals)
-        }
-        return onStake(stakeAmount, stakingToken.decimals)
+        // if (isRemovingStake) {
+        //   return onUnstake(stakeAmount, stakingToken.decimals)
+        // }
+        // return onStake(stakeAmount, stakingToken.decimals)
       })
       if (receipt?.status) {
         if (isRemovingStake) {
