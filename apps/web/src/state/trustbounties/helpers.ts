@@ -182,7 +182,7 @@ export const fetchBounties = async (
           ve,
           tokenAddress: token,
           isNativeCoin: token.toLowerCase() === DEFAULT_INPUT_CURRENCY,
-          token: new Token(56, token, 18, 'TUSD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
+          token: new Token(56, token, 18, 'USD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
           owner,
           claims,
           friendlyClaims,

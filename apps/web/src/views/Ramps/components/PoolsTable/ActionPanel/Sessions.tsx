@@ -74,7 +74,7 @@ const ViewControls = styled.div`
   }
 `
 
-const DataCard = ({ session, pool }) => {
+const DataCard = ({ idx, session, pool }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { data: accountData } = useGetAccountSg(account, 'stripe')
@@ -85,7 +85,7 @@ const DataCard = ({ session, pool }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const rampHelperContract = useRampHelper()
   const variant = !session?.mintSession ? 'transfer' : session?.ppDataFound ? 'mint' : 'charge'
-  console.log('variant=============>', variant)
+  console.log('variant=============>', variant, accountData)
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal variant={variant} session={session} location="staked" pool={pool} currency={currency} />,
   )
@@ -111,15 +111,21 @@ const DataCard = ({ session, pool }) => {
     console.log('7processCharge==================>', route, args, session)
 
     if (pool?.automatic) {
-      const { data } = await axios.post(route, args)
-      if (data.error || data.amount === undefined) {
-        setIsLoading(false)
-        console.log('data.error=====================>', data.error)
-      } else if (variant === 'charge') {
+      if (variant === 'charge') {
+        const { data } = await axios.post(route, args)
+        if (data.error || data.amount === undefined) {
+          setIsLoading(false)
+          console.log('data.error=====================>', data.error)
+        }
         const stripe = await loadStripe(pool?.publishableKeys?.length && pool?.publishableKeys[0])
         await stripe.redirectToCheckout({ sessionId: data?.id })
       } else {
-        return callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => setIsLoading(false))
+        await callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => setIsLoading(false))
+        const { data } = await axios.post(route, args)
+        if (data.error || data.amount === undefined) {
+          setIsLoading(false)
+          console.log('data.error=====================>', data.error)
+        }
       }
     } else {
       return callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => setIsLoading(false))
@@ -130,7 +136,7 @@ const DataCard = ({ session, pool }) => {
       <TopMoverCard>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center" mb="8px">
           <Text lineHeight="1" fontSize="14px" color="textSubtle" as="span">
-            {csId}
+            {`${idx})`} {csId}
           </Text>
           <Wrapper>
             <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -197,11 +203,18 @@ const DataCard = ({ session, pool }) => {
             <Button
               scale="sm"
               variant="secondary"
-              disabled={!session?.active || session.user?.toLowerCase() !== account?.toLowerCase()}
+              disabled={
+                parseInt(session.amount ?? '0') < 1 ||
+                !session?.active ||
+                session.user?.toLowerCase() !== account?.toLowerCase() ||
+                !(pool?.secretKeys?.length && pool?.secretKeys[0]) ||
+                !session?.token?.symbol ||
+                !session?.amount
+              }
               endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
               onClick={processCharge}
             >
-              {t('Process Post Burn')}
+              {t('Process Burn')}
             </Button>
           ) : (
             <Button
@@ -284,12 +297,13 @@ const Cart: React.FC<any> = ({ pool }) => {
         {pool?.allSessions
           .filter(
             (session) =>
-              (mintOnly && session.mintSession) ||
-              (burnOnly && !session.mintSession) ||
-              (mineOnly && session?.user?.toLowerCase() === account?.toLowerCase()),
+              session.active &&
+              ((mintOnly && session.mintSession) ||
+                (burnOnly && !session.mintSession) ||
+                (mineOnly && session?.user?.toLowerCase() === account?.toLowerCase())),
           )
-          .map((session) => (
-            <DataCard session={session} pool={pool} />
+          .map((session, idx) => (
+            <DataCard idx={idx} session={session} pool={pool} />
           ))}
       </ScrollableRow>
     </Card>

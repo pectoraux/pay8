@@ -284,7 +284,7 @@
     },
     {
       "name": "Tokenized Fiat USD",
-      "symbol": "TUSD",
+      "symbol": "USD",
       "address": "0xbE04187288D198ed6F0d90eCAAca0fE42Dd434Fe",
       "chainId": 4002,
       "decimals": 18,
@@ -292,7 +292,7 @@
     },
     {
       "name": "Tokenized Fiat XOF",
-      "symbol": "TXOF",
+      "symbol": "XOF",
       "address": "0x7eB9763f5eF3bFb84CE6f31b324e7619bFA1ca37",
       "chainId": 4002,
       "decimals": 18,

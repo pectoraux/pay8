@@ -4,6 +4,7 @@ import Stripe from 'stripe'
 const handler = async (req, res) => {
   const { sessionId, sk } = req.body
   console.log('check=================>', sk, process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
+  console.log('sessionId=================>', sessionId)
   // const stripe = initStripe(sk)
   const stripe = new Stripe(sk, { apiVersion: '2020-08-27' })
 
@@ -13,7 +14,7 @@ const handler = async (req, res) => {
     res.send({
       id: session.length && session[0].id,
       amount: session.length && Number(session[0]?.amount_total ?? 0) / 100,
-      currency: session.length && `${session[0].currency}`,
+      currency: session.length && session[0].currency,
       error: undefined,
     })
   } catch (error) {

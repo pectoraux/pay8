@@ -1,11 +1,10 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useRampContract, useRampHelper, useRampAds } from 'hooks/useContract'
+import { useERC20, useRampContract, useRampHelper } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
@@ -17,13 +16,17 @@ import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/Confi
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useRouter } from 'next/router'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
+import { fantomTestnet } from 'viem/chains'
+import { privateKeyToAccount } from 'viem/accounts'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { rampABI } from 'config/abi/ramp'
 import { useAppDispatch } from 'state'
 import { fetchRampsAsync } from 'state/ramps'
+import MintStage from 'views/Ramps/components/MintStage'
+import BurnStage from 'views/Ramps/components/BurnStage'
+import { useGetRamp, useGetTokenData, useGetSessionInfo, useGetSessionInfoSg } from 'state/ramps/hooks'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
-import MintStage from './MintStage'
-import BurnStage from './BurnStage'
 import PartnerStage from './PartnerStage'
 import BuyRampStage from './BuyRampStage'
 import UpdateDevStage from './UpdateDevStage'
@@ -34,22 +37,16 @@ import UpdateBadgeStage from './UpdateBadgeStage'
 import ClaimRevenueStage from './ClaimRevenueStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import CreateProtocolStage from './CreateProtocolStage'
-import UpdateBlacklistStage from './UpdateBlacklistStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import DeleteStage from './DeleteStage'
 import InitRampStage from './InitRampStage'
 import DeleteRampStage from './DeleteRampStage'
-import SponsorTagStage from './SponsorTagStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import UpdateTokenStage from './UpdateTokenStage'
 import UnlockBountyStage from './UnlockBountyStage'
 import UpdateProfileStage from './UpdateProfileStage'
-import AddExtraTokenStage from './AddExtraTokenStage'
-import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
-import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
-import { useGetRamp, useGetSessionInfo, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -158,6 +155,16 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(currency?.address || router.query?.userCurrency || '')
   const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '')
   const rampHelperContract = useRampHelper()
+  const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+    // key: process.env.NEXT_PUBLIC_PAYSWAP_SIGNER
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
 
   console.log('mcurrencyy===============>', currency, pool?.secretKeys, rampContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
@@ -169,6 +176,8 @@ const CreateGaugeModal: React.FC<any> = ({
   console.log('stripeData=================>', stripeData, tokenData)
 
   const [state, setState] = useState<any>(() => ({
+    sk: pool?.secretKeys && pool?.secretKeys[0],
+    pk: pool?.publishableKeys && pool?.publishableKeys[0],
     owner: pool?.owner,
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
@@ -229,7 +238,7 @@ const CreateGaugeModal: React.FC<any> = ({
     if (data) {
       if (data?.user?.toLowerCase() !== account?.toLowerCase() || !data?.active) {
         onDismiss()
-        router.push(`/ramps/${router.query?.ramp}`)
+        if (router.query?.ramp) router.push(`/ramps/${router.query?.ramp}`)
       } else {
         state.amountReceivable = data?.amount
         state.token = data?.tokenAddress
@@ -484,7 +493,7 @@ const CreateGaugeModal: React.FC<any> = ({
       )
     },
     // eslint-disable-next-line consistent-return
-    onConfirm: () => {
+    onConfirm: async () => {
       if (stage === LockStage.CONFIRM_CREATE_PROTOCOL) {
         console.log('CONFIRM_CREATE_PROTOCOL2===============>', [state.token, state.tokenId || 0])
         return callWithGasPrice(rampContract, 'createProtocol', [state.token, state.tokenId || 0]).catch((err) =>
@@ -500,13 +509,17 @@ const CreateGaugeModal: React.FC<any> = ({
           state.identityTokenId,
           state.sessionId,
         ])
-        return callWithGasPrice(rampContract, 'mint', [
-          data?.tokenAddress,
-          account,
-          amount.toString(),
-          state.identityTokenId,
-          state.sessionId,
-        ]).catch((err) => console.log('CONFIRM_MINT===============>', err))
+        const { request } = await client.simulateContract({
+          account: adminAccount,
+          address: rampContract.address,
+          abi: rampABI,
+          functionName: 'mint',
+          args: [data?.tokenAddress, account, BigInt(amount.toString()), state.identityTokenId, state.sessionId],
+        })
+        await walletClient.writeContract(request).catch((err) => console.log('CONFIRM_MINT===============>', err))
+        return callWithGasPrice(rampHelperContract, 'postMint', [state.sessionId || '']).catch((err) =>
+          console.log('1CONFIRM_MINT===============>', err),
+        )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PROTOCOL) {
         const amount = getDecimalAmount(state.salePrice, 18)
@@ -816,6 +829,7 @@ const CreateGaugeModal: React.FC<any> = ({
           currency={currency}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
+          callWithGasPrice={callWithGasPrice}
           rampHelperContract={rampHelperContract}
           continueToNextStage={continueToNextStage}
         />
@@ -826,6 +840,7 @@ const CreateGaugeModal: React.FC<any> = ({
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
           rampHelperContract={rampHelperContract}
+          callWithGasPrice={callWithGasPrice}
           continueToNextStage={continueToNextStage}
         />
       )}

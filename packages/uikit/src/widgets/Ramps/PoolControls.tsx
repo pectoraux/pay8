@@ -105,7 +105,7 @@ export function PoolControls<T>({
   const [watchlistTokens] = useWatchlistTokens();
   const chosenPoolsLength = useRef(0);
 
-  const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => !pool.automatic), [pools]);
+  const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool.automatic === false), [pools]);
   const openPoolsWithStartBlockFilter = useMemo(
     () =>
       openPools.filter((pool) =>

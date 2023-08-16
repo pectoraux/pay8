@@ -1,11 +1,11 @@
 import styled, { keyframes, css } from 'styled-components'
 import { Box, Flex, Text, useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
 import { Token } from '@pancakeswap/sdk'
+import Sessions from 'views/Ramps/components/PoolsTable/ActionPanel/Sessions'
 import { useState } from 'react'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import PoolStatsInfo from '../../PoolStatsInfo'
-import Sessions from './Sessions'
 
 const expandAnimation = keyframes`
   from {

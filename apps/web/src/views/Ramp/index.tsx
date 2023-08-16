@@ -41,7 +41,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   const { ramp, session_id: sessionId, state: status, userCurrency } = router.query
-  const ogRamp = useMemo(() => pools?.length && pools[0], [pools])
+  const rampAddress = ramp as String
+  const ogRamp = useMemo(
+    () => pools?.find((pool) => pool?.rampAddress?.toLowerCase() === rampAddress?.toLowerCase()),
+    [pools],
+  )
   const isOwner = ogRamp?.devaddr_ === account
   const dispatch = useAppDispatch()
   const [openedAlready, setOpenedAlready] = useState(false)
@@ -56,7 +60,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
       location="home"
-      pool={pools?.length && pools[0]}
+      pool={ogRamp}
       currency={currency ?? userCurrency}
       status={status}
       sessionId={sessionId}
@@ -119,7 +123,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{ramp}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools?.length && pools[0]?.accounts}>
+        <PoolControls pools={ogRamp?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (
@@ -133,7 +137,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   {t('Delete Ramp!')}
                 </FinishedTextButton>
               ) : null}
-              {console.log('9chosenPools================>', chosenPools, pools?.length && pools[0]?.accounts)}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow
@@ -141,7 +144,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                     key={pool.sousId}
                     sousId={pool.sousId}
                     account={account}
-                    rampAddress={pools[0]?.id}
+                    rampAddress={ogRamp?.id}
                   />
                 ))}
               </Pool.PoolsTable>

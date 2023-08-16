@@ -26,7 +26,14 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const BurnStage: React.FC<any> = ({ state, rampAddress, handleChange, rampHelperContract, continueToNextStage }) => {
+const BurnStage: React.FC<any> = ({
+  state,
+  rampAddress,
+  handleChange,
+  rampHelperContract,
+  callWithGasPrice,
+  continueToNextStage,
+}) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -34,13 +41,14 @@ const BurnStage: React.FC<any> = ({ state, rampAddress, handleChange, rampHelper
   const { toastError, toastSuccess } = useToast()
   const { data: accountData, refetch } = useGetAccountSg(account, 'stripe')
   const [linking, setLinking] = useState<boolean>(false)
-  const [linked, setLinked] = useState<boolean>(accountData?.active)
-  console.log('accountData===================>', accountData)
+  const [linked, setLinked] = useState<boolean>(accountData?.active && accountData?.id)
+  console.log('2accountData===================>', accountData, accountData?.id && accountData?.active)
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
     }
+    setLinked(accountData?.id && accountData?.active)
   }, [inputRef])
 
   async function onAttemptToCreateLink() {
@@ -53,9 +61,17 @@ const BurnStage: React.FC<any> = ({ state, rampAddress, handleChange, rampHelper
     })
     console.log('1linkAccount=============>', data)
     if (!linked) {
-      await rampHelperContract
-        .linkAccount('stripe', data.accountId, state.moreInfo?.split(','))
-        .then(() => router.push(data.link))
+      if (data?.err) {
+        setLinked(false)
+        setLinking(false)
+        return
+      }
+      const args = ['stripe', data.accountId, state.moreInfo?.split(',')]
+      console.log('confirm_link============>', args)
+      await callWithGasPrice(rampHelperContract, 'linkAccount', args).catch((err) => {
+        console.log('createGauge=================>', err)
+      })
+      router.push(data.link)
     } else if (!data.err) {
       toastSuccess(t('Bank account successfully linked'))
       setLinked(true)
@@ -73,7 +89,7 @@ const BurnStage: React.FC<any> = ({ state, rampAddress, handleChange, rampHelper
     Number(state.amountReceivable),
     Number(state.amountReceivable) <= 1,
   )
-  return !linked ? (
+  return !(accountData?.id && accountData?.active) ? (
     <>
       <Divider />
       <Flex flexDirection="column">
@@ -124,7 +140,7 @@ const BurnStage: React.FC<any> = ({ state, rampAddress, handleChange, rampHelper
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage} disabled={Number(state.amountReceivable) < 1}>
+        <Button mb="8px" onClick={continueToNextStage} disabled={Number(state.amountReceivable) < 2}>
           {t('Burn')}
         </Button>
       </Flex>

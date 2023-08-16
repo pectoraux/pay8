@@ -37,16 +37,24 @@ export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        console.log('fetchRampsAsync===================>Done')
-        dispatch(fetchRampsAsync())
-      })
-    }
+  useSWR(
+    ['/ramps', chainId],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchRampsAsync())
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch, chainId])
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const fetchPoolsDataWithFarms = async (ramp, dispatch) => {
@@ -129,20 +137,27 @@ export const useGetAccountSg = (accountAddress, channel) => {
 export const useGetSessionInfo = (sessionId, sk) => {
   console.log('useGetSessionInfo==========>', sk)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-  const sk0 = sk
-    ? nodeRSA.decryptStringWithRsaPrivateKey({
-        text: sk,
-        privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-      })
-    : ''
-  const {
-    data,
-    status,
-    mutate: refetch,
-  } = useSWRImmutable(['stripe-session-info', sessionId ?? '0', sk0], async () =>
-    axios.post('/api/check', { sessionId, sk: sk0 }),
-  )
-  return { data: data?.data, refetch, status }
+  try {
+    const sk0 = sk
+      ? nodeRSA.decryptStringWithRsaPrivateKey({
+          text: sk,
+          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+        })
+      : ''
+    const {
+      data,
+      status,
+      mutate: refetch,
+    } = useSWRImmutable(['stripe-session-info', sessionId ?? '0', sk0], async () =>
+      axios.post('/api/check', { sessionId, sk: sk0 }),
+    )
+    return { data: data?.data, refetch, status }
+  } catch (err) {
+    return {
+      data: null,
+      refetch: null,
+    }
+  }
 }
 
 export const useGetRamp = (rampAddress) => {

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import NodeRSA from 'encrypt-rsa'
 import { Token } from '@pancakeswap/sdk'
-import { getBep20Contract } from 'utils/contractHelpers'
 import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_RAMPS } from 'config/constants/endpoints'
@@ -22,7 +21,7 @@ export const getRamps = async (first = 5, skip = 0, where = {}) => {
     const res = await request(
       GRAPH_API_RAMPS,
       gql`
-      # query getRamps($first: Int!, $skip: Int!, $where: NFT_filter) 
+      query getRamps($first: Int!, $skip: Int!, $where: NFT_filter) 
       {
         ramps(first: $first, skip: $skip, where: $where) {
           ${rampFields}
@@ -139,7 +138,7 @@ export const getAccountSg = async (address: string, channel: string) => {
       { ownerAddress, channel },
     )
     console.log('getAccountSg=================>', res)
-    return res.accounts?.length && res.accounts[0]
+    return res.accounts?.length && res.accounts?.find((acct) => !!acct?.id)
   } catch (error) {
     console.error('Failed to fetch account=============>', error)
     return null
@@ -174,10 +173,10 @@ export const getTokenData = async (tokenAddress) => {
 
 // eslint-disable-next-line consistent-return
 export const fetchRamp = async (address) => {
+  const rampAddress = address?.toLowerCase()
+  const gauge = await getRampSg(rampAddress)
+  console.log('fetchRamp=========>', rampAddress, gauge)
   try {
-    const rampAddress = address?.toLowerCase()
-    const gauge = await getRampSg(rampAddress)
-    console.log('fetchRamp=========>', rampAddress, gauge)
     // const serializedTokens = serializeTokens()
     const bscClient = publicClient({ chainId: 4002 })
     const [devaddr_, tokens, params] = await bscClient.multicall({
@@ -221,11 +220,15 @@ export const fetchRamp = async (address) => {
       automatic,
       _ve,
     )
-    const { sessions, clientIds, secretKeys, publishableKeys, ...rest } = gauge
+
+    const sessions = gauge?.sessions
+    const clientIds = gauge?.clientIds
+    const secretKeys = gauge?.secretKeys
+    const publishableKeys = gauge?.publishableKeys
     const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
     const allSessions = await Promise.all(
       sessions
-        .filter((session) => session?.active)
+        ?.filter((session) => session?.active)
         .map(async (session) => {
           let ppData
           const sk = gauge.secretKeys?.length && gauge.secretKeys[0]
@@ -257,12 +260,13 @@ export const fetchRamp = async (address) => {
           })
           if (session.mintSession) {
             ppData = await Promise.all([axios.post('/api/check', { sessionId: session.sessionId, sk: sk0 })])
+            console.log('2ppData=======================>', ppData, session.sessionId, sk0)
           }
 
           return {
             ...session,
-            ppDataFound: !ppData || !ppData?.error,
-            ppData: ppData?.data,
+            ppDataFound: ppData?.length && !ppData[0]?.data?.error,
+            ppData: ppData?.length && ppData[0]?.data,
             token: new Token(
               56,
               session?.tokenAddress,
@@ -315,7 +319,7 @@ export const fetchRamp = async (address) => {
                 salePrice: protocolInfo.result[7]?.toString(),
                 maxPartners: protocolInfo.result[8]?.toString(),
                 cap: protocolInfo.result[9]?.toString(),
-                token: new Token(56, token, 18, 'TUSD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
+                token: new Token(56, token, 18, 'USD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
                 // allTokens.find((tk) => tk.address === token),
               }
             }),
@@ -437,10 +441,10 @@ export const fetchRamp = async (address) => {
         : ''
     } catch (err) {}
     console.log('secretKeys================>', [sk0, sk1, sk2, sk3, sk4], rampBadgeId.toString())
-    const collection = await getCollection(rest.collectionId)
+    const collection = await getCollection(gauge.collectionId)
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
-      ...rest,
+      ...gauge,
       secretKeys: [sk0, sk1, sk2, sk3, sk4],
       clientIds: [cId0, cId1, cId2, cId3, cId4],
       publishableKeys: [pk0, pk1, pk2, pk3, pk4],
@@ -460,6 +464,7 @@ export const fetchRamp = async (address) => {
     }
   } catch (err) {
     console.log('fetchRamp err================>', err, address)
+    return gauge
   }
 }
 

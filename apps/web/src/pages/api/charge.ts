@@ -18,6 +18,7 @@ const handler = async (req, res) => {
       },
     },
   ]
+  console.log('lineItems======================>', lineItems)
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',

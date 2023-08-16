@@ -2,15 +2,16 @@ import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
 import { useEffect, useRef, useState } from 'react'
 import { Flex, Grid, Box, Text, Button, AutoRenewIcon, Input, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { fantomTestnet } from 'viem/chains'
+import { privateKeyToAccount } from 'viem/accounts'
 
 import { GreyedOutContainer, Divider } from './styles'
-import { publicClient } from 'utils/wagmi'
-import useCatchTxError from 'hooks/useCatchTxError'
-import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { rampHelperABI } from 'config/abi/rampHelper'
+import { getRampHelperAddress } from 'utils/addressHelpers'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -28,22 +29,20 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({
-  state,
-  pool,
-  currency,
-  rampAddress,
-  handleChange,
-  callWithGasPrice,
-  rampHelperContract,
-  continueToNextStage,
-}) => {
+const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
-  const [pendingFb, setPendingFb] = useState(false)
-
+  const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
   const processCharge = async () => {
     setIsLoading(true)
     console.log('processCharge===============>', currency, state.sk)
@@ -66,22 +65,21 @@ const SetPriceStage: React.FC<any> = ({
       state.identityTokenId,
       data.id,
     ])
-    return callWithGasPrice(rampHelperContract, 'preMint', [
-      rampAddress,
-      account,
-      currency?.address,
-      state.amountPayable,
-      state.identityTokenId,
-      data.id,
-    ])
+
+    const { request } = await client.simulateContract({
+      account: acct,
+      address: getRampHelperAddress(),
+      abi: rampHelperABI,
+      functionName: 'preMint',
+      args: [rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id],
+    })
+    await walletClient
+      .writeContract(request)
       .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
       .catch((err) => {
         console.log('createGauge=================>', err)
         setIsLoading(false)
       })
-    // await rampHelperContract
-    //   .preMint(rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id)
-    //   .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
   }
 
   useEffect(() => {

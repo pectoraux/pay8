@@ -88,7 +88,7 @@ export const fetchRampAsync = (rampAddress) => async (dispatch) => {
     console.log('fetchBusinesse================>', ramp, rampAddress)
     dispatch(setRampsPublicData([ramp] || []))
   } catch (error) {
-    console.error('[Pools Action] error when getting staking limits', error)
+    console.error('[Pools Action]=============> error when getting staking limits', error)
   }
 }
 

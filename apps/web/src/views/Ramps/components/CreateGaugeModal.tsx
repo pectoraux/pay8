@@ -20,6 +20,9 @@ import { useRouter } from 'next/router'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { useAppDispatch } from 'state'
 import { fetchRampsAsync } from 'state/ramps'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { fantomTestnet } from 'viem/chains'
+import { privateKeyToAccount } from 'viem/accounts'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import MintStage from './MintStage'
@@ -49,6 +52,7 @@ import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
+import { rampABI } from 'config/abi/ramp'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -156,10 +160,19 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(
     currency?.address || rampAccount?.token?.address || router.query?.userCurrency || '',
   )
-  const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '')
+  const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '', true)
   const rampHelperContract = useRampHelper()
   const rampAdsContract = useRampAds()
   const dispatch = useAppDispatch()
+  const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
   console.log('mcurrencyy1===============>', currency, rampAccount, pool, rampContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
@@ -542,7 +555,7 @@ const CreateGaugeModal: React.FC<any> = ({
       )
     },
     // eslint-disable-next-line consistent-return
-    onConfirm: () => {
+    onConfirm: async () => {
       if (stage === LockStage.CONFIRM_CREATE_PROTOCOL) {
         const args = [state.token, state.tokenId]
         console.log('CONFIRM_CREATE_PROTOCOL===============>', args)
@@ -571,8 +584,16 @@ const CreateGaugeModal: React.FC<any> = ({
         const amount = getDecimalAmount(state.amountPayable, currency?.decimals)
         const args = [state.token, account, amount.toString(), state.identityTokenId, state.sessionId || '']
         console.log('CONFIRM_MINT===============>', args)
-        return callWithGasPrice(rampContract, 'mint', args).catch((err) =>
-          console.log('CONFIRM_MINT===============>', err, rampContract),
+        const { request } = await client.simulateContract({
+          account: adminAccount,
+          address: rampContract.address,
+          abi: rampABI,
+          functionName: 'mint',
+          args: [state.token, account, BigInt(amount.toString()), state.identityTokenId, state.sessionId || ''],
+        })
+        await walletClient.writeContract(request).catch((err) => console.log('1CONFIRM_MINT===============>', err))
+        return callWithGasPrice(rampHelperContract, 'postMint', [state.sessionId || '']).catch((err) =>
+          console.log('2CONFIRM_MINT===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PROTOCOL) {
@@ -1087,6 +1108,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state={state}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
+          callWithGasPrice={callWithGasPrice}
           rampHelperContract={rampHelperContract}
           continueToNextStage={continueToNextStage}
         />
