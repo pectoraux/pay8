@@ -29,14 +29,15 @@ const RoundResult: React.FC<any> = ({ betting, children, ...props }) => {
         maxHeight="200px"
         onClick={onPresentClaimTicketsModal}
       >
-        {betting?.rewardsBreakdown
+        {betting?.rewardsBreakdownBc
           ?.filter((rwb) => !!parseFloat(rwb))
           .map((rwb, index) => {
-            const _length = betting?.rewardsBreakdown?.length
+            const _length = betting?.rewardsBreakdownBc?.length
+            const subjects = betting?.subjects?.split(',')
             return (
               <RoundPrice
                 percentReward={rwb}
-                option={betting?.subjects?.length && betting?.subjects[index]}
+                option={subjects?.length && subjects[index]}
                 countOfWinners={
                   betting?.countWinnersPerBracket?.length && betting?.countWinnersPerBracket[_length - index - 1]
                 }

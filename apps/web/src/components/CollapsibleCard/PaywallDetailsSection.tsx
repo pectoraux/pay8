@@ -3,6 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Text, Flex, Button, IconButton, ExpandableSectionButton } from '@pancakeswap/uikit'
 import Partners from './Partners'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 export interface ExpandableSectionProps {
   paywall: any
@@ -55,11 +56,11 @@ const ProductDetailsSection: React.FC<ExpandableSectionProps> = ({ paywall, coll
           <Wrapper>
             <Flex justifyContent="space-between">
               <Text color="secondary">{t('SuperLikes')}:</Text>
-              <Text color="secondary">{paywall?.superLikes ?? 0}</Text>
+              <Text color="secondary">{getBalanceNumber(paywall?.superLikes ?? 0)}</Text>
             </Flex>
             <Flex justifyContent="space-between">
               <Text color="failure">{t('SuperDislikes')}:</Text>
-              <Text color="failure">{paywall?.superDislikes ?? 0}</Text>
+              <Text color="failure">{getBalanceNumber(paywall?.superDislikes ?? 0)}</Text>
             </Flex>
             <Flex justifyContent="space-between">
               <Text color="secondary">{t('Likes')}:</Text>

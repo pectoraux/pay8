@@ -149,7 +149,7 @@ const CreateGaugeModal: React.FC<any> = ({
     description: currAccount?.description ?? '',
     media: currAccount?.media ?? '',
     identityTokenId: '0',
-    discountDivisor: currAccount?.discountDivisor ?? '',
+    discountDivisor: parseInt(currAccount?.discountDivisor) / 100 ?? '',
     adminShare: currAccount?.adminShare ?? '',
     referrerShare: currAccount?.referrerShare ?? '',
     ticketNumbers: '',
@@ -328,7 +328,7 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.SET_BETTING_RESULTS)
         break
       case LockStage.SET_BETTING_RESULTS:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_BURN_FOR_CREDIT:
         setStage(LockStage.BURN_FOR_CREDIT)
@@ -745,6 +745,9 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CLOSE_BETTING)}>
             {t('CLOSE BETTING')}
+          </Button>
+          <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.SET_BETTING_RESULTS)}>
+            {t('SET BETTING RESULTS')}
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('WITHDRAW')}

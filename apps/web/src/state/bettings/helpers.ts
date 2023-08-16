@@ -31,6 +31,7 @@ export const getBetting = async (bettingAddress) => {
         currEnd,
         currPeriod,
         rewardsBreakdown: be.rewardsBreakdown?.map((rwb) => parseInt(rwb) / 100),
+        rewardsBreakdownBc: be.rewardsBreakdown?.map((rwb) => parseInt(rwb) / 100),
       }
     })
     console.log('getBetting=================>', bettingAddress, res, bettingEvents)
@@ -79,6 +80,7 @@ export const getAmountCollected = async (bettingAddress, bettingId, period) => {
       },
     ],
   })
+  console.log('getAmountCollected=============>', bettingAddress, bettingId, period, amountCollected)
   return amountCollected.result.toString()
 }
 
@@ -117,7 +119,7 @@ export const getCountWinnersPerBracket = async (bettingAddress, bettingId, perio
 export const fetchBetting = async (bettingAddress) => {
   const bettingFromSg = await getBetting(bettingAddress)
   const bscClient = publicClient({ chainId: 4002 })
-  const [devaddr_, collectionId] = await bscClient.multicall({
+  const [devaddr_, collectionId, oracle] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -129,6 +131,11 @@ export const fetchBetting = async (bettingAddress) => {
         address: bettingAddress,
         abi: bettingABI,
         functionName: 'collectionId',
+      },
+      {
+        address: bettingAddress,
+        abi: bettingABI,
+        functionName: 'oracle',
       },
     ],
   })
@@ -233,6 +240,7 @@ export const fetchBetting = async (bettingAddress) => {
     devaddr_: devaddr_.result,
     collectionId: collectionId.result.toString(),
     bettingEvents,
+    oracle: oracle.result,
   }
 }
 
@@ -252,4 +260,27 @@ export const fetchBettings = async ({ fromBetting }) => {
       .flat(),
   )
   return bettings
+}
+
+export const getCalculateRewardsForTicketId = async (bettingAddress, bettingId, ticketId, bracketNumber) => {
+  const arr = Array.from({ length: Number(bracketNumber) }, (v, i) => i)
+  const bscClient = publicClient({ chainId: 4002 })
+  const rewards = await Promise.all(
+    arr.map(async (bracket) => {
+      const [reward] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: bettingAddress,
+            abi: bettingABI,
+            functionName: 'calculateRewardsForTicketId',
+            args: [bettingId, ticketId, BigInt(bracket)],
+          },
+        ],
+      })
+      return reward.result
+    }),
+  )
+  console.log('getCalculateRewardsForTicketId===================>', rewards)
+  return rewards
 }

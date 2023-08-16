@@ -1,15 +1,19 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { useTranslation } from '@pancakeswap/localization'
 import { format } from 'date-fns'
+import { getBlockExploreLink } from 'utils'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useTranslation } from '@pancakeswap/localization'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { Button, Text, Flex, Box, Balance, ScanLink } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
+  const { chainId } = useActiveChainId()
   const {
     days: daysReceivable,
     hours: hoursReceivable,
@@ -37,12 +41,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
     )
   }
 
-  if (!pool?.accounts?.length) {
+  if (!pool?.bettingEvents?.length) {
     return (
       <ActionContainer>
         <ActionContent>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('No protocols created yet')}
+            {t('No events created yet')}
           </Text>
         </ActionContent>
       </ActionContainer>
@@ -137,6 +141,25 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Bracket Duration')}
             </Text>
           </Flex>
+          <Box mr="8px" height="32px">
+            {parseInt(currAccount?.nextToClose) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={currAccount?.nextToClose}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Next To Close')}
+            </Text>
+          </Box>
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
@@ -174,6 +197,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Latest Period End Time')}
+          </Text>
+          <ScanLink href={getBlockExploreLink(pool?.oracle, 'address', chainId)} bold={false} small>
+            {truncateHash(pool?.oracle ?? '', 12)}
+          </ScanLink>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Oracle')}
           </Text>
           <Box mr="8px" height="32px">
             {parseInt(currAccount?.currPeriod) || parseInt(currAccount?.currPeriod) === 0 ? (

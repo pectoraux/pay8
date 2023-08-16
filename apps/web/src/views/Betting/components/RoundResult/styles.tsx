@@ -6,6 +6,8 @@ import { BetPosition, NodeRound, Round } from 'state/types'
 import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
 import { formatBnb, formatUsd } from '../History/helpers'
 import PositionTag from '../PositionTag'
+import { useGetAmountCollected } from 'state/bettings/hooks'
+import BigNumber from 'bignumber.js'
 
 // PrizePoolRow
 interface PrizePoolRowProps extends FlexProps {
@@ -30,8 +32,9 @@ const Row = ({ children, ...props }) => {
 
 export const PrizePoolRow: React.FC<any> = ({ betting, ...props }) => {
   const { t } = useTranslation()
-  const totalAmount = getBalanceAmount(betting?.amountCollected || 0, betting?.token?.decimals ?? 18)
-  console.log('PrizePoolRow==================>', betting)
+  const { amountCollected } = useGetAmountCollected(betting?.id, betting?.bettingId, Number(betting?.currPeriod ?? 0))
+  const totalAmount = getBalanceAmount(new BigNumber(amountCollected ?? '0'), betting?.token?.decimals ?? 18)
+  console.log('PrizePoolRow==================>', betting, amountCollected)
   return (
     <Row {...props}>
       <Text bold>{t('Prize Pool')}:</Text>
@@ -183,19 +186,15 @@ export const RoundPrice: React.FC<any> = ({ percentReward, option, countOfWinner
   //       return 'textDisabled'
   //   }
   // }, [betPosition])
-
+  console.log('option================>', option, percentReward)
   return (
     <Flex alignItems="center" justifyContent="space-between" mb="16px">
-      {option ? (
-        <Text color={textColor} bold fontSize="24px">
-          {option}
-        </Text>
-      ) : (
-        <Skeleton height="34px" my="1px" />
-      )}
-      <PositionTag ml="18px" betPosition={betPosition}>
+      <Text color={textColor} bold fontSize="24px">
+        {option ?? ''}
+      </Text>
+      <Text ml="18px">
         {percentReward}% {`(${countOfWinners})`}
-      </PositionTag>
+      </Text>
     </Flex>
   )
 }

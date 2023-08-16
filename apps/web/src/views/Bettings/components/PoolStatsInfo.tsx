@@ -19,14 +19,15 @@ import {
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrPool } from 'state/bettings/hooks'
+import { useCurrBribe, useCurrPool } from 'state/bettings/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
-import { setCurrPoolData } from 'state/bettings'
+import { setCurrBribeData, setCurrPoolData } from 'state/bettings'
 import WebPagesModal from './WebPagesModal'
+import Divider from 'components/Divider'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -40,10 +41,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, bettingAddress } = pool
+  const { earningToken } = pool
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
+  const currState2 = useCurrBribe()
+  const currAccount = useMemo(() => pool?.bettingEvents?.find((n) => n.id === currState[pool?.id]), [pool, currState])
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" pool={pool} />)
 
   return (
@@ -103,11 +106,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
-          {t('View NFTs')}
-        </LinkExternal>
-      </Flex>
+      {currState && currState[pool?.id] ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
+            {t('View NFTs')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
@@ -148,6 +153,37 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             variant="text"
             scale="sm"
             onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            {t('Clear')}
+          </Button>
+        ) : null}
+      </Flex>
+      <Divider />
+      <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
+        {currAccount?.tickets?.length
+          ? currAccount?.tickets.map((balance) => (
+              <Button
+                key={balance.id}
+                onClick={() => {
+                  const newState = { ...currState, [pool?.id]: balance.id }
+                  dispatch(setCurrBribeData(newState))
+                }}
+                mt="4px"
+                mr={['2px', '2px', '4px', '4px']}
+                scale="sm"
+                variant={currState2[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+              >
+                {t('Ticket #%val%', { val: balance?.id ?? '0' })}
+              </Button>
+            ))
+          : null}
+        {currAccount?.tickets?.length ? (
+          <Button
+            key="clear-all"
+            variant="text"
+            scale="sm"
+            onClick={() => dispatch(setCurrBribeData({}))}
             style={{ whiteSpace: 'nowrap' }}
           >
             {t('Clear')}
