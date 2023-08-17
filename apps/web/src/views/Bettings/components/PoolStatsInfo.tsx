@@ -162,21 +162,23 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       <Divider />
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
         {currAccount?.tickets?.length
-          ? currAccount?.tickets.map((balance) => (
-              <Button
-                key={balance.id}
-                onClick={() => {
-                  const newState = { ...currState, [pool?.id]: balance.id }
-                  dispatch(setCurrBribeData(newState))
-                }}
-                mt="4px"
-                mr={['2px', '2px', '4px', '4px']}
-                scale="sm"
-                variant={currState2[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
-              >
-                {t('Ticket #%val%', { val: balance?.id ?? '0' })}
-              </Button>
-            ))
+          ? currAccount?.tickets
+              .filter((balance) => balance.owner?.toLowerCase() === account?.toLowerCase())
+              .map((balance) => (
+                <Button
+                  key={balance.id}
+                  onClick={() => {
+                    const newState = { ...currState, [pool?.id]: balance.id }
+                    dispatch(setCurrBribeData(newState))
+                  }}
+                  mt="4px"
+                  mr={['2px', '2px', '4px', '4px']}
+                  scale="sm"
+                  variant={currState2[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+                >
+                  {t('Ticket #%val%', { val: balance?.id ?? '0' })}
+                </Button>
+              ))
           : null}
         {currAccount?.tickets?.length ? (
           <Button

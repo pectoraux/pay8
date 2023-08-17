@@ -23,37 +23,44 @@ const Container = styled(Flex)`
   padding: 16px 24px;
 `
 
-const Claim: React.FC<any> = ({ tokenId, setTokenId }) => {
+const Claim: React.FC<any> = ({ data, tokenId, setTokenId }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
-  const { data, publicData, userData } = usePotteryData()
+  // const { data, publicData, userData } = usePotteryData()
   const symb = ` ${data?.token?.symbol?.toUpperCase() ?? '$'}`
   const [identityTokenId, setIdentityTokenId] = useState('')
 
   const tokenData = useMemo(() => {
     return data?.accounts?.find((protocol) => protocol.id === tokenId)
   }, [data, tokenId])
-
+  console.log('Claim==================>', data)
   return (
     <>
       <Box>
         <Container>
           <GreyCard mb="18px">
             <Flex justifyContent="space-between">
-              <YourDeposit tokenId={tokenId} setTokenId={setTokenId} />
+              <YourDeposit data={data} tokenId={tokenId} setTokenId={setTokenId} />
               <WinRate />
             </Flex>
           </GreyCard>
           <Flex justifyContent="space-between">
             <Text color="textSubtle">{t('Total Spent')}</Text>
-            <Balance bold decimals={2} value={tokenData?.price ?? 0} unit={symb} />
+            <Balance
+              bold
+              decimals={2}
+              value={getBalanceNumber(tokenData?.price ?? 0, data?.token?.decimals ?? 18)}
+              unit={symb}
+            />
           </Flex>
           <Flex justifyContent="space-between">
             <Text color="textSubtle">{t('Score')}</Text>
-            <Balance bold decimals={2} value={getBalanceNumber(tokenData?.score || 0)} />
+            <Balance bold decimals={2} value={tokenData?.score} />
           </Flex>
-          {tokenData?.timer && <LockTimer lockTime={tokenData?.timer} />}
-          {tokenData?.deadline && <LockTimer lockTime={tokenData?.deadline} />}
+          {Number(tokenData?.userDeadLine) ? (
+            <LockTimer lockTime={tokenData?.userDeadLine} text={t('Play Expires')} />
+          ) : null}
+          {Number(tokenData?.deadline) ? <LockTimer lockTime={tokenData?.deadline} text={t('Played Until')} /> : null}
         </Container>
       </Box>
       <Box>
@@ -82,7 +89,7 @@ const Claim: React.FC<any> = ({ tokenId, setTokenId }) => {
         ) : (
           <WalletNotConnected />
         )}
-        <CardFooter account={account} publicData={publicData} userData={userData} />
+        <CardFooter account={account} data={data} />
       </Box>
     </>
   )

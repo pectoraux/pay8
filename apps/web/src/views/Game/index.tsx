@@ -35,11 +35,11 @@ const Pottery: React.FC<React.PropsWithChildren> = () => {
   return (
     <Box position="relative">
       <PageMeta />
-      <Banner collection={collection} handleScroll={handleScroll} />
+      <Banner collection={collection} data={pool} handleScroll={handleScroll} />
       <Box ref={potWrapperEl}>
         <Pot collection={collection} data={pool} tokenId={tokenId} setTokenId={setTokenId} />
       </Box>
-      <FinishedRounds tokenId={tokenId} />
+      <FinishedRounds data={pool} tokenId={tokenId} />
       <HowToPlay pool={pool} />
       <PrizeFunds />
       <FAQ />

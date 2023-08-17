@@ -20,7 +20,7 @@ interface CardFooterProps {
   userData: DeserializedPotteryUserData
 }
 
-const CardFooter: React.FC<any> = ({ account, data, publicData, userData }) => {
+const CardFooter: React.FC<any> = ({ account, data }) => {
   const { t } = useTranslation()
   const symb = ` ${data?.token?.symbol?.toUpperCase() ?? '$'}`
   const boostFactorDisplay = useMemo(() => `X${Number(data?.numPlayers ?? 0).toFixed(2)}`, [data])
@@ -38,55 +38,6 @@ const CardFooter: React.FC<any> = ({ account, data, publicData, userData }) => {
         </Box>
         <Text bold>{account ? boostFactorDisplay : '-'}</Text>
       </Flex>
-      {/* {publicData.getStatus !== PotteryDepositStatus.BEFORE_LOCK && (
-        <Box>
-          <Flex justifyContent="space-between">
-            <Box>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold as="span">
-                {t('Deposit')}
-              </Text>
-              <Text fontSize="12px" ml="4px" color="textSubtle" textTransform="uppercase" bold as="span">
-                {t('by cohort')}
-              </Text>
-            </Box>
-            <Box>
-              {account ? (
-                <Flex>
-                  <Balance bold decimals={2} value={totalValueLocked} />
-                  <Text ml="4px" color="textSubtle" as="span">
-                    CAKE
-                  </Text>
-                </Flex>
-              ) : (
-                <Text bold as="span">
-                  -
-                </Text>
-              )}
-            </Box>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Box>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold as="span">
-                {t('remaining')}
-              </Text>
-              <Text fontSize="12px" ml="4px" color="textSubtle" textTransform="uppercase" bold as="span">
-                {t('period')}
-              </Text>
-            </Box>
-            <Box>
-              {account ? (
-                <>
-                  <Text bold>{distanceToNowStrictWithUnit(daysRemaining, 'day')}</Text>
-                </>
-              ) : (
-                <Text bold as="span">
-                  -
-                </Text>
-              )}
-            </Box>
-          </Flex>
-        </Box>
-      )} */}
       <Flex justifyContent="space-between">
         <Box>
           <Text fontSize="12px" color="textSubtle" textTransform="uppercase" bold as="span">
@@ -96,7 +47,9 @@ const CardFooter: React.FC<any> = ({ account, data, publicData, userData }) => {
             {t('winnings')}
           </Text>
         </Box>
-        <Text bold>{account && data?.totalEarned ? data?.totalEarned : '-'}</Text>
+        <Text bold>
+          {account && Number(data?.totalEarned) ? getBalanceNumber(data?.totalEarned, data?.token?.decimals) : '-'}
+        </Text>
         <Text>{symb}</Text>
       </Flex>
     </Container>

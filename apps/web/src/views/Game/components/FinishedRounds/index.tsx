@@ -20,7 +20,7 @@ const FinishedRoundsBg = styled(Flex)<{ isDark: boolean }>`
 const COVEX_BG =
   'linear-gradient(90deg,rgba(168,129,252,1) 0%,rgb(160 121 244) 15%,rgb(145 104 226) 30%,rgb(136 95 216) 45%,rgb(139 98 219) 65%,rgb(148 108 230) 80%,rgba(168,129,252,1) 100%)'
 
-const FinishedRounds: React.FC<any> = ({ tokenId }) => {
+const FinishedRounds: React.FC<any> = ({ tokenId, data }) => {
   const { t } = useTranslation()
   const { isDark } = useTheme()
   const [historyTabMenuIndex, setHistoryTabMenuIndex] = useState(0)
@@ -35,7 +35,11 @@ const FinishedRounds: React.FC<any> = ({ tokenId }) => {
         <Box mb="24px">
           <HistoryTabMenu activeIndex={historyTabMenuIndex} setActiveIndex={(index) => setHistoryTabMenuIndex(index)} />
         </Box>
-        {historyTabMenuIndex === 0 ? <AllHistoryCard tokenId={tokenId} /> : <YourHistoryCard tokenId={tokenId} />}
+        {historyTabMenuIndex === 0 ? (
+          <AllHistoryCard data={data} tokenId={tokenId} />
+        ) : (
+          <YourHistoryCard data={data} tokenId={tokenId} />
+        )}
       </Flex>
     </FinishedRoundsBg>
   )

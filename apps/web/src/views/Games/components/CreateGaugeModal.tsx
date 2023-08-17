@@ -220,7 +220,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.PROCESS_SCORE)
         break
       case LockStage.UPDATE_SCORE:
-        setStage(LockStage.SETTINGS)
+        setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_SCORE:
         setStage(LockStage.UPDATE_SCORE)
@@ -502,9 +502,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_SCORE) {
-        const args = [state.owner, state.identityTokenId, state.tokenId]
+        const args = [state.tokenId, state.score, state.deadline]
         console.log('CONFIRM_UPDATE_SCORE===============>', args)
-        return callWithGasPrice(gameFactoryContract, 'claimGameTicket', args).catch((err) =>
+        return callWithGasPrice(gameMinterContract, 'updateScoreNDeadline', args).catch((err) =>
           console.log('CONFIRM_UPDATE_SCORE===============>', err),
         )
       }
@@ -726,9 +726,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CONFIRM_PROCESS_SCORE)}>
             {t('PROCESS SCORE')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_SCORE)}>
-            {t('UPDATE SCORE')}
-          </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('CLAIM REWARDS')}
           </Button>
@@ -784,8 +781,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.UPDATE_SPONSOR_MEDIA)}>
             {t('UPDATE SPONSOR MEDIA')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.PROCESS_SCORE)}>
-            {t('PROCESS SCORE')}
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_SCORE)}>
+            {t('UPDATE SCORE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.BLACKLIST_AUDITOR)}>
             {t('BLACKLIST AUDITOR')}
@@ -834,7 +831,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           continueToNextStage={continueToNextStage}
         />
       )}
-      {stage === LockStage.PROCESS_SCORE && (
+      {stage === LockStage.UPDATE_SCORE && (
         <ProcessScoreStage
           state={state}
           handleChange={handleChange}
@@ -842,14 +839,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           continueToNextStage={continueToNextStage}
         />
       )}
-      {stage === LockStage.UPDATE_SCORE && (
+      {/* {stage === LockStage.UPDATE_SCORE && (
         <UpdateScoreStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
-      )}
+      )} */}
       {stage === LockStage.WITHDRAW && (
         <AdminWithdrawStage
           state={state}

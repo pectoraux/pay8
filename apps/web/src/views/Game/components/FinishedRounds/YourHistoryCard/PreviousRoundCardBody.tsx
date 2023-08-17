@@ -47,7 +47,7 @@ interface PreviousRoundCardBodyProps {
   finishedRoundInfo: PotteryRoundInfo
 }
 
-const PreviousRoundCardBody: React.FC<any> = ({ roundId, latestRoundId, roundInfo, tokenId }) => {
+const PreviousRoundCardBody: React.FC<any> = ({ roundId, latestRoundId, roundInfo, tokenId, tokenIds }) => {
   const { t } = useTranslation()
   // const { isFetched, roundId, prizePot, totalPlayers, txid, winners, lockDate } = finishedRoundInfo
   // const cakePriceBusd = usePriceCakeBusd()
@@ -67,7 +67,7 @@ const PreviousRoundCardBody: React.FC<any> = ({ roundId, latestRoundId, roundInf
             {roundInfo?.name}
           </Text>
           <WinnersContainer>
-            {roundInfo?.tokenIds.map((info, index) => (
+            {tokenIds.map((info, index) => (
               <Winner key={`${info?.category}-${index}`} info={info} />
             ))}
           </WinnersContainer>

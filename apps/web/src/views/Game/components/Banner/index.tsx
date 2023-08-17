@@ -69,11 +69,11 @@ interface BannerProps {
   handleScroll: () => void
 }
 
-const Banner: React.FC<any> = ({ collection, handleScroll }) => {
+const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   // const cakePriceBusd = usePriceCakeBusd()
-  const { data } = usePotteryData()
+  // const { data } = usePotteryData()
   const symb = ` ${data?.token?.symbol?.toUpperCase() ?? '$'}`
   console.log('ball==============>', data)
   const userTickets = useMemo(() => {
@@ -84,7 +84,7 @@ const Banner: React.FC<any> = ({ collection, handleScroll }) => {
   const pricePerMinutes = getBalanceNumber(data?.pricePerMinutes ?? 0, data?.token?.decimals ?? 18)
   const [onPresentLink] = useModal(
     <WebPageModal
-      width="4px"
+      width="400px"
       height="500px"
       title={collection?.name ?? ''}
       link="https://meet.jit.si/VocalLawyersSpanOk"
@@ -184,7 +184,7 @@ const Banner: React.FC<any> = ({ collection, handleScroll }) => {
                 {t('Join')}
               </Text>
               <DarkTextStyle ml="3px" bold as="span">
-                {t('%num% other players', { num: data?.numPlayers ?? 0 })}
+                {t('%num% other player(s)', { num: data?.numPlayers ?? 0 })}
               </DarkTextStyle>
             </Box>
             <Box>
@@ -200,7 +200,7 @@ const Banner: React.FC<any> = ({ collection, handleScroll }) => {
                 {t('Total Game Earnings')}
               </Text>
               <DarkTextStyle ml="3px" bold as="span">
-                {`${data?.totalEarned ?? 0} ${symb}`}
+                {`${getBalanceNumber(data?.totalEarned ?? 0, data?.token?.decimals ?? 18)} ${symb}`}
               </DarkTextStyle>
             </Box>
             {account ? (

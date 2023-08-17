@@ -12,12 +12,10 @@ interface PrizeToBeClaimedProps {
 
 const PrizeToBeClaimed: React.FC<any> = ({ tokenId, tokenData, gameData }) => {
   const { t } = useTranslation()
-  const cakePriceBusd = BIG_ONE // usePriceCakeBusd()
   const symb = ` ${gameData?.token?.symbol?.toUpperCase() ?? '$'}`
-  const rewards = (gameData?.paidReceivable * tokenData?.score) / gameData?.totalScore
-  const rewardToken = getBalanceNumber(new BigNumber((rewards ?? 0).toString()))
-  const rewardInBusd = new BigNumber(rewardToken).times(cakePriceBusd).toNumber()
-
+  const rewards =
+    (Number(gameData?.totalPaid) * Number(tokenData?.score)) / (Number(gameData?.totalScore) + Number(tokenData?.score))
+  const rewardToken = getBalanceNumber(new BigNumber(rewards.toString()), gameData?.token?.decimals)
   return (
     <Box mt="20px">
       <Text fontSize="12px" color="secondary" bold as="span" textTransform="uppercase">
@@ -28,8 +26,14 @@ const PrizeToBeClaimed: React.FC<any> = ({ tokenId, tokenData, gameData }) => {
       </Text>
       <Flex>
         <Box style={{ alignSelf: 'center' }}>
-          <Balance fontSize="20px" lineHeight="110%" value={rewardToken} decimals={2} bold />
-          <Balance fontSize="12px" lineHeight="110%" color="textSubtle" value={rewardInBusd} decimals={2} unit={symb} />
+          <Balance
+            fontSize="20px"
+            lineHeight="110%"
+            color="textSubtle"
+            decimals={5}
+            unit={symb}
+            value={getBalanceNumber(new BigNumber(rewards.toString()), gameData?.token?.decimals)}
+          />
         </Box>
         <ClaimButton tokenId={tokenId} gameData={gameData} rewardToken={rewardToken} />
       </Flex>

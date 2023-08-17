@@ -27,7 +27,7 @@ const StyledCardHeader = styled(CardHeader)`
   }
 `
 
-const YourHistoryCard = ({ tokenId }) => {
+const YourHistoryCard = ({ tokenId, data }) => {
   const { t } = useTranslation()
   const res = [
     // {
@@ -74,7 +74,7 @@ const YourHistoryCard = ({ tokenId }) => {
     // },
   ]
   const [selectedRoundId, setSelectedRoundId] = useState('1')
-  const latestRoundId = res?.length
+  const latestRoundId = data?.objects?.length
 
   const handleInputChange = (event) => {
     const {
@@ -113,22 +113,23 @@ const YourHistoryCard = ({ tokenId }) => {
           handleArrowButtonPress={handleArrowButtonPress}
         />
         <Flex mt={['8px', '8px', '8px', '0px']} alignSelf={['flex-start', 'flex-start', 'flex-start', 'center']}>
-          {res &&
-            (res?.length > parseInt(selectedRoundId) - 1 ? (
+          {data?.objects &&
+            (data?.object?.length > parseInt(selectedRoundId) - 1 ? (
               <Text fontSize="14px">
-                {t('Object Name: ')} {res[parseInt(selectedRoundId) - 1]?.name}
+                {t('Object Name: ')} {data?.objects[parseInt(selectedRoundId) - 1]?.name}
               </Text>
             ) : (
               <Skeleton width="185px" height="21px" />
             ))}
         </Flex>
       </StyledCardHeader>
-      {res?.length ? (
+      {data?.objects?.length ? (
         <PreviousRoundCardBody
           tokenId={tokenId}
+          tokenIds={data?.objects?.userTokenIds?.filter((tk) => Number(tk.tokenId) === Number(tokenId))}
           latestRoundId={latestRoundId}
           roundId={parseInt(selectedRoundId) - 1}
-          roundInfo={res[parseInt(selectedRoundId) - 1]}
+          roundInfo={data?.objects[parseInt(selectedRoundId) - 1]}
         />
       ) : (
         <Flex m="24px auto" flexDirection="column" alignItems="center" width="240px">

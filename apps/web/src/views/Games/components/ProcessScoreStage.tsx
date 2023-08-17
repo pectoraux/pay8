@@ -70,7 +70,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will process the score on your gaming ticket. Only the game account can process the score. Please read the documentation for more information on this parameter',
+              'The will set the score on the gaming ticket. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>
@@ -78,7 +78,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" variant="success" onClick={continueToNextStage}>
-          {t('Process Score')}
+          {t('Update Score')}
         </Button>
       </Flex>
     </>

@@ -8,11 +8,11 @@ interface YourDepositProps {
   depositBalance?: any
 }
 
-const YourDeposit: React.FC<any> = ({ tokenId, setTokenId }) => {
+const YourDeposit: React.FC<any> = ({ tokenId, data, setTokenId }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   // const cakePriceBusd = usePriceCakeBusd()
-  const { data, userData } = usePotteryData()
+  // const { data, userData } = usePotteryData()
   const tokenData = useMemo(() => {
     return data?.accounts?.find((protocol) => protocol.id === tokenId)
   }, [data, tokenId])
@@ -47,7 +47,7 @@ const YourDeposit: React.FC<any> = ({ tokenId, setTokenId }) => {
       </Box>
       <Balance bold decimals={3} fontSize={['20px', '20px', '24px']} lineHeight="110%" value={tokenData?.score} />
       <Balance
-        // unit={symb}
+        unit="%"
         prefix={t('Score Percentile: ')}
         decimals={2}
         value={tokenData?.scorePercentile || 0}
@@ -55,7 +55,7 @@ const YourDeposit: React.FC<any> = ({ tokenId, setTokenId }) => {
         color="textSubtle"
       />
       <Balance
-        unit={symb}
+        unit="%"
         prefix={t('Price Percentile: ')}
         decimals={2}
         value={tokenData?.pricePercentile || 0}

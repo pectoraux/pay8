@@ -4,6 +4,7 @@ import { Flex, Heading, Text } from '@pancakeswap/uikit'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import { remainTimeToNextFriday } from '../helpers'
+import { format } from 'date-fns'
 
 const FlexGap = styled(Flex)<{ gap: string }>`
   gap: ${({ gap }) => gap};
@@ -21,7 +22,7 @@ const StyledTimerText = styled(Heading)`
 `
 
 const StyledWhiteText = styled(Text)`
-  color: white;
+  color: primary;
   margin-bottom: 0px;
   align-self: flex-end;
 
@@ -30,35 +31,19 @@ const StyledWhiteText = styled(Text)`
   }
 `
 
-const Timer: React.FC<React.PropsWithChildren<{ secondsRemaining: number; text: string }>> = ({
-  secondsRemaining,
-  text,
-}) => {
+const Timer: React.FC<any> = ({ secondsRemaining, text }) => {
   const { t } = useTranslation()
   const { days, hours, minutes } = getTimePeriods(secondsRemaining)
 
   return (
     <>
       <FlexContainer mt="32px" gap="8px" alignItems="center">
-        <FlexGap gap="4px" alignItems="baseline">
-          {days ? (
-            <>
-              <StyledTimerText scale="xl">{days}</StyledTimerText>
-              <StyledTimerText>{t('d')}</StyledTimerText>
-            </>
-          ) : null}
-          {days || hours ? (
-            <>
-              <StyledTimerText scale="xl">{hours}</StyledTimerText>
-              <StyledTimerText color="secondary">{t('h')}</StyledTimerText>
-            </>
-          ) : null}
-          <>
-            <StyledTimerText scale="xl">{minutes}</StyledTimerText>
-            <StyledTimerText color="secondary">{t('m')}</StyledTimerText>
-          </>
-        </FlexGap>
         <StyledWhiteText bold>{text}</StyledWhiteText>
+        <FlexGap gap="4px" alignItems="baseline">
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {format(new Date(parseInt(secondsRemaining || 0) * 1000), 'yyyy-MM-dd HH:mm')}
+          </Text>
+        </FlexGap>
       </FlexContainer>
     </>
   )
@@ -72,10 +57,17 @@ export const BannerTimer: React.FC<React.PropsWithChildren> = () => {
   return <Timer secondsRemaining={secondsRemaining} text={t('until deadline ends.')} />
 }
 
-export const LockTimer: React.FC<React.PropsWithChildren<{ lockTime: number }>> = ({ lockTime }) => {
+export const LockTimer: React.FC<React.PropsWithChildren<{ lockTime: number; text: string }>> = ({
+  lockTime,
+  text,
+}) => {
   const { t } = useTranslation()
 
   const secondsRemaining = Number(lockTime) === 0 ? 0 : lockTime - Date.now() / 1000
 
-  return <Timer secondsRemaining={secondsRemaining} text={t('until the next pot lock')} />
+  return (
+    <Flex flexDirection="row">
+      <Timer secondsRemaining={Number(lockTime)} text={text} />
+    </Flex>
+  )
 }

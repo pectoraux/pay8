@@ -4,7 +4,6 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_GAMES } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { getCollection } from 'state/cancan/helpers'
-import { gameFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { getGameFactoryAddress, getGameHelperAddress, getGameMinterAddress } from 'utils/addressHelpers'
 import { gameFactoryABI } from 'config/abi/gameFactory'
@@ -12,12 +11,10 @@ import { erc20ABI } from 'wagmi'
 import { gameHelperABI } from 'config/abi/gameHelper'
 import { gameMinterABI } from 'config/abi/gameMinter'
 
+import { gameFields, protocolFields } from './queries'
+
 export const fetchGameData = async (gameName, tokenId) => {
   return (await firestore.collection('c4').doc('1').get()).data()
-}
-
-export const fetchSessionInfo = async (sessionId) => {
-  return (await firestore.collection('onramp').doc(sessionId).get()).data()
 }
 
 export const getProtocols = async (first = 5, skip = 0, where = {}) => {

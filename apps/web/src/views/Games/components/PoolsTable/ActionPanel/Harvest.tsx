@@ -8,6 +8,7 @@ import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { format } from 'date-fns'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -18,7 +19,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
     minutes: minutesReceivable,
   } = getTimePeriods(Number(currAccount?.gameMinutes ?? '0'))
   const gameData = useGetGame(pool?.collection?.name?.toLowerCase(), currAccount?.id ?? '0')
-  console.log('gamepool1====>', gameData)
+  console.log('gamepool1====>', gameData, currAccount)
 
   const actionTitle = (
     <>
@@ -221,13 +222,17 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {daysReceivable} {t('days')} {hoursReceivable} {t('hours')} {minutesReceivable} {t('minutes')}
+            {Number(currAccount?.userDeadLine)
+              ? format(new Date(parseInt(currAccount?.userDeadLine || 0) * 1000), 'yyyy-MM-dd HH:mm')
+              : '-'}
           </Text>
           <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Time Purchased')}
           </Text>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {days} {t('days')} {hours} {t('hours')} {minutes} {t('minutes')}
+            {Number(currAccount?.deadline)
+              ? format(new Date(parseInt(currAccount?.deadline || 0) * 1000), 'yyyy-MM-dd HH:mm')
+              : '-'}
           </Text>
           <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Time Played')}

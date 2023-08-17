@@ -53,7 +53,7 @@ const Deposit: React.FC<any> = ({ tokenId, data, setTokenId }) => {
       <Container>
         <GreyCard mb="18px">
           <Flex justifyContent="space-between">
-            <YourDeposit tokenId={tokenId} setTokenId={setTokenId} />
+            <YourDeposit data={data} tokenId={tokenId} setTokenId={setTokenId} />
             <WinRate />
           </Flex>
         </GreyCard>

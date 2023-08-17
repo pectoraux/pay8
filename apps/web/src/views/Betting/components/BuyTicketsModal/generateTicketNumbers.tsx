@@ -53,7 +53,7 @@ export const encodeAlphabet = (value: any, ticketSize: any) => {
       }
     }
   }
-  return `1 ${res.join('')}`
+  return `1${res.join('')}`
 }
 /**
  * Generate a specific number of unique, randomised 7-digit lottery numbers between 1000000 & 1999999
