@@ -24,6 +24,7 @@ interface StackedActionProps {
 }
 
 const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
+  console.log('staked===================>', currAccount)
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const variant = pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
