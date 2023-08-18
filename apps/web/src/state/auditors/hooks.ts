@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import useSWR from 'swr'
 import { fetchAuditorsAsync, fetchAuditorSgAsync } from '.'
 import {
@@ -26,16 +25,25 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromAuditor = router.query.auditor
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchAuditorSgAsync({ fromAuditor }))
-        dispatch(fetchAuditorsAsync({ fromAuditor }))
-      })
-    }
+  useSWR(
+    ['/auditors', chainId],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchAuditorSgAsync({ fromAuditor }))
+          dispatch(fetchAuditorsAsync({ fromAuditor }))
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch, chainId, fromAuditor])
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {

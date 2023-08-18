@@ -14,6 +14,7 @@ import YourDeposit from '../YourDeposit'
 import WinRate from '../WinRate'
 import DepositAction from './DepositAction'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { format } from 'date-fns'
 
 const Container = styled(Flex)`
   flex-direction: column;
@@ -71,15 +72,19 @@ const Deposit: React.FC<any> = ({ tokenId, data, setTokenId }) => {
           <Balance bold decimals={2} value={tokenData?.score || 0} />
         </Flex>
         <Flex justifyContent="space-between">
-          <Text color="textSubtle">{t('Minutes Purchased')}</Text>
+          <Text color="textSubtle">{t('Time Purchased')}</Text>
           <Text bold color="textSubtle">
-            {daysReceivable} {t('days')} {hoursReceivable} {t('hours')} {minutesReceivable} {t('minutes')}
+            {Number(tokenData?.userDeadLine)
+              ? format(new Date(parseInt(tokenData?.userDeadLine || 0) * 1000), 'yyyy-MM-dd HH:mm')
+              : '-'}
           </Text>
         </Flex>
         <Flex justifyContent="space-between">
-          <Text color="textSubtle">{t('Minutes Played')}</Text>
+          <Text color="textSubtle">{t('Time Played')}</Text>
           <Text bold color="textSubtle">
-            {days} {t('days')} {hours} {t('hours')} {minutes} {t('minutes')}
+            {Number(tokenData?.deadline)
+              ? format(new Date(parseInt(tokenData?.deadline || 0) * 1000), 'yyyy-MM-dd HH:mm')
+              : '-'}
           </Text>
         </Flex>
       </Container>

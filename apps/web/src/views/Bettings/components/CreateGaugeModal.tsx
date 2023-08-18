@@ -454,7 +454,7 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_UPDATE_PROTOCOL) {
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
-        const time = combineDateAndTime(state.startReceivable, state.startTime)?.toString()
+        const time = combineDateAndTime(state.startReceivable, state.startTime)
         const startReceivable = Math.max(Number(time) - Number(Date.now() / 1000), 0)
         const args = [
           currency?.address,

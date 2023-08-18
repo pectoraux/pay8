@@ -169,7 +169,7 @@ export const fetchGame = async (gameId) => {
   })
   const objects = await Promise.all(
     gameFromSg?.objectNames?.map(async (objectName) => {
-      const [gameTokenIds, userTokenIds] = await bscClient.multicall({
+      const [gameTokenIds, numUserTokenIds] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
           {
@@ -181,15 +181,33 @@ export const fetchGame = async (gameId) => {
           {
             address: getGameHelperAddress(),
             abi: gameHelperABI,
-            functionName: 'getResourceToObject',
-            args: [BigInt(objectName.id), objectName.name],
+            functionName: 'resourceToObjectLength',
+            args: [BigInt(gameId), objectName.name],
           },
         ],
       })
+      const arr2 = Array.from({ length: parseInt(numUserTokenIds.result.toString()) }, (v, i) => i)
+      const recipes = await Promise.all(
+        arr2?.map(async (idx) => {
+          const [_recipes] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getGameHelperAddress(),
+                abi: gameHelperABI,
+                functionName: 'getResourceToObject',
+                args: [BigInt(gameId), BigInt(idx), objectName.name],
+              },
+            ],
+          })
+          return _recipes.result
+        }),
+      )
+      console.log('gameTokenIds=================>', gameTokenIds, recipes)
       return {
         ...objectName,
-        gameTokenIds: getTokenIds(gameTokenIds.result, objectName.name, gameId),
-        userTokenIds: getTokenIds(userTokenIds.result, objectName.name, gameId),
+        gameTokenIds: gameTokenIds.result, // : getTokenIds(gameTokenIds.result, objectName.name, gameId),
+        recipes, // : getTokenIds(userTokenIds, objectName.name, gameId),
       }
     }),
   )
@@ -289,30 +307,30 @@ export const fetchGame = async (gameId) => {
   }
 }
 
-export const getTokenIds = async (objectTokenIds, name, gameId) => {
-  const bscClient = publicClient({ chainId: 4002 })
-  return objectTokenIds.map(async (tokenId) => {
-    const [getResourceToObject] = await bscClient.multicall({
-      allowFailure: true,
-      contracts: [
-        {
-          address: getGameHelperAddress(),
-          abi: gameHelperABI,
-          functionName: 'getResourceToObject',
-          args: [name, gameId],
-        },
-      ],
-    })
-    const category = getResourceToObject.result[0]
-    const ratings = getResourceToObject.result[1]
+// export const getTokenIds = async (objectTokenIds, name, gameId) => {
+//   // const bscClient = publicClient({ chainId: 4002 })
+//   // return objectTokenIds.map(async (tokenId) => {
+//   //   const [getResourceToObject] = await bscClient.multicall({
+//   //     allowFailure: true,
+//   //     contracts: [
+//   //       {
+//   //         address: getGameHelperAddress(),
+//   //         abi: gameHelperABI,
+//   //         functionName: 'getResourceToObject',
+//   //         args: [name, gameId],
+//   //       },
+//   //     ],
+//   //   })
+//   //   const category = getResourceToObject.result[0]
+//   //   const ratings = getResourceToObject.result[1]
 
-    return {
-      category,
-      tokenId,
-      ratings,
-    }
-  })
-}
+//     return {
+//       category: objectTokenIds,
+//       tokenId,
+//       ratings,
+//     }
+//   // })
+// }
 
 export const fetchGames = async ({ fromGame }) => {
   const gamesFromSg = await getGames(0, 0, {})

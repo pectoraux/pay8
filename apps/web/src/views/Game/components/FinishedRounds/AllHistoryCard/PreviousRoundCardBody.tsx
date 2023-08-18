@@ -57,8 +57,8 @@ const PreviousRoundCardBody: React.FC<any> = ({ tokenId, roundId, latestRoundId,
   // const prizeInBusd = new BigNumber(prize).times(cakePriceBusd).toNumber()
 
   const isLatest = useMemo(() => new BigNumber(latestRoundId).minus(1).eq(roundId), [latestRoundId, roundId])
-  const tokenIds = useMemo(() => roundInfo?.tokenIds?.map((elt) => elt.tokenId), [roundInfo])
-  console.log('tokenIds============>', tokenIds)
+  const tokenIds = useMemo(() => roundInfo?.recipes?.map((elt) => elt.category), [roundInfo])
+  console.log('tokenIds============>', tokenIds, roundInfo)
   return (
     <StyledCardBody>
       {isLatest && <StyledCardRibbon text={t('Latest')} />}
@@ -68,7 +68,7 @@ const PreviousRoundCardBody: React.FC<any> = ({ tokenId, roundId, latestRoundId,
             {roundInfo?.name}
           </Text>
           <WinnersContainer>
-            {roundInfo?.tokenIds.map((info, index) => (
+            {roundInfo?.recipes?.map((info, index) => (
               <Winner key={`${info?.category}-${index}`} info={info} />
             ))}
           </WinnersContainer>
@@ -82,7 +82,7 @@ const PreviousRoundCardBody: React.FC<any> = ({ tokenId, roundId, latestRoundId,
           <Text fontSize="20px" textAlign={['center', 'center', 'left']} lineHeight="110%" bold>
             {t('Mint Object')}
           </Text>
-          <MintButton tokenId={tokenId} objectName={roundInfo?.name} tokenIds={tokenIds} />
+          <MintButton tokenId={tokenId} data={roundInfo} />
         </Flex>
         <LinkExternal
           m={['10px auto auto auto', '10px auto auto auto', 'auto 0 0 auto']}

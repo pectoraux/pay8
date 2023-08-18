@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Card, Text, Skeleton, CardHeader, Flex, BunnyPlaceholderIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import RoundSwitcher from '../AllHistoryCard/RoundSwitcher'
 import PreviousRoundCardBody from './PreviousRoundCardBody'
+import { useWeb3React } from '@pancakeswap/wagmi'
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -29,52 +30,12 @@ const StyledCardHeader = styled(CardHeader)`
 
 const YourHistoryCard = ({ tokenId, data }) => {
   const { t } = useTranslation()
-  const res = [
-    // {
-    //   id: '1',
-    //   name: 'sparrow_ferrari_move_99',
-    //   tokenIds: [
-    //     {
-    //       tokenId: '1',
-    //       ratings: [1, 2, 3, 4, 5],
-    //       category: '3',
-    //     },
-    //     {
-    //       tokenId: '2',
-    //       ratings: [1, 2, 3, 4, 5],
-    //       category: '2',
-    //     },
-    //     {
-    //       tokenId: '3',
-    //       ratings: [1, 2, 3, 4, 5],
-    //       category: '1',
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: '2',
-    //   name: 'mountain_horse_move_90',
-    //   tokenIds: [
-    //     {
-    //       tokenId: '1',
-    //       ratings: [1, 2, 3, 4, 5],
-    //       category: '3',
-    //     },
-    //     {
-    //       tokenId: '2',
-    //       ratings: [1, 2, 3, 4, 5],
-    //       category: '2',
-    //     },
-    //     {
-    //       tokenId: '3',
-    //       ratings: [1, 2, 3, 4, 5],
-    //       category: '1',
-    //     },
-    //   ],
-    // },
-  ]
+  const [obj, setObj] = useState([])
+  useEffect(() => setObj(data?.accounts?.find((ac) => ac?.id === tokenId)?.objectNames), [tokenId])
+
   const [selectedRoundId, setSelectedRoundId] = useState('1')
-  const latestRoundId = data?.objects?.length
+  const latestRoundId = obj?.length
+  console.log('YourHistoryCard==============>', data, obj)
 
   const handleInputChange = (event) => {
     const {
@@ -113,27 +74,25 @@ const YourHistoryCard = ({ tokenId, data }) => {
           handleArrowButtonPress={handleArrowButtonPress}
         />
         <Flex mt={['8px', '8px', '8px', '0px']} alignSelf={['flex-start', 'flex-start', 'flex-start', 'center']}>
-          {data?.objects &&
-            (data?.object?.length > parseInt(selectedRoundId) - 1 ? (
+          {obj &&
+            (obj?.length > parseInt(selectedRoundId) - 1 ? (
               <Text fontSize="14px">
-                {t('Object Name: ')} {data?.objects[parseInt(selectedRoundId) - 1]?.name}
+                {t('Object Name: ')} {obj[parseInt(selectedRoundId) - 1]}
               </Text>
-            ) : (
-              <Skeleton width="185px" height="21px" />
-            ))}
+            ) : null)}
         </Flex>
       </StyledCardHeader>
-      {data?.objects?.length ? (
+      {obj?.length ? (
         <PreviousRoundCardBody
           tokenId={tokenId}
-          tokenIds={data?.objects?.userTokenIds?.filter((tk) => Number(tk.tokenId) === Number(tokenId))}
+          data={data}
           latestRoundId={latestRoundId}
           roundId={parseInt(selectedRoundId) - 1}
-          roundInfo={data?.objects[parseInt(selectedRoundId) - 1]}
+          objectName={obj[parseInt(selectedRoundId) - 1]}
         />
       ) : (
         <Flex m="24px auto" flexDirection="column" alignItems="center" width="240px">
-          <Text mb="8px">{t('No Recipe Found')}</Text>
+          <Text mb="8px">{tokenId ? t('No Recipe Found') : t('Please Input a Token ID')}</Text>
           <BunnyPlaceholderIcon height="64px" width="64px" />
         </Flex>
       )}

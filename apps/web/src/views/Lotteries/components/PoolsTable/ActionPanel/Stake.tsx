@@ -11,6 +11,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateGaugeModal from '../../CreateGaugeModal'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 const IconButtonWrapper = styled.div`
   display: flex;

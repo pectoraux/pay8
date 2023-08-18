@@ -15,6 +15,7 @@ import {
   TelegramIcon,
   ProposalIcon,
   SmartContractIcon,
+  Text,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -94,11 +95,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
+      {pool?.category && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
-          </ScanLink>
+          <Text color="primary" fontSize="14px">
+            {t('Category')} {`->`} {pool.category}
+          </Text>
         </Flex>
       )}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -128,21 +129,36 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((balance) => (
+        {pool?.accounts?.length
+          ? pool?.accounts
+              .filter((protocol) => account?.toLowerCase() === protocol?.owner?.toLowerCase())
+              .map((balance) => (
+                <Button
+                  key={balance.id}
+                  onClick={() => {
+                    const newState = { ...currState, [pool?.id]: balance?.id }
+                    dispatch(setCurrPoolData(newState))
+                  }}
+                  mt="4px"
+                  mr={['2px', '2px', '4px', '4px']}
+                  scale="sm"
+                  variant={currState[pool?.id] === balance?.id ? 'subtle' : 'tertiary'}
+                >
+                  {balance?.protocolId}
+                </Button>
+              ))
+          : null}
+        {pool?.accounts?.length ? (
           <Button
-            key={balance.token.address}
-            onClick={() => {
-              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
-              dispatch(setCurrPoolData(newState))
-            }}
-            mt="4px"
-            mr={['2px', '2px', '4px', '4px']}
+            key="clear-all"
+            variant="text"
             scale="sm"
-            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+            onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
           >
-            {balance.token.symbol}
+            {t('Clear')}
           </Button>
-        ))}
+        ) : null}
       </Flex>
       <Flex>
         <FlexGap gap="16px" pt="24px" pl="4px">

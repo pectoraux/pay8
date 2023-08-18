@@ -56,13 +56,13 @@ const HowToPlay: React.FC<any> = ({ pool }) => {
       label: t('Step %number%', { number: 2 }),
       title: t('Play the game'),
       subtitle: t(
-        'Open up the game page and play until your minutes are close to end. The game will assign you a score',
+        'Open up the game page and play until your minutes are close to an end. The game will assign you a score',
       ),
     },
     {
       label: t('Step %number%', { number: 3 }),
       title: t('Claim & Withdrawal'),
-      subtitle: t("Look at your score versus other players and when you're proud of it, claim your winnings"),
+      subtitle: t("Look at your score versus other players' scores and when you're proud of it, claim your winnings"),
     },
   ]
 

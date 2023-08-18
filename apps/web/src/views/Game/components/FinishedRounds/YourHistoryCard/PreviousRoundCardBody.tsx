@@ -47,7 +47,7 @@ interface PreviousRoundCardBodyProps {
   finishedRoundInfo: PotteryRoundInfo
 }
 
-const PreviousRoundCardBody: React.FC<any> = ({ roundId, latestRoundId, roundInfo, tokenId, tokenIds }) => {
+const PreviousRoundCardBody: React.FC<any> = ({ roundId, latestRoundId, objectName, tokenId, data }) => {
   const { t } = useTranslation()
   // const { isFetched, roundId, prizePot, totalPlayers, txid, winners, lockDate } = finishedRoundInfo
   // const cakePriceBusd = usePriceCakeBusd()
@@ -62,16 +62,9 @@ const PreviousRoundCardBody: React.FC<any> = ({ roundId, latestRoundId, roundInf
     <StyledCardBody>
       {isLatest && <StyledCardRibbon text={t('Latest')} />}
       <Flex flexDirection={['column']} width="100%">
-        <Flex flexDirection={['column', 'column', 'row']}>
-          <Text style={{ alignSelf: 'center' }} fontSize="20px" bold>
-            {roundInfo?.name}
-          </Text>
-          <WinnersContainer>
-            {tokenIds.map((info, index) => (
-              <Winner key={`${info?.category}-${index}`} info={info} />
-            ))}
-          </WinnersContainer>
-        </Flex>
+        <Text style={{ alignSelf: 'center' }} fontSize="20px" bold>
+          {objectName ?? ''}
+        </Text>
         <Box width="100%">
           <Divider />
         </Box>
@@ -81,7 +74,7 @@ const PreviousRoundCardBody: React.FC<any> = ({ roundId, latestRoundId, roundInf
           <Text fontSize="20px" textAlign={['center', 'center', 'left']} lineHeight="110%" bold>
             {t('Burn Object')}
           </Text>
-          <BurnButton tokenId={tokenId} objectName={roundInfo?.name} />
+          <BurnButton tokenId={tokenId} data={data} />
         </Flex>
         <LinkExternal
           m={['10px auto auto auto', '10px auto auto auto', 'auto 0 0 auto']}

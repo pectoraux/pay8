@@ -288,6 +288,11 @@ export const gameHelperABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: '_idx',
+        type: 'uint256',
+      },
+      {
         internalType: 'string',
         name: '_objName',
         type: 'string',
@@ -308,9 +313,9 @@ export const gameHelperABI = [
             type: 'uint256[]',
           },
         ],
-        internalType: 'struct GameHelper.Ingredient[]',
+        internalType: 'struct GameHelper.Ingredient',
         name: '',
-        type: 'tuple[]',
+        type: 'tuple',
       },
     ],
     stateMutability: 'view',
@@ -495,6 +500,30 @@ export const gameHelperABI = [
         internalType: 'bool',
         name: '',
         type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_objName',
+        type: 'string',
+      },
+    ],
+    name: 'resourceToObjectLength',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',

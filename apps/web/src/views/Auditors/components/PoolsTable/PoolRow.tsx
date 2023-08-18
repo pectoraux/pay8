@@ -2,6 +2,7 @@ import { memo, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/auditors/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import NameCell from './Cells/NameCell'
 import VotesCell from './Cells/VotesCell'
@@ -24,8 +25,8 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <VotesCell pool={pool} />
       <TotalValueCell
         labelText={t('Amount Due')}
-        amount={currAccount?.amountReceivable}
-        decimals={currAccount?.token?.decimals}
+        decimals={5}
+        amount={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token?.decimals)}
         symbol={currAccount?.token?.symbol ?? ''}
       />
       <EndsInCell currAccount={currAccount} labelText={t('Next Due')} />

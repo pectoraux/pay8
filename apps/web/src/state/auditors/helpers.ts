@@ -6,10 +6,11 @@ import { auditorFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { auditorABI } from 'config/abi/auditor'
 import { erc20ABI } from 'wagmi'
-import { getAuditorHelper2Address, getAuditorNoteAddress } from 'utils/addressHelpers'
+import { getAuditorHelper2Address, getAuditorHelperAddress, getAuditorNoteAddress } from 'utils/addressHelpers'
 import { auditorHelper2ABI } from 'config/abi/auditorHelper2'
 import { auditorNoteABI } from 'config/abi/auditorNote'
 import { getCollection } from 'state/cancan/helpers'
+import { auditorHelperABI } from 'config/abi/auditorHelper'
 
 export const getProtocolsSg = async (userAddress: string): Promise<any> => {
   try {
@@ -134,7 +135,7 @@ export const fetchAuditor = async (auditorAddress) => {
   const auditor = await getAuditor(auditorAddress.toLowerCase())
 
   const bscClient = publicClient({ chainId: 4002 })
-  const [devaddr_, bountyRequired, collectionId] = await bscClient.multicall({
+  const [devaddr_, bountyRequired, collectionId, category] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -151,6 +152,12 @@ export const fetchAuditor = async (auditorAddress) => {
         address: auditorAddress,
         abi: auditorABI,
         functionName: 'collectionId',
+      },
+      {
+        address: getAuditorHelperAddress(),
+        abi: auditorHelperABI,
+        functionName: 'categories',
+        args: [auditorAddress],
       },
     ],
   })
@@ -209,7 +216,7 @@ export const fetchAuditor = async (auditorAddress) => {
             functionName: 'decimals',
           },
           {
-            address: auditorAddress,
+            address: _token,
             abi: erc20ABI,
             functionName: 'balanceOf',
             args: [auditorAddress],
@@ -222,7 +229,7 @@ export const fetchAuditor = async (auditorAddress) => {
           },
         ],
       })
-      console.log('nextDuePayable=================>', amountReceivable, nextDueReceivable)
+      console.log('0nextDuePayable=================>', totalLiquidity, amountReceivable, nextDueReceivable)
 
       return {
         ...protocol,
@@ -257,6 +264,7 @@ export const fetchAuditor = async (auditorAddress) => {
     collection,
     auditorAddress,
     accounts,
+    category: category.result?.toString(),
     bountyRequired: bountyRequired.result,
     devaddr_: devaddr_.result,
     collectionId: collectionId.toString(),

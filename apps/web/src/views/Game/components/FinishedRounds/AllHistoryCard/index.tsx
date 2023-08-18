@@ -31,7 +31,7 @@ const StyledCardHeader = styled(CardHeader)`
 const AllHistoryCard = ({ tokenId, data }) => {
   const { t } = useTranslation()
   // const { data, finishedRoundInfo } = usePotteryData()
-  console.log('usePotteryData===========>', data)
+  console.log('1usePotteryData===========>', data)
   const res = data?.objects
   const [selectedRoundId, setSelectedRoundId] = useState('1')
   const latestRoundId = res?.length

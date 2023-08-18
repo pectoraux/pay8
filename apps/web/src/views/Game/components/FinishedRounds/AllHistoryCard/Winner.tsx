@@ -23,14 +23,14 @@ const Winner: React.FC<any> = ({ info }) => {
     <Container>
       <ProfileAvatar style={{ alignSelf: 'center' }} width={24} height={24} src="" />
       <Box ml="4px">
-        <Text fontSize="12px" color="primary">
+        {/* <Text fontSize="12px" color="primary">
           {t('Token ID:')} {info.tokenId}
-        </Text>
+        </Text> */}
         <Text minHeight="18px" fontSize="12px" color="primary">
           {t('Ratings:')} {info.ratings?.toString()}
         </Text>
         <Text minHeight="18px" fontSize="12px" color="primary">
-          {t('Category:')} {info.category}
+          {t('Category:')} {info.category?.toString()}
         </Text>
       </Box>
     </Container>

@@ -293,11 +293,11 @@ export default {
   },
   lotteryHelper: {
     56: '0x',
-    4002: '0x3b5d16e362b01Bf8590fF6e82C906F75112130b4',
+    4002: '0x3D3664BBFe3B16C367C8f1ccB43d6B77226aC601',
   },
   lottery: {
     56: '0x',
-    4002: '0x0e00e32B2645DBa98B6Cf283B90e7816e1fAF68C',
+    4002: '0x1557Be5c647Db440fB0C36Da69A3f4583358A512',
   },
   randomNumberGenerator: {
     56: '0x',

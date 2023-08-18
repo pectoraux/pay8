@@ -320,9 +320,9 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_UPDATE_PROTOCOL) {
         const amountPayable = getDecimalAmount(state.amountPayable ?? '0', currency?.decimals)
-        const startPayable = combineDateAndTime(state.startDate, state.startTime)?.toString()
+        const startPayable = combineDateAndTime(state.startDate, state.startTime)
         const startDate = Math.max(
-          differenceInSeconds(new Date(startPayable ?? 0), new Date(), {
+          differenceInSeconds(new Date(startPayable * 1000), new Date(), {
             roundingMethod: 'ceil',
           }),
           0,

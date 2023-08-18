@@ -29,6 +29,8 @@ import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/st
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { Divider, GreyedOutContainer } from './styles'
+import { TimePicker } from 'views/AcceleratorVoting/components/DatePicker'
+import { combineDateAndTime } from 'views/AcceleratorVoting/CreateProposal/helpers'
 
 interface SetPriceStageProps {
   currency?: any
@@ -48,7 +50,9 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
   const { toastSuccess, toastError } = useToast()
   const [state, setState] = useState<any>(() => ({
     valuepool: '',
+    startDate: '',
     startTime: '',
+    endDate: '',
     endTime: '',
     endAmount: '',
     useNFTicket: 0,
@@ -78,14 +82,16 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
+      const start = combineDateAndTime(state.startDate, state.startTime)
+      const end = combineDateAndTime(state.endDate, state.endTime)
       const startTime = Math.max(
-        differenceInSeconds(new Date(state.startTime || 0), new Date(), {
+        differenceInSeconds(new Date(start * 1000), new Date(), {
           roundingMethod: 'ceil',
         }),
         0,
       )
       const endTime = Math.max(
-        differenceInSeconds(new Date(state.endTime || 0), new Date(), {
+        differenceInSeconds(new Date(end * 1000), new Date(), {
           roundingMethod: 'ceil',
         }),
         0,
@@ -100,7 +106,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         endAmount.toString(),
         state.lockDuration,
         !!state.useNFTicket,
-        [state.treasuryFee, state.referrerFee, priceTicket.toString(), state.discountDivisor],
+        [state.treasuryFee, state.referrerFee, priceTicket.toString(), parseInt(state.discountDivisor) * 100],
         state.rewardsBreakdown?.split(',')?.map((val) => parseFloat(val.trim()) * 100),
       ]
       console.log('receipt================>', lotteryHelperContract, args)
@@ -127,17 +133,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
   }, [
     fetchWithCatchTxError,
     onDismiss,
-    state.startTime,
-    state.endTime,
-    state.endAmount,
-    state.priceTicket,
-    state.valuepool,
-    state.lockDuration,
-    state.useNFTicket,
-    state.treasuryFee,
-    state.referrerFee,
-    state.discountDivisor,
-    state.rewardsBreakdown,
+    state,
     account,
     lotteryHelperContract,
     callWithGasPrice,
@@ -160,9 +156,21 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
           {t('Start Date')}
         </Text>
         <DatePicker
+          onChange={handleRawValueChange('startDate')}
+          selected={state.startDate}
+          placeholderText="YYYY/MM/DD"
+        />
+        <DatePickerPortal />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Start Time')}
+        </Text>
+        <TimePicker
+          name="startTime"
           onChange={handleRawValueChange('startTime')}
           selected={state.startTime}
-          placeholderText="YYYY/MM/DD"
+          placeholderText="00:00"
         />
         <DatePickerPortal />
       </GreyedOutContainer>
@@ -170,7 +178,19 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('End Date')}
         </Text>
-        <DatePicker onChange={handleRawValueChange('endTime')} selected={state.endTime} placeholderText="YYYY/MM/DD" />
+        <DatePicker onChange={handleRawValueChange('endDate')} selected={state.endDate} placeholderText="YYYY/MM/DD" />
+        <DatePickerPortal />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('End Time')}
+        </Text>
+        <TimePicker
+          name="endTime"
+          onChange={handleRawValueChange('endTime')}
+          selected={state.endTime}
+          placeholderText="00:00"
+        />
         <DatePickerPortal />
       </GreyedOutContainer>
       <GreyedOutContainer>

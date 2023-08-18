@@ -4,12 +4,13 @@ import request, { gql } from 'graphql-request'
 import { getCollection } from 'state/cancan/helpers'
 import { lotteryFields } from './queries'
 import { publicClient } from 'utils/wagmi'
-import { getLotteryAddress } from 'utils/addressHelpers'
+import { getLotteryAddress, getLotteryHelperAddress } from 'utils/addressHelpers'
 import { lotteryABI } from 'config/abi/lottery'
 import { erc20ABI } from 'wagmi'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
+import { lotteryHelperABI } from 'config/abi/lotteryHelper'
 
 export const getLottery = async (lotteryId) => {
   try {
@@ -211,4 +212,20 @@ export const fetchLotteries = async ({ fromLottery }) => {
       .flat(),
   )
   return lotteries
+}
+
+export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, idx) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const [count] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getLotteryHelperAddress(),
+        abi: lotteryHelperABI,
+        functionName: 'viewRewardsForTicketId',
+        args: [BigInt(lotteryId), BigInt(ticketId), BigInt(idx), tokenAddress],
+      },
+    ],
+  })
+  return count.result
 }

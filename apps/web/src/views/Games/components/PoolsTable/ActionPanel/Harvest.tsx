@@ -143,12 +143,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Score')}
             </Text>
           </Box>
-          <CopyAddress title={truncateHash(currAccount?.receiver ?? '')} account={currAccount?.receiver} />
-          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t('Receiver')}
-          </Text>
-        </Flex>
-        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">
             {parseInt(currAccount?.scorePercentile) ? (
               <Balance
@@ -157,6 +151,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
                 fontSize="12px"
                 decimals={0}
                 value={currAccount?.scorePercentile}
+                unit=" %"
               />
             ) : (
               <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
@@ -167,6 +162,31 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Score Percentile')}
             </Text>
           </Box>
+          <Box mr="8px" height="32px">
+            {parseInt(currAccount?.pricePercentile) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={currAccount?.pricePercentile}
+                unit=" %"
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Price Percentile')}
+            </Text>
+          </Box>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Receiver')}
+          </Text>
+          <CopyAddress title={truncateHash(currAccount?.receiver ?? '')} account={currAccount?.receiver} />
+        </Flex>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">
             {parseInt(currAccount?.price) ? (
               <Balance
@@ -183,24 +203,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Price')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.pricePercentile) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.pricePercentile}
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Price Percentile')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">

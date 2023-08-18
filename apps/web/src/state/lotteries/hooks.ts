@@ -12,6 +12,7 @@ import {
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
 } from './selectors'
+import { getRewardsForTicketId } from './helpers'
 
 export const useFetchPublicPoolsData = () => {
   const { chainId } = useActiveChainId()
@@ -50,4 +51,21 @@ export const useCurrPool = () => {
 
 export const usePoolsWithFilterSelector = () => {
   return useSelector(poolsWithFilterSelector)
+}
+
+export const useGetRewardsForTicketId = (tokenAddress, lotteryId, ticketId) => {
+  const { data: winners } = useSWRImmutable(['rewards-for-user2', tokenAddress, lotteryId, ticketId], async () => {
+    try {
+      const arr = Array.from({ length: 6 }, (v, i) => i)
+      const res = await Promise.all(
+        arr?.map(async (idx) => getRewardsForTicketId(tokenAddress, lotteryId, ticketId, idx)),
+      )
+      return res
+    } catch (err) {
+      console.log('rerr==========>', err)
+    }
+    return []
+  })
+  console.log('winners============>', tokenAddress, lotteryId, ticketId)
+  return winners
 }

@@ -21,10 +21,10 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrPool } from 'state/lotteries/hooks'
+import { useCurrBribe, useCurrPool } from 'state/lotteries/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
-import { setCurrPoolData } from 'state/lotteries'
+import { setCurrBribeData, setCurrPoolData } from 'state/lotteries'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -42,6 +42,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
+  const currState2 = useCurrBribe()
   console.log('PoolStatsInfo==========>', pool)
   return (
     <>
@@ -145,6 +146,39 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             variant="text"
             scale="sm"
             onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            {t('Clear')}
+          </Button>
+        ) : null}
+      </Flex>
+      <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
+        {pool?.users?.length
+          ? pool?.users
+              .filter((user) => user.account?.toLowerCase() === account?.toLowerCase())
+              .map((balance) => (
+                <Button
+                  key={balance.id}
+                  onClick={() => {
+                    const newState = { ...currState2, [pool?.id]: balance.id }
+                    dispatch(setCurrBribeData(newState))
+                  }}
+                  mt="4px"
+                  mr={['2px', '2px', '4px', '4px']}
+                  scale="sm"
+                  variant={currState2[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+                >
+                  {balance.id}
+                </Button>
+              ))
+          : null}
+        {pool?.users?.length &&
+        pool?.users?.filter((user) => user.account?.toLowerCase() === account?.toLowerCase())?.length ? (
+          <Button
+            key="clear-all"
+            variant="text"
+            scale="sm"
+            onClick={() => dispatch(setCurrBribeData({}))}
             style={{ whiteSpace: 'nowrap' }}
           >
             {t('Clear')}
