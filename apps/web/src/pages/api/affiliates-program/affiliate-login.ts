@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getCookie, setCookie, deleteCookie } from 'cookies-next'
-import { MAX_AGE } from 'config/constants/affiliatesProgram'
+// import { MAX_AGE } from 'config/constants/affiliatesProgram'
 
 export const AFFILIATE_SID = 'AFFILIATE_SID'
 export const AFFILIATE_NONCE_SID = 'AFFILIATE_NONCE_SID'
@@ -31,7 +31,7 @@ const affiliateLogin = async (req: NextApiRequest, res: NextApiResponse) => {
   setCookie(AFFILIATE_SID, response.headers.get('set-cookie'), {
     req,
     res,
-    maxAge: MAX_AGE,
+    maxAge: 100, // MAX_AGE,
     sameSite: true,
   })
 
