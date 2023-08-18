@@ -27,7 +27,7 @@ const PreviousRoundCardFooter: React.FC<any> = ({ lotteryNodeData, currentTokenI
     const { priceTicket } = lotteryNodeData
     prizeInBusd = new BigNumber(priceTicket)
   }
-
+  console.log('PreviousRoundCardFooter==============>', currTokenData)
   const getPrizeBalances = () => {
     return (
       <>
@@ -35,14 +35,13 @@ const PreviousRoundCardFooter: React.FC<any> = ({ lotteryNodeData, currentTokenI
           <Skeleton my="7px" height={40} width={200} />
         ) : (
           <Heading scale="xl" lineHeight="1" color="secondary">
-            {formatNumber(getBalanceNumber(prizeInBusd), 0, 0)}{' '}
+            {formatNumber(getBalanceNumber(currTokenData?.amountCollected), 3, currTokenData?.token?.decimals)}{' '}
             {` ${currTokenData?.token?.symbol?.toUpperCase() ?? ''}`}
           </Heading>
         )}
       </>
     )
   }
-
   return (
     <NextDrawWrapper>
       <Flex mr="24px" flexDirection="column" justifyContent="space-between">

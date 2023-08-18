@@ -84,59 +84,6 @@ const PreviousRoundTicketsInner: React.FC<React.PropsWithChildren<{ roundId: str
     tooltipOffset: [20, 10],
   })
 
-  useEffect(() => {
-    const addWinningTicketInfoToAllTickets = (
-      _allTickets: LotteryTicket[],
-      _allWinningTickets: LotteryTicket[],
-    ): LotteryTicket[] => {
-      const allTicketsWithWinningTickets = _allTickets.map((ticket) => {
-        const winningTicketEquivalent = _allWinningTickets.find((winningTicket) => winningTicket.id === ticket.id)
-        if (winningTicketEquivalent) {
-          return winningTicketEquivalent
-        }
-        return ticket
-      })
-      return allTicketsWithWinningTickets
-    }
-
-    const sortTicketsByWinningBracket = (tickets) => {
-      return orderBy(tickets, (ticket) => (ticket.rewardBracket === undefined ? 0 : ticket.rewardBracket + 1), 'desc')
-    }
-
-    const fetchData = async () => {
-      // const [userTickets, lotteryData] = await Promise.all([
-      //   fetchUserTicketsForOneRound(account, roundId),
-      //   fetchLottery(roundId),
-      // ])
-      // const processedLotteryData = processLotteryResponse(lotteryData)
-      // const winningTickets = await getWinningTickets({
-      //   roundId,
-      //   userTickets,
-      //   finalNumber: processedLotteryData.finalNumber.toString(),
-      // })
-      // setUserWinningTickets({
-      //   isFetched: true,
-      //   allWinningTickets: winningTickets?.allWinningTickets,
-      //   ticketsWithUnclaimedRewards: winningTickets?.ticketsWithUnclaimedRewards,
-      //   claimData: winningTickets,
-      // })
-      // setLotteryInfo(processedLotteryData)
-      // // If the user has some winning tickets - modify the userTickets response to include that data
-      // if (winningTickets?.allWinningTickets) {
-      //   const allTicketsWithWinningTicketInfo = addWinningTicketInfoToAllTickets(
-      //     userTickets,
-      //     winningTickets.allWinningTickets,
-      //   )
-      //   const ticketsSortedByWinners = sortTicketsByWinningBracket(allTicketsWithWinningTicketInfo)
-      //   setAllUserTickets(ticketsSortedByWinners)
-      // } else {
-      //   setAllUserTickets(userTickets)
-      // }
-    }
-
-    fetchData()
-  }, [roundId, account])
-
   const getFooter = () => {
     if (userWinningTickets?.ticketsWithUnclaimedRewards?.length > 0) {
       return (

@@ -213,10 +213,10 @@ const Hero = ({ lottery, currentTokenId }) => {
   // const cakePriceBusd = usePriceCakeBusd()
   // times(cakePriceBusd)
   const tokenData = lottery?.tokenData?.length ? lottery?.tokenData[currentTokenId] : {}
-  const prizeInBusd = tokenData.amountCollected ?? 0
+  const prizeInBusd = tokenData?.amountCollected ?? 0
   const prizeTotal = getBalanceNumber(prizeInBusd, tokenData?.decimals ?? 18)
   const ticketBuyIsDisabled = lottery?.status !== LotteryStatus.OPEN
-
+  console.log('Hero=====================>', lottery, currentTokenId)
   const getHeroHeading = () => {
     if (lottery?.status === LotteryStatus.OPEN) {
       return (
@@ -224,7 +224,7 @@ const Hero = ({ lottery, currentTokenId }) => {
           <PrizeTotalBalance
             fontSize="64px"
             bold
-            unit={` ${tokenData.token?.symbol ?? ''}`}
+            unit={` ${tokenData?.token?.symbol ?? ''}`}
             value={prizeTotal}
             mb="8px"
             decimals={0}

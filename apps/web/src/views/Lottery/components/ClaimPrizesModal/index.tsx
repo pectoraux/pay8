@@ -1,14 +1,10 @@
 import { useEffect } from 'react'
 import styled from 'styled-components'
 import { Heading, ModalContainer, ModalHeader, ModalTitle, ModalBody, ModalCloseButton } from '@pancakeswap/uikit'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import delay from 'lodash/delay'
 import confetti from 'canvas-confetti'
 import { LotteryTicketClaimData } from 'config/constants/types'
-import { useAppDispatch } from 'state'
-import { useLottery } from 'state/lottery/hooks'
-import { fetchUserLotteries } from 'state/lottery'
 import ClaimPrizesInner from './ClaimPrizesInner'
 
 const StyledModal = styled(ModalContainer)`
@@ -54,9 +50,6 @@ interface ClaimPrizesModalModalProps {
 
 const ClaimPrizesModal: React.FC<any> = ({ onDismiss, currentTokenId, roundsToClaim }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
-  const { currentLotteryId } = useLottery()
-  const dispatch = useAppDispatch()
 
   useEffect(() => {
     delay(showConfetti, 100)

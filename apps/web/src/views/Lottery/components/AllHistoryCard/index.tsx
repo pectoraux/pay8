@@ -39,7 +39,7 @@ const AllHistoryCard = ({ currentTokenId }) => {
 
   useEffect(() => {
     if (currentLotteryId) {
-      const mostRecentFinishedRoundId = history?.length ? history[history?.length - 1]?.id : null
+      const mostRecentFinishedRoundId = history?.length ? history[history?.length - 1]?.id : 1
       setLatestRoundId(mostRecentFinishedRoundId)
       setSelectedRoundId(mostRecentFinishedRoundId ?? '')
     }
@@ -88,7 +88,7 @@ const AllHistoryCard = ({ currentTokenId }) => {
       setSelectedRoundId(currentLotteryId)
     }
   }
-
+  console.log('9AllHistoryCard==================>', currentTokenId, currentLotteryId)
   return (
     <StyledCard>
       <StyledCardHeader>

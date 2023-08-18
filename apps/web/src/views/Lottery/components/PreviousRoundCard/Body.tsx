@@ -96,7 +96,7 @@ const PreviousRoundCardBody: React.FC<any> = ({ lotteryNodeData, lotteryId, late
           )}
         </Flex>
         <Box display={['none', null, null, 'flex']}>
-          <Heading>{t('Your tickets')}</Heading>
+          <Heading>{t('Your Tickets')}</Heading>
         </Box>
         <Flex flexDirection="column" mr={[null, null, null, '24px']} alignItems={['center', null, null, 'flex-start']}>
           <Box mt={['32px', null, null, 0]}>

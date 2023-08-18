@@ -227,5 +227,6 @@ export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, i
       },
     ],
   })
+  console.log('viewRewardsForTicketId==============>', tokenAddress, lotteryId, ticketId, idx)
   return count.result
 }

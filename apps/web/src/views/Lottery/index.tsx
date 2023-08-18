@@ -24,6 +24,7 @@ import CheckPrizesSection from './components/CheckPrizesSection'
 import HowToPlay from './components/HowToPlay'
 import useShowMoreUserHistory from './hooks/useShowMoreUserRounds'
 import { PageMeta } from '../../components/Layout/Page'
+import { useRouter } from 'next/router'
 
 const LotteryPage = styled.div`
   min-height: calc(100vh - 64px);
@@ -39,6 +40,7 @@ const Lottery = () => {
   console.log('lottery=================>', lotteryData)
   const [historyTabMenuIndex, setHistoryTabMenuIndex] = useState(0)
   const endTimeAsInt = parseInt(endTime, 10)
+  const router = useRouter()
   const { nextEventTime, postCountdownText, preCountdownText } = useGetNextLotteryEvent(endTimeAsInt, status)
   const { numUserRoundsRequested, handleShowMoreUserRounds } = useShowMoreUserHistory()
   const [currentTokenId, setCurrentTokenId] = useState('0')

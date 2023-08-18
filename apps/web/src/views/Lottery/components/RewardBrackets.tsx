@@ -37,7 +37,7 @@ interface RewardsState {
 
 const RewardBrackets: React.FC<any> = ({ lotteryNodeData, isHistoricRound, currentTokenId }) => {
   const { t } = useTranslation()
-
+  console.log('lotteryNodeData================>', lotteryNodeData)
   const getCakeRewards = (bracket: number) => {
     const shareAsPercentage = new BigNumber(lotteryNodeData?.rewardsBreakdown[bracket])
     return new BigNumber(currTokenData?.amountCollected).div(100).times(shareAsPercentage)

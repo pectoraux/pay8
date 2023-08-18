@@ -124,59 +124,11 @@ const CollectWinningsPopup = () => {
   const { t } = useTranslation()
   const ref = useRef(null)
   const timer = useRef(null)
-  // const { account } = useWeb3React()
-  // const bettingStatus = useGetPredictionsStatus()
-  // const isHistoryPaneOpen = useIsHistoryPaneOpen()
-  // const dispatch = useLocalDispatch()
-  // const { api, token } = useConfig()
-
-  // const handleOpenHistory = () => {
-  //   dispatch(setHistoryPaneState(true))
-  // }
 
   const handleClick = () => {
     setIsOpen(false)
     clearInterval(timer.current)
   }
-
-  // // Check user's history for unclaimed winners
-  // useEffect(() => {
-  //   let isCancelled = false
-  //   if (account) {
-  //     timer.current = setInterval(async () => {
-  //       const bets = await getBetHistory(
-  //         { user: account.toLowerCase(), claimed: false },
-  //         undefined,
-  //         undefined,
-  //         api,
-  //         token.symbol,
-  //       )
-
-  //       if (!isCancelled) {
-  //         // Filter out bets that were not winners
-  //         const winnerBets = bets.filter((bet) => {
-  //           return bet.position === bet.round.position
-  //         })
-
-  //         if (!isHistoryPaneOpen) {
-  //           setIsOpen(winnerBets.length > 0)
-  //         }
-  //       }
-  //     }, 30000)
-  //   }
-
-  //   return () => {
-  //     clearInterval(timer.current)
-  //     isCancelled = true
-  //   }
-  // }, [account, timer, bettingStatus, setIsOpen, isHistoryPaneOpen, api, token.symbol])
-
-  // // Any time the history pane is open make sure the popup closes
-  // useEffect(() => {
-  //   if (isHistoryPaneOpen) {
-  //     setIsOpen(false)
-  //   }
-  // }, [isHistoryPaneOpen, setIsOpen])
 
   return (
     <CSSTransition in={isOpen} unmountOnExit nodeRef={ref} timeout={1000} classNames="popup">

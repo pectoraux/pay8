@@ -38,10 +38,10 @@ const RewardBracketDetail: React.FC<any> = ({
         bold
         unit={` ${currTokenData?.token?.symbol ?? ''}`}
         value={getBalanceNumber(cakeAmount)}
-        decimals={0}
+        decimals={5}
       />
-      <Balance fontSize="12px" color="textSubtle" prefix="~$" value={getBalanceNumber(cakeAmount)} decimals={0} />
-      {isHistoricRound && cakeAmount && (
+      <Balance fontSize="12px" color="textSubtle" prefix="~$" value={getBalanceNumber(cakeAmount)} decimals={5} />
+      {isHistoricRound && cakeAmount ? (
         <>
           {numberWinners !== '0' && (
             <Text fontSize="12px" color="textSubtle">
@@ -57,7 +57,7 @@ const RewardBracketDetail: React.FC<any> = ({
             {numberWinners} {t('Winning Tickets')}
           </Text>
         </>
-      )}
+      ) : null}
     </Flex>
   )
 }

@@ -30,11 +30,9 @@ const CheckPrizesSection = ({ currentTokenId }) => {
   const {
     lotteryData: { status },
   } = useLottery()
-  // const currTokenData = useMemo(() => tokenData?.length ? tokenData[parseInt(currentTokenId)] : {}, [tokenData, currentTokenId])
   const [hasCheckedForRewards, setHasCheckedForRewards] = useState(false)
   const [hasRewardsToClaim, setHasRewardsToClaim] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
-  // const pendingReward = useGetPendingReward(account, currentLotteryId, currTokenData?.token?.address)
   const { fetchAllRewards, unclaimedRewards, fetchStatus } = useGetUnclaimedRewards({ currentTokenId, activeIndex })
   const [onPresentClaimModal] = useModal(
     <ClaimPrizesModal currentTokenId={currentTokenId} roundsToClaim={unclaimedRewards} />,
@@ -50,7 +48,7 @@ const CheckPrizesSection = ({ currentTokenId }) => {
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {
         setHasRewardsToClaim(unclaimedRewards[0] > 0)
         setHasCheckedForRewards(true)
-        if (unclaimedRewards[0] > 0) onPresentClaimModal()
+        if (unclaimedRewards[0] > 0 || true) onPresentClaimModal()
       }
 
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {

@@ -89,7 +89,7 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
         bold
         unit={` ${currTokenData.token?.symbol ?? '$'}`}
         value={getBalanceNumber(currTokenData?.amountCollected, currTokenData.token?.decimals)}
-        decimals={0}
+        decimals={5}
       />
     )
   }

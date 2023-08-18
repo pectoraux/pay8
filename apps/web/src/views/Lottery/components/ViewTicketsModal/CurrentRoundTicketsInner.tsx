@@ -29,7 +29,7 @@ const CurrentRoundTicketsInner = () => {
     <>
       <Flex flexDirection="column">
         <Text bold textTransform="uppercase" color="secondary" fontSize="12px" mb="16px">
-          {t('Your tickets')}
+          {t('Your Tickets')}
         </Text>
         <ScrollBox>
           {userTickets?.map((ticket, index) => {
@@ -38,7 +38,7 @@ const CurrentRoundTicketsInner = () => {
         </ScrollBox>
       </Flex>
       <Flex borderTop={`1px solid ${theme.colors.cardBorder}`} alignItems="center" justifyContent="center">
-        <BuyTicketsButton disabled={ticketBuyIsDisabled} mt="24px" width="100%" />
+        <BuyTicketsButton disabled={ticketBuyIsDisabled} userTickets={userTickets} mt="24px" width="100%" />
       </Flex>
     </>
   )

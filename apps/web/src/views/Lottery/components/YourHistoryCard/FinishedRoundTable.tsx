@@ -50,17 +50,18 @@ const FinishedRoundTable: React.FC<any> = ({
         <Box width="20px" />
       </Grid>
       <Flex px="24px" pb="24px" flexDirection="column" overflowY="scroll" height="240px">
-        {filteredForClaimable?.length &&
-          sortedByRoundId.map((finishedRound) => (
-            <FinishedRoundRow
-              key={finishedRound.id}
-              roundId={finishedRound.id}
-              hasWon={finishedRound.lottery?.users?.every((user) => !!user?.claimed)}
-              numberTickets={finishedRound.lottery?.users?.length}
-              endTime={finishedRound?.updatedAt}
-              onClick={handleHistoryRowClick}
-            />
-          ))}
+        {filteredForClaimable?.length
+          ? sortedByRoundId.map((finishedRound) => (
+              <FinishedRoundRow
+                key={finishedRound.id}
+                roundId={finishedRound.id}
+                hasWon={finishedRound.lottery?.users?.every((user) => !!user?.claimed)}
+                numberTickets={finishedRound.lottery?.users?.length}
+                endTime={finishedRound?.updatedAt}
+                onClick={handleHistoryRowClick}
+              />
+            ))
+          : null}
         {filteredForClaimable?.length === numUserRoundsRequested && (
           <Flex justifyContent="center">
             <Button mt="12px" variant="text" width="fit-content" onClick={handleShowMoreClick}>

@@ -1,13 +1,12 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useLottery } from 'state/lottery/hooks'
-import fetchPendingRevenue from 'state/lottery/fetchUnclaimedUserRewards'
+import fetchPendingRevenue from 'state/lottery/fetchPendingRevenue'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { FetchStatus } from 'config/constants/types'
 
 const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
-  console.log('useGetUnclaimedRewards=============>1')
   const { account } = useWeb3React()
   const {
     lotteryData: { id: currentLotteryId, tokenData },
@@ -17,6 +16,14 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
   const currTokenData = useMemo(
     () => (tokenData?.length ? tokenData[parseInt(currentTokenId) > 0 ? parseInt(currentTokenId) - 1 : 0] : {}),
     [currentTokenId, tokenData],
+  )
+  console.log(
+    'useGetUnclaimedRewards=============>',
+    currentTokenId,
+    activeIndex,
+    currentLotteryId,
+    tokenData,
+    currTokenData,
   )
 
   useEffect(() => {
