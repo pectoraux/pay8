@@ -6,7 +6,6 @@ import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { requiresApproval } from 'utils/requiresApproval'
 
-import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { fetchPairsAsync, fetchPoolsUserDataAsync } from '.'
 import {
@@ -38,15 +37,24 @@ export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchPairsAsync())
-      })
-    }
+  useSWR(
+    ['/pools'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchPairsAsync())
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch, chainId])
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId: number) => {

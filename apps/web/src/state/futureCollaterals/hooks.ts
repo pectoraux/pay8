@@ -1,8 +1,9 @@
-import { useRouter } from 'next/router'
-import { useMemo, useEffect, useState } from 'react'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { batch, useSelector } from 'react-redux'
+import useSWR from 'swr'
+import { useMemo } from 'react'
 import { useAppDispatch } from 'state'
+import { useRouter } from 'next/router'
+import { batch, useSelector } from 'react-redux'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { fetchFutureCollateralsAsync, fetchFutureCollateralSgAsync } from '.'
 import {
@@ -18,16 +19,25 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromFutureCollateral = router.query.futureCollateral
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchFutureCollateralSgAsync({ fromFutureCollateral }))
-        dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral }))
-      })
-    }
+  useSWR(
+    ['/futureCollaterals'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchFutureCollateralSgAsync({ fromFutureCollateral }))
+          dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral }))
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch, chainId, fromFutureCollateral])
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {

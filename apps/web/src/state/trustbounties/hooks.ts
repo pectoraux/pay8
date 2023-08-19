@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { requiresApproval } from 'utils/requiresApproval'
 import { fetchBountiesAsync } from '.'
@@ -26,25 +25,34 @@ export const useFetchPublicPoolsData = () => {
   const fromContributors = router.pathname.includes('contributors')
   const fromTransfers = router.pathname.includes('transfers')
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(
-          fetchBountiesAsync({
-            fromAccelerator,
-            fromContributors,
-            fromSponsors,
-            fromAuditors,
-            fromBusinesses,
-            fromRamps,
-            fromTransfers,
-          }),
-        )
-      })
-    }
+  useSWR(
+    ['/trustbounties'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(
+            fetchBountiesAsync({
+              fromAccelerator,
+              fromContributors,
+              fromSponsors,
+              fromAuditors,
+              fromBusinesses,
+              fromRamps,
+              fromTransfers,
+            }),
+          )
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch, chainId])
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId: number): { pool: any; userDataLoaded: boolean } => {

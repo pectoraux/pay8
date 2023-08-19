@@ -44,7 +44,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const currProtocol = pool?.accounts?.find((acct) => acct?.id === currState[pool?.id])
   const tokenAddress = pool?.token?.address || ''
   const dispatch = useAppDispatch()
-  // const [onPresentNFT] = useModal(<WebPagesModal height="500px" tokenId={pool.id} metadataUrl={pool?.metadataUrl} />)
+  const [onPresentNFT] = useModal(<WebPagesModal height="500px" tokenId={pool.id} metadataUrl={pool?.metadataUrl} />)
 
   return (
     <>
@@ -74,11 +74,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
-          {t('View NFTs')}
-        </LinkExternal>
-      </Flex> */}
+      {pool?.metadataUrl ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFT} bold={false} small>
+            {t('View NFT')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

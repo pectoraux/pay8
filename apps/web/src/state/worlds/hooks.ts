@@ -1,5 +1,5 @@
+import useSWR from 'swr'
 import { useMemo } from 'react'
-import useSWRImmutable from 'swr/immutable'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { fetchWorldsAsync } from '.'
@@ -13,15 +13,24 @@ import {
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
 
-  useSWRImmutable('worlds', () => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchWorldsAsync())
-      })
-    }
+  useSWR(
+    ['/worlds'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchWorldsAsync())
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  })
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean } => {

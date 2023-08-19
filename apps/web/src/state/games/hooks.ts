@@ -24,16 +24,25 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromGame = router.query.game
 
-  useSWRImmutable('games', () => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchGameSgAsync({ fromGame }))
-        dispatch(fetchGamesAsync({ fromGame }))
-      })
-    }
+  useSWR(
+    ['/games'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchGameSgAsync({ fromGame }))
+          dispatch(fetchGamesAsync({ fromGame }))
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  })
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {

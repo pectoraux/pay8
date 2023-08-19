@@ -1,9 +1,9 @@
-import { useRouter } from 'next/router'
+import useSWR from 'swr'
 import { useMemo } from 'react'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import { useRouter } from 'next/router'
+import { batch, useSelector } from 'react-redux'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { fetchLotteriesAsync, fetchLotteriesSgAsync } from '.'
 import useSWRImmutable from 'swr/immutable'
 import {
@@ -20,16 +20,25 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromLottery = router.query.lottery
 
-  useSWRImmutable('lotteries', () => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchLotteriesSgAsync({ fromLottery }))
-        dispatch(fetchLotteriesAsync({ fromLottery }))
-      })
-    }
+  useSWR(
+    ['/lotteries'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchLotteriesSgAsync({ fromLottery }))
+          dispatch(fetchLotteriesAsync({ fromLottery }))
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  })
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {

@@ -1,8 +1,6 @@
-import BigNumber from 'bignumber.js'
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_COLLATERALS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-import { getFutureCollateralsContract, getBep20Contract } from '../../utils/contractHelpers'
 import { futureCollateralFields } from './queries'
 import { getFutureCollateralsAddress } from 'utils/addressHelpers'
 import { futureCollateralsABI } from 'config/abi/futureCollaterals'
@@ -149,13 +147,13 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral }) => {
         return {
           sousId: index,
           ...collateral,
-          fund: fund.toString(),
+          fund: fund.result.toString(),
           token: new Token(
             56,
             tokenAddress.result,
             decimals.result,
-            symbol?.toString()?.toUpperCase() ?? 'symbol',
-            name?.toString() ?? 'name',
+            symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+            name.result?.toString() ?? 'name',
             'https://www.payswap.org/',
           ),
         }
