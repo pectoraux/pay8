@@ -40,7 +40,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { token: earningToken, gameAddress } = pool
+  const { token: earningToken } = pool
   const tokenAddress = pool?.token?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()

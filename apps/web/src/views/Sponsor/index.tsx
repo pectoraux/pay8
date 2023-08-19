@@ -23,11 +23,11 @@ import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
 import CreateGaugeModal from 'views/Sponsors/components/CreateGaugeModal'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
@@ -90,7 +90,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{sponsor}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools?.length && ogSponsor?.accounts}>
+        <PoolControls pools={ogSponsor?.accounts?.length && ogSponsor?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>
@@ -99,8 +99,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
                     key={pool.sousId}
                     account={account}
-                    id={ogSponsor.id}
-                    protocolId={pool.protocolId}
+                    sousId={ogSponsor.sousId}
+                    currAccount={pool}
                   />
                 ))}
               </Pool.PoolsTable>

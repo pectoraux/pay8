@@ -40,7 +40,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { bill } = router.query as any
-  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
+  const { pools } = usePoolsWithFilterSelector()
   const ogBill = pools?.find((pool) => pool?.id?.toLowerCase() === bill?.toLowerCase())
   const isOwner = ogBill?.devaddr_ === account
   const inputCurency = useCurrency(DEFAULT_TFIAT ?? undefined)
@@ -97,7 +97,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{bill}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools?.length && pools[0]?.accounts}>
+        <PoolControls pools={ogBill?.accounts?.length && ogBill?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (
@@ -115,9 +115,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 {chosenPools.map((pool) => (
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
-                    key={pool.sousId}
-                    sousId={pool.sousId}
+                    key={pool.id}
+                    sousId={ogBill.sousId}
                     account={account}
+                    currAccount={pool}
                   />
                 ))}
               </Pool.PoolsTable>

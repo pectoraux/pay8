@@ -1,8 +1,9 @@
-import { useRouter } from 'next/router'
+import useSWR from 'swr'
 import { useMemo } from 'react'
+import { useAppDispatch } from 'state'
+import { useRouter } from 'next/router'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
-import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { fetchWillsAsync, fetchWillSgAsync } from '.'
 import {
@@ -18,16 +19,25 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromWill = router.query.will
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchWillSgAsync({ fromWill }))
-        dispatch(fetchWillsAsync({ fromWill }))
-      })
-    }
+  useSWR(
+    ['/wills'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchWillSgAsync({ fromWill }))
+          dispatch(fetchWillsAsync({ fromWill }))
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch, chainId, fromWill])
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {

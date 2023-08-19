@@ -3,7 +3,7 @@ import { Box, Flex, Text, useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
 import { Token } from '@pancakeswap/sdk'
 import Harvest from './Harvest'
 import Stake from './Stake'
-import PoolStatsInfo from '../../PoolStatsInfo'
+import PoolStatsInfo from 'views/Bills/components/PoolStatsInfo'
 
 const expandAnimation = keyframes`
   from {
@@ -88,7 +88,7 @@ const ActionPanel: React.FC<any> = ({ account, pool, currAccount, expanded }) =>
     <StyledActionPanel expanded={expanded}>
       <InfoSection>
         <Flex flexDirection="column" mb="8px">
-          <PoolStatsInfo pool={pool} account={account} alignLinksToRight={isMobile} />
+          <PoolStatsInfo hideAccounts pool={pool} account={account} alignLinksToRight={isMobile} />
         </Flex>
       </InfoSection>
       <ActionContainer>

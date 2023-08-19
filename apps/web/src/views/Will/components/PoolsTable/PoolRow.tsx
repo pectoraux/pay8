@@ -9,8 +9,8 @@ import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 
-const PoolRow: React.FC<any> = ({ id, account, currAccount, initialActivity }) => {
-  const { pool } = usePool(id)
+const PoolRow: React.FC<any> = ({ sousId, account, currAccount, initialActivity }) => {
+  const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState2 = useCurrBribe()
   const { isMobile } = useMatchBreakpoints()

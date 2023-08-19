@@ -15,12 +15,10 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-const EndsInCell: React.FC<any> = ({ labelText, currAccount }) => {
-  const getDate = () => {
+const EndsInCell: React.FC<any> = ({ t, currAccount }) => {
+  const getDate = (val) => {
     try {
-      return Number(currAccount?.nextDueReceivable)
-        ? format(convertTimeToSeconds(currAccount?.nextDueReceivable), 'MMM do, yyyy HH:mm')
-        : '-'
+      return Number(val) ? format(convertTimeToSeconds(val), 'MMM do, yyyy HH:mm') : '-'
     } catch (err) {
       return '-'
     }
@@ -29,12 +27,22 @@ const EndsInCell: React.FC<any> = ({ labelText, currAccount }) => {
     <StyledCell role="cell">
       <Pool.CellContent>
         <Text fontSize="12px" color="textSubtle" textAlign="left">
-          {labelText}
+          {t('Next Due Payable')}
         </Text>
         <Flex>
           <Box mr="8px" height="32px">
             <Text mt="4px" fontSize="14px" color="primary" bold>
-              {getDate()}
+              {getDate(currAccount?.nextDuePayable)}
+            </Text>
+          </Box>
+        </Flex>
+        <Text fontSize="12px" color="textSubtle" textAlign="left">
+          {t('Next Due Receivable')}
+        </Text>
+        <Flex>
+          <Box mr="8px" height="32px">
+            <Text mt="4px" fontSize="14px" color="primary" bold>
+              {getDate(currAccount?.nextDueReceivable)}
             </Text>
           </Box>
         </Flex>

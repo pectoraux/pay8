@@ -23,11 +23,10 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
         {t('Protocol Uses')}{' '}
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {currAccount?.token?.symbol}
+        {currAccount?.token?.symbol ?? ''}
       </Text>
     </>
   )
-
   if (!account) {
     return (
       <ActionContainer>
@@ -103,6 +102,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Amount Payable')}
             </Text>
           </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={currAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Total Liquidity')}
+            </Text>
+          </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {daysPayable} {t('days')} {hoursPayable} {t('hours')} {minutesPayable} {t('minutes')}
           </Text>
@@ -133,7 +144,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Admin Bounty Id')}
+              {t('Admin Bounty ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -152,7 +163,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached veNFT Token Id')}
+              {t('Attached veNFT Token ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -171,7 +182,26 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Bounty Id')}
+              {t('Attached Bounty ID')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            {parseInt(currAccount?.tokenId) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={currAccount?.tokenId}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Token ID')}
             </Text>
           </Box>
           <Text lineHeight="1" mt="2px" fontSize="12px" color="textSubtle" as="span">

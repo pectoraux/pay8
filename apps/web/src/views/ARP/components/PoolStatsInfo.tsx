@@ -15,11 +15,9 @@ import {
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useAppDispatch } from 'state'
-import { useRouter } from 'next/router'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>

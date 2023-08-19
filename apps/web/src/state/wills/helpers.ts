@@ -8,6 +8,7 @@ import { erc20ABI } from 'wagmi'
 import { willABI } from 'config/abi/will'
 import { getWillNoteAddress } from 'utils/addressHelpers'
 import { willNoteABI } from 'config/abi/willNote'
+import BigNumber from 'bignumber.js'
 
 export const getProtocols = async (first = 5, skip = 0, where = {}) => {
   try {
@@ -139,35 +140,9 @@ export const fetchWill = async (willAddress) => {
       }
     }),
   )
-  const [
-    devaddr_,
-    bountyRequired,
-    _profileId,
-    contractMedia,
-    willWithdrawalPeriod,
-    minWithdrawableNow,
-    minNFTWithdrawableNow,
-    updatePeriod,
-    unlocked,
-    collectionId,
-  ] = await bscClient.multicall({
+  const [contractMedia, getParams, unlocked, collectionId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
-      {
-        address: willAddress,
-        abi: willABI,
-        functionName: 'devaddr_',
-      },
-      {
-        address: willAddress,
-        abi: willABI,
-        functionName: 'adminBountyRequired',
-      },
-      {
-        address: willAddress,
-        abi: willABI,
-        functionName: 'profileId',
-      },
       {
         address: willAddress,
         abi: willABI,
@@ -176,22 +151,7 @@ export const fetchWill = async (willAddress) => {
       {
         address: willAddress,
         abi: willABI,
-        functionName: 'willWithdrawalPeriod',
-      },
-      {
-        address: willAddress,
-        abi: willABI,
-        functionName: 'minWithdrawableNow',
-      },
-      {
-        address: willAddress,
-        abi: willABI,
-        functionName: 'minNFTWithdrawableNow',
-      },
-      {
-        address: willAddress,
-        abi: willABI,
-        functionName: 'updatePeriod',
+        functionName: 'getParams',
       },
       {
         address: willAddress,
@@ -205,6 +165,13 @@ export const fetchWill = async (willAddress) => {
       },
     ],
   })
+  const updatePeriod = getParams.result[0]
+  const activePeriod = getParams.result[1]
+  const minWithdrawableNow = getParams.result[2]
+  const willWithdrawalPeriod = getParams.result[3]
+  const minNFTWithdrawableNow = getParams.result[4]
+  const willWithdrawalActivePeriod = getParams.result[5]
+
   const collection = await getCollection(collectionId.result.toString())
   const accounts = await Promise.all(
     will?.protocols?.map(async (protocol) => {
@@ -231,7 +198,7 @@ export const fetchWill = async (willAddress) => {
       const media = protocolInfo.result[2]
       const description = protocolInfo.result[3]
 
-      console.log('tokens===============>', 1)
+      console.log('tokens===============>', protocol)
       const _tokens = await Promise.all(
         protocol?.percentages?.map(async (perct, idx) => {
           const [tk] = await bscClient.multicall({
@@ -360,7 +327,6 @@ export const fetchWill = async (willAddress) => {
       }
     }),
   )
-
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...will,
@@ -370,13 +336,12 @@ export const fetchWill = async (willAddress) => {
     unlocked: unlocked.result,
     collection,
     contractMedia: contractMedia.result,
-    willWithdrawalPeriod: willWithdrawalPeriod.result.toString(),
-    minWithdrawableNow: minWithdrawableNow.result.toString(),
-    minNFTWithdrawableNow: minNFTWithdrawableNow.result.toString(),
-    updatePeriod: updatePeriod.result.toString(),
-    devaddr_: devaddr_.result,
-    profileId: _profileId.result.toString(),
-    bountyRequired: bountyRequired.result.toString(),
+    updatePeriod: updatePeriod.toString(),
+    activePeriod: activePeriod.toString(),
+    minWithdrawableNow: new BigNumber(minWithdrawableNow.toString()).div(100).toJSON(),
+    willWithdrawalPeriod: willWithdrawalPeriod.toString(),
+    minNFTWithdrawableNow: minNFTWithdrawableNow.toString(),
+    willWithdrawalActivePeriod: willWithdrawalActivePeriod.toString(),
   }
 }
 

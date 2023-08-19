@@ -15,6 +15,11 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
     hours: hoursReceivable,
     minutes: minutesReceivable,
   } = getTimePeriods(Number(currAccount?.periodReceivable ?? '0'))
+  const {
+    days: daysPayable,
+    hours: hoursPayable,
+    minutes: minutesPayable,
+  } = getTimePeriods(Number(currAccount?.periodPayable ?? '0'))
 
   const actionTitle = (
     <>
@@ -22,7 +27,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
         {t('Auditor Uses')}{' '}
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {currAccount?.token?.symbol}
+        {currAccount?.token?.symbol ?? ''}
       </Text>
     </>
   )
@@ -47,12 +52,11 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
-              value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token.decimals)}
-              unit={` ${currAccount?.token.symbol}`}
+              decimals={currAccount?.token.decimals}
+              value={getBalanceNumber(currAccount?.credit, currAccount?.token.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Paid Receivable')}
+              {t('Credit')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -60,19 +64,76 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
-              value={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token.decimals)}
-              unit={` ${currAccount?.token.symbol}`}
+              prefix="# "
+              decimals={0}
+              value={currAccount?.creditFactor}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Amount Receivable')}
+              {t('Credit Factor')}
             </Text>
           </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={currAccount?.token.decimals}
+              value={getBalanceNumber(currAccount?.debit, currAccount?.token.decimals)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Debit')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              prefix="# "
+              decimals={0}
+              value={currAccount?.debitFactor}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Debit Factor')}
+            </Text>
+          </Box>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.optionId ?? ''}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Option ID')}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {daysPayable} {t('days')} {hoursPayable} {t('hours')} {minutesPayable} {t('minutes')}
+          </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Period Payable')}
+          </Text>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {daysReceivable} {t('days')} {hoursReceivable} {t('hours')} {minutesReceivable} {t('minutes')}
           </Text>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Period Receivable')}
+          </Text>
+          <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
+            {format(new Date(parseInt(currAccount?.nextDuePayable || 0) * 1000), 'yyyy-MM-dd HH:mm')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Next Due Payable')}
+          </Text>
+          <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
+            {format(new Date(parseInt(currAccount?.nextDueReceivable || 0) * 1000), 'yyyy-MM-dd HH:mm')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Next Due Receivable')}
+          </Text>
+        </Flex>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.adminBountyId ?? ''}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Admin Bounty ID')}
           </Text>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {currAccount?.isAutoChargeable ? 'Yes' : 'No'}
@@ -81,101 +142,73 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
             {t('AutoCharge')}
           </Text>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {currAccount?.optionId ?? ''}
+            {currAccount?.bountyId ?? ''}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Option ID')}
+            {t('Bounty ID')}
           </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {currAccount?.ratings?.length ? currAccount?.ratings.map((r) => r + ', ') : 'N/A'}
+          <Box mr="8px" height="32px">
+            {parseInt(currAccount?.profileId) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={currAccount?.profileId}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Profile ID')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            {parseInt(currAccount?.totalLiquidity) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={currAccount?.totalLiquidity}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Total Liquidity')}
+            </Text>
+          </Box>
+          <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
+            {format(new Date(parseInt(currAccount?.startPayable || 0) * 1000), 'yyyy-MM-dd HH:mm')}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Ratings')}
+            {t('Start Payable')}
           </Text>
-        </Flex>
-        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.adminBountyId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.adminBountyId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Bounty Id')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.tokenId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.tokenId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached veNFT Token Id')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.bountyId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.bountyId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Bounty Id')}
-            </Text>
-          </Box>
           <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
             {format(new Date(parseInt(currAccount?.startReceivable || 0) * 1000), 'yyyy-MM-dd HH:mm')}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Start Date')}
+            {t('Start Receivable')}
           </Text>
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.esgRating) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.esgRating}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('ESG Rating')}
-            </Text>
-          </Box>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.version ?? ''}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Version')}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.description ?? ''}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Description')}
+          </Text>
         </Flex>
       </ActionContent>
     </ActionContainer>

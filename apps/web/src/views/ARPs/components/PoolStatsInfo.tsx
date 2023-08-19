@@ -27,6 +27,7 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/arps'
 import WebPagesModal from './WebPagesModal'
+import WebPagesModal2 from './WebPagesModal2'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -35,51 +36,52 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
+const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
   const currState = useCurrPool()
-  const { arpAddress } = pool
   const earningToken = currState[pool?.id]
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.accounts} />)
   const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} notes />)
-  // const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />,)
+  const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />)
 
   return (
     <>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <Button
-          as={Link}
-          variant="text"
-          p="0"
-          height="auto"
-          color="primary"
-          endIcon={
-            pendingTx ? (
-              <AutoRenewIcon spin color="currentColor" />
-            ) : (
-              <ArrowForwardIcon
-                onClick={() => {
-                  setPendingTx(true)
-                  router.push(`/arps/${arpAddress}`)
-                }}
-                color="primary"
-              />
-            )
-          }
-          isLoading={pendingTx}
-          onClick={() => {
-            setPendingTx(true)
-            router.push(`/arps/${arpAddress}`)
-          }}
-        >
-          {t('View All Accounts')}
-        </Button>
-      </Flex>
+      {!hideAccounts ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Button
+            as={Link}
+            variant="text"
+            p="0"
+            height="auto"
+            color="primary"
+            endIcon={
+              pendingTx ? (
+                <AutoRenewIcon spin color="currentColor" />
+              ) : (
+                <ArrowForwardIcon
+                  onClick={() => {
+                    setPendingTx(true)
+                    router.push(`/arps/${pool?.id}`)
+                  }}
+                  color="primary"
+                />
+              )
+            }
+            isLoading={pendingTx}
+            onClick={() => {
+              setPendingTx(true)
+              router.push(`/arps/${pool?.id}`)
+            }}
+          >
+            {t('View All Accounts')}
+          </Button>
+        </Flex>
+      ) : null}
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
@@ -106,11 +108,20 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
-          {t('View NFTs')}
-        </LinkExternal>
-      </Flex>
+      {pool?.accounts?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
+            {t('View NFTs')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
+      {pool?.notes?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes} bold={false} small>
+            {t('View Notes')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
@@ -128,21 +139,37 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((balance) => (
+        {pool?.accounts?.length && !hideAccounts
+          ? pool?.accounts
+              .filter((protocol) => account?.toLowerCase() === protocol?.owner?.toLowerCase())
+              .map((balance) => (
+                <Button
+                  key={balance.id}
+                  onClick={() => {
+                    const newState = { ...currState, [pool?.id]: balance.id }
+                    dispatch(setCurrPoolData(newState))
+                    onPresentNFT()
+                  }}
+                  mt="4px"
+                  mr={['2px', '2px', '4px', '4px']}
+                  scale="sm"
+                  variant={currState[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+                >
+                  {balance.id?.split('_')[0]}
+                </Button>
+              ))
+          : null}
+        {pool?.accounts?.length && !hideAccounts ? (
           <Button
-            key={balance.token.address}
-            onClick={() => {
-              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
-              dispatch(setCurrPoolData(newState))
-            }}
-            mt="4px"
-            mr={['2px', '2px', '4px', '4px']}
+            key="clear-all"
+            variant="text"
             scale="sm"
-            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+            onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
           >
-            {balance.token.symbol}
+            {t('Clear')}
           </Button>
-        ))}
+        ) : null}
       </Flex>
       <Flex>
         <FlexGap gap="16px" pt="24px" pl="4px">

@@ -119,6 +119,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Amount Payable')}
             </Text>
           </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={currAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Total Liquidity')}
+            </Text>
+          </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {daysReceivable} {t('days')} {hoursReceivable} {t('hours')} {minutesReceivable} {t('minutes')}
           </Text>
@@ -130,12 +142,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Text>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Period Payable')}
-          </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {currAccount?.description ?? ''}
-          </Text>
-          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Description')}
           </Text>
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
@@ -226,6 +232,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Option ID')}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {currAccount?.description ?? ''}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Description')}
           </Text>
         </Flex>
       </ActionContent>

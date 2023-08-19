@@ -1,9 +1,10 @@
-import styled, { keyframes, css } from 'styled-components'
-import { Box, Flex, Text, useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
 import { Token } from '@pancakeswap/sdk'
-import Harvest from './Harvest'
+import styled, { keyframes, css } from 'styled-components'
+import PoolStatsInfo from 'views/ARPs/components/PoolStatsInfo'
+import Harvest from 'views/ARPs/components/PoolsTable/ActionPanel/Harvest'
+import { Box, Flex, Text, useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
+
 import Stake from './Stake'
-import PoolStatsInfo from '../../PoolStatsInfo'
 
 const expandAnimation = keyframes`
   from {
@@ -88,13 +89,19 @@ const ActionPanel: React.FC<any> = ({ account, pool, currAccount, expanded }) =>
     <StyledActionPanel expanded={expanded}>
       <InfoSection>
         <Flex flexDirection="column" mb="8px">
-          <PoolStatsInfo pool={pool} account={account} currAccount={currAccount} alignLinksToRight={isMobile} />
+          <PoolStatsInfo
+            hideAccounts
+            pool={pool}
+            account={account}
+            currAccount={currAccount}
+            alignLinksToRight={isMobile}
+          />
         </Flex>
       </InfoSection>
       <ActionContainer>
         <Box width="100%">
           <ActionContainer hasBalance>
-            <Harvest currAccount={currAccount} />
+            <Harvest pool={pool} currAccount={currAccount} />
             <Stake pool={pool} currAccount={currAccount} />
           </ActionContainer>
         </Box>

@@ -82,7 +82,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('%arp%', { arp: (arp ?? '')?.toString() })}
             </Heading>
             <Heading scale="md" color="text">
-              {t(ogARP?.description ?? '')}
+              {t(ogARP?.collection?.description ?? '')}
             </Heading>
             {isOwner ? (
               <Flex pt="17px">
@@ -113,7 +113,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{arp}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools?.length && pools[0]?.accounts}>
+        <PoolControls pools={ogARP?.accounts?.length && ogARP?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (
@@ -132,8 +132,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
                     key={pool.sousId}
-                    sousId={pool.sousId}
+                    sousId={ogARP.sousId}
                     account={account}
+                    currAccount={pool}
                   />
                 ))}
               </Pool.PoolsTable>

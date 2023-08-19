@@ -18,8 +18,6 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useAppDispatch } from 'state'
-import { useRouter } from 'next/router'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -31,7 +29,6 @@ interface ExpandedFooterProps {
 const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const [pendingTx, setPendingTx] = useState(false)
   const tokenAddress = currAccount?.token?.address || ''
 
   return (

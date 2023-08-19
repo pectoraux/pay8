@@ -8,6 +8,7 @@ import {
   useModal,
   Button,
   Link,
+  Text,
   FlexGap,
   IconButton,
   LanguageIcon,
@@ -27,6 +28,7 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/sponsors'
 import WebPagesModal from './WebPagesModal'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -35,7 +37,7 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
+const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const router = useRouter()
@@ -48,35 +50,63 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
 
   return (
     <>
+      {!hideAccounts ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Button
+            as={Link}
+            variant="text"
+            p="0"
+            height="auto"
+            color="primary"
+            endIcon={
+              pendingTx ? (
+                <AutoRenewIcon spin color="currentColor" />
+              ) : (
+                <ArrowForwardIcon
+                  onClick={() => {
+                    setPendingTx(true)
+                    router.push(`/sponsors/${sponsorAddress}`)
+                  }}
+                  color="primary"
+                />
+              )
+            }
+            isLoading={pendingTx}
+            onClick={() => {
+              setPendingTx(true)
+              router.push(`/sponsors/${sponsorAddress}`)
+            }}
+          >
+            {t('View All Accounts')}
+          </Button>
+        </Flex>
+      ) : null}
+      {pool?.profileId && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Profile ID')} {`->`} {pool.profileId}
+          </Text>
+        </Flex>
+      )}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <Button
-          as={Link}
-          variant="text"
-          p="0"
-          height="auto"
-          color="primary"
-          endIcon={
-            pendingTx ? (
-              <AutoRenewIcon spin color="currentColor" />
-            ) : (
-              <ArrowForwardIcon
-                onClick={() => {
-                  setPendingTx(true)
-                  router.push(`/sponsors/${sponsorAddress}`)
-                }}
-                color="primary"
-              />
-            )
-          }
-          isLoading={pendingTx}
-          onClick={() => {
-            setPendingTx(true)
-            router.push(`/sponsors/${sponsorAddress}`)
-          }}
-        >
-          {t('View All Accounts')}
-        </Button>
+        <Text color="primary" fontSize="14px">
+          {t('Bounty Required')} {`->`} {pool.bountyRequired ? t('Yes') : t('No')}
+        </Text>
       </Flex>
+      {pool.requiredIdentity ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Required Identity')} {`->`} {pool.requiredIdentity}
+          </Text>
+        </Flex>
+      ) : null}
+      {pool.valueName ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Value Name')} {`->`} {pool.valueName}
+          </Text>
+        </Flex>
+      ) : null}
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
@@ -91,10 +121,17 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
+      {pool?.sponsorAddress && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
+          <ScanLink href={getBlockExploreLink(pool?.sponsorAddress, 'address', chainId)} bold={false} small>
             {t('View Contract')}
+          </ScanLink>
+        </Flex>
+      )}
+      {pool?._ve !== ADDRESS_ZERO && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?._ve, 'address', chainId)} bold={false} small>
+            {t('View veNFT contract')}
           </ScanLink>
         </Flex>
       )}
@@ -125,7 +162,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.length
+        {pool?.accounts?.length && !hideAccounts
           ? pool?.accounts
               .filter(
                 (protocol) =>
@@ -149,7 +186,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
                 </Button>
               ))
           : null}
-        {pool?.accounts?.length ? (
+        {pool?.accounts?.length && !hideAccounts ? (
           <Button
             key="clear-all"
             variant="text"

@@ -9,6 +9,7 @@ import EndsInCell from './Cells/EndsInCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
@@ -25,21 +26,20 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       {Number(currAccount?.dueReceivable) ? (
         <TotalValueCell
           labelText={t('Amount Due')}
-          amount={currAccount?.dueReceivable}
-          decimals={currAccount?.token?.decimals}
+          amount={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals)}
+          decimals={5}
           symbol={currAccount?.token?.symbol ?? ''}
         />
       ) : null}
       {Number(currAccount?.duePayable) ? (
         <TotalValueCell
           labelText={t('Amount Payable')}
-          amount={currAccount?.duePayable}
-          decimals={currAccount?.token?.decimals}
+          amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
+          decimals={5}
           symbol={currAccount?.token?.symbol ?? ''}
         />
       ) : null}
-      <EndsInCell value={currAccount?.nextDueReceivable} labelText={t('Next Due')} />
-      <EndsInCell value={currAccount?.nextPayable} labelText={t('Next Payable')} />
+      <EndsInCell currAccount={currAccount} t={t} />
     </>
   )
   return (

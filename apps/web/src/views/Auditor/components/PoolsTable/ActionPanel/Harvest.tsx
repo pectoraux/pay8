@@ -22,7 +22,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
         {t('Auditor Uses')}{' '}
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {currAccount?.token?.symbol}
+        {currAccount?.token?.symbol ?? ''}
       </Text>
     </>
   )
@@ -47,9 +47,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={currAccount?.token.decimals}
               value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token.decimals)}
-              unit={` ${currAccount?.token.symbol}`}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Paid Receivable')}
@@ -60,9 +59,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={currAccount?.token.decimals}
               value={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token.decimals)}
-              unit={` ${currAccount?.token.symbol}`}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Amount Receivable')}

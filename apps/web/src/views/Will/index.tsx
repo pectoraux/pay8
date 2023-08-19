@@ -57,7 +57,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Heading scale="md" color="text">
               {t(ogWill?.collection?.description ?? '')}
             </Heading>
-            {ogWill?.devaddr_?.toLowerCase() === account?.toLowerCase() ? (
+            {ogWill?.collection?.owner?.toLowerCase() === account?.toLowerCase() ? (
               <Flex>
                 <Button p="0" variant="text">
                   <Text color="primary" onClick={onPresentAdminSettings} bold fontSize="16px" mr="4px">
@@ -87,7 +87,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{will}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools?.length && pools[0]?.accounts}>
+        <PoolControls pools={ogWill?.accounts?.length && ogWill?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>
@@ -95,8 +95,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
                     key={pool.sousId}
-                    sousId={pool.sousId}
+                    sousId={ogWill.sousId}
                     account={account}
+                    currAccount={pool}
                   />
                 ))}
               </Pool.PoolsTable>

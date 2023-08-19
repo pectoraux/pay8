@@ -96,7 +96,7 @@ const SetPriceStage: React.FC<any> = ({
           onClick={continueToNextStage}
           // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
-          {t('Withdraw')}
+          {t('Pay')}
         </Button>
       </Flex>
     </>

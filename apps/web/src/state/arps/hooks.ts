@@ -1,9 +1,9 @@
-import { useRouter } from 'next/router'
+import useSWR from 'swr'
 import { useMemo } from 'react'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import { useRouter } from 'next/router'
+import { batch, useSelector } from 'react-redux'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { fetchArpsAsync, fetchArpSgAsync } from '.'
 import {
   currPoolSelector,
@@ -18,16 +18,25 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromArp = router.query.arp
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchArpSgAsync({ fromArp }))
-        dispatch(fetchArpsAsync({ fromArp }))
-      })
-    }
+  useSWR(
+    ['/arps'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchArpSgAsync({ fromArp }))
+          dispatch(fetchArpsAsync({ fromArp }))
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch, chainId, fromArp])
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: true,
+      revalidateIfStale: true,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {

@@ -1,40 +1,46 @@
 import { memo } from 'react'
-import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { usePool } from 'state/auditors/hooks'
+import { usePool } from 'state/bills/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 
 import NameCell from './Cells/NameCell'
 import EndsInCell from './Cells/EndsInCell'
 import ActionPanel from './ActionPanel/ActionPanel'
-import TotalUsersCell from './Cells/TotalUsersCell'
+import CreditCell from './Cells/CreditCell'
+import DebitCell from './Cells/DebitCell'
 import TotalValueCell from './Cells/TotalValueCell'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
-const PoolRow: React.FC<any> = ({ id, account, currAccount, initialActivity }) => {
-  const { pool } = usePool(id)
+const PoolRow: React.FC<any> = ({ sousId, account, currAccount, initialActivity }) => {
+  const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
-  console.log('billpool==========>', pool)
+  console.log('billpool1==========>', pool, currAccount)
   const tabs = (
     <>
       <NameCell pool={pool} currAccount={currAccount} />
-      <TotalUsersCell labelText={t('ESG Rating')} amount={currAccount?.esgRating ?? 0} />
+      <CreditCell currAccount={currAccount} />
+      <DebitCell currAccount={currAccount} />
       <TotalValueCell
-        labelText={t('Amount Due')}
-        amount={currAccount?.amountReceivable}
-        decimals={currAccount?.token?.decimals}
+        labelText={t('Due Payable')}
+        amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
+        decimals={5}
         symbol={currAccount?.token?.symbol ?? ''}
       />
       <TotalValueCell
-        labelText={t('Liquidity')}
-        amount={currAccount?.totalLiquidity}
-        decimals={currAccount?.token?.decimals}
+        labelText={t('Due Receivable')}
+        amount={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals)}
+        decimals={5}
         symbol={currAccount?.token?.symbol ?? ''}
       />
-      <EndsInCell currAccount={currAccount} labelText={t('Next Due')} />
+      <EndsInCell currAccount={currAccount} t={t} />
     </>
   )
   return (
-    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
+    <Pool.ExpandRow
+      initialActivity={initialActivity}
+      panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
+    >
       {isMobile ? (
         <TabMenu>
           {tabs}

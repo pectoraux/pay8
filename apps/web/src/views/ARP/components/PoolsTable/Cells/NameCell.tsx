@@ -26,7 +26,6 @@ const NameCell: React.FC<any> = ({ pool, currAccount }) => {
 
   return (
     <StyledCell role="cell">
-      <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
       <Pool.CellContent>
         <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
           <Flex flexDirection="column">
@@ -35,7 +34,7 @@ const NameCell: React.FC<any> = ({ pool, currAccount }) => {
               onClick={() => addWatchlistToken(pool?.id)}
               style={{ marginRight: '20px', position: 'relative' }}
             />
-            <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
+            <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
             {truncateHash(currAccount?.id)}
           </Flex>
         </Text>

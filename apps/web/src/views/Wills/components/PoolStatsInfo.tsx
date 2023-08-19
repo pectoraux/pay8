@@ -1,13 +1,10 @@
 import {
   Flex,
   LinkExternal,
-  AutoRenewIcon,
-  ArrowForwardIcon,
   Pool,
   ScanLink,
-  useModal,
-  Button,
   Link,
+  Text,
   FlexGap,
   IconButton,
   LanguageIcon,
@@ -15,6 +12,9 @@ import {
   TelegramIcon,
   ProposalIcon,
   SmartContractIcon,
+  Button,
+  AutoRenewIcon,
+  ArrowForwardIcon,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -22,11 +22,10 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrBribe, useCurrPool } from 'state/wills/hooks'
+import { useCurrBribe } from 'state/wills/hooks'
 import { useAppDispatch } from 'state'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { useRouter } from 'next/router'
-import { setCurrPoolData } from 'state/wills'
-import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -35,45 +34,142 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksToRight = true }) => {
+const PoolStatsInfo: React.FC<any> = ({
+  pool,
+  account,
+  currAccount,
+  hideAccounts = false,
+  alignLinksToRight = true,
+}) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const dispatch = useAppDispatch()
   const currState2 = useCurrBribe()
+  const router = useRouter()
+  const [pendingTx, setPendingTx] = useState(false)
   const earningToken = useMemo(
     () => pool?.tokens?.find((n) => n.tokenAddress === currState2[pool?.id]),
     [pool, currState2],
   )
   const tokenAddress = earningToken?.address || ''
-
+  const {
+    days: daysActive,
+    hours: hoursActive,
+    minutes: minutesActive,
+  } = getTimePeriods(Number(pool?.activePeriod ?? '0'))
+  const {
+    days: daysUpdate,
+    hours: hoursUpdate,
+    minutes: minutesUpdate,
+  } = getTimePeriods(Number(pool?.updatePeriod ?? '0'))
+  const {
+    days: daysWithdrawalActive,
+    hours: hoursWithdrawalActive,
+    minutes: minutesWithdrawalActive,
+  } = getTimePeriods(Number(pool?.willWithdrawalActivePeriod ?? '0'))
+  const {
+    days: daysWithdrawal,
+    hours: hoursWithdrawal,
+    minutes: minutesWithdrawal,
+  } = getTimePeriods(Number(pool?.willWithdrawalPeriod ?? '0'))
   return (
     <>
-      {pool?.owner && (
+      {!hideAccounts ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
+          <Button
+            as={Link}
+            variant="text"
+            p="0"
+            height="auto"
+            color="primary"
+            endIcon={
+              pendingTx ? (
+                <AutoRenewIcon spin color="currentColor" />
+              ) : (
+                <ArrowForwardIcon
+                  onClick={() => {
+                    setPendingTx(true)
+                    router.push(`/wills/${pool?.id}`)
+                  }}
+                  color="primary"
+                />
+              )
+            }
+            isLoading={pendingTx}
+            onClick={() => {
+              setPendingTx(true)
+              router.push(`/wills/${pool?.id}`)
+            }}
+          >
+            {t('View All Accounts')}
+          </Button>
+        </Flex>
+      ) : null}
+      <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="secondary" fontSize="14px">
+          {daysActive} {t('days')} {hoursActive} {t('hours')} {minutesActive} {t('minutes')}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Active Period')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="secondary" fontSize="14px">
+          {daysUpdate} {t('days')} {hoursUpdate} {t('hours')} {minutesUpdate} {t('minutes')}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Update Period')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="secondary" fontSize="14px">
+          {daysWithdrawalActive} {t('days')} {hoursWithdrawalActive} {t('hours')} {minutesWithdrawalActive}{' '}
+          {t('minutes')}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Will Withdrawal Active Period')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="secondary" fontSize="14px">
+          {daysWithdrawal} {t('days')} {hoursWithdrawal} {t('hours')} {minutesWithdrawal} {t('minutes')}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Will Withdrawal Period')}
+        </Text>
+      </Flex>
+      {pool?.contractMedia ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Contract Media')} {`->`} {pool.contractMedia}
+          </Text>
+        </Flex>
+      ) : null}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Unlocked')} {`->`} {pool.unlocked ? t('Yes') : t('No')}
+        </Text>
+      </Flex>
+      {pool?.collection?.owner && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?.collection?.owner, 'address', chainId)} bold={false} small>
             {t('View Owner Info')}
           </ScanLink>
         </Flex>
       )}
-      {pool?.devaddr_ && (
+      {pool?.willAddress && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.devaddr_, 'address', chainId)} bold={false} small>
-            {t('View Admin Info')}
-          </ScanLink>
-        </Flex>
-      )}
-      {pool?.rampAddress && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
+          <ScanLink href={getBlockExploreLink(pool?.willAddress, 'address', chainId)} bold={false} small>
             {t('View Contract')}
           </ScanLink>
         </Flex>
       )}
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
-          {t('See Admin Channel')}
-        </LinkExternal>
-      </Flex>
+      {pool?.collection ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal href={`/cancan/collections/${pool?.collection?.id}`} bold={false} small>
+            {t('See Admin Channel')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

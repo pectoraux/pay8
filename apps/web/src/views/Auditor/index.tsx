@@ -16,18 +16,18 @@ import {
   useModal,
   Breadcrumbs,
 } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/auditors/hooks'
 import Page from 'components/Layout/Page'
-import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useTranslation } from '@pancakeswap/localization'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateGaugeModal from 'views/Auditors/components/CreateGaugeModal'
+import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/auditors/hooks'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 const FinishedTextButton = styled(Button)`
   font-weight: 400;
@@ -98,7 +98,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text>{auditor}</Text>
           </Breadcrumbs>
         </Box>
-        <PoolControls pools={pools?.length && pools?.accounts}>
+        <PoolControls pools={ogAuditor?.accounts?.length && ogAuditor?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {isOwner ? (
@@ -116,9 +116,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 {chosenPools.map((pool) => (
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
-                    key={pool.sousId}
-                    sousId={pool.sousId}
+                    key={pool.id}
+                    sousId={ogAuditor.sousId}
                     account={account}
+                    currAccount={pool}
                   />
                 ))}
               </Pool.PoolsTable>
