@@ -22,7 +22,9 @@ export const getBetting = async (bettingAddress) => {
       { bettingAddress },
     )
     const bettingEvents = res.betting?.bettingEvents?.map((be) => {
-      const currPeriod = Number((Date.now() / 1000 - Number(be.startTime || 0)) / Number(be.bracketDuration || 0))
+      const currPeriod = parseInt(
+        ((Date.now() / 1000 - Number(be.startTime || 0)) / Number(be.bracketDuration || 0)).toString(),
+      )
       const currStart = parseInt(be.startTime || 0) + currPeriod * parseInt(be.bracketDuration || 0)
       const currEnd = currStart + parseInt(be.bracketDuration)
       return {
@@ -278,7 +280,7 @@ export const getCalculateRewardsForTicketId = async (bettingAddress, bettingId, 
           },
         ],
       })
-      return reward.result
+      return reward.result || '0'
     }),
   )
   console.log('getCalculateRewardsForTicketId===================>', rewards)

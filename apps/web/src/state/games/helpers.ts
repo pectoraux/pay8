@@ -14,7 +14,7 @@ import { gameMinterABI } from 'config/abi/gameMinter'
 import { gameFields, protocolFields } from './queries'
 
 export const fetchGameData = async (gameName, tokenId) => {
-  return (await firestore.collection('c4').doc('1').get()).data()
+  return (await firestore.collection(gameName).doc(tokenId).get()).data()
 }
 
 export const getProtocols = async (first = 5, skip = 0, where = {}) => {
@@ -213,7 +213,7 @@ export const fetchGame = async (gameId) => {
   )
   const accounts = await Promise.all(
     gameFromSg?.protocols?.map(async (protocol) => {
-      const [gameInfo_, receiver, objectNames, userDeadLine] = await bscClient.multicall({
+      const [gameInfo_, receiver, objectNames, userDeadLine, metadataUrl] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
           {
@@ -240,6 +240,12 @@ export const fetchGame = async (gameId) => {
             functionName: 'userDeadLines_',
             args: [BigInt(protocol?.id), BigInt(gameId)],
           },
+          {
+            address: getGameHelperAddress(),
+            abi: gameHelperABI,
+            functionName: 'tokenURI',
+            args: [BigInt(protocol?.id)],
+          },
         ],
       })
       const tokenOwner = gameInfo_.result[0]
@@ -260,6 +266,7 @@ export const fetchGame = async (gameId) => {
         tokenOwner,
         lender,
         game,
+        metadataUrl: metadataUrl.result,
         receiver: receiver.result,
         objectNames: objectNames.result,
         timer: timer?.toString(),

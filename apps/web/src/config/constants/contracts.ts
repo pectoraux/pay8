@@ -309,19 +309,19 @@ export default {
   },
   gameHelper: {
     56: '0x',
-    4002: '0xF2aDCC4c959629B568D6fCFC7d582434bD2d34FA',
+    4002: '0x6Ff847c7EbDf92bA9E6D1DBD9c172d912f61C4D4',
   },
   gameHelper2: {
     56: '0x',
-    4002: '0x5B3EF7B2F0Fc499477e27cb656753554C9b6064B',
+    4002: '0xD3A538C35fEA83F7C696Fc5b80783dA5B3c4812A',
   },
   gameMinter: {
     56: '0x',
-    4002: '0xC32E6012b4bee4F47a1Aa647d3F1512aC56EFDB0',
+    4002: '0x45160eA1079e7A07160C2EA122A760cee0Ffcc71',
   },
   gameFactory: {
     56: '0x',
-    4002: '0x20886c6D212Fc074fC7F8B4ab9A466128A5a21F5',
+    4002: '0x87b5235830038Dc8b874fa5700BC3492E5Fd96bF',
   },
   paywallARPHelper: {
     56: '0x',
@@ -437,15 +437,15 @@ export default {
     56: '0x',
   },
   bettingHelper: {
-    4002: '0x6Db1E2079aB7fA65E793d33F14Da90F4D0409e7C',
+    4002: '0xE7c267Fa69166Cc6431916Cd0612F74BEb52E19D',
     56: '0x',
   },
   bettingMinter: {
-    4002: '0xD4DD6D416Ab00dff419080B3eD895a8338074434',
+    4002: '0xB486008DcD9770d452bF82A22bb6ae1FceE85bDE',
     56: '0x',
   },
   bettingFactory: {
-    4002: '0x875782F768E456ee75eb58aB83394840C219e3AC',
+    4002: '0x03b92F38DD4d6B66aFd5679F84f0A22291A325B3',
     56: '0x',
   },
   trustbounties: {

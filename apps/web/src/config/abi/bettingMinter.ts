@@ -108,6 +108,74 @@ export const bettingMinterABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string[]',
+        name: '_media',
+        type: 'string[]',
+      },
+      {
+        internalType: 'string[]',
+        name: '_description',
+        type: 'string[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'optionNames',
+        type: 'string[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'optionValues',
+        type: 'string[]',
+      },
+    ],
+    name: '_constructTokenURI',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_betting',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_protocolId',
+        type: 'uint256',
+      },
+    ],
+    name: '_getOptions',
+    outputs: [
+      {
+        internalType: 'string[]',
+        name: 'optionNames',
+        type: 'string[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'optionValues',
+        type: 'string[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: 'to',
         type: 'address',

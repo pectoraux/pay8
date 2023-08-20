@@ -641,6 +641,25 @@ export const gameFactoryABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getToken',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '',
         type: 'address',

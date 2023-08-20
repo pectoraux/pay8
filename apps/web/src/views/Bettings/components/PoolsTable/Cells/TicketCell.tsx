@@ -25,43 +25,34 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 1
     currTicket?.id,
     currAccount?.ticketSize,
   )
+  console.log('rewards============>', rewards)
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
         <Flex flexDirection="column" justifyContent="center" alignItems="flex-center">
-          {!currTicket ? (
-            <Flex flexDirection="row" mb="30x">
-              <Text mr="8px" mt="4px" fontSize="12px" color="primary" textAlign="left">
-                {t('Ticket #')}
-              </Text>
-              <Balance
-                decimals={0}
-                bold={!isMobile}
-                fontSize={isMobile ? '14px' : '16px'}
-                color={Number(currTicket?.ticketNumber) ? 'primary' : 'textDisabled'}
-                value={Number(currTicket?.ticketNumber) ?? 0}
-              />
-            </Flex>
-          ) : (
-            <>
-              <Text mr="8px" mb="10px" fontSize="12px" color="failure" textAlign="left">
-                {t('Ticket Rewards Per Bracket (%val%)', { val: currTicket?.claimed ? 'CLAIMED' : 'UNCLAIMED' })}
-              </Text>
-              <Flex flexDirection="column" overflow="auto" maxHeight="50px" position="relative">
-                {rewards?.length &&
-                  rewards?.map((rwd, index) => (
-                    <Balance
-                      decimals={5}
-                      bold={!isMobile}
-                      fontSize="13px"
-                      color={Number(currTicket?.rewards) ? 'primary' : 'textDisabled'}
-                      value={getBalanceNumber(new BigNumber(rwd.toString()), decimals) ?? 0}
-                      prefix={`${index + 1}) `}
-                    />
-                  ))}
-              </Flex>
-            </>
-          )}
+          <Text fontSize="12px" color="failure" textAlign="left">
+            {t('Ticket Rewards Per Bracket (%val%)', { val: currTicket?.claimed ? 'CLAIMED' : 'UNCLAIMED' })}
+          </Text>
+          <Flex flexDirection="row" mb="30x">
+            <Text mr="8px" mt="4px" fontSize="12px" color="primary" textAlign="left">
+              {currTicket ? t('#%val%', { val: currTicket?.ticketNumber }) : 'N/A'}
+            </Text>
+          </Flex>
+          <Flex flexDirection="column" overflow="auto" maxHeight="50px" position="relative">
+            {rewards?.length &&
+              rewards
+                ?.filter((rwd) => !!rwd)
+                ?.map((rwd, index) => (
+                  <Balance
+                    decimals={5}
+                    bold={!isMobile}
+                    fontSize="13px"
+                    color={Number(currTicket?.rewards) ? 'primary' : 'textDisabled'}
+                    value={getBalanceNumber(new BigNumber(rwd.toString()), decimals) ?? 0}
+                    prefix={`${index + 1}) `}
+                  />
+                ))}
+          </Flex>
         </Flex>
       </Pool.CellContent>
     </StyledCell>

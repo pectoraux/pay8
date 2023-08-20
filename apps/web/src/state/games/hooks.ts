@@ -14,7 +14,7 @@ import {
 } from './selectors'
 
 export const useGetGame = (gameName: string, tokenId: string) => {
-  const { data } = useSWRImmutable([gameName, tokenId], async () => fetchGameData(gameName, tokenId))
+  const { data } = useSWRImmutable(['fb-score', gameName, tokenId], async () => fetchGameData(gameName, tokenId))
   console.log('useGetGame===================>', data)
   return data
 }

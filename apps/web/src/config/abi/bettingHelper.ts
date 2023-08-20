@@ -948,9 +948,9 @@ export const bettingHelperABI = [
         type: 'uint256[]',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: '_subjects',
-        type: 'string[]',
+        type: 'string',
       },
       {
         internalType: 'string',

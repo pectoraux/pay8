@@ -1,3 +1,4 @@
+import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -39,7 +40,7 @@ export const useGetSubjects = (bettingAddress, bettingId, ticketSize) => {
 }
 
 export const useGetCalculateRewardsForTicketId = (bettingAddress, bettingId, ticketId, bracketNumber) => {
-  const { data: rewards } = useSWRImmutable(['rewards-for-ticket1', bettingAddress, bettingId, ticketId], async () => {
+  const { data: rewards } = useSWRImmutable(['rewards-for-ticket', bettingAddress, bettingId, ticketId], async () => {
     try {
       return getCalculateRewardsForTicketId(bettingAddress, bettingId, ticketId, bracketNumber)
     } catch (err) {
@@ -74,16 +75,25 @@ export const useFetchPublicPoolsData = () => {
   const router = useRouter()
   const fromBetting = router.query.betting
 
-  useSWRImmutable(['bettings', fromBetting, chainId], () => {
-    const fetchPoolsDataWithFarms = async () => {
-      batch(() => {
-        dispatch(fetchBettingSgAsync({ fromBetting }))
-        dispatch(fetchBettingsAsync({ fromBetting }))
-      })
-    }
+  useSWR(
+    ['/bettings'],
+    async () => {
+      const fetchPoolsDataWithFarms = async () => {
+        batch(() => {
+          dispatch(fetchBettingSgAsync({ fromBetting }))
+          dispatch(fetchBettingsAsync({ fromBetting }))
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  })
+      fetchPoolsDataWithFarms()
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
+    },
+  )
 }
 
 export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {

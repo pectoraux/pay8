@@ -101,11 +101,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
-          {t('See Admin Channel')}
-        </LinkExternal>
-      </Flex>
+      {Number(pool?.collectionId) ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
+            {t('See Admin Channel')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       {currState && currState[pool?.id] ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
@@ -163,12 +165,16 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
         {currAccount?.tickets?.length
           ? currAccount?.tickets
-              .filter((balance) => balance.owner?.toLowerCase() === account?.toLowerCase())
+              .filter(
+                (balance) =>
+                  balance.owner?.toLowerCase() === account?.toLowerCase() ||
+                  pool?.owner?.toLowerCase() === account?.toLowerCase(),
+              )
               .map((balance) => (
                 <Button
                   key={balance.id}
                   onClick={() => {
-                    const newState = { ...currState, [pool?.id]: balance.id }
+                    const newState = { ...currState2, [pool?.id]: balance.id }
                     dispatch(setCurrBribeData(newState))
                   }}
                   mt="4px"

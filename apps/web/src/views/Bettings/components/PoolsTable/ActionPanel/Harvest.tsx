@@ -19,7 +19,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
     hours: hoursReceivable,
     minutes: minutesReceivable,
   } = getTimePeriods(Number(currAccount?.bracketDuration ?? '0'))
-  console.log('currAccount==================>', currAccount)
+  console.log('8currAccount==================>', pool, currAccount)
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -75,7 +75,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={currAccount?.token?.decimals ?? 18}
               value={getBalanceNumber(currAccount?.pricePerTicket, currAccount?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -160,14 +160,14 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Next To Close')}
             </Text>
           </Box>
-        </Flex>
-        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {currAccount?.action ?? ''}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Action')}
           </Text>
+        </Flex>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {currAccount?.description ?? ''}
           </Text>
@@ -223,6 +223,33 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Current Period')}
             </Text>
           </Box>
+          <Box mr="8px" height="32px">
+            {currAccount?.periods?.length > 0 ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={currAccount?.token?.decimals ?? 18}
+                value={getBalanceNumber(
+                  currAccount.periods[currAccount.periods.length - 1].amountCollected,
+                  currAccount?.token?.decimals ?? 18,
+                )}
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Collected Last Period')}
+            </Text>
+          </Box>
+          <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+            {currAccount?.periods?.length > 0 ? currAccount.periods[currAccount.periods.length - 1].finalNumber : 'N/A'}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Latest Winning Answer')}
+          </Text>
         </Flex>
       </ActionContent>
     </ActionContainer>
