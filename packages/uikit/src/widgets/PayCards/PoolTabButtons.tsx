@@ -75,7 +75,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
         <ButtonMenuItem as={NextLinkFromReactRouter} to="/cards" replace>
           {t("Cards")}
         </ButtonMenuItem>
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/cards/bounties/admin" replace>
+        <ButtonMenuItem as={NextLinkFromReactRouter} to="/trustbounties" replace>
           {t("Bounties")}
         </ButtonMenuItem>
       </ButtonMenu>

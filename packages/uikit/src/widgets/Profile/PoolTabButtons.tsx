@@ -87,7 +87,7 @@ const PoolTabButtons = ({
         <ButtonMenuItem as={NextLinkFromReactRouter} to={`/profile/${account}/transfers`} replace>
           {t("Profiles")}
         </ButtonMenuItem>
-        <ButtonMenuItem as={NextLinkFromReactRouter} to={`/profile/${account}/transfers#bounties`} replace>
+        <ButtonMenuItem as={NextLinkFromReactRouter} to="/trustbounties" replace>
           {t("Bounties")}
         </ButtonMenuItem>
       </ButtonMenu>

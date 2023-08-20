@@ -73,7 +73,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
 
   const { t } = useTranslation();
 
-  const isExact = router.pathname.includes("bounties");
+  const isExact = router.pathname.includes("trustbounties");
 
   const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
 
@@ -83,7 +83,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
         <ButtonMenuItem as={NextLinkFromReactRouter} to="/accelerator" replace>
           {t("Pitches")}
         </ButtonMenuItem>
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/accelerator/bounties" replace>
+        <ButtonMenuItem as={NextLinkFromReactRouter} to="/trustbounties" replace>
           {t("Bounties")}
         </ButtonMenuItem>
       </ButtonMenu>
