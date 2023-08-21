@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Box, ButtonMenu, ButtonMenuItem, Flex, Grid, Text, CommunityIcon } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
@@ -12,12 +12,14 @@ import groupBy from 'lodash/groupBy'
 import { FcHome } from 'react-icons/fc'
 import { FaHandshake } from 'react-icons/fa'
 import useGetCollectionDistribution from '../../hooks/useGetCollectionDistribution'
+
+import TagFilters from './TagFilters'
 import ClearAllButton from './ClearAllButton'
 import SortSelect from './SortSelect'
 
 interface FiltersProps {
   address: string
-  attributes: NftAttribute[]
+  collection: any
   setDisplayText: (string) => void
 }
 
@@ -88,8 +90,8 @@ const ScrollableFlexContainer = styled(Flex)`
   }
 `
 
-const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, attributes, setDisplayText }) => {
-  const { data } = useGetCollectionDistribution(address)
+const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, collection, setDisplayText }) => {
+  // const { data } = useGetCollectionDistribution(address)
   const { t } = useTranslation()
   const showOnlyNftsUsers = useGetNftShowOnlyUsers(address)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(address)
@@ -122,11 +124,6 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, att
     }
   }
 
-  const nftFilters = useGetNftFilters(address)
-
-  const attrsByType: Record<string, NftAttribute[]> = attributes ? groupBy(attributes, (attr) => attr.traitType) : null
-  const uniqueTraitTypes = attrsByType ? Object.keys(attrsByType) : []
-
   return (
     <GridContainer>
       <FilterByTitle textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
@@ -149,33 +146,13 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, att
           </ButtonMenuItem>
         </ButtonMenu>
       </FilterByControls>
+      <TagFilters address={address} collection={collection} />
       <SortByTitle fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600} mb="4px">
         {t('Sort By')}
       </SortByTitle>
       <SortByControls>
         <SortSelect collectionAddress={address} />
       </SortByControls>
-      <ScrollableFlexContainer>
-        {uniqueTraitTypes.map((traitType) => {
-          const attrs = attrsByType[traitType]
-          const items: Item[] = attrs.map((attr) => ({
-            label: capitalize(attr.value as string),
-            count: data && data[traitType] ? data[traitType][attr.value] : undefined,
-            attr,
-          }))
-
-          return (
-            <ListTraitFilter
-              key={traitType}
-              title={capitalize(traitType)}
-              traitType={traitType}
-              items={items}
-              collectionAddress={address}
-            />
-          )
-        })}
-        {!isEmpty(nftFilters) && <ClearAllButton collectionAddress={address} mb="4px" />}
-      </ScrollableFlexContainer>
     </GridContainer>
   )
 }

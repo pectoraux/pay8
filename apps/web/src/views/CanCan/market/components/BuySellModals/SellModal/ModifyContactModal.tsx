@@ -13,6 +13,7 @@ const ModifyCollectionModal: React.FC<any> = ({
   state,
   nftFilters,
   setNftFilters,
+  collection,
   handleChange,
   continueToNextStage,
 }) => {
@@ -115,7 +116,7 @@ const ModifyCollectionModal: React.FC<any> = ({
             onChange={handleChange}
           />
         </GreyedOutContainer>
-        <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
+        <Filters collection={collection} nftFilters={nftFilters} setNftFilters={setNftFilters} />
       </Box>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">

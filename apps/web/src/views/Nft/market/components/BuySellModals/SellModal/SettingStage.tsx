@@ -405,6 +405,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         <ModifyCollectionModal
           state={state}
           handleChange={handleChange}
+          nftFilters={nftFilters}
+          setNftFilters={setNewFilters}
+          collection={collection}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />

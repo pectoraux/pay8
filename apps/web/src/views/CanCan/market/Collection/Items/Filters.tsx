@@ -19,7 +19,7 @@ import SortSelect from './SortSelect'
 
 interface FiltersProps {
   address: string
-  attributes: NftAttribute[]
+  collection: any
   setDisplayText: (string) => void
 }
 
@@ -90,7 +90,7 @@ const ScrollableFlexContainer = styled(Flex)`
   }
 `
 
-const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, attributes, setDisplayText }) => {
+const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, collection, setDisplayText }) => {
   // const { data } = useGetCollectionDistribution(address)
   const { t } = useTranslation()
   const showOnlyNftsUsers = useGetNftShowOnlyUsers(address)
@@ -124,9 +124,6 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, att
     }
   }
 
-  const attrsByType: Record<string, NftAttribute[]> = attributes ? groupBy(attributes, (attr) => attr.traitType) : null
-  const uniqueTraitTypes = attrsByType ? Object.keys(attrsByType) : []
-
   return (
     <GridContainer>
       <FilterByTitle textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
@@ -149,33 +146,13 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, att
           </ButtonMenuItem>
         </ButtonMenu>
       </FilterByControls>
-      <TagFilters address={address} />
+      <TagFilters address={address} collection={collection} />
       <SortByTitle fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600} mb="4px">
         {t('Sort By')}
       </SortByTitle>
       <SortByControls>
         <SortSelect collectionAddress={address} />
       </SortByControls>
-      <ScrollableFlexContainer>
-        {uniqueTraitTypes.map((traitType) => {
-          const attrs = attrsByType[traitType]
-          const items: Item[] = attrs.map((attr) => ({
-            label: capitalize(attr.value as string),
-            count: 0, // data && data[traitType] ? data[traitType][attr.value] : undefined,
-            attr,
-          }))
-
-          return (
-            <ListTraitFilter
-              key={traitType}
-              title={capitalize(traitType)}
-              traitType={traitType}
-              items={items}
-              collectionAddress={address}
-            />
-          )
-        })}
-      </ScrollableFlexContainer>
     </GridContainer>
   )
 }

@@ -27,7 +27,7 @@ const Items = () => {
   return (
     <Box py="32px">
       <Flex flexDirection="row">
-        <Filters address={collection?.id || ''} attributes={collection?.attributes} setDisplayText={setDisplayText} />
+        <Filters address={collection?.id || ''} collection={collection} setDisplayText={setDisplayText} />
         <Flex
           style={{ gap: '16px', padding: '16px 16px 0 0' }}
           alignItems={[null, null, 'center']}

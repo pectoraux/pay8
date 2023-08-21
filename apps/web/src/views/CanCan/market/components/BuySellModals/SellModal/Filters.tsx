@@ -6,6 +6,7 @@ import { WORKSPACES, COUNTRIES, CITIES, PRODUCTS } from 'config'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { ListTraitFilter } from './ListTraitFilter'
 import { ListTraitFilter2 } from './ListTraitFilter2'
+import { useMemo } from 'react'
 
 interface FiltersProps {
   nftFilters: any
@@ -32,12 +33,22 @@ const ScrollableFlexContainer = styled(Flex)`
 
 const Filters: React.FC<any> = ({
   nftFilters,
+  collection,
   setNftFilters,
   showWorkspace = true,
   showCountry = true,
   showCity = true,
   showProduct = true,
 }) => {
+  let Country = require('country-state-city').Country
+  let City = require('country-state-city').City
+  const code = useMemo(
+    () =>
+      nftFilters?.country?.length &&
+      Country.getAllCountries()?.find((val) => val.name === nftFilters.country[0])?.isoCode,
+    [nftFilters],
+  )
+
   const workspaces = Object.entries(WORKSPACES)?.reduce(
     (accum: any, attr: any) => ({
       ...accum,
@@ -47,94 +58,68 @@ const Filters: React.FC<any> = ({
     }),
     {} as any,
   )
-  const countries = Object.entries(COUNTRIES)?.reduce(
+  const countries = Object.entries(Country.getAllCountries())?.reduce(
     (accum: any, attr: any) => ({
-      ...accum,
-      Country: nftFilters.workspace
-        ? accum.Country
-          ? [...accum.Country, { traitType: 'Country', value: attr[0], count: attr[1].Total }]
-          : [
-              {
-                traitType: 'Country',
-                value: attr[0],
-                count:
-                  nftFilters.workspace?.value && attr[1].Workspace ? attr[1].Workspace[nftFilters.workspace?.value] : 0,
-              },
-            ]
-        : accum.Country
-        ? [...accum.Country, { traitType: 'Country', value: attr[0], count: attr[1].Total }]
-        : [{ traitType: 'Country', value: attr[0], count: attr[1].Total }],
+      Country: accum.Country
+        ? [...accum.Country, { traitType: 'Country', value: attr[1].name, count: 0 }]
+        : [{ traitType: 'Country', value: attr[1].name, count: 0 }],
     }),
-    {} as any,
+    { traitType: 'Country', value: 'All', count: 0 } as any,
   )
-  const cities = Object.entries(CITIES)?.reduce(
-    (accum: any, attr: any) => ({
-      ...accum,
-      City: nftFilters.workspace
-        ? accum.City
-          ? [...accum.City, { traitType: 'City', value: attr[0], count: attr[1].Total }]
-          : [
-              {
-                traitType: 'City',
-                value: attr[0],
-                count:
-                  nftFilters.workspace.value && attr[1].Workspace ? attr[1].Workspace[nftFilters.workspace.value] : 0,
-              },
-            ]
-        : accum.City
-        ? [...accum.City, { traitType: 'City', value: attr[0], count: attr[1].Total }]
-        : [{ traitType: 'City', value: attr[0], count: attr[1].Total }],
-    }),
-    {} as any,
-  )
-  // .filter((item) => nftFilters.workspace ? item[1].Workspace === nftFilters.workspace?.value : true)
-  const productsHome = Object.entries(PRODUCTS)?.reduce(
-    (accum: any, attr: any) => ({
-      ...accum,
-      Product: nftFilters.city
-        ? accum.Product
-          ? [...accum.Product, { traitType: 'Product', value: attr[0], count: attr[1].City[nftFilters.city.value] }]
-          : [
-              {
-                traitType: 'Product',
-                value: attr[0],
-                count: nftFilters.city.value ? attr[1].City[nftFilters.city.value] : 0,
-              },
-            ]
-        : nftFilters.country
-        ? accum.Product
-          ? [
-              ...accum.Product,
-              { traitType: 'Product', value: attr[0], count: attr[1].Country[nftFilters.country.value] },
-            ]
-          : [
-              {
-                traitType: 'Product',
-                value: attr[0],
-                count: nftFilters.country.value ? attr[1].Country[nftFilters.country.value] : 0,
-              },
-            ]
-        : accum.Product
-        ? [...accum.Product, { traitType: 'Product', value: attr[0], count: attr[1].Total }]
-        : [{ traitType: 'Product', value: attr[0], count: attr[1].Total }],
-    }),
-    {} as any,
-  )
+  const cities: any =
+    Object.values(City.getCitiesOfCountry(code ?? ''))?.reduce(
+      (accum: any, attr: any) => ({
+        City: accum.City
+          ? [...accum.City, { traitType: 'City', value: attr.name, count: 0 }]
+          : [{ traitType: 'City', value: attr.name, count: 0 }],
+      }),
+      { traitType: 'City', value: 'All', count: 0 } as any,
+    ) || []
+  const productsHome =
+    collection?.products?.split(',')?.reduce(
+      (accum: any, attr: any) => ({
+        ...accum,
+        Product: accum.Product
+          ? [...accum.Product, { traitType: 'Product', value: attr, count: 0 }]
+          : [{ traitType: 'Product', value: attr, count: 0 }],
+      }),
+      {} as any,
+    ) || []
   const workspaceItems: Item[] = workspaces.Workspace.map((attr) => ({
     label: attr.value as string,
     count: attr.count ? attr.count : undefined,
     attr,
   }))
-  const countryItems: Item[] = countries.Country.map((attr) => ({
-    label: capitalize(attr.value as string),
-    count: attr.count ? attr.count : undefined,
-    attr,
-  }))
-  const cityItems: Item[] = cities.City.map((attr) => ({
-    label: attr.value as string,
-    count: attr.count ? attr.count : undefined,
-    attr,
-  }))
+  let countryItems =
+    countries.Country?.map((attr) => ({
+      label: capitalize(attr.value as string),
+      count: attr.count ? attr.count : undefined,
+      attr,
+    })) || []
+  countryItems.push({
+    label: 'All',
+    count: 0,
+    attr: {
+      traitType: 'Country',
+      value: 'All',
+      count: 0,
+    },
+  })
+  let cityItems =
+    cities.City?.map((attr) => ({
+      label: attr.value as string,
+      count: attr.count ? attr.count : undefined,
+      attr,
+    })) || []
+  cityItems.push({
+    label: 'All',
+    count: 0,
+    attr: {
+      traitType: 'City',
+      value: 'All',
+      count: 0,
+    },
+  })
   const productItems: Item[] = productsHome.Product?.map((attr) => ({
     label: attr.value as string,
     count: attr.count ? attr.count : undefined,
@@ -176,7 +161,7 @@ const Filters: React.FC<any> = ({
             collectionAddress={ADDRESS_ZERO}
           />
         )}
-        {showProduct && (
+        {showProduct && productItems && (
           <ListTraitFilter
             key="product"
             title={capitalize('product tags')}

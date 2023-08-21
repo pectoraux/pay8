@@ -29,6 +29,7 @@ const LocationStage: React.FC<any> = ({
   state,
   thumbnail,
   nftToSell,
+  collection,
   collectionId,
   variant,
   updateValue,
@@ -76,7 +77,7 @@ const LocationStage: React.FC<any> = ({
     <>
       <Box p="16px" maxWidth="360px">
         <Text fontSize="24px" bold>
-          {t('%variantName% Location Data', { variantName })}
+          {t('%variantName% Locations Data', { variantName })}
         </Text>
         <Flex p="16px">
           <RoundedImage src={thumbnail} height={68} width={68} mr="8px" />
@@ -261,7 +262,12 @@ const LocationStage: React.FC<any> = ({
             <Text mt="24px" color="textSubtle" mb="8px">
               {t("Click on each one of these to set your %variantName%'s location data", { variantName })}
             </Text>
-            <Filters showWorkspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
+            <Filters
+              collection={collection}
+              showWorkspace={false}
+              nftFilters={nftFilters}
+              setNftFilters={setNftFilters}
+            />
             <GreyedOutContainer style={{ paddingTop: '18px' }}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
                 {t('Not satisfied with above tags ? Add custom tags')}

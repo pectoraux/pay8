@@ -432,6 +432,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           state={state}
           nftFilters={nftFilters}
           setNftFilters={setNewFilters}
+          collection={collection}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />

@@ -449,6 +449,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           state={state}
           variant={variant}
           updateValue={updateValue}
+          collection={collection}
           nftFilters={nftFilters}
           setNftFilters={setNftFilters}
           handleChange={handleChange}

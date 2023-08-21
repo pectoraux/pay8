@@ -1,6 +1,8 @@
 import { Flex, Box, Text, Button, Input, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import Filters from 'views/ChannelCreation/Filters'
+
 import { MarketPlace } from './types'
 import { GreyedOutContainer } from './styles'
 import { Divider } from '../shared/styles'
@@ -12,7 +14,15 @@ interface RemoveStageProps {
   continueToNextStage: () => void
 }
 
-const ModifyCollectionModal: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
+const ModifyCollectionModal: React.FC<any> = ({
+  state,
+  nftFilters,
+  setNftFilters,
+  collection,
+  handleChange,
+  handleRawValueChange,
+  continueToNextStage,
+}) => {
   const { t } = useTranslation()
 
   return (
@@ -131,6 +141,7 @@ const ModifyCollectionModal: React.FC<any> = ({ state, handleChange, handleRawVa
             </ButtonMenu>
           </StyledItemRow>
         </GreyedOutContainer>
+        <Filters collection={collection} nftFilters={nftFilters} setNftFilters={setNftFilters} />
       </Box>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">

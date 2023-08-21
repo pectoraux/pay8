@@ -249,7 +249,12 @@ const CreateProposal = () => {
               </Box>
               <Box mb="24px">
                 <SecondaryLabel>{t("Click on each one of these to set your article's location data")}</SecondaryLabel>
-                <Filters showWorkspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
+                <Filters
+                  collection={collection}
+                  showWorkspace={false}
+                  nftFilters={nftFilters}
+                  setNftFilters={setNftFilters}
+                />
               </Box>
               <Box mb="24px">
                 <SecondaryLabel>{t('Not satisfied with above tags ? Add custom tags')}</SecondaryLabel>

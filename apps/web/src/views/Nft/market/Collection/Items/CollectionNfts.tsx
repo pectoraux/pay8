@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
   BunnyPlaceholderIcon,
   Spinner,
@@ -21,6 +21,8 @@ import {
   useGetSubscriptionStatus,
   useGetNftShowOnlyUsers,
   useGetNftShowOnlyOnSale,
+  useGetNftFilters,
+  useGetNftShowSearch,
 } from 'state/cancan/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
@@ -43,6 +45,9 @@ import AddPartnerModal from '../AddPartnerModal'
 import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
+import { selectFilteredData } from 'state/cancan/selectors'
+import { orderBy } from 'lodash'
+import latinise from '@pancakeswap/utils/latinise'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -52,7 +57,9 @@ interface CollectionNftsProps {
 const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   const { owner, id } = collection || {}
   const { t } = useTranslation()
-  const { nfts, isFetchingNfts, page, setPage, resultSize, isLastPage } = useCollectionNfts(id)
+  const { nfts: __nfts, isFetchingNfts, page, setPage, resultSize, isLastPage } = useCollectionNfts(id)
+  const showNftFilters = useGetNftFilters(id)
+  const showSearch = useGetNftShowSearch(id)
   const showOnlyNftsUsers = useGetNftShowOnlyUsers(id)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(id)
   const [currentPartner, setCurrentPartner] = useState(null)
@@ -61,14 +68,29 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   const [onPresentUnregister] = useModal(
     <UnregisterModal collectionId={id} userBountyId={userBountyId} userCollectionId={userCollectionId} />,
   )
-  console.log('nfts007=================>', nfts, collection)
   const handleLoadMore = useCallback(() => {
     setPage(page + 1)
   }, [setPage, page])
 
+  const _nfts = selectFilteredData(id, __nfts)
+  const nfts = useMemo(() => {
+    const newests = orderBy(_nfts, (nft) => (nft?.updatedAt ? Date.parse(nft.updatedAt) : 0), 'desc')
+    const newData = newests.filter((newest: any) => {
+      if (showSearch) {
+        const lowercaseQuery = latinise(showSearch.toLowerCase())
+        return (
+          latinise(newest?.id?.toLowerCase()).includes(lowercaseQuery) ||
+          latinise(newest?.description?.toLowerCase()).includes(lowercaseQuery)
+        )
+      }
+      return newest
+    })
+    return newData
+  }, [status, _nfts, showSearch])
   if ((!nfts || nfts?.length === 0) && isFetchingNfts) {
     return <GridPlaceholder />
   }
+  console.log('nfts007=================>', nfts, collection)
 
   return (
     <>

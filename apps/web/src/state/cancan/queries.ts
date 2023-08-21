@@ -200,6 +200,7 @@ collection {
   name
   large
   small
+  products
   totalVolumeBNB
 }
 tasks {

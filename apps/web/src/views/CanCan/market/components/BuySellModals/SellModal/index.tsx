@@ -110,6 +110,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
       ...option,
     }
   })
+  console.log('nftToSellnftToSell==========>', nftToSell)
   const { account } = useWeb3React()
   let { mp4, thumbnail } = getThumbnailNContent(nftToSell)
   const paywallARP = useGetPaywallARP(nftToSell?.collection?.id ?? '')
@@ -743,6 +744,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           state={state}
           variant={variant}
           nftFilters={nftFilters}
+          collection={nftToSell?.collection}
           setNftFilters={setNftFilters}
           updateValue={updateValue}
           handleChange={handleChange}

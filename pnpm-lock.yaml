@@ -670,6 +670,9 @@ importers:
       cookies-next:
         specifier: ^2.1.1
         version: 2.1.1
+      country-state-city:
+        specifier: ^3.0.0
+        version: 3.0.0(webpack@5.74.0)
       crypto-js:
         specifier: ^4.1.1
         version: 4.1.1
@@ -15358,6 +15361,21 @@ packages:
     dependencies:
       toggle-selection: 1.0.6
 
+  /copy-webpack-plugin@9.1.0(webpack@5.74.0):
+    resolution: {integrity: sha512-rxnR7PaGigJzhqETHGmAcxKnLZSR5u1Y3/bcIv/1FnqXedcL/E2ewK7ZCNrArJKCiSv8yVXhTqetJh8inDvfsA==}
+    engines: {node: '>= 12.13.0'}
+    peerDependencies:
+      webpack: ^5.1.0
+    dependencies:
+      fast-glob: 3.2.11
+      glob-parent: 6.0.2
+      globby: 11.1.0
+      normalize-path: 3.0.0
+      schema-utils: 3.1.1
+      serialize-javascript: 6.0.0
+      webpack: 5.74.0
+    dev: false
+
   /core-js-compat@3.26.0:
     resolution: {integrity: sha512-piOX9Go+Z4f9ZiBFLnZ5VrOpBl0h7IGCkiFUN11QTe6LjAvOT3ifL/5TdoizMh99hcGy5SoLyWbapIY/PIb/3A==}
     dependencies:
@@ -15413,6 +15431,14 @@ packages:
     dependencies:
       long: 4.0.0
       protobufjs: 6.11.3
+    dev: false
+
+  /country-state-city@3.0.0(webpack@5.74.0):
+    resolution: {integrity: sha512-iuJQteimcE/3Ryrk5dUw5Zw3elk1nOUYxwSu+2WKmOlE/CDpm+iOaansDb3M66g/5cXYSXN3V3bRtdpHIRrR6Q==}
+    dependencies:
+      copy-webpack-plugin: 9.1.0(webpack@5.74.0)
+    transitivePeerDependencies:
+      - webpack
     dev: false
 
   /countup.js@2.3.2:
@@ -23002,7 +23028,6 @@ packages:
   /normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /normalize-selector@0.2.0:
     resolution: {integrity: sha512-dxvWdI8gw6eAvk9BlPffgEoGfM7AdijoCwOEJge3e3ulT2XLgmU7KvvxprOaCu05Q1uGRHmOhHe1r6emZoKyFw==}

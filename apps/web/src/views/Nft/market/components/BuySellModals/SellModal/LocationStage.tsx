@@ -31,6 +31,7 @@ const LocationStage: React.FC<any> = ({
   updateValue,
   thumbnail,
   nftToSell,
+  collection,
   collectionId,
   nftFilters,
   setNftFilters,
@@ -256,7 +257,12 @@ const LocationStage: React.FC<any> = ({
             <Text mt="24px" color="textSubtle" mb="8px">
               {t('Click on each one of these to set location data of your collectible')}
             </Text>
-            <Filters showWorkspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
+            <Filters
+              collection={collection}
+              showWorkspace={false}
+              nftFilters={nftFilters}
+              setNftFilters={setNftFilters}
+            />
             <GreyedOutContainer style={{ paddingTop: '18px' }}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
                 {t('Not satisfied with above tags ? Add custom tags')}
