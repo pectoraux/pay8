@@ -12,6 +12,7 @@ import { useCallback, useState } from 'react'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateAcceleratorModal from './components/CreateAcceleratorModal'
+import Filters from 'views/ChannelCreation/Filters'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -22,6 +23,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateAcceleratorModal />)
+  const [nftFilters, setNftFilters] = useState({})
 
   usePoolsPageFetch()
 
@@ -47,6 +49,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>
+          </Flex>
+          <Flex justifyContent="flex-end" alignItems="flex-end">
+            <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
           </Flex>
         </Flex>
       </PageHeader>

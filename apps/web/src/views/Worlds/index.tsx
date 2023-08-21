@@ -8,6 +8,8 @@ import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateWorldModal from './components/CreateWorldModal'
+import Filters from 'views/ChannelCreation/Filters'
+import { useState } from 'react'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -15,6 +17,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const [onPresentCreateGauge] = useModal(<CreateWorldModal />)
+  const [nftFilters, setNftFilters] = useState({})
 
   usePoolsPageFetch()
 
@@ -42,6 +45,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>
+          </Flex>
+          <Flex justifyContent="flex-end" alignItems="flex-end">
+            <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
           </Flex>
         </Flex>
       </PageHeader>

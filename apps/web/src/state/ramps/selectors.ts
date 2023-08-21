@@ -19,15 +19,16 @@ const selectCurrPool = (state: State) => state.ramps?.currPool
 const selectFilteredData = (state: State) => {
   return state.ramps?.data.filter(
     (ramp) =>
-      (!state.ramps.filters.workspace ||
-        state.ramps.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.ramps.filters.workspace?.toLowerCase()) &&
-      (!state.ramps.filters.country ||
-        state.ramps.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.ramps.filters.country?.toLowerCase()) &&
-      (!state.ramps.filters.city ||
-        state.ramps.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.ramps.filters.city?.toLowerCase()),
+      !state.ramps.filters.country ||
+      state.ramps.filters.country.includes('All') ||
+      (state.ramps.filters.country.filter((value) =>
+        ramp?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+      ) &&
+        (!state.ramps.filters.city ||
+          state.ramps.filters.city.includes('All') ||
+          state.ramps.filters.city.filter((value) =>
+            ramp?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          ))),
   )
 }
 

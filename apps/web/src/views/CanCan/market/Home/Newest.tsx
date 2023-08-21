@@ -7,6 +7,8 @@ import { isAddress } from 'utils'
 
 import { CollectibleLinkCard } from '../components/CollectibleCard'
 import GridPlaceholder from '../components/GridPlaceholder'
+import { selectFilteredData } from 'state/cancan/selectors'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 /**
  * Fetch latest NFTs data from SG+API and combine them
@@ -30,7 +32,8 @@ const useNewestNfts = () => {
 
 const Newest: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-  const nfts = useNewestNfts()
+  const _nfts = useNewestNfts()
+  const nfts = selectFilteredData(ADDRESS_ZERO, _nfts)
 
   return (
     <>

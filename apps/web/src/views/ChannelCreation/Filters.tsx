@@ -84,7 +84,7 @@ const ScrollableFlexContainer = styled(Flex)`
   }
 `
 
-const Filters: React.FC<any> = ({ variant, collection, nftFilters, setNftFilters }) => {
+const Filters: React.FC<any> = ({ variant, collection, nftFilters, setNftFilters, workspace = true }) => {
   let Country = require('country-state-city').Country
   let City = require('country-state-city').City
   const code = useMemo(
@@ -173,15 +173,17 @@ const Filters: React.FC<any> = ({ variant, collection, nftFilters, setNftFilters
   return (
     <>
       <ScrollableFlexContainer>
-        <ListTraitFilter
-          key="workspace"
-          title={capitalize('workspace')}
-          traitType="workspace"
-          items={workspaceItems}
-          nftFilters={nftFilters}
-          setNftFilters={setNftFilters}
-          collectionAddress={ADDRESS_ZERO}
-        />
+        {workspace && (
+          <ListTraitFilter
+            key="workspace"
+            title={capitalize('workspace')}
+            traitType="workspace"
+            items={workspaceItems}
+            nftFilters={nftFilters}
+            setNftFilters={setNftFilters}
+            collectionAddress={ADDRESS_ZERO}
+          />
+        )}
         <ListTraitFilter
           key="country"
           title={capitalize('country')}

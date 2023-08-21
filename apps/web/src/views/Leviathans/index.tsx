@@ -8,12 +8,15 @@ import { LEVIATHANS } from 'config/constants/exchange'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
+import { useState } from 'react'
+import Filters from 'views/ChannelCreation/Filters'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
+  const [nftFilters, setNftFilters] = useState({})
 
   usePoolsPageFetch()
 
@@ -33,6 +36,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Heading scale="md" color="text">
               {t('Each nonprofit has a different set of goals and means to reach those goals.')}
             </Heading>
+          </Flex>
+          <Flex justifyContent="flex-end" alignItems="flex-end">
+            <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
           </Flex>
         </Flex>
       </PageHeader>

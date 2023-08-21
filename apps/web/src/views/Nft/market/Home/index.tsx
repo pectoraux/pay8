@@ -11,12 +11,13 @@ import PageLoader from 'components/Loader/PageLoader'
 import useTheme from 'hooks/useTheme'
 import orderBy from 'lodash/orderBy'
 import latinise from '@pancakeswap/utils/latinise'
+import TagFilters from 'views/CanCan/market/Collection/Items/TagFilters'
 
 import SearchBar from '../components/SearchBar'
 import Collections from './Collections'
 import Newest from './Newest'
 import config from './config'
-// import Filters from './Filters'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const Gradient = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientCardHeader};
@@ -116,7 +117,10 @@ const Home = () => {
               </Button>
             )}
           </div>
-          <SearchBar onChange={handleChangeSearchQuery} />
+          <Flex justifyContent="flex-end" alignItems="flex-end">
+            <TagFilters address={ADDRESS_ZERO} />
+            <SearchBar onChange={handleChangeSearchQuery} />
+          </Flex>
         </StyledHeaderInner>
       </StyledPageHeader>
       {status !== FetchStatus.Fetched ? (

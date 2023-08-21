@@ -8,6 +8,8 @@ import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateBettingModal from './components/CreateBettingModal'
+import { useState } from 'react'
+import Filters from 'views/ChannelCreation/Filters'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -15,6 +17,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const [onPresentCreateGauge] = useModal(<CreateBettingModal />)
+  const [nftFilters, setNftFilters] = useState({})
 
   usePoolsPageFetch()
 
@@ -41,11 +44,14 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>
           </Flex>
+          <Flex justifyContent="flex-end" alignItems="flex-end">
+            <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
+          </Flex>
         </Flex>
       </PageHeader>
       <Page>
         <PoolControls pools={pools}>
-          {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
+          {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (

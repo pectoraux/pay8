@@ -1,4 +1,8 @@
 import styled from 'styled-components'
+import { useCallback, useMemo, useState } from 'react'
+import latinise from '@pancakeswap/utils/latinise'
+import TagFilters from 'views/CanCan/market/Collection/Items/TagFilters'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { Box, Button, Flex, Heading, PageHeader, NextLinkFromReactRouter, PageSection } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
 import { useTranslation } from '@pancakeswap/localization'
@@ -12,8 +16,6 @@ import SearchBar from '../components/SearchBar'
 import Collections from './Collections'
 import Newest from './Newest'
 import config from './config'
-import { useCallback, useMemo, useState } from 'react'
-import latinise from '@pancakeswap/utils/latinise'
 
 const Gradient = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientCardHeader};
@@ -109,7 +111,10 @@ const Home = () => {
               </Button>
             )}
           </div>
-          <SearchBar onChange={handleChangeSearchQuery} />
+          <Flex justifyContent="flex-end" alignItems="flex-end">
+            <TagFilters address={ADDRESS_ZERO} />
+            <SearchBar onChange={handleChangeSearchQuery} />
+          </Flex>
         </StyledHeaderInner>
       </StyledPageHeader>
       {status !== FetchStatus.Fetched ? (

@@ -14,7 +14,6 @@ import { FaHandshake } from 'react-icons/fa'
 import useGetCollectionDistribution from '../../hooks/useGetCollectionDistribution'
 
 import TagFilters from './TagFilters'
-import ClearAllButton from './ClearAllButton'
 import SortSelect from './SortSelect'
 
 interface FiltersProps {

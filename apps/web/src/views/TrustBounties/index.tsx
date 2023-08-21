@@ -28,6 +28,7 @@ import { useCallback, useState } from 'react'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateBountyModal from './components/CreateBountyModal'
+import Filters from 'views/ChannelCreation/Filters'
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -56,6 +57,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentTrustBounties] = useModal(<CreateBountyModal currency={currency ?? inputCurency} />)
+  const [nftFilters, setNftFilters] = useState({})
 
   usePoolsPageFetch()
 
@@ -91,6 +93,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               </Button>
               <ArrowForwardIcon onClick={onPresentTrustBounties} color="primary" />
             </Flex>
+          </Flex>
+          <Flex justifyContent="flex-end" alignItems="flex-end">
+            <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
           </Flex>
         </Flex>
       </PageHeader>
