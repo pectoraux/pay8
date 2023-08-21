@@ -8,7 +8,7 @@ import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 const selectPoolsData = (state: State) => state.lotteries?.data
 const selectPoolData = (sousId) => (state: State) => state.lotteries?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.lotteries.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.lotteries.data.find((p) => p.lotteryAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.lotteries?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.lotteries ? state.lotteries[key] : {}
 const selectIfo = (state: State) => state.lotteries.ifo
@@ -18,16 +18,16 @@ const selectCurrBribe = (state: State) => state.lotteries?.currBribe
 const selectCurrPool = (state: State) => state.lotteries?.currPool
 const selectFilteredData = (state: State) => {
   return state.lotteries?.data.filter(
-    (ramp) =>
+    (lottery) =>
       (!state.lotteries.filters.workspace ||
         state.lotteries.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.lotteries.filters.workspace?.toLowerCase()) &&
+        lottery?.workspace?.toLowerCase() === state.lotteries.filters.workspace?.toLowerCase()) &&
       (!state.lotteries.filters.country ||
         state.lotteries.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.lotteries.filters.country?.toLowerCase()) &&
+        lottery?.country?.toLowerCase() === state.lotteries.filters.country?.toLowerCase()) &&
       (!state.lotteries.filters.city ||
         state.lotteries.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.lotteries.filters.city?.toLowerCase()),
+        lottery?.city?.toLowerCase() === state.lotteries.filters.city?.toLowerCase()),
   )
 }
 

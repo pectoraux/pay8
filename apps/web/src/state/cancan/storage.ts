@@ -6,8 +6,10 @@ import { useCallback } from 'react'
 
 const initialNftFilterState: NftFilter = {
   activeFilters: {},
+  showNftFilters: {},
   showOnlyUsers: false,
   showOnlyOnSale: true,
+  showSearch: '',
   ordering: {
     field: 'currentAskPrice',
     direction: 'asc',
@@ -123,6 +125,36 @@ export function useNftStorage() {
     [setNftMarketFilters, nftMarketFilters],
   )
 
+  const setShowNftFilters = useCallback(
+    ({ collection, showNftFilters }: { collection: string; showNftFilters: any }) => {
+      if (nftMarketFilters[collection]) {
+        nftMarketFilters[collection].showNftFilters = showNftFilters
+      } else {
+        nftMarketFilters[collection] = {
+          ...cloneDeep(initialNftFilterState),
+          showNftFilters,
+        }
+      }
+      setNftMarketFilters({ ...nftMarketFilters })
+    },
+    [setNftMarketFilters, nftMarketFilters],
+  )
+
+  const setShowSearch = useCallback(
+    ({ collection, showSearch }: { collection: string; showSearch: string }) => {
+      if (nftMarketFilters[collection]) {
+        nftMarketFilters[collection].showSearch = showSearch
+      } else {
+        nftMarketFilters[collection] = {
+          ...cloneDeep(initialNftFilterState),
+          showSearch,
+        }
+      }
+      setNftMarketFilters({ ...nftMarketFilters })
+    },
+    [setNftMarketFilters, nftMarketFilters],
+  )
+
   const setOrdering = useCallback(
     ({ collection, field, direction }: { collection: string; field: string; direction: 'asc' | 'desc' }) => {
       if (nftMarketFilters[collection]) {
@@ -153,7 +185,7 @@ export function useNftStorage() {
   )
 
   const updateItemFilters = useCallback(
-    ({ collectionAddress, nftFilters }: { collectionAddress: string; nftFilters: Record<string, NftAttribute> }) => {
+    ({ collectionAddress, nftFilters }: { collectionAddress: string; nftFilters: any }) => {
       if (nftMarketFilters[collectionAddress]) {
         nftMarketFilters[collectionAddress] = {
           ...nftMarketFilters[collectionAddress],
@@ -182,6 +214,8 @@ export function useNftStorage() {
     removeAllActivityCollectionFilters,
     setShowOnlyOnSale,
     setShowOnlyUsers,
+    setShowSearch,
+    setShowNftFilters,
     setOrdering,
     setTryVideoNftMedia,
     removeAllItemFilters,

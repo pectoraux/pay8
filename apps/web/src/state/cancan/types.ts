@@ -85,8 +85,10 @@ export interface NftToken {
 
 export interface NftFilter {
   activeFilters: Record<string, NftAttribute>
+  showNftFilters: Record<string, NftAttribute>
   showOnlyUsers: boolean
   showOnlyOnSale: boolean
+  showSearch: string
   ordering: {
     field: string
     direction: 'asc' | 'desc'

@@ -127,6 +127,16 @@ export const useGetNftShowOnlyUsers = (collectionAddress: string) => {
   return nftMarketFilters[collectionAddress]?.showOnlyUsers ?? false
 }
 
+export const useGetNftShowSearch = (collectionAddress: string) => {
+  const [nftMarketFilters] = useAtom(nftMarketFiltersAtom)
+  return nftMarketFilters[collectionAddress]?.showSearch ?? ''
+}
+
+export const useGetNftFilters2 = (collectionAddress: string) => {
+  const [nftMarketFilters] = useAtom(nftMarketFiltersAtom)
+  return nftMarketFilters[collectionAddress]?.showNftFilters ?? false
+}
+
 export const useTryVideoNftMedia = () => {
   const [tryVideoNftMedia] = useAtom(tryVideoNftMediaAtom)
   return tryVideoNftMedia ?? true
