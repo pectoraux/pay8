@@ -350,9 +350,9 @@ export const trustBountiesHelperABI = [
       },
       {
         indexed: false,
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'UpdateMiscellaneous',
@@ -872,9 +872,9 @@ export const trustBountiesHelperABI = [
         type: 'address',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'emitUpdateMiscellaneous',

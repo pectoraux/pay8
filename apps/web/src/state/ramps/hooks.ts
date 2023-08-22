@@ -25,11 +25,12 @@ import {
   ifoCeilingSelector,
   makeVaultPoolWithKeySelector,
   currPoolSelector,
+  filterSelector,
   currBribeSelector,
   poolsWithFilterSelector,
 } from './selectors'
 import { requiresApproval } from 'utils/requiresApproval'
-import { getAccountSg, getRampSg, getSession, getTokenData } from './helpers'
+import { getAccountSg, getRampSg, getSession, getTag, getTokenData } from './helpers'
 import axios from 'axios'
 import NodeRSA from 'encrypt-rsa'
 
@@ -101,6 +102,10 @@ export const useCurrBribe = () => {
 
 export const useCurrPool = () => {
   return useSelector(currPoolSelector)
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }
 
 export const usePoolsWithFilterSelector = () => {
@@ -175,6 +180,12 @@ export const useGetRequiresApproval = (c, a, s) => {
     status,
     needsApproval: data ?? true,
   }
+}
+
+export const useGetTags = () => {
+  const { data } = useSWR('ramps-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
 }
 
 export const usePoolsPageFetch = () => {

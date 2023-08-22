@@ -12,6 +12,29 @@ import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
 import { lotteryHelperABI } from 'config/abi/lotteryHelper'
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_LOTTERIES,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getLottery = async (lotteryId) => {
   try {
     const res = await request(

@@ -25,9 +25,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_BOUNTY_ID,
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.CONFIRM_VOTE,
+  LockStage.CONFIRM_UPDATE_LOCATION,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_LOCATION,
+  LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.TRANSFER_TO_NOTE_RECEIVABLE,
   LockStage.CONFIRM_TRANSFER_TO_NOTE_RECEIVABLE,
   LockStage.DEPOSIT_DUE,

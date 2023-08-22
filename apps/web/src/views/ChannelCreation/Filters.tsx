@@ -1,14 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
-import { Box, ButtonMenu, ButtonMenuItem, Flex, Grid, Text } from '@pancakeswap/uikit'
+import { Box, Flex, Grid, Text } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
-import isEmpty from 'lodash/isEmpty'
-import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { NftAttribute } from 'state/cancan/types'
-import { useTranslation } from '@pancakeswap/localization'
 import { Item } from 'views/CanCan/market/components/Filters'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { WORKSPACES, COUNTRIES, CITIES, PRODUCTS } from 'config'
+import { WORKSPACES } from 'config'
 import { ListTraitFilter } from './ListTraitFilter'
 
 interface FiltersProps {
@@ -84,7 +81,7 @@ const ScrollableFlexContainer = styled(Flex)`
   }
 `
 
-const Filters: React.FC<any> = ({ variant, collection, nftFilters, setNftFilters, workspace = true }) => {
+const Filters: React.FC<any> = ({ collection, nftFilters, setNftFilters, workspace = true }) => {
   let Country = require('country-state-city').Country
   let City = require('country-state-city').City
   const code = useMemo(

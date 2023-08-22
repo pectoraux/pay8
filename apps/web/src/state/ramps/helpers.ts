@@ -16,6 +16,29 @@ export const fetchRampData = async (rampAddress) => {
   return (await firestore.collection('ramps').doc(rampAddress).get()).data()
 }
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_RAMPS,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getRamps = async (first = 5, skip = 0, where = {}) => {
   try {
     const res = await request(

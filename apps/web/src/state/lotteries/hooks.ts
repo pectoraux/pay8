@@ -11,8 +11,9 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
+  filterSelector,
 } from './selectors'
-import { getRewardsForTicketId } from './helpers'
+import { getRewardsForTicketId, getTag } from './helpers'
 
 export const useFetchPublicPoolsData = () => {
   const { chainId } = useActiveChainId()
@@ -58,8 +59,18 @@ export const useCurrPool = () => {
   return useSelector(currPoolSelector)
 }
 
+export const useFilters = () => {
+  return useSelector(filterSelector)
+}
+
 export const usePoolsWithFilterSelector = () => {
   return useSelector(poolsWithFilterSelector)
+}
+
+export const useGetTags = () => {
+  const { data } = useSWR('lotteries-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
 }
 
 export const useGetRewardsForTicketId = (tokenAddress, lotteryId, ticketId) => {

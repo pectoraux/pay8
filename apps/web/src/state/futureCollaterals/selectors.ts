@@ -13,20 +13,31 @@ const selectIfoUserCredit = (state: State) => state.futureCollaterals.ifo.credit
 
 const selectCurrBribe = (state: State) => state.futureCollaterals?.currBribe
 const selectCurrPool = (state: State) => state.futureCollaterals?.currPool
+const selectFilters = (state: State) => state.futureCollaterals?.filters
 const selectFilteredData = (state: State) => {
-  return state.futureCollaterals?.data.filter(
-    (ramp) =>
-      (!state.futureCollaterals.filters.workspace ||
-        state.futureCollaterals.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.futureCollaterals.filters.workspace?.toLowerCase()) &&
+  return state.futureCollaterals?.data.filter((futureCollateral) => {
+    return (
       (!state.futureCollaterals.filters.country ||
-        state.futureCollaterals.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.futureCollaterals.filters.country?.toLowerCase()) &&
+        state.futureCollaterals.filters.country.includes('All') ||
+        state.futureCollaterals.filters.country.filter((value) =>
+          futureCollateral?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.futureCollaterals.filters.city ||
-        state.futureCollaterals.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.futureCollaterals.filters.city?.toLowerCase()),
-  )
+        state.futureCollaterals.filters.city.includes('All') ||
+        state.futureCollaterals.filters.city.filter((value) =>
+          futureCollateral?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.futureCollaterals.filters.product ||
+        state.futureCollaterals.filters.product.includes('All') ||
+        state.futureCollaterals.filters.product.filter((value) =>
+          futureCollateral?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

@@ -39,19 +39,20 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 1
             </Text>
           </Flex>
           <Flex flexDirection="column" overflow="auto" maxHeight="50px" position="relative">
-            {rewards?.length &&
-              rewards
-                ?.filter((rwd) => !!rwd)
-                ?.map((rwd, index) => (
-                  <Balance
-                    decimals={5}
-                    bold={!isMobile}
-                    fontSize="13px"
-                    color={Number(currTicket?.rewards) ? 'primary' : 'textDisabled'}
-                    value={getBalanceNumber(new BigNumber(rwd.toString()), decimals) ?? 0}
-                    prefix={`${index + 1}) `}
-                  />
-                ))}
+            {rewards?.length
+              ? rewards
+                  ?.filter((rwd) => !!rwd)
+                  ?.map((rwd, index) => (
+                    <Balance
+                      decimals={5}
+                      bold={!isMobile}
+                      fontSize="13px"
+                      color={Number(currTicket?.rewards) ? 'primary' : 'textDisabled'}
+                      value={getBalanceNumber(new BigNumber(rwd.toString()), decimals) ?? 0}
+                      prefix={`${index + 1}) `}
+                    />
+                  ))
+              : null}
           </Flex>
         </Flex>
       </Pool.CellContent>

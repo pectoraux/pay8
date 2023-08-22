@@ -11,8 +11,21 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
+  filterSelector,
 } from './selectors'
-import { getAmountCollected, getCalculateRewardsForTicketId, getCountWinnersPerBracket, getSubjects } from './helpers'
+import {
+  getAmountCollected,
+  getCalculateRewardsForTicketId,
+  getCountWinnersPerBracket,
+  getSubjects,
+  getTag,
+} from './helpers'
+
+export const useGetTags = () => {
+  const { data } = useSWR('bettings-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
+}
 
 export const useGetAmountCollected = (bettingAddress, bettingId, period) => {
   const { data: amountCollected, mutate: refetch } = useSWRImmutable(
@@ -115,4 +128,8 @@ export const useCurrPool = () => {
 
 export const usePoolsWithFilterSelector = () => {
   return useSelector(poolsWithFilterSelector)
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }

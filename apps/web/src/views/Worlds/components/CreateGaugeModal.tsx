@@ -55,6 +55,7 @@ import DeleteStage from './DeleteStage'
 import DeleteRampStage from './DeleteRampStage'
 import UpdateDiscountDivisorStage from './UpdateDiscountDivisorStage'
 import UpdatePenaltyDivisorStage from './UpdatePenaltyDivisorStage'
+import LocationStage from 'views/Ramps/components/LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -86,6 +87,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.MINT_PRESENT_WORLD]: t('Mint World'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
   [LockStage.CONFIRM_UPDATE_URI_GENERATOR]: t('Back'),
   [LockStage.CONFIRM_MINT_PRESENT_WORLD]: t('Back'),
@@ -187,9 +190,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
     name: pool?.name,
     applicationLink: pool?.world?.applicationLink,
     accounts: [],
+    customTags: '',
     // owner: currAccount?.owner || account
   }))
-
+  const [nftFilters, setNftFilters] = useState<any>({
+    workspace: pool?.workspaces,
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
+  })
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -206,6 +215,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
 
   const goBack = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       case LockStage.UPDATE_AUTOCHARGE:
         setStage(LockStage.SETTINGS)
         break
@@ -387,6 +402,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.UPDATE_AUTOCHARGE:
         setStage(LockStage.CONFIRM_UPDATE_AUTOCHARGE)
         break
@@ -495,6 +513,22 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.id,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(worldNoteContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_UPDATE_PROTOCOL) {
         let args
         try {
@@ -798,6 +832,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.MINT_PRESENT_WORLD)}>
             {t('MINT WORLD')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_WORLD_BOUNTY)}>
             {t('UPDATE WORLD BOUNTY')}
           </Button>
@@ -864,6 +901,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
             </Button>
           ) : null}
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE_DEV && (
         <UpdateDevStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

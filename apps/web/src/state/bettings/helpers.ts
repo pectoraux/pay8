@@ -7,6 +7,29 @@ import { publicClient } from 'utils/wagmi'
 import { bettingABI } from 'config/abi/betting'
 import { erc20ABI } from 'wagmi'
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_BETTINGS,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getBetting = async (bettingAddress) => {
   try {
     const res = await request(

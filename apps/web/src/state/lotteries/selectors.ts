@@ -16,20 +16,31 @@ const selectIfoUserCredit = (state: State) => state.lotteries.ifo.credit ?? BIG_
 
 const selectCurrBribe = (state: State) => state.lotteries?.currBribe
 const selectCurrPool = (state: State) => state.lotteries?.currPool
+const selectFilters = (state: State) => state.lotteries?.filters
 const selectFilteredData = (state: State) => {
-  return state.lotteries?.data.filter(
-    (lottery) =>
-      (!state.lotteries.filters.workspace ||
-        state.lotteries.filters.workspace === 'All' ||
-        lottery?.workspace?.toLowerCase() === state.lotteries.filters.workspace?.toLowerCase()) &&
+  return state.lotteries?.data.filter((lotterie) => {
+    return (
       (!state.lotteries.filters.country ||
-        state.lotteries.filters.country === 'All' ||
-        lottery?.country?.toLowerCase() === state.lotteries.filters.country?.toLowerCase()) &&
+        state.lotteries.filters.country.includes('All') ||
+        state.lotteries.filters.country.filter((value) =>
+          lotterie?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.lotteries.filters.city ||
-        state.lotteries.filters.city === 'All' ||
-        lottery?.city?.toLowerCase() === state.lotteries.filters.city?.toLowerCase()),
-  )
+        state.lotteries.filters.city.includes('All') ||
+        state.lotteries.filters.city.filter((value) =>
+          lotterie?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.lotteries.filters.product ||
+        state.lotteries.filters.product.includes('All') ||
+        state.lotteries.filters.product.filter((value) =>
+          lotterie?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

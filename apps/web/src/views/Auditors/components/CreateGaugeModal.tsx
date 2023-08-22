@@ -47,6 +47,7 @@ import ClaimNoteStage from './ClaimNoteStage'
 import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import UpdateRatingLegendStage from './UpdateRatingLegendStage'
+import LocationStage from 'views/Ramps/components/LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -78,6 +79,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
   [LockStage.UPDATE_TAG_REGISTRATION]: t('Update Tag Registration'),
   [LockStage.UPDATE_DATA_KEEPER]: t('Update Data Keeper'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
   [LockStage.CONFIRM_TRANSFER_TO_NOTE_RECEIVABLE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_DATA_KEEPER]: t('Back'),
@@ -182,9 +185,10 @@ const CreateGaugeModal: React.FC<any> = ({
     auditorDescription: pool?.auditorDescription ?? '',
     datakeeper: 0,
     accounts: [],
+    customTags: '',
   }))
 
-  const [nftFilters, setNewFilters] = useState({
+  const [nftFilters, setNftFilters] = useState<any>({
     workspace: pool?.workspaces,
     country: pool?.countries,
     city: pool?.cities,
@@ -207,6 +211,12 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const goBack = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
@@ -376,6 +386,9 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA)
         break
@@ -481,6 +494,22 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.id,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(auditorNoteContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA) {
         const args = [state.protocolId, state.tag]
         console.log('CONFIRM_UPDATE_SPONSOR_MEDIA===============>', args)
@@ -741,6 +770,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
             {t('UPDATE BOUNTY REQUIRED')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
             {t('AUTOCHARGE')}
           </Button>
@@ -808,6 +840,15 @@ const CreateGaugeModal: React.FC<any> = ({
             </Button>
           ) : null}
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE_DISCOUNT_DIVISOR && (
         <UpdateDiscountDivisorStage

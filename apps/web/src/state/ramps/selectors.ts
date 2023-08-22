@@ -16,21 +16,31 @@ const selectIfoUserCredit = (state: State) => state.ramps.ifo.credit ?? BIG_ZERO
 
 const selectCurrBribe = (state: State) => state.ramps?.currBribe
 const selectCurrPool = (state: State) => state.ramps?.currPool
+const selectFilters = (state: State) => state.ramps?.filters
 const selectFilteredData = (state: State) => {
-  return state.ramps?.data.filter(
-    (ramp) =>
-      !state.ramps.filters.country ||
-      state.ramps.filters.country.includes('All') ||
-      (state.ramps.filters.country.filter((value) =>
-        ramp?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
-      ) &&
-        (!state.ramps.filters.city ||
-          state.ramps.filters.city.includes('All') ||
-          state.ramps.filters.city.filter((value) =>
-            ramp?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
-          ))),
-  )
+  return state.ramps?.data.filter((ramp) => {
+    return (
+      (!state.ramps.filters.country ||
+        state.ramps.filters.country.includes('All') ||
+        state.ramps.filters.country.filter((value) =>
+          ramp?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
+      (!state.ramps.filters.city ||
+        state.ramps.filters.city.includes('All') ||
+        state.ramps.filters.city.filter((value) =>
+          ramp?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.ramps.filters.product ||
+        state.ramps.filters.product.includes('All') ||
+        state.ramps.filters.product.filter((value) =>
+          ramp?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe
@@ -43,6 +53,7 @@ export const currPoolSelector = createSelector([selectCurrPool], (currPool) => {
 export const poolsWithFilterSelector = createSelector(
   [selectFilteredData, selectUserDataLoaded],
   (pools, userDataLoaded) => {
+    console.log('poolsWithFilterSelector===============>', pools)
     return { pools, userDataLoaded }
   },
 )

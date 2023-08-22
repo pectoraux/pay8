@@ -4,20 +4,31 @@ import { State } from '../types'
 const selectPoolsData = (state: State) => state.pools.data
 const selectCurrBribe = (state: State) => state.pools.currBribe
 const selectCurrPool = (state: State) => state.pools.currPool
+const selectFilters = (state: State) => state.pools?.filters
 const selectFilteredData = (state: State) => {
-  return state.pools.data.filter(
-    (pool) =>
-      (!state.pools.filters.workspace ||
-        state.pools.filters.workspace === 'All' ||
-        pool?.workspace?.toLowerCase() === state.pools.filters.workspace?.toLowerCase()) &&
+  return state.pools?.data.filter((pool) => {
+    return (
       (!state.pools.filters.country ||
-        state.pools.filters.country === 'All' ||
-        pool?.country?.toLowerCase() === state.pools.filters.country?.toLowerCase()) &&
+        state.pools.filters.country.includes('All') ||
+        state.pools.filters.country.filter((value) =>
+          pool?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.pools.filters.city ||
-        state.pools.filters.city === 'All' ||
-        pool?.city?.toLowerCase() === state.pools.filters.city?.toLowerCase()),
-  )
+        state.pools.filters.city.includes('All') ||
+        state.pools.filters.city.filter((value) =>
+          pool?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.pools.filters.product ||
+        state.pools.filters.product.includes('All') ||
+        state.pools.filters.product.filter((value) =>
+          pool?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 const selectPoolData = (sousId) => (state: State) => state.pools.data.find((p) => p.sousId === sousId)
 const selectUserDataLoaded = (state: State) => state.pools.userDataLoaded
 

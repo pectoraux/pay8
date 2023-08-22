@@ -43,6 +43,29 @@ import { nftMarketHelper3ABI } from 'config/abi/nftMarketHelper3'
 import { veABI } from 'config/abi/ve'
 import { marketCollectionsABI } from 'config/abi/marketCollections'
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_CANCAN,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 /**
  * API HELPERS
  */

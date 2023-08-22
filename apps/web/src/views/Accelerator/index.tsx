@@ -1,9 +1,8 @@
 import { useAccount } from 'wagmi'
 import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/accelerator/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/accelerator/hooks'
 import Page from 'components/Layout/Page'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
@@ -12,7 +11,7 @@ import { useCallback, useState } from 'react'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateAcceleratorModal from './components/CreateAcceleratorModal'
-import Filters from 'views/ChannelCreation/Filters'
+import Filters from './Filters'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -23,7 +22,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateAcceleratorModal />)
-  const [nftFilters, setNftFilters] = useState({})
+  const nftFilters = useFilters()
+  const tags = useGetTags()
 
   usePoolsPageFetch()
 
@@ -51,7 +51,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </Flex>
           </Flex>
           <Flex justifyContent="flex-end" alignItems="flex-end">
-            <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
+            <Filters tags={tags} workspace={false} nftFilters={nftFilters} />
           </Flex>
         </Flex>
       </PageHeader>

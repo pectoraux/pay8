@@ -14,20 +14,31 @@ const selectIfoUserCredit = (state: State) => state.games.ifo.credit ?? BIG_ZERO
 
 const selectCurrBribe = (state: State) => state.games?.currBribe
 const selectCurrPool = (state: State) => state.games?.currPool
+const selectFilters = (state: State) => state.games?.filters
 const selectFilteredData = (state: State) => {
-  return state.games?.data.filter(
-    (game) =>
-      (!state.games.filters.workspace ||
-        state.games.filters.workspace === 'All' ||
-        game?.workspace?.toLowerCase() === state.games.filters.workspace?.toLowerCase()) &&
+  return state.games?.data.filter((game) => {
+    return (
       (!state.games.filters.country ||
-        state.games.filters.country === 'All' ||
-        game?.country?.toLowerCase() === state.games.filters.country?.toLowerCase()) &&
+        state.games.filters.country.includes('All') ||
+        state.games.filters.country.filter((value) =>
+          game?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.games.filters.city ||
-        state.games.filters.city === 'All' ||
-        game?.city?.toLowerCase() === state.games.filters.city?.toLowerCase()),
-  )
+        state.games.filters.city.includes('All') ||
+        state.games.filters.city.filter((value) =>
+          game?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.games.filters.product ||
+        state.games.filters.product.includes('All') ||
+        state.games.filters.product.filter((value) =>
+          game?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

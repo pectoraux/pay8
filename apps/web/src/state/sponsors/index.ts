@@ -75,6 +75,9 @@ export const PoolsSlice = createSlice({
     setCurrPoolData: (state, action) => {
       state.currPool = action.payload
     },
+    setFilters: (state, action) => {
+      state.filters = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetUserState, (state) => {
@@ -88,6 +91,7 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setSponsorsPublicData, setSponsorsUserData, setCurrBribeData, setCurrPoolData } = PoolsSlice.actions
+export const { setSponsorsPublicData, setSponsorsUserData, setCurrBribeData, setCurrPoolData, setFilters } =
+  PoolsSlice.actions
 
 export default PoolsSlice.reducer

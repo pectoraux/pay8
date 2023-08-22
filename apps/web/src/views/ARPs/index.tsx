@@ -1,13 +1,14 @@
 import { useAccount } from 'wagmi'
 import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/arps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/arps/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateARPModal from './components/CreateARPModal'
+import Filters from './Filters'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -15,6 +16,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const [onPresentCreateGauge] = useModal(<CreateARPModal />)
+  const nftFilters = useFilters()
+  const tags = useGetTags()
 
   usePoolsPageFetch()
 
@@ -42,6 +45,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>
+          </Flex>
+          <Flex justifyContent="flex-end" alignItems="flex-end">
+            <Filters tags={tags} workspace={false} nftFilters={nftFilters} />
           </Flex>
         </Flex>
       </PageHeader>

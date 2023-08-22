@@ -61,6 +61,7 @@ import UpdateUserIDProofStage from './UpdateUserIDProofStage'
 import UpdateVotingParametersStage from './UpdateVotingParametersStage'
 import UpdateVotingBlacklistStage from './UpdateVotingBlacklistStage'
 import NotifyPaymentStage from './NotifyPaymentStage'
+import LocationStage from 'views/Ramps/components/LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -96,6 +97,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_MEDIA]: t('Update Media'),
   [LockStage.UPDATE_VOTING_PARAMETERS]: t('Update Voting Parameters'),
   [LockStage.UPDATE_VOTING_BLACKLIST]: t('Update Voting Blacklist'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_MARKETPLACE]: t('Back'),
   [LockStage.CONFIRM_SWITCH_POOL]: t('Back'),
   [LockStage.CONFIRM_UPDATE_VOTING_BLACKLIST]: t('Back'),
@@ -271,7 +274,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     treasuryShare: pool?.treasuryShare,
     maxWithdrawable: pool?.maxWithdrawable,
     minimumSponsorPercentile: pool?.minimumSponsorPercentile,
+    customTags: '',
   }))
+  const [nftFilters, setNftFilters] = useState<any>({
+    workspace: pool?.workspaces,
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
+  })
   console.log('ppool==============>', pool, adminARP, valuepoolContract)
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -289,6 +299,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
 
   const goBack = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       case LockStage.MERGE:
         setStage(LockStage.SETTINGS)
         break
@@ -479,6 +495,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.ADD_CREDIT:
         setStage(LockStage.CONFIRM_ADD_CREDIT)
         break
@@ -593,6 +612,22 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.id,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(valuepoolHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_DELETE_VP) {
         console.log('CONFIRM_DELETE_VP===============>', [pool?.valuepoolAddress])
         return callWithGasPrice(valuepoolHelperContract, 'deleteVava', [pool?.valuepoolAddress]).catch((err) =>
@@ -950,6 +985,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_VP)}>
                 {t('UPDATE PARAMETERS')}
               </Button>
+              <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+                {t('UPDATE LOCATION')}
+              </Button>
               <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.UPDATE_MERCHANT_IDENTITY_PROOFS)}>
                 {t('UPDATE MERCHANT IDENTITY PROOFS')}
               </Button>
@@ -1012,6 +1050,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
             {t('ALL TRANSACTION HISTORY')}
           </Button>
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE_VOTING_BLACKLIST && (
         <UpdateVotingBlacklistStage

@@ -13,8 +13,16 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
+  filterSelector,
 } from './selectors'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { getTag } from './helpers'
+
+export const useGetTags = () => {
+  const { data } = useSWR('pools-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
+}
 
 export const useFetchPublicPoolsStats = () => {
   const [data, setData] = useState(null)
@@ -145,4 +153,8 @@ export const useIfoCredit = () => {
 
 export const useIfoCeiling = () => {
   return BIG_ZERO // useSelector(ifoCeilingSelector)
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }

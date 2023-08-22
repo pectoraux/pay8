@@ -6,7 +6,7 @@ import { State, VaultKey } from '../types'
 const selectPoolsData = (state: State) => state.stakemarket?.data
 const selectPoolData = (sousId) => (state: State) => state.stakemarket?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.stakemarket.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.stakemarket.data.find((p) => p.stakeAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.stakemarket?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.stakemarket ? state.stakemarket[key] : {}
 const selectIfo = (state: State) => state.stakemarket.ifo
@@ -14,20 +14,31 @@ const selectIfoUserCredit = (state: State) => state.stakemarket.ifo.credit ?? BI
 
 const selectCurrBribe = (state: State) => state.stakemarket?.currBribe
 const selectCurrPool = (state: State) => state.stakemarket?.currPool
+const selectFilters = (state: State) => state.stakemarket?.filters
 const selectFilteredData = (state: State) => {
-  return state.stakemarket?.data.filter(
-    (ramp) =>
-      (!state.stakemarket.filters.workspace ||
-        state.stakemarket.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.stakemarket.filters.workspace?.toLowerCase()) &&
+  return state.stakemarket?.data.filter((stake) => {
+    return (
       (!state.stakemarket.filters.country ||
-        state.stakemarket.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.stakemarket.filters.country?.toLowerCase()) &&
+        state.stakemarket.filters.country.includes('All') ||
+        state.stakemarket.filters.country.filter((value) =>
+          stake?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.stakemarket.filters.city ||
-        state.stakemarket.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.stakemarket.filters.city?.toLowerCase()),
-  )
+        state.stakemarket.filters.city.includes('All') ||
+        state.stakemarket.filters.city.filter((value) =>
+          stake?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.stakemarket.filters.product ||
+        state.stakemarket.filters.product.includes('All') ||
+        state.stakemarket.filters.product.filter((value) =>
+          stake?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

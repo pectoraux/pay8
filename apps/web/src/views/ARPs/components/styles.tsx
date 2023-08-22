@@ -10,6 +10,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
 export const stagesWithApproveButton = [LockStage.CONFIRM_UPDATE_AUTOCHARGE]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.CONFIRM_SPONSOR_TAG,
   LockStage.CONFIRM_UPDATE_CATEGORY,
   LockStage.CONFIRM_UPDATE_CAP,
@@ -50,6 +51,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_LOCATION,
+  LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.UPDATE_SPONSOR_MEDIA,
   LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA,
   LockStage.UPDATE_TOKEN_ID,

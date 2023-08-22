@@ -7,7 +7,7 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useERC20, useRampContract, useRampHelper, useRampAds } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
@@ -53,6 +53,7 @@ import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import { rampABI } from 'config/abi/ramp'
+import LocationStage from './LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -85,7 +86,9 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
   [LockStage.ADD_EXTRA_TOKEN]: t('Add Extra Token'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
   [LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE]: t('Back'),
@@ -175,8 +178,6 @@ const CreateGaugeModal: React.FC<any> = ({
   })
   console.log('mcurrencyy1===============>', currency, rampAccount, pool, rampContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
-  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const [nftFilters, setNftFilters] = useState<any>({})
   console.log('sessionId===================>', session, sessionId)
   const [state, setState] = useState<any>(() => ({
     sk: pool?.secretKeys && pool?.secretKeys[0],
@@ -185,6 +186,7 @@ const CreateGaugeModal: React.FC<any> = ({
     sponsor: '',
     tag: '',
     message: '',
+    customTags: '',
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
     tokenId: pool?.tokenId ?? '0',
@@ -245,6 +247,11 @@ const CreateGaugeModal: React.FC<any> = ({
     sessionId: session?.id || sessionId || '',
   }))
 
+  const [nftFilters, setNftFilters] = useState<any>({
+    countries: pool?.countries,
+    cities: pool?.cities,
+    products: pool?.products,
+  })
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -266,6 +273,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CONFIRM_INIT_RAMP:
         setStage(LockStage.INIT_RAMP)
+        break
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
         break
       case LockStage.CONFIRM_UPDATE_PARAMETERS:
         setStage(LockStage.UPDATE_PARAMETERS)
@@ -442,6 +455,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.INIT_RAMP:
         setStage(LockStage.CONFIRM_INIT_RAMP)
         break
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.UPDATE_DEV:
         setStage(LockStage.CONFIRM_UPDATE_DEV)
         break
@@ -561,6 +577,22 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_CREATE_PROTOCOL===============>', args)
         return callWithGasPrice(rampContract, 'createProtocol', args).catch((err) =>
           console.log('CONFIRM_CREATE_PROTOCOL===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.rampAddress,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_BLACKLIST) {
@@ -997,6 +1029,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
             {t('UPDATE PARAMETERS')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
             {t('ADD EXTRA TOKEN')}
           </Button>
@@ -1058,6 +1093,15 @@ const CreateGaugeModal: React.FC<any> = ({
           setNftFilters={setNftFilters}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />
       )}

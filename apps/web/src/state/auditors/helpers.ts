@@ -12,6 +12,29 @@ import { auditorNoteABI } from 'config/abi/auditorNote'
 import { getCollection } from 'state/cancan/helpers'
 import { auditorHelperABI } from 'config/abi/auditorHelper'
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_AUDITORS,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getProtocolsSg = async (userAddress: string): Promise<any> => {
   try {
     const res = await request(

@@ -28,6 +28,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
 export const stagesWithApproveButton = [LockStage.CONFIRM_PAY]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.CONFIRM_FOLLOW,
   LockStage.CONFIRM_DELETE,
   LockStage.CONFIRM_UPDATE_BOUNTY,
@@ -48,6 +49,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_LOCATION,
+  LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.FOLLOW,
   LockStage.PAY,
   LockStage.UPDATE_LATE_DAYS,

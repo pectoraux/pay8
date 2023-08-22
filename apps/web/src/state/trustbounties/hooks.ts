@@ -9,9 +9,17 @@ import { fetchBountiesAsync } from '.'
 import {
   currBribeSelector,
   currPoolSelector,
+  filterSelector,
   makePoolWithUserDataLoadingSelector,
   poolsWithFilterSelector,
 } from './selectors'
+import { getTag } from './helpers'
+
+export const useGetTags = () => {
+  const { data } = useSWR('trustbounties-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
+}
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -93,4 +101,8 @@ export const useGetRequiresApproval = (c, a, s) => {
     refetch: mutate,
     needsApproval: data ?? true,
   }
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }

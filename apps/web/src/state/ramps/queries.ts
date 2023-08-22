@@ -84,6 +84,9 @@ secretKeys
 clientIds
 channels
 profileId
+countries
+cities
+products
 likes
 dislikes
 sessions {

@@ -420,9 +420,9 @@ export const billMinterABI = [
       },
       {
         indexed: false,
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'UpdateMiscellaneous',
@@ -579,6 +579,19 @@ export const billMinterABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
+    name: 'attach',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: 'owner',
         type: 'address',
@@ -630,6 +643,19 @@ export const billMinterABI = [
       },
     ],
     name: 'deleteBILL',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
+    name: 'detach',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -846,9 +872,9 @@ export const billMinterABI = [
         type: 'address',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'emitUpdateMiscellaneous',

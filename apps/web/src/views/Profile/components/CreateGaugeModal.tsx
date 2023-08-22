@@ -33,6 +33,7 @@ import RemoveAccountStage from './RemoveAccountStage'
 import CreateProfileStage from './CreateProfileStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
+import LocationStage from 'views/Ramps/components/LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -51,6 +52,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.BROADCAST]: t('Broadcast'),
   [LockStage.CLAIM_REVENUE]: t('Withdraw'),
   [LockStage.REMOVE_ACCOUNT]: t('Remove Account'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_PAY]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LATE_DAYS]: t('Back'),
   [LockStage.CONFIRM_ADD_ACCOUNT]: t('Back'),
@@ -111,7 +114,6 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
   const profileContract = useProfileContract()
   const profileHelperContract = useProfileHelperContract()
   const tokenContract = useERC20(currency?.address || '')
-  const [nftFilters, setNftFilters] = useState<any>({})
 
   const [state, setState] = useState(() => ({
     profileId: pool?.id ?? '',
@@ -132,9 +134,15 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
     amountPayable: '0',
     name: '',
     referrerProfileId: '0',
+    customTags: '',
   }))
   console.log('pppoool================>', pool, profile)
-
+  const [nftFilters, setNftFilters] = useState<any>({
+    workspace: pool?.workspaces,
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
+  })
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -151,6 +159,12 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
 
   const goBack = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       case LockStage.CONFIRM_CREATE:
         setStage(LockStage.CREATE)
         break
@@ -245,6 +259,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.CREATE:
         setStage(LockStage.CONFIRM_CREATE)
         break
@@ -310,6 +327,22 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.id,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(profileContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_CREATE) {
         console.log('CONFIRM_CREATE================>', [state.name, state.referrerProfileId])
         return callWithGasPrice(profileContract, 'createProfile', [state.name, state.referrerProfileId]).catch((err) =>
@@ -475,6 +508,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_COLLECTION_ID)}>
             {t('UPDATE COLLECTION ID')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_SSID)}>
             {t('UPDATE SSID')}
           </Button>
@@ -500,6 +536,15 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
             {t('DELETE PROFILE')}
           </Button>
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.PAY && (
         <PayProfileStage

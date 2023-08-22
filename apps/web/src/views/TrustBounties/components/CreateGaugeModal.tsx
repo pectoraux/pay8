@@ -30,6 +30,8 @@ import CleanUpBalanceStage from './CleanUpBalanceStage'
 import CleanUpApprovalStage from './CleanUpApprovalStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
+import LocationStage from 'views/Ramps/components/LocationStage'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -43,6 +45,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADD_RECURRING_BALANCE]: t('Add Recurring Balance'),
   [LockStage.CLEAN_UP_APPROVALS]: t('Clean Up Approvals'),
   [LockStage.CLEAN_UP_BALANCES]: t('Clean Up Balances'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_CLEAN_UP_BALANCES]: t('Back'),
   [LockStage.CONFIRM_CLEAN_UP_APPROVALS]: t('Back'),
   [LockStage.CONFIRM_ADD_RECURRING_BALANCE]: t('Back'),
@@ -132,8 +136,14 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
     title: '',
     content: '',
     sourceAddress: trustBountiesContract.address,
+    customTags: '',
   }))
-
+  const [nftFilters, setNftFilters] = useState<any>({
+    workspace: pool?.workspaces,
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
+  })
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -150,6 +160,12 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
 
   const goBack = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       case LockStage.APPLY_RESULTS:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
@@ -214,6 +230,9 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.UPDATE:
         setStage(LockStage.CONFIRM_UPDATE)
         break
@@ -270,6 +289,22 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          ADDRESS_ZERO,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(trustBountiesHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_ADD_BALANCE) {
         const amount = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
         const method = state.nativeCoin ? 'addBalanceETH' : 'addBalance'
@@ -405,6 +440,9 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_OWNER)}>
             {t('UPDATE OWNER')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button variant="light" mb="8px" onClick={() => setStage(LockStage.APPLY_RESULTS)}>
             {t('APPLY RESULTS')}
           </Button>
@@ -452,6 +490,15 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
             </LinkExternal>
           </Flex>
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE && (
         <UpdateParametersStage

@@ -18,20 +18,31 @@ const selectIfoUserCredit = (state: State) => state.valuepools.ifo.credit ?? BIG
 
 const selectCurrBribe = (state: State) => state.valuepools?.currBribe
 const selectCurrPool = (state: State) => state.valuepools?.currPool
+const selectFilters = (state: State) => state.valuepools?.filters
 const selectFilteredData = (state: State) => {
-  return state.valuepools?.data.filter(
-    (ramp) =>
-      (!state.valuepools.filters.workspace ||
-        state.valuepools.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.valuepools.filters.workspace?.toLowerCase()) &&
+  return state.valuepools?.data.filter((valuepool) => {
+    return (
       (!state.valuepools.filters.country ||
-        state.valuepools.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.valuepools.filters.country?.toLowerCase()) &&
+        state.valuepools.filters.country.includes('All') ||
+        state.valuepools.filters.country.filter((value) =>
+          valuepool?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.valuepools.filters.city ||
-        state.valuepools.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.valuepools.filters.city?.toLowerCase()),
-  )
+        state.valuepools.filters.city.includes('All') ||
+        state.valuepools.filters.city.filter((value) =>
+          valuepool?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.valuepools.filters.product ||
+        state.valuepools.filters.product.includes('All') ||
+        state.valuepools.filters.product.filter((value) =>
+          valuepool?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

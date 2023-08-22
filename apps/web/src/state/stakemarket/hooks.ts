@@ -10,7 +10,15 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
+  filterSelector,
 } from './selectors'
+import { getTag } from './helpers'
+
+export const useGetTags = () => {
+  const { data } = useSWR('stakemarket-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
+}
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -63,4 +71,8 @@ export const useGetRequiresApproval = (c, a, s) => {
     status,
     needsApproval: data ?? true,
   }
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }

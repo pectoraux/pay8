@@ -8,7 +8,7 @@ import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 const selectPoolsData = (state: State) => state.arps?.data
 const selectPoolData = (sousId) => (state: State) => state.arps?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.arps.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.arps.data.find((p) => p.arpAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.arps?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.arps ? state.arps[key] : {}
 const selectIfo = (state: State) => state.arps.ifo
@@ -16,20 +16,30 @@ const selectIfoUserCredit = (state: State) => state.arps.ifo.credit ?? BIG_ZERO
 
 const selectCurrBribe = (state: State) => state.arps?.currBribe
 const selectCurrPool = (state: State) => state.arps?.currPool
+const selectFilters = (state: State) => state.arps?.filters
 const selectFilteredData = (state: State) => {
-  return state.arps?.data.filter(
-    (arp) =>
-      (!state.arps.filters.workspace ||
-        state.arps.filters.workspace === 'All' ||
-        arp?.workspace?.toLowerCase() === state.arps.filters.workspace?.toLowerCase()) &&
+  return state.arps?.data.filter((arp) => {
+    return (
       (!state.arps.filters.country ||
-        state.arps.filters.country === 'All' ||
-        arp?.country?.toLowerCase() === state.arps.filters.country?.toLowerCase()) &&
+        state.arps.filters.country.includes('All') ||
+        state.arps.filters.country.filter((value) =>
+          arp?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.arps.filters.city ||
-        state.arps.filters.city === 'All' ||
-        arp?.city?.toLowerCase() === state.arps.filters.city?.toLowerCase()),
-  )
+        state.arps.filters.city.includes('All') ||
+        state.arps.filters.city.filter((value) => arp?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()))
+          ?.length > 0) &&
+      (!state.arps.filters.product ||
+        state.arps.filters.product.includes('All') ||
+        state.arps.filters.product.filter((value) =>
+          arp?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

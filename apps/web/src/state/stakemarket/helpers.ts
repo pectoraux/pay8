@@ -35,6 +35,29 @@ netPrice
 txType
 `
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_STAKES,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getStakes = async (first: number, skip: number, where) => {
   try {
     const res = await request(

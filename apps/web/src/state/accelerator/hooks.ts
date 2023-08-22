@@ -1,3 +1,4 @@
+import useSWR from 'swr'
 import { useMemo, useEffect, useState } from 'react'
 import { firestore } from 'utils/firebase'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -11,7 +12,15 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
+  filterSelector,
 } from './selectors'
+import { getTag } from './helpers'
+
+export const useGetTags = () => {
+  const { data } = useSWR('acc-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
+}
 
 export const useFetchPublicPoolsStats = () => {
   const [data, setData] = useState(null)
@@ -73,4 +82,8 @@ export const useCurrPool = () => {
 
 export const usePoolsWithFilterSelector = () => {
   return useSelector(poolsWithFilterSelector)
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }

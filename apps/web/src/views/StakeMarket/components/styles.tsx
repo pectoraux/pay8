@@ -24,9 +24,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_MINT_NOTE,
   LockStage.CONFIRM_MINT_IOU,
   LockStage.CONFIRM_ACCEPT,
+  LockStage.CONFIRM_UPDATE_LOCATION,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_LOCATION,
+  LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.ACCEPT,
   LockStage.CONFIRM_ACCEPT,
   LockStage.APPLY,

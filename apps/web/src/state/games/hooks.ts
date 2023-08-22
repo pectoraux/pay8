@@ -4,14 +4,21 @@ import { useMemo } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import useSWRImmutable from 'swr/immutable'
-import { fetchGameData } from './helpers'
+import { fetchGameData, getTag } from './helpers'
 import { fetchGamesAsync, fetchGameSgAsync } from '.'
 import {
   currPoolSelector,
   currBribeSelector,
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
+  filterSelector,
 } from './selectors'
+
+export const useGetTags = () => {
+  const { data } = useSWR('games-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
+}
 
 export const useGetGame = (gameName: string, tokenId: string) => {
   const { data } = useSWRImmutable(['fb-score', gameName, tokenId], async () => fetchGameData(gameName, tokenId))
@@ -64,4 +71,8 @@ export const useCurrPool = () => {
 
 export const usePoolsWithFilterSelector = () => {
   return useSelector(poolsWithFilterSelector)
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }

@@ -1,4 +1,5 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo } from 'react'
+import useSWR from 'swr'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { batch, useSelector } from 'react-redux'
@@ -10,7 +11,15 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
+  filterSelector,
 } from './selectors'
+import { getTag } from './helpers'
+
+export const useGetTags = () => {
+  const { data } = useSWR('referrals-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
+}
 
 export const useFetchPublicPoolsData = () => {
   const { chainId } = useActiveChainId()
@@ -51,6 +60,10 @@ export const useCurrBribe = () => {
 
 export const useCurrPool = () => {
   return useSelector(currPoolSelector)
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }
 
 export const usePoolsWithFilterSelector = () => {

@@ -726,9 +726,9 @@ export const valuePoolHelperABI = [
       },
       {
         indexed: false,
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'UpdateMiscellaneous',
@@ -793,55 +793,6 @@ export const valuePoolHelperABI = [
       },
     ],
     name: 'UpdateParameters',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'vava',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'description',
-        type: 'string',
-      },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'workspace',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'string[]',
-        name: 'countries',
-        type: 'string[]',
-      },
-      {
-        indexed: false,
-        internalType: 'string[]',
-        name: 'cities',
-        type: 'string[]',
-      },
-      {
-        indexed: false,
-        internalType: 'string[]',
-        name: 'products',
-        type: 'string[]',
-      },
-    ],
-    name: 'UpdateVava',
     type: 'event',
   },
   {
@@ -1417,9 +1368,9 @@ export const valuePoolHelperABI = [
         type: 'address',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'emitUpdateMiscellaneous',
@@ -1646,6 +1597,19 @@ export const valuePoolHelperABI = [
     name: 'setContractAddress',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'tradingFee',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {

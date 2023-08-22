@@ -48,9 +48,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_WHITELIST,
   LockStage.CONFIRM_MIGRATE,
   LockStage.CONFIRM_UPDATE_MIGRATE_POINT,
+  LockStage.CONFIRM_UPDATE_LOCATION,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_LOCATION,
+  LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.NOTIFY_CREDIT,
   LockStage.CONFIRM_NOTIFY_CREDIT,
   LockStage.NOTIFY_DEBIT,

@@ -36,6 +36,7 @@ import DepositDueStage from './DepositDueStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import DeleteStage from './DeleteStage'
 import DeleteSponsorStage from './DeleteSponsorStage'
+import LocationStage from 'views/Ramps/components/LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -54,6 +55,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CLAIM_NOTE]: t('Claim Note'),
   [LockStage.TRANSFER_TO_NOTE_RECEIVABLE]: t('Transfer Note Receivable'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PROTOCOL]: t('Back'),
   [LockStage.CONFIRM_CLAIM_NOTE]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW]: t('Back'),
@@ -136,8 +139,14 @@ const CreateGaugeModal: React.FC<any> = ({
     account: currAccount?.owner || account,
     owner: currAccount?.owner || account,
     content: pool?.content,
+    customTags: '',
   }))
-
+  const [nftFilters, setNftFilters] = useState<any>({
+    workspace: pool?.workspaces,
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
+  })
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -154,6 +163,12 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const goBack = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       case LockStage.CLAIM_NOTE:
         setStage(LockStage.ADMIN_SETTINGS)
         break
@@ -245,6 +260,9 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.CLAIM_NOTE:
         setStage(LockStage.CONFIRM_CLAIM_NOTE)
         break
@@ -311,6 +329,22 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.id,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(sponsorHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_CLAIM_NOTE) {
         const args = [state.sponsor, state.tokenId]
         console.log('CONFIRM_CLAIM_NOTE===============>', args)
@@ -476,6 +510,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.PAY)}>
             {t('PAY')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
             {t('UPDATE PARAMETERS')}
           </Button>
@@ -513,6 +550,15 @@ const CreateGaugeModal: React.FC<any> = ({
             </Button>
           ) : null}
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.CLAIM_NOTE && (
         <ClaimNoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

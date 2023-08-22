@@ -8,7 +8,7 @@ import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 const selectPoolsData = (state: State) => state.businesses?.data
 const selectPoolData = (sousId) => (state: State) => state.businesses?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.businesses.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.businesses.data.find((p) => p.businesseAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.businesses?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.businesses ? state.businesses[key] : {}
 const selectIfo = (state: State) => state.businesses.ifo
@@ -16,20 +16,31 @@ const selectIfoUserCredit = (state: State) => state.businesses.ifo.credit ?? BIG
 
 const selectCurrBribe = (state: State) => state.businesses?.currBribe
 const selectCurrPool = (state: State) => state.businesses?.currPool
+const selectFilters = (state: State) => state.businesses?.filters
 const selectFilteredData = (state: State) => {
-  return state.businesses?.data.filter(
-    (ramp) =>
-      (!state.businesses.filters.workspace ||
-        state.businesses.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.businesses.filters.workspace?.toLowerCase()) &&
+  return state.businesses?.data.filter((businesse) => {
+    return (
       (!state.businesses.filters.country ||
-        state.businesses.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.businesses.filters.country?.toLowerCase()) &&
+        state.businesses.filters.country.includes('All') ||
+        state.businesses.filters.country.filter((value) =>
+          businesse?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.businesses.filters.city ||
-        state.businesses.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.businesses.filters.city?.toLowerCase()),
-  )
+        state.businesses.filters.city.includes('All') ||
+        state.businesses.filters.city.filter((value) =>
+          businesse?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.businesses.filters.product ||
+        state.businesses.filters.product.includes('All') ||
+        state.businesses.filters.product.filter((value) =>
+          businesse?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

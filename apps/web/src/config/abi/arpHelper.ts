@@ -365,9 +365,9 @@ export const arpHelperABI = [
       },
       {
         indexed: false,
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'UpdateMiscellaneous',
@@ -551,19 +551,6 @@ export const arpHelperABI = [
     name: 'burn',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'contractAddress',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -753,9 +740,9 @@ export const arpHelperABI = [
         type: 'address',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'emitUpdateMiscellaneous',
@@ -1100,25 +1087,6 @@ export const arpHelperABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'percentiles',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'uint256',
         name: '',
         type: 'uint256',
@@ -1448,77 +1416,6 @@ export const arpHelperABI = [
       {
         internalType: 'uint256',
         name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_arp',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_profileId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: 'like',
-        type: 'bool',
-      },
-    ],
-    name: 'vote',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'voted',
-    outputs: [
-      {
-        internalType: 'int256',
-        name: '',
-        type: 'int256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'votes',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'likes',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'dislikes',
         type: 'uint256',
       },
     ],

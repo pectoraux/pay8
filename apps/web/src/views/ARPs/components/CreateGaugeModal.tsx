@@ -57,6 +57,7 @@ import UpdateDiscountDivisorStage from './UpdateDiscountDivisorStage'
 import UpdatePenaltyDivisorStage from './UpdatePenaltyDivisorStage'
 import UpdateAdminStage from './UpdateAdminStage'
 import UpdateUserOwnerStage from './UpdateUserOwnerStage'
+import LocationStage from 'views/Ramps/components/LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -98,6 +99,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CLAIM_NOTE]: t('Claim Note'),
   [LockStage.DELETE]: t('Delete'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_AUTOCHARGE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PROFILE_ID]: t('Back'),
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
@@ -194,6 +197,7 @@ const CreateGaugeModal: React.FC<any> = ({
     ratings: currAccount?.ratings?.toString() ?? '',
     esgRating: currAccount?.esgRating ?? '',
     media: pool?.media ?? '',
+    customTags: '',
     identityTokenId: '0',
     message: '',
     tag: '',
@@ -214,7 +218,11 @@ const CreateGaugeModal: React.FC<any> = ({
     arpDescription: pool?.arpDescription ?? '',
     owner: currAccount?.owner || account,
   }))
-
+  const [nftFilters, setNftFilters] = useState<any>({
+    countries: pool?.countries,
+    cities: pool?.cities,
+    products: pool?.products,
+  })
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -453,6 +461,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_UPDATE_PAID_PAYABLE:
         setStage(LockStage.UPDATE_PAID_PAYABLE)
         break
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       default:
         break
     }
@@ -462,6 +476,9 @@ const CreateGaugeModal: React.FC<any> = ({
     switch (stage) {
       case LockStage.AUTOCHARGE:
         setStage(LockStage.CONFIRM_AUTOCHARGE)
+        break
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
         break
       case LockStage.PAY:
         setStage(LockStage.CONFIRM_PAY)
@@ -595,6 +612,22 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.id,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(arpHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_AUTOCHARGE) {
         const args = [!!state.autoCharge, state.protocolId]
         console.log('CONFIRM_AUTOCHARGE===============>', args)
@@ -1012,6 +1045,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
             {t('UPDATE PARAMETERS')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY_ID)}>
             {t('UPDATE BOUNTY ID')}
           </Button>
@@ -1061,6 +1097,15 @@ const CreateGaugeModal: React.FC<any> = ({
             </Button>
           ) : null}
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.NOTIFY_REWARDS && (
         <UpdateNotifyRewardStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

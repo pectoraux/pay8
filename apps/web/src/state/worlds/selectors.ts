@@ -6,7 +6,7 @@ import { State, VaultKey } from '../types'
 const selectPoolsData = (state: State) => state.worlds?.data
 const selectPoolData = (sousId) => (state: State) => state.worlds?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.worlds.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.worlds.data.find((p) => p.worldAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.worlds?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.worlds ? state.worlds[key] : {}
 const selectIfo = (state: State) => state.worlds.ifo
@@ -14,20 +14,31 @@ const selectIfoUserCredit = (state: State) => state.worlds.ifo.credit ?? BIG_ZER
 
 const selectCurrBribe = (state: State) => state.worlds?.currBribe
 const selectCurrPool = (state: State) => state.worlds?.currPool
+const selectFilters = (state: State) => state.worlds?.filters
 const selectFilteredData = (state: State) => {
-  return state.worlds?.data.filter(
-    (ramp) =>
-      (!state.worlds.filters.workspace ||
-        state.worlds.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.worlds.filters.workspace?.toLowerCase()) &&
+  return state.worlds?.data.filter((world) => {
+    return (
       (!state.worlds.filters.country ||
-        state.worlds.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.worlds.filters.country?.toLowerCase()) &&
+        state.worlds.filters.country.includes('All') ||
+        state.worlds.filters.country.filter((value) =>
+          world?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.worlds.filters.city ||
-        state.worlds.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.worlds.filters.city?.toLowerCase()),
-  )
+        state.worlds.filters.city.includes('All') ||
+        state.worlds.filters.city.filter((value) =>
+          world?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.worlds.filters.product ||
+        state.worlds.filters.product.includes('All') ||
+        state.worlds.filters.product.filter((value) =>
+          world?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

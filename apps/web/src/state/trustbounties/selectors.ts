@@ -14,20 +14,31 @@ const selectIfoUserCredit = (state: State) => state.trustbounties.ifo.credit ?? 
 
 const selectCurrBribe = (state: State) => state.trustbounties?.currBribe
 const selectCurrPool = (state: State) => state.trustbounties?.currPool
+const selectFilters = (state: State) => state.trustbounties?.filters
 const selectFilteredData = (state: State) => {
-  return state.trustbounties?.data.filter(
-    (tb) =>
-      (!state.trustbounties.filters.workspace ||
-        state.trustbounties.filters.workspace === 'All' ||
-        tb?.workspace?.toLowerCase() === state.trustbounties.filters.workspace?.toLowerCase()) &&
+  return state.trustbounties?.data.filter((trustbountie) => {
+    return (
       (!state.trustbounties.filters.country ||
-        state.trustbounties.filters.country === 'All' ||
-        tb?.country?.toLowerCase() === state.trustbounties.filters.country?.toLowerCase()) &&
+        state.trustbounties.filters.country.includes('All') ||
+        state.trustbounties.filters.country.filter((value) =>
+          trustbountie?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.trustbounties.filters.city ||
-        state.trustbounties.filters.city === 'All' ||
-        tb?.city?.toLowerCase() === state.trustbounties.filters.city?.toLowerCase()),
-  )
+        state.trustbounties.filters.city.includes('All') ||
+        state.trustbounties.filters.city.filter((value) =>
+          trustbountie?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.trustbounties.filters.product ||
+        state.trustbounties.filters.product.includes('All') ||
+        state.trustbounties.filters.product.filter((value) =>
+          trustbountie?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

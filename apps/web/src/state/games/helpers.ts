@@ -17,6 +17,29 @@ export const fetchGameData = async (gameName, tokenId) => {
   return (await firestore.collection(gameName).doc(tokenId).get()).data()
 }
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_GAMES,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getProtocols = async (first = 5, skip = 0, where = {}) => {
   try {
     const res = await request(

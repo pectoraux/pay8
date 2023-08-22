@@ -25,30 +25,20 @@ export const AUCTION_WHITELISTED_BIDDERS_TO_FETCH = 500
 export const IPFS_GATEWAY = 'https://ipfs.io/ipfs'
 
 export const WORKSPACES = {
-  All: 0,
   'Real Estate': 0,
   Transportation: 0,
   HealthCare: 0,
   Food: 0,
   Beverage: 0,
-  'Law & Security': 0,
-  Telco: 0,
-  'Apparel & Cosmetics': 0,
+  'Law & Order': 0,
+  'Software & Telco': 0,
+  'Apparel, Beauty & Cosmetics': 0,
   Energy: 0,
   Mining: 0,
-  Mines: 0,
-  Entertainment: 0,
-  NSFW: 0,
-
-  Delivery: 0,
+  'Culture & Entertainment': 0,
   Education: 0,
-  Tourism: 0,
-  'Software & Data': 0,
   Finance: 0,
-  Spiritual: 0,
-  Religions: 0,
-  'Sports, Games & Betting': 0,
-  Others: 0,
+  NSFW: 0,
 }
 
 export const COUNTRIES = {

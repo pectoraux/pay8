@@ -14,7 +14,15 @@ import {
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector2,
   makePoolWithUserDataLoadingSelector3,
+  filterSelector,
 } from './selectors'
+import { getTag } from './helpers'
+
+export const useGetTags = () => {
+  const { data } = useSWR('valuepools-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
+}
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -78,4 +86,8 @@ export const useGetRequiresApproval = (c, a, s) => {
     isRequired: data ?? true,
     refetch,
   }
+}
+
+export const useFilters = () => {
+  return useSelector(filterSelector)
 }

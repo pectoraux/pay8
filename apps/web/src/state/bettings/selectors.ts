@@ -8,7 +8,7 @@ import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 const selectPoolsData = (state: State) => state.bettings?.data
 const selectPoolData = (sousId) => (state: State) => state.bettings?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.bettings.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.bettings.data.find((p) => p.bettingAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.bettings?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.bettings ? state.bettings[key] : {}
 const selectIfo = (state: State) => state.bettings.ifo
@@ -16,20 +16,31 @@ const selectIfoUserCredit = (state: State) => state.bettings.ifo.credit ?? BIG_Z
 
 const selectCurrBribe = (state: State) => state.bettings?.currBribe
 const selectCurrPool = (state: State) => state.bettings?.currPool
+const selectFilters = (state: State) => state.bettings?.filters
 const selectFilteredData = (state: State) => {
-  return state.bettings?.data.filter(
-    (ramp) =>
-      (!state.bettings.filters.workspace ||
-        state.bettings.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.bettings.filters.workspace?.toLowerCase()) &&
+  return state.bettings?.data.filter((betting) => {
+    return (
       (!state.bettings.filters.country ||
-        state.bettings.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.bettings.filters.country?.toLowerCase()) &&
+        state.bettings.filters.country.includes('All') ||
+        state.bettings.filters.country.filter((value) =>
+          betting?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.bettings.filters.city ||
-        state.bettings.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.bettings.filters.city?.toLowerCase()),
-  )
+        state.bettings.filters.city.includes('All') ||
+        state.bettings.filters.city.filter((value) =>
+          betting?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.bettings.filters.product ||
+        state.bettings.filters.product.includes('All') ||
+        state.bettings.filters.product.filter((value) =>
+          betting?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

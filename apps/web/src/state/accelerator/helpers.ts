@@ -13,6 +13,29 @@ import { getProfileAddress } from 'utils/addressHelpers'
 import { profileABI } from 'config/abi/profile'
 import { getCollection } from 'state/cancan/helpers'
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_ACC_VOTER,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getAcceleratorData = async () => {
   try {
     const res = await request(

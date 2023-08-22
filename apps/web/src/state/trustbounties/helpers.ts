@@ -10,6 +10,29 @@ import { getCollection } from 'state/cancan/helpers'
 import { getTrustBountiesAddress } from 'utils/addressHelpers'
 import { erc20ABI } from 'wagmi'
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_TRUSTBOUNTIES,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getBounties = async (first: number, skip: number, where) => {
   try {
     const res = await request(

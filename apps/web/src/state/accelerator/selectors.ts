@@ -7,20 +7,31 @@ const selectUserDataLoaded = (state: State) => state.accelerator?.userDataLoaded
 
 const selectCurrBribe = (state: State) => state.accelerator?.currBribe
 const selectCurrPool = (state: State) => state.accelerator?.currPool
+const selectFilters = (state: State) => state.accelerator?.filters
 const selectFilteredData = (state: State) => {
-  return state.accelerator?.data.filter(
-    (ramp) =>
-      (!state.accelerator.filters.workspace ||
-        state.accelerator.filters.workspace === 'All' ||
-        ramp?.workspace?.toLowerCase() === state.accelerator.filters.workspace?.toLowerCase()) &&
+  return state.accelerator?.data.filter((acc) => {
+    return (
       (!state.accelerator.filters.country ||
-        state.accelerator.filters.country === 'All' ||
-        ramp?.country?.toLowerCase() === state.accelerator.filters.country?.toLowerCase()) &&
+        state.accelerator.filters.country.includes('All') ||
+        state.accelerator.filters.country.filter((value) =>
+          acc?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.accelerator.filters.city ||
-        state.accelerator.filters.city === 'All' ||
-        ramp?.city?.toLowerCase() === state.accelerator.filters.city?.toLowerCase()),
-  )
+        state.accelerator.filters.city.includes('All') ||
+        state.accelerator.filters.city.filter((value) =>
+          acc?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.accelerator.filters.product ||
+        state.accelerator.filters.product.includes('All') ||
+        state.accelerator.filters.product.filter((value) =>
+          acc?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

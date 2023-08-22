@@ -11,6 +11,29 @@ import { worldNoteABI } from 'config/abi/worldNote'
 import { worldHelper3ABI } from 'config/abi/worldHelper3'
 import { erc20ABI } from 'wagmi'
 
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_WORLDS,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
 export const getProtocols = async (first = 5, skip = 0, where = {}) => {
   try {
     const res = await request(

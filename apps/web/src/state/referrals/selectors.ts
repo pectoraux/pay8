@@ -8,7 +8,7 @@ import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 const selectPoolsData = (state: State) => state.referrals?.data
 const selectPoolData = (sousId) => (state: State) => state.referrals?.data.find((p) => p.sousId === sousId)
 const selectPoolData2 = (address) => (state: State) =>
-  state.referrals.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
+  state.referrals.data.find((p) => p.referralAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.referrals?.userDataLoaded
 const selectVault = (key: VaultKey) => (state: State) => key && state.referrals ? state.referrals[key] : {}
 const selectIfo = (state: State) => state.referrals.ifo
@@ -16,20 +16,31 @@ const selectIfoUserCredit = (state: State) => state.referrals.ifo.credit ?? BIG_
 
 const selectCurrBribe = (state: State) => state.referrals?.currBribe
 const selectCurrPool = (state: State) => state.referrals?.currPool
+const selectFilters = (state: State) => state.referrals?.filters
 const selectFilteredData = (state: State) => {
-  return state.referrals?.data.filter(
-    (referral) =>
-      (!state.referrals.filters.workspace ||
-        state.referrals.filters.workspace === 'All' ||
-        referral?.workspace?.toLowerCase() === state.referrals.filters.workspace?.toLowerCase()) &&
+  return state.referrals?.data.filter((referral) => {
+    return (
       (!state.referrals.filters.country ||
-        state.referrals.filters.country === 'All' ||
-        referral?.country?.toLowerCase() === state.referrals.filters.country?.toLowerCase()) &&
+        state.referrals.filters.country.includes('All') ||
+        state.referrals.filters.country.filter((value) =>
+          referral?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length) &&
       (!state.referrals.filters.city ||
-        state.referrals.filters.city === 'All' ||
-        referral?.city?.toLowerCase() === state.referrals.filters.city?.toLowerCase()),
-  )
+        state.referrals.filters.city.includes('All') ||
+        state.referrals.filters.city.filter((value) =>
+          referral?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0) &&
+      (!state.referrals.filters.product ||
+        state.referrals.filters.product.includes('All') ||
+        state.referrals.filters.product.filter((value) =>
+          referral?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+        )?.length > 0)
+    )
+  })
 }
+export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
 
 export const currBribeSelector = createSelector([selectCurrBribe], (currBribe) => {
   return currBribe

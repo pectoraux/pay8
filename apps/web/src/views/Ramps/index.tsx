@@ -2,22 +2,23 @@ import { useAccount } from 'wagmi'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
+import { useFilters, useGetTags, usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateRampModal from './components/CreateRampModal'
-import Filters from 'views/ChannelCreation/Filters'
-import { useState } from 'react'
+
+import Filters from './Filters'
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
-  console.log('pools=============>', pools)
   const [onPresentCreateGauge] = useModal(<CreateRampModal />)
-  const [nftFilters, setNftFilters] = useState({})
+  const nftFilters = useFilters()
+  const tags = useGetTags()
+  console.log('pools=============>', pools, tags)
 
   usePoolsPageFetch()
 
@@ -45,7 +46,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </Flex>
           </Flex>
           <Flex justifyContent="flex-end" alignItems="flex-end">
-            <Filters workspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
+            <Filters tags={tags} workspace={false} nftFilters={nftFilters} />
           </Flex>
         </Flex>
       </PageHeader>

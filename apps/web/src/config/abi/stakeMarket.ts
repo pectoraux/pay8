@@ -378,19 +378,6 @@ export const stakeMarketABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'check',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -906,24 +893,6 @@ export const stakeMarketABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_stakeId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_numPeriods',
-        type: 'uint256',
-      },
-    ],
-    name: 'mintNote',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
         name: '',
         type: 'uint256',
       },
@@ -1058,6 +1027,34 @@ export const stakeMarketABI = [
       },
     ],
     name: 'switchStake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakeId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_numPeriods',
+        type: 'uint256',
+      },
+    ],
+    name: 'transferDueToNote',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

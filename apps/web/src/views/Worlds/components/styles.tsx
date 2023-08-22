@@ -41,9 +41,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_MINT_PAST_WORLD,
   LockStage.CONFIRM_MINT_PRESENT_WORLD,
   LockStage.CONFIRM_UPDATE_URI_GENERATOR,
+  LockStage.CONFIRM_UPDATE_LOCATION,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_LOCATION,
+  LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.UPDATE_CATEGORY,
   LockStage.CONFIRM_WITHDRAW,
   LockStage.CONFIRM_UPDATE_CATEGORY,

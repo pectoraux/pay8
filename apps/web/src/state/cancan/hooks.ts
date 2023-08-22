@@ -24,6 +24,7 @@ import {
   getVeToken,
   getItemSg,
   getCollectionId,
+  getTag,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 
@@ -105,6 +106,12 @@ export const useApprovalNfts = (nftsInWallet: NftToken[]) => {
     : null
 
   return { data: approvedTokenIds }
+}
+
+export const useGetTags = () => {
+  const { data } = useSWR('cancan-tags6', async () => getTag())
+  console.log('usetag============>', data)
+  return data?.name ?? ''
 }
 
 export const useGetNftFilters = (collectionAddress: string): Readonly<Record<string, NftAttribute>> => {

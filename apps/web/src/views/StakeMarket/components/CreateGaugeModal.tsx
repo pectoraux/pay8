@@ -45,6 +45,8 @@ import MintIOUStage from './MintIOUStage'
 import SwitchStakeStage from './SwitchStakeStage'
 import CancelStakeStage from './CancelStakeStage'
 import WaitingPeriodStage from './WaitingPeriodStage'
+import LocationStage from 'views/Ramps/components/LocationStage'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -63,6 +65,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CANCEL_STAKE]: t('Cancel Stake'),
   [LockStage.SWITCH_STAKE]: t('Switch Stake'),
   [LockStage.MINT_IOU]: t('Mint IOU'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_MINT_IOU]: t('Back'),
   [LockStage.CONFIRM_SWITCH_STAKE]: t('Back'),
   [LockStage.CONFIRM_CANCEL_STAKE]: t('Back'),
@@ -111,13 +115,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     0,
   )
   const { days, hours, minutes } = getTimePeriods(Number(remainingDuration ?? '0'))
-  const [nftFilters, setNftFilters] = useState({
-    country: pool?.countries,
-    city: pool?.cities,
-    product: pool?.products,
-  })
   console.log('adminPool======================>', adminPool)
-  console.log('gauge=================>', pool, nftFilters)
+  console.log('gauge=================>', pool)
   const [state, setState] = useState<any>(() => ({
     owner: pool?.owner,
     bountyId: pool?.bountyId ?? '',
@@ -164,7 +163,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     stakeId: pool?.sousId ?? '',
     waitingDuration: pool.waitingDuration,
     defenderStakeId: '',
+    customTags: '',
   }))
+  const [nftFilters, setNftFilters] = useState<any>({
+    workspace: pool?.workspaces,
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
+  })
   console.log('ppool==============>', stage, LockStage.WITHDRAW, stage === LockStage.CONFIRM_WITHDRAW, pool)
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -182,6 +188,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
 
   const goBack = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       case LockStage.APPLY:
         setStage(LockStage.SETTINGS)
         break
@@ -279,6 +291,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.UPDATE:
         setStage(LockStage.CONFIRM_UPDATE)
         break
@@ -349,6 +364,22 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const args = [
+          '0',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          ADDRESS_ZERO,
+          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(stakeMarketContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_APPLY) {
         const amountPayable = getDecimalAmount(new BigNumber(state.amountPayable), currency.decimals)
         const amountReceivable = getDecimalAmount(new BigNumber(state.amountReceivable), currency.decimals)
@@ -537,6 +568,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.DEPOSIT)}>
             {t('DEPOSIT')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE)}>
             {t('UPDATE REQUIREMENTS')}
           </Button>
@@ -595,6 +629,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
             </LinkExternal>
           </Flex>
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE && (
         <UpdateParametersStage

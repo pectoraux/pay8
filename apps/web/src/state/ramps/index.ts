@@ -1,55 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit'
-import BigNumber from 'bignumber.js'
 import keyBy from 'lodash/keyBy'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { bscTokens } from '@pancakeswap/tokens'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { fetchTokenUSDValue } from '@pancakeswap/utils/llamaPrice'
 import {
-  fetchPoolsTimeLimits,
-  fetchPoolsTotalStaking,
-  fetchPoolsProfileRequirement,
-  fetchPoolsStakingLimits,
   fetchPoolsAllowance,
   fetchUserBalances,
   fetchUserPendingRewards,
   fetchUserStakeBalances,
-  fetchPublicIfoData,
-  fetchUserIfoCredit,
-  fetchPublicVaultData,
-  fetchPublicFlexibleSideVaultData,
-  fetchVaultUser,
-  fetchVaultFees,
-  fetchFlexibleSideVaultUser,
-  getCakeVaultAddress,
-  getCakeFlexibleSideVaultAddress,
-  getPoolsConfig,
-  isLegacyPool,
-  getPoolAprByTokenPerSecond,
-  getPoolAprByTokenPerBlock,
 } from '@pancakeswap/pools'
 import { ChainId } from '@pancakeswap/sdk'
-
-import {
-  PoolsState,
-  SerializedPool,
-  SerializedVaultFees,
-  SerializedCakeVault,
-  SerializedLockedVaultUser,
-  PublicIfoData,
-  SerializedVaultUser,
-  SerializedLockedCakeVault,
-} from 'state/types'
-import { Address, erc20ABI } from 'wagmi'
-import { isAddress } from 'utils'
-import { publicClient } from 'utils/wagmi'
 import { getViemClients } from 'utils/viem'
-import { getPoolsPriceHelperLpFiles } from 'config/constants/priceHelperLps/index'
-import { farmV3ApiFetch } from 'state/farmsV3/hooks'
-import { getCakePriceFromOracle } from 'hooks/useCakePriceAsBN'
 
-import fetchFarms from '../farms/fetchFarms'
-import getFarmsPrices from '../farms/getFarmsPrices'
 import { fetchRamps, getAccountSg, fetchRampData, fetchRamp } from './helpers'
 import { resetUserState } from '../global/actions'
 
@@ -171,6 +130,9 @@ export const PoolsSlice = createSlice({
     setCurrPoolData: (state, action) => {
       state.currPool = action.payload
     },
+    setFilters: (state, action) => {
+      state.filters = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetUserState, (state) => {
@@ -229,6 +191,6 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setRampsPublicData, setCurrBribeData, setPoolUserData, setCurrPoolData } = PoolsSlice.actions
+export const { setRampsPublicData, setCurrBribeData, setPoolUserData, setCurrPoolData, setFilters } = PoolsSlice.actions
 
 export default PoolsSlice.reducer

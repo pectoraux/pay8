@@ -34,9 +34,6 @@ veDecimals
 maxSupply
 minTicketPrice
 minToSwitch
-countries
-cities
-products
 timestamp
 queueDuration
 maxDueReceivable
@@ -94,6 +91,9 @@ lockValue
 lockTime
 createAt
 updatedAt
+countries
+cities
+products
 metadataUrl
 `
 const purchaseFields = `
@@ -113,6 +113,29 @@ rank
 epoch
 price
 `
+
+export const getTag = async () => {
+  try {
+    const res = await request(
+      GRAPH_API_VALUEPOOLS,
+      gql`
+        {
+          tags(id: tags) {
+            id
+            name
+          }
+        }
+      `,
+      {},
+    )
+    console.log('getTag===========>', res)
+
+    return res.tags?.length && res.tags[0]
+  } catch (error) {
+    console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
 
 export const fetchValuepool = async (valuepoolContract) => {
   try {
