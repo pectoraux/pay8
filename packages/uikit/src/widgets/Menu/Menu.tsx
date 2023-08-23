@@ -71,6 +71,7 @@ const Inner = styled.div`
 const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   linkComponent = "a",
   banner,
+  banner2,
   rightSide,
   isDark,
   toggleTheme,
@@ -144,6 +145,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
         <Wrapper>
           <FixedContainer showMenu={showMenu} height={totalTopMenuHeight}>
             {banner && isMounted && <TopBannerContainer height={topBannerHeight}>{banner}</TopBannerContainer>}
+            {banner2 && isMounted && <TopBannerContainer height={topBannerHeight}>{banner2}</TopBannerContainer>}
             <StyledNav>
               <Flex>
                 <Logo href={homeLink?.href ?? "/"} />

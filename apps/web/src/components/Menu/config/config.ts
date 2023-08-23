@@ -277,12 +277,12 @@ const config: (
         //   label: t('Affiliate Program'),
         //   href: '/affiliates-program',
         // },
-        {
-          label: t('Voting'),
-          href: '/voting',
-          supportChainIds: SUPPORT_ONLY_BSC,
-          image: '/images/voting/voting-bunny.png',
-        },
+        // {
+        //   label: t('Voting'),
+        //   href: '/voting',
+        //   supportChainIds: SUPPORT_ONLY_BSC,
+        //   image: '/images/voting/voting-bunny.png',
+        // },
         {
           label: t('SSI'),
           href: '/ssi',

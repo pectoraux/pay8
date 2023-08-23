@@ -1,4 +1,5 @@
 import { useAccount } from 'wagmi'
+import styled from 'styled-components'
 import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useFetchPublicPoolsData, usePoolsWithFilterSelector } from 'state/futureCollaterals/hooks'
@@ -7,14 +8,24 @@ import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useRouter } from 'next/router'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateFutureCollateralModal from './components/CreateFutureCollateralModal'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
+
+import Steps from './Steps'
+import Questions from './components/Questions'
+
+const DesktopButton = styled(Button)`
+  align-self: flex-end;
+`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
@@ -22,6 +33,14 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateFutureCollateralModal currency={currency} />)
+  const handleClick = () => {
+    const howToElem = document.getElementById('ifo-how-to')
+    if (howToElem != null) {
+      howToElem.scrollIntoView()
+    } else {
+      router.push('/ifo#ifo-how-to')
+    }
+  }
 
   useFetchPublicPoolsData()
 
@@ -60,6 +79,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>
           </Flex>
+          <DesktopButton onClick={handleClick} variant="subtle">
+            {t('How does it work?')}
+          </DesktopButton>
         </Flex>
       </PageHeader>
       <Page>
@@ -87,6 +109,14 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
+        <Steps
+          title={t('How to mint a Future Collateral')}
+          isLive={true}
+          hasClaimed={true}
+          isCommitted={false}
+          ifoCurrencyAddress={ADDRESS_ZERO}
+        />
+        <Questions />
         <V3SubgraphHealthIndicator />
       </Page>
     </>

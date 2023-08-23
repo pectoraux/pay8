@@ -48,8 +48,7 @@ const AddToHomeScreenBanner: React.FC<React.PropsWithChildren> = () => {
   const { isMobile, isMd } = useMatchBreakpoints()
   const warningTextAsParts = useMemo(() => {
     const warningText = t(
-      'To install the app, you need to add this %domain% to your home screen. In your browser menu, tap the More button and choose Install App in the options',
-      { domain },
+      'To install the app, you need to add this website to your home screen. In your browser menu, tap the More button and choose Install App in the options',
     )
     return warningText.split(/(https:\/\/payswap.org)/g)
   }, [t])
@@ -84,23 +83,8 @@ const AddToHomeScreenBanner: React.FC<React.PropsWithChildren> = () => {
       ) : (
         <>
           <InnerContainer>
-            <img
-              src="/images/decorations/phishing-warning-bunny.webp"
-              alt="add-to-home-screen"
-              width="92px"
-              onError={(e) => {
-                const fallbackSrc = '/images/decorations/phishing-warning-bunny.png'
-                if (!e.currentTarget.src.endsWith(fallbackSrc)) {
-                  // eslint-disable-next-line no-param-reassign
-                  e.currentTarget.src = fallbackSrc
-                }
-              }}
-            />
             <SpeechBubble>{warningTextComponent}</SpeechBubble>
           </InnerContainer>
-          <IconButton onClick={hideBanner} variant="text">
-            <CloseIcon color="#FFFFFF" />
-          </IconButton>
         </>
       )}
     </Container>
