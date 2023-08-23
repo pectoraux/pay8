@@ -1,8 +1,6 @@
 import {
   Flex,
   LinkExternal,
-  AutoRenewIcon,
-  ArrowForwardIcon,
   Pool,
   ScanLink,
   useModal,
@@ -45,7 +43,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = pool?.token?.address || ''
   const dispatch = useAppDispatch()
   const [onPresentNFT] = useModal(<WebPagesModal height="500px" tokenId={pool.id} metadataUrl={pool?.metadataUrl} />)
-
   return (
     <>
       {pool?.owner && (
@@ -113,49 +110,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             {balance.token.symbol}
           </Button>
         ))}
-      </Flex>
-      <Flex>
-        <FlexGap gap="16px" pt="24px" pl="4px">
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentProject}
-          >
-            <LanguageIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentArticle}
-          >
-            <ProposalIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentPayChat}
-          >
-            <SmartContractIcon color="textSubtle" />
-          </IconButton>
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTwitter}
-            >
-              <TwitterIcon color="textSubtle" />
-            </IconButton>
-          )}
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTelegram}
-            >
-              <TelegramIcon color="textSubtle" />
-            </IconButton>
-          )}
-        </FlexGap>
       </Flex>
     </>
   )

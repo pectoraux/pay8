@@ -15,6 +15,7 @@ export const stagesWithApproveButton = [
 ]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_UPDATE_CONTACT_CHANNELS,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.CONFIRM_DELETE,
   LockStage.CONFIRM_DELETE_RAMP,
@@ -46,6 +47,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_CONTACT_CHANNELS,
+  LockStage.CONFIRM_UPDATE_CONTACT_CHANNELS,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.UPDATE_SPONSOR_MEDIA,

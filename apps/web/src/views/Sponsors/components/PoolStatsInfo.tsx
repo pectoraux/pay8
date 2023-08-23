@@ -29,6 +29,7 @@ import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/sponsors'
 import WebPagesModal from './WebPagesModal'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -47,7 +48,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const [onPresentNotes] = useModal(<WebPagesModal height="500px" pool={pool} notes />)
-
+  const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
+  const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
       {!hideAccounts ? (
@@ -198,49 +200,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           </Button>
         ) : null}
       </Flex>
-      <Flex>
-        <FlexGap gap="16px" pt="24px" pl="4px">
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentProject}
-          >
-            <LanguageIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentArticle}
-          >
-            <ProposalIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentPayChat}
-          >
-            <SmartContractIcon color="textSubtle" />
-          </IconButton>
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTwitter}
-            >
-              <TwitterIcon color="textSubtle" />
-            </IconButton>
-          )}
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTelegram}
-            >
-              <TelegramIcon color="textSubtle" />
-            </IconButton>
-          )}
-        </FlexGap>
-      </Flex>
+      <Contacts contactChannels={contactChannels} contacts={contacts} />
     </>
   )
 }

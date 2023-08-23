@@ -19,7 +19,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <NameCell pool={pool} />
       <TotalValueCell labelText={t('Auditor Bounty ID')} amount={pool?.auditorBountyId} />
       <TotalValueCell labelText={t('User Bounty ID')} amount={pool?.bountyId} />
-      <TotalValueCell labelText={t('Channel')} amount={pool?.Channel} />
+      <TotalValueCell labelText={t('Channel')} amount={pool?.channel} />
       <TotalValueCell labelText={t('Stake ID')} amount={pool?.stakeId} />
     </>
   )

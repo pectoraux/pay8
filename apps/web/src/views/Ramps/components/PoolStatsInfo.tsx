@@ -18,6 +18,7 @@ import {
   ProposalIcon,
   SmartContractIcon,
   ReactMarkdown,
+  CopyButton,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -38,6 +39,40 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
+export const Contacts: React.FC<any> = ({ contactChannels = [], contacts = [] }) => {
+  return (
+    <Flex>
+      <FlexGap gap="16px" pt="24px" pl="4px">
+        {contactChannels?.length > 0 && contactChannels[0] ? (
+          <IconButton external as={Link} style={{ cursor: 'pointer' }} href={contacts[0]}>
+            <LanguageIcon color="textSubtle" />
+          </IconButton>
+        ) : null}
+        {contactChannels?.length > 1 && contactChannels[1] ? (
+          <IconButton as={Link} external style={{ cursor: 'pointer' }} href={`mailto:${contacts[1]}`}>
+            <ProposalIcon color="textSubtle" />
+          </IconButton>
+        ) : null}
+        {contactChannels?.length > 2 && contactChannels[2] ? (
+          <IconButton as={Link} style={{ cursor: 'pointer' }} onClick={contacts[2]}>
+            <SmartContractIcon color="textSubtle" />
+          </IconButton>
+        ) : null}
+        {contactChannels?.length > 3 && contactChannels[3] ? (
+          <IconButton as={Link} style={{ cursor: 'pointer' }} onClick={contacts[3]}>
+            <TwitterIcon color="textSubtle" />
+          </IconButton>
+        ) : null}
+        {contactChannels?.length > 4 && contactChannels[4] ? (
+          <IconButton as={Link} style={{ cursor: 'pointer' }} onClick={contacts[4]}>
+            <TelegramIcon color="textSubtle" />
+          </IconButton>
+        ) : null}
+      </FlexGap>
+    </Flex>
+  )
+}
+
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
@@ -49,7 +84,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const currState = useCurrPool()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
   console.log('onPresentNFTs====================>', pool, rampAddress)
-
+  const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
+  const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
       {pool?.description ? (
@@ -180,49 +216,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </Button>
         ))}
       </Flex>
-      <Flex>
-        <FlexGap gap="16px" pt="24px" pl="4px">
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentProject}
-          >
-            <LanguageIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentArticle}
-          >
-            <ProposalIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentPayChat}
-          >
-            <SmartContractIcon color="textSubtle" />
-          </IconButton>
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTwitter}
-            >
-              <TwitterIcon color="textSubtle" />
-            </IconButton>
-          )}
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTelegram}
-            >
-              <TelegramIcon color="textSubtle" />
-            </IconButton>
-          )}
-        </FlexGap>
-      </Flex>
+      <Contacts contactChannels={contactChannels} contacts={contacts} />
     </>
   )
 }

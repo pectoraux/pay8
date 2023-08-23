@@ -30,6 +30,7 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/worlds'
 import WebPagesModal from './WebPagesModal'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -42,16 +43,15 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { t } = useTranslation()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { worldAddress } = pool
   const currState = useCurrPool()
-  const isBounty = router.pathname.includes('bounties')
   const earningToken = currState[pool?.id]
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" worldNFTs={pool?.worldNFTs} />)
   const [onPresentNotes] = useModal(<WebPagesModal height="500px" worldNFTs={pool?.notes} />)
-
+  const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
+  const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
       <Box>
@@ -194,49 +194,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </Button>
         ) : null}
       </Flex>
-      <Flex>
-        <FlexGap gap="16px" pt="24px" pl="4px">
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentProject}
-          >
-            <LanguageIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentArticle}
-          >
-            <ProposalIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentPayChat}
-          >
-            <SmartContractIcon color="textSubtle" />
-          </IconButton>
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTwitter}
-            >
-              <TwitterIcon color="textSubtle" />
-            </IconButton>
-          )}
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTelegram}
-            >
-              <TelegramIcon color="textSubtle" />
-            </IconButton>
-          )}
-        </FlexGap>
-      </Flex>
+      <Contacts contactChannels={contactChannels} contacts={contacts} />
     </>
   )
 }

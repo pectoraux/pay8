@@ -1,12 +1,9 @@
 import {
   Flex,
   LinkExternal,
-  AutoRenewIcon,
-  ArrowForwardIcon,
   Pool,
   ScanLink,
   useModal,
-  Button,
   Link,
   FlexGap,
   IconButton,
@@ -19,14 +16,11 @@ import {
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useMemo, useState } from 'react'
+import { memo, useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrPool } from 'state/stakemarket/hooks'
-import { useAppDispatch } from 'state'
-import { useRouter } from 'next/router'
-import { setCurrPoolData } from 'state/stakemarket'
 import WebPagesModal from './WebPagesModal'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -46,7 +40,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   }, [pool])
   const tokenAddress = earningToken?.address || ''
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.tokenIds} />)
-
+  const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
+  const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
       {pool?.owner && (
@@ -114,47 +109,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         ))}
       </Flex> */}
       <Flex>
-        <FlexGap gap="16px" pt="24px" pl="4px">
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentProject}
-          >
-            <LanguageIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentArticle}
-          >
-            <ProposalIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentPayChat}
-          >
-            <SmartContractIcon color="textSubtle" />
-          </IconButton>
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTwitter}
-            >
-              <TwitterIcon color="textSubtle" />
-            </IconButton>
-          )}
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTelegram}
-            >
-              <TelegramIcon color="textSubtle" />
-            </IconButton>
-          )}
-        </FlexGap>
+        <Contacts contactChannels={contactChannels} contacts={contacts} />
       </Flex>
     </>
   )
