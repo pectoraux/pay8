@@ -190,14 +190,6 @@ const Pools: React.FC<any> = () => {
               ) : (
                 <PoolsTable urlSearch={normalizedUrlSearch} pools={chosenPools} account={account} />
               )}
-              <Image
-                // mx="auto"
-                // mt="12px"
-                src="/images/decorations/3d-syrup-bunnies.png"
-                alt="Payswap illustration"
-                width={192}
-                height={184.5}
-              />
             </>
           )}
         </PoolControls>

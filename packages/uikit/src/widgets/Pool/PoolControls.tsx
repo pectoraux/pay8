@@ -226,7 +226,11 @@ export function PoolControls<T>({
             <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
               {t("Search")}
             </Text>
-            <SearchInput initialValue={searchQuery} onChange={handleChangeSearchQuery} placeholder="Search Pools" />
+            <SearchInput
+              initialValue={searchQuery}
+              onChange={handleChangeSearchQuery}
+              placeholder={t("Search Pools")}
+            />
           </LabelWrapper>
         </FilterContainer>
       </PoolControlsView>
