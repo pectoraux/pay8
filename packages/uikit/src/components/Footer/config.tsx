@@ -14,22 +14,22 @@ export const footerLinks: FooterLinkType[] = [
         label: "Blog",
         href: "https://blog.pancakeswap.finance/",
       },
-      {
-        label: "Community",
-        href: "https://docs.pancakeswap.finance/contact-us/telegram",
-      },
-      {
-        label: "CAKE",
-        href: "https://docs.pancakeswap.finance/tokenomics/cake",
-      },
-      {
-        label: "—",
-      },
-      {
-        label: "Online Store",
-        href: "https://pancakeswap.creator-spring.com/",
-        isHighlighted: true,
-      },
+      // {
+      //   label: "Community",
+      //   href: "https://docs.pancakeswap.finance/contact-us/telegram",
+      // },
+      // {
+      //   label: "CAKE",
+      //   href: "https://docs.pancakeswap.finance/tokenomics/cake",
+      // },
+      // {
+      //   label: "—",
+      // },
+      // {
+      //   label: "Online Store",
+      //   href: "https://pancakeswap.creator-spring.com/",
+      //   isHighlighted: true,
+      // },
     ],
   },
   {
@@ -54,24 +54,24 @@ export const footerLinks: FooterLinkType[] = [
     items: [
       {
         label: "Github",
-        href: "https://github.com/pancakeswap",
+        href: "https://github.com/pectoraux",
       },
       {
         label: "Documentation",
         href: "https://docs.pancakeswap.finance",
       },
-      {
-        label: "Bug Bounty",
-        href: "https://app.gitbook.com/@pancakeswap-1/s/pancakeswap/code/bug-bounty",
-      },
-      {
-        label: "Audits",
-        href: "https://docs.pancakeswap.finance/help/faq#is-pancakeswap-safe-has-pancakeswap-been-audited",
-      },
-      {
-        label: "Careers",
-        href: "https://docs.pancakeswap.finance/hiring/become-a-chef",
-      },
+      // {
+      //   label: "Bug Bounty",
+      //   href: "https://app.gitbook.com/@pancakeswap-1/s/pancakeswap/code/bug-bounty",
+      // },
+      // {
+      //   label: "Audits",
+      //   href: "https://docs.pancakeswap.finance/help/faq#is-pancakeswap-safe-has-pancakeswap-been-audited",
+      // },
+      // {
+      //   label: "Careers",
+      //   href: "https://docs.pancakeswap.finance/hiring/become-a-chef",
+      // },
     ],
   },
 ];

@@ -97,7 +97,7 @@ const Steps: React.FC<any> = ({ title }) => {
             <Box>
               <Text mb="4px" color="textSubtle" small>
                 {t(
-                  'Only unique profiles can follow and only unique profiles can get followed. Following users enable you to receive their broadcasts.',
+                  'Only unique profiles can follow and only unique profiles can get followed. Following users enable you to receive their broadcasts. It also lets you create a decentralized social graph that you can port from social media to social media. You can install your followers on a new social media just like you would install an app.',
                 )}
               </Text>
             </Box>
