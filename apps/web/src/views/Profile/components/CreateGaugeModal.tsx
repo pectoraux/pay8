@@ -502,6 +502,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_ACCOUNT)}>
             {t('ADD ACCOUNT')}
           </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.PAY)}>
+            {t('PAY PROFILE')}
+          </Button>
           {/* <Button mb="8px" variant='success' onClick={()=> setStage(LockStage.ADD_ACCOUNT_FROM_PROOF) }>
             {t('ADD ACCOUNT FROM PROOF')}
           </Button> */}

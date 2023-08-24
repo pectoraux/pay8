@@ -37,6 +37,7 @@ import AdminWithdrawStage from './AdminWithdrawStage'
 import DeleteStage from './DeleteStage'
 import DeleteSponsorStage from './DeleteSponsorStage'
 import LocationStage from 'views/Ramps/components/LocationStage'
+import UpdateApplicationStage from 'views/ARPs/components/UpdateApplicationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -56,6 +57,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.TRANSFER_TO_NOTE_RECEIVABLE]: t('Transfer Note Receivable'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.UPDATE_APPLICATION]: t('Update Application Link'),
+  [LockStage.CONFIRM_UPDATE_APPLICATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PROTOCOL]: t('Back'),
   [LockStage.CONFIRM_CLAIM_NOTE]: t('Back'),
@@ -169,6 +172,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_UPDATE_LOCATION:
         setStage(LockStage.UPDATE_LOCATION)
         break
+      case LockStage.UPDATE_APPLICATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_APPLICATION:
+        setStage(LockStage.UPDATE_APPLICATION)
+        break
       case LockStage.CLAIM_NOTE:
         setStage(LockStage.ADMIN_SETTINGS)
         break
@@ -263,6 +272,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.UPDATE_LOCATION:
         setStage(LockStage.CONFIRM_UPDATE_LOCATION)
         break
+      case LockStage.UPDATE_APPLICATION:
+        setStage(LockStage.CONFIRM_UPDATE_APPLICATION)
+        break
       case LockStage.CLAIM_NOTE:
         setStage(LockStage.CONFIRM_CLAIM_NOTE)
         break
@@ -343,6 +355,13 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_UPDATE_LOCATION===============>', args)
         return callWithGasPrice(sponsorHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
           console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_APPLICATION) {
+        const args = ['0', '0', '', '', '0', '0', ADDRESS_ZERO, state.applicationLink]
+        console.log('CONFIRM_UPDATE_APPLICATION===============>', args)
+        return callWithGasPrice(sponsorHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_APPLICATION===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_CLAIM_NOTE) {
@@ -513,6 +532,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_APPLICATION)}>
+            {t('UPDATE APPLICATION')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
             {t('UPDATE PARAMETERS')}
           </Button>
@@ -559,6 +581,9 @@ const CreateGaugeModal: React.FC<any> = ({
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.UPDATE_APPLICATION && (
+        <UpdateApplicationStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.CLAIM_NOTE && (
         <ClaimNoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

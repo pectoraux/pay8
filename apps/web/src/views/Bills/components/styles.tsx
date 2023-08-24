@@ -16,6 +16,7 @@ export const stagesWithApproveButton = [
 ]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_UPDATE_APPLICATION,
   LockStage.CONFIRM_PAY,
   LockStage.CONFIRM_VOTE,
   LockStage.CONFIRM_UPDATE_TAX_CONTRACT,
@@ -52,6 +53,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_APPLICATION,
+  LockStage.CONFIRM_UPDATE_APPLICATION,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.NOTIFY_CREDIT,

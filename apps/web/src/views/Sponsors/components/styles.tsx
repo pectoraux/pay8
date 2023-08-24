@@ -11,6 +11,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
 export const stagesWithApproveButton = [LockStage.CONFIRM_DEPOSIT_DUE]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_UPDATE_APPLICATION,
   LockStage.CONFIRM_TRANSFER_TO_NOTE_RECEIVABLE,
   LockStage.CONFIRM_CLAIM_NOTE,
   LockStage.CONFIRM_DELETE,
@@ -29,6 +30,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_APPLICATION,
+  LockStage.CONFIRM_UPDATE_APPLICATION,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.TRANSFER_TO_NOTE_RECEIVABLE,

@@ -56,7 +56,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const [allowing, setAllowing] = useState(false)
-  const currencyAddress = currency.address ?? DEFAULT_INPUT_CURRENCY
+  const currencyAddress = currency?.address ?? DEFAULT_INPUT_CURRENCY
   const { toastSuccess, toastError } = useToast()
   const [nftFilters, setNftFilters] = useState<any>({})
   const stakingTokenContract = useERC20(currencyAddress || '')
@@ -385,7 +385,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
           >
             {t('%text% %symbol%', {
               text: status === FetchStatus.Fetching ? 'Enabling for' : 'Enable for',
-              symbol: currency.symbol,
+              symbol: currency?.symbol ?? '',
               titleName,
             })}
           </Button>
@@ -396,7 +396,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('%text% %symbol%', { text: 'Create a stake with', symbol: currency.symbol, titleName })}
+            {t('%text% %symbol%', { text: 'Create a stake with', symbol: currency?.symbol ?? '', titleName })}
           </Button>
         )}
       </Flex>

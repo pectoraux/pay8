@@ -30,7 +30,13 @@ import CardFooter from './components/PoolCard/CardFooter'
 import PoolsTable from './components/PoolsTable/PoolsTable'
 import PoolControls from './components/PoolControls'
 import CreatePoolModal from './components/CreatePoolModal'
+import Steps from './Steps'
+import Questions from './components/Questions'
+import { useRouter } from 'next/router'
 
+const DesktopButton = styled(Button)`
+  align-self: flex-end;
+`
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
 `
@@ -69,12 +75,20 @@ const FarmFlexWrapper = styled(Flex)`
 
 const Pools: React.FC<any> = () => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { account } = useWeb3React()
   const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const [onPresentCreateGauge] = useModal(<CreatePoolModal />)
   console.log('pools===================>', pools)
   usePoolsPageFetch()
-
+  const handleClick = () => {
+    const howToElem = document.getElementById('ifo-how-to')
+    if (howToElem != null) {
+      howToElem.scrollIntoView()
+    } else {
+      router.push('/ifo#ifo-how-to')
+    }
+  }
   return (
     <>
       <PageHeader>
@@ -99,6 +113,9 @@ const Pools: React.FC<any> = () => {
                 <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
               </Flex>
             </Flex>
+            <DesktopButton onClick={handleClick} variant="subtle">
+              {t('How does it work?')}
+            </DesktopButton>
           </Flex>
           {/* <Box>
           <CardWrapper>
@@ -184,6 +201,8 @@ const Pools: React.FC<any> = () => {
             </>
           )}
         </PoolControls>
+        <Steps title={t('How does it work ?')} onPresentCreateGauge={onPresentCreateGauge} />
+        <Questions />
       </Page>
       {createPortal(<ScrollToTopButtonV2 />, document.body)}
     </>

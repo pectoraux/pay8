@@ -27,7 +27,13 @@ import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateBountyModal from './components/CreateBountyModal'
 import Filters from './Filters'
+import Steps from './Steps'
+import Questions from './components/Questions'
+import { useRouter } from 'next/router'
 
+const DesktopButton = styled(Button)`
+  align-self: flex-end;
+`
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
 `
@@ -48,6 +54,7 @@ const FinishedTextLink = styled(Link)`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
@@ -57,7 +64,14 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [onPresentTrustBounties] = useModal(<CreateBountyModal currency={currency ?? inputCurency} />)
   const nftFilters = useFilters()
   const tags = useGetTags()
-
+  const handleClick = () => {
+    const howToElem = document.getElementById('ifo-how-to')
+    if (howToElem != null) {
+      howToElem.scrollIntoView()
+    } else {
+      router.push('/ifo#ifo-how-to')
+    }
+  }
   usePoolsPageFetch()
 
   return (
@@ -96,6 +110,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
           <Flex justifyContent="flex-end" alignItems="flex-end">
             <Filters tags={tags} workspace={false} nftFilters={nftFilters} />
           </Flex>
+          <DesktopButton onClick={handleClick} variant="subtle">
+            {t('How does it work?')}
+          </DesktopButton>
         </Flex>
       </PageHeader>
       <Page>
@@ -123,6 +140,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
+        <Steps title={t('How does it work ?')} onPresentTrustBounties={onPresentTrustBounties} />
+        <Questions />
         <V3SubgraphHealthIndicator />
       </Page>
     </>

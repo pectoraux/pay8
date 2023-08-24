@@ -83,14 +83,6 @@ const PoolsTable: React.FC<any> = ({ account }) => {
                   )}
                 </StyledTable>
               </StyledTableBorder>
-              <Image
-                mx="auto"
-                mt="12px"
-                src="/images/decorations/3d-syrup-bunnies.png"
-                alt="Pancake illustration"
-                width={192}
-                height={184.5}
-              />
             </>
           )}
         </PoolControls>

@@ -62,12 +62,11 @@ const InlineLink = styled(Link)`
   display: inline;
 `
 
-const IfoSteps: React.FC<any> = ({ title, isCommitted, hasClaimed, isLive, ifoCurrencyAddress }) => {
+const IfoSteps: React.FC<any> = ({ title }) => {
   const { hasActiveProfile } = useProfile()
   const { address: account } = useAccount()
   const { t } = useTranslation()
-  const { balance } = useTokenBalance(ifoCurrencyAddress)
-  const stepsValidationStatus = [hasActiveProfile, balance.isGreaterThan(0), isCommitted, hasClaimed]
+  const stepsValidationStatus = [hasActiveProfile, true, true, true]
 
   const renderCardBody = (step: number) => {
     const isStepValid = stepsValidationStatus[step]

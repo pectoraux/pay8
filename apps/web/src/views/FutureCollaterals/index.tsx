@@ -86,7 +86,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       </PageHeader>
       <Page>
         <PoolControls pools={pools}>
-          {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
+          {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
@@ -109,13 +109,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
-        <Steps
-          title={t('How to mint a Future Collateral')}
-          isLive={true}
-          hasClaimed={true}
-          isCommitted={false}
-          ifoCurrencyAddress={ADDRESS_ZERO}
-        />
+        <Steps title={t('How to mint a Future Collateral')} />
         <Questions />
         <V3SubgraphHealthIndicator />
       </Page>

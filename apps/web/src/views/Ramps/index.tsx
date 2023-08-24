@@ -1,4 +1,5 @@
 import { useAccount } from 'wagmi'
+import styled from 'styled-components'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
@@ -10,16 +11,31 @@ import PoolRow from './components/PoolsTable/PoolRow'
 import CreateRampModal from './components/CreateRampModal'
 
 import Filters from './Filters'
+import Steps from './Steps'
+import Questions from './components/Questions'
+import { useRouter } from 'next/router'
+
+const DesktopButton = styled(Button)`
+  align-self: flex-end;
+`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   const [onPresentCreateGauge] = useModal(<CreateRampModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
   console.log('pools=============>', pools, tags)
-
+  const handleClick = () => {
+    const howToElem = document.getElementById('ifo-how-to')
+    if (howToElem != null) {
+      howToElem.scrollIntoView()
+    } else {
+      router.push('/ifo#ifo-how-to')
+    }
+  }
   usePoolsPageFetch()
 
   return (
@@ -48,6 +64,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
           <Flex justifyContent="flex-end" alignItems="flex-end">
             <Filters tags={tags} workspace={false} nftFilters={nftFilters} />
           </Flex>
+          <DesktopButton onClick={handleClick} variant="subtle">
+            {t('How does it work?')}
+          </DesktopButton>
         </Flex>
       </PageHeader>
       <Page>
@@ -75,6 +94,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
+        <Steps title={t('How to create my own ramp ?')} onPresentCreateGauge={onPresentCreateGauge} />
+        <Questions />
         <V3SubgraphHealthIndicator />
       </Page>
     </>

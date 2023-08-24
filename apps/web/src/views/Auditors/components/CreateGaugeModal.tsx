@@ -48,6 +48,8 @@ import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import UpdateRatingLegendStage from './UpdateRatingLegendStage'
 import LocationStage from 'views/Ramps/components/LocationStage'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import UpdateApplicationStage from 'views/ARPs/components/UpdateApplicationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -80,6 +82,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_TAG_REGISTRATION]: t('Update Tag Registration'),
   [LockStage.UPDATE_DATA_KEEPER]: t('Update Data Keeper'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.UPDATE_APPLICATION]: t('Update Application Link'),
+  [LockStage.CONFIRM_UPDATE_APPLICATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
   [LockStage.CONFIRM_TRANSFER_TO_NOTE_RECEIVABLE]: t('Back'),
@@ -216,6 +220,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CONFIRM_UPDATE_LOCATION:
         setStage(LockStage.UPDATE_LOCATION)
+        break
+      case LockStage.UPDATE_APPLICATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_APPLICATION:
+        setStage(LockStage.UPDATE_APPLICATION)
         break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
@@ -389,6 +399,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.UPDATE_LOCATION:
         setStage(LockStage.CONFIRM_UPDATE_LOCATION)
         break
+      case LockStage.UPDATE_APPLICATION:
+        setStage(LockStage.CONFIRM_UPDATE_APPLICATION)
+        break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA)
         break
@@ -508,6 +521,13 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_UPDATE_LOCATION===============>', args)
         return callWithGasPrice(auditorNoteContract, 'emitUpdateMiscellaneous', args).catch((err) =>
           console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_APPLICATION) {
+        const args = ['0', '0', state.contactChannels, state.contacts, '0', '0', ADDRESS_ZERO, state.applicationLink]
+        console.log('CONFIRM_UPDATE_APPLICATION===============>', args)
+        return callWithGasPrice(auditorNoteContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_APPLICATION===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA) {
@@ -773,6 +793,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_APPLICATION)}>
+            {t('UPDATE APPLICATION')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
             {t('AUTOCHARGE')}
           </Button>
@@ -849,6 +872,9 @@ const CreateGaugeModal: React.FC<any> = ({
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.UPDATE_APPLICATION && (
+        <UpdateApplicationStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_DISCOUNT_DIVISOR && (
         <UpdateDiscountDivisorStage

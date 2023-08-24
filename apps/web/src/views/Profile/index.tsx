@@ -2,7 +2,7 @@ import { FC, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { isAddress } from 'utils'
 import { useProfileForAddress, usePoolsPageFetch } from 'state/profile/hooks'
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { Box, Flex, Text, Button } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
@@ -10,6 +10,8 @@ import MarketPageHeader from '../Nft/market/components/MarketPageHeader'
 import ProfileHeader from './components/ProfileHeader'
 import NoNftsImage from '../Nft/market/components/Activity/NoNftsImage'
 import TabMenu from './components/TabMenu'
+import Steps from './Steps'
+import Questions from './components/Questions'
 
 const TabMenuWrapper = styled(Box)`
   position: absolute;
@@ -22,13 +24,23 @@ const TabMenuWrapper = styled(Box)`
     transform: none;
   }
 `
+const DesktopButton = styled(Button)`
+  align-self: flex-end;
+`
 
 const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   const accountAddress = useRouter().query.accountAddress as string
   const { t } = useTranslation()
   usePoolsPageFetch()
   const invalidAddress = !accountAddress || isAddress(accountAddress) === false
-
+  const handleClick = () => {
+    const howToElem = document.getElementById('ifo-how-to')
+    if (howToElem != null) {
+      howToElem.scrollIntoView()
+    } else {
+      useRouter().push('/ifo#ifo-how-to')
+    }
+  }
   const {
     profile,
     isValidating: isProfileValidating,
@@ -93,7 +105,14 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
           <TabMenu id={profile?.id} />
         </TabMenuWrapper>
       </MarketPageHeader>
-      <Page style={{ minHeight: 'auto' }}>{children}</Page>
+      <Page style={{ minHeight: 'auto' }}>
+        <DesktopButton onClick={handleClick} variant="subtle">
+          {t('How does it work?')}
+        </DesktopButton>
+        {children}
+        <Steps title={t('How does it work ?')} />
+        <Questions />
+      </Page>
     </>
   )
 }

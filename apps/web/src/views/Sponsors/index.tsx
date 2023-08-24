@@ -9,16 +9,31 @@ import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateSponsorModal from './components/CreateSponsorModal'
 import Filters from './Filters'
+import Steps from './Steps'
+import Questions from './components/Questions'
+import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
+const DesktopButton = styled(Button)`
+  align-self: flex-end;
+`
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   console.log('7pools=============>', pools)
   const [onPresentCreateGauge] = useModal(<CreateSponsorModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
-
+  const handleClick = () => {
+    const howToElem = document.getElementById('ifo-how-to')
+    if (howToElem != null) {
+      howToElem.scrollIntoView()
+    } else {
+      router.push('/ifo#ifo-how-to')
+    }
+  }
   usePoolsPageFetch()
 
   return (
@@ -47,6 +62,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
           <Flex justifyContent="flex-end" alignItems="flex-end">
             <Filters tags={tags} workspace={false} nftFilters={nftFilters} />
           </Flex>
+          <DesktopButton onClick={handleClick} variant="subtle">
+            {t('How does it work?')}
+          </DesktopButton>
         </Flex>
       </PageHeader>
       <Page>
@@ -74,6 +92,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
+        <Steps title={t('How does it work ?')} onPresentCreateGauge={onPresentCreateGauge} />
+        <Questions />
         <V3SubgraphHealthIndicator />
       </Page>
     </>
