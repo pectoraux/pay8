@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import every from 'lodash/every'
 import {
   Box,
   Button,
@@ -9,7 +8,6 @@ import {
   Container,
   Flex,
   Heading,
-  Link,
   NextLinkFromReactRouter as RouterLink,
   Step,
   Stepper,
@@ -18,8 +16,6 @@ import {
 import { Address, useAccount } from 'wagmi'
 
 import { useTranslation } from '@pancakeswap/localization'
-import useTokenBalance from 'hooks/useTokenBalance'
-import { useProfile } from 'state/profile/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 
 interface TypeProps {
@@ -28,12 +24,6 @@ interface TypeProps {
   isCommitted: boolean
   isLive?: boolean
 }
-
-const SmallStakePoolCard = styled(Box)`
-  margin-top: 16px;
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  background-color: ${({ theme }) => theme.colors.background};
-`
 
 const Wrapper = styled(Container)`
   margin-left: -16px;
@@ -47,11 +37,7 @@ const Wrapper = styled(Container)`
   }
 `
 
-const InlineLink = styled(Link)`
-  display: inline;
-`
-
-const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
+const Steps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
   const { address: account } = useAccount()
   const { t } = useTranslation()
   const stepsValidationStatus = [true, true, true]
@@ -151,4 +137,4 @@ const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
   )
 }
 
-export default IfoSteps
+export default Steps

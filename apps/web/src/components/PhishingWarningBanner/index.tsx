@@ -100,18 +100,12 @@ const PhishingWarningBanner: React.FC<React.PropsWithChildren> = () => {
       {isMobile || isMd ? (
         <>
           <Box>{warningTextComponent}</Box>
-          <IconButton onClick={hideBanner} variant="text">
-            <CloseIcon color="#FFFFFF" />
-          </IconButton>
         </>
       ) : (
         <>
           <InnerContainer>
             <SpeechBubble style={{ marginRight: '3px' }}>{warningTextComponent}</SpeechBubble>
           </InnerContainer>
-          <IconButton onClick={hideBanner} variant="text">
-            <CloseIcon color="#FFFFFF" />
-          </IconButton>
         </>
       )}
     </Container>

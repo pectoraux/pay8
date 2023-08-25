@@ -85,6 +85,9 @@ const AddToHomeScreenBanner: React.FC<React.PropsWithChildren> = () => {
           <InnerContainer>
             <SpeechBubble>{warningTextComponent}</SpeechBubble>
           </InnerContainer>
+          <IconButton onClick={hideBanner} variant="text">
+            <CloseIcon color="#FFFFFF" />
+          </IconButton>
         </>
       )}
     </Container>
