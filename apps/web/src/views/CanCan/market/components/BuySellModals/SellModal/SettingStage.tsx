@@ -2,7 +2,7 @@ import { differenceInSeconds } from 'date-fns'
 import { useState, ChangeEvent } from 'react'
 import { requiresApproval } from 'utils/requiresApproval'
 import { Flex, Grid, Text, Button, useToast } from '@pancakeswap/uikit'
-import { Currency, MaxUint256 } from '@pancakeswap/sdk'
+import { MaxUint256 } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation, ContextApi } from '@pancakeswap/localization'
@@ -15,13 +15,14 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import {
   useMarketCollectionsContract,
   useMarketTradesContract,
+  useNFTicketHelper,
   usePaywallMarketTradesContract,
 } from 'hooks/useContract'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import AvatarImage from '../../BannerHeader/AvatarImage'
-import { SellingStage, MarketPlace } from './types'
+import { SellingStage } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
 import UpdateAuditorsStage from './UpdateAuditorsStage'
 import ModifyCollectionModal from './ModifyCollectionModal'
@@ -29,7 +30,12 @@ import ModifyContactModal from './ModifyContactModal'
 import TransferDueToNote from './TransferDueToNote'
 import FundPendingRevenue from './FundPendingRevenue'
 import ClaimPendingRevenue from './ClaimPendingRevenue'
+import UpdateTagStage from './UpdateTagStage'
+import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
+import UpdatePricePerMinuteStage from './UpdatePricePerMinuteStage'
+import UpdateExcludedContentStage from './UpdateExcludedContentStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import BigNumber from 'bignumber.js'
 
 interface EditStageProps {
   variant: 'ProductPage' | 'ChannelPage'
@@ -53,6 +59,12 @@ const getToastText = (stage: SellingStage, t: ContextApi['t']) => {
   if (stage === SellingStage.CONFIRM_UPDATE_AUDITORS) {
     return t('Auditors successfully updated')
   }
+  if (stage === SellingStage.CONFIRM_UPDATE_TAG) {
+    return t('Tag successfully updated')
+  }
+  if (stage === SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION) {
+    return t('Tag registration successfully updated')
+  }
   return ''
 }
 
@@ -66,6 +78,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
   const { callWithGasPrice } = useCallWithGasPrice()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const marketCollectionsContract = useMarketCollectionsContract()
+  const nfticketHelperContract = useNFTicketHelper()
   const itemMarketTradesContract = useMarketTradesContract()
   const paywallMarketTradesContract = usePaywallMarketTradesContract()
   const paywallPath = '/cancan/collections/[collectionAddress]/paywall/[tokenId]'
@@ -108,10 +121,10 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     instagramChannel: '',
     contactChannels: collection?.contactChannels?.toString() ?? '',
     contacts: collection?.contacts?.toString() ?? '',
-    workspace: [],
-    country: [],
-    city: [],
-    product: [],
+    tag: '',
+    productId: '',
+    price: '',
+    contentType: '',
   }))
   const [nftFilters, setNewFilters] = useState({
     workspace: collection?.workspaces,
@@ -176,6 +189,30 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
       case SellingStage.CONFIRM_UPDATE_AUDITORS:
         setStage(SellingStage.UPDATE_AUDITORS)
         break
+      case SellingStage.UPDATE_TAG:
+        setStage(SellingStage.SETTINGS)
+        break
+      case SellingStage.CONFIRM_UPDATE_TAG:
+        setStage(SellingStage.UPDATE_TAG)
+        break
+      case SellingStage.UPDATE_TAG_REGISTRATION:
+        setStage(SellingStage.SETTINGS)
+        break
+      case SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION:
+        setStage(SellingStage.UPDATE_TAG_REGISTRATION)
+        break
+      case SellingStage.UPDATE_PRICE_PER_MINUTE:
+        setStage(SellingStage.SETTINGS)
+        break
+      case SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE:
+        setStage(SellingStage.UPDATE_PRICE_PER_MINUTE)
+        break
+      case SellingStage.UPDATE_EXCLUDED_CONTENT:
+        setStage(SellingStage.SETTINGS)
+        break
+      case SellingStage.CONFIRM_UPDATE_EXCLUDED_CONTENT:
+        setStage(SellingStage.UPDATE_EXCLUDED_CONTENT)
+        break
       default:
         break
     }
@@ -200,6 +237,18 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         break
       case SellingStage.UPDATE_AUDITORS:
         setStage(SellingStage.CONFIRM_UPDATE_AUDITORS)
+        break
+      case SellingStage.UPDATE_TAG:
+        setStage(SellingStage.CONFIRM_UPDATE_TAG)
+        break
+      case SellingStage.UPDATE_TAG_REGISTRATION:
+        setStage(SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION)
+        break
+      case SellingStage.UPDATE_PRICE_PER_MINUTE:
+        setStage(SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE)
+        break
+      case SellingStage.UPDATE_EXCLUDED_CONTENT:
+        setStage(SellingStage.CONFIRM_UPDATE_EXCLUDED_CONTENT)
         break
       default:
         break
@@ -246,6 +295,33 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           !!state.requestUserRegistration,
           !!state.requestPartnerRegistration,
         ]).catch((err) => console.log('CONFIRM_MODIFY_COLLECTION===========>', err))
+      }
+      if (stage === SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION) {
+        console.log('CONFIRM_UPDATE_TAG_REGISTRATION===========>', [state.tag, !!state.add])
+        return callWithGasPrice(nfticketHelperContract, 'updateTagRegistration', [state.tag, !!state.add]).catch(
+          (err) => console.log('CONFIRM_UPDATE_TAG_REGISTRATION===========>', err),
+        )
+      }
+      if (stage === SellingStage.CONFIRM_UPDATE_TAG) {
+        console.log('CONFIRM_UPDATE_TAG===========>', [state.productId, state.tag])
+        return callWithGasPrice(nfticketHelperContract, 'updateTag', [state.productId, state.tag]).catch((err) =>
+          console.log('CONFIRM_UPDATE_TAG===========>', err),
+        )
+      }
+      if (stage === SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE) {
+        const amount = getDecimalAmount(new BigNumber(state.price ?? 0))
+        console.log('CONFIRM_UPDATE_PRICE_PER_MINUTE===========>', [amount?.toString()])
+        return callWithGasPrice(nfticketHelperContract, 'updatePricePerAttachMinutes', [amount?.toString()]).catch(
+          (err) => console.log('CONFIRM_UPDATE_PRICE_PER_MINUTE===========>', err),
+        )
+      }
+      if (stage === SellingStage.CONFIRM_UPDATE_EXCLUDED_CONTENT) {
+        console.log('CONFIRM_UPDATE_EXCLUDED_CONTENT===========>', [state.tag, state.contentType, !!state.add])
+        return callWithGasPrice(nfticketHelperContract, 'updateExcludedContent', [
+          state.tag,
+          state.contentType,
+          !!state.add,
+        ]).catch((err) => console.log('CONFIRM_UPDATE_EXCLUDED_CONTENT===========>', err))
       }
       if (stage === SellingStage.CONFIRM_MODIFY_CONTACT) {
         const args = [
@@ -368,6 +444,18 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           <Button mb="8px" variant="secondary" onClick={() => setStage(SellingStage.UPDATE_AUDITORS)}>
             {t('Update auditors')}
           </Button>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(SellingStage.UPDATE_TAG)}>
+            {t('Update Tag')}
+          </Button>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(SellingStage.UPDATE_TAG_REGISTRATION)}>
+            {t('Update Tag Registration')}
+          </Button>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(SellingStage.UPDATE_PRICE_PER_MINUTE)}>
+            {t('Update Price Per Minute')}
+          </Button>
+          <Button variant="danger" mb="8px" onClick={() => setStage(SellingStage.UPDATE_EXCLUDED_CONTENT)}>
+            {t('Update Excluded Content')}
+          </Button>
           {variant === 'ProductPage' && (
             <>
               <Button mb="8px" onClick={() => setStage(SellingStage.CLAIM_PENDING_REVENUE)}>
@@ -434,6 +522,38 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           setNftFilters={setNewFilters}
           collection={collection}
           handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === SellingStage.UPDATE_TAG && (
+        <UpdateTagStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === SellingStage.UPDATE_TAG_REGISTRATION && (
+        <UpdateTagRegistrationStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === SellingStage.UPDATE_PRICE_PER_MINUTE && (
+        <UpdatePricePerMinuteStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === SellingStage.UPDATE_EXCLUDED_CONTENT && (
+        <UpdateExcludedContentStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
       )}

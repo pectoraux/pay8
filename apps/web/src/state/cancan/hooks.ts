@@ -25,6 +25,7 @@ import {
   getItemSg,
   getCollectionId,
   getTag,
+  getPricePerMinute,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 
@@ -47,6 +48,11 @@ export const useGetTransactions = (userAddress) => {
 export const useGetProfileId = (account: string) => {
   const { data, status } = useSWR(['profileId', account], async () => getProfile(account))
   return { data, status }
+}
+
+export const useGetPricePerMinute = (merchantId: string) => {
+  const { data } = useSWR(['pricePerMinute', merchantId], async () => getPricePerMinute(merchantId))
+  return data
 }
 
 export const useGetCollection = (collectionAddress: string) => {
@@ -186,7 +192,7 @@ export const useGetItem = (collectionAddress: string, tokenId: string) => {
 export const useGetCollectionId = (collectionAddress) => {
   try {
     const { data } = useSWR(
-      ['cancan-getCollectionId4', collectionAddress],
+      ['cancan-getCollectionId', collectionAddress],
       async () => getCollectionId(collectionAddress),
       {
         revalidateIfStale: true,

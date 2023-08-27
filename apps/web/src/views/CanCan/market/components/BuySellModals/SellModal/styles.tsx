@@ -21,6 +21,14 @@ export const stagesWithBackButton = [
   SellingStage.CONFIRM_REMOVE_FROM_MARKET,
   SellingStage.TRANSFER,
   SellingStage.CONFIRM_TRANSFER,
+  SellingStage.UPDATE_TAG,
+  SellingStage.CONFIRM_UPDATE_TAG,
+  SellingStage.UPDATE_TAG_REGISTRATION,
+  SellingStage.UPDATE_EXCLUDED_CONTENT,
+  SellingStage.CONFIRM_UPDATE_EXCLUDED_CONTENT,
+  SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION,
+  SellingStage.UPDATE_PRICE_PER_MINUTE,
+  SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE,
   SellingStage.UPDATE_IDENTITY_REQUIREMENTS,
   SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS,
   SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS,
@@ -64,6 +72,10 @@ export const stagesWithBackButton = [
 export const stagesWithApproveButton = [SellingStage.CONFIRM_FUND_PENDING_REVENUE]
 
 export const stagesWithConfirmButton = [
+  SellingStage.CONFIRM_UPDATE_TAG,
+  SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION,
+  SellingStage.CONFIRM_UPDATE_EXCLUDED_CONTENT,
+  SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE,
   SellingStage.CONFIRM_CLAIM_PENDING_REVENUE,
   SellingStage.CONFIRM_TRANSFER_DUE_TO_NOTE,
   SellingStage.CONFIRM_MODIFY_COLLECTION,

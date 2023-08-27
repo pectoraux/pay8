@@ -15,6 +15,18 @@ export enum SellingStage {
   // Transfer flow
   TRANSFER,
   CONFIRM_TRANSFER,
+  // update tag
+  UPDATE_TAG,
+  CONFIRM_UPDATE_TAG,
+  // update tag registration
+  UPDATE_TAG_REGISTRATION,
+  CONFIRM_UPDATE_TAG_REGISTRATION,
+  // update price per minute
+  UPDATE_PRICE_PER_MINUTE,
+  CONFIRM_UPDATE_PRICE_PER_MINUTE,
+  // update excluded content
+  UPDATE_EXCLUDED_CONTENT,
+  CONFIRM_UPDATE_EXCLUDED_CONTENT,
   // Update identity requirements flow
   UPDATE_IDENTITY_REQUIREMENTS,
   CONFIRM_UPDATE_IDENTITY_REQUIREMENTS,

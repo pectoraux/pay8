@@ -24,6 +24,9 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useNFTicketHelper } from 'hooks/useContract'
 import { Divider } from 'views/ARPs/components/styles'
 import { GreyedOutContainer } from 'views/Nft/market/components/BuySellModals/SellModal/styles'
+import { useGetPricePerMinute } from 'state/cancan/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { DEFAULT_SYMBOL } from 'config/constants/exchange'
 // import { Label, SecondaryLabel } from '../CreateProposal/styles'
 // import { combineDateAndTime } from '../CreateProposal/helpers'
 
@@ -44,7 +47,7 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
   const [minutes, setMinutes] = useState<any>(0)
   const [media, setMedia] = useState<any>('')
   const nfticketHelper = useNFTicketHelper()
-
+  const price = useGetPricePerMinute(merchantId) as any
   const handleSponsorTag = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
@@ -84,7 +87,14 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Sponsor Tag: [%tag%]', { tag })} onDismiss={onDismiss}>
+    <Modal
+      title={t('Sponsor Tag: [%tag%] (%price% %symb% per minute)', {
+        tag,
+        price: getBalanceNumber(price),
+        symb: DEFAULT_SYMBOL,
+      })}
+      onDismiss={onDismiss}
+    >
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Sponsor Card Address')}

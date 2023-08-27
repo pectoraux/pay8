@@ -16,6 +16,7 @@ import {
   useMarketHelperContract,
   useMarketCollectionsContract,
   usePaywallMarketHelperContract,
+  useNFTicketHelper,
 } from 'hooks/useContract'
 import { NftToken } from 'state/cancan/types'
 import BigNumber from 'bignumber.js'
@@ -49,6 +50,9 @@ const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS]: t('Update Tokens To Burn For Credit'),
   [SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS]: t('Update Discounts and Cashback'),
   [SellingStage.ADD_USERS_PAYMENT_CREDIT]: t('Users Payment Credits'),
+  [SellingStage.UPDATE_TAG]: t('Update Tag'),
+  [SellingStage.UPDATE_TAG_REGISTRATION]: t('Update Tag Registration'),
+  [SellingStage.UPDATE_PRICE_PER_MINUTE]: t('Update Price Per Minute'),
   [SellingStage.REMOVE_FROM_MARKET]: t('Remove From Market'),
   [SellingStage.REINITIALIZE_IDENTITY_LIMITS]: t('Reset Identity Limits'),
   [SellingStage.REINITIALIZE_DISCOUNTS_LIMITS]: t('Reset Discounts Limits'),
@@ -57,10 +61,13 @@ const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.CONFIRM_ADJUST_OPTIONS]: t('Back'),
   [SellingStage.CONFIRM_ADD_LOCATION]: t('Back'),
   [SellingStage.CONFIRM_REMOVE_FROM_MARKET]: t('Back'),
+  [SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_BURN_FOR_CREDIT_TOKENS]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_DISCOUNTS_AND_CASHBACKS]: t('Back'),
   [SellingStage.CONFIRM_ADD_USERS_PAYMENT_CREDIT]: t('Back'),
+  [SellingStage.CONFIRM_UPDATE_TAG]: t('Back'),
+  [SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION]: t('Back'),
   [SellingStage.CONFIRM_REINITIALIZE_IDENTITY_LIMITS]: t('Back'),
   [SellingStage.CONFIRM_REINITIALIZE_DISCOUNTS_LIMITS]: t('Back'),
   [SellingStage.CONFIRM_REINITIALIZE_CASHBACK_LIMITS]: t('Back'),
@@ -172,6 +179,8 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     period: nftToSell?.period ?? '0',
     isTradable: Number(nftToSell?.isTradable) ?? 0,
     isPaywall: 0,
+    tag: '',
+    add: 0,
   }))
   console.log('options===================>', options, nftToSell)
   const [stage, setStage] = useState(SellingStage.EDIT)
@@ -261,6 +270,12 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
       case SellingStage.CONFIRM_ADD_USERS_PAYMENT_CREDIT:
         setStage(SellingStage.ADD_USERS_PAYMENT_CREDIT)
         break
+      case SellingStage.UPDATE_PRICE_PER_MINUTE:
+        setStage(SellingStage.EDIT)
+        break
+      case SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE:
+        setStage(SellingStage.UPDATE_PRICE_PER_MINUTE)
+        break
       case SellingStage.REINITIALIZE_IDENTITY_LIMITS:
         setStage(SellingStage.EDIT)
         break
@@ -315,6 +330,9 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
         break
       case SellingStage.ADD_USERS_PAYMENT_CREDIT:
         setStage(SellingStage.CONFIRM_ADD_USERS_PAYMENT_CREDIT)
+        break
+      case SellingStage.UPDATE_PRICE_PER_MINUTE:
+        setStage(SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE)
         break
       case SellingStage.REMOVE_FROM_MARKET:
         setStage(SellingStage.CONFIRM_REMOVE_FROM_MARKET)

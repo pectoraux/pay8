@@ -6,6 +6,7 @@ import {
   getMarketCollectionsAddress,
   getMarketHelperAddress,
   getMarketOrdersAddress,
+  getNFTicketHelperAddress,
   getNftMarketHelper3Address,
   getNftMarketHelperAddress,
   getPaywallMarketHelperAddress,
@@ -42,6 +43,7 @@ import { nftMarketHelperABI } from 'config/abi/nftMarketHelper'
 import { nftMarketHelper3ABI } from 'config/abi/nftMarketHelper3'
 import { veABI } from 'config/abi/ve'
 import { marketCollectionsABI } from 'config/abi/marketCollections'
+import { nfticketHelperABI } from 'config/abi/nfticketHelper'
 
 export const getTag = async () => {
   try {
@@ -1145,4 +1147,20 @@ export const getCollectionId = async (address) => {
     ],
   })
   return collectionId.result
+}
+
+export const getPricePerMinute = async (merchantId) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const [pricePerMinute] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getNFTicketHelperAddress(),
+        abi: nfticketHelperABI,
+        functionName: 'pricePerAttachMinutes',
+        args: [merchantId],
+      },
+    ],
+  })
+  return pricePerMinute.result
 }
