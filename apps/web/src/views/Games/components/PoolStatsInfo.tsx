@@ -87,7 +87,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.devaddr_ && (
+      {pool?.gam && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.devaddr_, 'address', chainId)} bold={false} small>
             {t('View Admin Info')}
@@ -106,6 +106,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
+      {pool?.gameLink ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal href={pool?.gameLink} bold={false} small>
+            {t('Play %val%', { val: pool?.gameName ?? '' })}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
           {t('View NFTs')}
@@ -152,7 +159,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
                 </Button>
               ))
           : null}
-        {pool?.accounts?.length ? (
+        {pool?.accounts?.length &&
+        pool?.accounts?.filter(
+          (protocol) =>
+            account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
+            account?.toLowerCase() === pool?.owner?.toLowerCase(),
+        )?.length ? (
           <Button
             key="clear-all"
             variant="text"

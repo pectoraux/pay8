@@ -45,17 +45,18 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currUser, decimals = 18 
                 {t('Ticket Rewards Per Bracket (%val%)', { val: currUser?.claimed ? 'CLAIMED' : 'UNCLAIMED' })}
               </Text>
               <Flex flexDirection="column" overflow="auto" maxHeight="50px" position="relative">
-                {rewards?.length &&
-                  rewards?.map((rwd, index) => (
-                    <Balance
-                      decimals={5}
-                      bold={!isMobile}
-                      fontSize="13px"
-                      color={Number(currUser?.rewards) ? 'primary' : 'textDisabled'}
-                      value={getBalanceNumber(new BigNumber(rwd.toString()), decimals) ?? 0}
-                      prefix={`${index + 1}) `}
-                    />
-                  ))}
+                {rewards?.length
+                  ? rewards?.map((rwd, index) => (
+                      <Balance
+                        decimals={5}
+                        bold={!isMobile}
+                        fontSize="13px"
+                        color={Number(currUser?.rewards) ? 'primary' : 'textDisabled'}
+                        value={getBalanceNumber(new BigNumber(rwd.toString()), decimals) ?? 0}
+                        prefix={`${index + 1}) `}
+                      />
+                    ))
+                  : null}
               </Flex>
             </>
           )}

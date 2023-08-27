@@ -309,6 +309,7 @@ export const fetchGame = async (gameId) => {
 
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
+    ...gameFromSg,
     id: gameId,
     owner,
     gameContract,

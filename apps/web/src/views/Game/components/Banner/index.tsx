@@ -84,10 +84,10 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
   const pricePerMinutes = getBalanceNumber(data?.pricePerMinutes ?? 0, data?.token?.decimals ?? 18)
   const [onPresentLink] = useModal(
     <WebPageModal
-      width="400px"
-      height="500px"
-      title={collection?.name ?? ''}
-      link="https://meet.jit.si/VocalLawyersSpanOk"
+      width={900}
+      height={1000}
+      title={t('Open new session in a bigger window')}
+      link={data?.gameLink}
       // link={collection.telegramUrl}
     />,
   )
@@ -141,8 +141,8 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
               >
                 {t('Play')}
               </OutlineText>
-              <OutlineText fontSize={['24px', '24px', '24px', '24px', '32px']} bold ml="4px">
-                {collection?.name ?? ''}
+              <OutlineText fontSize={['24px', '24px', '24px', '24px', '32px']} textTransform="capitalize" bold ml="4px">
+                {data?.gameName ?? ''}
               </OutlineText>
             </Flex>
             <BalanceStyle bold unit={` ${symb}`} value={prizeTotal || 0} decimals={0} fontSize={['40px', '64px']} />
@@ -217,7 +217,12 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
             <Flex mb="2px" justifyContent="flex-start">
               <LinkExternal bold={false} small>
                 {true && (
-                  <IconButton as={Link} style={{ cursor: 'pointer' }} onClick={onPresentLink}>
+                  <IconButton
+                    as={Link}
+                    style={{ cursor: 'pointer' }}
+                    disabled={!data?.gameLink}
+                    onClick={onPresentLink}
+                  >
                     {t('Play Game')}
                   </IconButton>
                 )}

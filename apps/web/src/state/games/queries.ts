@@ -16,6 +16,8 @@ export const gameFields = `
   active
   claimable
   tokenId
+  gameName
+  gameLink
   pricePerMinutes
   creatorShare
   referrerFee

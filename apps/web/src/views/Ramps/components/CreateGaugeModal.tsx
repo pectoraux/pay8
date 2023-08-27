@@ -163,7 +163,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(
     currency?.address || rampAccount?.token?.address || router.query?.userCurrency || '',
   )
-  const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '', true)
+  const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '')
   const rampHelperContract = useRampHelper()
   const rampAdsContract = useRampAds()
   const dispatch = useAppDispatch()

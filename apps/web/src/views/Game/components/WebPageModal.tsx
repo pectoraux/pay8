@@ -28,11 +28,12 @@ const WebPageModal: React.FC<any> = ({ title, link, width = '100px', height = '4
       onDismiss={onDismiss}
       bodyPadding="0"
       width={width}
+      height={height}
       minWidth="0"
       headerBackground={theme.colors.textSubtle}
     >
       <Flex justifyContent="center" alignItems="center" ml="10px">
-        <Iframe url={link} height={height} id="myId" />
+        <Iframe width={width} url={link} height={height} id="myId" />
       </Flex>
     </Modal>
   )

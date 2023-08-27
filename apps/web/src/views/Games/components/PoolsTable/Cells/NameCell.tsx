@@ -35,7 +35,7 @@ const NameCell: React.FC<any> = ({ pool }) => {
               style={{ marginRight: '20px', position: 'relative' }}
             />
             <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
-            {t(pool?.collection?.name ?? '')}
+            {pool?.gameName ?? ''}
           </Flex>
         </Text>
       </Pool.CellContent>

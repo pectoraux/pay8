@@ -25,6 +25,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useGetGame } from 'state/games/hooks'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { differenceInSeconds } from 'date-fns'
+import { fantomTestnet } from 'viem/chains'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -55,6 +56,11 @@ import BlacklistAuditorStage from './BlacklistAuditorStage'
 import BlacklistTicketStage from './BlacklistTicketStage'
 import UpdateExcludedContentStage from './UpdateExcludedContentStage'
 import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
+import UpdateInfoStage from './UpdateInfoStage'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { getGameMinterAddress } from 'utils/addressHelpers'
+import { gameMinterABI } from 'config/abi/gameMinter'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -73,6 +79,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ATTACH_KILL_DETACH_TOKEN]: t('Attach, Kill, or Detach Token'),
   [LockStage.BURN_TOKEN]: t('Burn Token'),
   [LockStage.UPDATE_GAME]: t('Update Game'),
+  [LockStage.UPDATE_INFO]: t('Update Info'),
   [LockStage.UPDATE_TOKEN_ID]: t('Update Token Id'),
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
   [LockStage.UPDATE_OBJECT]: t('Update Object'),
@@ -87,6 +94,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_PRICE_PER_MINUTE]: t('Update Price Per Minute'),
   [LockStage.DELETE_GAME]: t('Delete Game'),
   [LockStage.CONFIRM_UPDATE_GAME]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_INFO]: t('Back'),
   [LockStage.CONFIRM_BURN_TOKEN]: t('Back'),
   [LockStage.CONFIRM_ATTACH_KILL_DETACH_TOKEN]: t('Back'),
   [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
@@ -134,14 +142,21 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   const gameContract = useGameContract(pool?.gameAddress || router.query.game || '')
   const gameFactoryContract = useGameFactory()
   const gameMinterContract = useGameMinter()
-  const gameMinterContractWithPayswapSigner = useGameMinter() // useGameMinter(true)
   const gameHelperContract = useGameHelper()
   const gameHelper2Contract = useGameHelper2()
-  const gameData = useGetGame(pool?.collection?.name?.toLowerCase(), currAccount?.id ?? '0')
-  console.log('gameMinterContractWithPayswapSigner==========>', gameMinterContract, gameMinterContractWithPayswapSigner)
+  const gameData = useGetGame(pool?.collection?.name?.toLowerCase(), currAccount?.id ?? '0') as any
+  console.log('gameMinterContractWithPayswapSigner==========>', gameData, gameMinterContract)
   console.log('mcurrencyy===============>', currAccount, currency, pool, gameContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
-
+  const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
   const [state, setState] = useState<any>(() => ({
     tokenId: '',
     score: '',
@@ -177,6 +192,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     period: '',
     gameContract: '',
     owner: pool?.owner || '',
+    gameName: '',
+    gameLink: '',
   }))
 
   const updateValue = (key: any, value: any) => {
@@ -277,6 +294,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.UPDATE_GAME)
         break
       case LockStage.UPDATE_GAME:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_INFO:
+        setStage(LockStage.UPDATE_INFO)
+        break
+      case LockStage.UPDATE_INFO:
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_TOKEN_ID:
@@ -406,6 +429,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       case LockStage.UPDATE_GAME:
         setStage(LockStage.CONFIRM_UPDATE_GAME)
         break
+      case LockStage.UPDATE_INFO:
+        setStage(LockStage.CONFIRM_UPDATE_INFO)
+        break
       case LockStage.UPDATE_TOKEN_ID:
         setStage(LockStage.CONFIRM_UPDATE_TOKEN_ID)
         break
@@ -468,7 +494,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       )
     },
     // eslint-disable-next-line consistent-return
-    onConfirm: () => {
+    onConfirm: async () => {
       if (stage === LockStage.CONFIRM_BUY_MINUTES) {
         const args = [
           state.owner,
@@ -509,11 +535,21 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_PROCESS_SCORE) {
-        const args = [currAccount?.id, gameData?.score, gameData?.deadline]
-        console.log('CONFIRM_PROCESS_SCORE===============>', args)
-        return callWithGasPrice(gameMinterContractWithPayswapSigner, 'updateScoreNDeadline', args).catch((err) =>
-          console.log('CONFIRM_PROCESS_SCORE===============>', err),
-        )
+        console.log('CONFIRM_PROCESS_SCORE===============>', [
+          currAccount?.id,
+          BigInt(parseInt(gameData?.score)),
+          BigInt(parseInt(gameData?.deadline)),
+        ])
+        const { request } = await client.simulateContract({
+          account: adminAccount,
+          address: getGameMinterAddress(),
+          abi: gameMinterABI,
+          functionName: 'updateScoreNDeadline',
+          args: [BigInt(currAccount?.id), BigInt(parseInt(gameData?.score)), BigInt(parseInt(gameData?.deadline))],
+        })
+        return walletClient
+          .writeContract(request)
+          .catch((err) => console.log('1CONFIRM_PROCESS_SCORE===============>', err))
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
         const args = [state.owner, state.identityTokenId, state.tokenId]
@@ -592,6 +628,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         console.log('CONFIRM_UPDATE_GAME===============>', args)
         return callWithGasPrice(gameFactoryContract, 'updateProtocol', args).catch((err) =>
           console.log('CONFIRM_UPDATE_GAME===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_INFO) {
+        const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
+        const args = ['0', pool?.collection?.id, state.gameLink, state.gameName, '0', '0', ADDRESS_ZERO, '']
+        console.log('CONFIRM_UPDATE_INFO===============>', args)
+        return callWithGasPrice(gameFactoryContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_INFO===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_TOKEN_ID) {
@@ -757,6 +801,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_GAME)}>
             {t('UPDATE GAME')}
           </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_INFO)}>
+            {t('UPDATE INFO')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID)}>
             {t('UPDATE TOKEN ID')}
           </Button>
@@ -919,6 +966,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       )}
       {stage === LockStage.UPDATE_GAME && (
         <UpdateGameStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_INFO && (
+        <UpdateInfoStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
