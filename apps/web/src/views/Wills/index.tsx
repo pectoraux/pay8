@@ -24,11 +24,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   console.log('pools=============>', pools)
   const [onPresentCreateGauge] = useModal(<CreateWillModal />)
   const handleClick = () => {
-    const howToElem = document.getElementById('ifo-how-to')
+    const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
     } else {
-      router.push('/ifo#ifo-how-to')
     }
   }
   usePoolsPageFetch()

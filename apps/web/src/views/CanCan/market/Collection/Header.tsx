@@ -41,6 +41,7 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface HeaderProps {
   collection: Collection
@@ -53,7 +54,8 @@ const Header: React.FC<any> = ({ collection }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const isOwner = account?.toLocaleLowerCase() === owner?.toLocaleLowerCase()
-
+  const contactChannels = collection?.contactChannels?.split(',') ?? []
+  const contacts = collection?.contacts?.split(',') ?? []
   const volume = totalVolumeBNB
     ? parseFloat(totalVolumeBNB ?? 0).toLocaleString(undefined, {
         minimumFractionDigits: 3,
@@ -183,47 +185,9 @@ const Header: React.FC<any> = ({ collection }) => {
           </Row>
         </MarketPageTitle>
         <Flex>
+          <Contacts contactChannels={contactChannels} contacts={contacts} />
           <FlexGap gap="16px" pt="24px" pl="4px">
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentProject}
-            >
-              <LanguageIcon color="textSubtle" />
-            </IconButton>
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentArticle}
-            >
-              <ProposalIcon color="textSubtle" />
-            </IconButton>
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentPayChat}
-            >
-              <SmartContractIcon color="textSubtle" />
-            </IconButton>
-            {collection?.twitterUrl && (
-              <IconButton
-                as={Link}
-                style={{ cursor: 'pointer' }}
-                // onClick={onPresentTwitter}
-              >
-                <TwitterIcon color="textSubtle" />
-              </IconButton>
-            )}
-            {collection?.telegramUrl && (
-              <IconButton
-                as={Link}
-                style={{ cursor: 'pointer' }}
-                // onClick={onPresentTelegram}
-              >
-                <TelegramIcon color="textSubtle" />
-              </IconButton>
-            )}
-            <LinkExternal href="/info/token/" bold={false}>
+            <LinkExternal href="/lotteries/1" bold={false}>
               {t('See Lottery')}
             </LinkExternal>
           </FlexGap>

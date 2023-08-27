@@ -34,11 +34,11 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   usePoolsPageFetch()
   const invalidAddress = !accountAddress || isAddress(accountAddress) === false
   const handleClick = () => {
-    const howToElem = document.getElementById('ifo-how-to')
+    const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
     } else {
-      useRouter().push('/ifo#ifo-how-to')
+      useRouter().push('/ifo#how-to')
     }
   }
   const {

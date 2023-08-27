@@ -197,7 +197,7 @@ const IfoCardTokens: React.FC<React.PropsWithChildren<IfoCardTokensProps>> = ({
                 ? t('Activate PancakeSwap Profile to take part in next IFO‘s!')
                 : t('You need an active PancakeSwap Profile to take part in an IFO!')}
             </MessageText>{' '}
-            <MessageTextLink href="/ifo#ifo-how-to" color="#D67E0A" display="inline">
+            <MessageTextLink href="/ifo#how-to" color="#D67E0A" display="inline">
               {t('How does it work?')} »
             </MessageTextLink>
           </Box>
@@ -240,7 +240,7 @@ const IfoCardTokens: React.FC<React.PropsWithChildren<IfoCardTokensProps>> = ({
         <Message my="24px" p="8px" variant="danger">
           <Box>
             <MessageText display="inline">{t('You don’t have any iCAKE available for IFO public sale.')}</MessageText>{' '}
-            <MessageTextLink display="inline" fontWeight={700} href="/ifo#ifo-how-to" color="failure">
+            <MessageTextLink display="inline" fontWeight={700} href="/ifo#how-to" color="failure">
               {t('How does it work?')} »
             </MessageTextLink>
           </Box>
@@ -345,7 +345,7 @@ const IfoCardTokens: React.FC<React.PropsWithChildren<IfoCardTokensProps>> = ({
               <Text textAlign="center" fontSize="14px">
                 {t('To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!')}
               </Text>
-              <MessageTextLink href="/ifo#ifo-how-to" textAlign="center">
+              <MessageTextLink href="/ifo#how-to" textAlign="center">
                 {t('How does it work?')} »
               </MessageTextLink>
               <StakeVaultButton mt="24px" />

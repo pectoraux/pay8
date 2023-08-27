@@ -111,7 +111,7 @@ const CompositeImage: React.FC<React.PropsWithChildren<ComponentProps>> = ({
           }
         }}
       />
-      {attributes.map((image) => (
+      {attributes?.slice(0, 2).map((image) => (
         <ImageWrapper key={image.src}>
           <img
             srcSet={getSrcSet(path, image.src, '.webp')}

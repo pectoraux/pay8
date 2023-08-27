@@ -103,7 +103,7 @@ const MultipleBanner: React.FC<React.PropsWithChildren> = () => {
   const { isDesktop, isTablet } = useMatchBreakpoints()
   const { chainId } = useActiveChainId()
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
-
+  console.log('bannerList===================>', bannerList)
   useIsomorphicEffect(() => {
     if (swiperRef) {
       if (bannerList.length > 1 && !swiperRef.autoplay?.running) {

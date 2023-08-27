@@ -27,11 +27,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const nftFilters = useFilters()
   const tags = useGetTags()
   const handleClick = () => {
-    const howToElem = document.getElementById('ifo-how-to')
+    const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
     } else {
-      router.push('/ifo#ifo-how-to')
     }
   }
   usePoolsPageFetch()

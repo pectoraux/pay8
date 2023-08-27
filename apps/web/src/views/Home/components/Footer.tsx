@@ -92,7 +92,7 @@ const Footer = () => {
           <StyledSunburst />
         </Flex>
       </BgWrapper>
-      {(isTablet || isDesktop) && (
+      {/* {(isTablet || isDesktop) && (
         <FloatingPancakesWrapper>
           <TopLeftImgWrapper>
             <CompositeImage {...topLeftImage} maxHeight="256px" />
@@ -101,7 +101,7 @@ const Footer = () => {
             <CompositeImage {...bottomRightImage} maxHeight="256px" />
           </BottomRightImgWrapper>
         </FloatingPancakesWrapper>
-      )}
+      )} */}
       <Wrapper>
         <Heading mb="24px" scale="xl" color="white">
           {t('Start in seconds.')}
@@ -113,10 +113,10 @@ const Footer = () => {
           {t('No registration needed.')}
         </Text>
 
-        <Link external href="https://docs.pancakeswap.finance/">
+        {/* <Link external href="https://docs.pancakeswap.finance/">
           {t('Learn how to start')}
           <OpenNewIcon color="primary" ml="4px" />
-        </Link>
+        </Link> */}
         {!account && <ConnectWalletButton mt="24px" />}
       </Wrapper>
     </>

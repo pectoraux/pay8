@@ -336,16 +336,14 @@ const HowToPlay: React.FC<any> = () => {
       </GappedFlex>
       <Divider />
       <Flex justifyContent="center" alignItems="center" flexDirection={['column', 'column', 'row']}>
-        <Image width={240} height={172} src="/images/lottery/tombola.png" alt="tombola bunny" mr="8px" mb="16px" />
+        {/* <Image width={240} height={172} src="/images/lottery/tombola.png" alt="tombola bunny" mr="8px" mb="16px" /> */}
         <Flex maxWidth="300px" flexDirection="column">
           <Heading mb="16px" scale="md">
             {t('Still got questions?')}
           </Heading>
           <Text>
             {t('Check our in-depth guide on')}{' '}
-            <InlineLink href="https://docs.pancakeswap.finance/products/lottery/lottery-guide">
-              {t('how to play the PancakeSwap lottery!')}
-            </InlineLink>
+            <InlineLink href="/lotteries#how-to">{t('how to play the lottery!')}</InlineLink>
           </Text>
         </Flex>
       </Flex>

@@ -19,7 +19,7 @@ const IfoNotTokens: React.FC<React.PropsWithChildren<{ participateText: string; 
           {participateText}
         </Text>
         {showHowDoesItWork && (
-          <IfoMessageTextLink href="/ifo#ifo-how-to" color="primary" display="inline">
+          <IfoMessageTextLink href="/ifo#how-to" color="primary" display="inline">
             {t("How does it work?")} »
           </IfoMessageTextLink>
         )}

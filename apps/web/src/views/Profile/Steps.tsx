@@ -124,7 +124,7 @@ const Steps: React.FC<any> = ({ title }) => {
 
   return (
     <Wrapper>
-      <Heading id="ifo-how-to" as="h2" scale="xl" color="secondary" mb="24px" textAlign="center">
+      <Heading id="how-to" as="h2" scale="xl" color="secondary" mb="24px" textAlign="center">
         {title}
       </Heading>
       <Stepper>

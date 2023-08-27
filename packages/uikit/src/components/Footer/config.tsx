@@ -56,10 +56,10 @@ export const footerLinks: FooterLinkType[] = [
         label: "Github",
         href: "https://github.com/pectoraux",
       },
-      {
-        label: "Documentation",
-        href: "https://docs.pancakeswap.finance",
-      },
+      // {
+      //   label: "Documentation",
+      //   href: "",
+      // },
       // {
       //   label: "Bug Bounty",
       //   href: "https://app.gitbook.com/@pancakeswap-1/s/pancakeswap/code/bug-bounty",
