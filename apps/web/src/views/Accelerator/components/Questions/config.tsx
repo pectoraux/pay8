@@ -24,8 +24,9 @@ const config = [
           The Accelerator model uses a unique mechanism where investors don't directly purchase tokens from businesses
           but instead, vote for businesses they believe in. This voting mechanism allows investors to show support for
           projects they find promising or aligned with their investment strategy. To be able to vote, investors need to
-          purchase a stake in{' '}
+          purchase a stake in
         </Trans>
+        ,
         <InlineLink ml="4px" external href="/valuepools">
           <Trans>the valuepool </Trans>
         </InlineLink>

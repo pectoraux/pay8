@@ -76,13 +76,12 @@ const config = [
         </InlineLink>
         <Trans>
           Leviathans operate under a democratic governance model where decisions are made through votes. These votes
-          take place within{' '}
+          take place within
         </Trans>
         <InlineLink ml="4px" external href="/valuepools">
           <Trans>the valuepools </Trans>
         </InlineLink>
         <Trans>
-          {' '}
           of each Leviathan. This allows members to have a say in shaping the direction and priorities of their
           respective communities.
         </Trans>
