@@ -113,8 +113,7 @@ const OpenRoundCard: React.FC<any> = ({
                       height="200px"
                       // onClick={() => handleSetPosition(BetPosition.BULL)}
                       mb="4px"
-                      disabled={!true || isBufferPhase}
-                      // disabled={!canEnterPosition || isBufferPhase}
+                      disabled
                     >
                       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
                         {subject}

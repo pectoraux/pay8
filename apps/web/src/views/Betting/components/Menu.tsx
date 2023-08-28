@@ -84,7 +84,7 @@ const Menu = ({ allBettings, ogBetting, isHistoryPaneOpen, setHistoryPaneState }
               <Button
                 variant="subtle"
                 as="a"
-                href="https://docs.pancakeswap.finance/products/betting"
+                href="/bettings#how-to"
                 target="_blank"
                 rel="noreferrer noopener"
                 width="48px"
@@ -92,13 +92,13 @@ const Menu = ({ allBettings, ogBetting, isHistoryPaneOpen, setHistoryPaneState }
                 <HelpIcon width="24px" color="white" />
               </Button>
             </HelpButtonWrapper>
-            <LeaderboardButtonWrapper>
+            {/* <LeaderboardButtonWrapper>
               <Link href="/betting/leaderboard" passHref>
                 <Button as="a" variant="subtle" width="48px">
                   <PrizeIcon color="white" />
                 </Button>
               </Link>
-            </LeaderboardButtonWrapper>
+            </LeaderboardButtonWrapper> */}
             {!allBettings ? (
               <ButtonWrapper style={{ order: 4 }}>
                 <HistoryButton isHistoryPaneOpen={isHistoryPaneOpen} setHistoryPaneState={setHistoryPaneState} />

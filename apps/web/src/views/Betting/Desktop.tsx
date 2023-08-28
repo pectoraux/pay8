@@ -53,7 +53,7 @@ const Desktop: React.FC<any> = ({ allBettings }) => {
   const chartRef = useRef<HTMLDivElement>()
   const gutterRef = useRef<HTMLDivElement>()
   const [isHistoryPaneOpen, setHistoryPaneState] = useState(false)
-  const isChartPaneOpen = true
+  const isChartPaneOpen = false
   const dispatch = useLocalDispatch()
   const splitInstance = useRef<SplitInstance>()
 
@@ -124,12 +124,8 @@ const Desktop: React.FC<any> = ({ allBettings }) => {
             </Box>
           </PositionPane>
         </SplitWrapper>
-        <HistoryPane isHistoryPaneOpen={isHistoryPaneOpen} isChartPaneOpen={isChartPaneOpen}>
-          <History
-            ogBetting={ogBetting}
-            isHistoryPaneOpen={isHistoryPaneOpen}
-            setHistoryPaneState={setHistoryPaneState}
-          />
+        <HistoryPane isHistoryPaneOpen={false} isChartPaneOpen={false}>
+          <History ogBetting={ogBetting} isHistoryPaneOpen={false} setHistoryPaneState={setHistoryPaneState} />
         </HistoryPane>
       </StyledDesktop>
     </>

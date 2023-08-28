@@ -2,6 +2,7 @@ import { ArrowBackIcon, ArrowForwardIcon, BunnyCardsIcon, Flex, IconButton } fro
 import styled from 'styled-components'
 // import { useGetSortedRoundsCurrentEpoch } from 'state/bettings/hooks'
 import useSwiper from '../hooks/useSwiper'
+import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
 
 const StyledPrevNextNav = styled(Flex)`
   align-items: center;
@@ -42,7 +43,7 @@ const PrevNextNav = () => {
   const handleSlideToLive = () => {
     if (swiper) {
       // const currentEpochIndex = rounds.findIndex((round) => round.epoch === currentEpoch)
-      // swiper.slideTo(currentEpochIndex - 1)
+      swiper.slideTo(DEFAULT_BET_SIZE)
     }
   }
 

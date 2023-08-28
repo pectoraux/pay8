@@ -49,11 +49,11 @@ const History = ({ ogBetting, isHistoryPaneOpen, setHistoryPaneState }) => {
   const { bettingId } = useRouter().query
   const currEvent = ogBetting?.bettingEvents?.length && ogBetting?.bettingEvents[Number(bettingId || 1) - 1]
 
-  useEffect(() => {
-    if (account && isHistoryPaneOpen) {
-      dispatch(fetchNodeHistory({ account }))
-    }
-  }, [account, currentEpoch, isHistoryPaneOpen, dispatch])
+  // useEffect(() => {
+  //   if (account && isHistoryPaneOpen) {
+  //     dispatch(fetchNodeHistory({ account }))
+  //   }
+  // }, [account, currentEpoch, isHistoryPaneOpen, dispatch])
 
   const results = getFilteredBets(bets, null)
   const hasBetHistory = results && results.length > 0
@@ -85,7 +85,7 @@ const History = ({ ogBetting, isHistoryPaneOpen, setHistoryPaneState }) => {
       <Flex overflowY="auto" maxHeight="500px">
         <BetWrapper>
           {activeTab === 0 ? <RoundsTab hasBetHistory={hasBetHistory} currEvent={currEvent} /> : null}
-          {activeTab === 1 ? <Items /> : null}
+          {/* {activeTab === 1 ? <Items /> : null} */}
         </BetWrapper>
       </Flex>
     </StyledHistory>

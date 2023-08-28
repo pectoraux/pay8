@@ -9,6 +9,7 @@ import { useConfig } from 'views/Betting/context/ConfigProvider'
 // import { useGetCurrentHistoryPage, useGetHasHistoryLoaded, useGetIsFetchingHistory } from 'state/bettings/hooks'
 import HistoricalBet from './HistoricalBet'
 import V1ClaimCheck from '../v1/V1ClaimCheck'
+import { RoundedImage } from 'views/CanCan/market/Collection/IndividualNFTPage/shared/styles'
 
 interface RoundsTabProps {
   hasBetHistory: boolean
@@ -24,9 +25,11 @@ const RoundsTab: React.FC<any> = ({ currEvent }) => {
         <Grid gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} alignItems="center">
           {currEvent?.tickets
             ?.filter((nft) => nft.owner?.toLowerCase() === account?.toLowerCase())
-            .map((nft) => (
-              <Iframe url={nft.metadataUrl} height="500px" styles={{ marginBottom: '10px' }} id="myId" />
-            ))}
+            .map((nft) => {
+              console.log('1currEvent?.tickets==================>', currEvent?.tickets)
+              // return <Iframe url={nft.metadataUrl ?? ""} height="500px" styles={{ marginBottom: '10px' }} id={nft.id} />
+              return <RoundedImage width={100} height={500} id={nft.id} src={nft.metadataUrl} alt={nft?.name} />
+            })}
         </Grid>
       ) : (
         <Text as="p" textAlign="center">

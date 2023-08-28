@@ -23,7 +23,7 @@ import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools
 import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { cancanBaseUrl } from 'views/CanCan/market/constants'
 import { getPerpetualUrl } from 'utils/getPerpetualUrl'
-import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
+import { SUPPORT_FARMS, SUPPORT_ONLY_BSC, SUPPORT_ONLY_FANTOM_TESTNET } from 'config/constants/supportChains'
 import { NewIconButton } from 'views/BuyCrypto/components/NewIcon'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
@@ -57,6 +57,7 @@ const config: (
       fillIcon: SwapFillIcon,
       href: '/swap',
       showItemsOnMobile: false,
+      supportChainIds: SUPPORT_ONLY_FANTOM_TESTNET,
       items: [
         {
           label: t('dRamps'),
@@ -78,22 +79,19 @@ const config: (
       icon: EarnIcon,
       fillIcon: EarnFillIcon,
       image: '/images/decorations/pe2.png',
-      supportChainIds: SUPPORT_FARMS,
+      supportChainIds: SUPPORT_ONLY_FANTOM_TESTNET,
       items: [
         {
           label: t('Accelerator'),
           href: '/accelerator',
-          supportChainIds: SUPPORT_FARMS,
         },
         {
           label: t('Businesses'),
           href: '/businesses',
-          supportChainIds: POOL_SUPPORTED_CHAINS,
         },
         {
           label: t('Contributors'),
           href: '/contributors',
-          supportChainIds: POOL_SUPPORTED_CHAINS,
         },
         {
           label: t('Leviathans'),
@@ -114,7 +112,7 @@ const config: (
       href: '/auditors',
       icon: EarnIcon,
       fillIcon: EarnFillIcon,
-      supportChainIds: SUPPORT_ONLY_BSC,
+      supportChainIds: SUPPORT_ONLY_FANTOM_TESTNET,
       items: [
         {
           label: t('ARPs'),
@@ -143,7 +141,6 @@ const config: (
         {
           label: t('Pools'),
           href: '/pools',
-          supportChainIds: SUPPORT_ONLY_BSC,
         },
         {
           label: t('Sponsors'),
@@ -160,7 +157,7 @@ const config: (
       href: '/bettings',
       icon: TrophyIcon,
       fillIcon: TrophyFillIcon,
-      // supportChainIds: SUPPORT_ONLY_BSC,
+      supportChainIds: SUPPORT_ONLY_FANTOM_TESTNET,
       items: [
         {
           label: t('Bettings'),
@@ -218,7 +215,7 @@ const config: (
       href: `${cancanBaseUrl}`,
       icon: WalletIcon,
       fillIcon: WalletFilledIcon,
-      supportChainIds: SUPPORT_ONLY_BSC,
+      supportChainIds: SUPPORT_ONLY_FANTOM_TESTNET,
       image: '/images/decorations/nft.png',
       items: [
         {
@@ -240,7 +237,7 @@ const config: (
       href: `${nftsBaseUrl}`,
       icon: NftIcon,
       fillIcon: NftFillIcon,
-      supportChainIds: SUPPORT_ONLY_BSC,
+      supportChainIds: SUPPORT_ONLY_FANTOM_TESTNET,
       image: '/images/decorations/nft.png',
       items: [
         {
@@ -259,9 +256,10 @@ const config: (
     },
     {
       label: '',
-      href: '/info',
+      href: '/ssi',
       icon: MoreIcon,
       hideSubNav: true,
+      supportChainIds: SUPPORT_ONLY_FANTOM_TESTNET,
       items: [
         // {
         //   label: t('Info'),

@@ -8,6 +8,7 @@ import RoundCard from './components/RoundCard'
 import useSwiper from './hooks/useSwiper'
 import useOnViewChange from './hooks/useOnViewChange'
 import { CHART_DOT_CLICK_EVENT } from './helpers'
+import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
 
 const StyledSwiper = styled.div`
   .swiper-wrapper {
@@ -41,12 +42,13 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
   const { bettingId } = useRouter().query
   const currEvent =
     ogBetting?.bettingEvents?.length && ogBetting?.bettingEvents[parseInt(bettingId?.toString() || '1') - 1]
-  const arr2 = Array.from({ length: parseInt(currEvent?.currPeriod || 0) + 2 }, (v, i) => i)
+  const arr2 = Array.from({ length: parseInt(currEvent?.currPeriod || 0) + 2 }, (v, i) => i)?.slice(-DEFAULT_BET_SIZE)
   console.log('bettingId===========>', allBettings, bettingId, arr2)
 
   return (
     <StyledSwiper>
       <Swiper
+        arrLength={arr2?.length}
         initialSlide={swiperIndex}
         onSwiper={setSwiper}
         spaceBetween={16}
