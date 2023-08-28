@@ -47,10 +47,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('CanCan Businesses')}
+              {t('Businesses Reward Program')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Have a business in the marketplace?')}
+              {t('Have a business in the CanCan or eCollectible marketplace?')}
             </Heading>
             <Heading scale="md" color="text">
               {t('Create a gauge and start earning each time you make a sale.')}

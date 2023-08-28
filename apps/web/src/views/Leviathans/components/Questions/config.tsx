@@ -8,83 +8,113 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What are Leviathans?</Trans>,
+    title: <Trans>What are Leviathans ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The concept of Leviathans presents an ambitious and innovative approach to addressing various aspects of human
+        life and society. This model envisions decentralized communities working together to provide essential utilities
+        and resources to their members and ultimately to a global population. Here's an overview of the key components
+        and principles:
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Leviathans as Mission-Driven Communities: </Trans>
         </InlineLink>
+        <Trans>
+          Leviathans are communities united by a shared mission, pooling resources to advance that mission. Each
+          Leviathan focuses on a specific utility, such as housing, food, energy, transportation, etc.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are Leviathans solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to join a Leviathan?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are Leviathans a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if I lose my veNFT ?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Eleven Leviathans, Eleven Utilities: </Trans>
         </InlineLink>
+        <Trans>
+          There are in total 11 Leviathans, one for each of the following utilities: housing, food, beverage, security,
+          healthcare, energy, telecommunication & internet, transportation, apparels & cosmetics, entertainment &
+          culture and finally mining.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Goal of Universal Access: </Trans>
+        </InlineLink>
+        <Trans>
+          The overarching goal of each Leviathan is to develop processes and systems that make the associated utility
+          accessible to every human being on Earth, beginning with its own members. This aims to create a more equitable
+          and inclusive world where basic needs are met.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Free Tokens: </Trans>
+        </InlineLink>
+        <Trans>
+          Each Leviathan has an associated token, referred to as a "free token." These tokens serve as a form of value
+          exchange within the community, facilitating access to utilities and resources.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Leviats and Leviathanism: </Trans>
+        </InlineLink>
+        <Trans>
+          Members of all 11 Leviathans are known as Leviats. To maintain the collaborative and mission-focused nature of
+          the communities, Leviats adhere to a set of rules and principles known as Leviathanism. These principles
+          likely guide behaviors and actions in line with the community's objectives.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Governance through Voting: </Trans>
+        </InlineLink>
+        <Trans>
+          Leviathans operate under a democratic governance model where decisions are made through votes. These votes
+          take place within{' '}
+        </Trans>
+        <InlineLink ml="4px" external href="/valuepools">
+          <Trans>the valuepools </Trans>
+        </InlineLink>
+        <Trans>
+          {' '}
+          of each Leviathan. This allows members to have a say in shaping the direction and priorities of their
+          respective communities.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Creating a Global Network: </Trans>
+        </InlineLink>
+        <Trans>
+          Collectively, the Leviathans form a network that aims to address a wide array of human needs. Each Leviathan
+          contributes its expertise to the larger vision of a global community, combining efforts to create a better
+          world for all.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Societal Impact: </Trans>
+        </InlineLink>
+        <Trans>
+          The Leviathan model has the potential to revolutionize traditional systems by redistributing resources,
+          providing essential utilities, and empowering individuals through collaborative decision-making.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In summary, the Leviathans and valuepools model presents a complex and forward-thinking approach to building
+        interconnected communities that focus on providing essential utilities for their members and beyond. The
+        program's success would rely on collaboration, shared values, and a commitment to the betterment of human
+        society as a whole.
+      </Trans>,
     ],
   },
 ]

@@ -48,7 +48,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Contributor Teams')}
+              {t('Contributors Reward Program')}
             </Heading>
             <Heading scale="md" color="text">
               {t('Browse through all contributors and vote for those working on your favorite projects.')}

@@ -8,83 +8,106 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What is a Referral gauge ?</Trans>,
+    title: <Trans>What is the Referral rewards program ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The referral rewards program is a strategic approach to driving user acquisition and engagement within the
+        CanCan and eCollectibles marketplaces. This model incentivizes agents to refer users to the platform and
+        establish long-term connections with their referred users. Here's a breakdown of its key components:
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans> Referral Mechanism: </Trans>
         </InlineLink>
+        <Trans>
+          Agents are incentivized to refer users to the platform. When an agent successfully refers a user, they become
+          the user's designated referrer for life. This means that as long as the referred user creates a profile and
+          designates the agent as their referrer, the agent will continue to receive benefits from the user's activity.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem is it solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you vote for a referrer ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Is this a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if a referrer lies or commits fraud ?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Ongoing Rewards for Purchases: </Trans>
         </InlineLink>
+        <Trans>
+          When a user referred by an agent makes a purchase within the CanCan and eCollectibles marketplaces, the agent
+          receives a "vote." This vote is essentially a reward or credit granted to the agent as recognition for their
+          role in bringing the user to the platform.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Scaling Rewards with User Activity: </Trans>
+        </InlineLink>
+        <Trans>
+          The more purchases that referred users make, the more votes the referring agent receives. This means that
+          agents are incentivized not only to bring in users but also to encourage ongoing engagement and activity among
+          the users they've referred.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Weekly Token Distribution: </Trans>
+        </InlineLink>
+        <Trans>
+          A significant aspect of the program is the weekly emission of tokens by the platform. These tokens are
+          distributed among the referring agents based on the number of votes they've accumulated during that week. This
+          distribution model ensures that agents are rewarded for their ongoing efforts in bringing and retaining users.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Building a Referral Network: </Trans>
+        </InlineLink>
+        <Trans>
+          Agents have the potential to build a network of referred users, all of whom contribute to the agent's vote
+          count. This network effect can lead to exponential rewards as the agent's referred users engage with the
+          marketplaces.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Long-Term Relationships: </Trans>
+        </InlineLink>
+        <Trans>
+          The program encourages agents to establish lasting relationships with referred users by offering ongoing
+          incentives. This long-term connection benefits both the agent and the referred user, creating a win-win
+          scenario.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Token-Based Incentives: </Trans>
+        </InlineLink>
+        <Trans>
+          By rewarding agents with tokens, the program leverages the internal token economy to incentivize user
+          acquisition and engagement.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Transparency and Accountability: </Trans>
+        </InlineLink>
+        <Trans>
+          The program's design, including the requirement for referred users to designate a referrer, ensures
+          transparency and accountability in the reward distribution process.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In conclusion, the referral rewards program introduces a compelling model to drive user growth and engagement
+        within the marketplaces. By incentivizing agents to refer users and encouraging ongoing user activity, the
+        program contributes to the vibrancy and success of the ecosystem while also rewarding those who contribute to
+        its expansion.
+      </Trans>,
     ],
   },
 ]
