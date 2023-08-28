@@ -80,7 +80,7 @@ export const socials = [
   {
     label: "Twitter",
     icon: TwitterIcon,
-    href: "https://twitter.com/pancakeswap",
+    href: "https://twitter.com/payswap",
   },
   {
     label: "Telegram",
@@ -88,94 +88,94 @@ export const socials = [
     items: [
       {
         label: "English",
-        href: "https://t.me/pancakeswap",
+        href: "https://t.me/payswap",
       },
       {
         label: "Bahasa Indonesia",
-        href: "https://t.me/pancakeswapIndonesia",
+        href: "https://t.me/payswapIndonesia",
       },
       {
         label: "中文",
-        href: "https://t.me/pancakeswap_CN",
+        href: "https://t.me/payswap_CN",
       },
       {
         label: "Tiếng Việt",
-        href: "https://t.me/PancakeSwapVN",
+        href: "https://t.me/payswapVN",
       },
       {
         label: "Italiano",
-        href: "https://t.me/pancakeswap_Ita",
+        href: "https://t.me/payswap_Ita",
       },
       {
         label: "русский",
-        href: "https://t.me/pancakeswap_ru",
+        href: "https://t.me/payswap_ru",
       },
       {
         label: "Türkiye",
-        href: "https://t.me/pancakeswapturkiye",
+        href: "https://t.me/payswapturkiye",
       },
       {
         label: "Português",
-        href: "https://t.me/pancakeswapPortuguese",
+        href: "https://t.me/payswapPortuguese",
       },
       {
         label: "Español",
-        href: "https://t.me/pancakeswapES",
+        href: "https://t.me/payswapES",
       },
       {
         label: "日本語",
-        href: "https://t.me/pancakeswapJP",
+        href: "https://t.me/payswapJP",
       },
       {
         label: "Français",
-        href: "https://t.me/pancakeswapFR",
+        href: "https://t.me/payswapFR",
       },
       {
         label: "Deutsch",
-        href: "https://t.me/pancakeswap_DE",
+        href: "https://t.me/payswap_DE",
       },
       {
         label: "Filipino",
-        href: "https://t.me/pancakeswap_PH",
+        href: "https://t.me/payswap_PH",
       },
       {
         label: "ქართული ენა",
-        href: "https://t.me/pancakeswapGeorgia",
+        href: "https://t.me/payswapGeorgia",
       },
       {
         label: "हिन्दी",
-        href: "https://t.me/pancakeswap_INDIA",
+        href: "https://t.me/payswap_INDIA",
       },
       {
         label: "Announcements",
-        href: "https://t.me/PancakeSwapAnn",
+        href: "https://t.me/payswapAnn",
       },
     ],
   },
   {
     label: "Reddit",
     icon: RedditIcon,
-    href: "https://reddit.com/r/pancakeswap",
+    href: "https://reddit.com/r/payswap",
   },
   {
     label: "Instagram",
     icon: InstagramIcon,
-    href: "https://instagram.com/pancakeswap_official",
+    href: "https://instagram.com/payswap_official",
   },
   {
     label: "Github",
     icon: GithubIcon,
-    href: "https://github.com/pancakeswap/",
+    href: "https://github.com/payswap/",
   },
   {
     label: "Discord",
     icon: DiscordIcon,
-    href: "https://discord.gg/pancakeswap",
+    href: "https://discord.gg/payswap",
   },
   {
     label: "Youtube",
     icon: YoutubeIcon,
-    href: "https://www.youtube.com/@pancakeswap_official",
+    href: "https://www.youtube.com/@payswap_official",
   },
 ];
 
