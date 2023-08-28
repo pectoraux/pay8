@@ -48,7 +48,6 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
   return (
     <StyledSwiper>
       <Swiper
-        arrLength={arr2?.length}
         initialSlide={swiperIndex}
         onSwiper={setSwiper}
         spaceBetween={16}
