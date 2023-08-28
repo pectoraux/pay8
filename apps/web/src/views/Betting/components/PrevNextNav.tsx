@@ -1,4 +1,11 @@
-import { ArrowBackIcon, ArrowForwardIcon, BunnyCardsIcon, Flex, IconButton } from '@pancakeswap/uikit'
+import {
+  ArrowBackIcon,
+  ArrowForwardIcon,
+  BunnyCardsIcon,
+  Flex,
+  IconButton,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import styled from 'styled-components'
 // import { useGetSortedRoundsCurrentEpoch } from 'state/bettings/hooks'
 import useSwiper from '../hooks/useSwiper'
@@ -30,7 +37,8 @@ const Icon = styled.div`
 
 const PrevNextNav = () => {
   const { swiper } = useSwiper()
-  // const { currentEpoch, rounds } = useGetSortedRoundsCurrentEpoch()
+  const { isMobile } = useMatchBreakpoints()
+  const divisor = isMobile ? 5 : 1
 
   const handlePrevSlide = () => {
     swiper?.slidePrev()
@@ -42,8 +50,7 @@ const PrevNextNav = () => {
 
   const handleSlideToLive = () => {
     if (swiper) {
-      // const currentEpochIndex = rounds.findIndex((round) => round.epoch === currentEpoch)
-      swiper.slideTo(DEFAULT_BET_SIZE)
+      swiper.slideTo(DEFAULT_BET_SIZE / divisor)
     }
   }
 

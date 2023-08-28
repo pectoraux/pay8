@@ -9,6 +9,7 @@ import useSwiper from './hooks/useSwiper'
 import useOnViewChange from './hooks/useOnViewChange'
 import { CHART_DOT_CLICK_EVENT } from './helpers'
 import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
+import { useMatchBreakpoints } from '@pancakeswap/uikit'
 
 const StyledSwiper = styled.div`
   .swiper-wrapper {
@@ -40,9 +41,13 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
   }, [swiper?.el])
   const [isChangeTransition, setIsChangeTransition] = useState(false)
   const { bettingId } = useRouter().query
+  const { isMobile } = useMatchBreakpoints()
+  const divisor = isMobile ? 5 : 1
   const currEvent =
     ogBetting?.bettingEvents?.length && ogBetting?.bettingEvents[parseInt(bettingId?.toString() || '1') - 1]
-  const arr2 = Array.from({ length: parseInt(currEvent?.currPeriod || 0) + 2 }, (v, i) => i)?.slice(-DEFAULT_BET_SIZE)
+  const arr2 = Array.from({ length: parseInt(currEvent?.currPeriod || 0) + 2 }, (v, i) => i)?.slice(
+    -DEFAULT_BET_SIZE / divisor,
+  )
   console.log('bettingId===========>', allBettings, bettingId, arr2)
 
   return (
