@@ -126,7 +126,7 @@ export const DEFAULT_OUTPUT_CURRENCY = '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE
 export const DEFAULT_TFIAT = '0xd87D48b707D67Db50D3196f7D56FCaCEae009BcC'
 export const DEFAULT_SYMBOL = 'USD'
 
-export const DEFAULT_BET_SIZE = 100
+export const DEFAULT_BET_SIZE = 50
 
 // Handler string is passed to Gelato to use PCS router
 export const GELATO_HANDLER = 'pancakeswap'
