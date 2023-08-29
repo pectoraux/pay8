@@ -39,7 +39,6 @@ export const getPitchSg = async (pitchId: string) => {
         return { ...vote, voter }
       }),
     )
-    console.log('res=============>', res, res?.pitch?.ve, votes)
     return {
       ...res.pitch,
       votes,

@@ -53,7 +53,6 @@ export const ListTraitFilter: React.FC<any> = ({ title, traitType, items }) => {
   const menuRef = useRef(null)
   const { orderKey, orderDir } = orderState
   const nftFilters = useFilters()
-  console.log('useFilters=================>', nftFilters)
   const traitFilter = nftFilters[traitType]
   const isTraitSelected = !!traitFilter
   const dispatch = useAppDispatch()

@@ -68,13 +68,12 @@ export const usePoolsWithFilterSelector = () => {
 }
 
 export const useGetTags = () => {
-  const { data } = useSWR('lotteries-tags6', async () => getTag())
-  console.log('usetag============>', data)
+  const { data } = useSWR('lotteries-tags', async () => getTag())
   return data?.name ?? ''
 }
 
 export const useGetRewardsForTicketId = (tokenAddress, lotteryId, ticketId) => {
-  const { data: winners } = useSWRImmutable(['rewards-for-user2', tokenAddress, lotteryId, ticketId], async () => {
+  const { data: winners } = useSWRImmutable(['rewards-for-user', tokenAddress, lotteryId, ticketId], async () => {
     try {
       const arr = Array.from({ length: 6 }, (v, i) => i)
       const res = await Promise.all(
@@ -86,6 +85,5 @@ export const useGetRewardsForTicketId = (tokenAddress, lotteryId, ticketId) => {
     }
     return []
   })
-  console.log('winners============>', tokenAddress, lotteryId, ticketId)
   return winners
 }

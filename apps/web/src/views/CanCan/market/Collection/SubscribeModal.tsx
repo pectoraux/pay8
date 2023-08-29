@@ -53,8 +53,6 @@ const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
     [collection, state],
   )
-  console.log('1SubscribeModal=================>', paywallARP, paywallARP?.paywallAddress, collection, paywallContract)
-
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,

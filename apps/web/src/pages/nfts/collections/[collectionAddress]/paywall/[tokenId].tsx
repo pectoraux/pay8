@@ -33,13 +33,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
   const collection = await getCollection(collectionAddress)
   const nft = await getPaywallSg(`${collectionAddress}-${tokenId}`)
-  console.log('pay===============>', `${collectionAddress}-${tokenId}`, nft)
-  // const nft: NftToken = {
-  //   tokenId,
-  //   collectionAddress,
-  //   collectionName: collection.name,
-  //   attributes: [],
-  // }
   return {
     props: {
       fallback: {

@@ -39,7 +39,6 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
     productId: '',
     partnerCollectionId: '',
   }))
-  console.log('1PartnerModal=================>', collection)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
@@ -52,7 +51,6 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
     [collection, state],
   )
-  console.log('7collection===============>', item)
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -79,7 +77,6 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
       const thumb = chunks?.length > 0 && item?.images?.split(',')[0]
       const mp4 = chunks?.length > 1 && item?.images?.split(',').slice(1).join(',')
       let [img0, img1] = [thumb, mp4]
-      console.log('mp4==============>', thumb, mp4)
       try {
         img0 = thumb
           ? nodeRSA.decryptStringWithRsaPrivateKey({
@@ -87,29 +84,15 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
               privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
             })
           : ''
-        console.log('mp3==============>', thumb, img0)
         img1 = mp4
           ? nodeRSA.decryptStringWithRsaPrivateKey({
               text: mp4,
               privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
             })
           : ''
-        console.log('mp2==============>', mp4, img1)
       } catch (err) {
         console.log('err============>', err)
       }
-      // const img2 = item.images[2] ? nodeRSA.decryptStringWithRsaPrivateKey({
-      //   text: item.images[2],
-      //   privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY
-      // }):"";
-      // const img3 = item.images[3] ? nodeRSA.decryptStringWithRsaPrivateKey({
-      //   text: item.images[3],
-      //   privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY
-      // }):"";
-      // const img4 = item.images[4] ? nodeRSA.decryptStringWithRsaPrivateKey({
-      //   text: item.images[4],
-      //   privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY
-      // }):"";
       const args = [state.productId, paywall?.id, false, false, `${img0},${img1}`]
       console.log('handleRemoveItem====================>', args)
       return callWithGasPrice(marketEventsContract, 'updatePaywall', args).catch((err) => {

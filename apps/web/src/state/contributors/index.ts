@@ -22,12 +22,9 @@ let pools = []
 
 export const fetchContributorsGaugesAsync = () => async (dispatch) => {
   try {
-    console.log('fetchContributors1================>')
     const businesses = await fetchContributors()
-    console.log('fetchContributors================>', businesses)
     const data = businesses
     dispatch(setContributorsPublicData(data || []))
-    console.log('userData1================>', pools)
   } catch (error) {
     console.error('[Pools Action] error when getting staking limits======>', error)
   }

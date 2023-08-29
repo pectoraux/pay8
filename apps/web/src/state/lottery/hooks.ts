@@ -68,6 +68,5 @@ export const useGetPendingReward = (userAddress, lotteryId, tokenAddress) => {
   const { data: pendingReward } = useSWRImmutable(['reward', userAddress, lotteryId, tokenAddress], async () =>
     getPendingReward(lotteryId, userAddress, tokenAddress),
   )
-  console.log('useGetPendingReward============>', userAddress, lotteryId, tokenAddress)
   return pendingReward
 }

@@ -90,7 +90,6 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
   const paywallMarketTradesContract = usePaywallMarketTradesContract()
   const callContract = variant === 'paywall' ? paywallMarketTradesContract : nftMarketContract
   const p = getDecimalAmount(nftToBuy?.currentAskPrice, 18)
-  console.log('cred==========================>', variant, callContract, nftToBuy, mainCurrency)
   const { toastSuccess } = useToast()
   const nftFilters = useGetNftFilters(account)
   const [recipient, setRecipient] = useState<string>('')
@@ -124,23 +123,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
     0,
     variant === 'paywall',
   )
-  console.log(
-    'res111==================>',
-    discounted,
-    userOptions,
-    paymentCredits,
-    discount,
-    Number(discount),
-    Number(discount) - paymentCredits,
-  )
   const totalPayment = Math.max(Number(discount ?? 0) - paymentCredits, 0)
-  console.log(
-    '1res112==================>',
-    nftToBuy,
-    Number(new BigNumber(nftToBuy.nftokenId._hex).toJSON()),
-    !!Number(new BigNumber(nftToBuy.nftokenId._hex).toJSON()),
-    totalPayment,
-  )
 
   let { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
   const paywallARP = useGetPaywallARP(nftToBuy?.collection?.id ?? '')
@@ -190,7 +173,6 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
           identityTokenId,
           userOptions,
         ]
-        console.log('BNB================>', args)
         if (Number(new BigNumber(nftToBuy.nftokenId._hex).toJSON())) {
           return callWithGasPrice(tokenContract, 'approve', [marketHelper3Contract.address, nftToBuy.nftokenId])
             .then(() => callWithGasPrice(callContract, 'buyWithContract', args))

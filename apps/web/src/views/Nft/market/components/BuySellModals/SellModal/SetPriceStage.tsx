@@ -50,7 +50,6 @@ const SetPriceStage: React.FC<any> = ({
   handleRawValueChange,
   continueToNextStage,
 }) => {
-  console.log('SetPriceStage====================>', nftToSell)
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const {

@@ -90,8 +90,6 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   if ((!nfts || nfts?.length === 0) && isFetchingNfts) {
     return <GridPlaceholder />
   }
-  console.log('nfts007=================>', nfts, collection)
-
   return (
     <>
       <Flex p="16px">
@@ -283,7 +281,6 @@ const Content: React.FC<any> = ({ owner, registration }) => {
   const { t } = useTranslation()
   const [onPresentAddReferral] = useModal(<AddReferralModal registration={registration} />)
   const [onPresentCloseReferral] = useModal(<CloseReferralModal registration={registration} />)
-  console.log('Content========================>', registration)
   return registration.mirrors?.length > 0 ? (
     <Flex flexDirection="column">
       <Flex flexDirection="row" justifyContent="center">
@@ -326,10 +323,8 @@ const Content: React.FC<any> = ({ owner, registration }) => {
 }
 
 const Paywall: React.FC<any> = ({ collection, paywall }) => {
-  console.log('99paywall======================>', paywall)
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  // const paywallARP = useGetPaywallARP(collection?.id ?? '', paywall?.id ?? '')
   const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any
   const [nfticketId, setNfticketId] = useState('')
   const { ongoingSubscription, status } = useGetSubscriptionStatus(

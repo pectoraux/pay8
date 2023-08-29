@@ -116,7 +116,6 @@ const Collectible = () => {
       },
     ]
   }, [t])
-  console.log('shuffledCollections=================>', shuffledCollections)
   const { data: collections = [], status } = useSWRImmutable<
     (Collection & Partial<{ lowestPrice: number; highestPrice: number }>)[]
   >(
@@ -284,7 +283,6 @@ const Collectible = () => {
                               maximumFractionDigits: 3,
                             })
                           : '0'
-                        console.log('collection===============>', collection)
                         return (
                           <tr key={collection.id} data-test="nft-collection-row">
                             <Td style={{ cursor: 'pointer', minWidth: '200px' }}>

@@ -85,7 +85,6 @@ const CreateProposal = () => {
   const collectionAddress = useRouter().query.collectionAddress as string
   const [pendingFb, setPendingFb] = useState(false)
   const { collection } = useGetCollection(collectionAddress)
-  console.log('collectionAddress==================>', collection, collectionAddress)
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const { original } = state
   const formErrors = getFormErrors(state, t)

@@ -22,7 +22,6 @@ export const fetchBillSgAsync =
   ({ fromBill }) =>
   async (dispatch) => {
     try {
-      console.log('fetchBillSg1================>')
       const whereClause = isAddress(fromBill)
         ? {
             // active: true,
@@ -32,7 +31,6 @@ export const fetchBillSgAsync =
             // active: true
           }
       const bills = await getBills(0, 0, whereClause)
-      console.log('fetchBillSg================>', bills)
       dispatch(setBillsPublicData(bills || []))
     } catch (error) {
       console.error('[Pools Action]============>sg', error)
@@ -42,10 +40,8 @@ export const fetchBillSgAsync =
 export const fetchBillsAsync =
   ({ fromBill }) =>
   async (dispatch) => {
-    console.log('fetchBills1================>', fromBill)
     try {
       const bills = await fetchBills({ fromBill })
-      console.log('fetchBills================>', bills)
       dispatch(setBillsPublicData(bills || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)
@@ -57,7 +53,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setBillsPublicData: (state, action) => {
-      console.log('setBillsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setCurrBribeData: (state, action) => {

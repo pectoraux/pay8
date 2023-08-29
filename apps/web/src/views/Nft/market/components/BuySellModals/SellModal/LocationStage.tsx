@@ -46,7 +46,6 @@ const LocationStage: React.FC<any> = ({
   const collectionAddress = useRouter().query.collectionAddress as string
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
   const [activeButtonIndex3, setActiveButtonIndex3] = useState(0)
-  console.log('activeButtonIndex===================>', state.mp4, state.gif, state.thumbnail)
   const handleThumbnailUpload = useCallback(
     (file: File): Promise<string> =>
       new Promise((resolve, reject) => {
@@ -60,7 +59,6 @@ const LocationStage: React.FC<any> = ({
           .then((result) => {
             resolve(result.data.url)
             updateValue('thumbnail', result.data.url)
-            console.log('updateValue==========================>', result.data.url)
           })
           .catch((err) => {
             reject(new Error('Upload failed'))

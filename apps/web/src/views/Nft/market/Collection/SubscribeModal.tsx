@@ -40,7 +40,6 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
     pickedOption: '',
     partnerCollectionId: '',
   }))
-  console.log('1PartnerModal=================>', collection)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()

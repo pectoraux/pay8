@@ -20,9 +20,7 @@ const initialState: any = {
 
 export const fetchStakesAsync = (collectionId) => async (dispatch) => {
   try {
-    console.log('fetchStakes1================>', collectionId)
     const stakes = await fetchStakes(collectionId)
-    console.log('fetchStakes2================>', stakes)
     const reconstructedData = stakes
       .filter(
         (stake) => stake.tokenAddress !== ADDRESS_ZERO && parseInt(stake.sousId) === parseInt(stake.parentStakeId),
@@ -32,7 +30,6 @@ export const fetchStakesAsync = (collectionId) => async (dispatch) => {
         const applications = stake1?.applicationsConverted?.map((appId) =>
           stakes.find((stake2) => parseInt(stake2.sousId) === parseInt(appId)),
         )
-        // const totalLiquidity =  parseFloat(stake1.paidReceivable ?? '0') - parseFloat(stake1.paidPayable ?? '0') + parseFloat(partnerData?.paidReceivable ?? '0') - parseFloat(partnerData?.paidPayable ?? '0')
         resultArray.push({
           ...stake1,
           partnerData,
@@ -42,7 +39,6 @@ export const fetchStakesAsync = (collectionId) => async (dispatch) => {
         return resultArray
       }, [])
     const data = reconstructedData?.filter((d) => !d.appliedTo)
-    console.log('fetchStakes================>', data)
     dispatch(setStakesPublicData(data || []))
   } catch (error) {
     console.error('[Pools Action]========> error when getting stakes', error)
@@ -54,7 +50,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setStakesPublicData: (state, action) => {
-      console.log('setStakesPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setStakesUserData: (state, action) => {

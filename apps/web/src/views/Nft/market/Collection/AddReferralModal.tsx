@@ -54,7 +54,6 @@ const PartnerModal: React.FC<any> = ({ registration, handleRawValueChange, onDis
     identityProofId: registration?.identityProofId ?? '0',
     partnerCollectionId: '',
   }))
-  console.log('1PartnerModal=================>', registration)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()

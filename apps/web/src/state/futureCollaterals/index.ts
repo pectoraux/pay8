@@ -24,7 +24,6 @@ export const fetchFutureCollateralSgAsync =
   ({ fromFutureCollateral }) =>
   async (dispatch) => {
     try {
-      console.log('fetchFutureCollateralSg1================>')
       const whereClause = isAddress(fromFutureCollateral)
         ? {
             // active: true,
@@ -34,7 +33,6 @@ export const fetchFutureCollateralSgAsync =
             // active: true
           }
       const futureCollaterals = await getCollaterals(0, 0, whereClause)
-      console.log('fetchFutureCollateralSg================>', futureCollaterals)
       dispatch(setFutureCollateralsPublicData(futureCollaterals || []))
     } catch (error) {
       console.error('[Pools Action]============>sg', error)
@@ -44,10 +42,8 @@ export const fetchFutureCollateralSgAsync =
 export const fetchFutureCollateralsAsync =
   ({ fromFutureCollateral }) =>
   async (dispatch) => {
-    console.log('fetchFutureCollaterals1================>', fromFutureCollateral)
     try {
       const futureCollaterals = await fetchFutureCollaterals({ fromFutureCollateral })
-      console.log('fetchFutureCollaterals================>', futureCollaterals)
       dispatch(setFutureCollateralsPublicData(futureCollaterals || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)
@@ -59,7 +55,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setFutureCollateralsPublicData: (state, action) => {
-      console.log('setContributorsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setFutureCollateralsUserData: (state, action) => {

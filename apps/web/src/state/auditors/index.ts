@@ -57,7 +57,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setAuditorsPublicData: (state, action) => {
-      console.log('setAuditorsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setCurrBribeData: (state, action) => {

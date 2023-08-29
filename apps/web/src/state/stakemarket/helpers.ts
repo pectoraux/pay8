@@ -96,7 +96,6 @@ export const fetchStakes = async (collectionId) => {
         active: true,
       }
   const stakesFromSg = await getStakes(1000, 0, whereClause)
-  console.log('stakesFromSg==============>', stakesFromSg)
   const bscClient = publicClient({ chainId: 4002 })
   const stakes = await Promise.all(
     stakesFromSg
@@ -145,7 +144,6 @@ export const fetchStakes = async (collectionId) => {
             ],
           })
         const getStake = _getStake as any
-        console.log('getStake================>', getStake)
         const ve = getStake.result.ve
         const token = getStake.result.token
         const tokenId = getStake.result.tokenId

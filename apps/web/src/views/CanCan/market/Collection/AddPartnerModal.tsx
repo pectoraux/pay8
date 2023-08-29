@@ -56,8 +56,6 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
     [collection, state],
   )
-  console.log('1PartnerModal=================>', item, paywallARP, paywallContract)
-
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -115,7 +113,6 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
       const args = partner
         ? [state.partnerCollectionId, paywall?.tokenId, state.productId, numOfSeconds, false]
         : [state.productId, paywall?.id, true, false, `${img0},${img1}`]
-      console.log('handleAddPartner====================>', contract, method, args)
       return callWithGasPrice(contract, method, args).catch((err) => {
         console.log('handleAddPartner====================>', err)
       })

@@ -58,7 +58,6 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
   const { isXs, isSm, isMd } = useMatchBreakpoints()
 
   const nftActivityFiltersString = JSON.stringify(nftActivityFilters)
-  console.log('!nftActivityFilters============>', nftActivityFilters, nftActivityFiltersString)
 
   useEffect(() => {
     const fetchCollectionActivity = async () => {
@@ -241,7 +240,6 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
                     .filter((activity) => !!activity?.nft || activity?.paywall)
                     .map((activity) => {
                       const nft = activity?.nft ?? activity?.paywall
-                      console.log('activity=====================>', activity, nft)
                       return (
                         <ActivityRow
                           key={`${activity.marketEvent}#${nft.tokenId}#${activity.timestamp}#${activity.tx}`}

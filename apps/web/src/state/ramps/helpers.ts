@@ -190,7 +190,6 @@ export const getTokenData = async (tokenAddress) => {
       },
     ],
   })
-  console.log('tokenAddress================>', tokenAddress, name, symbol)
   return { name: name.result, symbol: symbol.result, decimals: decimals.result }
 }
 
@@ -198,7 +197,6 @@ export const getTokenData = async (tokenAddress) => {
 export const fetchRamp = async (address) => {
   const rampAddress = address?.toLowerCase()
   const gauge = await getRampSg(rampAddress)
-  console.log('fetchRamp=========>', rampAddress, gauge)
   try {
     // const serializedTokens = serializeTokens()
     const bscClient = publicClient({ chainId: 4002 })
@@ -223,7 +221,6 @@ export const fetchRamp = async (address) => {
         },
       ],
     })
-    console.log('fetchRamp0=========>', devaddr_, tokens, params)
     const rampBadgeId = params.result[0]
     const rampTokenId = params.result[1]
     const mintFee = params.result[2]
@@ -232,17 +229,6 @@ export const fetchRamp = async (address) => {
     const soldAccounts = params.result[5]
     const automatic = params.result[6]
     const _ve = params.result[7]
-    console.log(
-      'fetchRamp1=========>',
-      rampBadgeId,
-      rampTokenId,
-      mintFee,
-      burnFee,
-      rampSalePrice,
-      soldAccounts,
-      automatic,
-      _ve,
-    )
 
     const sessions = gauge?.sessions
     const clientIds = gauge?.clientIds
@@ -283,7 +269,6 @@ export const fetchRamp = async (address) => {
           })
           if (session.mintSession) {
             ppData = await Promise.all([axios.post('/api/check', { sessionId: session.sessionId, sk: sk0 })])
-            console.log('2ppData=======================>', ppData, session.sessionId, sk0)
           }
 
           return {
@@ -301,7 +286,6 @@ export const fetchRamp = async (address) => {
           }
         }),
     )
-    console.log('fetchRamp2=========>', allSessions, rampAddress, tokens)
     let accounts = []
     const _tokens = tokens.result as any
     try {
@@ -326,7 +310,6 @@ export const fetchRamp = async (address) => {
                   },
                 ],
               })
-              console.log('1mintAvailable==========>', mintAvailable)
               return {
                 sousId: index,
                 status: protocolInfo.result[0] === 0 ? 'Sold' : protocolInfo.result[0] === 1 ? 'Open' : 'Close',
@@ -350,7 +333,6 @@ export const fetchRamp = async (address) => {
     } catch (err) {
       console.log('mintAvailable========>', err)
     }
-    console.log('fetchRamp3=========>', accounts)
     const cIds = clientIds || ['', '', '', '', '']
     const sks = secretKeys || ['', '', '', '', '']
     const pks = publishableKeys || ['', '', '', '', '']
@@ -376,7 +358,6 @@ export const fetchRamp = async (address) => {
             privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
           })
         : ''
-      console.log('pks=======================>', pks[0], pk0)
       pk1 = pks[1]
         ? nodeRSA.decryptStringWithRsaPrivateKey({
             text: pks[1],
@@ -463,7 +444,6 @@ export const fetchRamp = async (address) => {
           })
         : ''
     } catch (err) {}
-    console.log('secretKeys================>', [sk0, sk1, sk2, sk3, sk4], rampBadgeId.toString())
     const collection = await getCollection(gauge.collectionId)
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
@@ -486,7 +466,7 @@ export const fetchRamp = async (address) => {
       collection,
     }
   } catch (err) {
-    console.log('fetchRamp err================>', err, address)
+    console.log('fetchRamp err================>', err)
     return gauge
   }
 }
@@ -499,8 +479,6 @@ export const fetchRamps = async () => {
       .filter((gauge) => !!gauge)
       .map(async (gauge, index) => {
         const data = await fetchRamp(gauge.id)
-        console.log('2gauges=============>', data)
-
         return {
           sousId: index,
           ...data,

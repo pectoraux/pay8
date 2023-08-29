@@ -63,8 +63,6 @@ const NFTMedia: FC<any> = ({ width, height, nft, borderRadius = 'default', as, .
     thumbnail = nft?.images?.length > 0 && nft?.images[0]
     mp4 = nft?.images?.length > 1 && nft?.images?.slice(1).join(',')
   }
-  console.log('7NFTMedia===================>', nft)
-
   if (
     Number(nft?.behindPaywall ?? 0) &&
     (ongoingSubscription || nft?.currentSeller?.toLowerCase() === account?.toLowerCase())
@@ -84,7 +82,7 @@ const NFTMedia: FC<any> = ({ width, height, nft, borderRadius = 'default', as, .
           })
         : ''
     } catch (err) {
-      console.log('nftmedia==============>', err, nft)
+      console.log('nftmedia==============>', err)
     }
   }
   if (mp4.length > 400) {

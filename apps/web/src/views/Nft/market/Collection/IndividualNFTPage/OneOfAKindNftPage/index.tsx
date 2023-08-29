@@ -65,7 +65,6 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
   const [onPresentSettings] = useModal(
     <SettingStage variant="ProductPage" collection={collection} mainCurrency={currency ?? mainCurrency} />,
   )
-  console.log('useWorkspaceCurrency================>', nft)
   const ownerButtons = (
     <Flex
       flexDirection={['column', 'column', 'column']}

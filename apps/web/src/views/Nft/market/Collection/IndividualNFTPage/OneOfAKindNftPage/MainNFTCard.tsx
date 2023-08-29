@@ -54,7 +54,6 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
   const dropInDatePassed = Number(nft?.dropinTimer) < Date.now()
   const collectionId = useRouter().query.collectionAddress as string
   const isPaywall = useRouter().pathname.includes('[collectionAddress]/paywall')
-  console.log('isPaywall========================>', isPaywall, nft)
   // const currentAskPriceAsNumber = nft?.currentAskPrice ? parseFloat(nft?.currentAskPrice) : 0
   const {
     mainCurrency,
@@ -63,7 +62,6 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
     mainToSecondaryCurrencyFactor,
     priceInSecondaryCurrency,
   } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
-  console.log('CREATE_ASK_ORDER================>', nft)
   const { isMobile } = useMatchBreakpoints()
   const chunks = nft?.images && nft?.images?.split(',')
   const mp4 = chunks?.length > 1 && nft?.images?.split(',').slice(1).join(',')

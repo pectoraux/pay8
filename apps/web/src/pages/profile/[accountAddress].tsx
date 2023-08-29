@@ -24,7 +24,6 @@ const NftProfilePage = () => {
     isLoading: isNftLoading,
     refresh: refreshUserNfts,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
-  console.log('isConnectedProfile================>', isConnectedProfile, profile)
   return (
     <>
       <SubMenu />

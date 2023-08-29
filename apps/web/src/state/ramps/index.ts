@@ -29,12 +29,9 @@ const initialState: any = {
 
 export const fetchRampsAsync = () => async (dispatch) => {
   try {
-    console.log('fetchBusinesses1================>')
     const ramps = await fetchRamps()
     const data = ramps.filter((ramp) => !!ramp)
-    console.log('fetchBusinesses================>', data, ramps)
     dispatch(setRampsPublicData(data || []))
-    console.log('fetchBusinesses================>Done')
   } catch (error) {
     console.error('[Pools Action]===============>', error)
   }
@@ -42,9 +39,7 @@ export const fetchRampsAsync = () => async (dispatch) => {
 
 export const fetchRampAsync = (rampAddress) => async (dispatch) => {
   try {
-    console.log('fetchBusinesses1================>', rampAddress)
     const ramp = await fetchRamp(rampAddress)
-    console.log('fetchBusinesse================>', ramp, rampAddress)
     dispatch(setRampsPublicData([ramp] || []))
   } catch (error) {
     console.error('[Pools Action]=============> error when getting staking limits', error)
@@ -56,9 +51,7 @@ export const fetchRampsUserDataAsync = createAsyncThunk<
   string
 >('pool/fetchPoolsUserData', async (account, { rejectWithValue }) => {
   try {
-    console.log('fetchRampsUserDataAsync1===============>', account)
     const [accountData] = await Promise.all([getAccountSg(account, 'stripe')])
-    console.log('fetchRampsUserDataAsync===============>', accountData)
     const userData = []
     return userData
   } catch (e) {
@@ -112,7 +105,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setRampsPublicData: (state, action) => {
-      console.log('setRampsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setPoolUserData: (state, action) => {

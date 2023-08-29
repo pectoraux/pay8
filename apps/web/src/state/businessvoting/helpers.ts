@@ -23,7 +23,6 @@ export const getCollectionSg = async (collectionId: string) => {
     )
     // const [collection] = await Promise.all([getCollectionApi(collectionId)])
     const collection = []
-    console.log('collection===============>', collection, collectionId, res)
     return {
       ...res.collection,
       ...collection,

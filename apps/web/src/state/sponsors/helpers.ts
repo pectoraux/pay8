@@ -179,7 +179,6 @@ export const fetchSponsor = async (sponsorAddress) => {
       ],
     })
   const collection = await getCollection(collectionId.result.toString())
-  console.log('nextDuePayable0=================>', sponsor, sponsor.protocols, collection)
   const accounts = await Promise.all(
     sponsor?.protocols?.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
@@ -242,7 +241,6 @@ export const fetchSponsor = async (sponsorAddress) => {
           },
         ],
       })
-      console.log('nextDuePayable=================>', amountPayable, nextDuePayable.result)
       return {
         ...protocol,
         owner,

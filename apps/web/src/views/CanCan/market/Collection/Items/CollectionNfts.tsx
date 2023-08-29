@@ -70,7 +70,6 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   const [onPresentUnregister] = useModal(
     <UnregisterModal collectionId={id} userBountyId={userBountyId} userCollectionId={userCollectionId} />,
   )
-  console.log('nfts=================>', __nfts, collection, isFetchingNfts)
   const handleLoadMore = useCallback(() => {
     setPage(page + 1)
   }, [setPage, page])
@@ -90,8 +89,6 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
     })
     return newData
   }, [status, _nfts, showSearch])
-
-  console.log('CollectionNfts==================>', showNftFilters, showSearch)
 
   if (isFetchingNfts) {
     return <GridPlaceholder />
@@ -334,11 +331,9 @@ const Content: React.FC<any> = ({ owner, registration }) => {
 }
 
 const Paywall: React.FC<any> = ({ collection, paywall }) => {
-  console.log('paywall======================>', paywall)
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any
-  console.log('paywallARP======================>', paywallARP)
   const [nfticketId, setNfticketId] = useState('')
   const { ongoingSubscription, status } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',

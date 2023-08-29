@@ -27,7 +27,6 @@ const NftProfilePage = () => {
     refresh: refreshUserNfts,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
   const transactions = useGetTransactions(account?.toLowerCase())
-  console.log('transactions===================>', transactions, isConnectedProfile)
   return (
     <>
       <SubMenu />

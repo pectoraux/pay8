@@ -115,8 +115,7 @@ export const useApprovalNfts = (nftsInWallet: NftToken[]) => {
 }
 
 export const useGetTags = () => {
-  const { data } = useSWR('cancan-tags6', async () => getTag())
-  console.log('usetag============>', data)
+  const { data } = useSWR('cancan-tags', async () => getTag())
   return data?.name ?? ''
 }
 
@@ -200,7 +199,6 @@ export const useGetCollectionId = (collectionAddress) => {
         revalidateOnReconnect: false,
       },
     )
-    console.log('useGetCollectionId==========>', data)
     return data
   } catch (err) {
     console.log('useGetCollectionId err=============+>', err)
@@ -268,7 +266,6 @@ export const useGetSubscriptionStatus = (
       revalidateOnReconnect: false,
     },
   )
-  console.log('useGetSubscriptionStatus===================>', status, paywallAddress, account, data, nfticketId)
   return {
     ongoingSubscription: data,
     status,

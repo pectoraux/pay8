@@ -83,7 +83,6 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
       </CollapsibleCard>
     )
   }
-  console.log('CollectionTraits================>', collection, collectionAddress)
   return (
     <>
       <IconButton onClick={() => setDesc(!desc)} variant="text">

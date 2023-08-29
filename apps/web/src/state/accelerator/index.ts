@@ -30,12 +30,9 @@ let pools = []
 
 export const fetchAcceleratorGaugesAsync = () => async (dispatch) => {
   try {
-    console.log('fetchAccelerator1================>')
     const businesses = await fetchAccelerator()
-    console.log('fetchAccelerator================>', businesses)
     const data = businesses
     dispatch(setAcceleratorPublicData(data || []))
-    console.log('userData1================>', pools)
   } catch (error) {
     console.error('[Pools Action] error when getting staking limits======>', error)
   }
@@ -54,7 +51,6 @@ export const fetchAcceleratorUserDataAsync = createAsyncThunk<
       tokenIds: allBribes?.find((entry) => parseInt(entry.sousId) === parseInt(pool.sousId))?.tokenIds,
       bribes: allBribes?.find((entry) => parseInt(entry.sousId) === parseInt(pool.sousId))?.augmentedBribes,
     }))
-    console.log('userData================>', userData)
     return userData
   } catch (e) {
     return rejectWithValue(e)

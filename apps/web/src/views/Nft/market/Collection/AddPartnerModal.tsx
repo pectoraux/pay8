@@ -56,8 +56,6 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
     [collection, state],
   )
-  console.log('1PartnerModal=================>', item, paywallARP, paywallContract)
-
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,

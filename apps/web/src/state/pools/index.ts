@@ -20,9 +20,7 @@ const initialState: any = {
 
 export const fetchPairsAsync = () => async (dispatch) => {
   try {
-    console.log('fetchPairs1================>')
     const pairs = await fetchPairs()
-    console.log('fetchPairs================>', pairs)
     dispatch(setPairsPublicData(pairs || []))
   } catch (error) {
     console.error('[Pools Action]============> error when getting staking limits', error)
@@ -34,7 +32,6 @@ export const fetchPoolsUserDataAsync = createAsyncThunk<{ sousId: number; stakin
   async (account, { rejectWithValue }) => {
     try {
       const [stakingTokenBalances] = await Promise.all([fetchUserBalances(account)])
-      console.log('stakingTokenBalances=============>', stakingTokenBalances)
       const userData = stakingTokenBalances || []
       return userData
     } catch (e) {

@@ -22,7 +22,6 @@ export const fetchBettingSgAsync =
   ({ fromBetting }) =>
   async (dispatch) => {
     try {
-      console.log('fetchBettingSg1================>')
       const whereClause = isAddress(fromBetting)
         ? {
             // active: true,
@@ -32,7 +31,6 @@ export const fetchBettingSgAsync =
             // active: true
           }
       const bettings = await getBettings(0, 0, whereClause)
-      console.log('fetchBettingSg================>', bettings)
       dispatch(setBettingsPublicData(bettings || []))
     } catch (error) {
       console.error('[Pools Action]============>sg', error)
@@ -42,10 +40,8 @@ export const fetchBettingSgAsync =
 export const fetchBettingsAsync =
   ({ fromBetting }) =>
   async (dispatch) => {
-    console.log('fetchBettings1================>', fromBetting)
     try {
       const bettings = await fetchBettings({ fromBetting })
-      console.log('fetchBettings================>', bettings)
       dispatch(setBettingsPublicData(bettings || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)
@@ -57,7 +53,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setBettingsPublicData: (state, action) => {
-      console.log('setBettingsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setCurrBribeData: (state, action) => {

@@ -40,7 +40,6 @@ const ProductDetailsSection: React.FC<ExpandableSectionProps> = ({ paywall }) =>
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const isAuction = Number(paywall?.bidDuration ?? 0) > 0
   const dropInDatePassed = Number(paywall?.dropinTimer ?? 0) < Date.now()
-  console.log('ProductDetailsSection===================>', paywall)
   return (
     <ExpandingWrapper>
       <ExpandableSectionButton

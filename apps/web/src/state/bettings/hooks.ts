@@ -22,17 +22,15 @@ import {
 } from './helpers'
 
 export const useGetTags = () => {
-  const { data } = useSWR('bettings-tags6', async () => getTag())
-  console.log('usetag============>', data)
+  const { data } = useSWR('bettings-tags', async () => getTag())
   return data?.name ?? ''
 }
 
 export const useGetAmountCollected = (bettingAddress, bettingId, period) => {
   const { data: amountCollected, mutate: refetch } = useSWRImmutable(
-    ['amountCollected6', bettingAddress, bettingId],
+    ['amountCollected', bettingAddress, bettingId],
     async () => getAmountCollected(bettingAddress, bettingId, parseInt(period)),
   )
-  console.log('1useGetAmountCollected===============>', amountCollected, bettingAddress, bettingId, parseInt(period))
   return {
     amountCollected,
     refetch,
@@ -48,7 +46,6 @@ export const useGetSubjects = (bettingAddress, bettingId, ticketSize) => {
     }
     return []
   })
-  console.log('subjects============>', bettingAddress, bettingId, subjects)
   return subjects
 }
 
@@ -61,7 +58,6 @@ export const useGetCalculateRewardsForTicketId = (bettingAddress, bettingId, tic
     }
     return []
   })
-  console.log('subjects============>', bettingAddress, bettingId, ticketId, bracketNumber, rewards)
   return rewards
 }
 
@@ -78,7 +74,6 @@ export const useGetWinnersPerBracket = (bettingAddress, bettingId, period, ticke
     }
     return []
   })
-  console.log('winners============>', bettingAddress, bettingId, period, ticketSize)
   return winners
 }
 

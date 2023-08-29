@@ -51,7 +51,6 @@ const RequestHistory: React.FC<any> = ({ collection }) => {
   const { isMd } = useMatchBreakpoints()
 
   const nftActivityFiltersString = JSON.stringify(nftActivityFilters)
-  console.log('collectioncollection===============>', collection)
   useEffect(() => {
     const fetchCollectionActivity = async () => {
       try {
@@ -203,7 +202,6 @@ const RequestHistory: React.FC<any> = ({ collection }) => {
                   activitiesSlice
                     .filter((activity) => !!activity.id && activity.id !== '' && !activity.active)
                     .map((activity) => {
-                      console.log('RequestRow=================>', activity)
                       return (
                         <RequestRow
                           key={`${activity.id}`}

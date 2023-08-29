@@ -58,14 +58,12 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
   const { isXs, isSm, isMd } = useMatchBreakpoints()
 
   const nftActivityFiltersString = JSON.stringify(nftActivityFilters)
-  console.log('!nftActivityFilters============>', nftActivityFilters, nftActivityFiltersString)
   useEffect(() => {
     const fetchCollectionActivity = async () => {
       try {
         setIsLoading(true)
         const nftActivityFiltersParsed = JSON.parse(nftActivityFiltersString)
         const collectionActivity = await getCollectionActivity(collectionId, nftActivityFiltersParsed, MAX_PER_QUERY)
-        console.log('collectionActivity==========================>', collectionActivity)
         const activity = sortActivity(collectionActivity)
         setPaginationData({
           activity,
@@ -233,7 +231,6 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
                 ) : (
                   activitiesSlice.map((activity) => {
                     const nft = activity?.item ?? activity?.paywall
-                    console.log('activity=====================>', activity, nft)
                     return (
                       <ActivityRow
                         key={`${activity.marketEvent}#${nft?.tokenId}#${activity.timestamp}#${activity.tx}`}

@@ -75,8 +75,6 @@ const Home = () => {
     (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),
     [],
   )
-  console.log('useGetCollections===============>', collections, status)
-
   const searchedHotCollections = useMemo(() => {
     const hotCollections = orderBy(
       collections,

@@ -54,7 +54,6 @@ const PartnerModal: React.FC<any> = ({ registration, onDismiss }) => {
     deactivate: 0,
     partnerCollectionId: '',
   }))
-  console.log('1PartnerModal=================>', registration)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()

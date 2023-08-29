@@ -73,7 +73,6 @@ export function useV3CandidatePoolsWithoutTicks(
     if (!currencyA || !currencyB || currencyA.wrapped.equals(currencyB.wrapped)) {
       return ''
     }
-    console.log('currencyA==============>', currencyA, currencyB)
     const symbols = currencyA.wrapped.sortsBefore(currencyB.wrapped)
       ? [currencyA.symbol, currencyB.symbol]
       : [currencyB.symbol, currencyA.symbol]

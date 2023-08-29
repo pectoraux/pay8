@@ -12,7 +12,6 @@ interface RemoveStageProps {
 const PublishMediaStage: React.FC<any> = ({ state, updateValue }) => {
   const { t } = useTranslation()
   const [value, onChange] = useState('')
-  console.log('PublishMediaStage===================>', value, state.thumbnail)
   // const token = process.env.API_TOKEN
   // const client = new Web3Storage({ token })
 
@@ -23,7 +22,6 @@ const PublishMediaStage: React.FC<any> = ({ state, updateValue }) => {
         formData.append('image', file)
         // client.put(file)
         // .then((cid) => {
-        //   console.log("cid======================>", cid)
         //   updateValue('original', cid)
         // })
         fetch(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`, {
@@ -33,7 +31,6 @@ const PublishMediaStage: React.FC<any> = ({ state, updateValue }) => {
           .then((response) => response.json())
           .then((result) => {
             resolve(result.data.url)
-            console.log('1PublishMediaStage===================>', result.data.url)
             updateValue('thumbnail', result.data.url)
           })
           .catch(() => reject(new Error('Upload failed')))

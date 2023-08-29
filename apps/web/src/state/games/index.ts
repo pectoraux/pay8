@@ -22,7 +22,6 @@ export const fetchGameSgAsync =
   ({ fromGame }) =>
   async (dispatch) => {
     try {
-      console.log('fetchGameSg1================>')
       const whereClause = isAddress(fromGame)
         ? {
             // active: true,
@@ -32,7 +31,6 @@ export const fetchGameSgAsync =
             // active: true
           }
       const games = await getGames(0, 0, whereClause)
-      console.log('fetchGameSg================>', games)
       dispatch(setGamesPublicData(games || []))
     } catch (error) {
       console.error('[Pools Action]============>sg', error)
@@ -42,10 +40,8 @@ export const fetchGameSgAsync =
 export const fetchGamesAsync =
   ({ fromGame }) =>
   async (dispatch) => {
-    console.log('fetchGames1================>', fromGame)
     try {
       const games = await fetchGames({ fromGame })
-      console.log('fetchGames================>', games)
       dispatch(setGamesPublicData(games || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)
@@ -54,9 +50,7 @@ export const fetchGamesAsync =
 
 export const fetchGameAsync = (gameAddress) => async (dispatch) => {
   try {
-    console.log('fetchBusinesses1================>', gameAddress)
     const game = await fetchGame(gameAddress)
-    console.log('fetchBusinesses================>', game, gameAddress)
     dispatch(setGamesPublicData([game] || []))
   } catch (error) {
     console.error('[Pools Action] error when getting staking limits', error)
@@ -68,7 +62,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setGamesPublicData: (state, action) => {
-      console.log('setContributorsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setGameUserData: (state, action) => {

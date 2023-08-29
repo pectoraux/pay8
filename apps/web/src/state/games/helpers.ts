@@ -169,7 +169,6 @@ export const fetchGame = async (gameId) => {
   const claimable = ticketInfo_.result[10]
 
   const collection = await getCollection(gameId)
-  console.log('9collection================>', collection)
   const [name, decimals, symbol] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

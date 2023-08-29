@@ -33,7 +33,6 @@ const fetchMarketDataNfts = async (collection: Collection, settings: ItemListing
     settings.direction,
     page * REQUEST_SIZE,
   )
-  console.log('subgraphRes===========>', subgraphRes)
   return subgraphRes as any
 }
 

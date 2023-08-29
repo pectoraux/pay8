@@ -34,7 +34,6 @@ interface FormState {
 }
 
 const RegisterModal: React.FC<any> = ({ collectionId, userBountyId, userCollectionId, onDismiss }) => {
-  console.log('UnRegisterModal===================>', userCollectionId)
   const [state, setState] = useState<any>(() => ({
     bountyId: userBountyId ?? '0',
     productId: '',

@@ -236,8 +236,6 @@ export const fetchArp = async (arpAddress) => {
           },
         ],
       })
-      console.log('nextDuePayable=================>', amountReceivable, nextDueReceivable)
-      console.log('totalLiquidity=================>', totalLiquidity)
       return {
         ...protocol,
         protocolId,

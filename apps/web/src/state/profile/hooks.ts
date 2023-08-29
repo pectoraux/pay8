@@ -69,13 +69,11 @@ export const useProfileForAddress = (
   isValidating: boolean
   refresh: KeyedMutator<any>
 } => {
-  console.log('useProfileForAddress=============>1')
   const { data, status, mutate, isValidating } = useSWR(
     address ? [address, 'profile7'] : null,
     () => getProfileDataFromUser(address),
     fetchConfiguration,
   )
-  console.log('useProfileForAddress=============>', data)
   return {
     profile: data?.profile,
     isFetching: status === FetchStatus.Fetching,
@@ -97,13 +95,11 @@ export const useSSIForAddress = (
   isValidating: boolean
   refresh: KeyedMutator<any>
 } => {
-  console.log('getSSIDatum===============>1')
   const { data, status, mutate, isValidating } = useSWR(
     address ? [address, 'identityTokens'] : null,
     () => getSSIDatum(address),
     fetchConfiguration,
   )
-  console.log('getSSIDatum===============>', data)
   return {
     nfts: data,
     isFetching: status === FetchStatus.Fetching,

@@ -22,7 +22,6 @@ export const fetchSponsorSgAsync =
   ({ fromSponsor }) =>
   async (dispatch) => {
     try {
-      console.log('fetchSponsorsg1================>')
       const whereClause = isAddress(fromSponsor)
         ? {
             active: true,
@@ -32,7 +31,6 @@ export const fetchSponsorSgAsync =
             active: true,
           }
       const sponsors = await getSponsors(0, 0, whereClause)
-      console.log('fetchSponsorsg================>', sponsors)
       dispatch(setSponsorsPublicData(sponsors || []))
     } catch (error) {
       console.error('[Pools Action]============> error when getting staking limits', error)
@@ -43,9 +41,7 @@ export const fetchSponsorsAsync =
   ({ fromSponsor }) =>
   async (dispatch) => {
     try {
-      console.log('fetchSponsors1================>')
       const sponsors = await fetchSponsors({ fromSponsor })
-      console.log('fetchSponsorsal================>', sponsors)
       dispatch(setSponsorsPublicData(sponsors || []))
     } catch (error) {
       console.error('[Pools Action]============> error when getting staking limits', error)
@@ -57,7 +53,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setSponsorsPublicData: (state, action) => {
-      console.log('setSponsorsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setSponsorsUserData: (state, action) => {

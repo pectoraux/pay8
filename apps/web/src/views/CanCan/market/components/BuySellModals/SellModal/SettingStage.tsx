@@ -82,11 +82,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
   const itemMarketTradesContract = useMarketTradesContract()
   const paywallMarketTradesContract = usePaywallMarketTradesContract()
   const paywallPath = '/cancan/collections/[collectionAddress]/paywall/[tokenId]'
-  console.log('useRouter().asPath==============>', useRouter().pathname === paywallPath, useRouter().asPath)
   const marketTradesContract =
     useRouter().pathname === paywallPath ? paywallMarketTradesContract : itemMarketTradesContract
   const tokenContract = getBep20Contract(mainCurrency?.address ?? '')
-  console.log('collection============>', collection)
   const [state, setState] = useState<any>(() => ({
     collection: collection?.owner,
     referrerFee: collection?.referrerFee ?? '0',

@@ -70,7 +70,6 @@ const PartnerModal: React.FC<any> = ({ position = 0, onConfirm, onDismiss }) => 
   const handleAdd = useCallback(async () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('emitUpdateAnnouncement====================>', [_position, true, title, body])
       return callWithGasPrice(marketEventsContract, 'emitUpdateAnnouncement', [_position, true, title, body]).catch(
         (err) => {
           console.log('emitUpdateAnnouncement====================>', err)

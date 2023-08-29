@@ -51,7 +51,6 @@ const RequestHistory: React.FC<any> = ({ collection }) => {
   const { isMd } = useMatchBreakpoints()
 
   const nftActivityFiltersString = JSON.stringify(nftActivityFilters)
-  console.log('collectioncollection===============>', collection)
   useEffect(() => {
     const fetchCollectionActivity = async () => {
       try {
@@ -153,7 +152,6 @@ const RequestHistory: React.FC<any> = ({ collection }) => {
       </Flex>
     </Container>
   )
-  console.log('paginationData=============>', activitiesSlice, paginationData)
   return (
     <Box py="32px">
       <Container px={[0, null, '24px']}>
@@ -203,7 +201,6 @@ const RequestHistory: React.FC<any> = ({ collection }) => {
                   activitiesSlice
                     .filter((activity) => !!activity.id && activity.id !== '' && !activity.active)
                     .map((activity) => {
-                      console.log('RequestRow=================>', activity)
                       return (
                         <RequestRow
                           key={`${activity.id}`}

@@ -201,7 +201,6 @@ export const fetchProfiles = async () => {
         const silverLateValue = profileInfo.result[9]?.lateValue
         const goldLateSeconds = profileInfo.result[10]?.lateSeconds
         const goldLateValue = profileInfo.result[10]?.lateValue
-        console.log('profileInfo=======================>', profileInfo)
         let collection
         if (Number(gauge.collectionId)) {
           collection = await getCollection(gauge.collectionId)
@@ -289,7 +288,6 @@ export const getProfile = async (address) => {
       ],
     })
     let profileInfo
-    console.log('1profileContract==================>', profileId, BigInt(profileId.result.toString()))
     if (BigInt(profileId.result.toString()) > 0) {
       const [_profileInfo] = await bscClient.multicall({
         allowFailure: true,
@@ -332,7 +330,6 @@ export const getProfile = async (address) => {
       profile: profileInfo,
       profileId,
     }
-    console.log('profileContract================>', res)
     return res
   } catch (e) {
     console.log('4profileContract==================>', e)

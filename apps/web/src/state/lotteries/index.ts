@@ -22,7 +22,6 @@ export const fetchLotteriesSgAsync =
   ({ fromLottery }) =>
   async (dispatch) => {
     try {
-      console.log('fetchLotterySg1================>')
       const whereClause = isAddress(fromLottery)
         ? {
             // active: true,
@@ -32,7 +31,6 @@ export const fetchLotteriesSgAsync =
             // active: true
           }
       const lotteries = await getLotteries(0, 0, whereClause)
-      console.log('fetchLotterySg================>', lotteries)
       dispatch(setLotteriesPublicData(lotteries || []))
     } catch (error) {
       console.error('[Pools Action]============>sg', error)
@@ -42,10 +40,8 @@ export const fetchLotteriesSgAsync =
 export const fetchLotteriesAsync =
   ({ fromLottery }) =>
   async (dispatch) => {
-    console.log('fetchLottery1================>', fromLottery)
     try {
       const lotteries = await fetchLotteries({ fromLottery })
-      console.log('fetchLottery================>', lotteries)
       dispatch(setLotteriesPublicData(lotteries || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)
@@ -57,7 +53,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setLotteriesPublicData: (state, action) => {
-      console.log('setContributorsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setLotteriesUserData: (state, action) => {

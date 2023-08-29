@@ -131,12 +131,6 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
     userTokenId: '',
     identityTokenId: '',
   }))
-  console.log(
-    'options==================>',
-    state.options,
-    state,
-    state.options?.reduce((accum, attr) => [...accum, attr.category], []),
-  )
   const tokenContract = useErc721CollectionContract(state.minter || '')
   const updateValue = (key: any, value: string | OptionType[] | boolean | number | Date) => {
     setState((prevState) => ({

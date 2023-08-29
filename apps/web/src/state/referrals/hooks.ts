@@ -16,8 +16,7 @@ import {
 import { getTag } from './helpers'
 
 export const useGetTags = () => {
-  const { data } = useSWR('referrals-tags6', async () => getTag())
-  console.log('usetag============>', data)
+  const { data } = useSWR('referrals-tags', async () => getTag())
   return data?.name ?? ''
 }
 

@@ -22,7 +22,6 @@ export const fetchBountiesAsync =
   ({ fromAccelerator, fromContributors, fromSponsors, fromAuditors, fromBusinesses, fromRamps, fromTransfers }) =>
   async (dispatch) => {
     try {
-      console.log('fetchBounties1================>')
       const trustbounties = await fetchBounties(
         0,
         fromAccelerator,
@@ -33,7 +32,6 @@ export const fetchBountiesAsync =
         fromRamps,
         fromTransfers,
       )
-      console.log('fetchBounties================>', trustbounties)
       dispatch(setBountiesPublicData(trustbounties || []))
     } catch (error) {
       console.error('[Pools Action] error when getting staking limits', error)

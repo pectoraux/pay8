@@ -56,7 +56,6 @@ export const getReferralsData = async () => {
 
 export const fetchReferrals = async () => {
   const gauges = await getReferralsData()
-  console.log('gauges7===================>', gauges)
   const bscClient = publicClient({ chainId: 4002 })
   const referrals = await Promise.all(
     gauges

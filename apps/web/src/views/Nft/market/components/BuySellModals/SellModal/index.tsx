@@ -176,7 +176,6 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
     isTradable: Number(nftToSell?.isTradable) ?? 0,
     isPaywall: 0,
   }))
-  console.log('options===================>', options, nftToSell)
   const [stage, setStage] = useState(SellingStage.EDIT)
   const [price, setPrice] = useState(nftToSell?.currentAskPrice)
   const [burnForCreditToken, setBurnForCreditToken] = useState('')

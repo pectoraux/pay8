@@ -117,7 +117,6 @@ export const fetchLottery = async (lotteryId) => {
     const useNFTicket = viewLottery.treasury.useNFTicket
     const referrerFee = viewLottery.treasury.referrerFee
 
-    console.log('viewLottery==============>', viewLottery, rewardsBreakdown)
     const _lottery = await getLotteries(0, 0, { id: lotteryId })
     const lottery = _lottery?.length && _lottery[0]
     const tokenData = await Promise.all(
@@ -250,6 +249,5 @@ export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, i
       },
     ],
   })
-  console.log('viewRewardsForTicketId==============>', tokenAddress, lotteryId, ticketId, idx)
   return count.result
 }

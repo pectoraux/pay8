@@ -116,7 +116,6 @@ const Collectible = () => {
       },
     ]
   }, [t])
-  console.log('shuffledCollections=================>', shuffledCollections)
   const { data: collections = [], status } = useSWRImmutable<
     (Collection & Partial<{ lowestPrice: number; highestPrice: number }>)[]
   >(

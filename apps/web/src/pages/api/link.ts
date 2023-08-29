@@ -5,7 +5,6 @@ const handler = async (req, res) => {
   const { account: accountAddress, rampAddress, sk, accountId } = req.body
   // const stripe = initStripe(sk)
   const stripe = new Stripe(sk, { apiVersion: '2020-08-27' })
-  console.log('RESP====================>', accountId, sk, accountAddress, rampAddress)
   let loginLink
   let account
   try {
@@ -21,9 +20,7 @@ const handler = async (req, res) => {
         return_url: `http://localhost:3000/ramps/${rampAddress}`,
         type: 'account_onboarding',
       })
-      console.log('a===================>', account)
     }
-    console.log('loginLink=======================>', loginLink)
     // Retrieve the URL from the response and redirect the user to Stripe
     res.send({
       link: loginLink ? loginLink.url : undefined,

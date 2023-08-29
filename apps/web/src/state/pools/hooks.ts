@@ -19,8 +19,7 @@ import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { getTag } from './helpers'
 
 export const useGetTags = () => {
-  const { data } = useSWR('pools-tags6', async () => getTag())
-  console.log('usetag============>', data)
+  const { data } = useSWR('pools-tags', async () => getTag())
   return data?.name ?? ''
 }
 

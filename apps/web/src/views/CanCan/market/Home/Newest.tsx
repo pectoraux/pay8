@@ -20,7 +20,6 @@ const useNewestNfts = () => {
   useEffect(() => {
     const fetchNewestNfts = async () => {
       const nftsFromSg = await getLatestListedItems(16)
-      console.log('nftsFromSg================>', Object.values(nftsFromSg))
       const nfts = Object.values(nftsFromSg)
       setNewestNfts(nfts)
     }

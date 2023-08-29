@@ -15,7 +15,6 @@ const fetchPendingRevenue = async (lotteryId, account, tokenAddress, referrer) =
       },
     ],
   })
-  console.log('fetchPendingRevenue==========>', pendingReward)
   return pendingReward.result.toString()
 }
 

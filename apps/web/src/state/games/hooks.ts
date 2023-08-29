@@ -15,14 +15,12 @@ import {
 } from './selectors'
 
 export const useGetTags = () => {
-  const { data } = useSWR('games-tags6', async () => getTag())
-  console.log('usetag============>', data)
+  const { data } = useSWR('games-tags', async () => getTag())
   return data?.name ?? ''
 }
 
 export const useGetGame = (gameName: string, tokenId: string) => {
-  const { data } = useSWRImmutable(['fb-score2', gameName, tokenId], async () => fetchGameData(gameName, tokenId))
-  console.log('1useGetGame===================>', data, gameName, tokenId)
+  const { data } = useSWRImmutable(['fb-score', gameName, tokenId], async () => fetchGameData(gameName, tokenId))
   return data
 }
 

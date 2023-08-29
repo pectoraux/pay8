@@ -83,7 +83,6 @@ export const getTokenData = async (tokenAddress) => {
       },
     ],
   })
-  console.log('tokenAddress================>', tokenAddress, name, symbol)
   return { name: name.result, symbol: symbol.result, decimals: decimals.result }
 }
 
@@ -141,7 +140,6 @@ export const fetchBounties = async (
         active: true,
       }
   const bountiesFromSg = await getBounties(1000, 0, whereClause)
-  console.log('bountiesFromSg==============>', bountiesFromSg)
   const bscClient = publicClient({ chainId: 4002 })
   const bounties = await Promise.all(
     bountiesFromSg

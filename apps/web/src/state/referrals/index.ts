@@ -22,12 +22,9 @@ let pools = []
 
 export const fetchReferralGaugesAsync = () => async (dispatch) => {
   try {
-    console.log('fetchReferrals1================>')
     const referrals = await fetchReferrals()
-    console.log('fetchReferrals================>', referrals)
     const data = referrals
     dispatch(setReferralsPublicData(data || []))
-    console.log('userData1================>', pools)
   } catch (error) {
     console.error('[Pools Action] error when getting staking limits======>', error)
   }
@@ -58,7 +55,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setReferralsPublicData: (state, action) => {
-      console.log('setReferralsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setReferralsUserData: (state, action) => {

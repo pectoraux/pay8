@@ -9,7 +9,6 @@ interface Props extends BoxProps {
 }
 
 const SectionsWithFoldableText: React.FC<React.PropsWithChildren<Props>> = ({ header, config, ...props }) => {
-  console.log('SectionsWithFoldableText==================>', config)
   return (
     <Box maxWidth="888px" {...props}>
       <Card>

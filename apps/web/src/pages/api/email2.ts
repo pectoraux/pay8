@@ -37,7 +37,6 @@ const handler = async (req, res) => {
       err,
     })
   })
-  console.log('RESP====================>', req.body, user, pass)
 }
 
 export default handler

@@ -19,7 +19,6 @@ const NftProfilePage = () => {
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   })
-  console.log('ssidata===============>', nfts, isConnectedProfile)
   return (
     <>
       <SubMenu />

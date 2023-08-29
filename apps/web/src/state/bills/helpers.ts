@@ -140,7 +140,6 @@ export const getBills = async (first = 5, skip = 0, where) => {
 
 export const fetchBill = async (billAddress) => {
   const bill = await getBill(billAddress.toLowerCase())
-  console.log('billAddress==================>', billAddress)
   const bscClient = publicClient({ chainId: 4002 })
   const [devaddr_, bountyRequired, profileRequired, collectionId] = await bscClient.multicall({
     allowFailure: true,
@@ -167,9 +166,7 @@ export const fetchBill = async (billAddress) => {
       },
     ],
   })
-  console.log('1billAddress==================>', billAddress)
   const collection = await getCollection(collectionId.result.toString())
-  console.log('2billAddress==================>', billAddress, bill)
   const accounts = await Promise.all(
     bill?.protocols?.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
@@ -196,7 +193,6 @@ export const fetchBill = async (billAddress) => {
           },
         ],
       })
-      console.log('3billAddress==================>', protocolInfo)
       const _token = protocolInfo.result[0]
       const version = protocolInfo.result[1]
       const bountyId = protocolInfo.result[2]
@@ -254,7 +250,6 @@ export const fetchBill = async (billAddress) => {
           },
         ],
       })
-      console.log('nextDuePayable=================>', receivables, payables)
       return {
         ...protocol,
         protocolId,
@@ -289,7 +284,6 @@ export const fetchBill = async (billAddress) => {
       }
     }),
   )
-  console.log('4billAddress==================>', billAddress)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...bill,

@@ -41,7 +41,6 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
     <SponsorTagModal merchantId={collection?.id} tag={nftActivityFilters.collectionFilters[0]} />,
   )
 
-  console.log('ActivityFilters============>', collection, nftActivityFilters, nftActivityFilters.collectionFilters[0])
   return (
     <Container justifyContent="space-between" flexDirection={['column', 'column', 'row']}>
       <Text textTransform="uppercase" color="textSubtle" fontSize="12px" bold>

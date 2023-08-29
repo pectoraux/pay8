@@ -12,9 +12,6 @@ interface RemoveStageProps {
 const PublishMediaStage: React.FC<any> = ({ state, updateValue }) => {
   const { t } = useTranslation()
   const [value, onChange] = useState('')
-  console.log('PublishMediaStage===================>', value, state.thumbnail)
-  // const token = process.env.API_TOKEN
-  // const client = new Web3Storage({ token })
 
   const handleImageUpload = useCallback(
     (file: File): Promise<string> =>
@@ -28,7 +25,6 @@ const PublishMediaStage: React.FC<any> = ({ state, updateValue }) => {
           .then((response) => response.json())
           .then((result) => {
             resolve(result.data.url)
-            console.log('1PublishMediaStage===================>', result.data.url)
             updateValue('thumbnail', result.data.url)
           })
           .catch(() => reject(new Error('Upload failed')))

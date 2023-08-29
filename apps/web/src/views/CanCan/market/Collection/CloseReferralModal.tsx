@@ -54,7 +54,6 @@ const PartnerModal: React.FC<any> = ({ registration, onDismiss }) => {
     paywall: 0,
     partnerCollectionId: '',
   }))
-  console.log('1PartnerModal=================>', registration)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
@@ -98,7 +97,6 @@ const PartnerModal: React.FC<any> = ({ registration, onDismiss }) => {
             !!state.deactivate,
           ]
         : [registration?.collection?.owner, account, state.deactivate ? 9 : 8, state.productId, '', '']
-      console.log('partner====================>', args)
       const contract = !state.paywall ? marketHelper2Contract : paywallMarketHelper2Contract
       return callWithGasPrice(contract, 'closeReferral', args).catch((err) => {
         console.log('partner====================>', err)

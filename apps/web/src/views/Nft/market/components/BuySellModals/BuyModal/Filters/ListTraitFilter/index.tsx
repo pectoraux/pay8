@@ -99,7 +99,6 @@ export const ListTraitFilter: React.FC<any> = ({ title, traitType, items, collec
   }
 
   const handleItemSelect = (item) => {
-    console.log('item==================>', item)
     updateItemFilters({
       collectionAddress,
       nftFilters: {

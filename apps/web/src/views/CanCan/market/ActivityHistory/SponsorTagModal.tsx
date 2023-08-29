@@ -52,7 +52,6 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('rerr1=============>', [sponsorAddress, merchantId, minutes, tag, media])
       return callWithGasPrice(nfticketHelper, 'sponsorTag', [sponsorAddress, merchantId, minutes, tag, media]).catch(
         (err) => console.log('err=============>', err),
       )

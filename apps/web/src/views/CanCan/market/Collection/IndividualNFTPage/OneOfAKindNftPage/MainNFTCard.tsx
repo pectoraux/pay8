@@ -90,7 +90,6 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
       ...option,
     }
   })
-  console.log('MainNFTCard========================+>', nft)
   return (
     <Card mb="40px">
       <CardBody>

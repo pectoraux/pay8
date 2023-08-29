@@ -76,9 +76,7 @@ export const fetchCurrentLotteryId = createAsyncThunk<PublicLotteryData>('lotter
 
 export const fetchLotteryAsync = (lotteryAddress) => async (dispatch) => {
   try {
-    console.log('fetchBusinesses1================>', lotteryAddress)
     const lottery = await fetchLottery2(lotteryAddress)
-    console.log('fetchBusinesses================>', lottery, lotteryAddress)
     dispatch(setLotteryPublicData(lottery || {}))
   } catch (error) {
     console.error('[Pools Action] =========>', error)

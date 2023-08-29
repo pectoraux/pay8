@@ -21,11 +21,8 @@ const pools = []
 
 export const fetchProfilesAsync = () => async (dispatch) => {
   try {
-    console.log('fetchProfiles1================>')
     const data = await fetchProfiles()
-    console.log('fetchProfiles================>', data)
     dispatch(setProfilesPublicData(data || []))
-    console.log('userData1================>', pools)
   } catch (error) {
     console.error('[Pools Action]profiles======>', error)
   }
@@ -36,7 +33,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setProfilesPublicData: (state, action) => {
-      console.log('setProfilesPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setPoolsUserData: (state, action) => {

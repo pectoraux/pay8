@@ -33,7 +33,6 @@ const fetchMarketDataNfts = async (collection: Collection, settings: ItemListing
     settings.direction,
     page * REQUEST_SIZE,
   )
-  console.log('subgraphRes===========>', subgraphRes)
   return subgraphRes as any
 }
 
@@ -114,7 +113,6 @@ export const useCollectionNfts = (collectionAddress: string) => {
   )
   fetchedNfts.current = uniqueNftList
   const paywallMirrorsCount = collection?.paywalls?.reduce((acc, cur) => acc + cur?.mirrors?.length, 0)
-  console.log('status=================>', status, FetchStatus.Fetched)
   return {
     nfts: uniqueNftList,
     isFetchingNfts: status !== FetchStatus.Fetched,

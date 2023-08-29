@@ -4,8 +4,8 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 export const selectFilteredData = (address, nfts) => {
   const filters = useGetNftFilters(address ?? '') as any
-  console.log('selectFilteredData==============>', filters)
   const _ve = filters?.workspace?.value ? getVeFromWorkspace(filters?.workspace.value.toLowerCase()) : ADDRESS_ZERO
+  console.log('selectFilteredData==============>', nfts, filters, _ve)
   return nfts?.filter(
     (nft) =>
       (!filters.workspace || nft?.ve?.toLowerCase() === _ve?.toLowerCase()) &&

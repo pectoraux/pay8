@@ -40,7 +40,6 @@ const RequestRow: React.FC<any> = ({
   isUserActivity = false,
   isPartnerRequest = false,
 }) => {
-  console.log('isPartnerRequest=============>', activity)
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { isXs, isSm } = useMatchBreakpoints()
@@ -79,7 +78,6 @@ const RequestRow: React.FC<any> = ({
   const handleAccept = useCallback(async () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('1RequestRow====================>', activity)
       const contract = isPartnerRequest ? marketOrdersContract : marketEventsContract
       const method = isPartnerRequest ? 'addReferral' : 'emitUserRegistration'
       const args = isPartnerRequest
@@ -119,7 +117,6 @@ const RequestRow: React.FC<any> = ({
 
   const handleRemove = useCallback(async () => {
     const receipt = await fetchWithCatchTxError2(() => {
-      console.log('1RequestRow====================>', activity)
       const contract = isPartnerRequest ? marketOrdersContract : marketEventsContract
       const method = isPartnerRequest ? 'closeReferral' : 'emitUserRegistration'
       const args = isPartnerRequest

@@ -42,7 +42,6 @@ const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
     referrer: '',
     user: '',
   }))
-  console.log('1PartnerModal=================>', collection)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()

@@ -55,8 +55,6 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
     [collection, state],
   )
-  console.log('1AddItemModal=================>', collection, item)
-
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -111,7 +109,6 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
             [state.referrerFee, state.bountyId, 2],
           ]
         : [state.productId, paywall?.id, true, false, `${img0},${img1}`]
-      console.log('handleAddItem====================>', method, args)
       return callWithGasPrice(contract, method, args).catch((err) => {
         console.log('handleAddItem====================>', err)
       })

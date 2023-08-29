@@ -252,8 +252,6 @@ export const fetchAuditor = async (auditorAddress) => {
           },
         ],
       })
-      console.log('0nextDuePayable=================>', totalLiquidity, amountReceivable, nextDueReceivable)
-
       return {
         ...protocol,
         protocolId,

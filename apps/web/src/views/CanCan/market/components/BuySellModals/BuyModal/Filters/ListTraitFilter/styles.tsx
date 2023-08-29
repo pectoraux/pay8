@@ -19,7 +19,6 @@ const StyledInput = styled(Input)`
 
 export const TraitItemRow: React.FC<any> = ({ item, order, itemCount, setOrder, handleSelect, handleResults }) => {
   const newItem = item
-  console.log('newItem===============>', newItem)
   const handleAdd = () => {
     if (order) {
       setOrder(false)

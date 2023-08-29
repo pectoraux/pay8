@@ -59,7 +59,6 @@ export const getBetting = async (bettingAddress) => {
         rewardsBreakdownBc: be.rewardsBreakdown?.map((rwb) => parseInt(rwb) / 100),
       }
     })
-    console.log('getBetting=================>', bettingAddress, res, bettingEvents)
     return {
       ...res.betting,
       bettingEvents,
@@ -105,7 +104,6 @@ export const getAmountCollected = async (bettingAddress, bettingId, period) => {
       },
     ],
   })
-  console.log('getAmountCollected=============>', bettingAddress, bettingId, period, amountCollected)
   return amountCollected.result.toString()
 }
 
@@ -165,7 +163,6 @@ export const fetchBetting = async (bettingAddress) => {
     ],
   })
   const collection = await getCollection(collectionId.result.toString())
-  console.log('2bettingFromSg===================>', bettingFromSg, collection, collectionId)
   const bettingEvents = await Promise.all(
     bettingFromSg?.bettingEvents?.map(async (bettingEvent) => {
       const [protocolInfo, ticketSize] = await bscClient.multicall({
@@ -198,19 +195,6 @@ export const fetchBetting = async (bettingAddress) => {
       const discountDivisor = protocolInfo.result[10]
       const newTicketRange = protocolInfo.result[11]
       const newMinTicketNumber = protocolInfo.result[12]
-
-      console.log(
-        'protocolInfo==============>',
-        // tickets,
-        _token,
-        action,
-        startTime,
-        adminShare,
-        referrerShare,
-        bracketDuration,
-        pricePerTicket,
-        discountDivisor,
-      )
 
       const [name, symbol, decimals] = await bscClient.multicall({
         allowFailure: true,
@@ -276,7 +260,6 @@ export const fetchBettings = async ({ fromBetting }) => {
       .filter((betting) => (fromBetting ? betting?.id === fromBetting : true))
       .map(async (betting, index) => {
         const data = await fetchBetting(betting.id)
-        console.log('bettingsFromSg=============>', data)
         return {
           sousId: index,
           ...data,
@@ -306,6 +289,5 @@ export const getCalculateRewardsForTicketId = async (bettingAddress, bettingId, 
       return reward.result || '0'
     }),
   )
-  console.log('getCalculateRewardsForTicketId===================>', rewards)
   return rewards
 }

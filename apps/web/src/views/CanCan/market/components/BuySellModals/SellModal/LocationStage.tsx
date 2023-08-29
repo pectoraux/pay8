@@ -47,13 +47,6 @@ const LocationStage: React.FC<any> = ({
   const collectionAddress = useRouter().query.collectionAddress as string
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
   const [activeButtonIndex3, setActiveButtonIndex3] = useState(0)
-  console.log(
-    'activeButtonIndex===================>',
-    state.original,
-    state.gif,
-    state.thumbnail,
-    process.env.NEXT_PUBLIC_IMGBB_API_KEY,
-  )
   const handleThumbnailUpload = useCallback(
     (file: File): Promise<string> =>
       new Promise((resolve, reject) => {

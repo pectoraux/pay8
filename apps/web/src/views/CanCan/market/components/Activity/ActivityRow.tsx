@@ -62,7 +62,6 @@ const ActivityRow: React.FC<any> = ({
       isUserActivity={isUserActivity}
     />,
   )
-  console.log('currNft==================>', nft, activity)
   const currNft = nft?.transactionHistory?.find((tx) => tx.id?.toLowerCase() === activity.tx?.toLowerCase())
   const [onPresentNFTicket] = useModal(<WebPageModal nft={currNft} />)
   const tokenId = nft ? nft.tokenId : null

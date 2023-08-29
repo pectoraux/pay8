@@ -59,14 +59,6 @@ export function useSingleTokenSwapInfo(
   const token0Address = useMemo(() => getTokenAddress(inputCurrencyId), [inputCurrencyId])
   const token1Address = useMemo(() => getTokenAddress(outputCurrencyId), [outputCurrencyId])
   const amount = useMemo(() => tryParseAmount('1', inputCurrency ?? undefined), [inputCurrency])
-  console.log(
-    'token0Address======================>',
-    token0Address,
-    token1Address,
-    inputCurrency,
-    outputCurrency,
-    amount,
-  )
 
   const { trade: bestTradeExactIn } = useBestAMMTrade({
     amount,

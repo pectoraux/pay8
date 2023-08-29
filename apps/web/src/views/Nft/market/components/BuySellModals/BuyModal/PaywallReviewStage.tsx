@@ -112,19 +112,8 @@ const ReviewStage: React.FC<any> = ({
   const showSecondMenu = discounted && showCredits
   const nftFilters = useGetNftFilters(account)
   const { balance: bnbBalance, fetchStatus: bnbFetchStatus } = useTokenBalance(mainCurrency?.address ?? '')
-  const notEnoughBnbForPurchase = bnbBalance.lt(
-    // ethersToBigNumber(
-    totalPayment,
-    // )
-  )
+  const notEnoughBnbForPurchase = bnbBalance.lt(totalPayment)
   const walletBalance = parseFloat(formatEther(bnbBalance.toString()))
-  console.log(
-    'secondaryCurrency=======================>',
-    mainCurrency,
-    notEnoughBnbForPurchase,
-    bnbBalance,
-    totalPayment,
-  )
   const slicedContract = isMobile ? `${t('Contract').slice(0, 2)}...` : t('Contract')
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const channelContracts = useGetCollectionContracts(nftToBuy.collectionAddress)

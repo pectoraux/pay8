@@ -78,7 +78,6 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, isPaywall, col
   const isInvalidField = (burnForCreditToken && !isAddress(burnForCreditToken)) || !burnForCreditToken
   const discountTokens = useGetTokenForCredit(collectionId, isPaywall)
 
-  console.log('discountTokens===========>', discountTokens)
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <Flex overflow="auto" maxHeight="400px" mb="240px">
       <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">

@@ -31,7 +31,6 @@ const SetPriceStage: React.FC<any> = ({
   handleChoiceChange,
   continueToNextStage,
 }) => {
-  console.log('SetPriceStage====================>', nftToSell)
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { options } = state

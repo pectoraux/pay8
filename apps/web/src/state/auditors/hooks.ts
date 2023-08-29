@@ -15,8 +15,7 @@ import {
 import { getProtocolsSg, getTag } from './helpers'
 
 export const useGetTags = () => {
-  const { data } = useSWR('auditors-tags6', async () => getTag())
-  console.log('usetag============>', data)
+  const { data } = useSWR('auditors-tags', async () => getTag())
   return data?.name ?? ''
 }
 

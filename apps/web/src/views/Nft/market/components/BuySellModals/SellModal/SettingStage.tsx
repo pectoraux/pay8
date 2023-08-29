@@ -63,7 +63,6 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
   const marketCollectionsContract = useMarketCollectionsContract()
   const marketTradesContract = useMarketTradesContract()
   const tokenContract = getBep20Contract(mainCurrency?.address ?? '')
-  console.log('collection============>', collection)
   const [state, setState] = useState<any>(() => ({
     collection: collection?.owner,
     referrerFee: collection?.referrerFee ?? '0',

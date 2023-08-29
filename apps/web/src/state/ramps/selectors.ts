@@ -53,7 +53,6 @@ export const currPoolSelector = createSelector([selectCurrPool], (currPool) => {
 export const poolsWithFilterSelector = createSelector(
   [selectFilteredData, selectUserDataLoaded],
   (pools, userDataLoaded) => {
-    console.log('poolsWithFilterSelector===============>', pools)
     return { pools, userDataLoaded }
   },
 )

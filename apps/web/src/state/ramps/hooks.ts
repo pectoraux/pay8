@@ -140,7 +140,6 @@ export const useGetAccountSg = (accountAddress, channel) => {
 }
 
 export const useGetSessionInfo = (sessionId, sk) => {
-  console.log('useGetSessionInfo==========>', sk)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
   try {
     const sk0 = sk
@@ -183,8 +182,7 @@ export const useGetRequiresApproval = (c, a, s) => {
 }
 
 export const useGetTags = () => {
-  const { data } = useSWR('ramps-tags6', async () => getTag())
-  console.log('usetag============>', data)
+  const { data } = useSWR('ramps-tags', async () => getTag())
   return data?.name ?? ''
 }
 

@@ -8,7 +8,6 @@ interface ActivityEventTextProps extends TextProps {
 
 const ActivityEventText: React.FC<React.PropsWithChildren<ActivityEventTextProps>> = ({ marketEvent, ...props }) => {
   const { t } = useTranslation()
-  console.log('marketEvent==============>', marketEvent)
   const events = {
     ['NewNFT']: {
       text: t('Listed'),

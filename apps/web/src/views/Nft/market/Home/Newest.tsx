@@ -30,7 +30,6 @@ const useNewestNfts = () => {
 const Newest: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const nfts = useNewestNfts()
-  console.log('nfts=====================>', nfts)
   return (
     <>
       {nfts?.length ? (

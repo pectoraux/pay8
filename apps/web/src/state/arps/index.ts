@@ -22,7 +22,6 @@ export const fetchArpSgAsync =
   ({ fromArp }) =>
   async (dispatch) => {
     try {
-      console.log('fetchArpSg1================>')
       const whereClause = isAddress(fromArp)
         ? {
             // active: true,
@@ -32,7 +31,6 @@ export const fetchArpSgAsync =
             // active: true
           }
       const arps = await getArps(0, 0, whereClause)
-      console.log('fetchArpSg================>', arps)
       dispatch(setArpsPublicData(arps || []))
     } catch (error) {
       console.error('[Pools Action]============>sg', error)
@@ -42,10 +40,8 @@ export const fetchArpSgAsync =
 export const fetchArpsAsync =
   ({ fromArp }) =>
   async (dispatch) => {
-    console.log('fetchArps1================>', fromArp)
     try {
       const arps = await fetchArps({ fromArp })
-      console.log('fetchArps================>', arps)
       dispatch(setArpsPublicData(arps || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)
@@ -57,7 +53,6 @@ export const PoolsSlice = createSlice({
   initialState,
   reducers: {
     setArpsPublicData: (state, action) => {
-      console.log('setArpsPublicData==============>', action.payload)
       state.data = [...action.payload]
     },
     setCurrBribeData: (state, action) => {

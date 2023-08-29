@@ -307,7 +307,6 @@ export const getNftsSg = async (first: number, skip: number, where) => {
     )
     return {
       ...nfts,
-      // images: res.nfts?.map((item) => getImages(item.images)),
     }
   } catch (error) {
     console.error('Failed to fetch nfts====================>', error)
@@ -397,7 +396,6 @@ export const getTokenForCredit = async (collectionAddress, isPaywall) => {
         },
       ],
     })
-    console.log('1credits================>', arrLength, collectionAddress, isPaywall)
     const arr = Array.from({ length: Number(arrLength) }, (v, i) => i)
     const credits = await Promise.all(
       arr?.map(async (idx) => {
@@ -456,7 +454,6 @@ export const getTokenForCredit = async (collectionAddress, isPaywall) => {
         }
       }),
     )
-    console.log('2credits================>', credits)
     return credits
   } catch (error) {
     console.error('===========>Failed to fetch credits tokens', error)
@@ -478,7 +475,6 @@ export const getNFTMarketTokenForCredit = async (collectionAddress) => {
         },
       ],
     })
-    console.log('1credits================>', arrLength, collectionAddress)
     const arr = Array.from({ length: Number(arrLength.result) }, (v, i) => i)
     const credits = await Promise.all(
       arr?.map(async (idx) => {
@@ -532,7 +528,6 @@ export const getNFTMarketTokenForCredit = async (collectionAddress) => {
         }
       }),
     )
-    console.log('2credits================>', credits)
     return credits
   } catch (error) {
     console.error('===========>Failed to fetch credits tokens', error)
@@ -802,14 +797,6 @@ export const getCollectionActivity = async (
   const askOrderIncluded = nftActivityFilter.typeFilters.length === 0 || askOrderTypeFilter.length > 0
 
   const askOrderTypeFilterGql = askOrderTypeFilter.length > 0 ? `orderType_in: [${askOrderTypeFilter}]` : ``
-  console.log(
-    '1collectionFilterGql=============>',
-    askOrderTypeFilter,
-    hasCollectionFilter,
-    nftActivityFilter,
-    collectionFilterGql,
-    askOrderTypeFilterGql,
-  )
 
   const transactionIncluded =
     nftActivityFilter.typeFilters.length === 0 ||
@@ -1053,7 +1040,6 @@ export const getPaymentCredits = async (collectionAddress, tokenId, address) => 
 }
 
 export const getSubscriptionStatus = async (paywallAddress, account, nfticketId, tokenId) => {
-  console.log('isOngoing=============>', paywallAddress, account)
   try {
     const bscClient = publicClient({ chainId: 4002 })
     const [isOngoing] = await bscClient.multicall({
@@ -1067,7 +1053,6 @@ export const getSubscriptionStatus = async (paywallAddress, account, nfticketId,
         },
       ],
     })
-    console.log('isOngoing=============>', isOngoing)
     return isOngoing.result
   } catch (error) {
     console.error('===========>Failed to fetch ongoing subscription', error)
@@ -1084,7 +1069,6 @@ export const getDiscounted = async (
   identityTokenId = 0,
   isPaywall = false,
 ) => {
-  console.log('0data================>', collectionAddress, account, tokenId, price, options, identityTokenId, isPaywall)
   try {
     const bscClient = publicClient({ chainId: 4002 })
     const [data] = await bscClient.multicall({
@@ -1098,12 +1082,10 @@ export const getDiscounted = async (
         },
       ],
     })
-    console.log('1data================>', data, options, isPaywall)
     const res = {
       discount: data.result?.length > 0 ? data.result[0].toString() : BIG_ZERO,
       discounted: data.result?.length > 1 ? data.result[1] : false,
     }
-    console.log('2data================>', res)
     return res
   } catch (error) {
     console.error('===========>Failed to fetch discounted price', error)

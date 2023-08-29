@@ -22,8 +22,6 @@ export const getCollectionSg = async (collectionId: string) => {
       { collectionId },
     )
     const collection = []
-    // const [collection] = await Promise.all([getCollectionApi(collectionId)])
-    console.log('collection===============>', collection, collectionId, res)
     return {
       ...res.collection,
       ...collection,
