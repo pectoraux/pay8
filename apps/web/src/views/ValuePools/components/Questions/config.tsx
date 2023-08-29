@@ -8,83 +8,141 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What are Valuepools?</Trans>,
+    title: <Trans>What are ValuePools ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The concept of "ValuePools" introduces a dynamic and collaborative way for groups of individuals to pool their
+        resources and work collectively towards a common mission or goal. By leveraging blockchain technology,
+        ValuePools enable participants to make decisions, allocate resources, and drive initiatives through a
+        decentralized process involving proposals and votes. Here's an overview of the key features and benefits of
+        "ValuePools":
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Shared Resource Pooling: </Trans>
         </InlineLink>
+        <Trans>
+          ValuePools allow participants to contribute their resources, whether financial, intellectual, or other assets,
+          to create a collective pool of value.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are they solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to operate a Valuepool ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are Valuepools a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if I get scammed ?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Decentralized Decision-Making: </Trans>
         </InlineLink>
+        <Trans>
+          Through proposals and voting mechanisms, participants collaboratively make decisions on how the pooled
+          resources are allocated and utilized.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Mission-Driven Approach: </Trans>
+        </InlineLink>
+        <Trans>
+          ValuePools are aligned with a shared mission or objective, ensuring that participants work together towards a
+          common goal.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Inclusive Participation: </Trans>
+        </InlineLink>
+        <Trans>
+          Participants from various backgrounds and expertise levels can contribute to the ValuePool's initiatives,
+          fostering inclusivity and diverse perspectives.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Transparent Governance: </Trans>
+        </InlineLink>
+        <Trans>
+          Blockchain's transparency ensures that all participants can track proposals, voting outcomes, and resource
+          allocations, enhancing accountability.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Democratic Voting Process: </Trans>
+        </InlineLink>
+        <Trans>
+          Participants vote on proposed initiatives, projects, or resource allocations, giving each member an equal say
+          in shaping the ValuePool's direction.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Efficient Resource Allocation: </Trans>
+        </InlineLink>
+        <Trans>
+          ValuePools enable optimized allocation of resources, preventing duplication of efforts and maximizing impact.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Collective Impact: </Trans>
+        </InlineLink>
+        <Trans>
+          Pooling resources and expertise allows participants to achieve a greater impact together than they could
+          individually.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Flexibility and Adaptability: </Trans>
+        </InlineLink>
+        <Trans>
+          ValuePools can adapt to changing circumstances and priorities by allowing participants to propose new
+          initiatives or pivot existing ones.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Empowerment and Engagement: </Trans>
+        </InlineLink>
+        <Trans>
+          Participants actively engage in decision-making, fostering a sense of ownership and empowerment within the
+          ValuePool community.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Value Creation and Distribution: </Trans>
+        </InlineLink>
+        <Trans>
+          As initiatives within the ValuePool succeed, the value created is distributed among participants according to
+          predefined rules.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Cross-Sector Collaboration: </Trans>
+        </InlineLink>
+        <Trans>
+          ValuePools can bridge gaps between industries, bringing together individuals with different skills and
+          perspectives to work on shared goals.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In summary, "ValuePools" introduce a collaborative and decentralized approach to achieving shared missions by
+        pooling resources, expertise, and efforts. By leveraging blockchain technology for transparent governance and
+        decision-making, ValuePools empower participants to work collectively towards impactful initiatives while
+        fostering inclusivity, transparency, and a sense of ownership within the community.
+      </Trans>,
     ],
   },
 ]

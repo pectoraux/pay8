@@ -11,80 +11,138 @@ const config = [
     title: <Trans>What are Pools ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The concept of "Pools" within an Automated Market Maker (AMM) ecosystem serves a crucial role in fairly
+        distributing fees generated from users swapping tokens. These pools are designed to benefit Liquidity Providers
+        (LP) who contribute assets to the pool's liquidity, ensuring a proportional share of the fees earned. Here's a
+        breakdown of the key features and benefits of using "Pools" in an AMM system:
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Fee Distribution: </Trans>
         </InlineLink>
+        <Trans>
+          Pools play a pivotal role in distributing the fees collected from token swaps among the LP providers who
+          supply liquidity to the pool.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are Pools solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to lock an LP token ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Is this a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if I don't reimbuse my loan?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>LP Participation: </Trans>
         </InlineLink>
+        <Trans>
+          Liquidity Providers lock their tokens into the pool, creating a reserve of assets that enable users to easily
+          trade tokens without causing significant price slippage.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Proportional Distribution: </Trans>
+        </InlineLink>
+        <Trans>
+          The fees collected are distributed among LP providers in proportion to the amount of liquidity they contribute
+          to the pool. Those with larger contributions receive a greater share of the fees.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Incentivizing Participation: </Trans>
+        </InlineLink>
+        <Trans>
+          Pools incentivize LP providers to contribute assets to the liquidity pool, as they are rewarded with a share
+          of the trading fees.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Passive Income for LPs: </Trans>
+        </InlineLink>
+        <Trans>
+          By participating in pools, LPs earn passive income in the form of a portion of the fees generated from the
+          platform's trading activities.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Fair Compensation: </Trans>
+        </InlineLink>
+        <Trans>
+          The distribution model ensures that LPs are fairly compensated for their contribution to maintaining liquidity
+          and enabling smooth token swapping.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Liquidity Provision: </Trans>
+        </InlineLink>
+        <Trans>
+          Pools facilitate the liquidity provision process, which is essential for AMMs to function effectively and
+          provide a seamless trading experience.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Dynamic Fees: </Trans>
+        </InlineLink>
+        <Trans>
+          Depending on the AMM protocol, fees might be dynamic and can vary based on trading volume or other parameters,
+          impacting the overall distribution to LPs.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Community Involvement: </Trans>
+        </InlineLink>
+        <Trans>
+          Pools encourage community involvement, as users have the opportunity to become LPs and actively participate in
+          the growth and success of the AMM platform.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Balanced Rewards: </Trans>
+        </InlineLink>
+        <Trans>
+          The distribution mechanism ensures that LPs who contribute more liquidity are rewarded accordingly, aligning
+          incentives with the level of involvement.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>AMM Sustainability: </Trans>
+        </InlineLink>
+        <Trans>
+          By providing an incentive structure for liquidity provision, pools contribute to the long-term sustainability
+          and growth of the AMM ecosystem.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Diversification Opportunities: </Trans>
+        </InlineLink>
+        <Trans>
+          LPs can participate in multiple pools across different tokens, allowing for diversification of their asset
+          holdings and potential revenue streams.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In conclusion, "Pools" are a fundamental component of an AMM system, providing a mechanism for fairly
+        distributing fees to Liquidity Providers who contribute assets to maintain liquidity. This approach fosters
+        community engagement, rewards active participation, and ensures the efficient functioning of the platform while
+        providing passive income opportunities for LPs.
+      </Trans>,
     ],
   },
 ]

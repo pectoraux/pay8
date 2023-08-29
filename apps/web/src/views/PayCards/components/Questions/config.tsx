@@ -11,80 +11,138 @@ const config = [
     title: <Trans>What are Pay Cards ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The concept of "Paycards" introduces a user-friendly and convenient approach to making payments within the
+        cryptocurrency ecosystem. Similar to traditional credit cards, Paycards offer a streamlined and accessible way
+        for users to initiate transactions without the need to connect their wallets each time. Here's an overview of
+        the key features and benefits of Paycards:
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Seamless Transactions: </Trans>
         </InlineLink>
+        <Trans>
+          Paycards enable users to make transactions without the hassle of manually connecting their wallets for every
+          purchase. This streamlines the payment process and enhances the user experience.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are Pay Cards solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to create a Pay Card ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are Pay Cards a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if I get scammed ?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Wallet Integration: </Trans>
         </InlineLink>
+        <Trans>
+          Users can link their cryptocurrency wallets to their Paycards, allowing for seamless integration between the
+          Paycard and their digital assets.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Accessibility and Convenience: </Trans>
+        </InlineLink>
+        <Trans>
+          The convenience of using a Paycard is comparable to traditional credit cards, making cryptocurrency payments
+          accessible to a wider audience.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Shop Transactions: </Trans>
+        </InlineLink>
+        <Trans>
+          Paycards can be used at various shops, online platforms, and merchant locations that accept cryptocurrency
+          payments, making them versatile for a range of purchasing scenarios.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Password Protection: </Trans>
+        </InlineLink>
+        <Trans>
+          The requirement to enter a password adds an extra layer of security, preventing unauthorized access and
+          ensuring that only the rightful owner can initiate transactions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>User-Friendly Interface: </Trans>
+        </InlineLink>
+        <Trans>
+          The user interface for managing Paycards can be designed for ease of use, making it simple for individuals,
+          even those unfamiliar with cryptocurrency, to initiate payments.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Reducing Complexity: </Trans>
+        </InlineLink>
+        <Trans>
+          By eliminating the need for users to manage complex wallet connections and addresses, Paycards simplify the
+          cryptocurrency payment process.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Enhancing Adoption: </Trans>
+        </InlineLink>
+        <Trans>
+          The familiarity of the credit card-like experience can encourage more individuals to adopt cryptocurrency for
+          daily transactions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Minimizing Errors: </Trans>
+        </InlineLink>
+        <Trans>
+          With Paycards, the potential for errors in entering wallet addresses is significantly reduced, contributing to
+          smoother transactions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Integrating Payment Ecosystems: </Trans>
+        </InlineLink>
+        <Trans>
+          Paycards can potentially integrate with existing payment gateways and systems, facilitating acceptance by
+          merchants and businesses.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Cross-Platform Usage: </Trans>
+        </InlineLink>
+        <Trans>
+          Paycards can be designed to work seamlessly across different platforms, including online and physical
+          transactions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Transitioning to Mainstream Use: </Trans>
+        </InlineLink>
+        <Trans>
+          The concept of Paycards bridges the gap between cryptocurrency and traditional financial systems, making
+          cryptocurrency payments more familiar and accepted.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In summary, "Paycards" offer a promising solution to streamline cryptocurrency payments and bridge the gap
+        between the digital asset world and traditional payment methods. By combining the convenience of credit
+        card-like transactions with the security of password protection, this concept has the potential to encourage
+        broader adoption of cryptocurrency for everyday purchases.
+      </Trans>,
     ],
   },
 ]

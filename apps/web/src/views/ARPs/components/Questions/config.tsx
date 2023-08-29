@@ -8,83 +8,123 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What are ARPs?</Trans>,
+    title: <Trans>What are ARPs ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        ARPs (Accounts Receivable Payable) contracts, as you've described them, offer a streamlined and innovative
+        solution for managing scheduled payments and financial transactions on the blockchain. This system can have a
+        wide range of applications, from payrolls to budgeting and more. Here's a breakdown of the key features and
+        benefits of ARPs:
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Scheduled Payment Processing: </Trans>
         </InlineLink>
+        <Trans>
+          ARPs provide a structured and automated way to process scheduled payments to one or multiple users. This can
+          be particularly valuable for managing payrolls, where employees receive regular payments at specified
+          intervals.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are ARPs solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to create an ARP ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are ARPs a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if my ARP admin is a fraud ?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Versatility in Use Cases: </Trans>
         </InlineLink>
+        <Trans>
+          ARPs can be used beyond payroll processing. They can serve various purposes such as budgeting, savings plans,
+          subscription payments, and any scenario that involves recurring financial transactions.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Blockchain Efficiency and Transparency: </Trans>
+        </InlineLink>
+        <Trans>
+          By deploying these contracts on the blockchain, ARPs benefit from the inherent efficiency and transparency of
+          the technology. Transactions are recorded immutably and can be audited for transparency.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>NFT Note Concept: </Trans>
+        </InlineLink>
+        <Trans>
+          The concept of converting future payments into NFT notes is an interesting approach. This can potentially
+          enable users to access funds earlier by selling these notes to individuals who are willing to wait for the
+          scheduled payment date to collect the amount.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Financial Flexibility: </Trans>
+        </InlineLink>
+        <Trans>
+          Allowing users to trade NFT notes provides financial flexibility. It can be particularly useful for those who
+          may need immediate funds before the scheduled payment date.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Value of Time and Waiting: </Trans>
+        </InlineLink>
+        <Trans>
+          The ability to trade NFT notes adds value to the element of time. Users who need funds sooner might be willing
+          to pay a premium to access their payments ahead of schedule.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Marketplace for NFT Notes: </Trans>
+        </InlineLink>
+        <Trans>
+          The NFT notes can potentially create a marketplace where individuals can buy and sell these notes, based on
+          their financial needs and preferences.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Enhanced Cash Flow Management: </Trans>
+        </InlineLink>
+        <Trans>
+          For businesses or individuals, the option to access funds sooner can help with better cash flow management and
+          meeting immediate financial needs.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Risk and Demand: </Trans>
+        </InlineLink>
+        <Trans>
+          The value of NFT notes may vary based on risk assessment and demand. Individuals willing to wait longer might
+          pay less for the note, while those in a hurry might pay more.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Innovation in Financial Instruments: </Trans>
+        </InlineLink>
+        <Trans>
+          The use of blockchain, smart contracts, and NFTs to manage payments and create financial instruments is a
+          prime example of the innovative potential of decentralized technologies.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In conclusion, ARPs, along with the concept of NFT notes, present a novel and forward-thinking approach to
+        managing financial transactions, providing flexibility, and leveraging blockchain for enhanced transparency and
+        efficiency. As the blockchain ecosystem continues to evolve, such innovative financial instruments have the
+        potential to reshape traditional payment systems and financial management practices.
+      </Trans>,
     ],
   },
 ]

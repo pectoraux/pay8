@@ -8,73 +8,143 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What are bounties?</Trans>,
+    title: <Trans>What are TrustBounties ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The concept of "Trust Bounties" introduces a unique mechanism for creating trust and accountability within a
+        community by utilizing blockchain technology and decentralized decision-making. Trust Bounties allow users to
+        lock collaterals in contracts with predefined terms. These terms act as conditions that, if violated, allow
+        anyone to submit a claim. The community then votes on whether the terms were indeed violated, leading to
+        consequences if the violation is proven. Here's an overview of the key features and benefits of "Trust
+        Bounties":
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Building Trust Through Collaterals: </Trans>
         </InlineLink>
+        <Trans>
+          Trust Bounties allow participants to build trust within a community by locking in collaterals that act as a
+          commitment to adhere to specified terms.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are bounties solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to claim a bounty ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are bounties a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Decentralized Accountability: </Trans>
         </InlineLink>
+        <Trans>
+          By utilizing blockchain and decentralized decision-making, Trust Bounties empower the community to hold each
+          other accountable for adhering to the agreed-upon terms.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Defined Terms and Conditions: </Trans>
+        </InlineLink>
+        <Trans>
+          Participants attach specific terms and conditions to their bounties, outlining the behavior or actions that
+          are expected to be followed.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Proposal and Voting Process: </Trans>
+        </InlineLink>
+        <Trans>
+          When someone believes the terms have been violated, they can submit a proposal to the community. A voting
+          process is initiated, allowing the community to collectively decide whether the terms were breached.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Transparent and Tamper-Proof: </Trans>
+        </InlineLink>
+        <Trans>
+          Blockchain's transparency ensures that the terms and voting outcomes are immutable and tamper-proof, enhancing
+          trust in the process.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Fair and Inclusive Decision-Making: </Trans>
+        </InlineLink>
+        <Trans>
+          The community's voting process ensures that decisions are made collectively and fairly, preventing any single
+          entity from having undue influence.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Time-Bound Process: </Trans>
+        </InlineLink>
+        <Trans>
+          The voting process has a predefined duration, providing a window for community members to participate and cast
+          their votes.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Incentivized Behavior: </Trans>
+        </InlineLink>
+        <Trans>
+          Trust Bounties incentivize participants to uphold their commitments, as any violation can result in losing the
+          claimed amount.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Encouraging Positive Interaction: </Trans>
+        </InlineLink>
+        <Trans>
+          The system encourages positive interactions and responsible behavior among community members, fostering a
+          healthier ecosystem.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Prevention of Violations: </Trans>
+        </InlineLink>
+        <Trans>
+          The potential for losing the claimed amount acts as a deterrent, discouraging individuals from violating the
+          terms set for the Trust Bounty.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Customizable Terms: </Trans>
+        </InlineLink>
+        <Trans>
+          Participants have the flexibility to customize the terms based on the context of the trust they are aiming to
+          establish.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Strengthening Relationships: </Trans>
+        </InlineLink>
+        <Trans>
+          Trust Bounties contribute to building stronger relationships within the community by promoting transparency,
+          accountability, and responsibility.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In summary, "Trust Bounties" offer a mechanism for creating trust and accountability within communities by
+        utilizing collaterals, predefined terms, and decentralized decision-making. By allowing participants to hold
+        each other accountable and fostering transparency, this concept promotes positive interactions and helps
+        establish a more trustworthy environment.
+      </Trans>,
     ],
   },
 ]

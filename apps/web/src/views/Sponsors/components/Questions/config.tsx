@@ -8,83 +8,141 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What are Sponsorship contracts ?</Trans>,
+    title: <Trans>What are Sponsor contracts ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The "Sponsor Contracts" concept introduces an efficient and innovative solution for managing sponsorship deals,
+        ensuring timely payments, and providing flexibility for account holders. By leveraging blockchain technology and
+        NFTs, this system addresses challenges related to late payments and offers a new way to access future funds.
+        Here's an overview of the key features and benefits of "Sponsor Contracts":
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Streamlined Sponsorship Deals: </Trans>
         </InlineLink>
+        <Trans>
+          "Sponsor Contracts" provide a streamlined process for creating sponsorship deals. The terms of the deal are
+          established on the blockchain, ensuring clarity and transparency.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are they solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to deploy a sponsorship contract ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are sponsorship contracts a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if I get scammed ?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Timely Payments: </Trans>
         </InlineLink>
+        <Trans>
+          Payments are automatically triggered and become available as soon as they are due according to the terms of
+          the sponsorship deal. This helps prevent delays in payment and ensures compliance with agreed-upon timelines.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Future Payment NFTs: </Trans>
+        </InlineLink>
+        <Trans>
+          Similar to ARPs and Bills, the system allows for future payments to be represented as NFTs. This enables
+          account holders to access funds earlier by selling these NFTs to individuals willing to wait for the payment
+          date.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Financial Flexibility: </Trans>
+        </InlineLink>
+        <Trans>
+          Account holders have the option to access funds from future sponsorship payments ahead of schedule, which can
+          be particularly helpful for addressing immediate financial needs.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>NFT Marketplace: </Trans>
+        </InlineLink>
+        <Trans>
+          The marketplace for NFTs representing future sponsorship payments creates a secondary market where individuals
+          can trade these assets based on their preferences.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Influencer and Partner Benefits: </Trans>
+        </InlineLink>
+        <Trans>
+          For influencers and other sponsored individuals, the ability to access future payments sooner helps address
+          cash flow challenges and provides greater financial predictability.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Transparent Transactions: </Trans>
+        </InlineLink>
+        <Trans>
+          All transactions and payment terms are recorded on the blockchain, offering transparency and accountability
+          for all parties involved.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Trust and Confidence: </Trans>
+        </InlineLink>
+        <Trans>
+          Sponsorship contracts executed on the blockchain can enhance trust between sponsors and beneficiaries by
+          ensuring the terms are executed as agreed upon.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Fraud Prevention: </Trans>
+        </InlineLink>
+        <Trans>
+          The use of blockchain and NFTs adds a layer of security and reduces the risk of fraudulent transactions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Versatility and Scalability: </Trans>
+        </InlineLink>
+        <Trans>
+          The "Sponsor Contracts" concept can be applied to various industries beyond influencer sponsorships, providing
+          flexibility for different types of agreements.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Economic Incentives: </Trans>
+        </InlineLink>
+        <Trans>
+          The ability to access future payments earlier can create economic incentives for those who are willing to
+          wait, providing an interesting dynamic in the NFT marketplace.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Financial Empowerment: </Trans>
+        </InlineLink>
+        <Trans>
+          NFTs representing future payments empower individuals to have greater control over their financial resources
+          and decisions.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In summary, "Sponsor Contracts" offer a novel and efficient approach to managing sponsorship deals, addressing
+        issues related to late payments, and providing new opportunities for financial flexibility. By integrating
+        blockchain technology and NFTs, this concept has the potential to transform how sponsorship agreements are
+        executed and experienced.
+      </Trans>,
     ],
   },
 ]

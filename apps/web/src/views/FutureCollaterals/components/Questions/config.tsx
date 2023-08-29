@@ -8,83 +8,132 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What are Future Collaterals?</Trans>,
+    title: <Trans>What are Future Collaterals ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The concept of "Future Collaterals" introduces an innovative mechanism to enhance borrowing capabilities while
+        maintaining a layer of security for lenders. By using a predefined table of values and collateral pricing, this
+        approach offers affordable rates for borrowers while ensuring lenders have a safeguard in place. Here's an
+        overview of the key features and benefits of Future Collaterals:
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Enhanced Borrowing Capacity: </Trans>
         </InlineLink>
+        <Trans>
+          Future Collaterals allow users to access loans even if they don't currently possess the full collateral value.
+          This feature expands borrowing opportunities, especially for those who lack immediate high-value assets.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are Future Collaterals solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to mint a Future Collateral?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are Future Collaterals a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if I don't reimbuse my loan?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Collateral Value Appreciation: </Trans>
         </InlineLink>
+        <Trans>
+          The value of the collateral increases over time according to the table of values. This appreciation aligns
+          with the loan duration, allowing borrowers to secure loans with assets that will appreciate in value by the
+          time repayment is due.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Affordable Rates: </Trans>
+        </InlineLink>
+        <Trans>
+          By using assets that will appreciate in value, borrowers can secure loans at more affordable rates compared to
+          traditional loans where immediate high-value collateral is required.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Secure Lending Environment: </Trans>
+        </InlineLink>
+        <Trans>
+          Lenders are still protected due to the collateral's eventual increased value. This serves as a safety net in
+          case borrowers default on their loans.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Layered Risk Management: </Trans>
+        </InlineLink>
+        <Trans>
+          While Future Collaterals offer a layer of security, lenders are still expected to conduct due diligence and
+          assess borrowers' risk profiles before lending.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Lowering Borrowing Barriers: </Trans>
+        </InlineLink>
+        <Trans>
+          This mechanism lowers barriers to entry for borrowing, making loans accessible to a broader range of
+          individuals who may not have substantial assets upfront.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Dynamic Collateral Pricing: </Trans>
+        </InlineLink>
+        <Trans>
+          The predefined table of values ensures that the collateral's pricing is dynamic and linked to its projected
+          appreciation, aligning with the loan term.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Encouraging Borrower Responsibility: </Trans>
+        </InlineLink>
+        <Trans>
+          Borrowers have an incentive to ensure they can repay the loan, as they risk losing an asset that will increase
+          in value.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Financial Inclusion: </Trans>
+        </InlineLink>
+        <Trans>
+          Future Collaterals promote financial inclusion by providing opportunities for individuals who might otherwise
+          be excluded from borrowing due to lack of immediate collateral.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Transparency and Predictability: </Trans>
+        </InlineLink>
+        <Trans>
+          The use of a predefined table of values ensures transparency and predictability in collateral value
+          appreciation.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Balancing Risk and Reward: </Trans>
+        </InlineLink>
+        <Trans>
+          Lenders can offer lower rates due to the increased security provided by Future Collaterals, enabling them to
+          take more calculated risks on certain borrowers.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In summary, "Future Collaterals" offer a creative solution to make borrowing more accessible and affordable
+        while maintaining security for both lenders and borrowers. By linking collateral value to a predefined table of
+        values that appreciates over time, this concept strikes a balance between financial inclusion and responsible
+        lending practices.
+      </Trans>,
     ],
   },
 ]

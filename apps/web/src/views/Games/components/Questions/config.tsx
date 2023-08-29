@@ -11,80 +11,140 @@ const config = [
     title: <Trans>What are Gaming contracts ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The concept of "Gaming Contracts" introduces a groundbreaking approach to the gaming industry by leveraging
+        blockchain technology to enable play-to-earn mechanisms and cross-game interoperability. This innovative system
+        revolutionizes the way players engage with games, creating new opportunities for earning rewards and
+        transferring virtual objects seamlessly between different games. It enables agents to setup a play to earn
+        process for their new game or an already existing game whether it's theirs or not. Here's an overview of the key
+        features and benefits of "Gaming Contracts":
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Play-to-Earn Mechanisms: </Trans>
         </InlineLink>
+        <Trans>
+          "Gaming Contracts" integrate play-to-earn models into games, allowing players to earn rewards, tokens, or
+          virtual assets based on their in-game activities and achievements.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are they solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to operate a gaming contract ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are they Ponzi Schemes?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if I get scammed ?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Enhanced User Engagement: </Trans>
         </InlineLink>
+        <Trans>
+          The play-to-earn model increases user engagement and motivation, as players are directly rewarded for their
+          time and efforts spent in the game.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Cross-Game Interoperability: </Trans>
+        </InlineLink>
+        <Trans>
+          The inclusion of cross-game interoperability enables players to transfer virtual objects, assets, or tokens
+          from one game to another, fostering a more connected gaming experience.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Blockchain Security: </Trans>
+        </InlineLink>
+        <Trans>
+          Blockchain technology ensures the security and authenticity of virtual assets and transactions, preventing
+          fraud and unauthorized manipulation.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Ownership of Virtual Assets: </Trans>
+        </InlineLink>
+        <Trans>
+          Players have true ownership of the virtual assets they earn in the game, allowing them to trade, sell, or use
+          them across different platforms.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>New Monetization Models: </Trans>
+        </InlineLink>
+        <Trans>
+          "Gaming Contracts" introduce new monetization possibilities by allowing players to earn tokens or assets that
+          have real-world value.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Decentralization and Control: </Trans>
+        </InlineLink>
+        <Trans>
+          Blockchain-based gaming contracts offer decentralized control, reducing the power of centralized gaming
+          companies and giving players more autonomy.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Community Building: </Trans>
+        </InlineLink>
+        <Trans>
+          Players become more invested in the gaming community as they directly benefit from their contributions and
+          achievements.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Dynamic Virtual Economies: </Trans>
+        </InlineLink>
+        <Trans>
+          The integration of blockchain enables the creation of dynamic virtual economies, where supply and demand of
+          virtual assets are determined by players' actions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Empowering Players: </Trans>
+        </InlineLink>
+        <Trans>
+          Players are empowered to make strategic decisions to maximize their earnings and assets within the gaming
+          ecosystem.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Interconnected Gaming Ecosystem: </Trans>
+        </InlineLink>
+        <Trans>
+          The ability to transfer assets between games creates an interconnected gaming ecosystem, allowing for diverse
+          and fluid player experiences.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Innovation and Creativity: </Trans>
+        </InlineLink>
+        <Trans>
+          The concept encourages game developers to innovate and create more engaging gameplay experiences that are
+          directly tied to player rewards.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In summary, "Gaming Contracts" bring significant advancements to the gaming industry by incorporating
+        play-to-earn models and cross-game interoperability through blockchain technology. This approach transforms the
+        traditional gaming landscape, giving players ownership of their virtual assets, promoting engagement, and
+        fostering new economic models within the gaming world.
+      </Trans>,
     ],
   },
 ]

@@ -11,80 +11,148 @@ const config = [
     title: <Trans>What are Bill contracts ?</Trans>,
     description: [
       <Trans>
-        In the current IFO format. There is a brand new Private Sale. To participate, participants will have to meet
-        certain requirements presented on the IFO card. Each eligible participant will be able to commit any amount of
-        CAKE up to the maximum commit limit, which is published along with the IFO voting proposal. The Private Sale has
-        no participation fee.
+        The "Bill Contract" concept you've described adds an interesting layer of flexibility and automation to the
+        realm of financial transactions, particularly when dealing with payments or deposits where the exact value is
+        unknown in advance. This contract model could have numerous applications, including calculating taxes, managing
+        bill payments, and processing bank account deposits. Here's an overview of the key aspects and benefits of the
+        "Bill Contract":
       </Trans>,
-      <Trans>
-        In the Public Sale, everyone with an active PancakeSwap profile can commit. However the maximum amount of CAKE
-        users can commit, is equal to the number of iCAKE they have.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about iCAKE</Trans>
-        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/ifo-initial-farm-offering/icake">
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Flexible Payment Processing: </Trans>
         </InlineLink>
+        <Trans>
+          The "Bill Contract" is designed to handle transactions where the precise value is uncertain or variable. This
+          flexibility is valuable for scenarios like taxes, where the exact amount owed might vary based on income or
+          other factors.
+        </Trans>
       </>,
-      <Trans>And there’s a fee for participation: see below.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>What problem are Bill contracts solving?</Trans>,
-    description: [
-      <Trans>You can choose one or both at the same time!</Trans>,
-      <Trans>
-        We recommend you to check if you are eligible to participate in the Private Sale first. In the Public Sale, if
-        the amount you commit is too small, you may not receive a meaningful amount of IFO tokens.
-      </Trans>,
-      <Trans>Just remember you need an active PancakeSwap Profile in order to participate.</Trans>,
-    ],
-  },
-  {
-    title: <Trans>How much does it cost to create a Bill contract ?</Trans>,
-    description: [
-      <Trans>There’s only a participation fee for the Public Sale: there’s no fee for the Private Sale.</Trans>,
-      <Trans>
-        The participation fee decreases in cliffs, based on the percentage of overflow from the “Public Sale” portion of
-        the IFO.
-      </Trans>,
-      <Trans>
-        Note: Fees may vary between different IFOs. To learn more about the participation fees, please refer to the
-        details in the IFO proposal (vote) for the specifics of the IFO you want to take part in.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>Are Bill contracts a Ponzi Scheme?</Trans>,
-    description: [<Trans>The CAKE from the participation fee will be burnt as part of the weekly token burn.</Trans>],
-  },
-  {
-    title: <Trans>What happens if I'm victim of a fraud ?</Trans>,
-    description: [
-      <Trans>You need to contribute a minimum of about 10 USD worth of CAKE to either sale.</Trans>,
-      <Trans>
-        You can contribute to one or both, it doesn’t matter: only your overall contribution is counted for the
-        achievement.
-      </Trans>,
-    ],
-  },
-  {
-    title: <Trans>How do you make sure users are protected?</Trans>,
-    description: [
-      <Trans>
-        cIFOs are a new subtype of IFOs, designed to reward our loyal community, and also introduce our community to
-        projects with slightly smaller raises.
-      </Trans>,
+      <br></br>,
       <>
-        <Trans>Learn more about cIFO</Trans>
-        <InlineLink
-          ml="4px"
-          external
-          href="https://medium.com/pancakeswap/community-initial-farm-offering-cifo-the-new-ifo-subtype-ac1abacf66be"
-        >
-          <Trans>here</Trans>
+        <InlineLink ml="4px">
+          <Trans>Automation and Accuracy: </Trans>
         </InlineLink>
+        <Trans>
+          By utilizing smart contracts, the "Bill Contract" automates the calculation and processing of payments,
+          ensuring accurate and transparent transactions.
+        </Trans>
       </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Dynamic Value Calculation: </Trans>
+        </InlineLink>
+        <Trans>
+          The contract can dynamically calculate the value of payments based on various parameters or external data
+          sources. This is particularly useful for payments that fluctuate, such as utility bills or taxes.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>User Voting and Reputation: </Trans>
+        </InlineLink>
+        <Trans>
+          Users have the ability to vote for auditors they trust, contributing to the auditor's reputation and status
+          level. This creates a self-regulating system where reputable auditors gain more influence.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Real-Time Adjustments: </Trans>
+        </InlineLink>
+        <Trans>
+          The contract can adjust payment amounts in real-time, accommodating changes in circumstances and preventing
+          under- or over-payment.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Secure and Transparent Transactions: </Trans>
+        </InlineLink>
+        <Trans>
+          Blockchain's inherent security and transparency contribute to the reliability of the "Bill Contract."
+          Participants can trust the accuracy of calculations and the integrity of transactions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Consistency in Recordkeeping: </Trans>
+        </InlineLink>
+        <Trans>
+          All transactions processed through the contract are recorded immutably on the blockchain, providing a
+          consistent and reliable record of payment history.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Streamlined Processes: </Trans>
+        </InlineLink>
+        <Trans>
+          Users can experience more streamlined and efficient payment processes, as the contract handles complex
+          calculations and eliminates the need for manual adjustments.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Wide Range of Use Cases: </Trans>
+        </InlineLink>
+        <Trans>
+          The "Bill Contract" is versatile and applicable to various scenarios, including calculating taxes, managing
+          bill payments, processing deposits, and other financial interactions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Customizable Parameters: </Trans>
+        </InlineLink>
+        <Trans>
+          Contract parameters can be customized to suit different types of payments and individual requirements.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Integration with Existing Systems: </Trans>
+        </InlineLink>
+        <Trans>
+          The contract can be integrated with existing financial systems, enhancing their capabilities and ensuring
+          compatibility with established processes.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Reducing Error Risks: </Trans>
+        </InlineLink>
+        <Trans>
+          Automation reduces the risks of human errors in calculations, leading to more accurate financial transactions.
+        </Trans>
+      </>,
+      <br></br>,
+      <>
+        <InlineLink ml="4px">
+          <Trans>Improved Financial Planning: </Trans>
+        </InlineLink>
+        <Trans>
+          Users can benefit from better financial planning, knowing that payments are being accurately calculated and
+          processed.
+        </Trans>
+      </>,
+      <br></br>,
+      <Trans>
+        In conclusion, the "Bill Contract" concept showcases the potential of blockchain and smart contracts in
+        revolutionizing the way we handle payments that involve variable or unknown values. By automating calculations,
+        ensuring accuracy, and enhancing transparency, this model has the potential to significantly streamline
+        financial transactions in various contexts.
+      </Trans>,
     ],
   },
 ]
