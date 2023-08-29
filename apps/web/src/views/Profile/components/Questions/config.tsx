@@ -8,7 +8,7 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What are Profiles ?</Trans>,
+    title: <Trans>What are Profiles?</Trans>,
     description: [
       <Trans>
         The "Profile System" introduces an innovative approach to social networking and identity management, leveraging
