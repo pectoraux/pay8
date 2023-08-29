@@ -27,6 +27,7 @@ const StyledPageHeader = styled(PageHeader)`
 `
 
 const StyledHeaderInner = styled(Flex)`
+  padding-bottom: 14px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -50,6 +51,9 @@ const StyledHeaderInner = styled(Flex)`
     }
   }
 `
+const DesktopButton = styled(Button)`
+  align-self: flex-end;
+`
 
 const Home = () => {
   const { t } = useTranslation()
@@ -58,7 +62,13 @@ const Home = () => {
   const { data, status } = useGetCollections()
   const collections = data as any
   const [searchQuery, setSearchQuery] = useState('')
-
+  const handleClick = () => {
+    const howToElem = document.getElementById('how-to')
+    if (howToElem != null) {
+      howToElem.scrollIntoView()
+    } else {
+    }
+  }
   const handleChangeSearchQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),
     [],
@@ -112,10 +122,13 @@ const Home = () => {
             )}
           </div>
           <Flex justifyContent="flex-end" alignItems="flex-end">
-            <TagFilters address={ADDRESS_ZERO} />
             <SearchBar onChange={handleChangeSearchQuery} />
           </Flex>
         </StyledHeaderInner>
+        <TagFilters address={ADDRESS_ZERO} />
+        <DesktopButton mt="14px" onClick={handleClick} variant="subtle">
+          {t('How does it work?')}
+        </DesktopButton>
       </StyledPageHeader>
       {status !== FetchStatus.Fetched ? (
         <PageLoader />
@@ -143,7 +156,7 @@ const Home = () => {
         </PageSection>
       )}
       <Gradient p="64px 0">
-        <SectionsWithFoldableText header={t('FAQs')} config={config(t)} m="auto" />
+        <SectionsWithFoldableText id="how-to" header={t('FAQs')} config={config(t)} m="auto" />
       </Gradient>
     </>
   )
