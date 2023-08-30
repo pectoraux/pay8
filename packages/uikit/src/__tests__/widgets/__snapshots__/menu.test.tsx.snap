@@ -1413,7 +1413,7 @@ exports[`renders correctly 1`] = `
           >
             <a
               class="c26"
-              href="https://pancakeswap.finance/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
+              href="https://payswap.finance/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
               target="_blank"
             >
               <svg
@@ -2872,7 +2872,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://docs.pancakeswap.finance/contact-us"
+              href="https://docs.payswap.finance/contact-us"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -2887,7 +2887,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://blog.pancakeswap.finance/"
+              href="https://blog.payswap.finance/"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -2902,7 +2902,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://docs.pancakeswap.finance/contact-us/telegram"
+              href="https://docs.payswap.finance/contact-us/telegram"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -2917,7 +2917,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://docs.pancakeswap.finance/tokenomics/cake"
+              href="https://docs.payswap.finance/tokenomics/cake"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -2941,7 +2941,7 @@ exports[`renders correctly 1`] = `
               color="var(--colors-warning)"
               data-theme="dark"
               font-size="16px"
-              href="https://pancakeswap.creator-spring.com/"
+              href="https://payswap.creator-spring.com/"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -2965,7 +2965,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="Support https://docs.pancakeswap.finance/contact-us/customer-support"
+              href="Support https://docs.payswap.finance/contact-us/customer-support"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -2980,7 +2980,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://docs.pancakeswap.finance/help/troubleshooting"
+              href="https://docs.payswap.finance/help/troubleshooting"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -2995,7 +2995,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://docs.pancakeswap.finance/get-started"
+              href="https://docs.payswap.finance/get-started"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3019,7 +3019,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://github.com/pancakeswap"
+              href="https://github.com/payswap"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3034,7 +3034,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://docs.pancakeswap.finance"
+              href="https://docs.payswap.finance"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3049,7 +3049,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://app.gitbook.com/@pancakeswap-1/s/pancakeswap/code/bug-bounty"
+              href="https://app.gitbook.com/@payswap-1/s/payswap/code/bug-bounty"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3064,7 +3064,7 @@ exports[`renders correctly 1`] = `
               color="text"
               data-theme="dark"
               font-size="16px"
-              href="https://docs.pancakeswap.finance/help/faq#is-pancakeswap-safe-has-pancakeswap-been-audited"
+              href="https://docs.payswap.finance/help/faq#is-payswap-safe-has-payswap-been-audited"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3174,7 +3174,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswap"
+              href="https://t.me/payswap"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3185,7 +3185,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswapIndonesia"
+              href="https://t.me/payswapIndonesia"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3196,7 +3196,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswap_CN"
+              href="https://t.me/payswap_CN"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3207,7 +3207,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/PancakeSwapVN"
+              href="https://t.me/payswapVN"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3218,7 +3218,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswap_Ita"
+              href="https://t.me/payswap_Ita"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3229,7 +3229,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswap_ru"
+              href="https://t.me/payswap_ru"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3240,7 +3240,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswapturkiye"
+              href="https://t.me/payswapturkiye"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3251,7 +3251,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswapPortuguese"
+              href="https://t.me/payswapPortuguese"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3262,7 +3262,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswapES"
+              href="https://t.me/payswapES"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3273,7 +3273,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswapJP"
+              href="https://t.me/payswapJP"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3284,7 +3284,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswapFR"
+              href="https://t.me/payswapFR"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3295,7 +3295,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswap_DE"
+              href="https://t.me/payswap_DE"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3306,7 +3306,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswap_PH"
+              href="https://t.me/payswap_PH"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3317,7 +3317,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswapGeorgia"
+              href="https://t.me/payswapGeorgia"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3328,7 +3328,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/pancakeswap_INDIA"
+              href="https://t.me/payswap_INDIA"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3339,7 +3339,7 @@ exports[`renders correctly 1`] = `
               class="c26 c13"
               color="textSubtle"
               font-size="16px"
-              href="https://t.me/PancakeSwapAnn"
+              href="https://t.me/payswapAnn"
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -3352,7 +3352,7 @@ exports[`renders correctly 1`] = `
           class="c20 c13"
           color="primary"
           font-size="16px"
-          href="https://reddit.com/r/pancakeswap"
+          href="https://reddit.com/r/payswap"
           rel="noreferrer noopener"
           target="_blank"
         >
@@ -3380,7 +3380,7 @@ exports[`renders correctly 1`] = `
           class="c20 c13"
           color="primary"
           font-size="16px"
-          href="https://instagram.com/pancakeswap_official"
+          href="https://instagram.com/payswap_official"
           rel="noreferrer noopener"
           target="_blank"
         >
@@ -3405,7 +3405,7 @@ exports[`renders correctly 1`] = `
           class="c20 c13"
           color="primary"
           font-size="16px"
-          href="https://github.com/pancakeswap/"
+          href="https://github.com/payswap/"
           rel="noreferrer noopener"
           target="_blank"
         >
@@ -3429,7 +3429,7 @@ exports[`renders correctly 1`] = `
           class="c20 c13"
           color="primary"
           font-size="16px"
-          href="https://discord.gg/pancakeswap"
+          href="https://discord.gg/payswap"
           rel="noreferrer noopener"
           target="_blank"
         >
@@ -3451,7 +3451,7 @@ exports[`renders correctly 1`] = `
           class="c27 c13"
           color="primary"
           font-size="16px"
-          href="https://www.youtube.com/@pancakeswap_official"
+          href="https://www.youtube.com/@payswap_official"
           rel="noreferrer noopener"
           target="_blank"
         >
@@ -3794,7 +3794,7 @@ exports[`renders correctly 1`] = `
           >
             <a
               class="c54"
-              href="https://pancakeswap.finance/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
+              href="https://payswap.finance/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
               target="_blank"
             >
               <svg
@@ -3859,7 +3859,7 @@ exports[`renders correctly 1`] = `
           <a
             class="c56"
             data-theme="light"
-            href="https://pancakeswap.finance/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
+            href="https://payswap.finance/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82&chainId=56"
             scale="sm"
             target="_blank"
           >

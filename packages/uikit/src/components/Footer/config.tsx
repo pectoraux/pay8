@@ -1,6 +1,15 @@
 import { Language } from "../LangSelector/types";
 import { FooterLinkType } from "./types";
-import { TwitterIcon, TelegramIcon, RedditIcon, InstagramIcon, GithubIcon, DiscordIcon, YoutubeIcon } from "../Svg";
+import {
+  TwitterIcon,
+  TelegramIcon,
+  RedditIcon,
+  InstagramIcon,
+  GithubIcon,
+  DiscordIcon,
+  YoutubeIcon,
+  ProposalIcon,
+} from "../Svg";
 
 export const footerLinks: FooterLinkType[] = [
   {
@@ -176,6 +185,11 @@ export const socials = [
     label: "Youtube",
     icon: YoutubeIcon,
     href: "https://www.youtube.com/@payswap_official",
+  },
+  {
+    label: "Mail",
+    icon: ProposalIcon,
+    href: "mailto:info@payswap.org",
   },
 ];
 

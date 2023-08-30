@@ -95,15 +95,14 @@ const TermsOfService = () => {
       <Text as="h3">Website for accessing Protocol</Text>
       <Text as="p">
         The Website is distinct from the Protocol and is one, but not the exclusive, means of accessing the Protocol.
-        The Protocol itself has three versions, designated as v1, v2, and v3, each of which comprises open-source or
-        source-available self-executing smart contracts that are deployed on various public blockchains, such as BNB
-        Chain, Aptos and Ethereum. PaySwap does not control or operate any version of the Protocol on any blockchain
-        network. By using the Website, you understand that you are not buying or selling digital assets from us and that
-        we do not operate any liquidity pools on the Protocol or control trade execution on the Protocol. When traders
-        pay fees for trades, those fees accrue to liquidity providers for the Protocol. As a general matter, the PaySwap
-        team is not a liquidity provider into Protocol liquidity pools and liquidity providers are independent third
-        parties. The Protocol was initially deployed on the BNB Chain blockchain, and has since been deployed on several
-        other blockchain networks.
+        The Protocol itself comprises open-source or source-available self-executing smart contracts that are deployed
+        on various public blockchains, such as BNB Chain, Aptos and Ethereum. PaySwap does not control or operate any
+        version of the Protocol on any blockchain network. By using the Website, you understand that you are not buying
+        or selling digital assets from us and that we do not operate any liquidity pools on the Protocol or control
+        trade execution on the Protocol. When traders pay fees for trades, those fees accrue to liquidity providers for
+        the Protocol. As a general matter, the PaySwap team is not a liquidity provider into Protocol liquidity pools
+        and liquidity providers are independent third parties. The Protocol was initially deployed on the BNB Chain
+        blockchain, and has since been deployed on several other blockchain networks.
       </Text>
 
       <Text as="h3">Eligibility</Text>
@@ -129,8 +128,8 @@ const TermsOfService = () => {
       <Text as="p">
         PaySwap owns all intellectual property and other rights in the Website and its contents, including (but not
         limited to) software, text, images, trademarks, service marks, copyrights, patents, designs, and its “look and
-        feel.” Unlike the Website, versions 1-3 of the Protocol are comprised entirely of open-source or
-        source-available software running on public blockchains.
+        feel.” Unlike the Website, the Protocol is comprised entirely of open-source or source-available software
+        running on public blockchains.
       </Text>
       <Text as="p">
         By using the Website to list, post, promote, or display NFTs, you grant us a worldwide, non-exclusive,
@@ -210,17 +209,6 @@ const TermsOfService = () => {
           requirements imposed by U.S. law.
         </li>
       </ul>
-
-      <Text as="h3">Initial Farm Offering</Text>
-      <Text as="p">
-        You represent that you are not a user from the following countries or regions when participating in our Initial
-        Farm Offerings:
-      </Text>
-      <Text as="p">
-        Belarus, Cuba, Crimea Region, Democratic Republic of Congo, Iran, Iraq, New Zealand, North Korea, South Sudan,
-        Sudan, Syria, United States of America and its territories (American Samoa, Guam, Puerto Rico, the Northern
-        Mariana Islands, and the U.S. Virgin Islands), Zimbabwe.
-      </Text>
 
       <Text as="h3">Not Registered with the SEC or Any Other Agency</Text>
       <Text as="p">
@@ -373,7 +361,7 @@ const TermsOfService = () => {
         Similarly, the Protocol is provided "AS IS", at your own risk, and without warranties of any kind. Although we
         contributed to the initial code for the Protocol, we do not provide, own, or control the Protocol, which is run
         autonomously without any headcount by smart contracts deployed on various blockchains. Upgrades and
-        modifications to the Protocol are generally managed in a community-driven way by holders of the CAKE token. No
+        modifications to the Protocol are generally managed in a community-driven way by holders of FREE tokens. No
         developer or entity involved in creating the Protocol will be liable for any claims or damages whatsoever
         associated with your use, inability to use, or your interaction with other users of, the Protocol, including any
         direct, indirect, incidental, special, exemplary, punitive or consequential damages, or loss of profits,
@@ -400,7 +388,7 @@ const TermsOfService = () => {
       <Text as="h3">Dispute Resolution</Text>
       <Text as="p">
         We will use our best efforts to resolve any potential disputes through informal, good faith negotiations. If a
-        potential dispute arises, you must contact us by sending an email to info@payswap.com so that we can attempt to
+        potential dispute arises, you must contact us by sending an email to info@payswap.org so that we can attempt to
         resolve it without resorting to formal dispute resolution. If we aren't able to reach an informal resolution
         within sixty days of your email, then you and we both agree to resolve the potential dispute according to the
         process set forth below.
