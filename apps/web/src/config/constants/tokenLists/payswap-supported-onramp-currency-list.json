@@ -1,0 +1,1157 @@
+{
+  "name": "PaySwap Onramp",
+  "timestamp": "2023-08-31T21:59:55.624Z",
+  "version": {
+    "major": 2,
+    "minor": 16,
+    "patch": 12
+  },
+  "logoURI": "https://payswap.org/logo.png",
+  "keywords": ["payswap", "onramp"],
+  "tokens": [
+    {
+      "name": "United Arab Emirates Dirham",
+      "address": "0x51ccF98593809607bdB08509e8b8d670658f86C0",
+      "symbol": "AED",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/aed.svg"
+    },
+    {
+      "name": "Afghan Afghani",
+      "address": "0xA1eCa5aC14274ad02F04b62F8620B2767e350d47",
+      "symbol": "AFN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/afn.svg"
+    },
+    {
+      "name": "Albanian Lek",
+      "address": "0xf2Ca8333888cf3C673E81225228a000F9b7b4338",
+      "symbol": "ALL",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/all.svg"
+    },
+    {
+      "name": "Armenian Dram",
+      "address": "0xa71B00c519d6573E0cFC37638FE712aC6dD65a2c",
+      "symbol": "AMD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/amd.svg"
+    },
+    {
+      "name": "Netherlands Antillean Guilder",
+      "address": "0xB8406F928784221b2dDD72a50Cf7563C45e8Ed9c",
+      "symbol": "ANG",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ang.svg"
+    },
+    {
+      "name": "Angolan Kwanza",
+      "address": "0x7eB9763f5eF3bFb84CE6f31b324e7619bFA1ca37",
+      "symbol": "AOA",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/aoa.svg"
+    },
+    {
+      "name": "Argentine Peso (ARS)",
+      "address": "0xC429AbCb98f3565af5e051fdC5Ff081a43b6B803",
+      "symbol": "ARS",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ars.svg"
+    },
+    {
+      "name": "Australian Dollar",
+      "address": "0xEE0A3DE3952B71cfadaA155182878Ed49a6D93a2",
+      "symbol": "AUD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/aud.svg"
+    },
+    {
+      "name": "Aruban Florin",
+      "address": "0xFf3254b1e3980fDA97FD7a4A245dC43FE8B9E53f",
+      "symbol": "AWG",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/awg.svg"
+    },
+    {
+      "name": "Azerbaijani Manat",
+      "address": "0x86EB24C62635573f0dbc52B1b07660f6B3FA8fdA",
+      "symbol": "AZN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/azn.svg"
+    },
+    {
+      "name": "Bosnia and Herzegovina Convertible Mark",
+      "address": "0xfd045C059AC6423F9B21A456a432Ead97a93F706",
+      "symbol": "BAM",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bam.svg"
+    },
+    {
+      "name": "Barbadian Dollar",
+      "address": "0x6Ff847c7EbDf92bA9E6D1DBD9c172d912f61C4D4",
+      "symbol": "BBD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bbd.svg"
+    },
+    {
+      "name": "Bangladeshi Taka",
+      "address": "0x0000000000000000000000000000000000000008",
+      "symbol": "BDT",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bdt.svg"
+    },
+    {
+      "name": "Bulgarian Lev",
+      "address": "0xfd045C059AC6423F9B21A456a432Ead97a93F706",
+      "symbol": "BGN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bgn.svg"
+    },
+    {
+      "name": "Burundian Franc",
+      "address": "0x0000000000000000000000000000000000000000",
+      "symbol": "BIF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bif.svg"
+    },
+    {
+      "name": "Bermudian Dollar",
+      "address": "0x0000000000000000000000000000000000000001",
+      "symbol": "BMD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bmd.svg"
+    },
+    {
+      "name": "Brunei Dollar",
+      "address": "0x0000000000000000000000000000000000000002",
+      "symbol": "BND",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bnd.svg"
+    },
+    {
+      "name": "Bolivian Boliviano",
+      "address": "0x0000000000000000000000000000000000000003",
+      "symbol": "BOB",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bob.svg"
+    },
+    {
+      "name": "Brazilian Real",
+      "address": "0x0000000000000000000000000000000000000004",
+      "symbol": "BRL",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/brl.svg"
+    },
+    {
+      "name": "Bahamas Dollar",
+      "address": "0x0000000000000000000000000000000000000005",
+      "symbol": "BSD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bsd.svg"
+    },
+    {
+      "name": "Bhutanese Ngultrum",
+      "address": "0x0000000000000000000000000000000000000006",
+      "symbol": "BTN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/btn.svg"
+    },
+    {
+      "name": "Botswana Pula",
+      "address": "0x0000000000000000000000000000000000000007",
+      "symbol": "BWP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bwp.svg"
+    },
+    {
+      "name": "Belarusian Ruble",
+      "address": "0x0000000000000000000000000000000000000009",
+      "symbol": "BYN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/byn.svg"
+    },
+    {
+      "name": "Belize Dollar",
+      "address": "0x0000000000000000000000000000000000000010",
+      "symbol": "BZD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/bzd.svg"
+    },
+    {
+      "name": "Canadian Dollar",
+      "address": "0x0000000000000000000000000000000000000011",
+      "symbol": "CAD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/cad.svg"
+    },
+    {
+      "name": "Congolese Franc",
+      "address": "0x0000000000000000000000000000000000000012",
+      "symbol": "CDF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/cdf.svg"
+    },
+    {
+      "name": "Swiss Franc",
+      "address": "0x0000000000000000000000000000000000000013",
+      "symbol": "CHF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/chf.svg"
+    },
+    {
+      "name": "Chilean Peso",
+      "address": "0x0000000000000000000000000000000000000014",
+      "symbol": "CLP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/clp.svg"
+    },
+    {
+      "name": "Chinese Yuan",
+      "address": "0x0000000000000000000000000000000000000015",
+      "symbol": "CNY",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/cny.svg"
+    },
+    {
+      "name": "Colombian Peso",
+      "address": "0x0000000000000000000000000000000000000016",
+      "symbol": "COP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/cop.svg"
+    },
+    {
+      "name": "Costa Rican Colon",
+      "address": "0x0000000000000000000000000000000000000017",
+      "symbol": "CRC",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/crc.svg"
+    },
+    {
+      "name": "Cape Verdean Escudo",
+      "address": "0x0000000000000000000000000000000000000018",
+      "symbol": "CVE",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/cve.svg"
+    },
+    {
+      "name": "Czech Koruna",
+      "address": "0x0000000000000000000000000000000000000019",
+      "symbol": "CZK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/czk.svg"
+    },
+    {
+      "name": "Djiboutian Franc",
+      "address": "0x0000000000000000000000000000000000000020",
+      "symbol": "DJF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/djf.svg"
+    },
+    {
+      "name": "Danish Krone",
+      "address": "0x0000000000000000000000000000000000000021",
+      "symbol": "DKK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/dkk.svg"
+    },
+    {
+      "name": "Dominican Peso",
+      "address": "0x0000000000000000000000000000000000000022",
+      "symbol": "DOP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/dop.svg"
+    },
+    {
+      "name": "Algerian Dinar",
+      "address": "0x0000000000000000000000000000000000000023",
+      "symbol": "DZD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/dzd.svg"
+    },
+    {
+      "name": "Egyptian Pound",
+      "address": "0x0000000000000000000000000000000000000024",
+      "symbol": "EGP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/egp.svg"
+    },
+    {
+      "name": "Ethiopian Birr",
+      "address": "0x0000000000000000000000000000000000000025",
+      "symbol": "ETB",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/etb.svg"
+    },
+    {
+      "name": "Euro",
+      "address": "0x0000000000000000000000000000000000000026",
+      "symbol": "EUR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/eur.svg"
+    },
+    {
+      "name": "Fiji Dollar",
+      "address": "0x0000000000000000000000000000000000000027",
+      "symbol": "FJD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/fjd.svg"
+    },
+    {
+      "name": "Falkland Islands Pound",
+      "address": "0x0000000000000000000000000000000000000028",
+      "symbol": "FKP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/fkp.svg"
+    },
+    {
+      "name": "British Pound Sterling",
+      "address": "0x0000000000000000000000000000000000000029",
+      "symbol": "GBP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/gbp.svg"
+    },
+    {
+      "name": "Georgian Lari",
+      "address": "0x0000000000000000000000000000000000000030",
+      "symbol": "GEL",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/gel.svg"
+    },
+    {
+      "name": "Guernsey Pound",
+      "address": "0x0000000000000000000000000000000000000031",
+      "symbol": "GGP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ggp.svg"
+    },
+    {
+      "name": "Ghanaian Cedi",
+      "address": "0x0000000000000000000000000000000000000032",
+      "symbol": "GHS",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ghs.svg"
+    },
+    {
+      "name": "Gibraltar Pound",
+      "address": "0x0000000000000000000000000000000000000033",
+      "symbol": "GIP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/gip.svg"
+    },
+    {
+      "name": "Gambian Dalasi",
+      "address": "0x0000000000000000000000000000000000000034",
+      "symbol": "GMD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/gmd.svg"
+    },
+    {
+      "name": "Guinean Franc",
+      "address": "0x0000000000000000000000000000000000000035",
+      "symbol": "GNF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/gnf.svg"
+    },
+    {
+      "name": "Guatemala Quetzal",
+      "address": "0x0000000000000000000000000000000000000036",
+      "symbol": "GTQ",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/gtq.svg"
+    },
+    {
+      "name": "Guyanese Dollar",
+      "address": "0x0000000000000000000000000000000000000037",
+      "symbol": "GYD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/gyd.svg"
+    },
+    {
+      "name": "Hong Kong Dollar",
+      "address": "0x0000000000000000000000000000000000000038",
+      "symbol": "HKD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/hkd.svg"
+    },
+    {
+      "name": "Honduran Lempira",
+      "address": "0x0000000000000000000000000000000000000039",
+      "symbol": "HNL",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/hnl.svg"
+    },
+    {
+      "name": "Croatian Kuna",
+      "address": "0x0000000000000000000000000000000000000040",
+      "symbol": "HRK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/hrk.svg"
+    },
+    {
+      "name": "Haitian Gourde",
+      "address": "0x0000000000000000000000000000000000000041",
+      "symbol": "HTG",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/htg.svg"
+    },
+    {
+      "name": "Hungarian Forint",
+      "address": "0x0000000000000000000000000000000000000042",
+      "symbol": "HUF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/huf.svg"
+    },
+    {
+      "name": "Indonesian Rupiah",
+      "address": "0x0000000000000000000000000000000000000043",
+      "symbol": "IDR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/idr.svg"
+    },
+    {
+      "name": "Israeli New Shekel",
+      "address": "0x0000000000000000000000000000000000000044",
+      "symbol": "ILS",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ils.svg"
+    },
+    {
+      "name": "Indian Rupee",
+      "address": "0x0000000000000000000000000000000000000045",
+      "symbol": "INR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/inr.svg"
+    },
+    {
+      "name": "Icelandic Krona",
+      "address": "0x0000000000000000000000000000000000000046",
+      "symbol": "ISK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/isk.svg"
+    },
+    {
+      "name": "Jamaican Dollar",
+      "address": "0x0000000000000000000000000000000000000047",
+      "symbol": "JMD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/jmd.svg"
+    },
+    {
+      "name": "Japanese Yen",
+      "address": "0x0000000000000000000000000000000000000048",
+      "symbol": "JPY",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/jpy.svg"
+    },
+    {
+      "name": "Kenyan Shilling",
+      "address": "0x0000000000000000000000000000000000000049",
+      "symbol": "KES",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/kes.svg"
+    },
+    {
+      "name": "Kyrgyzstani Som",
+      "address": "0x0000000000000000000000000000000000000050",
+      "symbol": "KGS",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/kgs.svg"
+    },
+    {
+      "name": "Cambodian Riel",
+      "address": "0x0000000000000000000000000000000000000051",
+      "symbol": "KHR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/khr.svg"
+    },
+    {
+      "name": "Comorian Franc",
+      "address": "0x0000000000000000000000000000000000000052",
+      "symbol": "KMF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/kmf.svg"
+    },
+    {
+      "name": "South Korean Won",
+      "address": "0x0000000000000000000000000000000000000053",
+      "symbol": "KRW",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/krw.svg"
+    },
+    {
+      "name": "Kuwaiti Dinar",
+      "address": "0x0000000000000000000000000000000000000053",
+      "symbol": "KWD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/kwd.svg"
+    },
+    {
+      "name": "Cayman Islands Dollar",
+      "address": "0x0000000000000000000000000000000000000054",
+      "symbol": "KYD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/kyd.svg"
+    },
+    {
+      "name": "Kazakhstani Tenge",
+      "address": "0x0000000000000000000000000000000000000055",
+      "symbol": "KZT",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/kzt.svg"
+    },
+    {
+      "name": "Lao Kip",
+      "address": "0x0000000000000000000000000000000000000056",
+      "symbol": "LAK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/lak.svg"
+    },
+    {
+      "name": "Lebanese Pound",
+      "address": "0x0000000000000000000000000000000000000057",
+      "symbol": "LBP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/lbp.svg"
+    },
+    {
+      "name": "Sri Lankan Rupee",
+      "address": "0x0000000000000000000000000000000000000058",
+      "symbol": "LKR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/lkr.svg"
+    },
+    {
+      "name": "Liberian Dollar",
+      "address": "0x0000000000000000000000000000000000000059",
+      "symbol": "LRD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/lrd.svg"
+    },
+    {
+      "name": "Lesotho Loti",
+      "address": "0x0000000000000000000000000000000000000060",
+      "symbol": "LSL",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/lsl.svg"
+    },
+    {
+      "name": "Libyan Dinar",
+      "address": "0x0000000000000000000000000000000000000061",
+      "symbol": "LYD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/lyd.svg"
+    },
+    {
+      "name": "Moroccan Dirham",
+      "address": "0x0000000000000000000000000000000000000062",
+      "symbol": "MAD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mad.svg"
+    },
+    {
+      "name": "Moldovan Leu",
+      "address": "0x0000000000000000000000000000000000000063",
+      "symbol": "MDL",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mdl.svg"
+    },
+    {
+      "name": "Malagasy Ariary",
+      "address": "0x0000000000000000000000000000000000000064",
+      "symbol": "MGA",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mga.svg"
+    },
+    {
+      "name": "Macedonian Denar",
+      "address": "0x0000000000000000000000000000000000000065",
+      "symbol": "MKD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mkd.svg"
+    },
+    {
+      "name": "Burmese Kyat",
+      "address": "0x0000000000000000000000000000000000000066",
+      "symbol": "MMK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mmk.svg"
+    },
+    {
+      "name": "Mongolian Tugrik",
+      "address": "0x0000000000000000000000000000000000000067",
+      "symbol": "MNT",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mnt.svg"
+    },
+    {
+      "name": "Macanese Pataca",
+      "address": "0x0000000000000000000000000000000000000068",
+      "symbol": "MOP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mop.svg"
+    },
+    {
+      "name": "Mauritanian Ouguiya",
+      "address": "0x0000000000000000000000000000000000000069",
+      "symbol": "MRO",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mro.svg"
+    },
+    {
+      "name": "Mauritian Rupee",
+      "address": "0x0000000000000000000000000000000000000070",
+      "symbol": "MUR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mur.svg"
+    },
+    {
+      "name": "Maldivian Rufiyaa",
+      "address": "0x0000000000000000000000000000000000000071",
+      "symbol": "MVR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mvr.svg"
+    },
+    {
+      "name": "Malawian Kwacha",
+      "address": "0x0000000000000000000000000000000000000072",
+      "symbol": "MWK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mwk.svg"
+    },
+    {
+      "name": "Mexican Peso",
+      "address": "0x0000000000000000000000000000000000000073",
+      "symbol": "MXN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mxn.svg"
+    },
+    {
+      "name": "Malaysian Ringgit",
+      "address": "0x0000000000000000000000000000000000000074",
+      "symbol": "MYR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/myr.svg"
+    },
+    {
+      "name": "Mozambican Metical",
+      "address": "0x0000000000000000000000000000000000000075",
+      "symbol": "MZN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/mzn.svg"
+    },
+    {
+      "name": "Namibian Dollar",
+      "address": "0x0000000000000000000000000000000000000076",
+      "symbol": "NAD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/nad.svg"
+    },
+    {
+      "name": "Nigerian Naira",
+      "address": "0x0000000000000000000000000000000000000077",
+      "symbol": "NGN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ngn.svg"
+    },
+    {
+      "name": "Nicaraguan Córdoba",
+      "address": "0x0000000000000000000000000000000000000078",
+      "symbol": "NIO",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/nio.svg"
+    },
+    {
+      "name": "Norwegian Krone",
+      "address": "0x0000000000000000000000000000000000000079",
+      "symbol": "NOK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/nok.svg"
+    },
+    {
+      "name": "Nepalese Rupee",
+      "address": "0x0000000000000000000000000000000000000080",
+      "symbol": "NPR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/npr.svg"
+    },
+    {
+      "name": "New Zealand Dollar",
+      "address": "0x0000000000000000000000000000000000000081",
+      "symbol": "NZD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/nzd.svg"
+    },
+    {
+      "name": "Panamanian Balboa",
+      "address": "0x0000000000000000000000000000000000000082",
+      "symbol": "PAB",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/pa.svg"
+    },
+    {
+      "name": "Peruvian Sol",
+      "address": "0x0000000000000000000000000000000000000083",
+      "symbol": "PEN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/pen.svg"
+    },
+    {
+      "name": "Papua New Guinean Kina",
+      "address": "0x0000000000000000000000000000000000000084",
+      "symbol": "PGK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/pgk.svg"
+    },
+    {
+      "name": "Philippine Peso",
+      "address": "0x0000000000000000000000000000000000000085",
+      "symbol": "PHP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/php.svg"
+    },
+    {
+      "name": "Pakistani Rupee",
+      "address": "0x0000000000000000000000000000000000000086",
+      "symbol": "PKR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/pkr.svg"
+    },
+    {
+      "name": "Polish Zloty",
+      "address": "0x0000000000000000000000000000000000000087",
+      "symbol": "PLN",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/pln.svg"
+    },
+    {
+      "name": "Paraguayan Guarani",
+      "address": "0x0000000000000000000000000000000000000088",
+      "symbol": "PYG",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/pyg.svg"
+    },
+    {
+      "name": "Qatari Rial",
+      "address": "0x0000000000000000000000000000000000000089",
+      "symbol": "QAR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/qar.svg"
+    },
+    {
+      "name": "Romanian Leu",
+      "address": "0x0000000000000000000000000000000000000090",
+      "symbol": "RON",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ron.svg"
+    },
+    {
+      "name": "Serbian Dinar",
+      "address": "0x0000000000000000000000000000000000000091",
+      "symbol": "RSD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/rsd.svg"
+    },
+    {
+      "name": "Russian Ruble",
+      "address": "0x0000000000000000000000000000000000000092",
+      "symbol": "RUB",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/rub.svg"
+    },
+    {
+      "name": "Rwandan Franc",
+      "address": "0x0000000000000000000000000000000000000093",
+      "symbol": "RWF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/rwf.svg"
+    },
+    {
+      "name": "Saudi Arabian Riyal",
+      "address": "0x0000000000000000000000000000000000000094",
+      "symbol": "SAR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/sar.svg"
+    },
+    {
+      "name": "Solomon Islands Dollar",
+      "address": "0x0000000000000000000000000000000000000095",
+      "symbol": "SBD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/sbd.svg"
+    },
+    {
+      "name": "Seychellois Rupee",
+      "address": "0x0000000000000000000000000000000000000096",
+      "symbol": "SCR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/scr.svg"
+    },
+    {
+      "name": "Swedish Krona",
+      "address": "0x0000000000000000000000000000000000000097",
+      "symbol": "SEK",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/sek.svg"
+    },
+    {
+      "name": "Singapore Dollar",
+      "address": "0x0000000000000000000000000000000000000098",
+      "symbol": "SGD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/sgd.svg"
+    },
+    {
+      "name": "Saint Helena Pound",
+      "address": "0x0000000000000000000000000000000000000099",
+      "symbol": "SHP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/shp.svg"
+    },
+    {
+      "name": "Sierra Leonean Leone",
+      "address": "0x0000000000000000000000000000000000000100",
+      "symbol": "SLE",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/sle.svg"
+    },
+    {
+      "name": "Somali Shilling",
+      "address": "0x0000000000000000000000000000000000000101",
+      "symbol": "SOS",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/sos.svg"
+    },
+    {
+      "name": "Surinamese Dollar",
+      "address": "0x0000000000000000000000000000000000000102",
+      "symbol": "SRD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/srd.svg"
+    },
+    {
+      "name": "Sao Tome and Principe Dobra",
+      "address": "0x0000000000000000000000000000000000000103",
+      "symbol": "STD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/std.svg"
+    },
+    {
+      "name": "Syrian Pound",
+      "address": "0x0000000000000000000000000000000000000104",
+      "symbol": "SYP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/syp.svg"
+    },
+    {
+      "name": "Swazi Lilangeni",
+      "address": "0x0000000000000000000000000000000000000105",
+      "symbol": "SZL",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/szl.svg"
+    },
+    {
+      "name": "Thai Baht",
+      "address": "0x0000000000000000000000000000000000000106",
+      "symbol": "THB",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/thb.svg"
+    },
+    {
+      "name": "Tajikistani Somoni",
+      "address": "0x0000000000000000000000000000000000000107",
+      "symbol": "TJS",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/tjs.svg"
+    },
+    {
+      "name": "Tanzanian Shilling",
+      "address": "0x0000000000000000000000000000000000000108",
+      "symbol": "TNG",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/tng.svg"
+    },
+    {
+      "name": "Tongan Paʻanga",
+      "address": "0x0000000000000000000000000000000000000109",
+      "symbol": "TOP",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/top.svg"
+    },
+    {
+      "name": "Turkish Lira",
+      "address": "0x0000000000000000000000000000000000000110",
+      "symbol": "TRY",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/try.svg"
+    },
+    {
+      "name": "Trinidad and Tobago Dollar",
+      "address": "0x0000000000000000000000000000000000000111",
+      "symbol": "TTD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ttd.svg"
+    },
+    {
+      "name": "Taiwan New Dollar",
+      "address": "0x0000000000000000000000000000000000000112",
+      "symbol": "TWD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/twd.svg"
+    },
+    {
+      "name": "Tanzanian Shilling",
+      "address": "0x0000000000000000000000000000000000000113",
+      "symbol": "TZS",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/tzs.svg"
+    },
+    {
+      "name": "Ukrainian Hryvnia",
+      "address": "0x0000000000000000000000000000000000000114",
+      "symbol": "UAH",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/uah.svg"
+    },
+    {
+      "name": "Ugandan Shilling",
+      "address": "0x0000000000000000000000000000000000000115",
+      "symbol": "UGX",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/ugx.svg"
+    },
+    {
+      "name": "United States Dollar",
+      "address": "0x0000000000000000000000000000000000000116",
+      "symbol": "USD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/usd.svg"
+    },
+    {
+      "name": "Uruguayan Peso",
+      "address": "0x0000000000000000000000000000000000000117",
+      "symbol": "UYU",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/uyu.svg"
+    },
+    {
+      "name": "Uzbekistani Som",
+      "address": "0x0000000000000000000000000000000000000118",
+      "symbol": "UZS",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/uzs.svg"
+    },
+    {
+      "name": "Venezuelan Bolivar Fuerte",
+      "address": "0x0000000000000000000000000000000000000119",
+      "symbol": "VEF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/vef.svg"
+    },
+    {
+      "name": "Vietnamese Dong",
+      "address": "0x0000000000000000000000000000000000000120",
+      "symbol": "VND",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/vnd.svg"
+    },
+    {
+      "name": "Vanuatu Vatu",
+      "address": "0x0000000000000000000000000000000000000121",
+      "symbol": "VUV",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/vuv.svg"
+    },
+    {
+      "name": "Samoan Tala",
+      "address": "0x0000000000000000000000000000000000000122",
+      "symbol": "WST",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/wst.svg"
+    },
+    {
+      "name": "Eastern Caribbean Dollar",
+      "address": "0x0000000000000000000000000000000000000126",
+      "symbol": "XCD",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/xcd.svg"
+    },
+    {
+      "name": "West African CFA Franc",
+      "address": "0x0000000000000000000000000000000000000125",
+      "symbol": "XOF",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/xof.svg"
+    },
+    {
+      "name": "Yemeni Rial",
+      "address": "0x0000000000000000000000000000000000000123",
+      "symbol": "YER",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/yer.svg"
+    },
+    {
+      "name": "South African Rand",
+      "address": "0x0000000000000000000000000000000000000124",
+      "symbol": "ZAR",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/zar.svg"
+    },
+    {
+      "name": "Zambian Kwacha",
+      "address": "0x0000000000000000000000000000000000000127",
+      "symbol": "ZMW",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/zmw.svg"
+    },
+    {
+      "name": "Zimbabwean Dollar",
+      "address": "0x0000000000000000000000000000000000000128",
+      "symbol": "ZWL",
+      "decimals": 18,
+      "chainId": 4002,
+      "logoURI": "https://tokens.payswap.org/images/zwl.svg"
+    }
+  ]
+}

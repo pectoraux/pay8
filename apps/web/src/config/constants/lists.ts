@@ -1,7 +1,7 @@
 export const PANCAKE_EXTENDED = 'https://tokens.pancakeswap.finance/pancakeswap-extended.json'
 export const COINGECKO = 'https://tokens.pancakeswap.finance/coingecko.json'
 export const PANCAKE_ETH_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-eth-default.json'
-export const PAYSWAP_FREE_TOKENS = 'https://tokens.payswap.org/payswap-default.json'
+export const PAYSWAP_ONRAMP_TOKENS = 'https://tokens.payswap.org/payswap-onramp.json'
 export const PANCAKE_POLYGON_ZKEVM_DEFAULT = 'https://tokens.pancakeswap.finance/pancakeswap-polygon-zkevm-default.json'
 export const PANCAKE_ETH_MM = 'https://tokens.pancakeswap.finance/pancakeswap-eth-mm.json'
 export const PANCAKE_BSC_MM = 'https://tokens.pancakeswap.finance/pancakeswap-bnb-mm.json'
@@ -9,12 +9,12 @@ export const COINGECKO_ETH = 'https://tokens.coingecko.com/uniswap/all.json'
 export const CMC = 'https://tokens.pancakeswap.finance/cmc.json'
 
 export const ETH_URLS = [PANCAKE_ETH_DEFAULT, PANCAKE_ETH_MM, COINGECKO_ETH]
-export const FANTOM_TESTNET_URLS = [PAYSWAP_FREE_TOKENS]
+export const FANTOM_TESTNET_URLS = [PAYSWAP_ONRAMP_TOKENS]
 export const BSC_URLS = [PANCAKE_EXTENDED, CMC, COINGECKO, PANCAKE_BSC_MM]
 export const POLYGON_ZKEVM_URLS = [PANCAKE_POLYGON_ZKEVM_DEFAULT]
 
 // List of official tokens list
-export const OFFICIAL_LISTS = [PANCAKE_EXTENDED, PANCAKE_ETH_DEFAULT]
+export const OFFICIAL_LISTS = [PANCAKE_EXTENDED, PANCAKE_ETH_DEFAULT, PAYSWAP_ONRAMP_TOKENS]
 
 export const UNSUPPORTED_LIST_URLS: string[] = []
 export const WARNING_LIST_URLS: string[] = []
