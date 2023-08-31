@@ -7,7 +7,7 @@ export const footerLinks: (t: ContextApi["t"]) => FooterLinkType[] = (t) => [
     items: [
       {
         label: t("Contact"),
-        href: "https://paychat.vercel.app/#/room/#payswap:matrix.org",
+        href: "https://paychat.payswap.org/#/room/#payswap:matrix.org",
         isHighlighted: true,
       },
       // {
@@ -41,7 +41,7 @@ export const footerLinks: (t: ContextApi["t"]) => FooterLinkType[] = (t) => [
     items: [
       {
         label: t("Customer Support"),
-        href: "https://paychat.vercel.app/",
+        href: "https://paychat.payswap.org/",
       },
       // {
       //   label: t("Troubleshooting"),

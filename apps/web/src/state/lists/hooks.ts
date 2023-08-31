@@ -7,6 +7,7 @@ import {
   UNSUPPORTED_LIST_URLS,
   WARNING_LIST_URLS,
   ETH_URLS,
+  FANTOM_TESTNET_URLS,
   POLYGON_ZKEVM_URLS,
   BSC_URLS,
 } from 'config/constants/lists'
@@ -19,7 +20,8 @@ import { EMPTY_LIST } from '@pancakeswap/tokens'
 import uniqBy from 'lodash/uniqBy'
 import { useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/pancake-default.tokenlist.json'
+import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/payswap-default.tokenlist.json'
+// import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/pancake-default.tokenlist.json'
 import UNSUPPORTED_TOKEN_LIST from '../../config/constants/tokenLists/pancake-unsupported.tokenlist.json'
 import WARNING_TOKEN_LIST from '../../config/constants/tokenLists/pancake-warning.tokenlist.json'
 import ONRAMP_TOKEN_LIST from '../../config/constants/tokenLists/pancake-supported-onramp-currency-list.json'
@@ -210,6 +212,7 @@ export function useAllLists(): {
         (_, url) =>
           (chainId === ChainId.ETHEREUM && ETH_URLS.includes(url)) ||
           (chainId === ChainId.BSC && BSC_URLS.includes(url)) ||
+          (chainId === ChainId.FANTOM_TESTNET && FANTOM_TESTNET_URLS.includes(url)) ||
           (chainId === ChainId.POLYGON_ZKEVM && POLYGON_ZKEVM_URLS.includes(url)),
       ),
     [chainId, urls],
@@ -243,6 +246,7 @@ export function useActiveListUrls(): string[] | undefined {
       urls.filter(
         (url) =>
           (chainId === ChainId.ETHEREUM && ETH_URLS.includes(url)) ||
+          (chainId === ChainId.FANTOM_TESTNET && FANTOM_TESTNET_URLS.includes(url)) ||
           (chainId === ChainId.BSC && BSC_URLS.includes(url)),
       ),
     [urls, chainId],

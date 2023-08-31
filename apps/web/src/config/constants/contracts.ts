@@ -648,15 +648,7 @@ export default {
     4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
     56: '0x',
   },
-  education: {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
-    56: '0x',
-  },
   'culture & entertainment': {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
-    56: '0x',
-  },
-  finance: {
     4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
     56: '0x',
   },

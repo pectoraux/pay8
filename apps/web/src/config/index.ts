@@ -36,8 +36,6 @@ export const WORKSPACES = {
   Energy: 0,
   Mining: 0,
   'Culture & Entertainment': 0,
-  Education: 0,
-  Finance: 0,
   NSFW: 0,
 }
 
