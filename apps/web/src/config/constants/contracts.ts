@@ -609,51 +609,51 @@ export default {
     56: '0x',
   },
   'real estate': {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x6E91468E9685bF6Ddd9Ef0a7Cce5597698878E9D',
     56: '0x',
   },
   transportation: {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x023803056E3532348E8a6Deac35dafD4732F792b',
     56: '0x',
   },
   healthcare: {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x272D5d2E5Be74ec1216162D3418be7EDF929d2a9',
     56: '0x',
   },
   food: {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x7D797d2D96EA6187E85008B8B2F386a552C86d6b',
     56: '0x',
   },
   beverage: {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x77B0e504900997eE937c0C10E027236aeCD386EF',
     56: '0x',
   },
   'law & order': {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x05Da08335F8B187769E60F3D92254e69ed5dF3EE',
     56: '0x',
   },
   'software & telco': {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x59013988E3730A66A9A973a812fb94056E6e7855',
     56: '0x',
   },
   'apparel, beauty & cosmetics': {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0xd17C814f5609889609720D95e1A7369f9F798aB4',
     56: '0x',
   },
   energy: {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0xd1a7aB1a1E1aaDD5CD51F51570885c7896bb3139',
     56: '0x',
   },
   mining: {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0xBa9fCa9130BF46FbB09740A3b02d5Ce9deB6ae11',
     56: '0x',
   },
   'culture & entertainment': {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x406BD6A54A4807E207823D28AB908b0E9466678E',
     56: '0x',
   },
   nsfw: {
-    4002: '0xfd045C059AC6423F9B21A456a432Ead97a93F706',
+    4002: '0x7F52Da327C3a6bbFc1dF348994919a66dcAC33e0',
     56: '0x',
   },
 } as const satisfies Record<string, Record<number, `0x${string}`>>
