@@ -6,7 +6,6 @@ import Image from 'next/legacy/image'
 import { ChainId } from '@pancakeswap/sdk'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import styled, { keyframes } from 'styled-components'
-import { ASSET_CDN } from 'config/constants/endpoints'
 import CompositeImage, { CompositeImageProps } from './CompositeImage'
 import { SlideSvgDark, SlideSvgLight } from './SlideSvg'
 
@@ -128,7 +127,7 @@ const Hero = () => {
       >
         <Flex flex="1" flexDirection="column">
           <Heading scale="xxl" color="secondary" mb="24px">
-            {t('Make every Purchase Impactful.')}
+            {t('Make every Purchase Count!')}
           </Heading>
           <Heading scale="md" mb="24px">
             {t('Trade, earn, and win crypto on a platform that has your back.')}
