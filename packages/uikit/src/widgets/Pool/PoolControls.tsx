@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, ReactElement } from "react";
 import styled from "styled-components";
-import BigNumber from "bignumber.js";
 import partition from "lodash/partition";
 import { useTranslation } from "@pancakeswap/localization";
 import { useIntersectionObserver } from "@pancakeswap/hooks";
@@ -11,7 +10,7 @@ import PoolTabButtons from "./PoolTabButtons";
 import { ViewMode } from "../../components/ToggleView/ToggleView";
 import { Flex, Text, SearchInput, Select, OptionProps } from "../../components";
 
-import { DeserializedPool, DeserializedPoolVault } from "./types";
+import { DeserializedPool } from "./types";
 import { sortPools } from "./helpers";
 
 const PoolControlsView = styled.div`
@@ -103,7 +102,7 @@ export function PoolControls<T>({
   const [sortOption, setSortOption] = useState("hot");
   const chosenPoolsLength = useRef(0);
 
-  const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools]);
+  const [finishedPools, openPools] = useMemo(() => partition(pools, (pool: any) => pool?.isFinished), [pools]);
   const openPoolsWithStartBlockFilter = useMemo(
     () =>
       openPools.filter((pool) =>
@@ -113,22 +112,14 @@ export function PoolControls<T>({
   );
   const stakedOnlyFinishedPools = useMemo(
     () =>
-      finishedPools.filter((pool) => {
-        if (pool.vaultKey) {
-          const vault = pool as DeserializedPoolVault<T>;
-          return vault?.userData?.userShares?.gt(0);
-        }
-        return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0);
+      finishedPools.filter((pool: any) => {
+        return pool?.accounts?.filter((acct: any) => acct?.owner?.toLowerCase() === account?.toLowerCase())?.length > 0;
       }),
     [finishedPools]
   );
   const stakedOnlyOpenPools = useCallback(() => {
-    return openPoolsWithStartBlockFilter.filter((pool) => {
-      if (pool.vaultKey) {
-        const vault = pool as DeserializedPoolVault<T>;
-        return vault?.userData?.userShares?.gt(0);
-      }
-      return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0);
+    return openPoolsWithStartBlockFilter.filter((pool: any) => {
+      return pool?.accounts?.filter((acct: any) => acct?.owner?.toLowerCase() === account?.toLowerCase())?.length > 0;
     });
   }, [openPoolsWithStartBlockFilter]);
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0;
@@ -160,13 +151,11 @@ export function PoolControls<T>({
   }
 
   chosenPools = useMemo(() => {
-    const sortedPools = sortPools<T>(account, sortOption, chosenPools).slice(0, numberOfPoolsVisible);
+    const sortedPools = sortPools<T>(sortOption, chosenPools).slice(0, numberOfPoolsVisible);
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
-      return sortedPools.filter((pool) =>
-        latinise(pool?.earningToken?.symbol?.toLowerCase() || "").includes(lowercaseQuery)
-      );
+      return sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
     }
     return sortedPools;
   }, [account, sortOption, chosenPools, numberOfPoolsVisible, searchQuery]);
@@ -198,24 +187,24 @@ export function PoolControls<T>({
               <Select
                 options={[
                   {
-                    label: t("Hot"),
-                    value: "hot",
+                    label: t("Creation time"),
+                    value: "timestamp",
                   },
                   {
-                    label: t("APR"),
-                    value: "apr",
+                    label: t("Name"),
+                    value: "name",
                   },
                   {
-                    label: t("Earned"),
-                    value: "earned",
+                    label: t("Symbol"),
+                    value: "symbol",
                   },
                   {
-                    label: t("Total staked"),
-                    value: "totalStaked",
+                    label: t("Total liquidity"),
+                    value: "totalLiquidity",
                   },
                   {
-                    label: t("Latest"),
-                    value: "latest",
+                    label: t("To distribute"),
+                    value: "toDistribute",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}
