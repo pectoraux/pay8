@@ -477,9 +477,11 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
             state.isArticle ? `${state.thumbnail},${state.mp4}` : `${state.thumbnail},${state.thumbnail}`,
             nftFilters?.country?.reduce((accum, attr) => [...accum, attr], []),
             nftFilters?.city?.reduce((accum, attr) => [...accum, attr], []),
-            [...nftFilters?.product, ...state.customTags.split(',')]
-              ?.filter((val) => !!val)
-              ?.reduce((accum, attr) => [...accum, attr], []),
+            nftFilters?.product
+              ? [...nftFilters?.product, ...state.customTags.split(',')]
+                  ?.filter((val) => !!val)
+                  ?.reduce((accum, attr) => [...accum, attr], [])
+              : [...state.customTags.split(',')]?.filter((val) => !!val)?.reduce((accum, attr) => [...accum, attr], []),
           ])
         } catch (err) {
           console.log('1CONFIRM_ADD_LOCATION============>', err)
@@ -495,9 +497,11 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           `${state.thumbnail},${state.mp4}`,
           nftFilters?.country?.reduce((accum, attr) => [...accum, attr], []),
           nftFilters?.city?.reduce((accum, attr) => [...accum, attr], []),
-          [...nftFilters?.product, ...state.customTags.split(',')]
-            ?.filter((val) => !!val)
-            ?.reduce((accum, attr) => [...accum, attr], []),
+          nftFilters?.product
+            ? [...nftFilters?.product, ...state.customTags.split(',')]
+                ?.filter((val) => !!val)
+                ?.reduce((accum, attr) => [...accum, attr], [])
+            : [...state.customTags.split(',')]?.filter((val) => !!val)?.reduce((accum, attr) => [...accum, attr], []),
         ]).catch((err) => console.log('CONFIRM_ADD_LOCATION================>', err))
       }
       if (stage === SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS) {

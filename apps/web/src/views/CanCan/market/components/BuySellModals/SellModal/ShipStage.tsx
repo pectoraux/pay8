@@ -341,7 +341,9 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             `${state.thumbnail},${state.original}`,
             nftFilters?.country?.toString(),
             nftFilters?.city?.toString(),
-            [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
+            nftFilters?.product
+              ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
+              : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
           ]
           console.log('11CONFIRM_ADD_LOCATION==============>', marketCollectionsContract, args)
         } catch (err) {

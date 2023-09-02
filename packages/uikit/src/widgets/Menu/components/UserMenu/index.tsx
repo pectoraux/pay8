@@ -85,7 +85,6 @@ const UserMenu: React.FC<UserMenuProps> = ({
     placement,
     modifiers: [{ name: "offset", options: { offset: [0, 0] } }],
   });
-  console.log("children===================>", children);
   const accountEllipsis = account ? `${account.substring(0, 2)}...${account.substring(account.length - 4)}` : null;
 
   // recalculate the popover position
