@@ -88,7 +88,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
   const paywallARPFactoryContract = usePaywallARPFactoryContract()
   const [nftFilters, setNftFilters] = useState(articleFilters)
   const [state, setState] = useState<any>(() => ({
-    tokenId: articleState?.tokenId ?? '',
+    tokenId: articleState?.tokenId?.split()?.join('-') ?? '',
     direction: 0,
     dropinDate: '',
     maxSupply: '0',
@@ -243,7 +243,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           0,
         )
         const args = [
-          state.tokenId,
+          state.tokenId?.split()?.join('-'),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -261,7 +261,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           .then(() => {
             if (state.options?.length > 0) {
               const args2 = [
-                state.tokenId,
+                state.tokenId?.split()?.join('-'),
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.value], []),
@@ -289,7 +289,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           0,
         )
         const createArgs = [
-          state.tokenId,
+          state.tokenId?.split()?.join('-'),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -318,7 +318,11 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             console.log('rerr=============>', err),
           )
         }
-        callWithGasPrice(minterFactoryContract, 'createGauge', [state.tokenId, state.name, state.symbol])
+        callWithGasPrice(minterFactoryContract, 'createGauge', [
+          state.tokenId?.split()?.join('-'),
+          state.name,
+          state.symbol,
+        ])
         return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
           console.log('rerr001=============>', err),
         )
@@ -327,7 +331,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         let args
         try {
           args = [
-            state.tokenId,
+            state.tokenId?.split()?.join('-'),
             state.description,
             state.prices?.split(',')?.filter((val) => !!val),
             state.start,

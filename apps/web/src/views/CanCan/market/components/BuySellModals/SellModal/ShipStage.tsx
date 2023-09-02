@@ -85,7 +85,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
   const paywallARPFactoryContract = usePaywallARPFactoryContract()
   const [nftFilters, setNftFilters] = useState(articleFilters)
   const [state, setState] = useState<any>(() => ({
-    tokenId: articleState?.tokenId ?? '',
+    tokenId: articleState?.tokenId?.split()?.join('-') ?? '',
     direction: 0,
     dropinDate: '',
     maxSupply: '0',
@@ -234,7 +234,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           0,
         )
         const args = [
-          state.tokenId,
+          state.tokenId?.split()?.join('-'),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -252,7 +252,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           .then(() => {
             if (state.options?.length > 0) {
               const args2 = [
-                state.tokenId,
+                state.tokenId?.split()?.join('-'),
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.value], []),
@@ -280,7 +280,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           0,
         )
         console.log('rerr0===========================>', [
-          state.tokenId,
+          state.tokenId?.split()?.join('-'),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -294,7 +294,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()),
         ])
         return callWithGasPrice(marketOrdersContract, 'createAskOrder', [
-          state.tokenId,
+          state.tokenId?.split()?.join('-'),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -310,7 +310,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           .then(() => {
             if (state.options?.length > 0) {
               return callWithGasPrice(marketHelperContract, 'updateOptions', [
-                state.tokenId,
+                state.tokenId?.split()?.join('-'),
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
                 state.options?.reduce((accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()], []),
@@ -331,7 +331,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         let args
         try {
           args = [
-            state.tokenId,
+            state.tokenId?.split()?.join('-'),
             state.description,
             state.prices?.split(',')?.filter((val) => !!val),
             state.start,
