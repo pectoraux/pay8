@@ -8,8 +8,6 @@ import { ActionContainer, ActionTitles, ActionContent } from './styles'
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  // const { days: daysReceivable, hours: hoursReceivable, minutes: minutesReceivable } = getTimePeriods(Number(currAccount?.periodReceivable ?? '0'))
-
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -25,7 +23,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
     return (
       <ActionContainer>
         <ActionContent>
-          <Button disabled>{t('History')}</Button>
+          <Button disabled>{t('Please Connect Your Wallet')}</Button>
         </ActionContent>
       </ActionContainer>
     )

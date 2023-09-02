@@ -49,7 +49,6 @@ function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
 //   Selectors
 // -------------------------------------
 const selectorActiveUrlsAtom = atom((get) => {
-  console.log('listsAtom===============>', get(listsAtom), get(listsAtom)?.activeListUrls ?? [])
   return get(listsAtom)?.activeListUrls ?? []
 })
 export const selectorByUrlsAtom = atom((get) => get(listsAtom)?.byUrl ?? {})
@@ -207,7 +206,6 @@ export function useAllLists(): {
   const { chainId } = useActiveChainId()
 
   const urls = useAtomValue(selectorByUrlsAtom)
-  console.log('urls======================>', urls)
   return useMemo(
     () =>
       _pickBy(

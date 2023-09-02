@@ -40,7 +40,7 @@ const SpeechBubble = styled.div`
   }
 `
 
-const domain = 'https://payswap.org'
+const domain = 'https://pancakeswap.finance'
 
 const PhishingWarningBanner: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -48,14 +48,7 @@ const PhishingWarningBanner: React.FC<React.PropsWithChildren> = () => {
   const { isMobile, isMd } = useMatchBreakpoints()
   const warningTextAsParts = useMemo(() => {
     const warningText = t("please make sure you're visiting %domain% - check the URL carefully.", { domain })
-    return warningText.split(/(https:\/\/payswap.org)/g)
-  }, [t])
-  const addHomeScreenTextAsParts = useMemo(() => {
-    const addHomeScreenText = t(
-      'To install the app, you need to add this website %domain% to your home screen. In your browser menu, tap the More button and choose Install App in the options',
-      { domain },
-    )
-    return addHomeScreenText.split(/(https:\/\/payswap.org)/g)
+    return warningText.split(/(https:\/\/pancakeswap.finance)/g)
   }, [t])
   const warningTextComponent = (
     <>
@@ -76,36 +69,35 @@ const PhishingWarningBanner: React.FC<React.PropsWithChildren> = () => {
       ))}
     </>
   )
-  const addHomeScreenTextComponent = (
-    <>
-      <Text as="span" color="warning" small bold textTransform="uppercase">
-        {t('Add to Home Screen: ')}
-      </Text>
-      {addHomeScreenTextAsParts.map((text, i) => (
-        <Text
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
-          small
-          as="span"
-          bold={text === domain}
-          color={text === domain ? '#FFFFFF' : '#BDC2C4'}
-        >
-          {text}
-        </Text>
-      ))}
-    </>
-  )
   return (
     <Container className="warning-banner">
       {isMobile || isMd ? (
         <>
           <Box>{warningTextComponent}</Box>
+          <IconButton onClick={hideBanner} variant="text">
+            <CloseIcon color="#FFFFFF" />
+          </IconButton>
         </>
       ) : (
         <>
           <InnerContainer>
-            <SpeechBubble style={{ marginRight: '3px' }}>{warningTextComponent}</SpeechBubble>
+            <img
+              src="/images/decorations/dinosaur.svg"
+              alt="phishing-warning"
+              width="92px"
+              onError={(e) => {
+                const fallbackSrc = '/images/decorations/dinosaur.svg'
+                if (!e.currentTarget.src.endsWith(fallbackSrc)) {
+                  // eslint-disable-next-line no-param-reassign
+                  e.currentTarget.src = fallbackSrc
+                }
+              }}
+            />
+            <SpeechBubble>{warningTextComponent}</SpeechBubble>
           </InnerContainer>
+          <IconButton onClick={hideBanner} variant="text">
+            <CloseIcon color="#FFFFFF" />
+          </IconButton>
         </>
       )}
     </Container>

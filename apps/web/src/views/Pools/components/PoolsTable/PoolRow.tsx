@@ -16,11 +16,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
-  const currAccount = useMemo(
-    () => pool?.userData?.accounts?.find((bal) => bal.id === currState[pool?.id]),
-    [currState],
-  )
-
+  const currAccount = useMemo(() => pool?.accounts?.find((bal) => bal.id === currState[pool?.id]), [currState])
   return (
     <ExpandRow
       initialActivity={initialActivity}

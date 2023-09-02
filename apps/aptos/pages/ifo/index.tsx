@@ -1,10 +1,10 @@
-// import { IfoPageLayout } from '../../views/Ifos'
-// import Ifo from '../../views/Ifos/Ifo'
+import { IfoPageLayout } from '../../views/Ifos'
+import Ifo from '../../views/Ifos/Ifo'
 
 const CurrentIfoPage = () => {
-  return <></>
+  return <Ifo />
 }
 
-// CurrentIfoPage.Layout = IfoPageLayout
+CurrentIfoPage.Layout = IfoPageLayout
 
 export default CurrentIfoPage

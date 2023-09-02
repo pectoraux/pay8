@@ -49,5 +49,6 @@ export const pairFields = `
     ve
     tokenId
     amount
+    owner
   }
 `

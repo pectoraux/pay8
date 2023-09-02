@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Flex, LinkExternal, Button, Text, Pool, Skeleton } from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Button, Text } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { setCurrPoolData } from 'state/pools'
@@ -15,11 +15,11 @@ interface ExpandedFooterProps {
 
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
-  const { id: tokenAddress, earningToken, userData } = pool
+  const { id: tokenAddress } = pool
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
-  const currAccount = useMemo(() => userData?.accounts?.find((bal) => bal.id === currState[pool?.id]), [currState])
-
+  const currAccount = useMemo(() => pool?.accounts?.find((bal) => bal.id === currState[pool?.id]), [currState])
+  const accounts = pool?.accounts?.filter((acct) => acct?.owner?.toLowerCase() === account?.toLowerCase())
   return (
     <Flex flexDirection="column" maxHeight="200px" overflow="auto">
       <Flex flex="1" flexDirection="column" alignSelf="flex-center">
@@ -33,7 +33,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('Decimals')} {`->`} {pool?.decimals}
         </Text>
         <Text color="primary" fontSize="14px">
-          {t('User Accounts')} {`->`} {userData?.accounts?.length ?? 0}
+          {t('User Accounts')} {`->`} {pool?.accounts?.length ?? 0}
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -64,17 +64,15 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           />
         </Flex>
       )}
-      {userData?.accounts?.length ? (
+      {accounts?.length ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <Text color="textSubtle" textTransform="uppercase" bold fontSize="12px">
             {t('Pick a token ID')}
           </Text>
         </Flex>
-      ) : (
-        <Skeleton width={180} height="32px" mb="2px" />
-      )}
+      ) : null}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {userData?.accounts?.map((balance) => (
+        {accounts?.map((balance) => (
           <Button
             key={balance.id}
             onClick={() => {

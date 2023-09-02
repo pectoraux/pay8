@@ -44,7 +44,6 @@ const domain = 'https://payswap.org'
 
 const AddToHomeScreenBanner: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-  const [, hideBanner] = usePhishingBanner()
   const { isMobile, isMd } = useMatchBreakpoints()
   const warningTextAsParts = useMemo(() => {
     const warningText = t(
@@ -74,21 +73,23 @@ const AddToHomeScreenBanner: React.FC<React.PropsWithChildren> = () => {
   return (
     <Container className="warning-banner">
       {isMobile || isMd ? (
-        <>
-          <Box>{warningTextComponent}</Box>
-          <IconButton onClick={hideBanner} variant="text">
-            <CloseIcon color="#FFFFFF" />
-          </IconButton>
-        </>
+        <Box>{warningTextComponent}</Box>
       ) : (
-        <>
-          <InnerContainer>
-            <SpeechBubble>{warningTextComponent}</SpeechBubble>
-          </InnerContainer>
-          <IconButton onClick={hideBanner} variant="text">
-            <CloseIcon color="#FFFFFF" />
-          </IconButton>
-        </>
+        <InnerContainer>
+          <SpeechBubble>{warningTextComponent}</SpeechBubble>
+          <img
+            src="/images/decorations/dinosaur.svg"
+            alt="phishing-warning"
+            width="92px"
+            onError={(e) => {
+              const fallbackSrc = '/images/decorations/dinosaur.svg'
+              if (!e.currentTarget.src.endsWith(fallbackSrc)) {
+                // eslint-disable-next-line no-param-reassign
+                e.currentTarget.src = fallbackSrc
+              }
+            }}
+          />
+        </InnerContainer>
       )}
     </Container>
   )

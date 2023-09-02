@@ -1,7 +1,8 @@
 import BigNumber from 'bignumber.js'
+import { useAppDispatch } from 'state'
+import { useGetTokenData } from 'state/ramps/hooks'
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
-import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -11,15 +12,14 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useERC20, usePoolGaugeContract } from 'hooks/useContract'
 import { useGetRequiresApproval } from 'state/pools/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { getBep20Contract } from 'utils/contractHelpers'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
+
 import { Divider, GreyedOutContainer } from './styles'
 import BribeField from './LockedPool/Common/BribeField'
 import { useApprovePool } from '../hooks/useApprove'
-import { useGetTokenData } from 'state/ramps/hooks'
 
 interface SetPriceStageProps {
   currency?: any
@@ -27,7 +27,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
+const CreatePoolModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -51,7 +51,11 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
     [tokenPairsWithLiquidityTokens],
   )
-  const pair = liquidityTokens.find((p) => p.address?.toLowerCase() === pairAddress?.toLowerCase())
+  const pair = useMemo(
+    () => liquidityTokens.find((p) => p.address?.toLowerCase() === pairAddress?.toLowerCase()),
+    [liquidityTokens, pairAddress],
+  )
+
   const balance = useCurrencyBalance(account ?? undefined, pair ?? undefined)
   const stakingTokenBalance = balance ? getDecimalAmount(new BigNumber(balance?.toExact()), pair?.decimals) : BIG_ZERO
   const stakingTokenContract = useERC20(pairAddress || '')
@@ -61,8 +65,8 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     poolGaugeContract.address,
     pair?.symbol,
   )
-  console.log('tokenData================>', data)
   const { needsApproval, refetch } = useGetRequiresApproval(stakingTokenContract, account, poolGaugeContract.address)
+  console.log('tokenData================>', data, needsApproval, pair, liquidityTokens)
   useEffect(() => {
     if (pendingPoolTx) {
       setAllowing(true)
@@ -225,4 +229,4 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   )
 }
 
-export default CreateAuditorModal
+export default CreatePoolModal
