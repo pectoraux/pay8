@@ -8,6 +8,7 @@ import {
   Skeleton,
   Text,
   useModal,
+  TabMenu,
   ChevronLeftIcon,
   NextLinkFromReactRouter,
 } from '@pancakeswap/uikit'
@@ -101,10 +102,16 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
                 {t('All Items')}
               </BackLink>
               <Text fontSize="40px" bold mt="12px">
-                {nft.tokenId}
+                {isMobile ? '' : nft.tokenId}
               </Text>
               {isArticle ? (
-                <Flex flex="2" justifyContent={['center', null, 'flex-end']} alignItems="center">
+                <Flex
+                  flex="2"
+                  justifyContent={['center', null, 'flex-end']}
+                  alignItems="center"
+                  overflow="auto"
+                  maxWidth={isMobile ? 250 : 1000}
+                >
                   <RichTextEditor value={mp4} readOnly style={{ width: '120%' }} id="rte" />
                 </Flex>
               ) : null}
