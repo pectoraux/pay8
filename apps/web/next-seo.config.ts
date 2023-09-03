@@ -4,7 +4,7 @@ export const SEO: DefaultSeoProps = {
   titleTemplate: '%s | PaySwap',
   defaultTitle: 'PaySwap',
   description:
-    'Cheaper and faster than Uniswap? Discover PaySwap, the canary in the coalmine of a better financial system',
+    'Cheaper and faster than Uniswap? Discover PaySwap, the marketplace that helps you setup your online item or talent marketplace business.',
   twitter: {
     cardType: 'summary_large_image',
     handle: '@payswaporg',
@@ -13,7 +13,7 @@ export const SEO: DefaultSeoProps = {
   openGraph: {
     title: '🥞 PaySwap - A next evolution DeFi exchange on BNB Smart Chain (BSC)',
     description:
-      'The most complete marketplace in both crypto and the traditional system with subscriptions, auctions, drops, discount and reward gimmicks.',
+      'PaySwap helps you start your own online cryptocurrency business, online eCommerce business, online Healthcare business, online Gambling business, as well as multiple online businesses.',
     images: [{ url: 'https://payswap.org/images/hero.png' }],
   },
 }

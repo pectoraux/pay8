@@ -292,7 +292,7 @@ const config: (
         },
         {
           label: t('PayChat'),
-          href: 'https://blog.pancakeswap.finance',
+          href: 'https://paychat.payswap.org',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
         {
@@ -300,12 +300,12 @@ const config: (
         },
         {
           label: t('Blog'),
-          href: 'https://medium.com/pancakeswap',
+          href: '/cancan/collections/2',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
         {
           label: t('Docs'),
-          href: 'https://docs.pancakeswap.finance',
+          href: '/cancan/collections/1',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
