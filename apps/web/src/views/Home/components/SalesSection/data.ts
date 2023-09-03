@@ -3,7 +3,7 @@ import { SalesSectionProps } from '.'
 
 export const swapSectionData = (t: TranslateFunction): SalesSectionProps => ({
   headingText: t('Trade anything. No registration, no hassle.'),
-  bodyText: t('Trade any token on BNB Smart Chain in seconds, just by connecting your wallet.'),
+  bodyText: t('Trade any token on your favorite chain in seconds, just by connecting your wallet.'),
   reverse: false,
   primaryButton: {
     to: '/swap',
@@ -11,7 +11,7 @@ export const swapSectionData = (t: TranslateFunction): SalesSectionProps => ({
     external: false,
   },
   secondaryButton: {
-    to: 'https://docs.pancakeswap.finance/',
+    to: '/cancan/collections/1',
     text: t('Learn'),
     external: true,
   },
@@ -20,7 +20,7 @@ export const swapSectionData = (t: TranslateFunction): SalesSectionProps => ({
     attributes: [
       { src: 'BNB', alt: t('BNB token') },
       { src: 'BTC', alt: t('BTC token') },
-      { src: 'CAKE', alt: t('CAKE token') },
+      // { src: 'CAKE', alt: t('CAKE token') },
     ],
   },
 })

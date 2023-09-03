@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, NextLinkFromReactRouter } from '@pancakeswap/uikit'
+import { Button, Flex, Heading, NextLinkFromReactRouter, Text } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -132,10 +132,15 @@ const Hero = () => {
           <Heading scale="md" mb="24px">
             {t('Trade, earn, and win crypto on a platform that has your back.')}
           </Heading>
+          <Text mb="24px" color="textSubtle">
+            {t(
+              'PaySwap is designed to support most online businesses no matter where they are in the world with tools for accepting payments, marketing and customer engagement.',
+            )}
+          </Text>
           <Flex>
             {!account && <ConnectWalletButton mr="8px" />}
-            <NextLinkFromReactRouter to="/swap">
-              <Button variant={!account ? 'secondary' : 'primary'}>{t('Trade Now')}</Button>
+            <NextLinkFromReactRouter to="/create-channel">
+              <Button variant={!account ? 'secondary' : 'primary'}>{t('Start Selling Now')}</Button>
             </NextLinkFromReactRouter>
           </Flex>
         </Flex>

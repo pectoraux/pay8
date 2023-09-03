@@ -7,8 +7,8 @@ export const SEO: DefaultSeoProps = {
     'Cheaper and faster than Uniswap? Discover PaySwap, the canary in the coalmine of a better financial system',
   twitter: {
     cardType: 'summary_large_image',
-    handle: '@PaySwap',
-    site: '@PaySwap',
+    handle: '@payswaporg',
+    site: '@payswaporg',
   },
   openGraph: {
     title: '🥞 PaySwap - A next evolution DeFi exchange on BNB Smart Chain (BSC)',

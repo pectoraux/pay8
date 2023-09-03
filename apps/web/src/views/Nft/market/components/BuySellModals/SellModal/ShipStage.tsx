@@ -243,7 +243,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           0,
         )
         const args = [
-          state.tokenId?.split()?.join('-'),
+          state.tokenId?.split(' ')?.join('-'),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -261,7 +261,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           .then(() => {
             if (state.options?.length > 0) {
               const args2 = [
-                state.tokenId?.split()?.join('-'),
+                state.tokenId?.split(' ')?.join('-'),
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.value], []),
@@ -289,7 +289,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           0,
         )
         const createArgs = [
-          state.tokenId?.split()?.join('-'),
+          state.tokenId?.split(' ')?.join('-'),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -319,7 +319,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           )
         }
         callWithGasPrice(minterFactoryContract, 'createGauge', [
-          state.tokenId?.split()?.join('-'),
+          state.tokenId?.split(' ')?.join('-'),
           state.name,
           state.symbol,
         ])
@@ -331,7 +331,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         let args
         try {
           args = [
-            state.tokenId?.split()?.join('-'),
+            state.tokenId?.split(' ')?.join('-'),
             state.description,
             state.prices?.split(',')?.filter((val) => !!val),
             state.start,

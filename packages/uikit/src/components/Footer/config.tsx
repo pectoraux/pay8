@@ -89,7 +89,7 @@ export const socials = [
   {
     label: "Twitter",
     icon: TwitterIcon,
-    href: "https://twitter.com/payswap",
+    href: "https://twitter.com/payswaporg",
   },
   {
     label: "Telegram",
@@ -97,7 +97,7 @@ export const socials = [
     items: [
       {
         label: "English",
-        href: "https://t.me/payswap",
+        href: "https://t.me/payswaporg",
       },
       {
         label: "Bahasa Indonesia",
