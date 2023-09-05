@@ -1,23 +1,6 @@
 import { useRouter } from 'next/router'
 import { useCallback, useState, useMemo } from 'react'
-import {
-  Text,
-  SvgProps,
-  Svg,
-  Row,
-  Button,
-  useModal,
-  Flex,
-  FlexGap,
-  IconButton,
-  TwitterIcon,
-  TelegramIcon,
-  LanguageIcon,
-  Link,
-  LinkExternal,
-  SmartContractIcon,
-  ProposalIcon,
-} from '@pancakeswap/uikit'
+import { Text, Row, Button, useModal, Flex, FlexGap, LinkExternal } from '@pancakeswap/uikit'
 import { useCurrency } from 'hooks/Tokens'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { Collection } from 'state/cancan/types'
@@ -26,6 +9,8 @@ import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+
 import MarketPageHeader from '../components/MarketPageHeader'
 import MarketPageTitle from '../components/MarketPageTitle'
 import StatBox, { StatBoxItem } from '../components/StatBox'
@@ -33,7 +18,6 @@ import BannerHeader from '../components/BannerHeader'
 import AvatarImage from '../components/BannerHeader/AvatarImage'
 import BaseSubMenu from '../components/BaseSubMenu'
 import { cancanBaseUrl } from '../constants'
-import BuyModal from '../components/BuySellModals/BuyModal'
 import SettingStage from '../components/BuySellModals/SellModal/SettingStage'
 import ShipStage from '../components/BuySellModals/SellModal/ShipStage'
 import PartnerModal from './PartnerModal'
@@ -41,7 +25,6 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface HeaderProps {
   collection: Collection
@@ -106,9 +89,8 @@ const Header: React.FC<any> = ({ collection }) => {
     if (hash === '#valuepools' || hash === '#trustbounties') {
       return `${cancanBaseUrl}/collections/${collectionAddress}#stakemarket`
     }
-    return router.asPath.replace('?chainId=97', '')
+    return router.asPath.replace('?chainId=4002', '')
   }, [router, collectionAddress])
-
   return (
     <>
       <MarketPageHeader>
