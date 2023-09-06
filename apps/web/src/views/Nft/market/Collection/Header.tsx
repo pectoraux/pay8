@@ -170,7 +170,7 @@ const Header: React.FC<any> = ({ collection }) => {
               </ActionTitles>
               <ActionContent>
                 <Button width="100%" onClick={isOwner ? onPresentShip : onPresentRegister} variant="secondary">
-                  {isOwner ? t('Poduct') : t('Register')}
+                  {isOwner ? t('Product') : t('Register')}
                 </Button>
               </ActionContent>
             </ActionContainer>

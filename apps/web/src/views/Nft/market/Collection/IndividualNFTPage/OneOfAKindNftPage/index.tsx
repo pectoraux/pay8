@@ -23,6 +23,8 @@ import { useCompleteNft } from '../../../hooks/useCompleteNft'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import SettingStage from '../../../components/BuySellModals/SellModal/SettingStage'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import RegisterModal from '../../RegisterModal'
+import PartnerModal from '../../PartnerModal'
 
 interface IndividualNFTPageProps {
   collectionAddress: string
@@ -52,6 +54,9 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
     nft?.tokenId,
   )
   const { thumbnail: _thumbnail, mp4: _mp4 } = decryptContent(nft, thumbnail, mp4, ongoingSubscription, account)
+
+  const [onPresentRegister] = useModal(<RegisterModal collection={collection} />)
+  const [onPresentPartner] = useModal(<PartnerModal collection={collection} />)
   const [onPresentSellModal] = useModal(
     <SellModal
       variant={isPaywall ? 'paywall' : 'item'}
@@ -101,6 +106,26 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
     </Flex>
   )
 
+  const userButtons = (
+    <Flex
+      flexDirection={['column', 'column', 'column']}
+      alignItems="center"
+      justifyContent="center"
+      mt="28px"
+      mb="28px"
+    >
+      <Flex flexDirection="column" alignItems="center" justifyContent="center">
+        <Button width="100%" onClick={onPresentPartner} variant="secondary">
+          {t('Partner')}
+        </Button>
+        <hr />
+        <Button width="100%" onClick={onPresentRegister} variant="secondary">
+          {t('Register')}
+        </Button>
+      </Flex>
+    </Flex>
+  )
+
   if (!nft || !collection) {
     // Normally we already show a 404 page here if no nft, just put this checking here for safety.
 
@@ -115,13 +140,11 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
       <TwoColumnsContainer flexDirection={['column', 'column', 'column', 'column', 'row']}>
         <Flex flexDirection="column" width="100%">
           <AuditNFTsCard collection={collection} nft={nft} onSuccess={refetch} />
-          {isOwnNft && (
-            <ExpandableCard
-              title={t('Manage Your Product')}
-              icon={<CogIcon width="24px" height="24px" />}
-              content={ownerButtons}
-            />
-          )}
+          <ExpandableCard
+            title={isOwnNft ? t('Manage Your Product') : t('Networking Activities')}
+            icon={<CogIcon width="24px" height="24px" />}
+            content={isOwnNft ? ownerButtons : userButtons}
+          />
           <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.metadataUrl} />
         </Flex>
         <OwnerActivityContainer flexDirection="column" width="100%">
@@ -137,7 +160,7 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
           <ActivityCard nft={nft} />
         </OwnerActivityContainer>
       </TwoColumnsContainer>
-      <MoreFromThisCollection collectionAddress={collectionAddress} currentTokenName={nft.name} />
+      <MoreFromThisCollection collectionAddress={collectionAddress} nft={nft} />
     </Page>
   )
 }
