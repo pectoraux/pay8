@@ -31,7 +31,7 @@ export const WORKSPACES = {
   Food: 0,
   Beverage: 0,
   'Law & Order': 0,
-  'Software & Telco': 0,
+  'software & telco & other': 0,
   'Apparel, Beauty & Cosmetics': 0,
   Energy: 0,
   Mining: 0,

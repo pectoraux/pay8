@@ -33,10 +33,11 @@ const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'as
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
 const EMPTY_OBJECT = {}
 
-export const useGetCollections = () => {
-  const { data, status } = useSWR(['cancan', 'collections'], async () => getCollections())
+export const useGetCollections = (where = {}) => {
+  console.log('useGetCollections==========>', where)
+  const { data, status, mutate } = useSWR(['cancan', 'collections', where], async () => getCollections(where))
   const collections = data ?? ({} as ApiCollections)
-  return { data: collections, status }
+  return { data: collections, status, refetch: mutate }
 }
 
 export const useGetTransactions = (userAddress) => {
@@ -76,11 +77,11 @@ export const useGetVeToken = (veAddress) => {
   return data
 }
 
-export const useGetShuffledCollections = () => {
-  const { data } = useSWRImmutable(['cancan', 'collections'], async () => getCollections())
+export const useGetShuffledCollections = (where = {}) => {
+  const { data } = useSWR(['cancan', 'collections', where], async () => getCollections(where))
   const collections = data ?? ({} as ApiCollections)
-  const { data: shuffledCollections, status } = useSWRImmutable(
-    !isEmpty(collections) ? ['cancan', 'shuffledCollections'] : null,
+  const { data: shuffledCollections, status } = useSWR(
+    !isEmpty(collections) ? ['cancan', 'shuffledCollections', where] : null,
     () => {
       return shuffle(collections)
     },

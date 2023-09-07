@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import latinise from '@pancakeswap/utils/latinise'
 import TagFilters from 'views/CanCan/market/Collection/Items/TagFilters'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
@@ -59,9 +59,10 @@ const Home = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { theme } = useTheme()
-  const { data, status } = useGetCollections()
-  const collections = data as any
   const [searchQuery, setSearchQuery] = useState('')
+  const where = useMemo(() => (searchQuery ? { description_contains_nocase: searchQuery } : {}), [searchQuery])
+  const { data, status } = useGetCollections(where)
+  const collections = data as any
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
@@ -82,7 +83,7 @@ const Home = () => {
     const newData = hotCollections.filter((hotCollection) => {
       if (searchQuery) {
         const lowercaseQuery = latinise(searchQuery.toLowerCase())
-        return latinise(hotCollection.name.toLowerCase()).includes(lowercaseQuery)
+        return latinise(hotCollection.description.toLowerCase()).includes(lowercaseQuery)
       }
       return hotCollection
     })
@@ -98,7 +99,7 @@ const Home = () => {
     const newData = newestCollections.filter((newestCollection) => {
       if (searchQuery) {
         const lowercaseQuery = latinise(searchQuery.toLowerCase())
-        return latinise(newestCollection.name.toLowerCase()).includes(lowercaseQuery)
+        return latinise(newestCollection.description.toLowerCase()).includes(lowercaseQuery)
       }
       return newestCollection
     })

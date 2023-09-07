@@ -20,6 +20,7 @@ import {
   NextLinkFromReactRouter,
   ToggleView,
 } from '@pancakeswap/uikit'
+import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import orderBy from 'lodash/orderBy'
 import { getLeastMostPriceInCollection } from 'state/cancan/helpers'
@@ -34,6 +35,8 @@ import { nftsBaseUrl } from 'views/CanCan/market/constants'
 import PageLoader from 'components/Loader/PageLoader'
 import DELIST_COLLECTIONS from 'config/constants/nftsCollections/delist'
 import CollectionCardWithVolume from '../components/CollectibleCard/CollectionCardWithVolume'
+import latinise from '@pancakeswap/utils/latinise'
+import SearchBar from '../components/SearchBar'
 
 export const ITEMS_PER_PAGE = 9
 
@@ -81,7 +84,9 @@ const getNewSortDirection = (oldSortField: string, newSortField: string, oldSort
 
 const Collectible = () => {
   const { t } = useTranslation()
-  const { data: shuffledCollections } = useGetShuffledCollections()
+  const [searchQuery, setSearchQuery] = useState('')
+  const where = useMemo(() => (searchQuery ? { description_contains_nocase: searchQuery } : {}), [searchQuery])
+  const { data: shuffledCollections } = useGetShuffledCollections(where)
   const { isMobile } = useMatchBreakpoints()
   const [sortField, setSortField] = useState(null)
   const [page, setPage] = useState(1)
@@ -116,10 +121,12 @@ const Collectible = () => {
       },
     ]
   }, [t])
-  const { data: collections = [], status } = useSWRImmutable<
+  const { data: collections = [], status } = useSWR<
     (Collection & Partial<{ lowestPrice: number; highestPrice: number }>)[]
   >(
-    shuffledCollections && shuffledCollections.length ? ['collectionsWithPrice', viewMode, sortField] : null,
+    shuffledCollections && shuffledCollections.length
+      ? ['collectionsWithPrice', viewMode, sortField, shuffledCollections]
+      : null,
     async () => {
       if (viewMode === ViewMode.CARD && sortField !== SORT_FIELD.lowestPrice && sortField !== SORT_FIELD.highestPrice)
         return shuffledCollections
@@ -140,6 +147,10 @@ const Collectible = () => {
     {
       keepPreviousData: true,
     },
+  )
+  const handleChangeSearchQuery = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),
+    [],
   )
 
   const arrow = useCallback(
@@ -201,6 +212,9 @@ const Collectible = () => {
         <Heading as="h1" scale="xxl" color="secondary" data-test="nft-collections-title">
           {t('Collections')}
         </Heading>
+        <Flex justifyContent="flex-end" alignItems="flex-end">
+          <SearchBar onChange={handleChangeSearchQuery} />
+        </Flex>
       </PageHeader>
       <Page>
         {status !== FetchStatus.Fetched ? (
@@ -300,18 +314,14 @@ const Collectible = () => {
                               </Flex>
                             </Td>
                             <Td>
-                              {collection.lowestPrice ? (
-                                collection.lowestPrice.toLocaleString(undefined, { maximumFractionDigits: 5 })
-                              ) : (
-                                <Skeleton width={36} height={20} />
-                              )}
+                              {collection.lowestPrice
+                                ? collection.lowestPrice.toLocaleString(undefined, { maximumFractionDigits: 5 })
+                                : '0'}
                             </Td>
                             <Td>
-                              {collection.highestPrice ? (
-                                collection.highestPrice.toLocaleString(undefined, { maximumFractionDigits: 5 })
-                              ) : (
-                                <Skeleton width={36} height={20} />
-                              )}
+                              {collection.highestPrice
+                                ? collection.highestPrice.toLocaleString(undefined, { maximumFractionDigits: 5 })
+                                : '0'}
                             </Td>
                             <Td>{collection.numberTokensListed}</Td>
                             <Td>{collection?.totalSupply}</Td>

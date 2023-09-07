@@ -80,9 +80,9 @@ export const getCollectionReviewsApi = async <T>(collectionAddress: string, toke
 /**
  * Fetch all collections data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
  */
-export const getCollections = async () => {
+export const getCollections = async (where = {}) => {
   try {
-    return getCollectionsSg()
+    return getCollectionsSg(where)
   } catch (error) {
     console.error('Unable to fetch data==================>:', error)
     return null
@@ -318,23 +318,22 @@ export const getNftsSg = async (first: number, skip: number, where) => {
  * Fetch market data from all collections using the Subgraph
  * @returns
  */
-export const getCollectionsSg = async (first = 5, skip = 0, where = {}): Promise<CollectionMarketDataBaseFields[]> => {
+export const getCollectionsSg = async (where = {}): Promise<CollectionMarketDataBaseFields[]> => {
   try {
     const res = await request(
       GRAPH_API_CANCAN,
       gql`
-        query getCollectionsSg($first: Int!, $skip: Int!, $where: Collection_filter) {
-          collections {
+        query getCollectionsSg($where: Collection_filter) {
+          collections(where: $where) {
             ${collectionBaseFields}
           }
         }
       `,
       {
-        first,
-        skip,
         where,
       },
     )
+    console.log('1useGetCollections==========>', where, res)
     return res.collections
   } catch (error) {
     console.error('Failed to fetch NFT collections====================>', error)

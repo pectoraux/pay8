@@ -628,7 +628,7 @@ export default {
     4002: '0x05Da08335F8B187769E60F3D92254e69ed5dF3EE',
     56: '0x',
   },
-  'software & telco': {
+  'software & telco & other': {
     4002: '0x59013988E3730A66A9A973a812fb94056E6e7855',
     56: '0x',
   },
