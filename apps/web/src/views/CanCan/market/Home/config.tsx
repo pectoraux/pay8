@@ -24,17 +24,17 @@ const config = (t: ContextApi['t']) => {
         <LinkExternal href="">{t('Click here for more')}</LinkExternal>,
       ],
     },
-    // {
-    //   title: t('What are the fees?'),
-    //   description: [
-    //     t(
-    //       '100% of all platform fees taken by PancakeSwap from sales are used to buy back and BURN CAKE tokens in our weekly CAKE burns.',
-    //     ),
-    //     t(
-    //       'Platform fees: 2% is subtracted from NFT sales on the market. Subject to change.Collection fees: Additional fees may be taken by collection creators, once those collections are live. These will not contribute to the CAKE burns.',
-    //     ),
-    //   ],
-    // },
+    {
+      title: t('Can you help me deploy my channel?'),
+      description: [
+        t(
+          'Yes, but we can only satisfy those requests in bulks of 100 to 200 at a time. Send the name and the description of your channel to support@payswap.org and wait a few days for your channel to be deployed. We will send you a notification. We will create a new wallet for you and send you its private key and other types of information along with it.',
+        ),
+        t(
+          'We do recommend you deploy your channel on your own though since the team is busy working on improving the platform. It is a simple form to fill and and in a few minutes, you channel will be up which is much better than waiting a few days for us to deploy your channel for you :).',
+        ),
+      ],
+    },
     {
       title: <Trans>What is CanCan?</Trans>,
       description: [

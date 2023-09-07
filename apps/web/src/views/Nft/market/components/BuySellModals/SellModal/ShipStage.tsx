@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { differenceInSeconds } from 'date-fns'
 import { useState, ChangeEvent } from 'react'
 import { Flex, Grid, Text, Button, useToast } from '@pancakeswap/uikit'
@@ -130,6 +131,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
     referrer: '',
     userTokenId: '',
     identityTokenId: '',
+    emailList: '',
   }))
   const tokenContract = useErc721CollectionContract(state.minter || '')
   const updateValue = (key: any, value: string | OptionType[] | boolean | number | Date) => {
@@ -208,6 +210,32 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         break
       case SellingStage.BUY_SUBSCRIPTION:
         setStage(SellingStage.CONFIRM_BUY_SUBSCRIPTION)
+        break
+      default:
+        break
+    }
+  }
+
+  const onSuccessSale = async () => {
+    let link = `https://payswap.org/nfts/collections/${collection?.id}/`
+    if (stage === SellingStage.CONFIRM_CREATE_PAYWALL2) {
+      link += `paywall/${state.tokenId?.split(' ')?.join('-')}`
+    } else if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
+      link += `${state.tokenId?.split(' ')?.join('-')}`
+    }
+    switch (stage) {
+      case SellingStage.CONFIRM_CREATE_PAYWALL2 || SellingStage.CONFIRM_CREATE_ASK_ORDER:
+        await axios.post('/api/email2', {
+          subject: 'New Product Listed',
+          messageHtml: `
+          # MarketPlace Support
+    
+          A channel you're following just launched a new product: [${state.tokenId}](${link})
+          
+          _Thanks for using Payswap_
+          `,
+          emailList: state.emailList,
+        })
         break
       default:
         break
@@ -357,11 +385,12 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
     },
     onSuccess: async ({ receipt }) => {
       toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      // onSuccessSale()
+      if (state.emailList) onSuccessSale()
       setConfirmedTxHash(receipt.transactionHash)
       setStage(SellingStage.TX_CONFIRMED)
     },
   })
+
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
 
   return (
