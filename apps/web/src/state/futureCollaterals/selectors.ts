@@ -28,7 +28,6 @@ const selectFilteredData = (state: State) => {
           futureCollateral?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.futureCollaterals.filters.product ||
-        state.futureCollaterals.filters.product.includes('All') ||
         state.futureCollaterals.filters.product.filter((value) =>
           futureCollateral?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

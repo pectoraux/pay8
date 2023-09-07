@@ -29,7 +29,6 @@ const selectFilteredData = (state: State) => {
           game?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.games.filters.product ||
-        state.games.filters.product.includes('All') ||
         state.games.filters.product.filter((value) =>
           game?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

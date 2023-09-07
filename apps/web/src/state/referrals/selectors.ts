@@ -31,7 +31,6 @@ const selectFilteredData = (state: State) => {
           referral?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.referrals.filters.product ||
-        state.referrals.filters.product.includes('All') ||
         state.referrals.filters.product.filter((value) =>
           referral?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

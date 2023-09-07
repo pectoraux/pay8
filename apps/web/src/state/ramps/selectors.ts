@@ -31,7 +31,6 @@ const selectFilteredData = (state: State) => {
           ramp?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.ramps.filters.product ||
-        state.ramps.filters.product.includes('All') ||
         state.ramps.filters.product.filter((value) =>
           ramp?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

@@ -31,7 +31,6 @@ const selectFilteredData = (state: State) => {
           betting?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.bettings.filters.product ||
-        state.bettings.filters.product.includes('All') ||
         state.bettings.filters.product.filter((value) =>
           betting?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

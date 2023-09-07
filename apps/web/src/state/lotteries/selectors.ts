@@ -31,7 +31,6 @@ const selectFilteredData = (state: State) => {
           lotterie?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.lotteries.filters.product ||
-        state.lotteries.filters.product.includes('All') ||
         state.lotteries.filters.product.filter((value) =>
           lotterie?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

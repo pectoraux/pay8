@@ -29,7 +29,6 @@ const selectFilteredData = (state: State) => {
           trustbountie?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.trustbounties.filters.product ||
-        state.trustbounties.filters.product.includes('All') ||
         state.trustbounties.filters.product.filter((value) =>
           trustbountie?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

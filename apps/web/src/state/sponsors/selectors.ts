@@ -31,7 +31,6 @@ const selectFilteredData = (state: State) => {
           sponsor?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.sponsors.filters.product ||
-        state.sponsors.filters.product.includes('All') ||
         state.sponsors.filters.product.filter((value) =>
           sponsor?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

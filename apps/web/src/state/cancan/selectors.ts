@@ -18,7 +18,6 @@ export const selectFilteredData = (address, nfts) => {
         filters.city.filter((value) => nft?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length >
           0) &&
       (!filters.product ||
-        filters.product.includes('All') ||
         filters.product.filter((value) => nft?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()))
           ?.length > 0),
   )

@@ -22,7 +22,6 @@ const selectFilteredData = (state: State) => {
           acc?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.accelerator.filters.product ||
-        state.accelerator.filters.product.includes('All') ||
         state.accelerator.filters.product.filter((value) =>
           acc?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

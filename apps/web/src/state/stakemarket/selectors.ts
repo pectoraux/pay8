@@ -29,7 +29,6 @@ const selectFilteredData = (state: State) => {
           stake?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.stakemarket.filters.product ||
-        state.stakemarket.filters.product.includes('All') ||
         state.stakemarket.filters.product.filter((value) =>
           stake?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

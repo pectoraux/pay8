@@ -29,7 +29,6 @@ const selectFilteredData = (state: State) => {
           world?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.worlds.filters.product ||
-        state.worlds.filters.product.includes('All') ||
         state.worlds.filters.product.filter((value) =>
           world?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)

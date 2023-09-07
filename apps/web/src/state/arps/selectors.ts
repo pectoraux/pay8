@@ -30,7 +30,6 @@ const selectFilteredData = (state: State) => {
         state.arps.filters.city.filter((value) => arp?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()))
           ?.length > 0) &&
       (!state.arps.filters.product ||
-        state.arps.filters.product.includes('All') ||
         state.arps.filters.product.filter((value) =>
           arp?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)
