@@ -8,13 +8,6 @@ import {
   useModal,
   Button,
   Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -52,6 +45,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
+      {/* {pool?.description ? <Box><ReactMarkdown>{pool?.description}</ReactMarkdown></Box>:null} */}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Button
           as={Link}

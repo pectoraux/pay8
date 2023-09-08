@@ -297,6 +297,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     updateValue(key, value)
   }
 
+  const handleEasyMdeChange = (value: string) => {
+    updateValue('description', value)
+  }
+
   const goBack = () => {
     switch (stage) {
       case LockStage.UPDATE_LOCATION:
@@ -1086,7 +1090,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         <UpdateTaxContractStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_DESCRIPTION && (
-        <UpdateDescriptionStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <UpdateDescriptionStage
+          state={state}
+          handleChange={handleChange}
+          handleEasyMdeChange={handleEasyMdeChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE_MEDIA && (
         <UpdateMediaStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

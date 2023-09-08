@@ -31,7 +31,7 @@ const config = (t: ContextApi['t']) => {
           'Yes, but we can only satisfy those requests in bulks of 100 to 200 at a time. Send the name and the description of your channel to support@payswap.org and wait a few days for your channel to be deployed. We will send you a notification. We will create a new wallet for you and send you its private key and other types of information along with it.',
         ),
         t(
-          'We do recommend you deploy your channel on your own though since the team is busy working on improving the platform. It is a simple form to fill and and in a few minutes, you channel will be up which is much better than waiting a few days for us to deploy your channel for you :).',
+          'We do recommend you deploy your channel on your own though since the team is busy working on improving the platform. It is a simple form to fill and and in a few minutes, your channel will be up which is much better than waiting a few days for us to deploy your channel for you :).',
         ),
       ],
     },

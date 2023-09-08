@@ -70,7 +70,7 @@ const Steps: React.FC<any> = ({ title }) => {
             </Heading>
             <Text color="textSubtle" small mb="16px">
               {t(
-                'Select the Make a Channel option in the drop down menu at the top right of the page and create you channel.',
+                'Select the Make a Channel option in the drop down menu at the top right of the page and create your channel.',
               )}
             </Text>
             {/* {renderAccountStatus()} */}

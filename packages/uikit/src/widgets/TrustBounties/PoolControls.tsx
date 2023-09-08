@@ -116,7 +116,7 @@ export function PoolControls<T>({
   const stakedOnlyFinishedPools = useMemo(
     () =>
       finishedPools.filter((pool) => {
-        return router.pathname.includes("valuepools")
+        return router.asPath.includes("valuepools")
           ? pool.devaddr_?.toLowerCase() === account?.toLowerCase()
           : pool.owner?.toLowerCase() === account?.toLowerCase();
       }),
@@ -124,7 +124,7 @@ export function PoolControls<T>({
   );
   const stakedOnlyOpenPools = useCallback(() => {
     return openPoolsWithStartBlockFilter.filter((pool) => {
-      return router.pathname.includes("valuepools")
+      return router.asPath.includes("valuepools")
         ? pool.devaddr_?.toLowerCase() === account?.toLowerCase()
         : pool.owner?.toLowerCase() === account?.toLowerCase();
     });
@@ -140,7 +140,7 @@ export function PoolControls<T>({
       });
     }
   }, [isIntersecting]);
-  const showFinishedPools = router.pathname.includes("manual");
+  const showFinishedPools = router.asPath.includes("manual");
 
   const handleChangeSearchQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),
@@ -160,9 +160,7 @@ export function PoolControls<T>({
     const sortedPools = sortPools<T>(sortOption, chosenPools)
       .slice(0, numberOfPoolsVisible)
       .filter((p: any) =>
-        favoritesOnly
-          ? watchlistTokens.includes(router.pathname.includes("valuepools") ? p?.valuepoolAddress : p.timestamp)
-          : true
+        favoritesOnly ? watchlistTokens.includes(router.asPath.includes("valuepools") ? p?.id : p.timestamp) : true
       );
 
     if (searchQuery) {
@@ -170,7 +168,7 @@ export function PoolControls<T>({
       return sortedPools.filter(
         (p: any) =>
           latinise(
-            router.pathname.includes("valuepools") ? p?.devaddr_?.toLowerCase() || "" : p?.owner?.toLowerCase() || ""
+            `${p?.devaddr_?.toLowerCase()} ${p?.description?.toLowerCase()} ${p?.owner?.toLowerCase() ?? ""}` || ""
           ).includes(lowercaseQuery) || latinise(p?.id || "").includes(lowercaseQuery)
       );
     }

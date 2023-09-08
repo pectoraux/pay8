@@ -411,13 +411,19 @@ export const fetchValuepools = async ({ fromVesting, fromValuepool }) => {
           const valuepoolContract = getValuepoolContract(id)
           const data = await fetchValuepool(valuepoolContract)
           console.log('valuepoolsFromSg2===================>', data)
-          const [onePersonOneVote] = await bscClient.multicall({
+          const [onePersonOneVote, description] = await bscClient.multicall({
             allowFailure: true,
             contracts: [
               {
                 address: getValuepoolHelperAddress(),
                 abi: valuePoolHelperABI,
                 functionName: 'onePersonOneVote',
+                args: [id],
+              },
+              {
+                address: getValuepoolHelperAddress(),
+                abi: valuePoolHelperABI,
+                functionName: 'getDescription',
                 args: [id],
               },
             ],
@@ -428,6 +434,7 @@ export const fetchValuepools = async ({ fromVesting, fromValuepool }) => {
             onePersonOneVote,
             ...data,
             ...rest,
+            description: description.result?.length ? description.result[0] : '',
           }
           console.log('valuepoolsFromSg3===================>', onePersonOneVote, res)
 

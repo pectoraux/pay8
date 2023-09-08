@@ -6,11 +6,14 @@ import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
 
+export const getTitle = (title) => {
+  return title?.replaceAll('-', ' ')?.trim() ?? ''
+}
+
 const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice, isUserNft }) => {
   const { t } = useTranslation()
   const { tokenId: name } = nft
   const bnbBusdPrice = useBNBBusdPrice()
-
   return (
     <CardBody p="8px">
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
@@ -23,7 +26,7 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
         {nftLocation && <LocationTag nftLocation={nftLocation} />}
       </Flex>
       <Text as="h4" fontWeight="600" mb="8px">
-        {name}
+        {getTitle(name)}
       </Text>
       <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
         {currentAskPrice && (

@@ -210,9 +210,9 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
   const onSuccessSale = async () => {
     let link = `https://payswap.org/cancan/collections/${collection?.id}/`
     if (stage === SellingStage.CONFIRM_CREATE_PAYWALL2) {
-      link += `paywall/${state.tokenId?.split(' ')?.join('-')}`
+      link += `paywall/${state.tokenId?.split(' ')?.join('-')?.trim()}`
     } else if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
-      link += `${state.tokenId?.split(' ')?.join('-')}`
+      link += `${state.tokenId?.split(' ')?.join('-')?.trim()}`
     }
     switch (stage) {
       case SellingStage.CONFIRM_CREATE_PAYWALL2 || SellingStage.CONFIRM_CREATE_ASK_ORDER:
@@ -262,7 +262,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           0,
         )
         const args = [
-          state.tokenId?.split(' ')?.join('-'),
+          state.tokenId?.split(' ')?.join('-')?.trim(),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -280,7 +280,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           .then(() => {
             if (state.options?.length > 0) {
               const args2 = [
-                state.tokenId?.split(' ')?.join('-'),
+                state.tokenId?.split(' ')?.join('-')?.trim(),
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.value], []),
@@ -308,7 +308,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           0,
         )
         console.log('rerr0===========================>', [
-          state.tokenId?.split(' ')?.join('-'),
+          state.tokenId?.split(' ')?.join('-')?.trim(),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -322,7 +322,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()),
         ])
         return callWithGasPrice(marketOrdersContract, 'createAskOrder', [
-          state.tokenId?.split(' ')?.join('-'),
+          state.tokenId?.split(' ')?.join('-')?.trim(),
           currentAskPrice.toString(),
           state.bidDuration,
           state.minBidIncrementPercentage,
@@ -338,7 +338,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           .then(() => {
             if (state.options?.length > 0) {
               return callWithGasPrice(marketHelperContract, 'updateOptions', [
-                state.tokenId?.split(' ')?.join('-'),
+                state.tokenId?.split(' ')?.join('-')?.trim(),
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
                 state.options?.reduce((accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()], []),
@@ -359,7 +359,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         let args
         try {
           args = [
-            state.tokenId?.split(' ')?.join('-'),
+            state.tokenId?.split(' ')?.join('-')?.trim(),
             state.description,
             state.prices?.split(',')?.filter((val) => !!val),
             state.start,

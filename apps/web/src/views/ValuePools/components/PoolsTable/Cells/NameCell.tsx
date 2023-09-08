@@ -25,7 +25,7 @@ const NameCell: React.FC<any> = ({ pool, vpCurrencyInput }) => {
 
   const title: React.ReactNode = pool?.name
   const subtitle1: React.ReactNode = `${t('Save')} ${vpCurrencyInput?.symbol ?? ''}`
-  const subtitle2: React.ReactNode = `${t('Receive')} ${pool?.veSymbol}`
+  const subtitle2: React.ReactNode = pool?.veSymbol ? `${t('Receive')} ${pool?.veSymbol}` : ''
   const showSubtitle = pool?.sousId !== 0 || (pool?.sousId === 0 && !isMobile)
 
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()

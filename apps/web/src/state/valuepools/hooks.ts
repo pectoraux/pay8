@@ -32,7 +32,7 @@ export const useFetchPublicPoolsData = () => {
   const fromValuepool = router.query.valuepool
 
   useSWR(
-    ['/stakes', chainId],
+    ['/valuepools', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
@@ -46,7 +46,7 @@ export const useFetchPublicPoolsData = () => {
     {
       revalidateOnFocus: false,
       revalidateIfStale: true,
-      revalidateOnReconnect: false,
+      revalidateOnReconnect: true,
       revalidateOnMount: true,
     },
   )
