@@ -14,6 +14,7 @@ import { getBep20Contract } from 'utils/contractHelpers'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import {
   useMarketCollectionsContract,
+  useMarketEventsContract,
   useMarketTradesContract,
   useNFTicketHelper,
   usePaywallMarketTradesContract,
@@ -34,6 +35,7 @@ import UpdateTagStage from './UpdateTagStage'
 import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 import UpdatePricePerMinuteStage from './UpdatePricePerMinuteStage'
 import UpdateExcludedContentStage from './UpdateExcludedContentStage'
+import UpdateValuePoolStage from './UpdateValuePoolStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import BigNumber from 'bignumber.js'
 
@@ -78,6 +80,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
   const { callWithGasPrice } = useCallWithGasPrice()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const marketCollectionsContract = useMarketCollectionsContract()
+  const marketEventsContract = useMarketEventsContract()
   const nfticketHelperContract = useNFTicketHelper()
   const itemMarketTradesContract = useMarketTradesContract()
   const paywallMarketTradesContract = usePaywallMarketTradesContract()
@@ -123,6 +126,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     productId: '',
     price: '',
     contentType: '',
+    valuepool: '',
   }))
   const [nftFilters, setNewFilters] = useState({
     workspace: collection?.workspaces,
@@ -211,6 +215,12 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
       case SellingStage.CONFIRM_UPDATE_EXCLUDED_CONTENT:
         setStage(SellingStage.UPDATE_EXCLUDED_CONTENT)
         break
+      case SellingStage.UPDATE_VALUEPOOL:
+        setStage(SellingStage.SETTINGS)
+        break
+      case SellingStage.CONFIRM_UPDATE_VALUEPOOL:
+        setStage(SellingStage.UPDATE_VALUEPOOL)
+        break
       default:
         break
     }
@@ -247,6 +257,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         break
       case SellingStage.UPDATE_EXCLUDED_CONTENT:
         setStage(SellingStage.CONFIRM_UPDATE_EXCLUDED_CONTENT)
+        break
+      case SellingStage.UPDATE_VALUEPOOL:
+        setStage(SellingStage.CONFIRM_UPDATE_VALUEPOOL)
         break
       default:
         break
@@ -320,6 +333,12 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           state.contentType,
           !!state.add,
         ]).catch((err) => console.log('CONFIRM_UPDATE_EXCLUDED_CONTENT===========>', err))
+      }
+      if (stage === SellingStage.CONFIRM_UPDATE_VALUEPOOL) {
+        console.log('CONFIRM_UPDATE_VALUEPOOL===========>', [state.valuepool, !!state.add])
+        return callWithGasPrice(marketEventsContract, 'emitUpdateValuepools', [state.valuepool, !!state.add]).catch(
+          (err) => console.log('CONFIRM_UPDATE_VALUEPOOL===========>', err),
+        )
       }
       if (stage === SellingStage.CONFIRM_MODIFY_CONTACT) {
         const args = [
@@ -439,7 +458,10 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           <Button mb="8px" onClick={() => setStage(SellingStage.MODIFY_CONTACT)}>
             {t('Modify location data')}
           </Button>
-          <Button mb="8px" variant="secondary" onClick={() => setStage(SellingStage.UPDATE_AUDITORS)}>
+          <Button variant="success" mb="8px" onClick={() => setStage(SellingStage.UPDATE_VALUEPOOL)}>
+            {t('Update ValuePool List')}
+          </Button>
+          <Button mb="8px" variant="success" onClick={() => setStage(SellingStage.UPDATE_AUDITORS)}>
             {t('Update auditors')}
           </Button>
           <Button variant="secondary" mb="8px" onClick={() => setStage(SellingStage.UPDATE_TAG)}>
@@ -448,7 +470,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           <Button variant="secondary" mb="8px" onClick={() => setStage(SellingStage.UPDATE_TAG_REGISTRATION)}>
             {t('Update Tag Registration')}
           </Button>
-          <Button variant="secondary" mb="8px" onClick={() => setStage(SellingStage.UPDATE_PRICE_PER_MINUTE)}>
+          <Button variant="danger" mb="8px" onClick={() => setStage(SellingStage.UPDATE_PRICE_PER_MINUTE)}>
             {t('Update Price Per Minute')}
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(SellingStage.UPDATE_EXCLUDED_CONTENT)}>
@@ -549,6 +571,14 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
       )}
       {stage === SellingStage.UPDATE_EXCLUDED_CONTENT && (
         <UpdateExcludedContentStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === SellingStage.UPDATE_VALUEPOOL && (
+        <UpdateValuePoolStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}

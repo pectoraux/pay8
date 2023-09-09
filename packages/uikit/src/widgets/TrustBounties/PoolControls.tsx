@@ -56,7 +56,7 @@ const ControlStretch = styled(Flex)`
   }
 `;
 
-const NUMBER_OF_POOLS_VISIBLE = 12;
+const NUMBER_OF_POOLS_VISIBLE = 122;
 
 interface ChildrenReturn<T> {
   chosenPools: DeserializedPool<T>[];
@@ -168,7 +168,9 @@ export function PoolControls<T>({
       return sortedPools.filter(
         (p: any) =>
           latinise(
-            `${p?.devaddr_?.toLowerCase()} ${p?.description?.toLowerCase()} ${p?.owner?.toLowerCase() ?? ""}` || ""
+            `${p?.devaddr_?.toLowerCase()} ${p?.description?.toLowerCase()} ${
+              p?.owner?.toLowerCase() ?? ""
+            } ${p?.symbol?.toLowerCase()}` || ""
           ).includes(lowercaseQuery) || latinise(p?.id || "").includes(lowercaseQuery)
       );
     }
@@ -181,6 +183,88 @@ export function PoolControls<T>({
     () => ({ chosenPools, stakedOnly, viewMode, normalizedUrlSearch, showFinishedPools }),
     [chosenPools, normalizedUrlSearch, showFinishedPools, stakedOnly, viewMode]
   );
+  let vaOptions = [
+    {
+      label: t("Created At"),
+      value: "timestamp",
+    },
+    {
+      label: t("Min Ticket Price"),
+      value: "minTicketPrice",
+    },
+    {
+      label: t("Min To Switch"),
+      value: "minToSwitch",
+    },
+    {
+      label: t("Max Supply"),
+      value: "maxSupply",
+    },
+    {
+      label: t("BNPL"),
+      value: "bnpl",
+    },
+    {
+      label: t("1 Person 1 Vote"),
+      value: "onePersonOneVote",
+    },
+    {
+      label: t("Riskpool"),
+      value: "riskpool",
+    },
+    {
+      label: t("Supply"),
+      value: "supply",
+    },
+    {
+      label: t("Total paid by sponsors"),
+      value: "totalpaidBySponsors",
+    },
+    {
+      label: t("Total Liquidity"),
+      value: "totalLiquidity",
+    },
+    {
+      label: t("Ve Balance"),
+      value: "veBalance",
+    },
+  ];
+  const tbOptions = [
+    {
+      label: t("Created At"),
+      value: "timestamp",
+    },
+    {
+      label: t("By ID"),
+      value: "id",
+    },
+    {
+      label: t("By NFT Collateral"),
+      value: "isNFT",
+    },
+    {
+      label: t("By Native Collateral"),
+      value: "isNativeCoin",
+    },
+    {
+      label: t("Min To Claim"),
+      value: "minToClaim",
+    },
+    {
+      label: t("By Parent Bount IDs"),
+      value: "parentBountyId",
+    },
+    {
+      label: t("Total Liquidity"),
+      value: "totalLiquidity",
+    },
+  ];
+  const smOptions = [
+    {
+      label: t("Created At"),
+      value: "timestamp",
+    },
+  ];
   return (
     <>
       <PoolControlsView>
@@ -194,6 +278,23 @@ export function PoolControls<T>({
           hideViewMode={hideViewMode}
         />
         <FilterContainer>
+          <LabelWrapper>
+            <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+              {t("Sort by")}
+            </Text>
+            <ControlStretch>
+              <Select
+                options={
+                  router.asPath.includes("valuepool")
+                    ? vaOptions
+                    : router.asPath.includes("trustbounties")
+                    ? tbOptions
+                    : smOptions
+                }
+                onOptionChange={handleSortOptionChange}
+              />
+            </ControlStretch>
+          </LabelWrapper>
           <LabelWrapper style={{ marginLeft: 16 }}>
             <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
               {t("Search")}

@@ -8,6 +8,8 @@ import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
@@ -15,15 +17,13 @@ import CreateValuepoolModal from './components/CreateValuepoolModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
-import { useRouter } from 'next/router'
+import { useGetCollection } from 'state/cancan/hooks'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
 `
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
@@ -33,6 +33,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [onPresentCreateGauge] = useModal(<CreateValuepoolModal currency={currency} />)
   const nftFilters = useFilters()
   const tags = useGetTags()
+  const router = useRouter()
+  const collectionAddress = router.query.collectionAddress as string
+  console.log('collectionAddress=============>', collectionAddress)
+  const { collection } = useGetCollection(collectionAddress)
+
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
@@ -41,7 +46,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     }
   }
   usePoolsPageFetch()
-
+  const valuepools = collection?.valuepools?.map((vp) => vp.valuepool)
   return (
     <>
       <PageHeader>
@@ -84,17 +89,14 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         </Flex>
       </PageHeader>
       <Page>
-        <PoolControls pools={pools}>
-          {({ chosenPools, normalizedUrlSearch }) => (
+        <PoolControls
+          pools={pools?.filter((pool) => !collectionAddress || valuepools?.includes(pool?.id?.toLowerCase()))}
+        >
+          {({ chosenPools }) => (
             <>
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
-                  <PoolRow
-                    initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
-                    key={pool.sousId}
-                    id={pool.id}
-                    account={account}
-                  />
+                  <PoolRow initialActivity={false} key={pool.sousId} id={pool.id} account={account} />
                 ))}
               </Pool.PoolsTable>
             </>

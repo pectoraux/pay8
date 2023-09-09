@@ -14,6 +14,7 @@ import {
   filterSelector,
 } from './selectors'
 import { getTag } from './helpers'
+import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
   const { data } = useSWR('sponsors-tags', async () => getTag())
@@ -43,6 +44,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

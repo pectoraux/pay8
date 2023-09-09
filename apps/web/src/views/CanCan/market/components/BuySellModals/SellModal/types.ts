@@ -18,6 +18,8 @@ export enum SellingStage {
   // update tag
   UPDATE_TAG,
   CONFIRM_UPDATE_TAG,
+  UPDATE_VALUEPOOL,
+  CONFIRM_UPDATE_VALUEPOOL,
   // update tag registration
   UPDATE_TAG_REGISTRATION,
   CONFIRM_UPDATE_TAG_REGISTRATION,

@@ -22,12 +22,12 @@ export const ExpandRow: React.FC<
   const toggleExpanded = useCallback(() => {
     setExpanded((prev) => !prev);
   }, []);
-  useEffect(() => {
-    if (initialActivity && hasSetInitialValue.current === false) {
-      setExpanded(initialActivity);
-      hasSetInitialValue.current = true;
-    }
-  }, [initialActivity]);
+  // useEffect(() => {
+  //   if (initialActivity && hasSetInitialValue.current === false) {
+  //     setExpanded(initialActivity);
+  //     hasSetInitialValue.current = true;
+  //   }
+  // }, [initialActivity]);
 
   return (
     <>
