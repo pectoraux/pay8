@@ -26,13 +26,13 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
-  console.log('pools=============>', pools)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateStakeModal currency={currency} />)
   const nftFilters = useFilters()
   const tags = useGetTags()
+  const collectionAddress = router.query.collectionAddress as string
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
@@ -86,7 +86,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         </Flex>
       </PageHeader>
       <Page>
-        <PoolControls pools={pools}>
+        <PoolControls pools={pools?.filter((pool) => !collectionAddress || pool?.stakeSource === collectionAddress)}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
               <Pool.PoolsTable>

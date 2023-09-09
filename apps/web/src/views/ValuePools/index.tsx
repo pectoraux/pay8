@@ -35,7 +35,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const tags = useGetTags()
   const router = useRouter()
   const collectionAddress = router.query.collectionAddress as string
-  console.log('collectionAddress=============>', collectionAddress)
   const { collection } = useGetCollection(collectionAddress)
 
   const handleClick = () => {

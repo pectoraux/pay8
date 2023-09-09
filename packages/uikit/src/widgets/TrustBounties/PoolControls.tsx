@@ -168,9 +168,11 @@ export function PoolControls<T>({
       return sortedPools.filter(
         (p: any) =>
           latinise(
-            `${p?.devaddr_?.toLowerCase()} ${p?.description?.toLowerCase()} ${
-              p?.owner?.toLowerCase() ?? ""
-            } ${p?.symbol?.toLowerCase()}` || ""
+            `${p?.devaddr_?.toLowerCase()} ${p?.description?.toLowerCase()} ${p?.owner?.toLowerCase() ?? ""} ${
+              p?.symbol?.toLowerCase() ?? ""
+            } ${p?.countries?.toLowerCase() ?? ""} ${p?.cities?.toLowerCase() ?? ""} ${
+              p?.products?.toLowerCase() ?? ""
+            }` || ""
           ).includes(lowercaseQuery) || latinise(p?.id || "").includes(lowercaseQuery)
       );
     }
