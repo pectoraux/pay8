@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useCallback, useState, useMemo } from 'react'
-import { Text, Row, Button, useModal, Flex, FlexGap, LinkExternal } from '@pancakeswap/uikit'
+import { Text, Row, Button, useModal, Flex, FlexGap, LinkExternal, ReactMarkdown } from '@pancakeswap/uikit'
 import { useCurrency } from 'hooks/Tokens'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { Collection } from 'state/cancan/types'
@@ -25,10 +25,18 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import dynamic from 'next/dynamic'
+import styled from 'styled-components'
+import RichTextEditor from 'components/RichText'
+
+const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
 interface HeaderProps {
   collection: Collection
 }
+const DesktopButton = styled(Button)`
+  align-self: flex-end;
+`
 
 const Header: React.FC<any> = ({ collection }) => {
   const router = useRouter()
@@ -47,16 +55,51 @@ const Header: React.FC<any> = ({ collection }) => {
     : '0'
   const defaultCurrency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(defaultCurrency)
+  const [launch, setLaunch] = useState(false)
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
-
   const [onPresentSettings] = useModal(<SettingStage collection={collection} />)
   const [onPresentPartner] = useModal(<PartnerModal collection={collection} />)
   const [onPresentRegister] = useModal(<RegisterModal collection={collection} />)
   const [onPresentShip] = useModal(<ShipStage variant="product" collection={collection} currency={currency} />)
   const [onPresentPaywall] = useModal(<ShipStage variant="paywall" collection={collection} currency={currency} />)
-
+  const steps = [
+    {
+      target: '.tour-1',
+      content: (
+        <>
+          <ReactMarkdown>{t("The **Items**' tab displays all products available on the channel.")}</ReactMarkdown>
+          <ReactMarkdown>{t("The **Activity**'s tab display all product sales & listings.")}</ReactMarkdown>
+          <ReactMarkdown>{t("The **Requests**' tab displays all partnership & membership requests.")}</ReactMarkdown>
+          <ReactMarkdown>
+            {t("The **Contracts**' tab displays all stakes, bounties and valuepools relevant to this channel.")}
+          </ReactMarkdown>
+          <ReactMarkdown>
+            {t("The **Legal & Info**'s tab display the channel's terms of service and essential announcements.")}
+          </ReactMarkdown>
+          <ReactMarkdown>{t("The **Stats**' tab displays all stats relevant to the channel")}</ReactMarkdown>
+        </>
+      ),
+      disableBeacon: true,
+    },
+    {
+      target: '.tour-2',
+      content: t('The Home tab displays all products listed by this channel'),
+    },
+    {
+      target: '.tour-3',
+      content: t('The Partner tab displays all products listed by channel partners'),
+    },
+    {
+      target: '.tour-4',
+      content: t("The Users' tab displays all channel users"),
+    },
+    {
+      target: '.tour-5',
+      content: t('Use this section for filtering products based on workspace, country, city or product tags'),
+    },
+  ]
   const itemsConfig = [
     {
       label: t('Items'),
@@ -91,8 +134,10 @@ const Header: React.FC<any> = ({ collection }) => {
     }
     return router.asPath.replace('?chainId=4002', '')
   }, [router, collectionAddress])
+
   return (
     <>
+      <Tour steps={steps} launch={launch} />
       <MarketPageHeader>
         <TopBar />
         <BannerHeader bannerImage={large ?? ''} avatar={<AvatarImage src={avatar ?? ''} />} />
@@ -169,6 +214,20 @@ const Header: React.FC<any> = ({ collection }) => {
         <Flex>
           <Contacts contactChannels={contactChannels} contacts={contacts} />
           <FlexGap gap="16px" pt="24px" pl="4px">
+            <DesktopButton
+              disabled={launch}
+              onClick={() => {
+                if (router.asPath.includes('#')) {
+                  router.push(`/cancan/collections/${collectionAddress}`)
+                } else {
+                  setLaunch(true)
+                }
+              }}
+              mb="18px"
+              variant="subtle"
+            >
+              {t('Launch Tour')}
+            </DesktopButton>
             <LinkExternal href="/lotteries/1" bold={false}>
               {t('See Lottery')}
             </LinkExternal>
@@ -176,7 +235,7 @@ const Header: React.FC<any> = ({ collection }) => {
         </Flex>
       </MarketPageHeader>
       <Container>
-        <BaseSubMenu items={itemsConfig} activeItem={getActiveItem} mt="24px" mb="8px" />
+        <BaseSubMenu className="tour-1" items={itemsConfig} activeItem={getActiveItem} mt="24px" mb="8px" />
       </Container>
     </>
   )
