@@ -63,7 +63,7 @@ export const footerLinks: FooterLinkType[] = [
     items: [
       {
         label: "Github",
-        href: "https://github.com/pectoraux",
+        href: "https://github.com/payswaporg",
       },
       // {
       //   label: "Documentation",
