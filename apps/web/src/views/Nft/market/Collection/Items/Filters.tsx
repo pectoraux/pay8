@@ -135,18 +135,20 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, col
           activeIndex={!showOnlyNftsOnSale && showOnlyNftsUsers ? 2 : showOnlyNftsOnSale && !showOnlyNftsUsers ? 1 : 0}
           onItemClick={onActiveButtonChange}
         >
-          <ButtonMenuItem>
+          <ButtonMenuItem className="tour-2">
             <FcHome />
           </ButtonMenuItem>
-          <ButtonMenuItem>
+          <ButtonMenuItem className="tour-3">
             <FaHandshake color="#280D5F" />
           </ButtonMenuItem>
-          <ButtonMenuItem>
+          <ButtonMenuItem className="tour-4">
             <CommunityIcon />
           </ButtonMenuItem>
         </ButtonMenu>
       </FilterByControls>
-      <TagFilters address={address} collection={collection} />
+      <Box className="tour-5">
+        <TagFilters address={address} collection={collection} />
+      </Box>
       <SortByTitle fontSize="12px" textTransform="uppercase" color="textSubtle" fontWeight={600} mb="4px">
         {t('Sort By')}
       </SortByTitle>

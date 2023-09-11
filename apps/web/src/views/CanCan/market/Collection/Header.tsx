@@ -10,6 +10,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import dynamic from 'next/dynamic'
+import styled from 'styled-components'
 
 import MarketPageHeader from '../components/MarketPageHeader'
 import MarketPageTitle from '../components/MarketPageTitle'
@@ -25,9 +27,6 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import dynamic from 'next/dynamic'
-import styled from 'styled-components'
-import RichTextEditor from 'components/RichText'
 
 const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
@@ -76,7 +75,7 @@ const Header: React.FC<any> = ({ collection }) => {
             {t("The **Contracts**' tab displays all stakes, bounties and valuepools relevant to this channel.")}
           </ReactMarkdown>
           <ReactMarkdown>
-            {t("The **Legal & Info**'s tab display the channel's terms of service and essential announcements.")}
+            {t("The **Legal & Info**'s tab displays the channel's terms of service and essential announcements.")}
           </ReactMarkdown>
           <ReactMarkdown>{t("The **Stats**' tab displays all stats relevant to the channel")}</ReactMarkdown>
         </>
