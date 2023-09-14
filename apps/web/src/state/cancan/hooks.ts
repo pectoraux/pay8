@@ -77,11 +77,11 @@ export const useGetVeToken = (veAddress) => {
   return data
 }
 
-export const useGetShuffledCollections = (where = {}) => {
-  const { data } = useSWR(['cancan', 'collections', where], async () => getCollections(where))
+export const useGetShuffledCollections = (searchQuery) => {
+  const { data } = useSWR(['cancan', 'collections', searchQuery], async () => getCollections(searchQuery))
   const collections = data ?? ({} as ApiCollections)
   const { data: shuffledCollections, status } = useSWR(
-    !isEmpty(collections) ? ['cancan', 'shuffledCollections', where] : null,
+    !isEmpty(collections) ? ['cancan', 'shuffledCollections', searchQuery] : null,
     () => {
       return shuffle(collections)
     },

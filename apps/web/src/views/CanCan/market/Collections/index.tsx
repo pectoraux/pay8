@@ -85,8 +85,11 @@ const getNewSortDirection = (oldSortField: string, newSortField: string, oldSort
 const Collectible = () => {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState('')
-  const where = useMemo(() => (searchQuery ? { description_contains_nocase: searchQuery } : {}), [searchQuery])
-  const { data: shuffledCollections } = useGetShuffledCollections(where)
+  const where1 = useMemo(() => (searchQuery ? { name_contains_nocase: searchQuery } : {}), [searchQuery])
+  const where2 = useMemo(() => (searchQuery ? { description_contains_nocase: searchQuery } : {}), [searchQuery])
+  const { data: shuffledCollections1 } = useGetShuffledCollections(where1)
+  const { data: shuffledCollections2 } = useGetShuffledCollections(where2)
+  const shuffledCollections = shuffledCollections1?.length ? shuffledCollections1 : shuffledCollections2
   const { isMobile } = useMatchBreakpoints()
   const [sortField, setSortField] = useState(null)
   const [page, setPage] = useState(1)

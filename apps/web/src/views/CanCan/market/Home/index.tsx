@@ -60,8 +60,12 @@ const Home = () => {
   const { address: account } = useAccount()
   const { theme } = useTheme()
   const [searchQuery, setSearchQuery] = useState('')
-  const where = useMemo(() => (searchQuery ? { description_contains_nocase: searchQuery } : {}), [searchQuery])
-  const { data, status } = useGetCollections(where)
+  const where1 = useMemo(() => (searchQuery ? { name_contains_nocase: searchQuery } : {}), [searchQuery])
+  const where2 = useMemo(() => (searchQuery ? { description_contains_nocase: searchQuery } : {}), [searchQuery])
+  const { data: data1, status: status1 } = useGetCollections(where1)
+  const { data: data2, status: status2 } = useGetCollections(where2)
+  const data = data1?.length ? data1 : data2
+  const status = data1?.length ? status1 : status2
   const collections = data as any
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
