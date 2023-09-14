@@ -16,6 +16,7 @@ import SearchBar from '../components/SearchBar'
 import Collections from './Collections'
 import Newest from './Newest'
 import config from './config'
+import { selectFilteredData2 } from 'state/cancan/selectors'
 
 const Gradient = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientCardHeader};
@@ -110,6 +111,9 @@ const Home = () => {
     return newData
   }, [status, collections, searchQuery])
 
+  const searchedNewestCollections2 = selectFilteredData2(ADDRESS_ZERO, searchedNewestCollections)
+  const searchedHotCollections2 = selectFilteredData2(ADDRESS_ZERO, searchedHotCollections)
+
   return (
     <>
       <StyledPageHeader>
@@ -147,13 +151,13 @@ const Home = () => {
             key="newest-collections"
             title={t('Newest Collections')}
             testId="nfts-newest-collections"
-            collections={searchedNewestCollections}
+            collections={searchedNewestCollections2 || searchedNewestCollections}
           />
           <Collections
             key="hot-collections"
             title={t('Hot Collections')}
             testId="nfts-hot-collections"
-            collections={searchedHotCollections}
+            collections={searchedHotCollections2 || searchedHotCollections}
           />
           <Newest />
         </PageSection>

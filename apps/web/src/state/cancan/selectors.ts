@@ -22,3 +22,24 @@ export const selectFilteredData = (address, nfts) => {
           ?.length > 0),
   )
 }
+
+export const selectFilteredData2 = (address, nfts) => {
+  const filters = useGetNftFilters(address ?? '') as any
+  const _ve = filters?.workspace?.value ? getVeFromWorkspace(filters?.workspace.value.toLowerCase()) : ADDRESS_ZERO
+  console.log('1selectFilteredData==============>', nfts, filters, _ve)
+  return nfts?.filter(
+    (nft) =>
+      (!filters.workspace || nft?.workspaces?.toLowerCase() === _ve?.toLowerCase()) &&
+      (!filters.country ||
+        filters.country.includes('All') ||
+        filters.country.filter((value) => nft?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()))
+          ?.length > 0) &&
+      (!filters.city ||
+        filters.city.includes('All') ||
+        filters.city.filter((value) => nft?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length >
+          0) &&
+      (!filters.product ||
+        filters.product.filter((value) => nft?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()))
+          ?.length > 0),
+  )
+}

@@ -21,14 +21,14 @@ import {
   ToggleView,
 } from '@pancakeswap/uikit'
 import useSWR from 'swr'
-import useSWRImmutable from 'swr/immutable'
 import orderBy from 'lodash/orderBy'
+import TagFilters from 'views/CanCan/market/Collection/Items/TagFilters'
 import { getLeastMostPriceInCollection } from 'state/cancan/helpers'
 import { ViewMode } from 'state/user/actions'
 import { Collection } from 'state/cancan/types'
 import styled from 'styled-components'
 import { FetchStatus } from 'config/constants/types'
-import { useGetShuffledCollections } from 'state/cancan/hooks'
+import { useGetNftFilters, useGetShuffledCollections } from 'state/cancan/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import Page from 'components/Layout/Page'
 import { nftsBaseUrl } from 'views/CanCan/market/constants'
@@ -37,6 +37,8 @@ import DELIST_COLLECTIONS from 'config/constants/nftsCollections/delist'
 import CollectionCardWithVolume from '../components/CollectibleCard/CollectionCardWithVolume'
 import latinise from '@pancakeswap/utils/latinise'
 import SearchBar from '../components/SearchBar'
+import { selectFilteredData2 } from 'state/cancan/selectors'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 export const ITEMS_PER_PAGE = 9
 
@@ -84,12 +86,13 @@ const getNewSortDirection = (oldSortField: string, newSortField: string, oldSort
 
 const Collectible = () => {
   const { t } = useTranslation()
+  const nftFilters = useGetNftFilters(ADDRESS_ZERO) as any
   const [searchQuery, setSearchQuery] = useState('')
   const where1 = useMemo(() => (searchQuery ? { name_contains_nocase: searchQuery } : {}), [searchQuery])
   const where2 = useMemo(() => (searchQuery ? { description_contains_nocase: searchQuery } : {}), [searchQuery])
   const { data: shuffledCollections1 } = useGetShuffledCollections(where1)
   const { data: shuffledCollections2 } = useGetShuffledCollections(where2)
-  const shuffledCollections = shuffledCollections1?.length ? shuffledCollections1 : shuffledCollections2
+  const _shuffledCollections = shuffledCollections1?.length ? shuffledCollections1 : shuffledCollections2
   const { isMobile } = useMatchBreakpoints()
   const [sortField, setSortField] = useState(null)
   const [page, setPage] = useState(1)
@@ -124,11 +127,13 @@ const Collectible = () => {
       },
     ]
   }, [t])
+  const shuffledCollections = selectFilteredData2(ADDRESS_ZERO, _shuffledCollections) || _shuffledCollections
+
   const { data: collections = [], status } = useSWR<
     (Collection & Partial<{ lowestPrice: number; highestPrice: number }>)[]
   >(
     shuffledCollections && shuffledCollections.length
-      ? ['collectionsWithPrice', viewMode, sortField, shuffledCollections]
+      ? ['collectionsWithPrice', viewMode, sortField, shuffledCollections, nftFilters]
       : null,
     async () => {
       if (viewMode === ViewMode.CARD && sortField !== SORT_FIELD.lowestPrice && sortField !== SORT_FIELD.highestPrice)
@@ -207,7 +212,7 @@ const Collectible = () => {
       },
       sortDirection ? 'desc' : 'asc',
     ).filter((collection) => !DELIST_COLLECTIONS[collection.address])
-  }, [collections, sortField, sortDirection])
+  }, [collections, sortField, sortDirection, nftFilters])
 
   return (
     <>
@@ -218,6 +223,7 @@ const Collectible = () => {
         <Flex justifyContent="flex-end" alignItems="flex-end">
           <SearchBar onChange={handleChangeSearchQuery} />
         </Flex>
+        <TagFilters address={ADDRESS_ZERO} />
       </PageHeader>
       <Page>
         {status !== FetchStatus.Fetched ? (

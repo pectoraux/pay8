@@ -122,7 +122,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, col
       setShowOnlyUsers({ collection: address, showOnlyUsers: true })
     }
   }
-
+  console.log('tagfilters====================>', collection)
   return (
     <GridContainer>
       <FilterByTitle textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
