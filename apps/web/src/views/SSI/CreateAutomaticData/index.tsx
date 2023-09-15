@@ -41,6 +41,12 @@ import { FormState } from './types'
 import { useProfileForAddress } from 'state/profile/hooks'
 import { useProfileFromSSI } from 'state/ssi/hooks'
 import { addYears } from 'date-fns'
+import { privateKeyToAccount } from 'viem/accounts'
+import { createPublicClient, createWalletClient, custom, http } from 'viem'
+import { fantomTestnet } from 'viem/chains'
+import { getProfileAddress, getSSIAddress } from 'utils/addressHelpers'
+import { profileABI } from 'config/abi/profile'
+import { ssiABI } from 'config/abi/ssi'
 
 const CreateProposal = () => {
   const [state, setState] = useState<any>(() => ({
@@ -61,14 +67,23 @@ const CreateProposal = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
-  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { fetchWithCatchTxError } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const ssiContract = useSSIContract()
   const { toastSuccess, toastError } = useToast()
-  const { profile } = useProfileFromSSI(account?.toLowerCase())
+  const { profile: payswapProfile } = useProfileFromSSI(`0x${process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS}`)
+  const { profile: userProfile } = useProfileFromSSI(account)
+  const profile = userProfile ?? payswapProfile
   const randomCode = useMemo(() => uniqueId(Date.now()?.toString()), [])
 
-  console.log('randomCode==============>', randomCode, profile)
+  console.log(
+    'randomCode==============>',
+    randomCode,
+    profile,
+    payswapProfile,
+    userProfile,
+    process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS,
+  )
   const handleSubmit = async () => {
     setIsLoading(true)
     const messageHtml = `
@@ -103,47 +118,77 @@ const CreateProposal = () => {
   const handleCreateData = useCallback(async () => {
     try {
       setIsLoading(true)
-      // eslint-disable-next-line consistent-return
-      const receipt = await fetchWithCatchTxError(async () => {
-        const encryptRsa = new EncryptRsa()
-        const pk = `-----BEGIN PUBLIC KEY-----${profile?.publicKey?.replace(/\s/g, '')}-----END PUBLIC KEY-----`
-        const encryptedAnswer = state.name
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: state.name,
-              publicKey: pk,
-            })
-          : ''
-        const nextYear = addYears(new Date(), 1)
-        const args = [
+      const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+      const client = createPublicClient({
+        chain: fantomTestnet,
+        transport: http(),
+      })
+      const walletClient = createWalletClient({
+        chain: fantomTestnet,
+        transport: custom(window.ethereum),
+      })
+      const encryptRsa = new EncryptRsa()
+      const pk = `-----BEGIN PUBLIC KEY-----${profile?.publicKey?.replace(/\s/g, '')}-----END PUBLIC KEY-----`
+      const encryptedAnswer = state.name
+        ? encryptRsa.encryptStringWithRsaPublicKey({
+            text: state.name,
+            publicKey: pk,
+          })
+        : ''
+      const nextYear = addYears(new Date(), 1)
+      const args = [
+        profile?.id,
+        payswapProfile?.id,
+        account,
+        `0x${process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS}`,
+        BigInt(parseInt((Date.now() / 1000).toString())),
+        BigInt(parseInt((nextYear.getTime() / 1000).toString())),
+        false,
+        'email',
+        encryptedAnswer,
+        'general',
+      ]
+      console.log('public===================>', args, account)
+      const { request } = await client.simulateContract({
+        account: acct,
+        address: getSSIAddress(),
+        abi: ssiABI,
+        functionName: 'createData',
+        args: [
           profile?.id,
-          profile?.id,
+          payswapProfile?.id,
           account,
-          account,
-          parseInt((Date.now() / 1000).toString()),
-          parseInt((nextYear.getDate() / 1000).toString()),
+          `0x${process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS}`,
+          BigInt(parseInt((Date.now() / 1000).toString())),
+          BigInt(parseInt((nextYear.getDate() / 1000).toString())),
           false,
           'email',
           encryptedAnswer,
           'general',
-        ]
-        console.log('public===================>', args)
-        return callWithGasPrice(ssiContract, 'createData', args).catch((err) =>
-          console.log('rerr1====================>', err),
-        )
+        ],
       })
-      if (receipt?.status) {
-        setIsLoading(false)
-        toastSuccess(
-          t('Data Created'),
-          <ToastDescriptionWithTx>
-            {t('You can now start sharing this data with different services/users')}
-          </ToastDescriptionWithTx>,
-        )
-      }
+      await walletClient.writeContract(request).catch((err) => console.log('rerr1=================>', err))
+
+      const { request: rq2 } = await client.simulateContract({
+        account: acct,
+        address: getProfileAddress(),
+        abi: profileABI,
+        functionName: 'shareEmail',
+        args: [account],
+      })
+      await walletClient
+        .writeContract(rq2)
+        .catch((err) => console.log('rerr2=================>', err, rq2, getProfileAddress(), client))
     } catch (err) {
       console.log('try err====================>', err)
     } finally {
       setIsLoading(false)
+      toastSuccess(
+        t('Data Created'),
+        <ToastDescriptionWithTx>
+          {t('You can now start sharing this data with different services/users')}
+        </ToastDescriptionWithTx>,
+      )
     }
   }, [t, profile, state, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
 

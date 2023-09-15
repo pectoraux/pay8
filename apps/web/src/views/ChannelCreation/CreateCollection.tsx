@@ -140,7 +140,7 @@ const Team: React.FC = () => {
   return (
     <>
       <Text fontSize="20px" color="textSubtle" bold>
-        {t('Step 2')}
+        {t('Step 4')}
       </Text>
       <Heading as="h3" scale="xl" mb="24px">
         {t('Create a Channel')}

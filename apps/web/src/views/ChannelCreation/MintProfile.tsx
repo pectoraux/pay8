@@ -18,6 +18,8 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import NextStepButton from './NextStepButton'
 import { ProfileCreationContext } from './contexts/ProfileCreationProvider'
+import { useProfileFromSSI } from 'state/ssi/hooks'
+import { useWeb3React } from '@pancakeswap/wagmi'
 
 const InputWrap = styled.div`
   position: relative;
@@ -36,6 +38,8 @@ const MintProfile: React.FC = () => {
   const profileContract = useProfileContract()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
+  const { account } = useWeb3React()
+  const { profile } = useProfileFromSSI(account?.toLowerCase())
   const { fetchWithCatchTxError, loading: isApproving } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
 
@@ -68,10 +72,10 @@ const MintProfile: React.FC = () => {
   return (
     <>
       <Text fontSize="20px" color="textSubtle" bold>
-        {t('Step %num%', { num: 3 })}
+        {t('Step 1')}
       </Text>
       <Heading as="h3" scale="xl" mb="24px">
-        {t('Mint Profile NFT')}
+        {t('Create Profile')}
       </Heading>
       <Card mb="24px">
         <CardBody>
@@ -87,7 +91,7 @@ const MintProfile: React.FC = () => {
               endIcon={isApproving ? <AutoRenewIcon spin color="currentColor" /> : undefined}
               id="approveStarterCollectible"
             >
-              {t('Mint')}
+              {t('Create')}
             </Button>
           </Flex>
         </CardBody>

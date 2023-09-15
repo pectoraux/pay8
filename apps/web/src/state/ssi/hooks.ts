@@ -17,7 +17,7 @@ export const useProfileFromSSI = (
 } => {
   const { data, status, mutate, isValidating } = useSWR(
     address ? [address, 'profile1'] : null,
-    () => getProfileData(1, 0, address),
+    () => getProfileData(1, 0, address?.toLowerCase()),
     fetchConfiguration,
   )
   return {

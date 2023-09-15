@@ -145,7 +145,7 @@ export const getProfileData = async (first = 5, skip = 0, account) => {
       { first, skip, account, orderDirection: 'desc' },
     )
     console.log('getProfileData=======================>', res.profiles)
-    return res.profiles?.length && res.profiles[0]
+    return res.profiles?.length ? res.profiles[0] : undefined
   } catch (error) {
     console.error('Failed to fetch profiledata=================>', error)
     return null
