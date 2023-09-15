@@ -27,5 +27,5 @@ interface ProposalTypeTagProps extends TagProps {
 }
 
 export const ProposalTypeTag: React.FC<any> = ({ entryType, ...props }) => {
-  return <TypeTag entryType={entryType.toString()} {...props} />
+  return <TypeTag entryType={entryType?.toString()} {...props} />
 }

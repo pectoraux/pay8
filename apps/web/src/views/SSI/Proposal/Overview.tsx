@@ -14,7 +14,7 @@ import {
 } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
 import { getUserData } from 'state/ssi/helpers'
-import { useWeb3React, useSignMessage } from '@pancakeswap/wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import useSWRImmutable from 'swr/immutable'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -25,6 +25,7 @@ import { getEntryState } from '../helpers'
 import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
 import Details from './Details'
+import { useSignMessage } from 'wagmi'
 
 const CryptoJS = require('crypto-js')
 
@@ -96,7 +97,7 @@ const Overview = () => {
           <Box mb="32px">
             <Flex alignItems="center" mb="8px">
               <ProposalStateTag entryState={getEntryState(proposal)} />
-              <ProposalTypeTag entryType={proposal.type} ml="8px" />
+              <ProposalTypeTag entryType={proposal.dataType} ml="8px" />
             </Flex>
             <Heading as="h1" scale="xl" mb="16px">
               {proposal.question}

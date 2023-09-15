@@ -14,7 +14,7 @@ import {
   useModal,
   useToast,
 } from '@pancakeswap/uikit'
-import { useSignMessage, useWeb3React } from '@pancakeswap/wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { ChangeEvent, useEffect, useCallback, useState } from 'react'
 import { useInitialBlock } from 'state/block/hooks'
 
@@ -30,6 +30,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useSSIContract } from 'hooks/useContract'
 import { SecondaryLabel } from './styles'
 import Layout from '../components/Layout'
+import { useSignMessage } from 'wagmi'
 
 const CryptoJS = require('crypto-js')
 

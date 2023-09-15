@@ -20,7 +20,7 @@ const handler = async (req, res) => {
   transporter.use('compile', markdown())
 
   const mailData = {
-    from: 'ssi@payswap.org',
+    from: 'no-reply@payswap.org',
     to: email,
     subject: `Verify Email`,
     text: messageHtml,

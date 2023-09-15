@@ -22,7 +22,7 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { useWeb3React, useSignMessage } from '@pancakeswap/wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { useSSIContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider } from 'views/ARPs/components/styles'
@@ -31,6 +31,7 @@ import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/st
 import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
 import { Label, SecondaryLabel } from '../CreateProposal/styles'
 import { combineDateAndTime } from '../CreateProposal/helpers'
+import { useSignMessage } from 'wagmi'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const CryptoJS = require('crypto-js')

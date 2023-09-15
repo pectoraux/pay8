@@ -17,7 +17,7 @@ import {
 import useSWR from 'swr'
 import uniqueId from 'lodash/uniqueId'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { ChangeEvent, useEffect, useState, useCallback } from 'react'
+import { ChangeEvent, useEffect, useState, useCallback, useMemo } from 'react'
 import { useInitialBlock } from 'state/block/hooks'
 
 import { useTranslation } from '@pancakeswap/localization'
@@ -38,6 +38,9 @@ import axios from 'axios'
 import { SecondaryLabel } from './styles'
 import Layout from '../components/Layout'
 import { FormState } from './types'
+import { useProfileForAddress } from 'state/profile/hooks'
+import { useProfileFromSSI } from 'state/ssi/hooks'
+import { addYears } from 'date-fns'
 
 const CreateProposal = () => {
   const [state, setState] = useState<any>(() => ({
@@ -53,6 +56,7 @@ const CreateProposal = () => {
     searchable: false,
   }))
   const [isLoading, setIsLoading] = useState(false)
+  const [codeSent, setCodeSent] = useState('')
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -61,18 +65,16 @@ const CreateProposal = () => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const ssiContract = useSSIContract()
   const { toastSuccess, toastError } = useToast()
-  const [randomCode, setRandomCode] = useState<any>()
-  const { data } = useSWR(['ssi-data', account?.toLowerCase()], async () => getSSIData(1000, 0, account?.toLowerCase()))
-  const userData = data?.find((datum) => datum?.owner?.toLowerCase() === account?.toLowerCase())
+  const { profile } = useProfileFromSSI(account?.toLowerCase())
+  const randomCode = useMemo(() => uniqueId(Date.now()?.toString()), [])
 
-  useEffect(() => setRandomCode(uniqueId(Date.now()?.toString())), [])
-
+  console.log('randomCode==============>', randomCode, profile)
   const handleSubmit = async () => {
     setIsLoading(true)
     const messageHtml = `
       # Payswap SSI
 
-      This is your verification code ++${randomCode}++
+      This is your verification code ${randomCode}
       
       _Thanks for using Payswap_
       `
@@ -88,6 +90,7 @@ const CreateProposal = () => {
           {t('Enter the code sent to your email below and then publish your email')}
         </ToastDescriptionWithTx>,
       )
+      setCodeSent(randomCode)
     } else {
       setIsLoading(false)
       toastError(
@@ -103,29 +106,27 @@ const CreateProposal = () => {
       // eslint-disable-next-line consistent-return
       const receipt = await fetchWithCatchTxError(async () => {
         const encryptRsa = new EncryptRsa()
-        const pk = `-----BEGIN PUBLIC KEY-----${userData?.ownerProfileId?.publicKey?.replace(
-          /\s/g,
-          '',
-        )}-----END PUBLIC KEY-----`
+        const pk = `-----BEGIN PUBLIC KEY-----${profile?.publicKey?.replace(/\s/g, '')}-----END PUBLIC KEY-----`
         const encryptedAnswer = state.name
           ? encryptRsa.encryptStringWithRsaPublicKey({
               text: state.name,
               publicKey: pk,
             })
           : ''
+        const nextYear = addYears(new Date(), 1)
         const args = [
-          userData?.ownerProfileId?.id,
-          userData?.ownerProfileId?.id,
+          profile?.id,
+          profile?.id,
           account,
           account,
-          Date.now() / 1000,
-          (Date.now() + 86400 * 24 * 54) / 1000,
+          parseInt((Date.now() / 1000).toString()),
+          parseInt((nextYear.getDate() / 1000).toString()),
           false,
           'email',
           encryptedAnswer,
           'general',
         ]
-        console.log('public===================>', userData?.ownerProfileId?.publicKey, args)
+        console.log('public===================>', args)
         return callWithGasPrice(ssiContract, 'createData', args).catch((err) =>
           console.log('rerr1====================>', err),
         )
@@ -144,7 +145,7 @@ const CreateProposal = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [t, userData, state, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
+  }, [t, profile, state, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -196,33 +197,38 @@ const CreateProposal = () => {
               </Heading>
             </CardHeader>
             <CardBody>
-              <Box mb="24px">
-                <SecondaryLabel>{t('Entry Type')}</SecondaryLabel>
-                <Select
-                  // name="dataType"
-                  options={[
-                    {
-                      label: t('Email'),
-                      value: t('email'),
-                    },
-                    {
-                      label: t('Phone Number'),
-                      value: t('phone'),
-                    },
-                  ]}
-                  onOptionChange={(val) => {
-                    handleTypeChange(val.value)
-                  }}
-                />
-              </Box>
-              <Box mb="24px">
-                <SecondaryLabel>{t('Email')}</SecondaryLabel>
-                <Input id="name" name="name" value={state.name} scale="lg" onChange={handleChange} required />
-              </Box>
-              <Box mb="24px">
-                <SecondaryLabel>{t('Code')}</SecondaryLabel>
-                <Input id="code" name="code" value={state.code} scale="lg" onChange={handleChange} required />
-              </Box>
+              {!codeSent ? (
+                <>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Entry Type')}</SecondaryLabel>
+                    <Select
+                      // name="dataType"
+                      options={[
+                        {
+                          label: t('Email'),
+                          value: t('email'),
+                        },
+                        // {
+                        //   label: t('Phone Number'),
+                        //   value: t('phone'),
+                        // },
+                      ]}
+                      onOptionChange={(val) => {
+                        handleTypeChange(val.value)
+                      }}
+                    />
+                  </Box>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Email')}</SecondaryLabel>
+                    <Input id="name" name="name" value={state.name} scale="lg" onChange={handleChange} required />
+                  </Box>
+                </>
+              ) : (
+                <Box mb="24px">
+                  <SecondaryLabel>{t('Code')}</SecondaryLabel>
+                  <Input id="code" name="code" value={state.code} scale="lg" onChange={handleChange} required />
+                </Box>
+              )}
               {account && (
                 <Flex alignItems="center" mb="8px">
                   <Text color="textSubtle" mr="16px">
@@ -237,12 +243,12 @@ const CreateProposal = () => {
                     type="submit"
                     width="100%"
                     isLoading={isLoading}
-                    onClick={state.code === randomCode ? handleCreateData : handleSubmit}
+                    onClick={!codeSent ? handleSubmit : handleCreateData}
                     endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
-                    disabled={!state.name}
+                    disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
                     mb="16px"
                   >
-                    {state.code === randomCode ? t('Publish') : t('Send')}
+                    {!codeSent ? t('Send') : t('Publish')}
                   </Button>
                 </>
               ) : (

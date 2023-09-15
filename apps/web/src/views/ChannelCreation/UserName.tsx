@@ -16,7 +16,7 @@ import {
   WarningIcon,
 } from '@pancakeswap/uikit'
 import { useDebounce } from '@pancakeswap/hooks'
-import { useSignMessage, useWeb3React } from '@pancakeswap/wagmi'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { API_PROFILE } from 'config/constants/endpoints'
 import { FetchStatus } from 'config/constants/types'
 import { formatDistance, parseISO } from 'date-fns'
@@ -26,6 +26,7 @@ import fetchWithTimeout from 'utils/fetchWithTimeout'
 import { REGISTER_COST, USERNAME_MAX_LENGTH, USERNAME_MIN_LENGTH } from './config'
 import ConfirmProfileCreationModal from './ConfirmProfileCreationModal'
 import useProfileCreation from './contexts/hook'
+import { useSignMessage } from 'wagmi'
 
 enum ExistingUserState {
   IDLE = 'idle', // initial state

@@ -70,7 +70,7 @@ export const useProfileForAddress = (
   refresh: KeyedMutator<any>
 } => {
   const { data, status, mutate, isValidating } = useSWR(
-    address ? [address, 'profile7'] : null,
+    address ? [address, 'profile'] : null,
     () => getProfileDataFromUser(address),
     fetchConfiguration,
   )

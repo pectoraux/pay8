@@ -20,6 +20,7 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { IPFS_GATEWAY } from '../config'
 import { ProposalStateTag } from '../components/Proposals/tags'
 import CreateContentModal from './CreateContentModal'
+import { getEntryState } from '../helpers'
 
 interface DetailsProps {
   entry: Entry
@@ -65,7 +66,7 @@ const Details: React.FC<any> = ({ entry, answer }) => {
           </LinkExternal>
         </Flex>
         <DetailBox p="16px">
-          <ProposalStateTag entryState={entry.state} mb="8px" />
+          <ProposalStateTag entryState={getEntryState(entry)} />
           <Flex alignItems="center">
             <Text color="textSubtle" fontSize="14px">
               {t('Start Date')}

@@ -99,7 +99,7 @@ export const getSharedEmail = async (accountAddress) => {
       },
     ],
   })
-  return shared.toString()
+  return shared.result
 }
 
 export const getIsNameUsed = async (name) => {
