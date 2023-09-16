@@ -41,7 +41,6 @@ export const useFetchPublicPoolsData = () => {
           dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool }))
         })
       }
-
       fetchPoolsDataWithFarms()
     },
     {

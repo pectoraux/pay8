@@ -20,6 +20,7 @@ import {
   getSubjects,
   getTag,
 } from './helpers'
+import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
   const { data } = useSWR('bettings-tags', async () => getTag())
@@ -84,7 +85,7 @@ export const useFetchPublicPoolsData = () => {
   const fromBetting = router.query.betting
 
   useSWR(
-    ['/bettings'],
+    ['/bettings', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
@@ -100,6 +101,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: true,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

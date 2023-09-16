@@ -4,6 +4,8 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { FAST_INTERVAL } from 'config/constants'
+
 import { fetchArpsAsync, fetchArpSgAsync } from '.'
 import {
   currPoolSelector,
@@ -26,7 +28,7 @@ export const useFetchPublicPoolsData = () => {
   const fromArp = router.query.arp
 
   useSWR(
-    ['/arps'],
+    ['/arps', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
@@ -42,6 +44,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: true,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

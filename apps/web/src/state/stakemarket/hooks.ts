@@ -14,6 +14,7 @@ import {
 } from './selectors'
 import { getTag } from './helpers'
 import { FAST_INTERVAL } from 'config/constants'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const useGetTags = () => {
   const { data } = useSWR('stakemarket-tags', async () => getTag())
@@ -22,10 +23,11 @@ export const useGetTags = () => {
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const collectionId = useRouter().query.collectionAddress as string
 
   useSWR(
-    ['/stakes'],
+    ['/stakes', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {

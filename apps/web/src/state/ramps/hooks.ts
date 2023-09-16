@@ -6,16 +6,11 @@ import { useAppDispatch } from 'state'
 import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { FAST_INTERVAL } from 'config/constants'
 import useSWRImmutable from 'swr/immutable'
-import { getFarmConfig } from '@pancakeswap/farms/constants'
-import { Pool } from '@pancakeswap/uikit'
-import { Token } from '@pancakeswap/sdk'
-import { getLivePoolsConfig } from '@pancakeswap/pools'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { fetchRampAsync, fetchRampsAsync } from '.'
 import { VaultKey } from '../types'
-import { fetchFarmsPublicDataAsync } from '../farms'
 import {
   makePoolWithUserDataLoadingSelector,
   makePoolWithUserDataLoadingSelector2,
@@ -54,6 +49,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: true,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

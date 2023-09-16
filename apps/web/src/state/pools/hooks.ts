@@ -1,13 +1,15 @@
 import { useMemo, useEffect, useState } from 'react'
 import { firestore } from 'utils/firebase'
 import useSWR from 'swr'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { requiresApproval } from 'utils/requiresApproval'
+import { FAST_INTERVAL } from 'config/constants'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { fetchPairsAsync, fetchPoolsUserDataAsync } from '.'
+import { fetchPairsAsync } from '.'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -15,7 +17,6 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { getTag } from './helpers'
 
 export const useGetTags = () => {
@@ -45,7 +46,7 @@ export const useFetchPublicPoolsData = () => {
   const { chainId } = useActiveChainId()
 
   useSWR(
-    ['/pools'],
+    ['/pools', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
@@ -60,6 +61,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

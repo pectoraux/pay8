@@ -34,7 +34,7 @@ export const useFetchPublicPoolsData = () => {
   const fromTransfers = router.pathname.includes('transfers')
 
   useSWR(
-    ['/trustbounties'],
+    ['/trustbounties', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {

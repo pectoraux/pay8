@@ -6,6 +6,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { fetchWillsAsync, fetchWillSgAsync } from '.'
+import { FAST_INTERVAL } from 'config/constants'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -28,7 +29,7 @@ export const useFetchPublicPoolsData = () => {
   const fromWill = router.query.will
 
   useSWR(
-    ['/wills'],
+    ['/wills', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
@@ -44,6 +45,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

@@ -4,6 +4,8 @@ import useSWR from 'swr'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
+import { FAST_INTERVAL } from 'config/constants'
+
 import { fetchBillsAsync, fetchBillSgAsync } from '.'
 import {
   currPoolSelector,
@@ -42,6 +44,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

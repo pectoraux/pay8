@@ -9,6 +9,7 @@ import RoundSwitcher from './RoundSwitcher'
 import { getDrawnDate } from '../../helpers'
 import PreviousRoundCardBody from '../PreviousRoundCard/Body'
 import PreviousRoundCardFooter from '../PreviousRoundCard/Footer'
+import { useRouter } from 'next/router'
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -36,12 +37,18 @@ const AllHistoryCard = ({ currentTokenId }) => {
   const [selectedRoundId, setSelectedRoundId] = useState('')
   const [selectedLotteryNodeData, setSelectedLotteryNodeData] = useState(lotteryData)
   const timer = useRef(null)
-
+  console.log(
+    'currentTokenId===================>',
+    currentTokenId,
+    selectedRoundId,
+    lotteryData,
+    selectedLotteryNodeData,
+  )
   useEffect(() => {
-    if (currentLotteryId) {
+    if (Number(currentLotteryId) > 0) {
       const mostRecentFinishedRoundId = history?.length ? history[history?.length - 1]?.id : 1
       setLatestRoundId(mostRecentFinishedRoundId)
-      setSelectedRoundId(mostRecentFinishedRoundId ?? '')
+      //     setSelectedRoundId(mostRecentFinishedRoundId ?? '')
     }
   }, [currentLotteryId, history])
 
@@ -81,14 +88,14 @@ const AllHistoryCard = ({ currentTokenId }) => {
   }
 
   const handleArrowButtonPress = (targetRound) => {
-    if (targetRound) {
+    if (targetRound && history?.find((lot) => Number(lot?.id) === Number(targetRound))?.length) {
       setSelectedRoundId(targetRound.toString())
     } else {
       // targetRound is NaN when the input is empty, the only button press that will trigger this func is 'forward one'
       setSelectedRoundId(currentLotteryId)
     }
   }
-  console.log('9AllHistoryCard==================>', currentTokenId, currentLotteryId)
+  console.log('9AllHistoryCard==================>', selectedLotteryNodeData, currentTokenId, currentLotteryId)
   return (
     <StyledCard>
       <StyledCardHeader>

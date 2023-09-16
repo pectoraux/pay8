@@ -4,6 +4,8 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import useSWR from 'swr'
+import { FAST_INTERVAL } from 'config/constants'
+
 import { fetchAuditorsAsync, fetchAuditorSgAsync } from '.'
 import {
   currPoolSelector,
@@ -20,7 +22,7 @@ export const useGetTags = () => {
 }
 
 export const useGetProtocols = (userAddress) => {
-  const { data, status } = useSWR(['auditors', 'protocols2'], async () => getProtocolsSg(userAddress))
+  const { data, status } = useSWR(['auditors-protocols', userAddress], async () => getProtocolsSg(userAddress))
   const protocols = data ?? ({} as any)
   return { data: protocols, status }
 }
@@ -48,6 +50,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

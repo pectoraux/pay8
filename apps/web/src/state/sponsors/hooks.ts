@@ -28,7 +28,7 @@ export const useFetchPublicPoolsData = () => {
   const fromSponsor = router.query.sponsor
 
   useSWR(
-    ['/sponsors'],
+    ['/sponsors', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {

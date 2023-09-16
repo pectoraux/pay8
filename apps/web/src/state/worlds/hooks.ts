@@ -2,6 +2,9 @@ import useSWR from 'swr'
 import { useMemo } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
+import { FAST_INTERVAL } from 'config/constants'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+
 import { fetchWorldsAsync } from '.'
 import {
   currPoolSelector,
@@ -20,9 +23,10 @@ export const useGetTags = () => {
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
 
   useSWR(
-    ['/worlds'],
+    ['/worlds', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
@@ -37,6 +41,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

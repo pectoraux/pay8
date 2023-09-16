@@ -6,6 +6,7 @@ import { batch, useSelector } from 'react-redux'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { fetchLotteriesAsync, fetchLotteriesSgAsync } from '.'
 import useSWRImmutable from 'swr/immutable'
+import { FAST_INTERVAL } from 'config/constants'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -22,7 +23,7 @@ export const useFetchPublicPoolsData = () => {
   const fromLottery = router.query.lottery
 
   useSWR(
-    ['/lotteries'],
+    ['/lotteries', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
@@ -30,14 +31,15 @@ export const useFetchPublicPoolsData = () => {
           dispatch(fetchLotteriesAsync({ fromLottery }))
         })
       }
-
       fetchPoolsDataWithFarms()
     },
     {
       revalidateOnFocus: false,
       revalidateIfStale: true,
-      revalidateOnReconnect: false,
+      revalidateOnReconnect: true,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }

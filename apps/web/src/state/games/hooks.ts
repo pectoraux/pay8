@@ -4,6 +4,9 @@ import { useMemo } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import useSWRImmutable from 'swr/immutable'
+import { FAST_INTERVAL } from 'config/constants'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+
 import { fetchGameData, getTag } from './helpers'
 import { fetchGamesAsync, fetchGameSgAsync } from '.'
 import {
@@ -28,9 +31,10 @@ export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const fromGame = router.query.game
+  const { chainId } = useActiveChainId()
 
   useSWR(
-    ['/games'],
+    ['/games', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
@@ -46,6 +50,8 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 3,
+      keepPreviousData: true,
     },
   )
 }
