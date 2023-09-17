@@ -1,4 +1,5 @@
 export enum SellingStage {
+  EMAIL_LIST,
   // Sell flow
   SELL,
   SET_PRICE,

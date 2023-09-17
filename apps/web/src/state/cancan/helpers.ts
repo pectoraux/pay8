@@ -44,6 +44,7 @@ import { nftMarketHelper3ABI } from 'config/abi/nftMarketHelper3'
 import { veABI } from 'config/abi/ve'
 import { marketCollectionsABI } from 'config/abi/marketCollections'
 import { nfticketHelperABI } from 'config/abi/nfticketHelper'
+import { ssiFields } from 'state/ssi/queries'
 
 export const getTag = async () => {
   try {

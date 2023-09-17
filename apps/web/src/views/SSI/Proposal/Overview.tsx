@@ -29,7 +29,7 @@ import { useSignMessage } from 'wagmi'
 
 const CryptoJS = require('crypto-js')
 
-const decryptWithAES = (ciphertext, pk) => {
+export const decryptWithAES = (ciphertext, pk) => {
   try {
     const bytes = CryptoJS.AES.decrypt(ciphertext, pk)
     const originalText = bytes.toString(CryptoJS.enc.Utf8)

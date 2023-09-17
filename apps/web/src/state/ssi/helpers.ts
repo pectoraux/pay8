@@ -6,6 +6,8 @@ import request, { gql } from 'graphql-request'
 import { Proposal, ProposalState, Vote, VoteWhere } from 'state/types'
 import _chunk from 'lodash/chunk'
 import { ssiFields, profileFields, identityTokenFields } from './queries'
+import { decryptWithAES } from 'views/SSI/Proposal/Overview'
+import NodeRSA from 'encrypt-rsa'
 
 export const getSSIDataFromAccount = async (accountAddress: string) => {
   try {
@@ -219,6 +221,52 @@ export const getProposals = async (first = 5, skip = 0, state, where = {}): Prom
     return res.userDatas
   } catch (error) {
     console.error('Failed to fetch user data', error)
+    return []
+  }
+}
+
+export const getEmailData = async (followers) => {
+  const owner = `0x${process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS?.toLowerCase()}`
+  try {
+    const res = await request(
+      GRAPH_API_SSI,
+      gql`
+        query getEmailListData($owner: String, $followers: [String]!) {
+          userDatas(where: {
+            question: "email",
+            auditor: $owner,
+            owner_in: $followers
+          }) {
+            ${ssiFields}
+          }
+        }
+      `,
+      { followers, owner },
+    )
+    console.log('res.userDatas=======================>', res.userDatas)
+    return res.userDatas
+  } catch (error) {
+    console.error('Failed to fetch email list==========>', error, followers)
+    return {}
+  }
+}
+
+export const getEmailList = async (followers, profile) => {
+  try {
+    const _emailList = (await getEmailData(followers)) as any
+    const privateKeyData = decryptWithAES(profile?.encyptedPrivateKey, process.env.NEXT_PUBLIC_PAYSWAP_SIGNATURE)
+    const privateKey = `-----BEGIN RSA PRIVATE KEY-----${privateKeyData?.replace(
+      /\s/g,
+      '',
+    )}-----END RSA PRIVATE KEY-----`
+    console.log('==emailList====================>', _emailList, profile, privateKey)
+    const nodeRSA = new NodeRSA(profile?.publicKey, privateKey)
+    const emailList = _emailList?.length
+      ? _emailList?.map((val) => nodeRSA.decryptStringWithRsaPrivateKey({ text: val?.answer, privateKey }))
+      : []
+    console.log('===emailList====================>', emailList)
+    return emailList
+  } catch (err) {
     return []
   }
 }

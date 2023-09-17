@@ -1,6 +1,6 @@
 import { FetchStatus } from 'config/constants/types'
 import useSWR, { KeyedMutator } from 'swr'
-import { getProfileData } from './helpers'
+import { getProfileData, getEmailList } from './helpers'
 
 export const useProfileFromSSI = (
   address: string,
@@ -26,4 +26,13 @@ export const useProfileFromSSI = (
     isValidating,
     refresh: mutate,
   }
+}
+
+export const useGetEmailList = (followers, profile) => {
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['getemaillist', followers, profile?.id], async () => getEmailList(followers, profile))
+  return { data, refetch, status }
 }

@@ -38,6 +38,7 @@ import UpdateExcludedContentStage from './UpdateExcludedContentStage'
 import UpdateValuePoolStage from './UpdateValuePoolStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import BigNumber from 'bignumber.js'
+import EmailStage from './EmailStage'
 
 interface EditStageProps {
   variant: 'ProductPage' | 'ChannelPage'
@@ -489,11 +490,12 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
               </Button>
             </>
           )}
-          <Button variant="secondary" mb="8px" disabled onClick={() => setStage(SellingStage.UPDATE_AUDITORS)}>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(SellingStage.EMAIL_LIST)}>
             {t('Download Email List')}
           </Button>
         </Flex>
       )}
+      {stage === SellingStage.EMAIL_LIST && <EmailStage collection={collection} />}
 
       {stage === SellingStage.CLAIM_PENDING_REVENUE && (
         <ClaimPendingRevenue
