@@ -233,7 +233,7 @@ const DataCard = ({ idx, session, pool }) => {
   )
 }
 
-const Cart: React.FC<any> = ({ pool }) => {
+const Cart: React.FC<any> = ({ pool, tokenSessions }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const increaseRef = useRef<HTMLDivElement>(null)
@@ -294,7 +294,7 @@ const Cart: React.FC<any> = ({ pool }) => {
         {burnOnlySwitch}
       </ViewControls>
       <ScrollableRow ref={increaseRef}>
-        {pool?.allSessions
+        {tokenSessions
           .filter(
             (session) =>
               session.active &&

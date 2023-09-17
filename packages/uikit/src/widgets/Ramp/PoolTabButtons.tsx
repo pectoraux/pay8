@@ -1,7 +1,15 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { useTranslation } from "@pancakeswap/localization";
-import { ButtonMenu, ButtonMenuItem, Toggle, Text, NotificationDot, NextLinkFromReactRouter } from "../../components";
+import {
+  ButtonMenu,
+  ButtonMenuItem,
+  Toggle,
+  Text,
+  NotificationDot,
+  NextLinkFromReactRouter,
+  LinkExternal,
+} from "../../components";
 import { ToggleView, ViewMode } from "../../components/ToggleView";
 
 const ToggleWrapper = styled.div`
@@ -50,6 +58,10 @@ const Wrapper = styled.div`
   }
 `;
 
+const StyledLinkExternal = styled(LinkExternal)`
+  font-weight: 400;
+`;
+
 interface PoolTableButtonsPropsType {
   stakedOnly: boolean;
   setStakedOnly: (s: boolean) => void;
@@ -76,6 +88,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
         <ButtonMenuItem as={NextLinkFromReactRouter} to={`/ramps/${router.query.ramp}?under`} replace>
           {t("Under")}
         </ButtonMenuItem>
+        <StyledLinkExternal href={`/trustbounties`}>{t("Litigations")}</StyledLinkExternal>
       </ButtonMenu>
     </Wrapper>
   );

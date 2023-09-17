@@ -105,7 +105,7 @@ export function PoolControls<T>({
   const [watchlistTokens] = useWatchlistTokens();
   const chosenPoolsLength = useRef(0);
 
-  const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool?.isFinished), [pools]);
+  const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => !pool?.isOverCollateralised), [pools]);
   const openPoolsWithStartBlockFilter = useMemo(
     () =>
       openPools.filter((pool) =>
@@ -136,7 +136,7 @@ export function PoolControls<T>({
       });
     }
   }, [isIntersecting]);
-  const showFinishedPools = router.pathname.includes("manual");
+  const showFinishedPools = router.asPath.includes("under");
 
   const handleChangeSearchQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),

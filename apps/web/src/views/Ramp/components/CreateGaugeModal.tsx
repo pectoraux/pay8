@@ -123,6 +123,7 @@ const CreateGaugeModal: React.FC<any> = ({
   location = 'ramp',
   pool,
   currency,
+  rampAccount,
   onDismiss,
 }) => {
   const [stage, setStage] = useState(
@@ -684,6 +685,7 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button
             mb="8px"
             variant="success"
+            disabled={!rampAccount?.isOverCollateralised}
             onClick={() => {
               if (pool?.redirect) {
                 router.push(pool.redirect)
@@ -697,6 +699,7 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button
             mb="8px"
             variant="danger"
+            disabled={!rampAccount?.isOverCollateralised}
             onClick={() => {
               if (pool?.redirect) {
                 router.push(pool.redirect)
@@ -729,6 +732,7 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button
             mb="8px"
             variant="success"
+            disabled={!rampAccount?.isOverCollateralised}
             onClick={() => {
               if (pool?.redirect) {
                 router.push(pool.redirect)
@@ -742,6 +746,7 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button
             mb="8px"
             variant="danger"
+            disabled={!rampAccount?.isOverCollateralised}
             onClick={() => {
               if (pool?.redirect) {
                 router.push(pool.redirect)

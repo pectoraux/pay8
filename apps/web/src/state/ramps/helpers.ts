@@ -310,6 +310,7 @@ export const fetchRamp = async (address) => {
                   },
                 ],
               })
+              const { name, symbol, decimals } = await getTokenData(token)
               return {
                 sousId: index,
                 status: protocolInfo.result[0] === 0 ? 'Sold' : protocolInfo.result[0] === 1 ? 'Open' : 'Close',
@@ -325,7 +326,7 @@ export const fetchRamp = async (address) => {
                 salePrice: protocolInfo.result[7]?.toString(),
                 maxPartners: protocolInfo.result[8]?.toString(),
                 cap: protocolInfo.result[9]?.toString(),
-                token: new Token(56, token, 18, 'USD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
+                token: new Token(4002, token, 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),
               }
             }),

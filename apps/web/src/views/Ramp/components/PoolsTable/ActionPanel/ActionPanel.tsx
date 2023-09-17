@@ -88,6 +88,9 @@ const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) =>
   const { isMobile } = useMatchBreakpoints()
   const [showSessions, setShowSessions] = useState(false)
   const toggleSessions = () => setShowSessions(!showSessions)
+  const tokenSessions = pool?.allSessions?.filter(
+    (sess) => sess?.tokenAddress?.toLowerCase() === rampAccount?.token?.address?.toLowerCase(),
+  )
 
   return (
     <>
@@ -101,12 +104,17 @@ const ActionPanel: React.FC<any> = ({ account, pool, rampAccount, expanded }) =>
           <Box width="100%">
             <ActionContainer hasBalance>
               <Harvest pool={pool} rampAccount={rampAccount} />
-              <Stake pool={pool} rampAccount={rampAccount} toggleSessions={toggleSessions} />
+              <Stake
+                pool={pool}
+                rampAccount={rampAccount}
+                tokenSessions={tokenSessions}
+                toggleSessions={toggleSessions}
+              />
             </ActionContainer>
           </Box>
         </ActionContainer>
       </StyledActionPanel>
-      {showSessions && <Sessions pool={pool} />}
+      {showSessions && <Sessions pool={pool} tokenSessions={tokenSessions} />}
     </>
   )
 }

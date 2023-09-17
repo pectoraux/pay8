@@ -15,12 +15,11 @@ interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
 }
 
-const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSessions }) => {
+const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions, toggleSessions }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const initialized = pool?.secretKeys?.length > 0 && pool?.clientIds?.length > 0 && pool?.publishableKeys?.length > 0
   const variant = !initialized ? 'init' : pool?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
-  console.log('initialized============>', initialized, variant, pool)
   const currencyId = useMemo(() => rampAccount?.token?.address, [rampAccount])
   const rampCurrencyInput = useCurrency(currencyId)
   const [currency, setCurrency] = useState(rampAccount?.address)
@@ -107,10 +106,10 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, toggleSession
           >
             {t('Transaction History')}
           </Button>
-          {pool?.allSessions?.length ? (
+          {tokenSessions?.length ? (
             <>
               <Button width="100%" onClick={toggleSessions} variant="secondary">
-                {t('Toggle Sessions (#%pos%)', { pos: pool?.allSessions?.length })}
+                {t('Toggle Sessions (#%pos%)', { pos: tokenSessions?.length })}
               </Button>
               {/* <Flex mb="40px"><NotificationDot show/></Flex> */}
             </>
