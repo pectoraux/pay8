@@ -51,7 +51,7 @@ const Stats = () => {
         </IconCard>
         <IconCard {...TradesCardData} mr={[null, null, null, '16px']} mb={['16px', null, null, '0']}>
           <StatCardContent
-            headingText={t('Setup a talent/item marketplace')}
+            headingText={t('Setup an item-marketplace')}
             bodyText={t('like Uber or LinkedIn')}
             highlightColor={theme.colors.primary}
           />
