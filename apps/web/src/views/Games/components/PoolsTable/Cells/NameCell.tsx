@@ -28,10 +28,10 @@ const NameCell: React.FC<any> = ({ pool }) => {
     <StyledCell role="cell">
       <Pool.CellContent>
         <Text bold={!isMobile} small={isMobile}>
-          <Flex flexDirection="column">
+          <Flex flexDirection="column" alignItems="flex-start">
             <SaveIcon
-              fill={watchlistTokens.includes(pool?.id)}
-              onClick={() => addWatchlistToken(pool?.id)}
+              fill={watchlistTokens.includes(`games-${pool.id}`)}
+              onClick={() => addWatchlistToken(`games-${pool.id}`)}
               style={{ marginRight: '20px', position: 'relative' }}
             />
             <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />

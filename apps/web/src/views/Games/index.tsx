@@ -24,7 +24,6 @@ const DesktopButton = styled(Button)`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { address: account } = useAccount()
   const { pools } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
@@ -92,12 +91,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <>
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
-                  <PoolRow
-                    initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
-                    key={pool.sousId}
-                    sousId={pool.sousId}
-                    account={account}
-                  />
+                  <PoolRow key={pool.sousId} sousId={pool.sousId} pool={pool} account={account} />
                 ))}
               </Pool.PoolsTable>
             </>

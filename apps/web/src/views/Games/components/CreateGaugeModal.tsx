@@ -631,7 +631,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_INFO) {
-        const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
         const args = ['0', pool?.collection?.id, state.gameLink, state.gameName, '0', '0', ADDRESS_ZERO, '']
         console.log('CONFIRM_UPDATE_INFO===============>', args)
         return callWithGasPrice(gameFactoryContract, 'emitUpdateMiscellaneous', args).catch((err) =>

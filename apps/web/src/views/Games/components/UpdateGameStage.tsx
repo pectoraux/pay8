@@ -93,7 +93,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Exclude Content Type?')}
+            {t('Make claimable?')}
           </Text>
           <ButtonMenu
             scale="xs"

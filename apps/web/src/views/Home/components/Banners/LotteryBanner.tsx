@@ -199,11 +199,11 @@ export const LotteryBanner = () => {
           <BGWrapper>
             <Image src={lotteryImage} alt="LotteryBanner" width={1112} height={192 + 32} placeholder="blur" />
           </BGWrapper>
-          {isMobile ? (
+          {/* {isMobile ? (
             <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={173} height={138} />
           ) : (
             <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={335} height={268} />
-          )}
+          )} */}
         </RightWrapper>
       </S.Inner>
     </S.Wrapper>
