@@ -161,11 +161,11 @@ const LogoBox = styled(Box)`
     margin-bottom: 10px;
   }
 `
-export const LotteryBanner = () => {
+export const ValuepoolBanner = () => {
   const { t } = useTranslation()
   const { isMobile, isDesktop } = useMatchBreakpoints()
 
-  const title = t('Launch or take part in lottery events')
+  const title = t('Launch or join a DAO/ValuePool')
 
   return (
     <S.Wrapper
@@ -181,11 +181,11 @@ export const LotteryBanner = () => {
           <Title data-text={title}>{title}</Title>
           {isDesktop && (
             <Text color="#FFE437" fontSize={24} fontWeight={700} mb="8px">
-              {t('Launch lotteries to market your channel or business')}
+              {t('Join a community and pool resources together towards a common agenda')}
             </Text>
           )}
           <Flex>
-            <NextLinkFromReactRouter target="_blank" to="/lotteries">
+            <NextLinkFromReactRouter target="_blank" to="/valuepools">
               <StyledButtonLeft scale={['xs', 'sm', 'md']}>
                 <Text bold fontSize={['12px', '16px']} mr="4px">
                   {t('Buy Tickets Now')}
@@ -197,7 +197,7 @@ export const LotteryBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={lotteryImage} alt="LotteryBanner" width={1112} height={192 + 32} placeholder="blur" />
+            <Image src={'/images/cancan/319.jpg'} alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
           {isMobile ? (
             <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={173} height={138} />

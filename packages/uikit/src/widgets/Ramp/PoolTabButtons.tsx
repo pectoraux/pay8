@@ -88,7 +88,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
         <ButtonMenuItem as={NextLinkFromReactRouter} to={`/ramps/${router.query.ramp}?under`} replace>
           {t("Under")}
         </ButtonMenuItem>
-        <StyledLinkExternal href={`/trustbounties`}>{t("Litigations")}</StyledLinkExternal>
+        <StyledLinkExternal href={`/trustbounties`}>{t("Bounties")}</StyledLinkExternal>
       </ButtonMenu>
     </Wrapper>
   );

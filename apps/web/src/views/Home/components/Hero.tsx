@@ -130,11 +130,11 @@ const Hero = () => {
             {t('Make every Purchase Count!')}
           </Heading>
           <Heading scale="md" mb="24px">
-            {t('Trade, earn, and win crypto on a platform that has your back.')}
+            {t('Why buy elsewhere when you can buy here?')}
           </Heading>
           <Text mb="24px" color="textSubtle">
             {t(
-              'PaySwap is designed to support most online businesses no matter where they are in the world with tools for accepting payments, marketing and customer engagement.',
+              'With PaySwap, you get a lottery ticket for every purchase you make. PaySwap is designed to support most online businesses no matter where they are in the world with tools for accepting payments, marketing and customer engagement.',
             )}
           </Text>
           <Flex>

@@ -1,4 +1,4 @@
-import { Button, Flex, NextLinkFromReactRouter, Text, useMatchBreakpoints, OpenNewIcon, Box } from '@pancakeswap/uikit'
+import { Button, Flex, Link, Text, useMatchBreakpoints, OpenNewIcon, Box, ArrowForwardIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import Image from 'next/legacy/image'
 import styled, { css } from 'styled-components'
@@ -27,6 +27,19 @@ const RightWrapper = styled.div`
       right: -3%;
       top: -20%;
     }
+  }
+`
+
+const StyledButton = styled(Button)`
+  box-shadow: inset 0px -2px 0px rgba(0, 0, 0, 0.1);
+  padding: 2px 4px;
+  border-radius: 8px;
+  height: auto;
+  ${({ theme }) => theme.mediaQueries.md} {
+    border-radius: 16px;
+    height: 48px;
+    padding: 4px 8px;
+    font-size: 16px;
   }
 `
 
@@ -161,11 +174,18 @@ const LogoBox = styled(Box)`
     margin-bottom: 10px;
   }
 `
-export const LotteryBanner = () => {
+const Devider = styled.div`
+  background: #ffffff;
+  height: 10px;
+  width: 2px;
+  border-radius: 1px;
+`
+
+export const FreeTokensBanner = () => {
   const { t } = useTranslation()
   const { isMobile, isDesktop } = useMatchBreakpoints()
 
-  const title = t('Launch or take part in lottery events')
+  const title = t('Free tokens are minted & distributed weekly')
 
   return (
     <S.Wrapper
@@ -181,23 +201,39 @@ export const LotteryBanner = () => {
           <Title data-text={title}>{title}</Title>
           {isDesktop && (
             <Text color="#FFE437" fontSize={24} fontWeight={700} mb="8px">
-              {t('Launch lotteries to market your channel or business')}
+              {t('Get rewards through: Accelerator, Business, Contributors & Referrals contracts')}
             </Text>
           )}
-          <Flex>
-            <NextLinkFromReactRouter target="_blank" to="/lotteries">
-              <StyledButtonLeft scale={['xs', 'sm', 'md']}>
-                <Text bold fontSize={['12px', '16px']} mr="4px">
-                  {t('Buy Tickets Now')}
-                </Text>
-                <OpenNewIcon color="white" />
-              </StyledButtonLeft>
-            </NextLinkFromReactRouter>
+          <Flex alignItems="center" style={{ gap: isMobile ? 4 : 16 }}>
+            <Link href="/accelerator" style={{ textDecoration: 'none' }} external>
+              <StyledButton variant="text" scale={isMobile ? 'sm' : 'md'} style={{ color: 'white', paddingLeft: 0 }}>
+                {t('Accelerator')}
+              </StyledButton>
+            </Link>
+            <Devider />
+            <Link href="/businesses" style={{ textDecoration: 'none' }} external>
+              <StyledButton variant="text" scale={isMobile ? 'sm' : 'md'} style={{ color: 'white', paddingLeft: 0 }}>
+                {t('Businesses')}
+              </StyledButton>
+            </Link>
+            <Devider />
+            <Link href="/contributors" style={{ textDecoration: 'none' }} external>
+              <StyledButton variant="text" scale={isMobile ? 'sm' : 'md'} style={{ color: 'white', paddingLeft: 0 }}>
+                {t('Contributors')}
+              </StyledButton>
+            </Link>
+            <Devider />
+            <Link href="/referrals" external style={{ textDecoration: 'none' }}>
+              <StyledButton variant="text" style={{ color: 'white' }} scale={isMobile ? 'sm' : 'md'}>
+                {t('Referrals')}
+                <ArrowForwardIcon color="white" />
+              </StyledButton>
+            </Link>
           </Flex>
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={lotteryImage} alt="LotteryBanner" width={1112} height={192 + 32} placeholder="blur" />
+            <Image src={'/images/cancan/341.jpg'} alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
           {isMobile ? (
             <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={173} height={138} />

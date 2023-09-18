@@ -1,11 +1,10 @@
-import { Button, Flex, NextLinkFromReactRouter, Text, useMatchBreakpoints, OpenNewIcon, Box } from '@pancakeswap/uikit'
+import { Button, Flex, NextLinkFromReactRouter, Text, useMatchBreakpoints, OpenNewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import Image from 'next/legacy/image'
 import styled, { css } from 'styled-components'
 
 import * as S from './Styled'
 import { flyingAnim } from './animations'
-import { lotteryImage } from './images'
 
 const RightWrapper = styled.div`
   position: absolute;
@@ -150,22 +149,12 @@ const BGWrapper = styled.div`
     }
   }
 `
-const LogoBox = styled(Box)`
-  margin-bottom: 0px;
-  margin-top: -3px;
-  transform: scale(0.9);
-  transform-origin: top left;
-  ${({ theme }) => theme.mediaQueries.md} {
-    margin-top: 0px;
-    transform: scale(1);
-    margin-bottom: 10px;
-  }
-`
-export const LotteryBanner = () => {
+
+export const RampBanner = () => {
   const { t } = useTranslation()
   const { isMobile, isDesktop } = useMatchBreakpoints()
 
-  const title = t('Launch or take part in lottery events')
+  const title = t('Ramps transfer value on/off blockchains')
 
   return (
     <S.Wrapper
@@ -175,20 +164,20 @@ export const LotteryBanner = () => {
     >
       <S.Inner>
         <S.LeftWrapper>
-          <LogoBox>
+          <Flex alignItems="center" mb="8px">
             <Header data-text="payswap">PAYSWAP</Header>
-          </LogoBox>
+          </Flex>
           <Title data-text={title}>{title}</Title>
           {isDesktop && (
             <Text color="#FFE437" fontSize={24} fontWeight={700} mb="8px">
-              {t('Launch lotteries to market your channel or business')}
+              {t('Most FIAT currencies can be transferred on/off all supported blockchains')}
             </Text>
           )}
           <Flex>
-            <NextLinkFromReactRouter target="_blank" to="/lotteries">
+            <NextLinkFromReactRouter target="_blank" to="/ramps">
               <StyledButtonLeft scale={['xs', 'sm', 'md']}>
                 <Text bold fontSize={['12px', '16px']} mr="4px">
-                  {t('Buy Tickets Now')}
+                  {t('Get Started')}
                 </Text>
                 <OpenNewIcon color="white" />
               </StyledButtonLeft>
@@ -197,7 +186,7 @@ export const LotteryBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={lotteryImage} alt="LotteryBanner" width={1112} height={192 + 32} placeholder="blur" />
+            <Image src={'/images/cancan/304.jpg'} alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
           {isMobile ? (
             <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={173} height={138} />
