@@ -97,11 +97,11 @@ export const useFetchPublicPoolsData = () => {
       fetchPoolsDataWithFarms()
     },
     {
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
-      revalidateOnReconnect: false,
-      revalidateOnMount: false,
-      refreshInterval: FAST_INTERVAL * 3,
+      revalidateOnFocus: true,
+      revalidateIfStale: true,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL * 10,
       keepPreviousData: true,
     },
   )

@@ -9,6 +9,7 @@ import TicketCell from './Cells/TicketCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
+import { decodeAlphabet, encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 
 const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
   // const { pool } = usePool(sousId)
@@ -22,6 +23,7 @@ const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
     [currAccount, currState2],
   )
   console.log('bettingpool1====>', pool, currAccount, currTicket)
+  console.log('0decode===========>', encodeAlphabet('paris', 27), decodeAlphabet(encodeAlphabet('alijez', 27), 27))
   const tabs = (
     <>
       <NameCell pool={pool} currAccount={currAccount} />

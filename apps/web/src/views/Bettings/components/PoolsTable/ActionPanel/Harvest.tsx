@@ -9,6 +9,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { Button, Text, Flex, Box, Balance, ScanLink } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
+import { getTicketAnswer } from '../Cells/TicketCell'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -245,7 +246,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             </Text>
           </Box>
           <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
-            {currAccount?.periods?.length > 0 ? currAccount.periods[currAccount.periods.length - 1].finalNumber : 'N/A'}
+            {currAccount?.periods?.length && currAccount.periods[currAccount.periods.length - 1].finalNumber > 0
+              ? getTicketAnswer(
+                  currAccount.periods[currAccount.periods.length - 1].finalNumber,
+                  currAccount.alphabetEncoding,
+                )
+              : 'N/A'}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Latest Winning Answer')}

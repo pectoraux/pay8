@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useGetCalculateRewardsForTicketId } from 'state/bettings/hooks'
+import { decodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 
 interface TotalStakedCellProps {
   totalStakedBalance: number
@@ -15,6 +16,10 @@ interface TotalStakedCellProps {
 const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
+
+export const getTicketAnswer = (value, alphabetEncoding) => {
+  return alphabetEncoding ? `${decodeAlphabet(value, 27)}` : `#${value}`
+}
 
 const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 18 }) => {
   const { t } = useTranslation()
@@ -35,7 +40,7 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 1
           </Text>
           <Flex flexDirection="row" mb="30x">
             <Text mr="8px" mt="4px" fontSize="12px" color="primary" textAlign="left">
-              {currTicket ? t('#%val%', { val: currTicket?.ticketNumber }) : 'N/A'}
+              {currTicket ? getTicketAnswer(currTicket?.ticketNumber, currAccount.alphabetEncoding) : 'N/A'}
             </Text>
           </Flex>
           <Flex flexDirection="column" overflow="auto" maxHeight="50px" position="relative">
