@@ -98,9 +98,9 @@ export const useFetchPublicPoolsData = () => {
     },
     {
       revalidateOnFocus: false,
-      revalidateIfStale: true,
-      revalidateOnReconnect: true,
-      revalidateOnMount: true,
+      revalidateIfStale: false,
+      revalidateOnReconnect: false,
+      revalidateOnMount: false,
       refreshInterval: FAST_INTERVAL * 3,
       keepPreviousData: true,
     },

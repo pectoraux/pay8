@@ -1,5 +1,17 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  Input,
+  ErrorIcon,
+  ButtonMenu,
+  ButtonMenuItem,
+  HelpIcon,
+  useTooltip,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
@@ -23,12 +35,25 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+    t('You must harvest and compound your earnings from this pool manually.'),
+    {
+      placement: 'bottom',
+    },
+  )
+
   return (
     <>
       <GreyedOutContainer>
+        {/* <Flex alignItems="center"> */}
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Collection ID')}
         </Text>
+        {/* {tooltipVisible && tooltip}
+          <Flex ref={targetRef}>
+            <HelpIcon ml="4px" width="20px" height="20px" color="textSubtle" />
+          </Flex>
+        </Flex> */}
         <Input
           type="text"
           scale="sm"

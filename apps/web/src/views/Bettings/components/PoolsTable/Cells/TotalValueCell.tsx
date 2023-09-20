@@ -13,7 +13,7 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-const TotalValueCell: React.FC<any> = ({ labelText, amount, symbol }) => {
+const TotalValueCell: React.FC<any> = ({ labelText, amount }) => {
   return (
     <StyledCell role="cell">
       <Pool.CellContent>

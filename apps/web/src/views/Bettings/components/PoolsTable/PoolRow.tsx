@@ -10,8 +10,8 @@ import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 
-const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
-  const { pool } = usePool(sousId)
+const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
+  // const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
   const currState2 = useCurrBribe()
@@ -24,7 +24,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   console.log('bettingpool1====>', pool, currAccount, currTicket)
   const tabs = (
     <>
-      <NameCell pool={pool} />
+      <NameCell pool={pool} currAccount={currAccount} />
       <TotalUsersCell labelText={t('Total Events')} amount={pool?.bettingEvents?.length} />
       <VotesCell pool={currAccount} />
       <TicketCell

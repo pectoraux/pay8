@@ -66,16 +66,12 @@ const BalanceStyle = styled(Balance)`
 
 const Pot: React.FC<any> = ({ collection, data, tokenId, setTokenId }) => {
   const { t } = useTranslation()
-  // const cakePriceBusd = usePriceCakeBusd()
   const { isMobile } = useMatchBreakpoints()
-  // const { data } = usePotteryData()
-  console.log('1data============>', data)
   const [activeTab, setIndex] = useState<POT_CATEGORY>(POT_CATEGORY.Deposit)
   const handleClick = useCallback((tabType: POT_CATEGORY) => setIndex(tabType), [])
-
-  // const prizeInBusd = publicData.totalPrize.times(cakePriceBusd)
   const symb = ` ${data?.token?.symbol?.toUpperCase() ?? '$'}`
   const prizeTotal = getBalanceNumber(data?.totalPaid ?? 0, data?.token?.decimals ?? 18)
+  console.log('1data============>', data, `https://tokens.payswap.org/images/symbol/${symb?.trim()?.toLowerCase()}.svg`)
 
   return (
     <PotteryContainer id="stake-to-win">
@@ -98,10 +94,10 @@ const Pot: React.FC<any> = ({ collection, data, tokenId, setTokenId }) => {
               <PotTab onItemClick={handleClick} activeIndex={activeTab} />
               <Box>
                 <CardHeader
-                  title={collection?.name ?? ''}
+                  title={data?.gameName ?? ''}
                   subTitle={t('Buy minutes, Play to increase your score, Win %symb%', { symb })}
                   primarySrc={collection?.avatar ?? ''}
-                  secondarySrc="/images/tokens/pot-icon.svg"
+                  secondarySrc={`https://tokens.payswap.org/images/symbol/${symb?.trim()?.toLowerCase()}.svg`}
                 />
                 {activeTab === POT_CATEGORY.Deposit ? (
                   <Deposit data={data} tokenId={tokenId} setTokenId={setTokenId} />

@@ -80,14 +80,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Bracket Duration')}
+          {t('Bracket Duration in minutes')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="periodReceivable"
           value={state.periodReceivable}
-          placeholder={t('input bracket duration')}
+          placeholder={t('input bracket duration in minutes')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

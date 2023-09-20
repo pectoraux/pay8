@@ -112,7 +112,6 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
           fontSize={['20px', '20px', '20px', '20px', '24px']}
           style={{ alignSelf: 'flex-end' }}
           bold
-          defaultType
         >
           {collection?.description}
         </OutlineText>
@@ -141,9 +140,16 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
               >
                 {t('Play')}
               </OutlineText>
-              <OutlineText fontSize={['24px', '24px', '24px', '24px', '32px']} textTransform="capitalize" bold ml="4px">
-                {data?.gameName ?? ''}
-              </OutlineText>
+              {data?.gameName ? (
+                <OutlineText
+                  fontSize={['24px', '24px', '24px', '24px', '32px']}
+                  textTransform="capitalize"
+                  bold
+                  ml="4px"
+                >
+                  {data?.gameName ?? ''} by {collection?.name}
+                </OutlineText>
+              ) : null}
             </Flex>
             <BalanceStyle bold unit={` ${symb}`} value={prizeTotal || 0} decimals={0} fontSize={['40px', '64px']} />
             <DarkTextStyle m="-16px 0 0 0" fontSize={['32px', '40px']} bold>

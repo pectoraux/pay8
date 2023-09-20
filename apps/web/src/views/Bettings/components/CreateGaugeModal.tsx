@@ -149,7 +149,7 @@ const CreateGaugeModal: React.FC<any> = ({
     description: currAccount?.description ?? '',
     media: currAccount?.media ?? '',
     identityTokenId: '0',
-    discountDivisor: parseInt(currAccount?.discountDivisor) / 100 ?? '',
+    discountDivisor: parseInt(currAccount?.discountDivisor) / 100 ?? '0',
     adminShare: currAccount?.adminShare ?? '',
     referrerShare: currAccount?.referrerShare ?? '',
     ticketNumbers: '',
@@ -465,7 +465,7 @@ const CreateGaugeModal: React.FC<any> = ({
           [
             parseFloat(state.adminShare) * 100,
             parseFloat(state.referrerShare) * 100,
-            state.periodReceivable,
+            parseFloat(state.periodReceivable) * 60,
             amountReceivable.toString(),
             parseFloat(state.discountDivisor) * 100,
           ],

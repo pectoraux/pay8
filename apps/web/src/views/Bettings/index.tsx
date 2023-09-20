@@ -1,5 +1,16 @@
 import { useAccount } from 'wagmi'
-import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
+import {
+  Heading,
+  Flex,
+  Image,
+  Text,
+  PageHeader,
+  Pool,
+  ArrowForwardIcon,
+  Button,
+  useModal,
+  Spinner,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/bettings/hooks'
 import Page from 'components/Layout/Page'
@@ -19,10 +30,9 @@ const DesktopButton = styled(Button)`
 `
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
-  console.log('pools=============>', pools)
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
+  console.log('pools=============>', pools, userDataLoaded)
   const [onPresentCreateGauge] = useModal(<CreateBettingModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
@@ -70,16 +80,23 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
-              <Pool.PoolsTable>
-                {chosenPools.map((pool) => (
-                  <PoolRow
-                    initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
-                    key={pool.sousId}
-                    sousId={pool.sousId}
-                    account={account}
-                  />
-                ))}
-              </Pool.PoolsTable>
+              {userDataLoaded ? (
+                <Pool.PoolsTable>
+                  {chosenPools.map((pool) => (
+                    <PoolRow
+                      initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
+                      key={pool.sousId}
+                      sousId={pool.sousId}
+                      pool={pool}
+                      account={account}
+                    />
+                  ))}
+                </Pool.PoolsTable>
+              ) : (
+                <Flex justifyContent="center" alignItems="center">
+                  <Spinner />
+                </Flex>
+              )}
             </>
           )}
         </PoolControls>

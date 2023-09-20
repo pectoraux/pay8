@@ -19,7 +19,7 @@ const StyledCell = styled(Pool.BaseCell)`
   }
 `
 
-const NameCell: React.FC<any> = ({ pool }) => {
+const NameCell: React.FC<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
@@ -33,7 +33,7 @@ const NameCell: React.FC<any> = ({ pool }) => {
               onClick={() => addWatchlistToken(pool?.id)}
               style={{ marginRight: '20px', position: 'relative' }}
             />
-            <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />
+            <TokenImage mr="8px" width={40} height={40} src={currAccount?.avatar} />
             {t(pool?.collection?.name ?? '')}
           </Flex>
         </Text>
