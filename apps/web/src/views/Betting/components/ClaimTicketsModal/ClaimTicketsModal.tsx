@@ -302,14 +302,14 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
         scale="sm"
         style={{ marginTop: '10px' }}
         value={ticketIds}
-        placeholder={t('comma seperated ticket ids')}
+        placeholder={t('comma separated ticket ids')}
         onChange={(e) => setTicketIds(e.target.value)}
       />
       <Input
         scale="sm"
         style={{ marginTop: '10px', marginBottom: '30px' }}
         value={brackets}
-        placeholder={t('comma seperated brackets')}
+        placeholder={t('comma separated brackets')}
         onChange={(e) => setBrackets(e.target.value)}
       />
       <Flex flexDirection="column">

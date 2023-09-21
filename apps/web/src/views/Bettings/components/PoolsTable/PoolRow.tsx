@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { usePool, useCurrPool, useCurrBribe } from 'state/bettings/hooks'
+import { usePool, useCurrPool, useCurrBribe, useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 import NameCell from './Cells/NameCell'
@@ -9,7 +9,7 @@ import TicketCell from './Cells/TicketCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
-import { decodeAlphabet, encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
+import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
 
 const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
   // const { pool } = usePool(sousId)
@@ -23,7 +23,6 @@ const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
     [currAccount, currState2],
   )
   console.log('bettingpool1====>', pool, currAccount, currTicket)
-  console.log('0decode===========>', encodeAlphabet('paris', 27), decodeAlphabet(encodeAlphabet('alijez', 27), 27))
   const tabs = (
     <>
       <NameCell pool={pool} currAccount={currAccount} />

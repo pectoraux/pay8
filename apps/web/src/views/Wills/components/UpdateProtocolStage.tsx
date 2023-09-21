@@ -60,7 +60,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="tokens"
           value={state.tokens}
-          placeholder={t('comma seperated token addresses')}
+          placeholder={t('comma separated token addresses')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -73,7 +73,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="percentages"
           value={state.percentages}
-          placeholder={t('comma seperated percentages')}
+          placeholder={t('comma separated percentages')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

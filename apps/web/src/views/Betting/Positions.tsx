@@ -10,6 +10,7 @@ import useOnViewChange from './hooks/useOnViewChange'
 import { CHART_DOT_CLICK_EVENT } from './helpers'
 import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useGetWinnersPerBracket, useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
 
 const StyledSwiper = styled.div`
   .swiper-wrapper {
@@ -50,6 +51,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
     (v, i) => i,
   )?.slice(-DEFAULT_BET_SIZE / divisor)
 
+  const winBr = useGetWinnersPerBracketNPeriod(ogBetting?.id, currEvent?.bettingId, arr2, currEvent?.ticketSize)
   return (
     <StyledSwiper>
       <Swiper
@@ -92,7 +94,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     adminShare: currEvent?.adminShare,
                     referrerShare: currEvent?.referrerShare,
                     finalNumber: currPeriod?.finalNumber,
-                    countWinnersPerBracket: currPeriod?.countWinnersPerBracket,
+                    countWinnersPerBracket: winBr[idx],
                     amountCollected: 0,
                     ...currEvent,
                     status: 'Past',
@@ -106,7 +108,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     adminShare: currEvent?.adminShare,
                     referrerShare: currEvent?.referrerShare,
                     finalNumber: '',
-                    countWinnersPerBracket: '',
+                    countWinnersPerBracket: winBr[idx],
                     amountCollected: 0,
                     ...currEvent,
                     status: 'Live',
@@ -119,7 +121,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     adminShare: currEvent?.adminShare,
                     referrerShare: currEvent?.referrerShare,
                     finalNumber: '',
-                    countWinnersPerBracket: '',
+                    countWinnersPerBracket: winBr[idx],
                     amountCollected: 0,
                     ...currEvent,
                     status: 'Next',

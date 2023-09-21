@@ -16,6 +16,7 @@ import { useTranslation } from '@pancakeswap/localization'
 
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
+import { encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -33,7 +34,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -73,16 +74,29 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Final Numbers')}
+          {t('Answers')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="finalNumbers"
           value={state.finalNumbers}
-          placeholder={t('comma seperated final numbers')}
+          placeholder={t('comma separated answers')}
           onChange={handleChange}
         />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Final Numbers')}
+        </Text>
+        {state.finalNumbers
+          ?.split(',')
+          ?.filter((fn) => !!fn)
+          ?.map((fn) => (
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {encodeAlphabet(fn, state?.ticketSize)}
+            </Text>
+          ))}
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">

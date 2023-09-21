@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
           scale="sm"
           name="legend"
           value={state.legend}
-          placeholder={t('comma seperated legend')}
+          placeholder={t('comma separated legend')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

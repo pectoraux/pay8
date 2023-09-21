@@ -35,7 +35,7 @@ const UpdateAuditorsStage: React.FC<RemoveStageProps> = ({
             scale="sm"
             name="auditors"
             value={state.auditors}
-            placeholder={t('comma seperated addresses')}
+            placeholder={t('comma separated addresses')}
             onChange={handleChange}
           />
         </GreyedOutContainer>

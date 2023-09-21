@@ -45,6 +45,7 @@ import DeleteBettingEventStage from './DeleteBettingEventStage'
 import SetBettingResultStage from './SetBettingResultStage'
 import ClaimTicketStage from './ClaimTicketStage'
 import CloseBettingStage from './CloseBettingStage'
+import { encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -139,7 +140,7 @@ const CreateGaugeModal: React.FC<any> = ({
     tokenId: pool?.tokenId,
     newMinTicketNumber: pool?.newMinTicketNumber,
     newTicketRange: pool?.newTicketRange,
-    ticketSize: pool?.ticketSize,
+    ticketSize: currAccount?.ticketSize,
     ticketId: '',
     betting: pool?.id ?? '',
     amountPayable: '',
@@ -446,7 +447,14 @@ const CreateGaugeModal: React.FC<any> = ({
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
       if (stage === LockStage.CONFIRM_SET_BETTING_RESULTS) {
-        const args = [state.bettingId, state.identityTokenId, state.finalNumbers?.split(',')]
+        const args = [
+          state.bettingId,
+          state.identityTokenId,
+          state.finalNumbers
+            ?.split(',')
+            ?.filter((fn) => !!fn)
+            ?.map((fn) => encodeAlphabet(fn, currAccount?.ticketSize)),
+        ]
         console.log('CONFIRM_SET_BETTING_RESULTS===============>', args)
         return callWithGasPrice(bettingContract, 'setBettingResults', args).catch((err) =>
           console.log('CONFIRM_SET_BETTING_RESULTS===============>', err),

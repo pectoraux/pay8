@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="contactChannels"
           value={state.contactChannels}
-          placeholder={t('comma seperated contact channels')}
+          placeholder={t('comma separated contact channels')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="contacts"
           value={state.contacts}
-          placeholder={t('comma seperated contacts')}
+          placeholder={t('comma separated contacts')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

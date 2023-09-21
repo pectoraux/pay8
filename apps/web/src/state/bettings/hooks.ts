@@ -78,6 +78,23 @@ export const useGetWinnersPerBracket = (bettingAddress, bettingId, period, ticke
   return winners
 }
 
+export const useGetWinnersPerBracketNPeriod = (bettingAddress, bettingId, periods, ticketSize) => {
+  const { data: winners } = useSWRImmutable(['winners1', bettingAddress, bettingId, periods, ticketSize], async () => {
+    try {
+      return Promise.all(
+        periods?.map(async (period) => {
+          const arr = Array.from({ length: Number(ticketSize) }, (v, i) => i)
+          return Promise.all(arr?.map(async (idx) => getCountWinnersPerBracket(bettingAddress, bettingId, period, idx)))
+        }),
+      )
+    } catch (err) {
+      console.log('rerr==========>', err)
+    }
+    return []
+  })
+  return winners
+}
+
 export const useFetchPublicPoolsData = () => {
   const { chainId } = useActiveChainId()
   const dispatch = useAppDispatch()
@@ -97,8 +114,8 @@ export const useFetchPublicPoolsData = () => {
       fetchPoolsDataWithFarms()
     },
     {
-      revalidateOnFocus: true,
-      revalidateIfStale: true,
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
       revalidateOnReconnect: true,
       revalidateOnMount: true,
       refreshInterval: FAST_INTERVAL * 10,

@@ -32,7 +32,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="accounts"
           value={state.accounts}
-          placeholder={t('input comma seperated list of accounts')}
+          placeholder={t('input comma separated list of accounts')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

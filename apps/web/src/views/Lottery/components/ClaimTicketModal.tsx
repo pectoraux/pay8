@@ -100,7 +100,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, onDismiss }) => {
           scale="sm"
           name="tickets"
           value={state.tickets}
-          placeholder={t('comma seperated ids')}
+          placeholder={t('comma separated ids')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

@@ -75,7 +75,7 @@ const SetPriceStage: React.FC<any> = ({
           scale="sm"
           name="accounts"
           value={state.accounts}
-          placeholder={t('comma seperated token ids')}
+          placeholder={t('comma separated token ids')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

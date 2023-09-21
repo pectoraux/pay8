@@ -273,7 +273,7 @@ const SetPriceStage: React.FC<any> = ({
         scale="sm"
         name='paywall_list'
         // value={blacklist_accounts}
-        placeholder={t('comma seperated paywall addresses')}
+        placeholder={t('comma separated paywall addresses')}
         // onChange={handleRawValueChange('blacklist_accounts')}
       />
     </GreyedOutContainer>

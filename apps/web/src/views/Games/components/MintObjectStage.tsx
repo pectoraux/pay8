@@ -73,7 +73,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="tokenIds"
           value={state.tokenIds}
-          placeholder={t('input comma seperated resources token ids')}
+          placeholder={t('input comma separated resources token ids')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

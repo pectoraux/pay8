@@ -6,10 +6,12 @@ import { useTranslation } from '@pancakeswap/localization'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { Button, Text, Flex, Box, Balance, ScanLink } from '@pancakeswap/uikit'
+import { Button, Text, Flex, Box, Balance, ScanLink, useMatchBreakpoints } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import { getTicketAnswer } from '../Cells/TicketCell'
+import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
+import { useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -20,7 +22,15 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
     hours: hoursReceivable,
     minutes: minutesReceivable,
   } = getTimePeriods(Number(currAccount?.bracketDuration ?? '0'))
-  console.log('8currAccount==================>', pool, currAccount)
+  const { isMobile } = useMatchBreakpoints()
+  const divisor = isMobile ? 5 : 1
+  const arr2 = Array.from(
+    { length: Math.min(parseInt(currAccount?.currPeriod || 0) + 2, parseInt(currAccount?.numberOfPeriods)) },
+    (v, i) => i,
+  )?.slice(-DEFAULT_BET_SIZE / divisor)
+  const winBr = useGetWinnersPerBracketNPeriod(pool?.id, currAccount?.bettingId, arr2, currAccount?.ticketSize)
+  console.log('8currAccount==================>', pool, currAccount, winBr)
+
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -256,6 +266,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Latest Winning Answer')}
           </Text>
+          {winBr?.map((br) => (
+            <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+              {br?.toString()}
+            </Text>
+          ))}
+          {winBr?.length ? (
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Winners Per Bracket')}
+            </Text>
+          ) : null}
         </Flex>
       </ActionContent>
     </ActionContainer>

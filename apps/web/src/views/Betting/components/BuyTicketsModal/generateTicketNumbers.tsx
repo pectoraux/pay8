@@ -5,7 +5,7 @@ export const encodeNumbers = (value: any) => {
   for (let i = 0; i < value.length; i++) {
     res[i] = value[i]
   }
-  return `1 ${res.join('')}`
+  return `1${res.join('')}`
 }
 
 export const encodeAlphabet = (value: any, ticketSize: any) => {

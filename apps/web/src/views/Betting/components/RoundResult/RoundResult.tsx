@@ -15,6 +15,8 @@ const RoundResult: React.FC<any> = ({ betting, children, ...props }) => {
   const betPosition = BetPosition.HOUSE // getRoundPosition(lockPrice, closePrice)
   const { t } = useTranslation()
   const [onPresentClaimTicketsModal] = useModal(<ClaimTicketsModal betting={betting} />)
+
+  const subjects = betting?.subjects?.split(',')
   console.log('RoundResult==============>', betting)
   return (
     <RoundResultBox betPosition={betPosition} {...props}>
@@ -31,16 +33,12 @@ const RoundResult: React.FC<any> = ({ betting, children, ...props }) => {
       >
         {betting?.rewardsBreakdownBc
           ?.filter((rwb) => !!parseFloat(rwb))
-          .map((rwb, index) => {
-            const _length = betting?.rewardsBreakdownBc?.length
-            const subjects = betting?.subjects?.split(',')
+          ?.map((rwb, index) => {
             return (
               <RoundPrice
                 percentReward={rwb}
                 option={subjects?.length && subjects[index]}
-                countOfWinners={
-                  betting?.countWinnersPerBracket?.length && betting?.countWinnersPerBracket[_length - index - 1]
-                }
+                countOfWinners={betting?.countWinnersPerBracket?.length && betting?.countWinnersPerBracket[index]}
               />
             )
           })}

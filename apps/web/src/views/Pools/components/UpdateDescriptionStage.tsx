@@ -74,7 +74,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, nftFilters, setNewF
           scale="sm"
           name="contactChannels"
           value={state.contactChannels}
-          placeholder={t('input comma seperated contact channels')}
+          placeholder={t('input comma separated contact channels')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -87,7 +87,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, nftFilters, setNewF
           scale="sm"
           name="contacts"
           value={state.contacts}
-          placeholder={t('input comma seperated contacts')}
+          placeholder={t('input comma separated contacts')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
