@@ -4,13 +4,14 @@ import styled from 'styled-components'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css/bundle'
 import delay from 'lodash/delay'
+import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
+import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
+
 import RoundCard from './components/RoundCard'
 import useSwiper from './hooks/useSwiper'
 import useOnViewChange from './hooks/useOnViewChange'
 import { CHART_DOT_CLICK_EVENT } from './helpers'
-import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useGetWinnersPerBracket, useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
 
 const StyledSwiper = styled.div`
   .swiper-wrapper {
@@ -94,7 +95,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     adminShare: currEvent?.adminShare,
                     referrerShare: currEvent?.referrerShare,
                     finalNumber: currPeriod?.finalNumber,
-                    countWinnersPerBracket: winBr[idx],
+                    countWinnersPerBracket: winBr?.length ? winBr[idx] : '',
                     amountCollected: 0,
                     ...currEvent,
                     status: 'Past',
@@ -108,7 +109,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     adminShare: currEvent?.adminShare,
                     referrerShare: currEvent?.referrerShare,
                     finalNumber: '',
-                    countWinnersPerBracket: winBr[idx],
+                    countWinnersPerBracket: winBr?.length ? winBr[idx] : '',
                     amountCollected: 0,
                     ...currEvent,
                     status: 'Live',
@@ -121,7 +122,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     adminShare: currEvent?.adminShare,
                     referrerShare: currEvent?.referrerShare,
                     finalNumber: '',
-                    countWinnersPerBracket: winBr[idx],
+                    countWinnersPerBracket: winBr?.length ? winBr[idx] : '',
                     amountCollected: 0,
                     ...currEvent,
                     status: 'Next',

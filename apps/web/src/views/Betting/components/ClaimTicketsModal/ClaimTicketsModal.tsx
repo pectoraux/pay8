@@ -1,21 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
-import {
-  ArrowForwardIcon,
-  Button,
-  Flex,
-  HelpIcon,
-  Modal,
-  Skeleton,
-  Text,
-  Ticket,
-  useToast,
-  useTooltip,
-  Input,
-} from '@pancakeswap/uikit'
-import { MaxUint256, Token } from '@pancakeswap/sdk'
+import { ArrowForwardIcon, Button, Flex, Modal, Text, Ticket, useToast, useTooltip, Input } from '@pancakeswap/uikit'
+import { MaxUint256 } from '@pancakeswap/sdk'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
-import ApproveConfirmButtons, { ButtonArrangement } from 'components/ApproveConfirmButtons'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { FetchStatus } from 'config/constants/types'
@@ -26,26 +13,15 @@ import useTheme from 'hooks/useTheme'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAppDispatch } from 'state'
-// import { usePriceCakeBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getBalanceAmount, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
-import { requiresApproval } from 'utils/requiresApproval'
-import EditNumbersModal from './EditNumbersModal'
-import NumTicketsToBuyButton from './NumTicketsToBuyButton'
+import { getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
 import { useTicketsReducer } from './useTicketsReducer'
 
 const StyledModal = styled(Modal)`
   ${({ theme }) => theme.mediaQueries.md} {
     width: 280px;
   }
-`
-
-const ShortcutButtonsWrapper = styled(Flex)<{ isVisible: boolean }>`
-  justify-content: space-between;
-  margin-top: 8px;
-  margin-bottom: 24px;
-  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
 `
 
 interface BuyTicketsModalProps {
