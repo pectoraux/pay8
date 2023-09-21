@@ -216,7 +216,8 @@ export const fetchBetting = async (bettingAddress) => {
           },
         ],
       })
-
+      const currPeriod = Math.min(parseInt(bettingEvent.currPeriod) + 1, parseInt(numberOfPeriods.toString()))
+      const currStart = parseInt(bettingEvent.startTime || 0) + currPeriod * parseInt(bettingEvent.bracketDuration || 0)
       return {
         id: bettingAddress,
         ...bettingEvent,
@@ -232,6 +233,9 @@ export const fetchBetting = async (bettingAddress) => {
         discountDivisor: discountDivisor.toString(),
         newTicketRange: newTicketRange.toString(),
         newMinTicketNumber: newMinTicketNumber.toString(),
+        currPeriod,
+        currStart,
+        currEnd: currStart + parseInt(bettingEvent.bracketDuration),
         token: new Token(
           56,
           _token,

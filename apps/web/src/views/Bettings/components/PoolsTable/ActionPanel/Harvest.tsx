@@ -129,7 +129,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             {t('Alphabet Encoding')}
           </Text>
           <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
-            {Number(currAccount?.numOfPeriods || 0) === 0 ? 'Infinity' : currAccount?.numOfPeriods}
+            {Number(currAccount?.numberOfPeriods || 0) === 0 ? 'Infinity' : currAccount?.numberOfPeriods}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Number of Periods')}
