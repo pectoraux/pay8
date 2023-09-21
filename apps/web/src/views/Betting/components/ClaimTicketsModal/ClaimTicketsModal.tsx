@@ -34,7 +34,6 @@ import { requiresApproval } from 'utils/requiresApproval'
 import EditNumbersModal from './EditNumbersModal'
 import NumTicketsToBuyButton from './NumTicketsToBuyButton'
 import { useTicketsReducer } from './useTicketsReducer'
-import { encodeAlphabet } from './generateTicketNumbers'
 
 const StyledModal = styled(Modal)`
   ${({ theme }) => theme.mediaQueries.md} {
