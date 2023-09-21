@@ -139,6 +139,22 @@ export const getCountWinnersPerBracket = async (bettingAddress, bettingId, perio
   return count.result
 }
 
+export const getPendingRevenue = async (bettingAddress, tokenAddress) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const [pendingRevenue] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: bettingAddress,
+        abi: bettingABI,
+        functionName: 'pendingRevenue',
+        args: [tokenAddress],
+      },
+    ],
+  })
+  return pendingRevenue.result
+}
+
 export const fetchBetting = async (bettingAddress) => {
   const bettingFromSg = await getBetting(bettingAddress)
   const bscClient = publicClient({ chainId: 4002 })
@@ -216,7 +232,8 @@ export const fetchBetting = async (bettingAddress) => {
           },
         ],
       })
-      const currPeriod = Math.min(parseInt(bettingEvent.currPeriod), parseInt(numberOfPeriods.toString()) - 1)
+      const _currPeriod = Math.min(parseInt(bettingEvent.currPeriod), parseInt(numberOfPeriods.toString()) - 1)
+      const currPeriod = alphabetEncoding ? _currPeriod : parseInt(bettingEvent.currPeriod)
       const currStart = parseInt(bettingEvent.startTime || 0) + currPeriod * parseInt(bettingEvent.bracketDuration || 0)
       return {
         id: bettingAddress,

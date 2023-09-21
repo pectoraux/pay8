@@ -449,7 +449,7 @@ export const getTokenForCredit = async (collectionAddress, isPaywall) => {
             decimals.result,
             symbol?.toString()?.toUpperCase(),
             name?.toString(),
-            'https://www.trueusd.com/',
+            `https://tokens.payswap.org/images/${_token}.png`,
           ),
         }
       }),
@@ -523,7 +523,7 @@ export const getNFTMarketTokenForCredit = async (collectionAddress) => {
             18,
             symbol?.toString()?.toUpperCase(),
             name?.toString(),
-            'https://www.trueusd.com/',
+            `https://tokens.payswap.org/images/${_token}.png`,
           ),
         }
       }),

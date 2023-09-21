@@ -195,7 +195,7 @@ export const fetchBounties = async (
           }),
         )
         const friendlyClaims = claims.filter((claim) => claim.friendly && !claim.atPeace)
-
+        const { name, symbol, decimals } = await getTokenData(token)
         return {
           ...bounty,
           collection,
@@ -203,7 +203,7 @@ export const fetchBounties = async (
           ve,
           tokenAddress: token,
           isNativeCoin: token.toLowerCase() === DEFAULT_INPUT_CURRENCY,
-          token: new Token(56, token, 18, 'USD', 'Binance-Peg TrueUSD Token', 'https://www.trueusd.com/'),
+          token: new Token(4002, token, decimals, symbol, name, `https://tokens.payswap.org/images/${token}.png`),
           owner,
           claims,
           friendlyClaims,

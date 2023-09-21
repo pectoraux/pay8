@@ -329,7 +329,7 @@ export const fetchWill = async (willAddress) => {
               decimals.result,
               symbol.result?.toString(),
               tokenName.result?.toString(),
-              'https://www.trueusd.com/',
+              `https://tokens.payswap.org/images/${token}.png`,
             ),
           }
         }),

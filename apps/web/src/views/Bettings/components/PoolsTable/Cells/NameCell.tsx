@@ -33,7 +33,7 @@ const NameCell: React.FC<any> = ({ pool, currAccount }) => {
               onClick={() => addWatchlistToken(pool?.id)}
               style={{ marginRight: '20px', position: 'relative' }}
             />
-            <TokenImage mr="8px" width={40} height={40} src={currAccount?.avatar} />
+            <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
             {t(pool?.collection?.name ?? '')}
           </Flex>
         </Text>

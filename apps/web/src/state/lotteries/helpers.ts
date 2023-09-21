@@ -155,7 +155,7 @@ export const fetchLottery = async (lotteryId) => {
             decimals.result,
             symbol.result?.toString()?.toUpperCase(),
             name.result?.toString(),
-            'https://www.trueusd.com/',
+            `https://tokens.payswap.org/images/${token}.png`,
           ),
         }
       }),
@@ -184,7 +184,14 @@ export const fetchLottery = async (lotteryId) => {
       })
       tokenData.push({
         amountCollected: amountCollected.result.toString(),
-        token: new Token(56, DEFAULT_TFIAT, 18, 'USD', 'Tokenized USD', 'https://www.trueusd.com/'),
+        token: new Token(
+          4002,
+          DEFAULT_TFIAT,
+          18,
+          'USD',
+          'Tokenized USD',
+          `https://tokens.payswap.org/images/${DEFAULT_TFIAT}.png`,
+        ),
       })
     }
     const collection = await getCollection(lottery.collectionId)

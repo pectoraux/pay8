@@ -261,7 +261,7 @@ export const fetchArp = async (arpAddress) => {
           decimals.result,
           symbol.result?.toString()?.toUpperCase() ?? 'symbol',
           name.result?.toString(),
-          'https://www.trueusd.com/',
+          `https://tokens.payswap.org/images/${_token}.png`,
         ),
         // allTokens.find((tk) => tk.address === token),
       }

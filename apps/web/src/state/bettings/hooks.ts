@@ -17,6 +17,7 @@ import {
   getAmountCollected,
   getCalculateRewardsForTicketId,
   getCountWinnersPerBracket,
+  getPendingRevenue,
   getSubjects,
   getTag,
 } from './helpers'
@@ -60,6 +61,18 @@ export const useGetCalculateRewardsForTicketId = (bettingAddress, bettingId, tic
     return []
   })
   return rewards
+}
+
+export const useGetPendingRevenue = (bettingAddress, tokenAddress) => {
+  const { data: pendingRevenue } = useSWRImmutable(['pendingRevenue', bettingAddress, tokenAddress], async () => {
+    try {
+      return getPendingRevenue(bettingAddress, tokenAddress)
+    } catch (err) {
+      console.log('rerr==========>', err)
+    }
+    return '0'
+  })
+  return pendingRevenue
 }
 
 export const useGetWinnersPerBracket = (bettingAddress, bettingId, period, ticketSize) => {

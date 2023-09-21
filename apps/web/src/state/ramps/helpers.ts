@@ -281,7 +281,7 @@ export const fetchRamp = async (address) => {
               decimals.result,
               symbol.result?.toString()?.toUpperCase() ?? 'symbol',
               name.result?.toString() ?? 'name',
-              'https://www.trueusd.com/',
+              `https://tokens.payswap.org/images/${session?.tokenAddress}.png`,
             ),
           }
         }),

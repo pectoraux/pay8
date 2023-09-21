@@ -11,7 +11,7 @@ import { Button, Text, Flex, Box, Balance, ScanLink, useMatchBreakpoints } from 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import { getTicketAnswer } from '../Cells/TicketCell'
 import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
-import { useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
+import { useGetPendingRevenue, useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -29,8 +29,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
     (v, i) => i,
   )?.slice(-DEFAULT_BET_SIZE / divisor)
   const winBr = useGetWinnersPerBracketNPeriod(pool?.id, currAccount?.bettingId, arr2, currAccount?.ticketSize)
+  const pendingRevenue = useGetPendingRevenue(pool?.id, currAccount?.token?.address)
   console.log('8currAccount==================>', pool, currAccount, winBr)
-
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -177,6 +177,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Action')}
           </Text>
+          {currAccount ? (
+            <>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {pendingRevenue?.toString()}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Event Pending Revenue')}
+              </Text>
+            </>
+          ) : null}
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">

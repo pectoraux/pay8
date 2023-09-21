@@ -332,7 +332,7 @@ export const fetchGame = async (gameId) => {
       decimals.result,
       symbol.result?.toString(),
       name.result?.toString(),
-      'https://www.trueusd.com/',
+      `https://tokens.payswap.org/images/${_token}.png`,
     ),
   }
 }
