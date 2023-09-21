@@ -185,10 +185,10 @@ export const LeviathanBanner = () => {
             </Text>
           )}
           <Flex>
-            <NextLinkFromReactRouter target="_blank" to="/arps">
+            <NextLinkFromReactRouter target="_blank" to="/leviathans">
               <StyledButtonLeft scale={['xs', 'sm', 'md']}>
                 <Text bold fontSize={['12px', '16px']} mr="4px">
-                  {t('Create an ARP')}
+                  {t('Join Now!')}
                 </Text>
                 <OpenNewIcon color="white" />
               </StyledButtonLeft>
