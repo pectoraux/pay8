@@ -1,21 +1,10 @@
-import {
-  Button,
-  Flex,
-  Link,
-  Text,
-  useMatchBreakpoints,
-  OpenNewIcon,
-  Box,
-  ArrowForwardIcon,
-  TabMenu,
-} from '@pancakeswap/uikit'
+import { Button, Flex, NextLinkFromReactRouter, Text, useMatchBreakpoints, OpenNewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import Image from 'next/legacy/image'
 import styled, { css } from 'styled-components'
 
 import * as S from './Styled'
 import { flyingAnim } from './animations'
-import { lotteryImage } from './images'
 
 const RightWrapper = styled.div`
   position: absolute;
@@ -37,19 +26,6 @@ const RightWrapper = styled.div`
       right: -3%;
       top: -20%;
     }
-  }
-`
-
-const StyledButton = styled(Button)`
-  box-shadow: inset 0px -2px 0px rgba(0, 0, 0, 0.1);
-  padding: 2px 4px;
-  border-radius: 8px;
-  height: auto;
-  ${({ theme }) => theme.mediaQueries.md} {
-    border-radius: 16px;
-    height: 48px;
-    padding: 4px 8px;
-    font-size: 16px;
   }
 `
 
@@ -173,35 +149,12 @@ const BGWrapper = styled.div`
     }
   }
 `
-const LogoBox = styled(Box)`
-  margin-bottom: 0px;
-  margin-top: -3px;
-  transform: scale(0.9);
-  transform-origin: top left;
-  ${({ theme }) => theme.mediaQueries.md} {
-    margin-top: 0px;
-    transform: scale(1);
-    margin-bottom: 10px;
-  }
-`
-const Wrapper = styled(Flex)`
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`
-const Devider = styled.div`
-  background: #ffffff;
-  height: 10px;
-  width: 2px;
-  border-radius: 1px;
-`
 
-export const FreeTokensBanner = () => {
+export const NftBanner = () => {
   const { t } = useTranslation()
   const { isMobile, isDesktop } = useMatchBreakpoints()
 
-  const title = t('Free tokens are minted & distributed weekly')
+  const title = t('Build the next OpenSea with the eCollectible Marketplace')
 
   return (
     <S.Wrapper
@@ -211,52 +164,29 @@ export const FreeTokensBanner = () => {
     >
       <S.Inner>
         <S.LeftWrapper>
-          <LogoBox>
+          <Flex alignItems="center" mb="8px">
             <Header data-text="payswap">PAYSWAP</Header>
-          </LogoBox>
+          </Flex>
           <Title data-text={title}>{title}</Title>
           {isDesktop && (
             <Text color="#FFE437" fontSize={24} fontWeight={700} mb="8px">
-              {t('Get rewards through: Accelerator, Business, Contributors & Referrals contracts')}
+              {t('This enables you to start your own collectible/Nft marketplace or buy a collectible')}
             </Text>
           )}
-          <Wrapper>
-            <Wrapper
-              maxWidth={isMobile ? '300px' : '900px'}
-              overflowX="auto"
-              alignItems="center"
-              style={{ gap: isMobile ? 4 : 16 }}
-            >
-              <Link href="/accelerator" style={{ textDecoration: 'none' }} external>
-                <StyledButton variant="text" scale={isMobile ? 'sm' : 'md'} style={{ color: 'white', paddingLeft: 0 }}>
-                  {t('Accelerator')}
-                </StyledButton>
-              </Link>
-              <Devider />
-              <Link href="/businesses" style={{ textDecoration: 'none' }} external>
-                <StyledButton variant="text" scale={isMobile ? 'sm' : 'md'} style={{ color: 'white', paddingLeft: 0 }}>
-                  {t('Businesses')}
-                </StyledButton>
-              </Link>
-              <Devider />
-              <Link href="/contributors" style={{ textDecoration: 'none' }} external>
-                <StyledButton variant="text" scale={isMobile ? 'sm' : 'md'} style={{ color: 'white', paddingLeft: 0 }}>
-                  {t('Contributors')}
-                </StyledButton>
-              </Link>
-              <Devider />
-              <Link href="/referrals" external style={{ textDecoration: 'none' }}>
-                <StyledButton variant="text" style={{ color: 'white' }} scale={isMobile ? 'sm' : 'md'}>
-                  {t('Referrals')}
-                  <ArrowForwardIcon color="white" />
-                </StyledButton>
-              </Link>
-            </Wrapper>
-          </Wrapper>
+          <Flex>
+            <NextLinkFromReactRouter target="_blank" to="/create-channel">
+              <StyledButtonLeft scale={['xs', 'sm', 'md']}>
+                <Text bold fontSize={['12px', '16px']} mr="4px">
+                  {t('Start your channel')}
+                </Text>
+                <OpenNewIcon color="white" />
+              </StyledButtonLeft>
+            </NextLinkFromReactRouter>
+          </Flex>
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/341.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src={'/images/cancan/396.jpg'} alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
           {/* {isMobile ? (
             <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={173} height={138} />

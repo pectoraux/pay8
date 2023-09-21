@@ -11,7 +11,7 @@ import { BettingBanner } from '../BettingBanner'
 import FarmV3MigrationBanner from '../FarmV3MigrationBanner'
 import useIsRenderCompetitionBanner from './useIsRenderCompetitionBanner'
 import useIsRenderIfoBanner from './useIsRenderIFOBanner'
-import TradingRewardBanner from '../TradingRewardBanner'
+import { NftBanner } from '../NftBanner'
 import { CanCanBanner } from '../CanCanBanner'
 import { RampBanner } from '../RampBanner'
 import { LotteryBanner } from '../LotteryBanner'
@@ -56,6 +56,7 @@ export const useMultipleBannerConfig = () => {
       { shouldRender: true, banner: <FreeTokensBanner /> },
       { shouldRender: true, banner: <RampBanner /> },
       { shouldRender: true, banner: <CanCanBanner /> },
+      { shouldRender: true, banner: <NftBanner /> },
       { shouldRender: true, banner: <GameBanner /> },
       { shouldRender: true, banner: <BettingBanner /> },
       { shouldRender: true, banner: <LotteryBanner /> },
