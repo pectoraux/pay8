@@ -45,10 +45,10 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
   const divisor = isMobile ? 5 : 1
   const currEvent =
     ogBetting?.bettingEvents?.length && ogBetting?.bettingEvents[parseInt(bettingId?.toString() || '1') - 1]
-  const arr2 = Array.from({ length: parseInt(currEvent?.currPeriod || 0) + 2 }, (v, i) => i)?.slice(
-    -DEFAULT_BET_SIZE / divisor,
-  )
-  console.log('bettingId===========>', allBettings, bettingId, arr2)
+  const arr2 = Array.from(
+    { length: Math.min(parseInt(currEvent?.currPeriod || 0) + 2, parseInt(currEvent?.numberOfPeriods) - 1) },
+    (v, i) => i,
+  )?.slice(-DEFAULT_BET_SIZE / divisor)
 
   return (
     <StyledSwiper>
@@ -68,7 +68,6 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
           ogBetting?.bettingEvents.map((bettingEvent) => (
             <SwiperSlide key={bettingEvent.id}>
               {({ isActive }) => {
-                console.log('bettingEvent==============>', bettingEvent)
                 return (
                   <RoundCard
                     allBettings={allBettings}
@@ -122,9 +121,8 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     countWinnersPerBracket: '',
                     amountCollected: 0,
                     ...currEvent,
-                    status: 'Next',
+                    status: parseInt(currEvent?.currPeriod || 0) + 1 === parseInt() ? '' : 'Next',
                   }
-            console.log('currEvent==============>', currEvent, currPeriod, arr2, betting)
             return (
               <SwiperSlide key={betting.id}>
                 {({ isActive }) => (
