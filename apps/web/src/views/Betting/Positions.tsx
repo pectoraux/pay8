@@ -82,7 +82,8 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
           arr2.map((idx) => {
             const currPeriod = currEvent?.periods?.find((period) => parseInt(period.period) === idx)
             const betting =
-              parseInt(currEvent?.currPeriod || 0) > idx
+              parseInt(currEvent?.currPeriod || 0) > idx ||
+              parseInt(currEvent?.numberOfPeriods) - 1 === parseInt(currEvent?.currPeriod || 0)
                 ? {
                     idx,
                     rewardsBreakDown: currEvent?.rewardsBreakDown,
