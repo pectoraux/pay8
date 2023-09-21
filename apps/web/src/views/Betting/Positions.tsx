@@ -121,7 +121,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
                     countWinnersPerBracket: '',
                     amountCollected: 0,
                     ...currEvent,
-                    status: parseInt(currEvent?.currPeriod || 0) + 1 === parseInt() ? '' : 'Next',
+                    status: 'Next',
                   }
             return (
               <SwiperSlide key={betting.id}>
