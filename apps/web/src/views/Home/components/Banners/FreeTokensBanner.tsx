@@ -217,7 +217,7 @@ export const FreeTokensBanner = () => {
           <Title data-text={title}>{title}</Title>
           {isDesktop && (
             <Text color="#FFE437" fontSize={24} fontWeight={700} mb="8px">
-              {t('Get rewards through: Accelerator, Business, Contributors & Referrals contracts')}
+              {t('Get rewards through the Accelerator, Businesses, Contributors & Referrals contracts')}
             </Text>
           )}
           <Wrapper>

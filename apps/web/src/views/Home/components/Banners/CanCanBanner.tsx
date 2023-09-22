@@ -170,7 +170,7 @@ export const CanCanBanner = () => {
           <Title data-text={title}>{title}</Title>
           {isDesktop && (
             <Text color="#FFE437" fontSize={24} fontWeight={700} mb="8px">
-              {t('CanCan enables you to build an interface for your business')}
+              {t('CanCan enables you to build an interface for your business & start processing payments')}
             </Text>
           )}
           <Flex>

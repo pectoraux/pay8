@@ -82,7 +82,7 @@ const Header = styled.div`
   background-clip: text;
   font-size: 24px;
   font-weight: 800;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
   width: 196px;
 
   &::after {

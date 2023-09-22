@@ -104,7 +104,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         startTime,
         endTime,
         endAmount.toString(),
-        state.lockDuration,
+        parseInt(state.lockDuration) * 60,
         !!state.useNFTicket,
         [state.treasuryFee, state.referrerFee, priceTicket.toString(), parseInt(state.discountDivisor) * 100],
         state.rewardsBreakdown?.split(',')?.map((val) => parseFloat(val.trim()) * 100),
@@ -260,7 +260,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Lock Duration')}
+          {t('Lock Duration in minutes')}
         </Text>
         <Input
           type="text"

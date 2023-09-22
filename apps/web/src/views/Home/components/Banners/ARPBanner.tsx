@@ -82,7 +82,7 @@ const Header = styled.div`
   background-clip: text;
   font-size: 24px;
   font-weight: 800;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
   width: 196px;
 
   &::after {
@@ -165,7 +165,7 @@ export const ARPBanner = () => {
   const { t } = useTranslation()
   const { isMobile, isDesktop } = useMatchBreakpoints()
 
-  const title = t('ARP & Bill contracts enable you to program payments')
+  const title = t('ARPs & Bills are AP/AR solutions for payments scheduling & bookkeeping')
 
   return (
     <S.Wrapper
@@ -181,7 +181,7 @@ export const ARPBanner = () => {
           <Title data-text={title}>{title}</Title>
           {isDesktop && (
             <Text color="#FFE437" fontSize={24} fontWeight={700} mb="8px">
-              {t('You can program payroll contracts, utility bill payments, etc.')}
+              {t('You can program payroll contracts, utility bill payments, tax payments, bookkeep, etc.')}
             </Text>
           )}
           <Flex>
