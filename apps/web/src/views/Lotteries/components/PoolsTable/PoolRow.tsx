@@ -10,8 +10,8 @@ import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 import TicketCell from './Cells/TicketCell'
 
-const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
-  const { pool } = usePool(sousId)
+const PoolRow: React.FC<any> = ({ pool, account, initialActivity }) => {
+  // const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()
   const currState2 = useCurrBribe()

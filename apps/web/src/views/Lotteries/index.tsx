@@ -75,6 +75,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   <PoolRow
                     initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
                     key={pool.sousId}
+                    pool={pool}
                     sousId={pool.sousId}
                     account={account}
                   />
