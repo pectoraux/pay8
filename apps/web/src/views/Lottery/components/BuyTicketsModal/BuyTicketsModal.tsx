@@ -22,7 +22,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { FetchStatus } from 'config/constants/types'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useCake, useTokenContract, useLotteryContract } from 'hooks/useContract'
+import { useCake, useTokenContract, useLotteryContract, useERC20 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useCallback, useEffect, useMemo, useState, ChangeEvent } from 'react'
@@ -37,6 +37,8 @@ import EditNumbersModal from './EditNumbersModal'
 import NumTicketsToBuyButton from './NumTicketsToBuyButton'
 import { useTicketsReducer } from './useTicketsReducer'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useGetRequiresApproval } from 'state/valuepools/hooks'
+import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 
 const StyledModal = styled(Modal)`
   ${({ theme }) => theme.mediaQueries.md} {
@@ -84,10 +86,8 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
   const cakeContract = useTokenContract(currToken?.token?.address)
   const { toastSuccess } = useToast()
   const { balance: userCake, fetchStatus } = useTokenBalance(currToken?.token?.address ?? '')
-  console.log('userCake============>', userCake, fetchStatus)
   // balance from useTokenBalance causes rerenders in effects as a new BigNumber is instantiated on each render, hence memoising it using the stringified value below.
   const stringifiedUserCake = userCake.toJSON()
-  console.log('1lotteryData===============>', lotteryData, priceTicketInCake, stringifiedUserCake)
   const memoisedUserCake = useMemo(() => new BigNumber(stringifiedUserCake), [stringifiedUserCake])
 
   const cakePriceBusd = BIG_ONE // usePriceCakeBusd()
@@ -99,6 +99,7 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
     identityTokenId: '',
     numbers: '',
   }))
+
   const TooltipComponent = () => (
     <>
       <Text mb="16px">
@@ -281,8 +282,8 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
           account,
           ADDRESS_ZERO,
           '',
-          state.nfticketId,
-          state.identityTokenId,
+          state.nfticketId ?? '0',
+          state.identityTokenId ?? '0',
           ticketsForPurchase,
         ]
         console.log('buyWithContract================>', args)
@@ -296,7 +297,6 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
         toastSuccess(t('Lottery tickets purchased!'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       },
     })
-
   const getErrorMessage = () => {
     if (userNotEnoughCake) return t('Insufficient balance')
     return t('The maximum number of tickets you can buy in one transaction is %maxTickets%', {

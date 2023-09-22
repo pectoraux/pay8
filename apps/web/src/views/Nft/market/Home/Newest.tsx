@@ -59,6 +59,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
                 data-test="newest-nft-card"
                 key={nft.collectionAddress + nft.tokenId}
                 nft={nft}
+                collectionId={nft?.collection?.id}
                 currentAskPrice={currentAskPrice}
               />
             )

@@ -25,7 +25,6 @@ interface StackedActionProps {
 }
 
 const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
-  console.log('staked===================>', currAccount)
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const variant = pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
@@ -38,9 +37,10 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       location="fromStake"
       pool={pool}
       currAccount={currAccount}
-      currency={currency ?? inputCurrency}
+      currency={currency ?? currencyId}
     />,
   )
+  console.log('staked===================>', currAccount, inputCurrency, currencyId, currency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
 
   if (!account) {

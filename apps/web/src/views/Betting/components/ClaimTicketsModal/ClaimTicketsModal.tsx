@@ -68,15 +68,12 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
   const [brackets, setBrackets] = useState('')
   const [ticketIds, setTicketIds] = useState('')
   const bettingContract = useBettingContract(betting?.id?.split('_')[0] ?? '')
-  console.log('bettingContract==============>', bettingContract)
   // const { reader: cakeContractReader, signer: cakeContractApprover } = useCake()
   const cakeContract = useTokenContract(betting?.token?.address)
   const { toastSuccess } = useToast()
   const { balance: userCake, fetchStatus } = useTokenBalance(betting?.token?.address ?? '')
-  console.log('userCake============>', userCake, fetchStatus)
   // balance from useTokenBalance causes rerenders in effects as a new BigNumber is instantiated on each render, hence memoising it using the stringified value below.
   const stringifiedUserCake = userCake.toJSON()
-  console.log('1lotteryData===============>', priceTicketInCake?.toNumber(), stringifiedUserCake)
   const memoisedUserCake = useMemo(() => new BigNumber(stringifiedUserCake), [stringifiedUserCake])
 
   const dispatch = useAppDispatch()

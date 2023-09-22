@@ -39,6 +39,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       currency={currency ?? inputCurrency}
     />,
   )
+  console.log('inputCurrency===========>', inputCurrency, currencyId, currency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
 
   if (!account) {
