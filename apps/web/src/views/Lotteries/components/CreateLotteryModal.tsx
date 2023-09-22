@@ -293,7 +293,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
           scale="sm"
           name="rewardsBreakdown"
           value={state.rewardsBreakdown}
-          placeholder="250,375,625,1250,2500,5000"
+          placeholder="2.5,3.75,6.25,12.5,25,50"
           onChange={handleChange}
         />
       </GreyedOutContainer>
