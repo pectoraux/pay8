@@ -4,7 +4,7 @@ import { batch, useSelector } from 'react-redux'
 import { useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
-import { fetchLastVaultAddressAsync, fetchPotteryUserDataAsync } from './index'
+import { fetchPotteryUserDataAsync } from './index'
 import { potterDataSelector } from './selectors'
 import { State } from '../types'
 import { fetchGameAsync } from 'state/games'
@@ -16,7 +16,7 @@ export const usePotteryFetch = () => {
   const game = useMemo(() => router.query.game, [router.query.game])
 
   useFastRefreshEffect(() => {
-    dispatch(fetchLastVaultAddressAsync())
+    // dispatch(fetchLastVaultAddressAsync())
 
     if (game) {
       batch(() => {

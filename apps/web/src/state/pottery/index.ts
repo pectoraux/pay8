@@ -58,10 +58,10 @@ const initialState: PotteryState = Object.freeze({
   },
 })
 
-export const fetchLastVaultAddressAsync = createAsyncThunk<string>('pottery/fetchLastVaultAddress', async () => {
-  const lastVaultAddress = await fetchLastVaultAddress()
-  return lastVaultAddress
-})
+// export const fetchLastVaultAddressAsync = createAsyncThunk<string>('pottery/fetchLastVaultAddress', async () => {
+//   const lastVaultAddress = await fetchLastVaultAddress()
+//   return lastVaultAddress
+// })
 
 export const fetchPublicPotteryDataAsync = createAsyncThunk<SerializedPotteryPublicData>(
   'pottery/fetchPublicPotteryData',
@@ -131,9 +131,9 @@ export const PotterySlice = createSlice({
     builder.addCase(resetUserState, (state) => {
       state.userData = { ...initialState.userData }
     })
-    builder.addCase(fetchLastVaultAddressAsync.fulfilled, (state, action: PayloadAction<string>) => {
-      state.lastVaultAddress = action.payload as Address
-    })
+    // builder.addCase(fetchLastVaultAddressAsync.fulfilled, (state, action: PayloadAction<string>) => {
+    //   state.lastVaultAddress = action.payload as Address
+    // })
     builder.addCase(
       fetchPublicPotteryDataAsync.fulfilled,
       (state, action: PayloadAction<SerializedPotteryPublicData>) => {
