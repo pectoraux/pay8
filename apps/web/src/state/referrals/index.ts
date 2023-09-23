@@ -26,7 +26,7 @@ export const fetchReferralGaugesAsync = () => async (dispatch) => {
     const data = referrals
     dispatch(setReferralsPublicData(data || []))
   } catch (error) {
-    console.error('[Pools Action] error when getting staking limits======>', error)
+    console.error('[Pools Action] error when getting referral gauges======>', error)
   }
 }
 
@@ -56,6 +56,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setReferralsPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setReferralsUserData: (state, action) => {
       const { sousId } = action.payload

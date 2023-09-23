@@ -212,8 +212,8 @@ export const fetchStakes = async (collectionId) => {
           // eslint-disable-next-line no-param-reassign
           if (!stake.products) stake.products = item?.products
         }
-        const duePayable = nextDuePayable.result[0].toString()
-        const dueReceivable = nextDueReceivable.result[0].toString()
+        const duePayable = nextDuePayable.result?.length ? nextDuePayable.result[0].toString() : '0'
+        const dueReceivable = nextDueReceivable.result?.length ? nextDueReceivable.result[0].toString() : '0'
 
         const applicationsConverted =
           applications.result?.map((application) => {
@@ -265,8 +265,8 @@ export const fetchStakes = async (collectionId) => {
           applicationsConverted,
           duePayable,
           dueReceivable,
-          nextDuePayable: nextDuePayable.result[1].toString(),
-          nextDueReceivable: nextDueReceivable.result[1].toString(),
+          nextDuePayable: nextDuePayable.result?.length > 1 ? nextDuePayable.result[1].toString() : null,
+          nextDueReceivable: nextDueReceivable.result?.length > 1 ? nextDueReceivable.result[1].toString() : null,
           totalLiquidity: totalLiquidity.result.toString(),
         }
       })

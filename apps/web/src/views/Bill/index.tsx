@@ -12,6 +12,7 @@ import {
   Button,
   useModal,
   Breadcrumbs,
+  Loading,
 } from '@pancakeswap/uikit'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
@@ -40,7 +41,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { bill } = router.query as any
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const ogBill = pools?.find((pool) => pool?.id?.toLowerCase() === bill?.toLowerCase())
   const isOwner = ogBill?.devaddr_ === account
   const inputCurency = useCurrency(DEFAULT_TFIAT ?? undefined)
@@ -111,6 +112,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   {t('Delete Bill!')}
                 </FinishedTextButton>
               ) : null}
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

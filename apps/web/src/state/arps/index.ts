@@ -54,6 +54,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setArpsPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setCurrBribeData: (state, action) => {
       state.currBribe = action.payload

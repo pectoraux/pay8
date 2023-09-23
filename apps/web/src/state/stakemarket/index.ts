@@ -51,6 +51,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setStakesPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setStakesUserData: (state, action) => {
       const { sousId } = action.payload

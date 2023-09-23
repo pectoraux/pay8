@@ -79,6 +79,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
 
   const isExact = router.pathname.includes("stakemarket");
   const isBounty = router.pathname.includes("trustbounties");
+  const isLeviathan = router.pathname.includes("leviathans");
   const isVP = router.pathname.includes("valuepools") || router.pathname.includes("leviathans");
   const isFromContracts =
     router.asPath.includes("#stakemarket") ||
@@ -125,7 +126,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
           to={isFromContracts ? `/cancan/collections/${collectionAddress}#valuepools` : "/valuepools"}
           replace
         >
-          {t("ValuePools")}
+          {isLeviathan ? t("Leviathans") : t("ValuePools")}
         </ButtonMenuItem>
         <NotificationDot show>
           <StyledLinkExternal href={`/${isFromContracts ? currentFromContracts : current}/voting`}>

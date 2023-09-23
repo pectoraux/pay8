@@ -1,6 +1,17 @@
 import { useAccount } from 'wagmi'
 import styled from 'styled-components'
-import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
+import {
+  Heading,
+  Flex,
+  Image,
+  Text,
+  PageHeader,
+  Pool,
+  ArrowForwardIcon,
+  Button,
+  useModal,
+  Loading,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useFetchPublicPoolsData, usePoolsWithFilterSelector } from 'state/futureCollaterals/hooks'
 import Page from 'components/Layout/Page'
@@ -9,8 +20,6 @@ import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import { useRouter } from 'next/router'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
@@ -25,9 +34,8 @@ const DesktopButton = styled(Button)`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
@@ -87,6 +95,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

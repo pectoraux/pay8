@@ -34,7 +34,7 @@ export const fetchAcceleratorGaugesAsync = () => async (dispatch) => {
     const data = businesses
     dispatch(setAcceleratorPublicData(data || []))
   } catch (error) {
-    console.error('[Pools Action] error when getting staking limits======>', error)
+    console.error('[Pools Action] error when getting accelerator pitches======>', error)
   }
 }
 
@@ -96,6 +96,7 @@ export const PoolsSlice = createSlice({
     setAcceleratorPublicData: (state, action) => {
       state.data = [...action.payload]
       pools = [...action.payload]
+      state.userDataLoaded = true
     },
     setAcceleratorUserData: (state, action) => {
       const { sousId } = action.payload

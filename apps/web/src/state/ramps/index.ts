@@ -42,7 +42,7 @@ export const fetchRampAsync = (rampAddress) => async (dispatch) => {
     const ramp = await fetchRamp(rampAddress)
     dispatch(setRampsPublicData([ramp] || []))
   } catch (error) {
-    console.error('[Pools Action]=============> error when getting staking limits', error)
+    console.error('[Pools Action]=============> error when getting ramps', error)
   }
 }
 
@@ -106,6 +106,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setRampsPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setPoolUserData: (state, action) => {
       const { sousId } = action.payload

@@ -24,7 +24,7 @@ export const fetchWorldsAsync = () => async (dispatch) => {
     console.log('fetchWorld================>', worlds)
     dispatch(setWorldsPublicData(worlds || []))
   } catch (error) {
-    console.error('[Pools Action]============> error when getting staking limits', error)
+    console.error('[Pools Action]============> error when getting worlds', error)
   }
 }
 
@@ -35,6 +35,7 @@ export const PoolsSlice = createSlice({
     setWorldsPublicData: (state, action) => {
       console.log('setWorldsPublicData==============>', action.payload)
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setWorldsUserData: (state, action) => {
       const { sousId } = action.payload

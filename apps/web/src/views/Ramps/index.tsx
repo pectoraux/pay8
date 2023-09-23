@@ -2,7 +2,18 @@ import { useAccount } from 'wagmi'
 import styled from 'styled-components'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
-import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
+import {
+  Heading,
+  Flex,
+  Image,
+  Text,
+  PageHeader,
+  Pool,
+  ArrowForwardIcon,
+  Button,
+  useModal,
+  Loading,
+} from '@pancakeswap/uikit'
 import { useFilters, useGetTags, usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 
@@ -13,7 +24,6 @@ import CreateRampModal from './components/CreateRampModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import { useRouter } from 'next/router'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -21,9 +31,8 @@ const DesktopButton = styled(Button)`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const [onPresentCreateGauge] = useModal(<CreateRampModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
@@ -72,6 +81,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

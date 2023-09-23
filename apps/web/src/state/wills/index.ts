@@ -59,6 +59,7 @@ export const PoolsSlice = createSlice({
     setWillsPublicData: (state, action) => {
       console.log('setWillsPublicData==============>', action.payload)
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setWillsUserData: (state, action) => {
       const { sousId } = action.payload

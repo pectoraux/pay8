@@ -54,6 +54,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setLotteriesPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setLotteriesUserData: (state, action) => {
       const { sousId } = action.payload

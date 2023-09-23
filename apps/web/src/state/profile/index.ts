@@ -34,6 +34,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setProfilesPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setPoolsUserData: (state, action) => {
       const { sousId } = action.payload

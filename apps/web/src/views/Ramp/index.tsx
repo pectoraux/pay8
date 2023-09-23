@@ -15,6 +15,7 @@ import {
   Button,
   useModal,
   Breadcrumbs,
+  Loading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms } from 'state/ramps/hooks'
@@ -39,7 +40,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const { ramp, session_id: sessionId, state: status, userCurrency } = router.query
   const rampAddress = ramp as String
   const ogRamp = useMemo(
@@ -126,6 +127,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={ogRamp?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               {isOwner ? (
                 <FinishedTextButton
                   as={Link}

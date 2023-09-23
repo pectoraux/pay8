@@ -10,6 +10,7 @@ import {
   Button,
   useModal,
   Spinner,
+  Loading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/bettings/hooks'
@@ -23,7 +24,6 @@ import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
 import styled from 'styled-components'
-import { useRouter } from 'next/router'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -80,23 +80,22 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
-              {userDataLoaded ? (
-                <Pool.PoolsTable>
-                  {chosenPools.map((pool) => (
-                    <PoolRow
-                      initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
-                      key={pool.sousId}
-                      sousId={pool.sousId}
-                      pool={pool}
-                      account={account}
-                    />
-                  ))}
-                </Pool.PoolsTable>
-              ) : (
-                <Flex justifyContent="center" alignItems="center">
-                  <Spinner />
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
                 </Flex>
               )}
+              <Pool.PoolsTable>
+                {chosenPools.map((pool) => (
+                  <PoolRow
+                    initialActivity={normalizedUrlSearch.toLowerCase() === pool?.earningToken?.symbol?.toLowerCase()}
+                    key={pool.sousId}
+                    sousId={pool.sousId}
+                    pool={pool}
+                    account={account}
+                  />
+                ))}
+              </Pool.PoolsTable>
             </>
           )}
         </PoolControls>

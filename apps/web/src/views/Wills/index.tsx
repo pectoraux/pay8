@@ -1,5 +1,16 @@
 import { useAccount } from 'wagmi'
-import { Heading, Flex, Image, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
+import {
+  Heading,
+  Flex,
+  Image,
+  Text,
+  PageHeader,
+  Pool,
+  ArrowForwardIcon,
+  Button,
+  useModal,
+  Loading,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/wills/hooks'
 import Page from 'components/Layout/Page'
@@ -18,9 +29,8 @@ const DesktopButton = styled(Button)`
 `
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const [onPresentCreateGauge] = useModal(<CreateWillModal />)
   const handleClick = () => {
@@ -67,6 +77,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

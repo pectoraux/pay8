@@ -15,6 +15,7 @@ import {
   Button,
   useModal,
   Breadcrumbs,
+  Loading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/valuepools/hooks'
@@ -37,7 +38,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const valuepool = router.query.valuepool as string
   const ogValuepool = pools.find((pool) => pool?.id?.toLowerCase() === valuepool?.toLowerCase())
   const isOwner = ogValuepool?.devaddr_?.toLowerCase() === account?.toLowerCase()
@@ -110,6 +111,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   {t('Delete Valuepool!')}
                 </FinishedTextButton>
               ) : null}
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

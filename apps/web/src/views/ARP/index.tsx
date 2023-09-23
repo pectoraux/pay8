@@ -15,6 +15,7 @@ import {
   Button,
   useModal,
   Breadcrumbs,
+  Loading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/arps/hooks'
@@ -38,7 +39,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const { arp, session_id: sessionId, state: status, userCurrency } = router.query
   const ogARP = useMemo(() => pools?.length && pools[0], [pools])
   const isOwner = ogARP?.devaddr_?.toLowerCase() === account?.toLowerCase()
@@ -127,6 +128,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   {t('Delete ARP!')}
                 </FinishedTextButton>
               ) : null}
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

@@ -279,7 +279,7 @@ export function PoolControls<T>({
           setViewMode={setViewMode}
           hideViewMode={hideViewMode}
         />
-        <FilterContainer>
+        <FilterContainer style={{ marginLeft: "1px", paddingBottom: "16px" }}>
           <LabelWrapper>
             <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
               {t("Sort by")}

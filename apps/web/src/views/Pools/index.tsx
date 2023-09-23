@@ -74,7 +74,7 @@ const FarmFlexWrapper = styled(Flex)`
 const Pools: React.FC<any> = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const [onPresentCreateGauge] = useModal(<CreatePoolModal />)
   console.log('pools===================>', pools)
 
@@ -121,7 +121,14 @@ const Pools: React.FC<any> = () => {
       <Page>
         <PoolControls pools={pools}>
           {({ chosenPools, normalizedUrlSearch }) => (
-            <PoolsTable urlSearch={normalizedUrlSearch} pools={chosenPools} account={account} />
+            <>
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
+              <PoolsTable urlSearch={normalizedUrlSearch} pools={chosenPools} account={account} />
+            </>
           )}
         </PoolControls>
         <Steps title={t('How does it work ?')} onPresentCreateGauge={onPresentCreateGauge} />

@@ -27,7 +27,11 @@ const PoolRow: React.FC<any> = ({ id, account, initialActivity, expanded, setExp
     </>
   )
   return (
-    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
+    <Pool.ExpandRow
+      key={`vava-poolrow-${pool?.id}`}
+      initialActivity={initialActivity}
+      panel={<ActionPanel account={account} pool={pool} expanded />}
+    >
       {isMobile ? (
         <TabMenu>
           {tabs}

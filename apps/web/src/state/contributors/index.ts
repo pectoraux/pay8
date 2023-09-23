@@ -26,7 +26,7 @@ export const fetchContributorsGaugesAsync = () => async (dispatch) => {
     const data = businesses
     dispatch(setContributorsPublicData(data || []))
   } catch (error) {
-    console.error('[Pools Action] error when getting staking limits======>', error)
+    console.error('[Pools Action] error when getting contributor gauges======>', error)
   }
 }
 
@@ -57,6 +57,7 @@ export const PoolsSlice = createSlice({
     setContributorsPublicData: (state, action) => {
       console.log('setContributorsPublicData==============>', action.payload)
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setContributorsUserData: (state, action) => {
       const { sousId } = action.payload

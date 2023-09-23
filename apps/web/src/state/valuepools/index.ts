@@ -42,7 +42,7 @@ export const fetchValuepoolSgAsync =
       console.log('sgallva==============>', data)
       dispatch(setValuepoolsPublicData(data || []))
     } catch (error) {
-      console.error('[Pools Action] error when getting staking limits=================>', error)
+      console.error('[Pools Action] error when getting valuepools from sg=================>', error)
     }
   }
 
@@ -56,7 +56,7 @@ export const fetchValuepoolsAsync =
       console.log('allva==============>', data)
       dispatch(setValuepoolsPublicData(data || []))
     } catch (error) {
-      console.error('[Pools Action] error when getting staking limits=================>', error)
+      console.error('[Pools Action] error when getting valuepools=================>', error)
     }
   }
 
@@ -67,6 +67,7 @@ export const PoolsSlice = createSlice({
     setValuepoolsPublicData: (state, action) => {
       console.log('setValuepoolsPublicData==============>', action.payload)
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setValuepoolsUserData: (state, action) => {
       const { sousId } = action.payload

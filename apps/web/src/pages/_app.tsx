@@ -39,23 +39,23 @@ BigNumber.config({
 })
 
 function GlobalHooks() {
-  usePollBlockNumber()
-  useEagerConnect()
+  // usePollBlockNumber()
+  // useEagerConnect()
   useUserAgent()
   useAccountEventListener()
   useSentryUser()
   useThemeCookie()
-  useLockedEndNotification()
+  // useLockedEndNotification()
   return null
 }
 
 function MPGlobalHooks() {
-  usePollBlockNumber()
-  useEagerConnectMP()
+  // usePollBlockNumber()
+  // useEagerConnectMP()
   useUserAgent()
   useAccountEventListener()
   useSentryUser()
-  useLockedEndNotification()
+  // useLockedEndNotification()
   return null
 }
 
@@ -72,7 +72,7 @@ function MyApp(props: AppProps<{ initialReduxState: any }>) {
         />
         <meta
           name="description"
-          content="Cheaper and faster than Uniswap? Discover PaySwap, the leading DEX on BNB Smart Chain (BSC) with the best farms in DeFi and a lottery for CAKE."
+          content="Cheaper and faster than Uniswap? Discover PaySwap, your app to create new apps."
         />
         <meta name="theme-color" content="#1FC7D4" />
         {(Component as NextPageWithLayout).mp && (

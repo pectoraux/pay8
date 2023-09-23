@@ -15,26 +15,27 @@ import { ChainId } from '@pancakeswap/sdk'
 const potteryDrawAddress = getPotteryDrawAddress()
 
 export const fetchLastVaultAddress = async () => {
-  try {
-    const response = await request(
-      GRAPH_API_POTTERY,
-      gql`
-        query getLastVaultAddress($contract: ID!) {
-          pottery(id: $contract) {
-            id
-            lastVaultAddress
-          }
-        }
-      `,
-      { contract: potteryDrawAddress },
-    )
+  return {}
+  // try {
+  //   const response = await request(
+  //     GRAPH_API_POTTERY,
+  //     gql`
+  //       query getLastVaultAddress($contract: ID!) {
+  //         pottery(id: $contract) {
+  //           id
+  //           lastVaultAddress
+  //         }
+  //       }
+  //     `,
+  //     { contract: potteryDrawAddress },
+  //   )
 
-    const { lastVaultAddress } = response.pottery
-    return lastVaultAddress
-  } catch (error) {
-    console.error('Failed to fetch last vault address', error)
-    return ''
-  }
+  //   const { lastVaultAddress } = response.pottery
+  //   return lastVaultAddress
+  // } catch (error) {
+  //   console.error('Failed to fetch last vault address', error)
+  //   return ''
+  // }
 }
 
 export const fetchPublicPotteryValue = async (potteryVaultAddress: Address) => {

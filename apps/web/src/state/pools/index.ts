@@ -23,7 +23,7 @@ export const fetchPairsAsync = () => async (dispatch) => {
     const pairs = await fetchPairs()
     dispatch(setPairsPublicData(pairs || []))
   } catch (error) {
-    console.error('[Pools Action]============> error when getting staking limits', error)
+    console.error('[Pools Action]============> error when getting pairs', error)
   }
 }
 
@@ -47,6 +47,7 @@ export const PoolsSlice = createSlice({
     setPairsPublicData: (state, action) => {
       console.log('setPairsPublicData==============>', action.payload)
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setPairsUserData: (state, action) => {
       const { sousId } = action.payload

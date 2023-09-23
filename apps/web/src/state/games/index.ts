@@ -53,7 +53,7 @@ export const fetchGameAsync = (gameAddress) => async (dispatch) => {
     const game = await fetchGame(gameAddress)
     dispatch(setGamesPublicData([game] || []))
   } catch (error) {
-    console.error('[Pools Action] error when getting staking limits', error)
+    console.error('[Pools Action] error when getting games', error)
   }
 }
 
@@ -63,6 +63,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setGamesPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setGameUserData: (state, action) => {
       const { sousId } = action.payload

@@ -10,6 +10,7 @@ import {
   Button,
   useModal,
   Grid,
+  Loading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/stakemarket/hooks'
@@ -36,7 +37,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const router = useRouter()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
@@ -109,6 +110,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools?.filter((pool) => !collectionAddress || pool?.stakeSource === collectionAddress)}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

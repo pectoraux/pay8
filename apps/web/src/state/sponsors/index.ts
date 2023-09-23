@@ -33,7 +33,7 @@ export const fetchSponsorSgAsync =
       const sponsors = await getSponsors(0, 0, whereClause)
       dispatch(setSponsorsPublicData(sponsors || []))
     } catch (error) {
-      console.error('[Pools Action]============> error when getting staking limits', error)
+      console.error('[Pools Action]============> error when getting sponsors', error)
     }
   }
 
@@ -44,7 +44,7 @@ export const fetchSponsorsAsync =
       const sponsors = await fetchSponsors({ fromSponsor })
       dispatch(setSponsorsPublicData(sponsors || []))
     } catch (error) {
-      console.error('[Pools Action]============> error when getting staking limits', error)
+      console.error('[Pools Action]============> error when getting sponsors from blockchain', error)
     }
   }
 
@@ -54,6 +54,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setSponsorsPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setSponsorsUserData: (state, action) => {
       const { sousId } = action.payload

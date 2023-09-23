@@ -13,6 +13,7 @@ import {
   Button,
   useModal,
   Breadcrumbs,
+  Loading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/worlds/hooks'
@@ -31,7 +32,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const world = router.query.world as string
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const ogWorld = useMemo(
     () => pools?.find((pool) => pool?.worldAddress?.toLowerCase() === world?.toLowerCase()),
     [pools],
@@ -80,7 +81,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={ogWorld?.accounts}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
-              {console.log('chosenPools================>', chosenPools)}
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

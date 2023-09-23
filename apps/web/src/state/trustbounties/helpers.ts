@@ -203,7 +203,7 @@ export const fetchBounties = async (
           ve,
           tokenAddress: token,
           isNativeCoin: token.toLowerCase() === DEFAULT_INPUT_CURRENCY,
-          token: new Token(4002, token, decimals, symbol, name, `https://tokens.payswap.org/images/${token}.png`),
+          token: new Token(4002, token, decimals ?? 18, symbol, name, `https://tokens.payswap.org/images/${token}.png`),
           owner,
           claims,
           friendlyClaims,

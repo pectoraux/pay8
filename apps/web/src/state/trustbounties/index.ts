@@ -34,7 +34,7 @@ export const fetchBountiesAsync =
       )
       dispatch(setBountiesPublicData(trustbounties || []))
     } catch (error) {
-      console.error('[Pools Action] error when getting staking limits', error)
+      console.error('[Pools Action] error when getting bounties', error)
     }
   }
 
@@ -45,6 +45,7 @@ export const PoolsSlice = createSlice({
     setBountiesPublicData: (state, action) => {
       console.log('setBountiesPublicData==============>', action.payload)
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setCurrBribeData: (state, action) => {
       state.currBribe = action.payload

@@ -15,6 +15,7 @@ import {
   Button,
   useModal,
   Breadcrumbs,
+  Loading,
 } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
 import { useCurrency } from 'hooks/Tokens'
@@ -41,7 +42,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { t } = useTranslation()
   const { auditor } = router.query as any
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const ogAuditor = pools?.find((pool) => pool?.id?.toLowerCase() === auditor?.toLowerCase())
   const isOwner = ogAuditor?.devaddr_ === account
   const inputCurency = useCurrency(DEFAULT_TFIAT ?? undefined)
@@ -112,6 +113,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   {t('Delete Auditor!')}
                 </FinishedTextButton>
               ) : null}
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow

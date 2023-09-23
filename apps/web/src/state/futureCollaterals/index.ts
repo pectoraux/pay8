@@ -56,6 +56,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setFutureCollateralsPublicData: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
     },
     setFutureCollateralsUserData: (state, action) => {
       const { sousId } = action.payload

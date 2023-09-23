@@ -38,25 +38,11 @@ const CardLayout = styled(FlexLayout)`
   justify-content: center;
 `
 
-const FinishedTextContainer = styled(Flex)`
-  padding-bottom: 32px;
-  flex-direction: column;
-  ${({ theme }) => theme.mediaQueries.md} {
-    flex-direction: row;
-  }
-`
-
-const FinishedTextLink = styled(Link)`
-  font-weight: 400;
-  white-space: nowrap;
-  text-decoration: underline;
-`
-
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const router = useRouter()
   const { address: account } = useAccount()
-  const { pools } = usePoolsWithFilterSelector()
+  const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
@@ -119,6 +105,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <PoolControls pools={pools?.filter((pool) => !collectionAddress || pool?.bountySource === collectionAddress)}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>
+              {!userDataLoaded && (
+                <Flex justifyContent="center" mb="4px">
+                  <Loading />
+                </Flex>
+              )}
               <Pool.PoolsTable>
                 {chosenPools.map((pool) => (
                   <PoolRow
