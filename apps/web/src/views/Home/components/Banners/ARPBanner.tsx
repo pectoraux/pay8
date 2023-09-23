@@ -43,7 +43,7 @@ const Title = styled.div`
   background-clip: text;
   font-size: 24px;
   font-weight: 800;
-  margin-bottom: 16px;
+  margin-bottom: 0px;
   width: 196px;
 
   &::after {
@@ -80,9 +80,9 @@ const Header = styled.div`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
-  margin-bottom: 6px;
+  margin-bottom: 0px;
   width: 196px;
 
   &::after {
@@ -163,7 +163,7 @@ const LogoBox = styled(Box)`
 `
 export const ARPBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('ARPs & Bills are AP/AR solutions for payments scheduling & bookkeeping')
 
@@ -180,7 +180,7 @@ export const ARPBanner = () => {
           </LogoBox>
           <Title data-text={title}>{title}</Title>
           {isDesktop && (
-            <Text color="#FFE437" fontSize={24} fontWeight={700} mb="8px">
+            <Text color="#FFE437" fontSize={24} fontWeight={700} mb="2px">
               {t('You can program payroll contracts, utility bill payments, tax payments, bookkeep, etc.')}
             </Text>
           )}
@@ -199,11 +199,6 @@ export const ARPBanner = () => {
           <BGWrapper>
             <Image src={'/images/cancan/329.jpg'} alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
-          {/* {isMobile ? (
-            <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={173} height={138} />
-          ) : (
-            <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={335} height={268} />
-          )} */}
         </RightWrapper>
       </S.Inner>
     </S.Wrapper>

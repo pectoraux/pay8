@@ -1,7 +1,7 @@
 import { Card, CardBody, Heading, Text, LinkExternal, Checkbox, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGetSharedEmail, useProfileForAddress } from 'state/profile/hooks'
+import { useGetProfileId, useGetSharedEmail, useProfileForAddress } from 'state/profile/hooks'
 import { noop } from 'lodash'
 import { useProfileFromSSI } from 'state/ssi/hooks'
 
@@ -12,11 +12,8 @@ const CreateProfile: React.FC = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { actions } = useProfileCreation()
-  const { profile } = useProfileForAddress(account?.toLowerCase(), {
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  })
+  const { profileId } = useGetProfileId(account)
+  console.log('profileprofileId==================>', profileId)
   return (
     <>
       <Text fontSize="20px" color="textSubtle" bold>
@@ -36,7 +33,7 @@ const CreateProfile: React.FC = () => {
             <label htmlFor="checkbox" style={{ display: 'block', cursor: 'pointer', marginBottom: '24px' }}>
               <Flex alignItems="center">
                 <div style={{ flex: 'none' }}>
-                  <Checkbox id="checkbox" scale="sm" checked={!!profile} onChange={noop} />
+                  <Checkbox id="checkbox" scale="sm" checked={!!Number(profileId)} onChange={noop} />
                 </div>
                 <Text ml="8px">{t('I have successfully created my profile')}</Text>
               </Flex>
@@ -44,7 +41,7 @@ const CreateProfile: React.FC = () => {
           </Flex>
         </CardBody>
       </Card>
-      <NextStepButton onClick={actions.nextStep} disabled={!profile}>
+      <NextStepButton onClick={actions.nextStep} disabled={!Number(profileId)}>
         {t('Next Step')}
       </NextStepButton>
     </>

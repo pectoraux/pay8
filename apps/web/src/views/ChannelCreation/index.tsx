@@ -1,23 +1,20 @@
 import Page from 'components/Layout/Page'
-import { useProfile } from 'state/profile/hooks'
-import PageLoader from 'components/Loader/PageLoader'
-import Header from './Header'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+
 import ProfileCreationProvider from './contexts/ProfileCreationProvider'
+import Header from './Header'
 import Steps from './Steps'
 
 const ProfileCreation = () => {
-  const { isInitialized, isLoading } = useProfile()
-
-  if (!isInitialized || isLoading) {
-    return <PageLoader />
-  }
+  const { account } = useWeb3React()
 
   return (
     <>
       <ProfileCreationProvider>
         <Page>
           <Header />
-          <Steps />
+          {!account ? <ConnectWalletButton width="100%" /> : <Steps />}
         </Page>
       </ProfileCreationProvider>
     </>

@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import CreateKeys from './CreateKeys'
 
+import SSIKeys from './SSIKeys'
 import NoWalletConnected from './WalletNotConnected'
 import { ProfileCreationContext } from './contexts/ProfileCreationProvider'
 import CreateCollection from './CreateCollection'
@@ -25,7 +25,7 @@ const Steps = () => {
   }
 
   if (currentStep === 2) {
-    return <CreateKeys />
+    return <SSIKeys />
   }
 
   if (currentStep === 3) {

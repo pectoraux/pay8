@@ -9,7 +9,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { getProfile } from './helpers'
+import { getProfile, getProfileId } from './helpers'
 import { Profile } from '../types'
 import { fetchProfilesAsync } from '.'
 import {
@@ -154,5 +154,14 @@ export const useGetIsNameUsed = (name) => {
     status,
     refetch: mutate,
     isNameUsed: data ?? false,
+  }
+}
+
+export const useGetProfileId = (address) => {
+  const { data, status, mutate } = useSWR(['getProfileId', address], async () => getProfileId(address))
+  return {
+    status,
+    refetch: mutate,
+    profileId: data ?? '0',
   }
 }

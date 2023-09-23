@@ -198,11 +198,6 @@ export const BettingBanner = () => {
           <BGWrapper>
             <Image src={'/images/cancan/314.jpg'} alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
-          {/* {isMobile ? (
-            <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={173} height={138} />
-          ) : (
-            <Image src={'/images/decorations/logo.png'} alt="GalxeTraverseBunny" width={335} height={268} />
-          )} */}
         </RightWrapper>
       </S.Inner>
     </S.Wrapper>

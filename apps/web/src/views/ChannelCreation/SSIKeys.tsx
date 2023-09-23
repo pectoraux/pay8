@@ -8,7 +8,7 @@ import { useProfileFromSSI } from 'state/ssi/hooks'
 import NextStepButton from './NextStepButton'
 import useProfileCreation from './contexts/hook'
 
-const CreateKeys: React.FC = () => {
+const SSIKeys: React.FC = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { actions } = useProfileCreation()
@@ -17,7 +17,7 @@ const CreateKeys: React.FC = () => {
   return (
     <>
       <Text fontSize="20px" color="textSubtle" bold>
-        {t('Step 2')}
+        {t('Step 3')}
       </Text>
       <Heading as="h3" scale="xl" mb="24px">
         {t('Create SSI Keys')}
@@ -48,4 +48,4 @@ const CreateKeys: React.FC = () => {
   )
 }
 
-export default CreateKeys
+export default SSIKeys

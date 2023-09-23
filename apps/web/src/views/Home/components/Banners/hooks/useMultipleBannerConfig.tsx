@@ -28,6 +28,8 @@ import { WillBanner } from '../WillBanner'
 import { WorldBanner } from '../WorldBanner'
 import { LeviathanBanner } from '../LeviathanBanner'
 import { FreeTokensBanner } from '../FreeTokensBanner'
+import { SSIBanner } from '../SSIBanner'
+import { ProfileBanner } from '../ProfileBanner'
 
 interface IBannerConfig {
   shouldRender: boolean
@@ -52,8 +54,7 @@ export const useMultipleBannerConfig = () => {
   const isRenderCompetitionBanner = useIsRenderCompetitionBanner()
 
   return useMemo(() => {
-    const NO_SHUFFLE_BANNERS: IBannerConfig[] = [
-      { shouldRender: true, banner: <FreeTokensBanner /> },
+    const SHUFFLE_BANNERS: IBannerConfig[] = [
       { shouldRender: true, banner: <RampBanner /> },
       { shouldRender: true, banner: <CanCanBanner /> },
       { shouldRender: true, banner: <NftBanner /> },
@@ -71,18 +72,13 @@ export const useMultipleBannerConfig = () => {
       { shouldRender: true, banner: <PoolBanner /> },
       { shouldRender: true, banner: <WillBanner /> },
       { shouldRender: true, banner: <WorldBanner /> },
-      { shouldRender: true, banner: <LeviathanBanner /> },
+      { shouldRender: true, banner: <SSIBanner /> },
+      { shouldRender: true, banner: <ProfileBanner /> },
     ]
 
-    const SHUFFLE_BANNERS: IBannerConfig[] = [
-      // {
-      //   shouldRender: isRenderCompetitionBanner,
-      //   banner: <CompetitionBanner />,
-      // },
-      // {
-      //   shouldRender: true,
-      //   banner: <PerpetualBanner />,
-      // },
+    const NO_SHUFFLE_BANNERS: IBannerConfig[] = [
+      { shouldRender: true, banner: <FreeTokensBanner /> },
+      { shouldRender: true, banner: <LeviathanBanner /> },
     ]
     return [...NO_SHUFFLE_BANNERS, ...shuffle(SHUFFLE_BANNERS)]
       .filter((bannerConfig: IBannerConfig) => bannerConfig.shouldRender)

@@ -119,6 +119,11 @@ export const getIsNameUsed = async (name) => {
 }
 
 export const getProfileDataFromUser = async (address) => {
+  const profileId = await getProfileId(address)
+  return getProfileData(profileId)
+}
+
+export const getProfileId = async (address) => {
   const bscClient = publicClient({ chainId: 4002 })
   const [profileId] = await bscClient.multicall({
     allowFailure: true,
@@ -131,7 +136,7 @@ export const getProfileDataFromUser = async (address) => {
       },
     ],
   })
-  return getProfileData(profileId.result?.toString())
+  return profileId.result?.toString()
 }
 
 export const getSSIDatum = async (account: string) => {
