@@ -5,7 +5,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
-const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUser }) => {
   const { t } = useTranslation()
   const {
     days: daysReceivable,
@@ -28,6 +28,20 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       <ActionTitles>{actionTitle}</ActionTitles>
       <ActionContent>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          {currUser ? (
+            <Box mr="8px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={getBalanceNumber(currUser?.ticketNumber || 0, 0)}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Ticket #')}
+              </Text>
+            </Box>
+          ) : null}
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {t(pool?.status ?? '')}
           </Text>

@@ -54,6 +54,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CLOSE_LOTTERY]: t('Close Lottery'),
   [LockStage.CLAIM_TICKETS]: t('Claim Tickets'),
   [LockStage.ADMIN_WITHDRAW]: t('Withdraw'),
+  [LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_START_LOTTERY]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BURN_TOKEN_FOR_CREDIT]: t('Back'),
@@ -146,6 +147,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.WITHDRAW)
         break
       case LockStage.WITHDRAW:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES:
+        setStage(LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES)
+        break
+      case LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES:
         setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_INJECT_FUNDS:
@@ -394,7 +401,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_CLOSE_LOTTERY) {
-        const args = [state.lotteryId, state.tokenId]
+        const args = [state.lotteryId]
         console.log('CONFIRM_CLOSE_LOTTERY===============>', args)
         return callWithGasPrice(lotteryContract, 'closeLottery', args).catch((err) =>
           console.log('CONFIRM_CLOSE_LOTTERY===============>', err),
@@ -454,7 +461,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.INJECT_FUNDS)}>
             {t('INJECT FUNDS')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CLAIM_LOTTERY_REVENUE)}>
+          <Button
+            variant="success"
+            mb="8px"
+            disabled={Number(pool?.id) !== 1}
+            onClick={() => setStage(LockStage.CLAIM_LOTTERY_REVENUE)}
+          >
             {t('CLAIM LOTTERY REVENUE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.CLOSE_LOTTERY)}>
@@ -470,7 +482,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.INJECT_FUNDS)}>
             {t('INJECT FUNDS')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CLAIM_LOTTERY_REVENUE)}>
+          <Button
+            variant="success"
+            mb="8px"
+            disabled={Number(pool?.id) !== 1}
+            onClick={() => setStage(LockStage.CLAIM_LOTTERY_REVENUE)}
+          >
             {t('CLAIM LOTTERY REVENUE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT)}>

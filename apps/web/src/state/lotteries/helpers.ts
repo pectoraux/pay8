@@ -258,3 +258,19 @@ export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, i
   })
   return count.result
 }
+
+export const getTicket = async (ticketId) => {
+  const bscClient = publicClient({ chainId: 4002 })
+  const [count] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getLotteryAddress(),
+        abi: lotteryABI,
+        functionName: 'viewTicket',
+        args: [BigInt(ticketId)],
+      },
+    ],
+  })
+  return count.result
+}

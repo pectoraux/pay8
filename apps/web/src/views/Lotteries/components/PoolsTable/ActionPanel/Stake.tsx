@@ -11,7 +11,6 @@ import { useCallback, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateGaugeModal from '../../CreateGaugeModal'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -27,7 +26,7 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const variant = pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
+  const variant = pool?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
   const inputCurrency = useCurrency(currencyId)
   const [currency, setCurrency] = useState(inputCurrency)
@@ -37,7 +36,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       location="fromStake"
       pool={pool}
       currAccount={currAccount}
-      currency={currency ?? currencyId}
+      currency={currency ?? inputCurrency}
     />,
   )
   console.log('staked===================>', currAccount, inputCurrency, currencyId, currency)

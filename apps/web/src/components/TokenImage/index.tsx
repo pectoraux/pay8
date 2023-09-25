@@ -17,12 +17,13 @@ export const tokenImageChainNameMapping = {
   [ChainId.POLYGON_ZKEVM]: 'polygon-zkevm/',
 }
 
-export const getImageUrlFromToken = (token: Token) => {
+export const getImageUrlFromToken = (token: any) => {
   const address = token?.isNative ? token.wrapped.address : token?.address
-
-  return `https://tokens.pancakeswap.finance/images/${
-    tokenImageChainNameMapping[token?.chainId ?? ChainId.BSC]
-  }${address}.png`
+  const res = `https://tokens.payswap.org/images/${
+    ''
+    // tokenImageChainNameMapping[token?.chainId ?? ChainId.FANTOM_TESTNET]
+  }${token?.symbol?.toLowerCase()}.svg`
+  return res
 }
 
 export const TokenPairImage: React.FC<React.PropsWithChildren<TokenPairImageProps>> = ({

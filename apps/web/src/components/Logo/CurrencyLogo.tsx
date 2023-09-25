@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useHttpLocations } from '@pancakeswap/hooks'
 import getTokenLogoURL from '../../utils/getTokenLogoURL'
+import { getImageUrlFromToken } from 'components/TokenImage'
 
 const StyledLogo = styled(TokenLogo)<{ size: string }>`
   width: ${({ size }) => size};
@@ -20,14 +21,7 @@ interface LogoProps {
 }
 
 export function FiatLogo({ currency, size = '24px', style }: LogoProps) {
-  return (
-    <StyledLogo
-      size={size}
-      srcs={[`/images/currencies/${currency?.symbol?.toLowerCase()}.png`]}
-      width={size}
-      style={style}
-    />
-  )
+  return <StyledLogo size={size} srcs={[`${getImageUrlFromToken(currency)}.svg`]} width={size} style={style} />
 }
 
 export default function CurrencyLogo({ currency, size = '24px', style }: LogoProps) {
@@ -37,7 +31,7 @@ export default function CurrencyLogo({ currency, size = '24px', style }: LogoPro
     if (currency?.isNative) return []
 
     if (currency?.isToken) {
-      const tokenLogoURL = getTokenLogoURL(currency)
+      const tokenLogoURL = getImageUrlFromToken(currency)
 
       if (currency instanceof WrappedTokenInfo) {
         if (!tokenLogoURL) return [...uriLocations]
@@ -53,9 +47,7 @@ export default function CurrencyLogo({ currency, size = '24px', style }: LogoPro
     if (currency.chainId === ChainId.BSC) {
       return <BinanceIcon width={size} style={style} />
     }
-    return (
-      <StyledLogo size={size} srcs={[`${ASSET_CDN}/web/native/${currency.chainId}.png`]} width={size} style={style} />
-    )
+    return <StyledLogo size={size} srcs={[`${getImageUrlFromToken(currency)}.svg`]} width={size} style={style} />
   }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />

@@ -35,7 +35,7 @@ const PoolRow: React.FC<any> = ({ pool, account, initialActivity }) => {
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
-      panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
+      panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} currUser={currUser} expanded />}
     >
       {isMobile ? (
         <TabMenu>

@@ -14,7 +14,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getRewardsForTicketId, getTag } from './helpers'
+import { getRewardsForTicketId, getTag, getTicket } from './helpers'
 
 export const useFetchPublicPoolsData = () => {
   const { chainId } = useActiveChainId()
@@ -72,6 +72,11 @@ export const usePoolsWithFilterSelector = () => {
 export const useGetTags = () => {
   const { data } = useSWR('lotteries-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useGetTicket = (ticketId) => {
+  const { data } = useSWR(['lotteries-tickets', ticketId], async () => getTicket(ticketId))
+  return data ?? ''
 }
 
 export const useGetRewardsForTicketId = (tokenAddress, lotteryId, ticketId) => {

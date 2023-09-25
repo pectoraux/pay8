@@ -87,6 +87,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.MINT_PRESENT_WORLD]: t('Mint World'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
+  [LockStage.UPDATE_DEV]: t('Update Contract Owner'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),

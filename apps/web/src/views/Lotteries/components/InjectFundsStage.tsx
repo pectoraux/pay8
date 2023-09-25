@@ -37,7 +37,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleChange, handleRaw
       inputRef.current.focus()
     }
   }, [inputRef])
-
+  console.log('ucurrency==================>', currency)
   return (
     <>
       <GreyedOutContainer>

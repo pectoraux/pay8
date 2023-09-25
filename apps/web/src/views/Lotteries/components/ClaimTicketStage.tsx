@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
@@ -32,7 +32,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <Text>
         {t(
-          'When selling NFTs from this collection, a portion of the BNB paid will be diverted before reaching the seller:',
+          'There are 6 brackets going from 0 to 5. To check for multiple brackets at the same time, for instance brackets 0-5 for ticket #1, you will input 1,1,1,1,1,1 in the field above and 0,1,2,3,4,5 in this field',
         )}
       </Text>
       {/* {creatorFeeAsNumber > 0 && (
@@ -78,9 +78,15 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Brackets')}
-        </Text>
+        <Flex flexDirection="row">
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Brackets')}
+          </Text>
+          <Flex ref={targetRef}>
+            <HelpIcon color="textSubtle" ml="6px" />
+          </Flex>
+        </Flex>
+        {tooltipVisible && tooltip}
         <Input
           type="text"
           scale="sm"
