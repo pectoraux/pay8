@@ -38,10 +38,10 @@ export const fetchArpSgAsync =
   }
 
 export const fetchArpsAsync =
-  ({ fromArp }) =>
+  ({ fromArp, chainId }) =>
   async (dispatch) => {
     try {
-      const arps = await fetchArps({ fromArp })
+      const arps = await fetchArps({ fromArp, chainId })
       dispatch(setArpsPublicData(arps || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)

@@ -33,7 +33,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchBillSgAsync({ fromBill }))
-          dispatch(fetchBillsAsync({ fromBill }))
+          dispatch(fetchBillsAsync({ fromBill, chainId }))
         })
       }
 

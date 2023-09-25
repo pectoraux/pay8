@@ -137,11 +137,11 @@ export const getTag = async () => {
   }
 }
 
-export const fetchValuepool = async (valuepoolContract) => {
+export const fetchValuepool = async (valuepoolContract, chainId) => {
   try {
     const valuepoolAddress = valuepoolContract.address
     console.log('valuepoolsFromSg26=============>', valuepoolAddress)
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [
       tokenAddress,
       getParams,
@@ -384,7 +384,7 @@ export const getValuepoolsSg = async (first: number, skip: number, where) => {
   return []
 }
 
-export const fetchValuepools = async ({ fromVesting, fromValuepool }) => {
+export const fetchValuepools = async ({ fromVesting, fromValuepool, chainId }) => {
   console.log('fromValuepool==========>', fromValuepool, isAddress(fromValuepool))
   const whereClause =
     isAddress(fromValuepool) && fromValuepool !== ADDRESS_ZERO
@@ -403,13 +403,13 @@ export const fetchValuepools = async ({ fromVesting, fromValuepool }) => {
   const valuepoolsFromSg = await getValuepoolsSg(0, 0, whereClause)
   console.log('valuepoolsFromSg===================>', valuepoolsFromSg)
   try {
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const valuepools = await Promise.all(
       valuepoolsFromSg
         .map(async ({ id, ...rest }, index) => {
           console.log('valuepoolsFromSg1===================>')
           const valuepoolContract = getValuepoolContract(id)
-          const data = await fetchValuepool(valuepoolContract)
+          const data = await fetchValuepool(valuepoolContract, chainId)
           console.log('valuepoolsFromSg2===================>', data)
           const [onePersonOneVote, description] = await bscClient.multicall({
             allowFailure: true,

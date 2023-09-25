@@ -4,6 +4,9 @@ import { useMemo } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { requiresApproval } from 'utils/requiresApproval'
+import { FAST_INTERVAL } from 'config/constants'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+
 import { fetchStakesAsync } from '.'
 import {
   currPoolSelector,
@@ -13,8 +16,6 @@ import {
   filterSelector,
 } from './selectors'
 import { getTag } from './helpers'
-import { FAST_INTERVAL } from 'config/constants'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const useGetTags = () => {
   const { data } = useSWR('stakemarket-tags', async () => getTag())
@@ -31,7 +32,7 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
-          dispatch(fetchStakesAsync(collectionId ?? 0))
+          dispatch(fetchStakesAsync(collectionId ?? 0, chainId))
         })
       }
 

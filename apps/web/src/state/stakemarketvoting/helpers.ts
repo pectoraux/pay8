@@ -20,8 +20,8 @@ export const getProposal = async (id: string) => {
   return (await firestore.collection('proposals').doc(id).get()).data()
 }
 
-export const getVavaVotes = async (vaAddress, limit = 10) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getVavaVotes = async (vaAddress, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [poolsLength] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -179,9 +179,9 @@ export const getLitigationSg = async (litigationId: string) => {
   }
 }
 
-export const getVotingPower = async (veAddress, tokenId) => {
+export const getVotingPower = async (veAddress, tokenId, chainId) => {
   try {
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [decimals, balance, percentile] = await bscClient.multicall({
       allowFailure: true,
       contracts: [

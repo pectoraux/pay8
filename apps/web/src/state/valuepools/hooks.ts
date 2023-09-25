@@ -38,7 +38,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchValuepoolSgAsync({ fromVesting, fromValuepool }))
-          dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool }))
+          dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool, chainId }))
         })
       }
       fetchPoolsDataWithFarms()

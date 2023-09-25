@@ -54,9 +54,9 @@ export const getReferralsData = async () => {
   }
 }
 
-export const fetchReferrals = async () => {
+export const fetchReferrals = async ({ chainId }) => {
   const gauges = await getReferralsData()
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const referrals = await Promise.all(
     gauges
       .map(async (gauge) => {
@@ -184,8 +184,8 @@ export const fetchReferrals = async () => {
   return referrals
 }
 
-export const fetchReferralsUserData = async (account, pools) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchReferralsUserData = async (account, pools, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const augmentedPools = await Promise.all(
     pools
       ?.map(async (pool) => {

@@ -20,22 +20,24 @@ const initialState: any = {
 
 let pools = []
 
-export const fetchContributorsGaugesAsync = () => async (dispatch) => {
-  try {
-    const businesses = await fetchContributors()
-    const data = businesses
-    dispatch(setContributorsPublicData(data || []))
-  } catch (error) {
-    console.error('[Pools Action] error when getting contributor gauges======>', error)
+export const fetchContributorsGaugesAsync =
+  ({ chainId }) =>
+  async (dispatch) => {
+    try {
+      const businesses = await fetchContributors(chainId)
+      const data = businesses
+      dispatch(setContributorsPublicData(data || []))
+    } catch (error) {
+      console.error('[Pools Action] error when getting contributor gauges======>', error)
+    }
   }
-}
 
 export const fetchContributorsUserDataAsync = createAsyncThunk<
   { sousId: number; allowance: any; profileId: number; tokenIds: any; bribes: any }[],
-  { account: string }
->('pool/fetchPoolsUserData', async ({ account }, { rejectWithValue }) => {
+  { account: string; chainId: any }
+>('pool/fetchPoolsUserData', async ({ account, chainId }, { rejectWithValue }) => {
   try {
-    const allBribes = await fetchContributorsUserData(account, pools)
+    const allBribes = await fetchContributorsUserData(account, pools, chainId)
     const userData = pools.map((pool) => ({
       sousId: parseInt(pool.sousId),
       allowance: 0,

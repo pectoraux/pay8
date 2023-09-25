@@ -47,6 +47,7 @@ export const useFetchPublicPoolsData = () => {
               fromBusinesses,
               fromRamps,
               fromTransfers,
+              chainId,
             }),
           )
         })

@@ -55,14 +55,14 @@ export const getAcceleratorData = async () => {
   }
 }
 
-export const fetchAccelerator = async () => {
+export const fetchAccelerator = async ({ chainId }) => {
   const acceleratorVoterContract = getAcceleratorVoterContract()
   const gauges = await getAcceleratorData()
   const businesses = await Promise.all(
     gauges
       .map(async (gauge) => {
         const collection = await getCollection(gauge.id)
-        const bscClient = publicClient({ chainId: 4002 })
+        const bscClient = publicClient({ chainId: chainId })
         const [totalWeight, gaugeWeight, claimable, vestingTokenAddress] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -180,8 +180,8 @@ export const fetchAccelerator = async () => {
   return businesses
 }
 
-export const fetchAcceleratorUserData = async (account, pools) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchAcceleratorUserData = async (account, pools, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const augmentedPools = await Promise.all(
     pools
       ?.map(async (pool) => {

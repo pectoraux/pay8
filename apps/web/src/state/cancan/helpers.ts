@@ -227,7 +227,7 @@ export const getItemsSg = async (first: number, skip: number, where) => {
   }
 }
 
-export const getNftSg = async (collectionAddress: string): Promise<CollectionMarketDataBaseFields> => {
+export const getNftSg = async (collectionAddress, chainId = 4002): Promise<CollectionMarketDataBaseFields> => {
   try {
     const res = await request(
       GRAPH_API_CANCAN,
@@ -244,7 +244,7 @@ export const getNftSg = async (collectionAddress: string): Promise<CollectionMar
       `,
       { collectionAddress },
     )
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [mintValues] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -268,7 +268,7 @@ export const getNftSg = async (collectionAddress: string): Promise<CollectionMar
   }
 }
 
-export const getNftsSg = async (first: number, skip: number, where) => {
+export const getNftsSg = async (first: number, skip: number, where, chainId = 4002) => {
   try {
     const res = await request(
       GRAPH_API_CANCAN,
@@ -284,7 +284,7 @@ export const getNftsSg = async (first: number, skip: number, where) => {
       `,
       { first, skip, where },
     )
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const nfts = await Promise.all(
       res.nfts.map(async (nft) => {
         const [mintValues] = await bscClient.multicall({
@@ -382,8 +382,8 @@ export const getNftsFromCollectionSg = async (
   }
 }
 
-export const getTokenForCredit = async (collectionAddress, isPaywall) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getTokenForCredit = async (collectionAddress, isPaywall, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
   try {
     const [arrLength] = await bscClient.multicall({
       allowFailure: true,
@@ -461,8 +461,8 @@ export const getTokenForCredit = async (collectionAddress, isPaywall) => {
   }
 }
 
-export const getNFTMarketTokenForCredit = async (collectionAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getNFTMarketTokenForCredit = async (collectionAddress, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
   try {
     const [arrLength] = await bscClient.multicall({
       allowFailure: true,
@@ -1018,9 +1018,9 @@ export const getCollectionAnnouncements = async (first: number, skip: number, wh
   }
 }
 
-export const getPaymentCredits = async (collectionAddress, tokenId, address) => {
+export const getPaymentCredits = async (collectionAddress, tokenId, address, chainId = 4002) => {
   try {
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [credits] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -1039,9 +1039,9 @@ export const getPaymentCredits = async (collectionAddress, tokenId, address) => 
   }
 }
 
-export const getSubscriptionStatus = async (paywallAddress, account, nfticketId, tokenId) => {
+export const getSubscriptionStatus = async (paywallAddress, account, nfticketId, tokenId, chainId = 4002) => {
   try {
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [isOngoing] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -1068,9 +1068,10 @@ export const getDiscounted = async (
   options,
   identityTokenId = 0,
   isPaywall = false,
+  chainId = 4002,
 ) => {
   try {
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [data] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -1100,8 +1101,8 @@ export const getCollectionContracts = async (collectionAddress: string) => {
   return (await firestore.collection('contracts').doc(collectionAddress).get()).data()
 }
 
-export const getVeToken = async (veAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getVeToken = async (veAddress, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [tokenAddress] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -1115,8 +1116,8 @@ export const getVeToken = async (veAddress) => {
   return tokenAddress
 }
 
-export const getCollectionId = async (address) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getCollectionId = async (address, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [collectionId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -1131,8 +1132,8 @@ export const getCollectionId = async (address) => {
   return collectionId.result
 }
 
-export const getPricePerMinute = async (merchantId) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getPricePerMinute = async (merchantId, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [pricePerMinute] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

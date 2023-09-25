@@ -39,7 +39,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchAuditorSgAsync({ fromAuditor }))
-          dispatch(fetchAuditorsAsync({ fromAuditor }))
+          dispatch(fetchAuditorsAsync({ fromAuditor, chainId }))
         })
       }
 

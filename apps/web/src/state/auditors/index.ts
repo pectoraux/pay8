@@ -40,11 +40,11 @@ export const fetchAuditorSgAsync =
   }
 
 export const fetchAuditorsAsync =
-  ({ fromAuditor }) =>
+  ({ fromAuditor, chainId }) =>
   async (dispatch) => {
     console.log('fetchAuditors1================>', fromAuditor)
     try {
-      const auditors = await fetchAuditors({ fromAuditor })
+      const auditors = await fetchAuditors({ fromAuditor, chainId })
       console.log('fetchAuditors================>', auditors)
       dispatch(setAuditorsPublicData(auditors || []))
     } catch (error) {

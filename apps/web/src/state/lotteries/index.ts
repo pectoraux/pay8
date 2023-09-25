@@ -38,10 +38,10 @@ export const fetchLotteriesSgAsync =
   }
 
 export const fetchLotteriesAsync =
-  ({ fromLottery }) =>
+  ({ fromLottery, chainId }) =>
   async (dispatch) => {
     try {
-      const lotteries = await fetchLotteries({ fromLottery })
+      const lotteries = await fetchLotteries({ fromLottery, chainId })
       dispatch(setLotteriesPublicData(lotteries || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)

@@ -48,7 +48,7 @@ const CheckPrizesSection = ({ currentTokenId }) => {
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {
         setHasRewardsToClaim(unclaimedRewards[0] > 0)
         setHasCheckedForRewards(true)
-        if (unclaimedRewards[0] > 0 || true) onPresentClaimModal()
+        if (unclaimedRewards[0] > 0) onPresentClaimModal()
       }
 
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {

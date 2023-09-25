@@ -101,10 +101,10 @@ export const getWorld = async (worldAddress) => {
   }
 }
 
-export const fetchWorld = async (worldAddress) => {
+export const fetchWorld = async (worldAddress, chainId) => {
   const protocols = await getProtocol(worldAddress.toLowerCase())
   const world = await getWorld(worldAddress.toLowerCase())
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
 
   const worldNFTs = await Promise.all(
     world?.worldNFTs?.map(async (nft) => {
@@ -299,8 +299,8 @@ export const fetchWorld = async (worldAddress) => {
   }
 }
 
-export const fetchWorlds = async () => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchWorlds = async ({ chainId }) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [worldAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -315,7 +315,7 @@ export const fetchWorlds = async () => {
   const worlds = await Promise.all(
     worldAddresses.result
       .map(async (worldAddress, index) => {
-        const data = await fetchWorld(worldAddress)
+        const data = await fetchWorld(worldAddress, chainId)
         return {
           sousId: index,
           ...data,

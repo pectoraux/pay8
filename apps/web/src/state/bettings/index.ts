@@ -38,10 +38,10 @@ export const fetchBettingSgAsync =
   }
 
 export const fetchBettingsAsync =
-  ({ fromBetting }) =>
+  ({ fromBetting, chainId }) =>
   async (dispatch) => {
     try {
-      const bettings = await fetchBettings({ fromBetting })
+      const bettings = await fetchBettings({ fromBetting, chainId })
       dispatch(setBettingsPublicData(bettings || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)

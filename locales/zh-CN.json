@@ -1169,7 +1169,7 @@
   "%symbol% in wallet": "钱包中的 %symbol%",
   "Total payment": "总付款",
   "Pay with": "支付方式",
-  "Please enable WBNB spending in your wallet": "请在您的钱包中启用 WBNB 消费",
+  "Please enable the spending of the selected in your wallet": "请在您的钱包中启用 WBNB 消费",
   "Please confirm the transaction in your wallet": "请在您的钱包中确认交易",
   "Your NFTs": "您的 NFT",
   "Contract approved - you can now buy NFT with WBNB!": "合约已批准 - 您现在可以使用 WBNB 购买 NFT！",

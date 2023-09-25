@@ -18,24 +18,33 @@ const initialState: any = {
   currPool: {},
 }
 
-export const fetchPairsAsync = () => async (dispatch) => {
-  try {
-    const pairs = await fetchPairs()
-    dispatch(setPairsPublicData(pairs || []))
-  } catch (error) {
-    console.error('[Pools Action]============> error when getting pairs', error)
-  }
-}
-
-export const fetchPoolsUserDataAsync = createAsyncThunk<{ sousId: number; stakingTokenBalance: any }[], string>(
-  'pool/fetchPoolsUserData',
-  async (account, { rejectWithValue }) => {
+export const fetchPairsAsync =
+  ({ chainId }) =>
+  async (dispatch) => {
     try {
-      const [stakingTokenBalances] = await Promise.all([fetchUserBalances(account)])
+      const pairs = await fetchPairs({ chainId })
+      dispatch(setPairsPublicData(pairs || []))
+    } catch (error) {
+      console.error('[Pools Action]============> error when getting pairs', error)
+    }
+  }
+
+export const fetchPoolsUserDataAsync = createAsyncThunk<
+  { sousId: number; stakingTokenBalance: any }[],
+  { account: string; chainId: any }
+>(
+  'pool/fetchPoolsUserData',
+  async (
+    account,
+    chainId,
+    // { rejectWithValue }
+  ) => {
+    try {
+      const [stakingTokenBalances] = await Promise.all([fetchUserBalances(account, chainId)])
       const userData = stakingTokenBalances || []
       return userData
     } catch (e) {
-      return rejectWithValue(e)
+      // return rejectWithValue(e)
     }
   },
 )

@@ -19,14 +19,16 @@ const initialState: any = {
 
 const pools = []
 
-export const fetchProfilesAsync = () => async (dispatch) => {
-  try {
-    const data = await fetchProfiles()
-    dispatch(setProfilesPublicData(data || []))
-  } catch (error) {
-    console.error('[Pools Action]profiles======>', error)
+export const fetchProfilesAsync =
+  ({ chainId }) =>
+  async (dispatch) => {
+    try {
+      const data = await fetchProfiles({ chainId })
+      dispatch(setProfilesPublicData(data || []))
+    } catch (error) {
+      console.error('[Pools Action]profiles======>', error)
+    }
   }
-}
 
 export const PoolsSlice = createSlice({
   name: 'Referrals',

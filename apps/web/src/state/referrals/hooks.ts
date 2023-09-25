@@ -27,7 +27,7 @@ export const useFetchPublicPoolsData = () => {
   useSlowRefreshEffect(() => {
     const fetchPoolsDataWithFarms = async () => {
       batch(() => {
-        dispatch(fetchReferralGaugesAsync())
+        dispatch(fetchReferralGaugesAsync({ chainId }))
       })
     }
 

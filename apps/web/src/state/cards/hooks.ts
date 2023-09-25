@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
-import { useMemo, useEffect, useState } from 'react'
-import { firestore } from 'utils/firebase'
+import { useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -17,12 +16,13 @@ export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const fromCard = router.query.card
+  const { chainId } = useActiveChainId()
 
-  useSWR('cards', () => {
+  useSWR(['cards', chainId], () => {
     const fetchPoolsDataWithFarms = async () => {
       batch(() => {
         dispatch(fetchCardSgAsync({ fromCard }))
-        dispatch(fetchCardsAsync({ fromCard }))
+        dispatch(fetchCardsAsync({ fromCard, chainId }))
       })
     }
 

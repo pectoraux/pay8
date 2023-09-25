@@ -47,11 +47,11 @@ export const fetchValuepoolSgAsync =
   }
 
 export const fetchValuepoolsAsync =
-  ({ fromVesting, fromValuepool }) =>
+  ({ fromVesting, fromValuepool, chainId }) =>
   async (dispatch) => {
     try {
       console.log('allva1==============>')
-      const valuepools = await fetchValuepools({ fromVesting, fromValuepool })
+      const valuepools = await fetchValuepools({ fromVesting, fromValuepool, chainId })
       const data = valuepools
       console.log('allva==============>', data)
       dispatch(setValuepoolsPublicData(data || []))

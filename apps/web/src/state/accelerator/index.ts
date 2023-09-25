@@ -28,22 +28,24 @@ const initialState: any = {
 }
 let pools = []
 
-export const fetchAcceleratorGaugesAsync = () => async (dispatch) => {
-  try {
-    const businesses = await fetchAccelerator()
-    const data = businesses
-    dispatch(setAcceleratorPublicData(data || []))
-  } catch (error) {
-    console.error('[Pools Action] error when getting accelerator pitches======>', error)
+export const fetchAcceleratorGaugesAsync =
+  ({ chainId }) =>
+  async (dispatch) => {
+    try {
+      const businesses = await fetchAccelerator({ chainId })
+      const data = businesses
+      dispatch(setAcceleratorPublicData(data || []))
+    } catch (error) {
+      console.error('[Pools Action] error when getting accelerator pitches======>', error)
+    }
   }
-}
 
 export const fetchAcceleratorUserDataAsync = createAsyncThunk<
   { sousId: number; allowance: any; bribes: any }[],
-  { account: string }
->('pool/fetchPoolsUserData', async ({ account }, { rejectWithValue }) => {
+  { account: string; chainId: any }
+>('pool/fetchPoolsUserData', async ({ account, chainId }, { rejectWithValue }) => {
   try {
-    const allBribes = await fetchAcceleratorUserData(account, pools)
+    const allBribes = await fetchAcceleratorUserData(account, pools, chainId)
     const userData = pools.map((pool) => ({
       sousId: parseInt(pool.sousId),
       allowance: 0,

@@ -1169,7 +1169,7 @@
   "%symbol% in wallet": "%symbol% a tárcában",
   "Total payment": "Fizetendő összesen",
   "Pay with": "Fizetés ezzel",
-  "Please enable WBNB spending in your wallet": "Kérjük, engedélyezze a WBNB költést a pénztárcájában",
+  "Please enable the spending of the selected in your wallet": "Kérjük, engedélyezze a WBNB költést a pénztárcájában",
   "Please confirm the transaction in your wallet": "Kérjük, erősítse meg a tranzakciót a pénztárcájában",
   "Your NFTs": "Az Ön NFT-i",
   "Contract approved - you can now buy NFT with WBNB!": "Kontraktus jóváhagyva - most vásárolhat NFT-t WBNB-vel!",

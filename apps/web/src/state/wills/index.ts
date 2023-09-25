@@ -40,11 +40,11 @@ export const fetchWillSgAsync =
   }
 
 export const fetchWillsAsync =
-  ({ fromWill }) =>
+  ({ fromWill, chainId }) =>
   async (dispatch) => {
     console.log('fetchWills1================>', fromWill)
     try {
-      const wills = await fetchWills({ fromWill })
+      const wills = await fetchWills({ fromWill, chainId })
       console.log('fetchWills================>', wills)
       dispatch(setWillsPublicData(wills || []))
     } catch (error) {

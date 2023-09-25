@@ -38,7 +38,7 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
-          dispatch(fetchRampsAsync())
+          dispatch(fetchRampsAsync({ chainId }))
         })
       }
 
@@ -56,9 +56,10 @@ export const useFetchPublicPoolsData = () => {
 }
 
 export const fetchPoolsDataWithFarms = async (ramp, dispatch) => {
+  const { chainId } = useActiveChainId()
   if (ramp) {
     batch(() => {
-      dispatch(fetchRampAsync(ramp))
+      dispatch(fetchRampAsync(ramp, chainId))
     })
   }
 }
@@ -119,11 +120,12 @@ export const useGetSessionInfoSg = (sessionId, rampAddress) => {
 }
 
 export const useGetTokenData = (tokenAddress) => {
+  const { chainId } = useActiveChainId()
   const {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['token-data2', tokenAddress], async () => getTokenData(tokenAddress))
+  } = useSWR(['token-data', tokenAddress, chainId], async () => getTokenData(tokenAddress, chainId))
   return { data, refetch, status }
 }
 

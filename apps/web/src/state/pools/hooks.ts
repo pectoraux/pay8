@@ -50,7 +50,7 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
-          dispatch(fetchPairsAsync())
+          dispatch(fetchPairsAsync({ chainId }))
         })
       }
 

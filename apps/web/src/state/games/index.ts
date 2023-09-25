@@ -38,19 +38,19 @@ export const fetchGameSgAsync =
   }
 
 export const fetchGamesAsync =
-  ({ fromGame }) =>
+  ({ fromGame, chainId }) =>
   async (dispatch) => {
     try {
-      const games = await fetchGames({ fromGame })
+      const games = await fetchGames({ fromGame, chainId })
       dispatch(setGamesPublicData(games || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
   }
 
-export const fetchGameAsync = (gameAddress) => async (dispatch) => {
+export const fetchGameAsync = (gameAddress, chainId) => async (dispatch) => {
   try {
-    const game = await fetchGame(gameAddress)
+    const game = await fetchGame(gameAddress, chainId)
     dispatch(setGamesPublicData([game] || []))
   } catch (error) {
     console.error('[Pools Action] error when getting games', error)

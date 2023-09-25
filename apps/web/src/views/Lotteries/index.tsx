@@ -31,7 +31,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { pools, userDataLoaded } = usePoolsWithFilterSelector()
-  console.log('pools=============>', pools)
+  console.log('pools=============>', pools, userDataLoaded)
   const [onPresentCreateGauge] = useModal(<CreateLotteryModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()

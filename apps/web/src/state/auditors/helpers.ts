@@ -154,10 +154,10 @@ export const getAuditors = async (first = 5, skip = 0, where) => {
   }
 }
 
-export const fetchAuditor = async (auditorAddress) => {
+export const fetchAuditor = async (auditorAddress, chainId) => {
   const auditor = await getAuditor(auditorAddress.toLowerCase())
 
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const [devaddr_, bountyRequired, collectionId, category] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -292,8 +292,8 @@ export const fetchAuditor = async (auditorAddress) => {
   }
 }
 
-export const fetchAuditors = async ({ fromAuditor }) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchAuditors = async ({ fromAuditor, chainId }) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [auditorAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -309,7 +309,7 @@ export const fetchAuditors = async ({ fromAuditor }) => {
     auditorAddresses.result
       .filter((auditorAddress) => (fromAuditor ? auditorAddress?.toLowerCase() === fromAuditor?.toLowerCase() : true))
       .map(async (auditorAddress, index) => {
-        const data = await fetchAuditor(auditorAddress)
+        const data = await fetchAuditor(auditorAddress, chainId)
         return {
           sousId: index,
           ...data,

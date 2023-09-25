@@ -39,7 +39,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchGameSgAsync({ fromGame }))
-          dispatch(fetchGamesAsync({ fromGame }))
+          dispatch(fetchGamesAsync({ fromGame, chainId }))
         })
       }
 

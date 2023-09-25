@@ -35,6 +35,7 @@ import AttachKillDetachStage from './AttachKillDetachStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import CreateGamingStage from './CreateGamingStage'
 import ProcessScoreStage from './ProcessScoreStage'
+import ProcessScoreStage2 from './ProcessScoreStage2'
 import BurnStage from './BurnStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import UpdateObjectStage from './UpdateObjectStage'
@@ -70,10 +71,10 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.BURN_TOKEN_FOR_CREDIT]: t('Burn Token For Credit'),
   [LockStage.PROCESS_SCORE]: t('Process Score'),
   [LockStage.UPDATE_SCORE]: t('Update Score'),
-  [LockStage.WITHDRAW]: t('Withdraw'),
+  [LockStage.WITHDRAW]: t('Claim Rewards'),
   [LockStage.MINT_OBJECT]: t('Mint Object'),
   [LockStage.BURN_OBJECT]: t('Burn Object'),
-  [LockStage.UPDATE_DESTINATION]: t('Update Description'),
+  [LockStage.UPDATE_DESTINATION]: t('Update Destination'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
   [LockStage.ATTACH_KILL_DETACH_TOKEN]: t('Attach, Kill, or Detach Token'),
@@ -766,7 +767,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button mb="8px" onClick={() => setStage(LockStage.BURN_TOKEN_FOR_CREDIT)}>
             {t('BURN TOKEN FOR CREDIT')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CONFIRM_PROCESS_SCORE)}>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.PROCESS_SCORE)}>
             {t('PROCESS SCORE')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.WITHDRAW)}>
@@ -885,14 +886,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           continueToNextStage={continueToNextStage}
         />
       )}
-      {/* {stage === LockStage.UPDATE_SCORE && (
-        <UpdateScoreStage
-          state={state}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
+      {stage === LockStage.PROCESS_SCORE && (
+        <ProcessScoreStage2
+          tokenId={currAccount?.id}
+          score={gameData?.score}
+          deadline={gameData?.deadline}
           continueToNextStage={continueToNextStage}
         />
-      )} */}
+      )}
       {stage === LockStage.WITHDRAW && (
         <AdminWithdrawStage
           state={state}

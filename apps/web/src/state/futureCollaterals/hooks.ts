@@ -27,12 +27,12 @@ export const useFetchPublicPoolsData = () => {
   const fromFutureCollateral = router.query.futureCollateral
 
   useSWR(
-    ['/futureCollaterals'],
+    ['/futureCollaterals', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchFutureCollateralSgAsync({ fromFutureCollateral }))
-          dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral }))
+          dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral, chainId }))
         })
       }
 

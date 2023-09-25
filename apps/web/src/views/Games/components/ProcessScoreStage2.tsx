@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Input, Button, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -12,7 +12,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ tokenId, score, deadline, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -28,27 +28,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Token ID')}
         </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="tokenId"
-          value={state.tokenId}
-          placeholder={t('input your token id')}
-          onChange={handleChange}
-        />
+        <Input type="text" scale="sm" value={tokenId} disabled />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Recipient Address')}
+          {t('Score')}
         </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="destination"
-          value={state.destination}
-          placeholder={t('input recipient address')}
-          onChange={handleChange}
-        />
+        <Input type="text" scale="sm" value={score} disabled />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Minutes Played')}
+        </Text>
+        <Input type="text" scale="sm" value={deadline} disabled />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
@@ -56,18 +48,16 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update the recipient of your winnings. Please read the documentation for more information.')}
+            {t(
+              'The will set the score on the gaming ticket. Please read the documentation for more information on this parameter',
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
-          {t('Update Recipient')}
+        <Button mb="8px" variant="success" onClick={continueToNextStage}>
+          {t('Process Score')}
         </Button>
       </Flex>
     </>

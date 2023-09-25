@@ -168,8 +168,8 @@ export const getAccountSg = async (address: string, channel: string) => {
   }
 }
 
-export const getTokenData = async (tokenAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getTokenData = async (tokenAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [name, symbol, decimals] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -194,12 +194,12 @@ export const getTokenData = async (tokenAddress) => {
 }
 
 // eslint-disable-next-line consistent-return
-export const fetchRamp = async (address) => {
+export const fetchRamp = async (address, chainId) => {
   const rampAddress = address?.toLowerCase()
   const gauge = await getRampSg(rampAddress)
   try {
     // const serializedTokens = serializeTokens()
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [devaddr_, tokens, params] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -310,7 +310,7 @@ export const fetchRamp = async (address) => {
                   },
                 ],
               })
-              const { name, symbol, decimals } = await getTokenData(token)
+              const { name, symbol, decimals } = await getTokenData(token, chainId)
               return {
                 sousId: index,
                 status: protocolInfo.result[0] === 0 ? 'Sold' : protocolInfo.result[0] === 1 ? 'Open' : 'Close',
@@ -326,7 +326,7 @@ export const fetchRamp = async (address) => {
                 salePrice: protocolInfo.result[7]?.toString(),
                 maxPartners: protocolInfo.result[8]?.toString(),
                 cap: protocolInfo.result[9]?.toString(),
-                token: new Token(4002, token, 18, symbol, name, 'https://www.payswap.org/'),
+                token: new Token(chainId, token, 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),
               }
             }),
@@ -472,14 +472,14 @@ export const fetchRamp = async (address) => {
   }
 }
 
-export const fetchRamps = async () => {
+export const fetchRamps = async ({ chainId }) => {
   const gauges = await getRamps()
   const nfts = await getNfts()
   const ramps = await Promise.all(
     gauges
       .filter((gauge) => !!gauge)
       .map(async (gauge, index) => {
-        const data = await fetchRamp(gauge.id)
+        const data = await fetchRamp(gauge.id, chainId)
         return {
           sousId: index,
           ...data,

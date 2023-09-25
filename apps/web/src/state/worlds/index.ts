@@ -17,16 +17,18 @@ const initialState: any = {
   currPool: {},
 }
 
-export const fetchWorldsAsync = () => async (dispatch) => {
-  try {
-    console.log('fetchWorlds1================>')
-    const worlds = await fetchWorlds()
-    console.log('fetchWorld================>', worlds)
-    dispatch(setWorldsPublicData(worlds || []))
-  } catch (error) {
-    console.error('[Pools Action]============> error when getting worlds', error)
+export const fetchWorldsAsync =
+  ({ chainId }) =>
+  async (dispatch) => {
+    try {
+      console.log('fetchWorlds1================>')
+      const worlds = await fetchWorlds({ chainId })
+      console.log('fetchWorld================>', worlds)
+      dispatch(setWorldsPublicData(worlds || []))
+    } catch (error) {
+      console.error('[Pools Action]============> error when getting worlds', error)
+    }
   }
-}
 
 export const PoolsSlice = createSlice({
   name: 'Worlds',

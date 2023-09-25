@@ -89,7 +89,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
               scale="sm"
               name="toAddress"
               value={state.toAddress}
-              placeholder={t('input recipient of attachment')}
+              placeholder={t('address of attachment recipient')}
               onChange={handleChange}
             />
           </GreyedOutContainer>

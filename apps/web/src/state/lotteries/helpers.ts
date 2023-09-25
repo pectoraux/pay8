@@ -79,9 +79,9 @@ export const getLotteries = async (first = 5, skip = 0, where) => {
   }
 }
 
-export const fetchLottery = async (lotteryId) => {
+export const fetchLottery = async (lotteryId, chainId) => {
   try {
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [_viewLottery, tokens] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -185,7 +185,7 @@ export const fetchLottery = async (lotteryId) => {
       tokenData.push({
         amountCollected: amountCollected.result.toString(),
         token: new Token(
-          4002,
+          chainId,
           DEFAULT_TFIAT,
           18,
           'USD',
@@ -225,13 +225,13 @@ export const fetchLottery = async (lotteryId) => {
   }
 }
 
-export const fetchLotteries = async ({ fromLottery }) => {
+export const fetchLotteries = async ({ fromLottery, chainId }) => {
   const _lotteries = await getLotteries(0, 0, {})
 
   const lotteries = await Promise.all(
     _lotteries
       .map(async (lottery, index) => {
-        const data = await fetchLottery(lottery.id)
+        const data = await fetchLottery(lottery.id, chainId)
         return {
           sousId: index,
           ...lottery,
@@ -243,8 +243,8 @@ export const fetchLotteries = async ({ fromLottery }) => {
   return lotteries
 }
 
-export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, idx) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, idx, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [count] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -259,8 +259,8 @@ export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, i
   return count.result
 }
 
-export const getTicket = async (ticketId) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getTicket = async (ticketId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [count] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

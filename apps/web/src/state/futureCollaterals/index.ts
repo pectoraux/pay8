@@ -40,10 +40,10 @@ export const fetchFutureCollateralSgAsync =
   }
 
 export const fetchFutureCollateralsAsync =
-  ({ fromFutureCollateral }) =>
+  ({ fromFutureCollateral, chainId }) =>
   async (dispatch) => {
     try {
-      const futureCollaterals = await fetchFutureCollaterals({ fromFutureCollateral })
+      const futureCollaterals = await fetchFutureCollaterals({ fromFutureCollateral, chainId })
       dispatch(setFutureCollateralsPublicData(futureCollaterals || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)

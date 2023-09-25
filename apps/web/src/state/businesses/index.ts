@@ -20,15 +20,17 @@ const initialState: any = {
 
 let pools = []
 
-export const fetchBusinessGaugesAsync = () => async (dispatch) => {
-  try {
-    const businesses = await fetchBusinesses()
-    const data = businesses
-    dispatch(setBusinessesPublicData(data || []))
-  } catch (error) {
-    console.error('[Pools Action] error when getting business gauges======>', error)
+export const fetchBusinessGaugesAsync =
+  ({ chainId }) =>
+  async (dispatch) => {
+    try {
+      const businesses = await fetchBusinesses({ chainId })
+      const data = businesses
+      dispatch(setBusinessesPublicData(data || []))
+    } catch (error) {
+      console.error('[Pools Action] error when getting business gauges======>', error)
+    }
   }
-}
 
 export const fetchBusinessesUserDataAsync = createAsyncThunk<
   { sousId: number; allowance: any; bribes: any }[],

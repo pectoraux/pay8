@@ -130,10 +130,10 @@ export const getArps = async (first = 5, skip = 0, where) => {
   }
 }
 
-export const fetchArp = async (arpAddress) => {
+export const fetchArp = async (arpAddress, chainId) => {
   const arp = await getArp(arpAddress.toLowerCase())
 
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const [devaddr_, bountyRequired, profileRequired, collectionId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -282,8 +282,8 @@ export const fetchArp = async (arpAddress) => {
   }
 }
 
-export const fetchArps = async ({ fromArp }) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchArps = async ({ fromArp, chainId }) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [arpAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -299,7 +299,7 @@ export const fetchArps = async ({ fromArp }) => {
     arpAddresses.result
       .filter((arpAddress) => (fromArp ? arpAddress?.toLowerCase() === fromArp?.toLowerCase() : true))
       .map(async (arpAddress, index) => {
-        const data = await fetchArp(arpAddress)
+        const data = await fetchArp(arpAddress, chainId)
         return {
           sousId: index,
           ...data,

@@ -61,8 +61,8 @@ export const getBounties = async (first: number, skip: number, where) => {
   return []
 }
 
-export const getTokenData = async (tokenAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getTokenData = async (tokenAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [name, symbol, decimals] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -95,6 +95,7 @@ export const fetchBounties = async (
   fromBusinesses = false,
   fromRamps = false,
   fromTransfers = false,
+  chainId,
 ) => {
   const whereClause = Number(collectionId)
     ? {
@@ -140,7 +141,7 @@ export const fetchBounties = async (
         active: true,
       }
   const bountiesFromSg = await getBounties(1000, 0, whereClause)
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const bounties = await Promise.all(
     bountiesFromSg
       .map(async (bounty) => {
@@ -195,7 +196,7 @@ export const fetchBounties = async (
           }),
         )
         const friendlyClaims = claims.filter((claim) => claim.friendly && !claim.atPeace)
-        const { name, symbol, decimals } = await getTokenData(token)
+        const { name, symbol, decimals } = await getTokenData(token, chainId)
         return {
           ...bounty,
           collection,
@@ -203,7 +204,14 @@ export const fetchBounties = async (
           ve,
           tokenAddress: token,
           isNativeCoin: token.toLowerCase() === DEFAULT_INPUT_CURRENCY,
-          token: new Token(4002, token, decimals ?? 18, symbol, name, `https://tokens.payswap.org/images/${token}.png`),
+          token: new Token(
+            chainId,
+            token,
+            decimals ?? 18,
+            symbol,
+            name,
+            `https://tokens.payswap.org/images/${token}.png`,
+          ),
           owner,
           claims,
           friendlyClaims,

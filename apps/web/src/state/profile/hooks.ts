@@ -27,7 +27,7 @@ export const useFetchPublicPoolsData = () => {
   useSlowRefreshEffect(() => {
     const fetchPoolsDataWithFarms = async () => {
       batch(() => {
-        dispatch(fetchProfilesAsync())
+        dispatch(fetchProfilesAsync({ chainId }))
       })
     }
 
@@ -69,9 +69,10 @@ export const useProfileForAddress = (
   isValidating: boolean
   refresh: KeyedMutator<any>
 } => {
+  const { chainId } = useActiveChainId()
   const { data, status, mutate, isValidating } = useSWR(
-    address ? [address, 'profile'] : null,
-    () => getProfileDataFromUser(address),
+    address ? [address, 'profile', chainId] : null,
+    () => getProfileDataFromUser(address, chainId),
     fetchConfiguration,
   )
   return {
@@ -117,9 +118,14 @@ export const useProfile = (): {
   refresh: KeyedMutator<any>
 } => {
   const { account } = useWeb3React()
-  const { data, status, mutate } = useSWRImmutable(account ? [account, 'profile38'] : null, () => getProfile(account), {
-    use: [localStorageMiddleware],
-  })
+  const { chainId } = useActiveChainId()
+  const { data, status, mutate } = useSWRImmutable(
+    account ? [account, 'profile38'] : null,
+    () => getProfile(account, chainId),
+    {
+      use: [localStorageMiddleware],
+    },
+  )
 
   const { profile, profileId } = data ?? { profile: null, profileId: 0 }
   const isLoading = status === FetchStatus.Fetching
@@ -130,8 +136,9 @@ export const useProfile = (): {
 }
 
 export const useGetSharedEmail = (account) => {
-  const { data, status } = useSWR(['sharedEmail', account?.toLowerCase()], async () =>
-    getSharedEmail(account?.toLowerCase()),
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWR(['sharedEmail', account?.toLowerCase(), chainId], async () =>
+    getSharedEmail(account?.toLowerCase(), chainId),
   )
   return {
     status,
@@ -149,7 +156,8 @@ export const useGetProfileData = (profileId) => {
 }
 
 export const useGetIsNameUsed = (name) => {
-  const { data, status, mutate } = useSWR(['isNameUsed', name], async () => getIsNameUsed(name))
+  const { chainId } = useActiveChainId()
+  const { data, status, mutate } = useSWR(['isNameUsed', name, chainId], async () => getIsNameUsed(name, chainId))
   return {
     status,
     refetch: mutate,
@@ -158,7 +166,10 @@ export const useGetIsNameUsed = (name) => {
 }
 
 export const useGetProfileId = (address) => {
-  const { data, status, mutate } = useSWR(['getProfileId', address], async () => getProfileId(address))
+  const { chainId } = useActiveChainId()
+  const { data, status, mutate } = useSWR(['getProfileId', address, chainId], async () =>
+    getProfileId(address, chainId),
+  )
   return {
     status,
     refetch: mutate,

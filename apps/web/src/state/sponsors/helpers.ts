@@ -129,9 +129,9 @@ export const getSponsors = async (first = 5, skip = 0, where) => {
   }
 }
 
-export const fetchSponsor = async (sponsorAddress) => {
+export const fetchSponsor = async (sponsorAddress, chainId) => {
   const sponsor = await getSponsor(sponsorAddress.toLowerCase())
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const [cosignEnabled, devaddr_, minCosigners, requiredIndentity, valueName, _ve, bountyRequired, collectionId] =
     await bscClient.multicall({
       allowFailure: true,
@@ -285,8 +285,8 @@ export const fetchSponsor = async (sponsorAddress) => {
   }
 }
 
-export const fetchSponsors = async ({ fromSponsor }) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchSponsors = async ({ fromSponsor, chainId }) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [sponsorAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -302,7 +302,7 @@ export const fetchSponsors = async ({ fromSponsor }) => {
     sponsorAddresses.result
       .filter((sponsorAddress) => (fromSponsor ? sponsorAddress?.toLowerCase() === fromSponsor?.toLowerCase() : true))
       .map(async (sponsorAddress, index) => {
-        const data = await fetchSponsor(sponsorAddress)
+        const data = await fetchSponsor(sponsorAddress, chainId)
         return {
           sousId: index,
           ...data,

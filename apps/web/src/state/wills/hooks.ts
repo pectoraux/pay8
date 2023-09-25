@@ -34,7 +34,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchWillSgAsync({ fromWill }))
-          dispatch(fetchWillsAsync({ fromWill }))
+          dispatch(fetchWillsAsync({ fromWill, chainId }))
         })
       }
 

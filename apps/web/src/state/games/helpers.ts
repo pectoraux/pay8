@@ -136,9 +136,9 @@ export const getGames = async (first = 5, skip = 0, where) => {
   }
 }
 
-export const fetchGame = async (gameId) => {
+export const fetchGame = async (gameId, chainId) => {
   const gameFromSg = await getGame(gameId)
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const [ticketInfo_, totalEarned] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -362,13 +362,13 @@ export const fetchGame = async (gameId) => {
 //   // })
 // }
 
-export const fetchGames = async ({ fromGame }) => {
+export const fetchGames = async ({ fromGame, chainId }) => {
   const gamesFromSg = await getGames(0, 0, {})
   const games = await Promise.all(
     gamesFromSg
       .filter((game) => (fromGame ? game?.id === fromGame : true))
       .map(async (game) => {
-        const data = await fetchGame(game.id)
+        const data = await fetchGame(game.id, chainId)
         return {
           sousId: game.id,
           ...data,

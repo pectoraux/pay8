@@ -138,9 +138,9 @@ export const getBills = async (first = 5, skip = 0, where) => {
   }
 }
 
-export const fetchBill = async (billAddress) => {
+export const fetchBill = async (billAddress, chainId) => {
   const bill = await getBill(billAddress.toLowerCase())
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const [devaddr_, bountyRequired, profileRequired, collectionId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -297,8 +297,8 @@ export const fetchBill = async (billAddress) => {
   }
 }
 
-export const fetchBills = async ({ fromBill }) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchBills = async ({ fromBill, chainId }) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [billAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -314,7 +314,7 @@ export const fetchBills = async ({ fromBill }) => {
     billAddresses.result
       .filter((billAddress) => (fromBill ? billAddress?.toLowerCase() === fromBill?.toLowerCase() : true))
       .map(async (billAddress, index) => {
-        const data = await fetchBill(billAddress)
+        const data = await fetchBill(billAddress, chainId)
         return {
           sousId: index,
           ...data,

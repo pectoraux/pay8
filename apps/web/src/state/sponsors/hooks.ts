@@ -33,7 +33,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchSponsorSgAsync({ fromSponsor }))
-          dispatch(fetchSponsorsAsync({ fromSponsor }))
+          dispatch(fetchSponsorsAsync({ fromSponsor, chainId }))
         })
       }
 

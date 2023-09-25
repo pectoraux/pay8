@@ -1169,7 +1169,7 @@
   "%symbol% in wallet": "ওয়ালেটে রয়েছে %symbol% in wallet",
   "Total payment": "মোট পেমেন্ট",
   "Pay with": "যা দিয়ে পরিশোধ করবেন",
-  "Please enable WBNB spending in your wallet": "অনুগ্রহ করে আপনার ওয়ালেটে WBNB খরচ সক্রিয় করুন",
+  "Please enable the spending of the selected in your wallet": "অনুগ্রহ করে আপনার ওয়ালেটে WBNB খরচ সক্রিয় করুন",
   "Please confirm the transaction in your wallet": "অনুগ্রহ করে আপনার ওয়ালেটে লেনদেন নিশ্চিত করুন",
   "Your NFTs": "আপনার NFT",
   "Contract approved - you can now buy NFT with WBNB!": "চুক্তি অনুমোদিত - আপনি এখন WBNB দ্বারা NFT ক্রয় করতে পারেন! ",

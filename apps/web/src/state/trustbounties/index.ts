@@ -19,7 +19,16 @@ const initialState: any = {
 }
 
 export const fetchBountiesAsync =
-  ({ fromAccelerator, fromContributors, fromSponsors, fromAuditors, fromBusinesses, fromRamps, fromTransfers }) =>
+  ({
+    fromAccelerator,
+    fromContributors,
+    fromSponsors,
+    fromAuditors,
+    fromBusinesses,
+    fromRamps,
+    fromTransfers,
+    chainId,
+  }) =>
   async (dispatch) => {
     try {
       const trustbounties = await fetchBounties(
@@ -31,6 +40,7 @@ export const fetchBountiesAsync =
         fromBusinesses,
         fromRamps,
         fromTransfers,
+        chainId,
       )
       dispatch(setBountiesPublicData(trustbounties || []))
     } catch (error) {

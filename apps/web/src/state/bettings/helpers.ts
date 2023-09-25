@@ -91,8 +91,8 @@ export const getBettings = async (first = 5, skip = 0, where) => {
   }
 }
 
-export const getAmountCollected = async (bettingAddress, bettingId, period) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getAmountCollected = async (bettingAddress, bettingId, period, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [amountCollected] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -107,8 +107,8 @@ export const getAmountCollected = async (bettingAddress, bettingId, period) => {
   return amountCollected.result.toString()
 }
 
-export const getSubjects = async (bettingAddress, bettingId) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getSubjects = async (bettingAddress, bettingId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [subjects] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -123,8 +123,8 @@ export const getSubjects = async (bettingAddress, bettingId) => {
   return subjects.result
 }
 
-export const getCountWinnersPerBracket = async (bettingAddress, bettingId, period, idx) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getCountWinnersPerBracket = async (bettingAddress, bettingId, period, idx, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [count] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -139,8 +139,8 @@ export const getCountWinnersPerBracket = async (bettingAddress, bettingId, perio
   return count.result
 }
 
-export const getPendingRevenue = async (bettingAddress, tokenAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getPendingRevenue = async (bettingAddress, tokenAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [pendingRevenue] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -155,9 +155,9 @@ export const getPendingRevenue = async (bettingAddress, tokenAddress) => {
   return pendingRevenue.result
 }
 
-export const fetchBetting = async (bettingAddress) => {
+export const fetchBetting = async (bettingAddress, chainId) => {
   const bettingFromSg = await getBetting(bettingAddress)
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const [devaddr_, collectionId, oracle] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -274,13 +274,13 @@ export const fetchBetting = async (bettingAddress) => {
   }
 }
 
-export const fetchBettings = async ({ fromBetting }) => {
+export const fetchBettings = async ({ fromBetting, chainId }) => {
   const bettingsFromSg = await getBettings(0, 0, {})
   const bettings = await Promise.all(
     bettingsFromSg
       .filter((betting) => (fromBetting ? betting?.id === fromBetting : true))
       .map(async (betting, index) => {
-        const data = await fetchBetting(betting.id)
+        const data = await fetchBetting(betting.id, chainId)
         return {
           sousId: index,
           ...data,
@@ -291,9 +291,9 @@ export const fetchBettings = async ({ fromBetting }) => {
   return bettings
 }
 
-export const getCalculateRewardsForTicketId = async (bettingAddress, bettingId, ticketId, bracketNumber) => {
+export const getCalculateRewardsForTicketId = async (bettingAddress, bettingId, ticketId, bracketNumber, chainId) => {
   const arr = Array.from({ length: Number(bracketNumber) }, (v, i) => i)
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const rewards = await Promise.all(
     arr.map(async (bracket) => {
       const [reward] = await bscClient.multicall({

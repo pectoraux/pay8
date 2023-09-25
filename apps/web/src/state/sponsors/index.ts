@@ -38,10 +38,10 @@ export const fetchSponsorSgAsync =
   }
 
 export const fetchSponsorsAsync =
-  ({ fromSponsor }) =>
+  ({ fromSponsor, chainId }) =>
   async (dispatch) => {
     try {
-      const sponsors = await fetchSponsors({ fromSponsor })
+      const sponsors = await fetchSponsors({ fromSponsor, chainId })
       dispatch(setSponsorsPublicData(sponsors || []))
     } catch (error) {
       console.error('[Pools Action]============> error when getting sponsors from blockchain', error)

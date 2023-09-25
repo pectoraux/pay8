@@ -28,7 +28,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchLotteriesSgAsync({ fromLottery }))
-          dispatch(fetchLotteriesAsync({ fromLottery }))
+          dispatch(fetchLotteriesAsync({ fromLottery, chainId }))
         })
       }
       fetchPoolsDataWithFarms()
@@ -75,16 +75,18 @@ export const useGetTags = () => {
 }
 
 export const useGetTicket = (ticketId) => {
-  const { data } = useSWR(['lotteries-tickets', ticketId], async () => getTicket(ticketId))
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['lotteries-tickets', ticketId, chainId], async () => getTicket(ticketId, chainId))
   return data ?? ''
 }
 
 export const useGetRewardsForTicketId = (tokenAddress, lotteryId, ticketId) => {
+  const { chainId } = useActiveChainId()
   const { data: winners } = useSWRImmutable(['rewards-for-user', tokenAddress, lotteryId, ticketId], async () => {
     try {
       const arr = Array.from({ length: 6 }, (v, i) => i)
       const res = await Promise.all(
-        arr?.map(async (idx) => getRewardsForTicketId(tokenAddress, lotteryId, ticketId, idx)),
+        arr?.map(async (idx) => getRewardsForTicketId(tokenAddress, lotteryId, ticketId, idx, chainId)),
       )
       return res
     } catch (err) {

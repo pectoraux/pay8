@@ -38,10 +38,10 @@ export const fetchCardSgAsync =
   }
 
 export const fetchCardsAsync =
-  ({ fromCard }) =>
+  ({ fromCard, chainId }) =>
   async (dispatch) => {
     try {
-      const cards = await fetchCards({ fromCard })
+      const cards = await fetchCards({ fromCard, chainId })
       dispatch(setCardsPublicData(cards || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)

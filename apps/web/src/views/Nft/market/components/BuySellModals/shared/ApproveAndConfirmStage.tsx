@@ -42,7 +42,7 @@ const ApproveAndConfirmStage: React.FC<React.PropsWithChildren<ApproveAndConfirm
           {!isApproved && (
             <Text mt="8px" maxWidth="275px" small color="textSubtle">
               {variant === 'buy'
-                ? t('Please enable WBNB spending in your wallet')
+                ? t('Please enable the spending of the selected in your wallet')
                 : t('Please enable your NFT to be sent to the market')}
             </Text>
           )}

@@ -29,9 +29,10 @@ export const useGetTags = () => {
 }
 
 export const useGetAmountCollected = (bettingAddress, bettingId, period) => {
+  const { chainId } = useActiveChainId()
   const { data: amountCollected, mutate: refetch } = useSWRImmutable(
     ['amountCollected', bettingAddress, bettingId],
-    async () => getAmountCollected(bettingAddress, bettingId, parseInt(period)),
+    async () => getAmountCollected(bettingAddress, bettingId, parseInt(period), chainId),
   )
   return {
     amountCollected,
@@ -40,9 +41,10 @@ export const useGetAmountCollected = (bettingAddress, bettingId, period) => {
 }
 
 export const useGetSubjects = (bettingAddress, bettingId, ticketSize) => {
+  const { chainId } = useActiveChainId()
   const { data: subjects } = useSWRImmutable(['subjects', bettingAddress, bettingId, ticketSize], async () => {
     try {
-      return getSubjects(bettingAddress, bettingId)
+      return getSubjects(bettingAddress, bettingId, chainId)
     } catch (err) {
       console.log('rerr==========>', err)
     }
@@ -52,9 +54,10 @@ export const useGetSubjects = (bettingAddress, bettingId, ticketSize) => {
 }
 
 export const useGetCalculateRewardsForTicketId = (bettingAddress, bettingId, ticketId, bracketNumber) => {
+  const { chainId } = useActiveChainId()
   const { data: rewards } = useSWRImmutable(['rewards-for-ticket', bettingAddress, bettingId, ticketId], async () => {
     try {
-      return getCalculateRewardsForTicketId(bettingAddress, bettingId, ticketId, bracketNumber)
+      return getCalculateRewardsForTicketId(bettingAddress, bettingId, ticketId, bracketNumber, chainId)
     } catch (err) {
       console.log('rerr==========>', err)
     }
@@ -64,9 +67,10 @@ export const useGetCalculateRewardsForTicketId = (bettingAddress, bettingId, tic
 }
 
 export const useGetPendingRevenue = (bettingAddress, tokenAddress) => {
+  const { chainId } = useActiveChainId()
   const { data: pendingRevenue } = useSWRImmutable(['pendingRevenue', bettingAddress, tokenAddress], async () => {
     try {
-      return getPendingRevenue(bettingAddress, tokenAddress)
+      return getPendingRevenue(bettingAddress, tokenAddress, chainId)
     } catch (err) {
       console.log('rerr==========>', err)
     }
@@ -76,11 +80,12 @@ export const useGetPendingRevenue = (bettingAddress, tokenAddress) => {
 }
 
 export const useGetWinnersPerBracket = (bettingAddress, bettingId, period, ticketSize) => {
+  const { chainId } = useActiveChainId()
   const { data: winners } = useSWRImmutable(['winners', bettingAddress, bettingId, period, ticketSize], async () => {
     try {
       const arr = Array.from({ length: Number(ticketSize) }, (v, i) => i)
       const res = await Promise.all(
-        arr?.map(async (idx) => getCountWinnersPerBracket(bettingAddress, bettingId, period, idx)),
+        arr?.map(async (idx) => getCountWinnersPerBracket(bettingAddress, bettingId, period, idx, chainId)),
       )
       return res
     } catch (err) {
@@ -92,12 +97,15 @@ export const useGetWinnersPerBracket = (bettingAddress, bettingId, period, ticke
 }
 
 export const useGetWinnersPerBracketNPeriod = (bettingAddress, bettingId, periods, ticketSize) => {
-  const { data: winners } = useSWRImmutable(['winners1', bettingAddress, bettingId, periods, ticketSize], async () => {
+  const { chainId } = useActiveChainId()
+  const { data: winners } = useSWRImmutable(['winners', bettingAddress, bettingId, periods, ticketSize], async () => {
     try {
       return Promise.all(
         periods?.map(async (period) => {
           const arr = Array.from({ length: Number(ticketSize) }, (v, i) => i)
-          return Promise.all(arr?.map(async (idx) => getCountWinnersPerBracket(bettingAddress, bettingId, period, idx)))
+          return Promise.all(
+            arr?.map(async (idx) => getCountWinnersPerBracket(bettingAddress, bettingId, period, idx, chainId)),
+          )
         }),
       )
     } catch (err) {
@@ -120,7 +128,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           dispatch(fetchBettingSgAsync({ fromBetting }))
-          dispatch(fetchBettingsAsync({ fromBetting }))
+          dispatch(fetchBettingsAsync({ fromBetting, chainId }))
         })
       }
 

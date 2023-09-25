@@ -20,22 +20,24 @@ const initialState: any = {
 
 let pools = []
 
-export const fetchReferralGaugesAsync = () => async (dispatch) => {
-  try {
-    const referrals = await fetchReferrals()
-    const data = referrals
-    dispatch(setReferralsPublicData(data || []))
-  } catch (error) {
-    console.error('[Pools Action] error when getting referral gauges======>', error)
+export const fetchReferralGaugesAsync =
+  ({ chainId }) =>
+  async (dispatch) => {
+    try {
+      const referrals = await fetchReferrals({ chainId })
+      const data = referrals
+      dispatch(setReferralsPublicData(data || []))
+    } catch (error) {
+      console.error('[Pools Action] error when getting referral gauges======>', error)
+    }
   }
-}
 
 export const fetchReferralsUserDataAsync = createAsyncThunk<
   { sousId: number; allowance: any; bribes: any }[],
-  { account: string }
->('pool/fetchPoolsUserData', async ({ account }, { rejectWithValue }) => {
+  { account: string; chainId: any }
+>('pool/fetchPoolsUserData', async ({ account, chainId }, { rejectWithValue }) => {
   try {
-    const allBribes = await fetchReferralsUserData(account, pools)
+    const allBribes = await fetchReferralsUserData(account, pools, chainId)
     const userData = pools.map((pool) => ({
       sousId: parseInt(pool.sousId),
       allowance: 0,

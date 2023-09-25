@@ -18,9 +18,9 @@ const initialState: any = {
   currPool: {},
 }
 
-export const fetchStakesAsync = (collectionId) => async (dispatch) => {
+export const fetchStakesAsync = (collectionId, chainId) => async (dispatch) => {
   try {
-    const stakes = await fetchStakes(collectionId)
+    const stakes = await fetchStakes(collectionId, chainId)
     const reconstructedData = stakes
       .filter(
         (stake) => stake.tokenAddress !== ADDRESS_ZERO && parseInt(stake.sousId) === parseInt(stake.parentStakeId),

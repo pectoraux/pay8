@@ -38,10 +38,10 @@ export const fetchBillSgAsync =
   }
 
 export const fetchBillsAsync =
-  ({ fromBill }) =>
+  ({ fromBill, chainId }) =>
   async (dispatch) => {
     try {
-      const bills = await fetchBills({ fromBill })
+      const bills = await fetchBills({ fromBill, chainId })
       dispatch(setBillsPublicData(bills || []))
     } catch (error) {
       console.error('[Pools Action]============>', error)

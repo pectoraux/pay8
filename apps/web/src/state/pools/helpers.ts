@@ -56,8 +56,8 @@ export const getPairs = async (first = 5, skip = 0, where = {}) => {
   }
 }
 
-export const fetchPair = async (pairAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchPair = async (pairAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [name, symbol, decimals, periodFinish, totalLiquidity, toDistribute] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -113,12 +113,12 @@ export const fetchPair = async (pairAddress) => {
   }
 }
 
-export const fetchPairs = async () => {
+export const fetchPairs = async ({ chainId }) => {
   const pairsFromSg = await getPairs()
   const pairs = await Promise.all(
     pairsFromSg
       .map(async (pair, index) => {
-        const data = await fetchPair(pair.id)
+        const data = await fetchPair(pair.id, chainId)
         return {
           sousId: index,
           ...pair,
@@ -130,8 +130,8 @@ export const fetchPairs = async () => {
   return pairs
 }
 
-export const fetchUserBalances = async (accountAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchUserBalances = async (accountAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const pairsFromSg = await getPairs()
   const pairs = await Promise.all(
     pairsFromSg

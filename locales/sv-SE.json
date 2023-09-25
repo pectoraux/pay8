@@ -1169,7 +1169,7 @@
   "%symbol% in wallet": "%symbol% i plånboken",
   "Total payment": "Totalbelopp att betala",
   "Pay with": "Betala med",
-  "Please enable WBNB spending in your wallet": "Aktivera WBNB-köp i din plånbok",
+  "Please enable the spending of the selected in your wallet": "Aktivera WBNB-köp i din plånbok",
   "Please confirm the transaction in your wallet": "Bekräfta transaktionen i din plånbok",
   "Your NFTs": "Dina NFT:er",
   "Contract approved - you can now buy NFT with WBNB!": "Kontraktet har godkänts – nu kan du köpa NFT:er med WBNB!",

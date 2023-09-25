@@ -1169,7 +1169,7 @@
   "%symbol% in wallet": "ウォレット内の%symbol%",
   "Total payment": "合計支払い",
   "Pay with": "支払い方法:",
-  "Please enable WBNB spending in your wallet": "ウォレットでWBNBの出費を有効にしてください",
+  "Please enable the spending of the selected in your wallet": "ウォレットでWBNBの出費を有効にしてください",
   "Please confirm the transaction in your wallet": "ウォレットで取引を確定してください",
   "Your NFTs": "あなたのNFT",
   "Contract approved - you can now buy NFT with WBNB!": "スマートコントラクトが承認され、WBNBでNFTを購入できるようになりました！",

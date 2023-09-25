@@ -1169,7 +1169,7 @@
   "%symbol% in wallet": "%symbol% lompakossa",
   "Total payment": "Maksu yhteensä",
   "Pay with": "Maksupoletti",
-  "Please enable WBNB spending in your wallet": "Ota WBNB:n käyttö käyttöön lompakossasi",
+  "Please enable the spending of the selected in your wallet": "Ota WBNB:n käyttö käyttöön lompakossasi",
   "Please confirm the transaction in your wallet": "Vahvista transaktio lompakossasi",
   "Your NFTs": "NFT:si",
   "Contract approved - you can now buy NFT with WBNB!": "Sopimus hyväksytty – voit nyt ostaa NFT:n WBNB:llä!",

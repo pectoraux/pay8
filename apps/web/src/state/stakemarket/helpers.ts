@@ -86,7 +86,7 @@ export const getStakes = async (first: number, skip: number, where) => {
   return null
 }
 
-export const fetchStakes = async (collectionId) => {
+export const fetchStakes = async (collectionId, chainId) => {
   const whereClause = Number(collectionId)
     ? {
         stakeSource: collectionId,
@@ -96,7 +96,7 @@ export const fetchStakes = async (collectionId) => {
         active: true,
       }
   const stakesFromSg = await getStakes(1000, 0, whereClause)
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const stakes = await Promise.all(
     stakesFromSg
       .map(async (stake) => {

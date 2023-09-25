@@ -1169,7 +1169,7 @@
   "%symbol% in wallet": "지갑의 %symbol%",
   "Total payment": "총 결제",
   "Pay with": "결제 수단",
-  "Please enable WBNB spending in your wallet": "지갑에서 WBNB 사용을 활성화하세요",
+  "Please enable the spending of the selected in your wallet": "지갑에서 WBNB 사용을 활성화하세요",
   "Please confirm the transaction in your wallet": "지갑에서 이 트랜잭션을 확인하세요",
   "Your NFTs": "내 NFT",
   "Contract approved - you can now buy NFT with WBNB!": "계약 승인됨 - 이제 WBNB로 NFT를 구입할 수 있습니다!",

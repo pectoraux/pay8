@@ -86,8 +86,8 @@ export const getProfilesData = async (first = 5, skip = 0, where = {}) => {
   }
 }
 
-export const getSharedEmail = async (accountAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getSharedEmail = async (accountAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [shared] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -102,8 +102,8 @@ export const getSharedEmail = async (accountAddress) => {
   return shared.result
 }
 
-export const getIsNameUsed = async (name) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getIsNameUsed = async (name, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [isNameTaken] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -118,13 +118,13 @@ export const getIsNameUsed = async (name) => {
   return isNameTaken.result
 }
 
-export const getProfileDataFromUser = async (address) => {
-  const profileId = await getProfileId(address)
+export const getProfileDataFromUser = async (address, chainId) => {
+  const profileId = await getProfileId(address, chainId)
   return getProfileData(profileId)
 }
 
-export const getProfileId = async (address) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getProfileId = async (address, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [profileId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -162,12 +162,12 @@ export const getSSIDatum = async (account: string) => {
   }
 }
 
-export const fetchProfiles = async () => {
+export const fetchProfiles = async ({ chainId }) => {
   const gauges = await getProfilesData()
   const profiles = await Promise.all(
     gauges
       .map(async (gauge) => {
-        const bscClient = publicClient({ chainId: 4002 })
+        const bscClient = publicClient({ chainId: chainId })
         const [profileInfo, _badgeIds, broadcast] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -278,9 +278,9 @@ export const fetchProfiles = async () => {
   return profiles
 }
 
-export const getProfile = async (address) => {
+export const getProfile = async (address, chainId) => {
   try {
-    const bscClient = publicClient({ chainId: 4002 })
+    const bscClient = publicClient({ chainId: chainId })
     const [profileId] = await bscClient.multicall({
       allowFailure: true,
       contracts: [

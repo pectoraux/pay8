@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will claim pnding revenue for your gaming ticket. Please read the documentation for more information on this parameter',
+              'The will claim pending revenue for your gaming ticket. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

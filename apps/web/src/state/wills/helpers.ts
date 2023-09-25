@@ -123,9 +123,9 @@ export const getWills = async (first = 5, skip = 0, where) => {
   }
 }
 
-export const fetchWill = async (willAddress) => {
+export const fetchWill = async (willAddress, chainId) => {
   const will = await getWill(willAddress.toLowerCase())
-  const bscClient = publicClient({ chainId: 4002 })
+  const bscClient = publicClient({ chainId: chainId })
   const tokens = await Promise.all(
     will?.tokens?.map(async (token) => {
       const [name, symbol, decimals, totalLiquidity] = await bscClient.multicall({
@@ -368,8 +368,8 @@ export const fetchWill = async (willAddress) => {
   }
 }
 
-export const fetchWills = async ({ fromWill }) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const fetchWills = async ({ fromWill, chainId }) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [willAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -387,7 +387,7 @@ export const fetchWills = async ({ fromWill }) => {
       .filter((willAddress) => (fromWill ? willAddress?.toLowerCase() === fromWill?.toLowerCase() : true))
       .map(async (willAddress, index) => {
         console.log('2fetchWills==================>2')
-        const data = await fetchWill(willAddress)
+        const data = await fetchWill(willAddress, chainId)
         console.log('3fetchWills==================>', data)
         return {
           sousId: index,

@@ -27,19 +27,21 @@ const initialState: any = {
   currPool: {},
 }
 
-export const fetchRampsAsync = () => async (dispatch) => {
-  try {
-    const ramps = await fetchRamps()
-    const data = ramps.filter((ramp) => !!ramp)
-    dispatch(setRampsPublicData(data || []))
-  } catch (error) {
-    console.error('[Pools Action]===============>', error)
+export const fetchRampsAsync =
+  ({ chainId }) =>
+  async (dispatch) => {
+    try {
+      const ramps = await fetchRamps({ chainId })
+      const data = ramps.filter((ramp) => !!ramp)
+      dispatch(setRampsPublicData(data || []))
+    } catch (error) {
+      console.error('[Pools Action]===============>', error)
+    }
   }
-}
 
-export const fetchRampAsync = (rampAddress) => async (dispatch) => {
+export const fetchRampAsync = (rampAddress, chainId) => async (dispatch) => {
   try {
-    const ramp = await fetchRamp(rampAddress)
+    const ramp = await fetchRamp(rampAddress, chainId)
     dispatch(setRampsPublicData([ramp] || []))
   } catch (error) {
     console.error('[Pools Action]=============> error when getting ramps', error)

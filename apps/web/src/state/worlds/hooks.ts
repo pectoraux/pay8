@@ -16,7 +16,7 @@ import {
 import { getTag } from './helpers'
 
 export const useGetTags = () => {
-  const { data } = useSWR('worlds-tags6', async () => getTag())
+  const { data } = useSWR('worlds-tags', async () => getTag())
   console.log('usetag============>', data)
   return data?.name ?? ''
 }
@@ -30,7 +30,7 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
-          dispatch(fetchWorldsAsync())
+          dispatch(fetchWorldsAsync({ chainId }))
         })
       }
 
