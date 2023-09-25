@@ -28,6 +28,7 @@ import {
   getPricePerMinute,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'asc' | 'desc' }
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
@@ -47,7 +48,8 @@ export const useGetTransactions = (userAddress) => {
 }
 
 export const useGetProfileId = (account: string) => {
-  const { data, status } = useSWR(['profileId', account], async () => getProfile(account))
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWR(['profileId', account], async () => getProfile(account, chainId))
   return { data, status }
 }
 
