@@ -178,9 +178,9 @@ export const TimerLabel: React.FC<any> = ({ interval, unit }) => {
     <Box pr="24px" position="relative">
       <Label dir="right">
         <ClosingTitle bold color="secondary">
-          {t('Closing')}
+          {interval > 0 ? t('Closing') : t('Closed for')}
         </ClosingTitle>
-        <Interval fontSize="12px">{`${interval}${t(unit)}`}</Interval>
+        <Interval fontSize="12px">{`${interval > 0 ? interval : -interval}${t(unit)}`}</Interval>
       </Label>
       <Token right={0}>
         <PocketWatchIcon />
