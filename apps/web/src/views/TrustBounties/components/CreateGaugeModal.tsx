@@ -32,6 +32,7 @@ import UpdateParametersStage from './UpdateParametersStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import LocationStage from 'views/Ramps/components/LocationStage'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -75,6 +76,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
   const dispatch = useAppDispatch()
   const { toastSuccess } = useToast()
   const adminARP = pool
+  const { chainId } = useActiveChainId()
   const trustBountiesContract = useTrustBountiesContract()
   const trustBountiesHelperContract = useTrustBountiesHelperContract()
   const stakingTokenContract = useERC20(pool?.tokenAddress || '')
@@ -412,6 +414,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           fromBusinesses,
           fromRamps,
           fromTransfers,
+          chainId,
         }),
       )
       setConfirmedTxHash(receipt.transactionHash)
