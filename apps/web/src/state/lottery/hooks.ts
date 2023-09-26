@@ -11,6 +11,7 @@ import { getLotteryContract } from '../../utils/contractHelpers'
 import { fetchLotteryAsync, fetchUserTicketsAndLotteries } from '.'
 import { makeLotteryGraphDataByIdSelector, lotterySelector } from './selectors'
 import { getPendingReward } from './helpers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 // Lottery
 export const useGetCurrentLotteryId = () => {
@@ -65,8 +66,9 @@ export const useLottery = () => {
 }
 
 export const useGetPendingReward = (userAddress, lotteryId, tokenAddress) => {
+  const { chainId } = useActiveChainId()
   const { data: pendingReward } = useSWRImmutable(['reward', userAddress, lotteryId, tokenAddress], async () =>
-    getPendingReward(lotteryId, userAddress, tokenAddress),
+    getPendingReward(lotteryId, userAddress, tokenAddress, chainId),
   )
   return pendingReward
 }

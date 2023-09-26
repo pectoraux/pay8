@@ -158,8 +158,8 @@ export const hasRoundBeenClaimed = (tickets: LotteryTicket[]): boolean => {
   return claimedTickets.length > 0
 }
 
-export const getPendingReward = async (lotteryId, userAddress, tokenAddress) => {
-  const bscClient = publicClient({ chainId: 4002 })
+export const getPendingReward = async (lotteryId, userAddress, tokenAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
   const [pendingReward] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

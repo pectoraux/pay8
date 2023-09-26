@@ -150,7 +150,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
         return {
           amountCollected: amountCollected.result?.toString(),
           token: new Token(
-            56,
+            chainId,
             token,
             decimals.result,
             symbol.result?.toString()?.toUpperCase(),
