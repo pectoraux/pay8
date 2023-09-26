@@ -26,17 +26,17 @@ const NameCell: React.FC<any> = ({ pool, currAccount }) => {
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
-        <Text bold={!isMobile} small={isMobile}>
-          <Flex flexDirection="column">
-            <SaveIcon
-              fill={watchlistTokens.includes(pool?.id)}
-              onClick={() => addWatchlistToken(pool?.id)}
-              style={{ marginRight: '20px', position: 'relative' }}
-            />
+        <Flex flexDirection="column" justifyContent="flex-end">
+          <SaveIcon
+            fill={watchlistTokens.includes(pool?.id)}
+            onClick={() => addWatchlistToken(pool?.id)}
+            style={{ marginRight: '20px', position: 'relative' }}
+          />
+          <Text bold={!isMobile} small={isMobile}>
             <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
             {t(pool?.collection?.name ?? '')}
-          </Flex>
-        </Text>
+          </Text>
+        </Flex>
       </Pool.CellContent>
     </StyledCell>
   )

@@ -29,8 +29,8 @@ const NameCell: React.FC<any> = ({ pool, currAccount }) => {
       <Pool.CellContent>
         <Flex flexDirection="column">
           <SaveIcon
-            fill={watchlistTokens.includes(currAccount?.owner)}
-            onClick={() => addWatchlistToken(currAccount?.owner)}
+            fill={watchlistTokens.includes(currAccount?.id)}
+            onClick={() => addWatchlistToken(currAccount?.id)}
             style={{ marginRight: '20px', position: 'relative' }}
           />
           <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />

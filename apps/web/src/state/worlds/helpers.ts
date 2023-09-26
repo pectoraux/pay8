@@ -85,16 +85,16 @@ export const getWorld = async (worldAddress) => {
     const res = await request(
       GRAPH_API_WORLDS,
       gql`
+        query getProtocolData2($worldAddress: String!) 
         {
-          worlds(id: $worldAddress) {
+          worlds(where: { id: $worldAddress }) {
             ${worldFields}
           }
         }
       `,
       { worldAddress },
     )
-
-    return res.worlds && res.worlds[0]
+    return res.worlds?.length && res.worlds[0]
   } catch (error) {
     console.error('Failed to fetch protocol=============>', error, worldAddress)
     return null
@@ -103,9 +103,8 @@ export const getWorld = async (worldAddress) => {
 
 export const fetchWorld = async (worldAddress, chainId) => {
   const protocols = await getProtocol(worldAddress.toLowerCase())
-  const world = await getWorld(worldAddress.toLowerCase())
+  const world = (await getWorld(worldAddress.toLowerCase())) || []
   const bscClient = publicClient({ chainId: chainId })
-
   const worldNFTs = await Promise.all(
     world?.worldNFTs?.map(async (nft) => {
       const [owner] = await bscClient.multicall({
@@ -170,7 +169,6 @@ export const fetchWorld = async (worldAddress, chainId) => {
       ],
     },
   )
-  console.log('category==========>', category)
   const [gaugeNColor, pricePerAttachMinutes] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -261,18 +259,17 @@ export const fetchWorld = async (worldAddress, chainId) => {
         nextDueReceivable: nextDueReceivable.result[1].toString(),
         rating: rating.toString(),
         token: new Token(
-          56,
+          chainId,
           _token,
           decimals.result ?? 18,
           symbol.result?.toString()?.toUpperCase() ?? 'symbol',
           name.result?.toString(),
-          'https://www.payswap.org/',
+          `https://tokens.payswap.org/images${symbol.result?.toString()?.toLowerCase()}`,
         ),
         // allTokens.find((tk) => tk.address === token),
       }
     }),
   )
-  console.log('gaugeNColor=========>', gaugeNColor)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     worldAddress,
@@ -314,7 +311,7 @@ export const fetchWorlds = async ({ chainId }) => {
   })
   const worlds = await Promise.all(
     worldAddresses.result
-      .map(async (worldAddress, index) => {
+      ?.map(async (worldAddress, index) => {
         const data = await fetchWorld(worldAddress, chainId)
         return {
           sousId: index,

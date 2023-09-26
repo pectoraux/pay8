@@ -59,7 +59,7 @@ export const fetchReferrals = async ({ chainId }) => {
   const bscClient = publicClient({ chainId: chainId })
   const referrals = await Promise.all(
     gauges
-      .map(async (gauge) => {
+      ?.map(async (gauge) => {
         const collection = await getCollection(gauge.id)
         const [totalWeight, gaugeWeight, vestingTokenAddress] = await bscClient.multicall({
           allowFailure: true,

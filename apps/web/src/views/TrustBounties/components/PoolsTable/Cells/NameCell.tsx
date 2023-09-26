@@ -35,8 +35,8 @@ const NameCell: React.FC<any> = ({ pool, symbol }) => {
       <Pool.CellContent>
         <Flex flexDirection="column">
           <SaveIcon
-            fill={watchlistTokens.includes(pool?.timestamp)}
-            onClick={() => addWatchlistToken(pool?.timestamp)}
+            fill={watchlistTokens.includes(`bounty-${pool?.id}`)}
+            onClick={() => addWatchlistToken(`bounty-${pool?.id}`)}
             style={{ marginRight: '20px', position: 'relative' }}
           />
           <TokenImage mr="8px" width={40} height={40} src={pool?.collection?.avatar} />

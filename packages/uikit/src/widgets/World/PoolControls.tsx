@@ -170,7 +170,6 @@ export function PoolControls<T>({
     () => ({ chosenPools, stakedOnly, viewMode, normalizedUrlSearch, showFinishedPools }),
     [chosenPools, normalizedUrlSearch, showFinishedPools, stakedOnly, viewMode]
   );
-  console.log("PoolControls=========================>", pools, chosenPools, showFinishedPools, stakedOnly);
   return (
     <>
       <PoolControlsView>

@@ -56,8 +56,8 @@ export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean }
 }
 
 export const usePoolsPageFetch = () => {
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
+  // const { account } = useWeb3React()
+  // const dispatch = useAppDispatch()
   useBusinessesConfigInitialize()
   useFetchPublicPoolsData()
   // useFastRefreshEffect(() => {

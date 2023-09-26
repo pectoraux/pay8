@@ -155,7 +155,7 @@ export function PoolControls<T>({
   chosenPools = useMemo(() => {
     const sortedPools = sortPools<T>(sortOption, chosenPools)
       .slice(0, numberOfPoolsVisible)
-      .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.id) : true));
+      .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.sousId) : true));
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());

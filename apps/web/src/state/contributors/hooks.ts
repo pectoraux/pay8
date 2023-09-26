@@ -28,7 +28,7 @@ export const useContributorConfigInitialize = () => {
     if (chainId) {
       batch(() => {
         const init = true
-        dispatch(fetchContributorsGaugesAsync({ chainId }))
+        dispatch(fetchContributorsGaugesAsync({ chainId, init }))
       })
     }
   }, [dispatch, chainId])
@@ -55,8 +55,8 @@ export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean }
 }
 
 export const usePoolsPageFetch = () => {
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
+  // const { account } = useWeb3React()
+  // const dispatch = useAppDispatch()
   useContributorConfigInitialize()
   useFetchPublicPoolsData()
   // useSlowRefreshEffect(() => {

@@ -160,7 +160,15 @@ export function PoolControls<T>({
     const sortedPools = sortPools<T>(sortOption, chosenPools)
       .slice(0, numberOfPoolsVisible)
       .filter((p: any) =>
-        favoritesOnly ? watchlistTokens.includes(router.asPath.includes("valuepools") ? p?.id : p.timestamp) : true
+        favoritesOnly
+          ? watchlistTokens.includes(
+              router.asPath.includes("valuepools")
+                ? p?.id
+                : router.asPath.includes("trustbounties")
+                ? `bounty-${p?.id}`
+                : `stake-${p?.id}`
+            )
+          : true
       );
 
     if (searchQuery) {
