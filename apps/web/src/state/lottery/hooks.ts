@@ -32,8 +32,8 @@ export const useGetLotteryGraphDataById = (lotteryId: string) => {
 }
 
 export const useFetchLottery = (fetchPublicDataOnly = false) => {
-  const { address: account } = useAccount()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const router = useRouter()
   const currentLotteryId = useMemo(() => router.query.lotteryId, [router.query.lotteryId])
 
@@ -48,7 +48,7 @@ export const useFetchLottery = (fetchPublicDataOnly = false) => {
         // Get historical lottery data from nodes +  last 100 subgraph entries
         // dispatch(fetchPublicLotteries({ currentLotteryId }))
         // get public data for current lottery
-        dispatch(fetchLotteryAsync(currentLotteryId))
+        dispatch(fetchLotteryAsync(currentLotteryId, chainId))
       })
     }
   }, [dispatch, currentLotteryId])
