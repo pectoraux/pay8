@@ -48,7 +48,7 @@ export const fetchValuepoolSgAsync =
   }
 
 export const fetchValuepoolsAsync =
-  ({ fromVesting, fromValuepool, init, chainId }) =>
+  ({ fromVesting, fromValuepool, chainId, init = false }) =>
   async (dispatch) => {
     try {
       console.log('allva1==============>')

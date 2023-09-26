@@ -19,7 +19,7 @@ const initialState: any = {
 }
 
 export const fetchWorldsAsync =
-  ({ init, chainId }) =>
+  ({ chainId, init = false }) =>
   async (dispatch) => {
     try {
       console.log('fetchWorlds1================>')

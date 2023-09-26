@@ -37,7 +37,7 @@ export const useGamesConfigInitialize = () => {
       batch(() => {
         const init = true
         dispatch(fetchGameSgAsync({ fromGame }))
-        dispatch(fetchGamesAsync({ fromGame, init, chainId }))
+        dispatch(fetchGamesAsync({ fromGame, chainId, init }))
       })
     }
   }, [dispatch, chainId])

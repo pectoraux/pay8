@@ -36,7 +36,7 @@ export const useValuepoolsConfigInitialize = () => {
       batch(() => {
         const init = true
         dispatch(fetchValuepoolSgAsync({ fromVesting, fromValuepool }))
-        dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool, init, chainId }))
+        dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool, chainId, init }))
       })
     }
   }, [dispatch, chainId])
@@ -54,9 +54,8 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
-          const init = false
           dispatch(fetchValuepoolSgAsync({ fromVesting, fromValuepool }))
-          dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool, init, chainId }))
+          dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool, chainId }))
         })
       }
       fetchPoolsDataWithFarms()

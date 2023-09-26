@@ -31,7 +31,7 @@ export const useWillsConfigInitialize = () => {
       batch(() => {
         const init = true
         dispatch(fetchWillSgAsync({ fromWill }))
-        dispatch(fetchWillsAsync({ fromWill, init, chainId }))
+        dispatch(fetchWillsAsync({ fromWill, chainId, init }))
       })
     }
   }, [dispatch, chainId])
@@ -50,7 +50,7 @@ export const useFetchPublicPoolsData = () => {
         batch(() => {
           const init = true
           dispatch(fetchWillSgAsync({ fromWill }))
-          dispatch(fetchWillsAsync({ fromWill, init, chainId }))
+          dispatch(fetchWillsAsync({ fromWill, chainId }))
         })
       }
 

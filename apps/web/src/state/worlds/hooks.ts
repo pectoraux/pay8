@@ -29,7 +29,7 @@ export const useWillsConfigInitialize = () => {
     if (chainId) {
       batch(() => {
         const init = true
-        dispatch(fetchWorldsAsync({ init, chainId }))
+        dispatch(fetchWorldsAsync({ chainId, init }))
       })
     }
   }, [dispatch, chainId])
@@ -45,7 +45,7 @@ export const useFetchPublicPoolsData = () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
           const init = false
-          dispatch(fetchWorldsAsync({ init, chainId }))
+          dispatch(fetchWorldsAsync({ chainId }))
         })
       }
 

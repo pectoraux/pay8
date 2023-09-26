@@ -39,7 +39,7 @@ export const fetchWillSgAsync =
   }
 
 export const fetchWillsAsync =
-  ({ fromWill, init, chainId }) =>
+  ({ fromWill, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const wills = await fetchWills({ fromWill, chainId })

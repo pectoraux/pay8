@@ -39,7 +39,7 @@ export const fetchGameSgAsync =
   }
 
 export const fetchGamesAsync =
-  ({ fromGame, init, chainId }) =>
+  ({ fromGame, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const games = await fetchGames({ fromGame, chainId })
