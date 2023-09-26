@@ -208,6 +208,10 @@ export function PoolControls<T>({
                     label: t("Creation Time"),
                     value: "creationTime",
                   },
+                  {
+                    label: t("User Count"),
+                    value: "users",
+                  },
                 ]}
                 onOptionChange={handleSortOptionChange}
               />
