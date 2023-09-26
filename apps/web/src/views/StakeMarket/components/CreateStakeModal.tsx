@@ -37,6 +37,7 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { useApprovePool } from '../hooks/useApprove'
 import { GreyedOutContainer, Divider } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -51,6 +52,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { account } = useWeb3React()
   const titleName = 'Stake Market'
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const stakeMarketContract = useStakeMarketContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -140,10 +142,11 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
           {t('You can now start processing applications for your Stake.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchStakesAsync(collectionId))
+      dispatch(fetchStakesAsync(collectionId, chainId))
     }
     onDismiss()
   }, [
+    chainId,
     onDismiss,
     dispatch,
     state,

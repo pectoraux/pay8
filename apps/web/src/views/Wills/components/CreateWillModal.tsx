@@ -11,6 +11,7 @@ import { useWILLFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 
 import { Divider } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -23,6 +24,7 @@ const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const willFactoryContract = useWILLFactory()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -51,11 +53,12 @@ const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
           {t('You can now start processing transactions through your WILL contract.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchWillsAsync({ fromWill: true }))
+      dispatch(fetchWillsAsync({ fromWill: true, chainId }))
     }
     onDismiss()
   }, [
     t,
+    chainId,
     account,
     dispatch,
     onDismiss,

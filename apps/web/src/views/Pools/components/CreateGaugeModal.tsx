@@ -25,6 +25,7 @@ import UnstakeStage from './UnstakeStage'
 // import ActivityHistory from './ActivityHistory/ActivityHistory'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage, ARPState } from './types'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.SETTINGS]: t('Control Panel'),
@@ -96,6 +97,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, onDismiss }
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { account } = useWeb3React()
+  const { chainId } = useActiveChainId()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
   const stakingTokenContract = useERC20(currency?.address || '')
@@ -289,7 +291,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, onDismiss }
       return null
     },
     onSuccess: async ({ receipt }) => {
-      dispatch(fetchPairsAsync())
+      dispatch(fetchPairsAsync({ chainId }))
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)

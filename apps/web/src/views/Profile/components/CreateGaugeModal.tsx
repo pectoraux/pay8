@@ -34,6 +34,7 @@ import CreateProfileStage from './CreateProfileStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import LocationStage from 'views/Ramps/components/LocationStage'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -104,6 +105,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       ? LockStage.ADD_ACCOUNT2
       : LockStage.SETTINGS,
   )
+  const { chainId } = useActiveChainId()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const { account } = useWeb3React()
   const { t } = useTranslation()
@@ -467,7 +469,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       // onSuccessSale()
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)
-      dispatch(fetchProfilesAsync())
+      dispatch(fetchProfilesAsync({ chainId }))
     },
   })
 

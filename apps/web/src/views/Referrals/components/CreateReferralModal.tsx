@@ -10,6 +10,7 @@ import { useReferralVoter } from 'hooks/useContract'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { Divider } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -20,6 +21,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
   const inputRef = useRef<HTMLInputElement>()
   const [pendingFb, setPendingFb] = useState(false)
   const referralVoterContract = useReferralVoter()
@@ -58,10 +60,11 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
           {t('You can now start earning token rewards each sale you make.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchReferralGaugesAsync())
+      dispatch(fetchReferralGaugesAsync({ chainId }))
       onDismiss()
     }
   }, [
+    chainId,
     nftFilters,
     onDismiss,
     dispatch,

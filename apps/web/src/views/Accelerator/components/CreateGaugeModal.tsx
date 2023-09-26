@@ -25,6 +25,7 @@ import DeletePitchStage from './DeletePitchStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
 import { fetchAcceleratorGaugesAsync } from 'state/accelerator'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -60,6 +61,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       ? LockStage.VOTE_DOWN
       : LockStage.SETTINGS,
   )
+  const { chainId } = useActiveChainId()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const [tokenId, setTokenId] = useState('')
   const { account } = useWeb3React()
@@ -237,7 +239,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       // onSuccessSale()
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)
-      dispatch(fetchAcceleratorGaugesAsync())
+      dispatch(fetchAcceleratorGaugesAsync({ chainId }))
     },
   })
 

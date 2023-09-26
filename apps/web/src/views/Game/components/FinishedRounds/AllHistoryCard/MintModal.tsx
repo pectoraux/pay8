@@ -14,6 +14,7 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { Divider, GreyedOutContainer } from 'views/Accelerator/components/styles'
 import { getAuditorHelperContract } from 'utils/contractHelpers'
 import { getGameHelperAddress } from 'utils/addressHelpers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -26,6 +27,7 @@ const MintModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const gameHelperContract = useGameHelper()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -72,7 +74,7 @@ const MintModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
           {t('You can now use your object in games.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchLotteriesAsync({ fromLottery: true }))
+      dispatch(fetchLotteriesAsync({ fromLottery: true, chainId }))
     }
     onDismiss()
   }, [

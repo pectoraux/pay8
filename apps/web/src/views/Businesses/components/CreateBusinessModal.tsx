@@ -10,6 +10,7 @@ import { useBusinessVoter } from 'hooks/useContract'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { Divider } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -24,6 +25,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   const [pendingFb, setPendingFb] = useState(false)
   const businessVoterContract = useBusinessVoter()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const [nftFilters, setNftFilters] = useState<any>({})
 
   useEffect(() => {
@@ -58,7 +60,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
           {t('You can now start earning token rewards each sale you make.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchBusinessGaugesAsync())
+      dispatch(fetchBusinessGaugesAsync({ chainId }))
       onDismiss()
     }
   }, [

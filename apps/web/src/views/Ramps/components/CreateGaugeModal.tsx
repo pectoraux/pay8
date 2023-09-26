@@ -54,6 +54,7 @@ import UpdateProtocolStage from './UpdateProtocolStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import { rampABI } from 'config/abi/ramp'
 import LocationStage from './LocationStage'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -153,6 +154,7 @@ const CreateGaugeModal: React.FC<any> = ({
   )
   const { theme } = useTheme()
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { account, chainId } = useAccountActiveChain()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
@@ -914,7 +916,7 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     onSuccess: async ({ receipt }) => {
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      dispatch(fetchRampsAsync())
+      dispatch(fetchRampsAsync({ chainId }))
       onSuccessSale(receipt.transactionHash)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)

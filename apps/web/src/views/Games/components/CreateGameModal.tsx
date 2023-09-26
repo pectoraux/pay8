@@ -28,6 +28,7 @@ import BigNumber from 'bignumber.js'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { Divider, GreyedOutContainer } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -40,6 +41,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const gameFactoryContract = useGameFactory()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -82,7 +84,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
           {t('You can now start processing transactions through your Game contract.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchGamesAsync({ fromGame: true }))
+      dispatch(fetchGamesAsync({ fromGame: true, chainId }))
     }
     onDismiss()
   }, [
@@ -100,6 +102,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
     callWithGasPrice,
     fetchWithCatchTxError,
     gameFactoryContract,
+    chainId,
   ])
 
   useEffect(() => {

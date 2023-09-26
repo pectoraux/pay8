@@ -12,6 +12,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { Divider, GreyedOutContainer } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   onDismiss?: any
@@ -24,6 +25,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const acceleratorContract = useAcceleratorContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -62,7 +64,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
           {t('You can now start receiving funding through your accelerator pitch.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchAcceleratorGaugesAsync())
+      dispatch(fetchAcceleratorGaugesAsync({ chainId }))
     }
     onDismiss()
   }, [

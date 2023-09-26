@@ -7,12 +7,14 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useGameFactory } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { fetchGameAsync } from 'state/games'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const useClaimPottery = ({ gameData, identityTokenId, tokenId }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { toastSuccess } = useToast()
   const contract = useGameFactory()
+  const { chainId } = useActiveChainId()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError()
 
@@ -30,7 +32,7 @@ export const useClaimPottery = ({ gameData, identityTokenId, tokenId }) => {
           {t('You have successfully claimed your rewards.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchGameAsync(gameData?.id))
+      dispatch(fetchGameAsync(gameData?.id, chainId))
     }
   }, [
     contract,
@@ -42,6 +44,7 @@ export const useClaimPottery = ({ gameData, identityTokenId, tokenId }) => {
     toastSuccess,
     t,
     dispatch,
+    chainId,
   ])
 
   return { isPending, handleClaim }

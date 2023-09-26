@@ -24,6 +24,7 @@ import UpdateBountyStage from './UpdateBountyStage'
 import BribesStage from './BribesStage'
 import WithdrawStage from './WithdrawStage'
 import DeletePitchStage from './DeletePitchStage'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -54,6 +55,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const { t } = useTranslation()
   const { theme } = useTheme()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
   const referralVoterContract = useReferralVoter()
@@ -183,7 +185,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       // onSuccessSale()
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)
-      dispatch(fetchReferralGaugesAsync())
+      dispatch(fetchReferralGaugesAsync({ chainId }))
     },
   })
 

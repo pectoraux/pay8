@@ -12,6 +12,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from 'views/Accelerator/components/styles'
 import { getAuditorHelperContract } from 'utils/contractHelpers'
 import { getGameHelperAddress } from 'utils/addressHelpers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -24,6 +25,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const lotteryContract = useLotteryContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -67,7 +69,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, onDismiss }) => {
           {t('You can now withdraw you rewards.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchLotteriesAsync({ fromLottery: true }))
+      dispatch(fetchLotteriesAsync({ fromLottery: true, chainId }))
     }
     onDismiss()
   }, [
@@ -81,6 +83,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, onDismiss }) => {
     t,
     toastSuccess,
     dispatch,
+    chainId,
   ])
 
   useEffect(() => {

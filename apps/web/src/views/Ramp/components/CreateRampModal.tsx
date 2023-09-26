@@ -11,6 +11,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRampFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -23,6 +24,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const rampFactoryContract = useRampFactory()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -51,11 +53,12 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
           {t('You can now start processing transactions through your Ramp.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchRampsAsync())
+      dispatch(fetchRampsAsync({ chainId }))
     }
     onDismiss()
   }, [
     t,
+    chainId,
     account,
     onDismiss,
     dispatch,

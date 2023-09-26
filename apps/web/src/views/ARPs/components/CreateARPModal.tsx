@@ -26,6 +26,7 @@ import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/st
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { Divider, GreyedOutContainer } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   onDismiss?: any
@@ -47,6 +48,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   const [automatic, setAutomatic] = useState(0)
   const [percentages, setPercentages] = useState(0)
   const [immutableContract, setImmutableContract] = useState(0)
+  const { chainId } = useActiveChainId()
   const { toastSuccess, toastError } = useToast()
 
   const handleCreateGauge = useCallback(async () => {
@@ -88,7 +90,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
           {t('You can now start processing transactions through your ARP contract.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchArpsAsync({ fromArp: true }))
+      dispatch(fetchArpsAsync({ fromArp: true, chainId }))
     }
     onDismiss()
   }, [

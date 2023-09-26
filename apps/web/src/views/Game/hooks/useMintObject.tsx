@@ -8,12 +8,14 @@ import { useGameHelper } from 'hooks/useContract'
 import { fetchGameAsync } from 'state/games'
 import { useRouter } from 'next/router'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const useMintObject = (objectName, tokenId, tokenIds) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { game } = useRouter().query
   const { toastSuccess } = useToast()
+  const { chainId } = useActiveChainId()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError()
   const contract = useGameHelper()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -33,9 +35,9 @@ export const useMintObject = (objectName, tokenId, tokenIds) => {
           {t('Your have successfully minted this object!')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchGameAsync(game))
+      dispatch(fetchGameAsync(game, chainId))
     }
-  }, [contract, game, tokenIds, objectName, tokenId, t, dispatch, fetchWithCatchTxError, toastSuccess])
+  }, [contract, game, tokenIds, objectName, tokenId, t, dispatch, fetchWithCatchTxError, toastSuccess, chainId])
 
   return { isPending, handleMintObject }
 }

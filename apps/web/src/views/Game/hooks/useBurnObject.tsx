@@ -9,6 +9,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { fetchGameAsync } from 'state/games'
 import { useRouter } from 'next/router'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const useBurnObject = (objectName: string, tokenId) => {
   const { t } = useTranslation()
@@ -16,6 +17,7 @@ export const useBurnObject = (objectName: string, tokenId) => {
   const dispatch = useAppDispatch()
   const { game } = useRouter().query
   const { toastSuccess } = useToast()
+  const { chainId } = useActiveChainId()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError()
   const contract = useGameHelper()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -34,9 +36,9 @@ export const useBurnObject = (objectName: string, tokenId) => {
           {t('Your have successfully burnt your object for its resources')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchGameAsync(game))
+      dispatch(fetchGameAsync(game, chainId))
     }
-  }, [game, contract, account, objectName, tokenId, t, dispatch, fetchWithCatchTxError, toastSuccess])
+  }, [game, contract, account, objectName, tokenId, t, dispatch, fetchWithCatchTxError, toastSuccess, chainId])
 
   return { isPending, handleBurnObject }
 }

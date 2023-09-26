@@ -23,6 +23,7 @@ import { useCardContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from './styles'
 import CreateGaugeModal from './CreateGaugeModal'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -35,6 +36,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const cardContract = useCardContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -70,7 +72,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
           {t('You can now start processing transactions through your PayCard.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchCardsAsync({ fromCard: true }))
+      dispatch(fetchCardsAsync({ fromCard: true, chainId }))
     }
     onDismiss()
   }, [
@@ -86,6 +88,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
     callWithGasPrice,
     fetchWithCatchTxError,
     cardContract,
+    chainId,
   ])
 
   useEffect(() => {

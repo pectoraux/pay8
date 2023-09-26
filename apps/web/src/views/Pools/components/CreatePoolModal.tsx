@@ -20,6 +20,7 @@ import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
 import { Divider, GreyedOutContainer } from './styles'
 import BribeField from './LockedPool/Common/BribeField'
 import { useApprovePool } from '../hooks/useApprove'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -37,6 +38,7 @@ const CreatePoolModal: React.FC<any> = ({ onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const [_ve, setVe] = useState('')
+  const { chainId } = useActiveChainId()
   const [pairAddress, setPairAddress] = useState<any>('')
   const [allowing, setAllowing] = useState(false)
   const [tokenId, setTokenId] = useState('')
@@ -105,7 +107,7 @@ const CreatePoolModal: React.FC<any> = ({ onDismiss }) => {
           {t('You can now start earning trading fees from the liquidity pool.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchAuditorsAsync({ fromAuditor: true }))
+      dispatch(fetchAuditorsAsync({ fromAuditor: true, chainId }))
     }
     onDismiss()
   }, [
@@ -113,6 +115,7 @@ const CreatePoolModal: React.FC<any> = ({ onDismiss }) => {
     _ve,
     data,
     amount,
+    chainId,
     tokenId,
     dispatch,
     onDismiss,

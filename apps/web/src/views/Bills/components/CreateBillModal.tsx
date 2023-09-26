@@ -25,6 +25,7 @@ import { useBILLFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { Divider, GreyedOutContainer } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -37,6 +38,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const billFactoryContract = useBILLFactory()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -67,7 +69,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
           {t('You can now start processing transactions through your BILL contract.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchBillsAsync({ fromBill: true }))
+      dispatch(fetchBillsAsync({ fromBill: true, chainId }))
     }
     onDismiss()
   }, [

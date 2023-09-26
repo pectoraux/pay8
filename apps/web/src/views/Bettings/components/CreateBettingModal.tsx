@@ -12,6 +12,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { Divider, GreyedOutContainer } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -24,6 +25,7 @@ const CreateBettingModal: React.FC<any> = ({ currency, onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const bettingFactoryContract = useBettingFactory()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -55,7 +57,7 @@ const CreateBettingModal: React.FC<any> = ({ currency, onDismiss }) => {
           {t('You can now start processing transactions through your betting contract.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchBettingsAsync({ fromBetting: true }))
+      dispatch(fetchBettingsAsync({ fromBetting: true, chainId }))
     }
     onDismiss()
   }, [

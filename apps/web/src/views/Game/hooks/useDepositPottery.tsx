@@ -10,12 +10,14 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { fetchGameAsync } from 'state/games'
 import { useRouter } from 'next/router'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 export const useDepositPottery = (amount: string, tokenId, identityTokenId, collectionAddress: string) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const { referrer } = useRouter().query
+  const { chainId } = useActiveChainId()
   const { toastSuccess, toastError } = useToast()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -53,7 +55,7 @@ export const useDepositPottery = (amount: string, tokenId, identityTokenId, coll
           {t('Your have successfully bought minutes in this game')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchGameAsync(collectionAddress))
+      dispatch(fetchGameAsync(collectionAddress, chainId))
     }
   }, [
     fetchWithCatchTxError,
@@ -69,6 +71,7 @@ export const useDepositPottery = (amount: string, tokenId, identityTokenId, coll
     t,
     toastSuccess,
     dispatch,
+    chainId,
   ])
 
   return { isPending: isPending || pendingFb, handleDeposit }

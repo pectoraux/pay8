@@ -23,6 +23,7 @@ import { useFutureCollateralContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from './styles'
 import CreateGaugeModal from './CreateGaugeModal'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -35,6 +36,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const futureCollateralContract = useFutureCollateralContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -53,6 +55,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
     userBountyId: '',
     auditorBountyId: '',
     channel: '',
+
     profileId: '',
   }))
 
@@ -92,7 +95,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
           {t('You can now start processing loans with your collateral.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral: true }))
+      dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral: true, chainId }))
     }
     onDismiss()
   }, [

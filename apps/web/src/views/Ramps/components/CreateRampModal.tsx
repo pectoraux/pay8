@@ -11,6 +11,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRampFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -20,6 +21,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
@@ -51,11 +53,12 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
           {t('You can now start processing transactions through your Ramp.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchRampsAsync())
+      dispatch(fetchRampsAsync({ chainId }))
     }
     onDismiss()
   }, [
     t,
+    chainId,
     account,
     onDismiss,
     dispatch,

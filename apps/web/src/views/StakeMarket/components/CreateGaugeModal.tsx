@@ -47,6 +47,7 @@ import CancelStakeStage from './CancelStakeStage'
 import WaitingPeriodStage from './WaitingPeriodStage'
 import LocationStage from 'views/Ramps/components/LocationStage'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -95,6 +96,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
   const { t } = useTranslation()
   const { theme } = useTheme()
   const router = useRouter()
+  const { chainId } = useActiveChainId()
   const collectionId = router.query.collectionAddress as string
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -542,7 +544,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     },
     onSuccess: async ({ receipt }) => {
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      dispatch(fetchStakesAsync(collectionId))
+      dispatch(fetchStakesAsync(collectionId, chainId))
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)
     },

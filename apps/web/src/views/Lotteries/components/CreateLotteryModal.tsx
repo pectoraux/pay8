@@ -31,6 +31,7 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { Divider, GreyedOutContainer } from './styles'
 import { TimePicker } from 'views/AcceleratorVoting/components/DatePicker'
 import { combineDateAndTime } from 'views/AcceleratorVoting/CreateProposal/helpers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -43,6 +44,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const lotteryHelperContract = useLotteryHelperContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -127,7 +129,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
           {t('You can now start processing transactions through your Lottery contract.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchLotteriesAsync({ fromLottery: true }))
+      dispatch(fetchLotteriesAsync({ fromLottery: true, chainId }))
     }
     onDismiss()
   }, [
@@ -141,6 +143,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
     t,
     toastSuccess,
     dispatch,
+    chainId,
   ])
 
   useEffect(() => {

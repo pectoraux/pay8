@@ -12,6 +12,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { Divider, GreyedOutContainer } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -24,6 +25,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
   const contributorsContract = useContributorsContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -59,7 +61,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
           {t('You can now start receiving support through your contributor team.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchContributorsGaugesAsync())
+      dispatch(fetchContributorsGaugesAsync({ chainId }))
     }
     onDismiss()
   }, [
