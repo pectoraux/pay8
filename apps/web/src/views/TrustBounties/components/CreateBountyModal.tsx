@@ -154,6 +154,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
           fromBusinesses,
           fromRamps,
           fromTransfers,
+          chainId,
         }),
       )
     }
