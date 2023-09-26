@@ -7,8 +7,8 @@ import {
   fetchUserStakeBalances,
 } from '@pancakeswap/pools'
 import { ChainId } from '@pancakeswap/sdk'
-
 import { getViemClients } from 'utils/viem'
+
 import { fetchAccelerator, fetchAcceleratorUserData } from './helpers'
 import { resetUserState } from '../global/actions'
 
