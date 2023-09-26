@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { getAchievements } from 'state/achievements/helpers'
 import { FetchStatus } from 'config/constants/types'
@@ -19,6 +19,20 @@ import {
   makePoolWithUserDataLoadingSelector,
 } from './selectors'
 import { getIsNameUsed, getProfileData, getProfileDataFromUser, getSSIDatum, getSharedEmail } from './helpers'
+
+export const useProfilesConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchProfilesAsync({ chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
+}
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -41,6 +55,7 @@ export const usePool = (id) => {
 }
 
 export const usePoolsPageFetch = () => {
+  useProfilesConfigInitialize()
   useFetchPublicPoolsData()
 }
 

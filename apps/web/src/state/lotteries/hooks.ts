@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
@@ -15,6 +15,23 @@ import {
   filterSelector,
 } from './selectors'
 import { getRewardsForTicketId, getTag, getTicket } from './helpers'
+
+export const useLotteriesConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const fromLottery = router.query.lottery
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchLotteriesSgAsync({ fromLottery }))
+        dispatch(fetchLotteriesAsync({ fromLottery, chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
+}
 
 export const useFetchPublicPoolsData = () => {
   const { chainId } = useActiveChainId()
@@ -50,6 +67,7 @@ export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
+  useLotteriesConfigInitialize()
   useFetchPublicPoolsData()
 }
 

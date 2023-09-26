@@ -41,6 +41,20 @@ export const useFetchPublicPoolsStats = () => {
   return data
 }
 
+export const usePairsConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchPairsAsync({ chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
+}
+
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
@@ -75,6 +89,7 @@ export const usePool = (sousId: number) => {
 export const usePoolsPageFetch = () => {
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  usePairsConfigInitialize()
   useFetchPublicPoolsData()
 
   // useFastRefreshEffect(() => {

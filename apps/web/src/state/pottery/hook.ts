@@ -9,7 +9,6 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import { State } from '../types'
 import { potterDataSelector } from './selectors'
-import { fetchPotteryUserDataAsync } from './index'
 
 export const usePotteryFetch = () => {
   const { account } = useWeb3React()

@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { LEVIATHANS } from 'config/constants/exchange'
 import { fetchValuepools, getValuepoolsSg } from './helpers'
 import { resetUserState } from '../global/actions'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -47,14 +48,18 @@ export const fetchValuepoolSgAsync =
   }
 
 export const fetchValuepoolsAsync =
-  ({ fromVesting, fromValuepool, chainId }) =>
+  ({ fromVesting, fromValuepool, init, chainId }) =>
   async (dispatch) => {
     try {
       console.log('allva1==============>')
       const valuepools = await fetchValuepools({ fromVesting, fromValuepool, chainId })
       const data = valuepools
       console.log('allva==============>', data)
-      dispatch(setValuepoolsPublicData(data || []))
+      if (init) {
+        dispatch(setInitialValuepoolConfig(data || []))
+      } else {
+        dispatch(setValuepoolsPublicData(data || []))
+      }
     } catch (error) {
       console.error('[Pools Action] error when getting valuepools=================>', error)
     }
@@ -64,9 +69,16 @@ export const PoolsSlice = createSlice({
   name: 'Valuepools',
   initialState,
   reducers: {
-    setValuepoolsPublicData: (state, action) => {
-      console.log('setValuepoolsPublicData==============>', action.payload)
+    setInitialValuepoolConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setValuepoolsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setValuepoolsUserData: (state, action) => {
@@ -100,7 +112,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setValuepoolsPublicData, setValuepoolsUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialValuepoolConfig,
+  setValuepoolsPublicData,
+  setValuepoolsUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

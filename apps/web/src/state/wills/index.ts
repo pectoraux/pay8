@@ -2,6 +2,7 @@ import { isAddress } from 'utils'
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchWills, getWills } from './helpers'
 import { resetUserState } from '../global/actions'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -22,7 +23,6 @@ export const fetchWillSgAsync =
   ({ fromWill }) =>
   async (dispatch) => {
     try {
-      console.log('fetchWillSg1================>')
       const whereClause = isAddress(fromWill)
         ? {
             // active: true,
@@ -32,7 +32,6 @@ export const fetchWillSgAsync =
             // active: true
           }
       const wills = await getWills(0, 0, whereClause)
-      console.log('fetchWillSg================>', wills)
       dispatch(setWillsPublicData(wills || []))
     } catch (error) {
       console.error('[Pools Action]============>sg', error)
@@ -40,13 +39,15 @@ export const fetchWillSgAsync =
   }
 
 export const fetchWillsAsync =
-  ({ fromWill, chainId }) =>
+  ({ fromWill, init, chainId }) =>
   async (dispatch) => {
-    console.log('fetchWills1================>', fromWill)
     try {
       const wills = await fetchWills({ fromWill, chainId })
-      console.log('fetchWills================>', wills)
-      dispatch(setWillsPublicData(wills || []))
+      if (init) {
+        dispatch(setInitialWillsConfig(wills || []))
+      } else {
+        dispatch(setWillsPublicData(wills || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
@@ -56,9 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'Wills',
   initialState,
   reducers: {
-    setWillsPublicData: (state, action) => {
-      console.log('setWillsPublicData==============>', action.payload)
+    setInitialWillsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setWillsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setWillsUserData: (state, action) => {
@@ -92,7 +100,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setWillsPublicData, setWillsUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialWillsConfig,
+  setWillsPublicData,
+  setWillsUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

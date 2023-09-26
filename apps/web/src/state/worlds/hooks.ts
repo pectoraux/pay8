@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { FAST_INTERVAL } from 'config/constants'
@@ -21,6 +21,20 @@ export const useGetTags = () => {
   return data?.name ?? ''
 }
 
+export const useWillsConfigInitialize = () => {
+  const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchWorldsAsync({ init, chainId }))
+      })
+    }
+  }, [dispatch, chainId])
+}
+
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
@@ -30,7 +44,8 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
-          dispatch(fetchWorldsAsync({ chainId }))
+          const init = false
+          dispatch(fetchWorldsAsync({ init, chainId }))
         })
       }
 

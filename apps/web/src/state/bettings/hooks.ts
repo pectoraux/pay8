@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -116,6 +116,23 @@ export const useGetWinnersPerBracketNPeriod = (bettingAddress, bettingId, period
   return winners
 }
 
+export const useBettingsConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const fromBetting = router.query.betting
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchBettingSgAsync({ fromBetting }))
+        dispatch(fetchBettingsAsync({ fromBetting, chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
+}
+
 export const useFetchPublicPoolsData = () => {
   const { chainId } = useActiveChainId()
   const dispatch = useAppDispatch()
@@ -151,6 +168,7 @@ export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
+  useBettingsConfigInitialize()
   useFetchPublicPoolsData()
 }
 

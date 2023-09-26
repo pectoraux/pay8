@@ -28,6 +28,7 @@ export const fetchBountiesAsync =
     fromRamps,
     fromTransfers,
     chainId,
+    init = false,
   }) =>
   async (dispatch) => {
     try {
@@ -42,7 +43,11 @@ export const fetchBountiesAsync =
         fromTransfers,
         chainId,
       )
-      dispatch(setBountiesPublicData(trustbounties || []))
+      if (init) {
+        dispatch(setInitialBountiesConfig(trustbounties || []))
+      } else {
+        dispatch(setBountiesPublicData(trustbounties || []))
+      }
     } catch (error) {
       console.error('[Pools Action] error when getting bounties', error)
     }
@@ -52,9 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'Bounties',
   initialState,
   reducers: {
-    setBountiesPublicData: (state, action) => {
-      console.log('setBountiesPublicData==============>', action.payload)
+    setInitialBountiesConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setBountiesPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setCurrBribeData: (state, action) => {
@@ -79,6 +91,7 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setBountiesPublicData, setCurrBribeData, setCurrPoolData, setFilters } = PoolsSlice.actions
+export const { setInitialBountiesConfig, setBountiesPublicData, setCurrBribeData, setCurrPoolData, setFilters } =
+  PoolsSlice.actions
 
 export default PoolsSlice.reducer

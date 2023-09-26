@@ -28,12 +28,16 @@ const initialState: any = {
 }
 
 export const fetchRampsAsync =
-  ({ chainId }) =>
+  ({ chainId, init = false }) =>
   async (dispatch) => {
     try {
       const ramps = await fetchRamps({ chainId })
       const data = ramps.filter((ramp) => !!ramp)
-      dispatch(setRampsPublicData(data || []))
+      if (init) {
+        dispatch(setInitialRampsConfig(data || []))
+      } else {
+        dispatch(setRampsPublicData(data || []))
+      }
     } catch (error) {
       console.error('[Pools Action]===============>', error)
     }
@@ -106,8 +110,16 @@ export const PoolsSlice = createSlice({
   name: 'Ramps',
   initialState,
   reducers: {
-    setRampsPublicData: (state, action) => {
+    setInitialRampsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setRampsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setPoolUserData: (state, action) => {
@@ -186,6 +198,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setRampsPublicData, setCurrBribeData, setPoolUserData, setCurrPoolData, setFilters } = PoolsSlice.actions
+export const {
+  setInitialRampsConfig,
+  setRampsPublicData,
+  setCurrBribeData,
+  setPoolUserData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

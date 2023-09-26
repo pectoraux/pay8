@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { fetchFutureCollaterals, getCollaterals } from './helpers'
 import { resetUserState } from '../global/actions'
 import { isAddress } from 'utils'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -40,11 +41,15 @@ export const fetchFutureCollateralSgAsync =
   }
 
 export const fetchFutureCollateralsAsync =
-  ({ fromFutureCollateral, chainId }) =>
+  ({ fromFutureCollateral, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const futureCollaterals = await fetchFutureCollaterals({ fromFutureCollateral, chainId })
-      dispatch(setFutureCollateralsPublicData(futureCollaterals || []))
+      if (init) {
+        dispatch(setInitialFutureCollateralsConfig(futureCollaterals || []))
+      } else {
+        dispatch(setFutureCollateralsPublicData(futureCollaterals || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
@@ -54,8 +59,16 @@ export const PoolsSlice = createSlice({
   name: 'Collaterals',
   initialState,
   reducers: {
-    setFutureCollateralsPublicData: (state, action) => {
+    setInitialFutureCollateralsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setFutureCollateralsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setFutureCollateralsUserData: (state, action) => {
@@ -90,6 +103,7 @@ export const PoolsSlice = createSlice({
 
 // Actions
 export const {
+  setInitialFutureCollateralsConfig,
   setFutureCollateralsPublicData,
   setFutureCollateralsUserData,
   setCurrBribeData,

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import useSWR from 'swr'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -18,6 +18,20 @@ import { getTag } from './helpers'
 export const useGetTags = () => {
   const { data } = useSWR('referrals-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useSponsorsConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchReferralGaugesAsync({ chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
 }
 
 export const useFetchPublicPoolsData = () => {
@@ -43,6 +57,7 @@ export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean }
 export const usePoolsPageFetch = () => {
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  useSponsorsConfigInitialize()
   useFetchPublicPoolsData()
   // useFastRefreshEffect(() => {
   //   batch(() => {

@@ -19,11 +19,15 @@ const initialState: any = {
 }
 
 export const fetchPairsAsync =
-  ({ chainId }) =>
+  ({ chainId, init = false }) =>
   async (dispatch) => {
     try {
       const pairs = await fetchPairs({ chainId })
-      dispatch(setPairsPublicData(pairs || []))
+      if (init) {
+        dispatch(setInitialPairsConfig(pairs || []))
+      } else {
+        dispatch(setPairsPublicData(pairs || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============> error when getting pairs', error)
     }
@@ -53,9 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'pools',
   initialState,
   reducers: {
-    setPairsPublicData: (state, action) => {
-      console.log('setPairsPublicData==============>', action.payload)
+    setInitialPairsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setPairsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setPairsUserData: (state, action) => {
@@ -102,7 +113,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setPairsPublicData, setPairsUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialPairsConfig,
+  setPairsPublicData,
+  setPairsUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

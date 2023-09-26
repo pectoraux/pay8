@@ -2,6 +2,7 @@ import { isAddress } from 'utils'
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchSponsors, getSponsors } from './helpers'
 import { resetUserState } from '../global/actions'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -38,11 +39,15 @@ export const fetchSponsorSgAsync =
   }
 
 export const fetchSponsorsAsync =
-  ({ fromSponsor, chainId }) =>
+  ({ fromSponsor, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const sponsors = await fetchSponsors({ fromSponsor, chainId })
-      dispatch(setSponsorsPublicData(sponsors || []))
+      if (init) {
+        dispatch(setInitialSponsorsConfig(sponsors || []))
+      } else {
+        dispatch(setSponsorsPublicData(sponsors || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============> error when getting sponsors from blockchain', error)
     }
@@ -52,8 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'Sponsors',
   initialState,
   reducers: {
-    setSponsorsPublicData: (state, action) => {
+    setInitialSponsorsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setSponsorsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setSponsorsUserData: (state, action) => {
@@ -87,7 +100,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setSponsorsPublicData, setSponsorsUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialSponsorsConfig,
+  setSponsorsPublicData,
+  setSponsorsUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

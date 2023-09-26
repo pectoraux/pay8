@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { fetchLotteries, getLotteries } from './helpers'
 import { resetUserState } from '../global/actions'
 import { isAddress } from 'utils'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -38,11 +39,15 @@ export const fetchLotteriesSgAsync =
   }
 
 export const fetchLotteriesAsync =
-  ({ fromLottery, chainId }) =>
+  ({ fromLottery, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const lotteries = await fetchLotteries({ fromLottery, chainId })
-      dispatch(setLotteriesPublicData(lotteries || []))
+      if (init) {
+        dispatch(setInitialLotteriesConfig(lotteries || []))
+      } else {
+        dispatch(setLotteriesPublicData(lotteries || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
@@ -52,8 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'Lotteries',
   initialState,
   reducers: {
-    setLotteriesPublicData: (state, action) => {
+    setInitialLotteriesConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setLotteriesPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setLotteriesUserData: (state, action) => {
@@ -87,7 +100,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setLotteriesPublicData, setLotteriesUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialLotteriesConfig,
+  setLotteriesPublicData,
+  setLotteriesUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

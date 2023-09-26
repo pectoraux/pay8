@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchProfiles } from './helpers'
 import { resetUserState } from '../global/actions'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -20,11 +21,15 @@ const initialState: any = {
 const pools = []
 
 export const fetchProfilesAsync =
-  ({ chainId }) =>
+  ({ chainId, init = false }) =>
   async (dispatch) => {
     try {
       const data = await fetchProfiles({ chainId })
-      dispatch(setProfilesPublicData(data || []))
+      if (init) {
+        dispatch(setInitialProfilesConfig(data || []))
+      } else {
+        dispatch(setProfilesPublicData(data || []))
+      }
     } catch (error) {
       console.error('[Pools Action]profiles======>', error)
     }
@@ -34,8 +39,16 @@ export const PoolsSlice = createSlice({
   name: 'Referrals',
   initialState,
   reducers: {
-    setProfilesPublicData: (state, action) => {
+    setInitialProfilesConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setProfilesPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setPoolsUserData: (state, action) => {
@@ -66,6 +79,7 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setProfilesPublicData, setPoolsUserData, setCurrBribeData, setCurrPoolData } = PoolsSlice.actions
+export const { setInitialProfilesConfig, setProfilesPublicData, setPoolsUserData, setCurrBribeData, setCurrPoolData } =
+  PoolsSlice.actions
 
 export default PoolsSlice.reducer

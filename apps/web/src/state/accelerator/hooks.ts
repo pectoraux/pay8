@@ -21,6 +21,20 @@ export const useGetTags = () => {
   return data?.name ?? ''
 }
 
+export const useAcceleratorConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchAcceleratorGaugesAsync({ chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
+}
+
 export const useFetchPublicPoolsStats = () => {
   const [data, setData] = useState(null)
   useEffect(() => {
@@ -61,6 +75,7 @@ export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
 export const usePoolsPageFetch = () => {
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  useAcceleratorConfigInitialize()
   useFetchPublicPoolsData()
   // useSlowRefreshEffect(() => {
   //   batch(() => {

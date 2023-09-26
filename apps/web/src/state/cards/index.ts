@@ -2,6 +2,7 @@ import { isAddress } from 'utils'
 import { createSlice } from '@reduxjs/toolkit'
 import { getCards, fetchCards } from './helpers'
 import { resetUserState } from '../global/actions'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -38,11 +39,15 @@ export const fetchCardSgAsync =
   }
 
 export const fetchCardsAsync =
-  ({ fromCard, chainId }) =>
+  ({ fromCard, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const cards = await fetchCards({ fromCard, chainId })
-      dispatch(setCardsPublicData(cards || []))
+      if (init) {
+        dispatch(setInitialCardsConfig(cards || []))
+      } else {
+        dispatch(setCardsPublicData(cards || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
@@ -52,8 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'Cards',
   initialState,
   reducers: {
-    setCardsPublicData: (state, action) => {
+    setInitialCardsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setCardsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setCurrBribeData: (state, action) => {
@@ -75,6 +88,6 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setCardsPublicData, setCurrBribeData, setCurrPoolData } = PoolsSlice.actions
+export const { setInitialCardsConfig, setCardsPublicData, setCurrBribeData, setCurrPoolData } = PoolsSlice.actions
 
 export default PoolsSlice.reducer

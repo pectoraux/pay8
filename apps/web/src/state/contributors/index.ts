@@ -21,12 +21,16 @@ const initialState: any = {
 let pools = []
 
 export const fetchContributorsGaugesAsync =
-  ({ chainId }) =>
+  ({ chainId, init = false }) =>
   async (dispatch) => {
     try {
       const businesses = await fetchContributors(chainId)
       const data = businesses
-      dispatch(setContributorsPublicData(data || []))
+      if (init) {
+        dispatch(setInitialContributorsConfig(data || []))
+      } else {
+        dispatch(setContributorsPublicData(data || []))
+      }
     } catch (error) {
       console.error('[Pools Action] error when getting contributor gauges======>', error)
     }
@@ -56,9 +60,16 @@ export const PoolsSlice = createSlice({
   name: 'Contributors',
   initialState,
   reducers: {
-    setContributorsPublicData: (state, action) => {
-      console.log('setContributorsPublicData==============>', action.payload)
+    setInitialContributorsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setContributorsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setContributorsUserData: (state, action) => {
@@ -105,7 +116,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setContributorsPublicData, setContributorsUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialContributorsConfig,
+  setContributorsPublicData,
+  setContributorsUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

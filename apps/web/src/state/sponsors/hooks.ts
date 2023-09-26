@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -19,6 +19,23 @@ import { FAST_INTERVAL } from 'config/constants'
 export const useGetTags = () => {
   const { data } = useSWR('sponsors-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useSponsorsConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const fromSponsor = router.query.sponsor
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchSponsorSgAsync({ fromSponsor }))
+        dispatch(fetchSponsorsAsync({ fromSponsor, chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
 }
 
 export const useFetchPublicPoolsData = () => {
@@ -61,6 +78,7 @@ export const usePool2 = (id): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
+  useSponsorsConfigInitialize()
   useFetchPublicPoolsData()
 }
 

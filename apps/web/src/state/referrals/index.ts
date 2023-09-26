@@ -21,12 +21,16 @@ const initialState: any = {
 let pools = []
 
 export const fetchReferralGaugesAsync =
-  ({ chainId }) =>
+  ({ chainId, init = false }) =>
   async (dispatch) => {
     try {
       const referrals = await fetchReferrals({ chainId })
       const data = referrals
-      dispatch(setReferralsPublicData(data || []))
+      if (init) {
+        dispatch(setInitialReferralsConfig(data || []))
+      } else {
+        dispatch(setReferralsPublicData(data || []))
+      }
     } catch (error) {
       console.error('[Pools Action] error when getting referral gauges======>', error)
     }
@@ -56,8 +60,16 @@ export const PoolsSlice = createSlice({
   name: 'Referrals',
   initialState,
   reducers: {
-    setReferralsPublicData: (state, action) => {
+    setInitialReferralsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setReferralsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setReferralsUserData: (state, action) => {
@@ -104,7 +116,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setReferralsPublicData, setReferralsUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialReferralsConfig,
+  setReferralsPublicData,
+  setReferralsUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -11,6 +11,23 @@ import {
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
 } from './selectors'
+
+export const useCardsConfigInitialize = () => {
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const fromCard = router.query.card
+  const { chainId } = useActiveChainId()
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchCardSgAsync({ fromCard }))
+        dispatch(fetchCardsAsync({ fromCard, chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
+}
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -36,6 +53,7 @@ export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
+  useCardsConfigInitialize()
   useFetchPublicPoolsData()
 }
 

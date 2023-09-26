@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -19,6 +19,40 @@ import { FAST_INTERVAL } from 'config/constants'
 export const useGetTags = () => {
   const { data } = useSWR('trustbounties-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useBountiesConfigInitialize = () => {
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const { chainId } = useActiveChainId()
+  const fromRamps = router.pathname.includes('ramps')
+  const fromAuditors = router.pathname.includes('auditors')
+  const fromSponsors = router.pathname.includes('sponsors')
+  const fromAccelerator = router.pathname.includes('accelerator')
+  const fromBusinesses = router.pathname.includes('businesses')
+  const fromContributors = router.pathname.includes('contributors')
+  const fromTransfers = router.pathname.includes('transfers')
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(
+          fetchBountiesAsync({
+            fromAccelerator,
+            fromContributors,
+            fromSponsors,
+            fromAuditors,
+            fromBusinesses,
+            fromRamps,
+            fromTransfers,
+            chainId,
+            init,
+          }),
+        )
+      })
+    }
+  }, [dispatch, chainId])
 }
 
 export const useFetchPublicPoolsData = () => {
@@ -74,6 +108,7 @@ export const usePool = (sousId: number): { pool: any; userDataLoaded: boolean } 
 export const usePoolsPageFetch = () => {
   // const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  useBountiesConfigInitialize()
   useFetchPublicPoolsData()
 
   // useFastRefreshEffect(() => {

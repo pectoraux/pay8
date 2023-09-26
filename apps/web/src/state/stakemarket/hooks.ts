@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { requiresApproval } from 'utils/requiresApproval'
@@ -20,6 +20,22 @@ import { getTag } from './helpers'
 export const useGetTags = () => {
   const { data } = useSWR('stakemarket-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useStakesConfigInitialize = () => {
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const { chainId } = useActiveChainId()
+  const collectionId = useRouter().query.collectionAddress as string
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchStakesAsync(collectionId ?? 0, chainId, init))
+      })
+    }
+  }, [dispatch, chainId])
 }
 
 export const useFetchPublicPoolsData = () => {
@@ -55,6 +71,7 @@ export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean }
 }
 
 export const usePoolsPageFetch = () => {
+  useStakesConfigInitialize()
   useFetchPublicPoolsData()
 }
 

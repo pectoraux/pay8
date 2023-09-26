@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getArps, fetchArps } from './helpers'
 import { resetUserState } from '../global/actions'
 import { isAddress } from 'utils'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -38,11 +39,15 @@ export const fetchArpSgAsync =
   }
 
 export const fetchArpsAsync =
-  ({ fromArp, chainId }) =>
+  ({ fromArp, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const arps = await fetchArps({ fromArp, chainId })
-      dispatch(setArpsPublicData(arps || []))
+      if (init) {
+        dispatch(setInitialArpsConfig(arps || []))
+      } else {
+        dispatch(setArpsPublicData(arps || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
@@ -52,8 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'ARPs',
   initialState,
   reducers: {
-    setArpsPublicData: (state, action) => {
+    setInitialArpsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setArpsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setCurrBribeData: (state, action) => {
@@ -78,6 +91,7 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setArpsPublicData, setCurrBribeData, setCurrPoolData, setFilters } = PoolsSlice.actions
+export const { setInitialArpsConfig, setArpsPublicData, setCurrBribeData, setCurrPoolData, setFilters } =
+  PoolsSlice.actions
 
 export default PoolsSlice.reducer

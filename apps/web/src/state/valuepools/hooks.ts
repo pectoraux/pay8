@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import useSWRImmutable from 'swr/immutable'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
@@ -25,6 +25,23 @@ export const useGetTags = () => {
   return data?.name ?? ''
 }
 
+export const useValuepoolsConfigInitialize = () => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
+  const fromVesting = router.pathname.includes('vesting')
+  const fromValuepool = router.query.valuepool
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchValuepoolSgAsync({ fromVesting, fromValuepool }))
+        dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool, init, chainId }))
+      })
+    }
+  }, [dispatch, chainId])
+}
+
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
@@ -37,8 +54,9 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
+          const init = false
           dispatch(fetchValuepoolSgAsync({ fromVesting, fromValuepool }))
-          dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool, chainId }))
+          dispatch(fetchValuepoolsAsync({ fromVesting, fromValuepool, init, chainId }))
         })
       }
       fetchPoolsDataWithFarms()
@@ -65,6 +83,7 @@ export const usePool2 = (address): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
+  useValuepoolsConfigInitialize()
   useFetchPublicPoolsData()
 }
 

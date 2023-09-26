@@ -2,6 +2,7 @@ import { isAddress } from 'utils'
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchGame, fetchGames, getGames } from './helpers'
 import { resetUserState } from '../global/actions'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -38,11 +39,16 @@ export const fetchGameSgAsync =
   }
 
 export const fetchGamesAsync =
-  ({ fromGame, chainId }) =>
+  ({ fromGame, init, chainId }) =>
   async (dispatch) => {
     try {
       const games = await fetchGames({ fromGame, chainId })
-      dispatch(setGamesPublicData(games || []))
+      console.log('init=================>', init)
+      if (init) {
+        dispatch(setInitialGamesConfig(games || []))
+      } else {
+        dispatch(setGamesPublicData(games || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
@@ -61,8 +67,16 @@ export const PoolsSlice = createSlice({
   name: 'Games',
   initialState,
   reducers: {
-    setGamesPublicData: (state, action) => {
+    setInitialGamesConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setGamesPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setGameUserData: (state, action) => {
@@ -96,6 +110,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setGamesPublicData, setGameUserData, setCurrBribeData, setCurrPoolData, setFilters } = PoolsSlice.actions
+export const {
+  setInitialGamesConfig,
+  setGamesPublicData,
+  setGameUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

@@ -6,6 +6,8 @@ import { useAppDispatch } from 'state'
 import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { FAST_INTERVAL } from 'config/constants'
 import useSWRImmutable from 'swr/immutable'
+import axios from 'axios'
+import NodeRSA from 'encrypt-rsa'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
@@ -26,8 +28,20 @@ import {
 } from './selectors'
 import { requiresApproval } from 'utils/requiresApproval'
 import { getAccountSg, getRampSg, getSession, getTag, getTokenData } from './helpers'
-import axios from 'axios'
-import NodeRSA from 'encrypt-rsa'
+
+export const useRampsConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchRampsAsync({ chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
+}
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -189,6 +203,7 @@ export const usePoolsPageFetch = () => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useAccountActiveChain()
 
+  useRampsConfigInitialize()
   useFetchPublicPoolsData()
 
   useFastRefreshEffect(() => {

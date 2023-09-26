@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -18,8 +18,23 @@ import { getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('wills-tags6', async () => getTag())
-  console.log('usetag============>', data)
   return data?.name ?? ''
+}
+
+export const useWillsConfigInitialize = () => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
+  const fromWill = router.query.will
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchWillSgAsync({ fromWill }))
+        dispatch(fetchWillsAsync({ fromWill, init, chainId }))
+      })
+    }
+  }, [dispatch, chainId])
 }
 
 export const useFetchPublicPoolsData = () => {
@@ -33,8 +48,9 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
+          const init = true
           dispatch(fetchWillSgAsync({ fromWill }))
-          dispatch(fetchWillsAsync({ fromWill, chainId }))
+          dispatch(fetchWillsAsync({ fromWill, init, chainId }))
         })
       }
 

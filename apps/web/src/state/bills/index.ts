@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getBills, fetchBills } from './helpers'
 import { resetUserState } from '../global/actions'
 import { isAddress } from 'utils'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -38,11 +39,15 @@ export const fetchBillSgAsync =
   }
 
 export const fetchBillsAsync =
-  ({ fromBill, chainId }) =>
+  ({ fromBill, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const bills = await fetchBills({ fromBill, chainId })
-      dispatch(setBillsPublicData(bills || []))
+      if (init) {
+        dispatch(setInitialBillsConfig(bills || []))
+      } else {
+        dispatch(setBillsPublicData(bills || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
@@ -52,8 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'Bills',
   initialState,
   reducers: {
-    setBillsPublicData: (state, action) => {
+    setInitialBillsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setBillsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setCurrBribeData: (state, action) => {
@@ -78,6 +91,7 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setBillsPublicData, setCurrBribeData, setCurrPoolData, setFilters } = PoolsSlice.actions
+export const { setInitialBillsConfig, setBillsPublicData, setCurrBribeData, setCurrPoolData, setFilters } =
+  PoolsSlice.actions
 
 export default PoolsSlice.reducer

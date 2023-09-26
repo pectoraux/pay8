@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import useSWRImmutable from 'swr/immutable'
@@ -27,6 +27,22 @@ export const useGetGame = (gameName: string, tokenId: string) => {
   return data
 }
 
+export const useGamesConfigInitialize = () => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
+  const fromGame = router.query.game
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchGameSgAsync({ fromGame }))
+        dispatch(fetchGamesAsync({ fromGame, init, chainId }))
+      })
+    }
+  }, [dispatch, chainId])
+}
+
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -38,8 +54,9 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
+          const init = false
           dispatch(fetchGameSgAsync({ fromGame }))
-          dispatch(fetchGamesAsync({ fromGame, chainId }))
+          dispatch(fetchGamesAsync({ fromGame, init, chainId }))
         })
       }
 
@@ -62,6 +79,7 @@ export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
+  useGamesConfigInitialize()
   useFetchPublicPoolsData()
 }
 

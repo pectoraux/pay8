@@ -21,12 +21,16 @@ const initialState: any = {
 let pools = []
 
 export const fetchBusinessGaugesAsync =
-  ({ chainId }) =>
+  ({ chainId, init = false }) =>
   async (dispatch) => {
     try {
       const businesses = await fetchBusinesses({ chainId })
       const data = businesses
-      dispatch(setBusinessesPublicData(data || []))
+      if (init) {
+        dispatch(setInitialBusinessesConfig(data || []))
+      } else {
+        dispatch(setBusinessesPublicData(data || []))
+      }
     } catch (error) {
       console.error('[Pools Action] error when getting business gauges======>', error)
     }
@@ -56,9 +60,16 @@ export const PoolsSlice = createSlice({
   name: 'Businesses',
   initialState,
   reducers: {
-    setBusinessesPublicData: (state, action) => {
-      console.log('setBusinessesPublicData==============>', action.payload)
+    setInitialBusinessesConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setBusinessesPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setBusinessesUserData: (state, action) => {
@@ -105,7 +116,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setBusinessesPublicData, setBusinessesUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialBusinessesConfig,
+  setBusinessesPublicData,
+  setBusinessesUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

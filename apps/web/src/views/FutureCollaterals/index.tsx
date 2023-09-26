@@ -13,7 +13,7 @@ import {
   Loading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useFetchPublicPoolsData, usePoolsWithFilterSelector } from 'state/futureCollaterals/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/futureCollaterals/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
@@ -49,7 +49,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     }
   }
 
-  useFetchPublicPoolsData()
+  usePoolsPageFetch()
 
   return (
     <>

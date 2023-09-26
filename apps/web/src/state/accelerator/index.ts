@@ -29,12 +29,16 @@ const initialState: any = {
 let pools = []
 
 export const fetchAcceleratorGaugesAsync =
-  ({ chainId }) =>
+  ({ chainId, init = false }) =>
   async (dispatch) => {
     try {
       const businesses = await fetchAccelerator({ chainId })
       const data = businesses
-      dispatch(setAcceleratorPublicData(data || []))
+      if (init) {
+        dispatch(setInitialAcceleratorConfig(data || []))
+      } else {
+        dispatch(setAcceleratorPublicData(data || []))
+      }
     } catch (error) {
       console.error('[Pools Action] error when getting accelerator pitches======>', error)
     }
@@ -95,9 +99,16 @@ export const PoolsSlice = createSlice({
   name: 'Accelerator',
   initialState,
   reducers: {
-    setAcceleratorPublicData: (state, action) => {
+    setInitialAcceleratorConfig: (state, action) => {
       state.data = [...action.payload]
-      pools = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setAcceleratorPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setAcceleratorUserData: (state, action) => {
@@ -160,7 +171,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setAcceleratorPublicData, setCurrBribeData, setAcceleratorUserData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialAcceleratorConfig,
+  setAcceleratorPublicData,
+  setCurrBribeData,
+  setAcceleratorUserData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer

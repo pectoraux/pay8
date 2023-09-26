@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import useSWR from 'swr'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -18,6 +18,20 @@ import { getTag } from './helpers'
 export const useGetTags = () => {
   const { data } = useSWR('contributors-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useContributorConfigInitialize = () => {
+  const dispatch = useAppDispatch()
+  const { chainId } = useActiveChainId()
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchContributorsGaugesAsync({ chainId }))
+      })
+    }
+  }, [dispatch, chainId])
 }
 
 export const useFetchPublicPoolsData = () => {
@@ -43,6 +57,7 @@ export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean }
 export const usePoolsPageFetch = () => {
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  useContributorConfigInitialize()
   useFetchPublicPoolsData()
   // useSlowRefreshEffect(() => {
   //   batch(() => {

@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
@@ -19,6 +19,23 @@ import { getTag } from './helpers'
 export const useGetTags = () => {
   const { data } = useSWR('arps-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useARPsConfigInitialize = () => {
+  const { chainId } = useActiveChainId()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const fromArp = router.query.arp
+
+  useEffect(() => {
+    if (chainId) {
+      batch(() => {
+        const init = true
+        dispatch(fetchArpSgAsync({ fromArp }))
+        dispatch(fetchArpsAsync({ fromArp, chainId, init }))
+      })
+    }
+  }, [dispatch, chainId])
 }
 
 export const useFetchPublicPoolsData = () => {
@@ -56,6 +73,7 @@ export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
+  useARPsConfigInitialize()
   useFetchPublicPoolsData()
 }
 

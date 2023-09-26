@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { getBettings, fetchBettings } from './helpers'
 import { resetUserState } from '../global/actions'
 import { isAddress } from 'utils'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -19,7 +20,7 @@ const initialState: any = {
 }
 
 export const fetchBettingSgAsync =
-  ({ fromBetting }) =>
+  ({ fromBetting, init = false }) =>
   async (dispatch) => {
     try {
       const whereClause = isAddress(fromBetting)
@@ -38,11 +39,15 @@ export const fetchBettingSgAsync =
   }
 
 export const fetchBettingsAsync =
-  ({ fromBetting, chainId }) =>
+  ({ fromBetting, chainId, init = false }) =>
   async (dispatch) => {
     try {
       const bettings = await fetchBettings({ fromBetting, chainId })
-      dispatch(setBettingsPublicData(bettings || []))
+      if (init) {
+        dispatch(setInitialBettingsConfig(bettings || []))
+      } else {
+        dispatch(setBettingsPublicData(bettings || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============>', error)
     }
@@ -52,8 +57,16 @@ export const PoolsSlice = createSlice({
   name: 'Bettings',
   initialState,
   reducers: {
-    setBettingsPublicData: (state, action) => {
+    setInitialBettingsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setBettingsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setCurrBribeData: (state, action) => {
@@ -78,6 +91,7 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setBettingsPublicData, setCurrBribeData, setCurrPoolData, setFilters } = PoolsSlice.actions
+export const { setInitialBettingsConfig, setBettingsPublicData, setCurrBribeData, setCurrPoolData, setFilters } =
+  PoolsSlice.actions
 
 export default PoolsSlice.reducer

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchWorlds } from './helpers'
 import { resetUserState } from '../global/actions'
+import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
@@ -18,13 +19,17 @@ const initialState: any = {
 }
 
 export const fetchWorldsAsync =
-  ({ chainId }) =>
+  ({ init, chainId }) =>
   async (dispatch) => {
     try {
       console.log('fetchWorlds1================>')
       const worlds = await fetchWorlds({ chainId })
       console.log('fetchWorld================>', worlds)
-      dispatch(setWorldsPublicData(worlds || []))
+      if (init) {
+        dispatch(setInitialWorldsConfig(worlds || []))
+      } else {
+        dispatch(setWorldsPublicData(worlds || []))
+      }
     } catch (error) {
       console.error('[Pools Action]============> error when getting worlds', error)
     }
@@ -34,9 +39,16 @@ export const PoolsSlice = createSlice({
   name: 'Worlds',
   initialState,
   reducers: {
-    setWorldsPublicData: (state, action) => {
-      console.log('setWorldsPublicData==============>', action.payload)
+    setInitialWorldsConfig: (state, action) => {
       state.data = [...action.payload]
+      state.userDataLoaded = true
+    },
+    setWorldsPublicData: (state, action) => {
+      const livePoolsSousIdMap = keyBy(action.payload, 'sousId')
+      state.data = state.data.map((pool) => {
+        const livePoolData = livePoolsSousIdMap[pool.sousId]
+        return { ...pool, ...livePoolData }
+      })
       state.userDataLoaded = true
     },
     setWorldsUserData: (state, action) => {
@@ -70,7 +82,13 @@ export const PoolsSlice = createSlice({
 })
 
 // Actions
-export const { setWorldsPublicData, setWorldsUserData, setCurrBribeData, setCurrPoolData, setFilters } =
-  PoolsSlice.actions
+export const {
+  setInitialWorldsConfig,
+  setWorldsPublicData,
+  setWorldsUserData,
+  setCurrBribeData,
+  setCurrPoolData,
+  setFilters,
+} = PoolsSlice.actions
 
 export default PoolsSlice.reducer
