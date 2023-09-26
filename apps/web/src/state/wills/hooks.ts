@@ -73,6 +73,7 @@ export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
+  useWillsConfigInitialize()
   useFetchPublicPoolsData()
 }
 

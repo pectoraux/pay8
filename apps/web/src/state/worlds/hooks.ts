@@ -20,7 +20,7 @@ export const useGetTags = () => {
   return data?.name ?? ''
 }
 
-export const useWillsConfigInitialize = () => {
+export const useWorldsConfigInitialize = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
 
@@ -67,6 +67,7 @@ export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean }
 }
 
 export const usePoolsPageFetch = () => {
+  useWorldsConfigInitialize()
   useFetchPublicPoolsData()
 }
 
