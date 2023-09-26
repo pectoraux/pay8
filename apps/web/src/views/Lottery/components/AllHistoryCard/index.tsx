@@ -10,6 +10,7 @@ import { getDrawnDate } from '../../helpers'
 import PreviousRoundCardBody from '../PreviousRoundCard/Body'
 import PreviousRoundCardFooter from '../PreviousRoundCard/Footer'
 import { useRouter } from 'next/router'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -32,6 +33,7 @@ const AllHistoryCard = ({ currentTokenId }) => {
   } = useTranslation()
   const dispatch = useAppDispatch()
   const { lotteryData } = useLottery()
+  const { chainId } = useActiveChainId()
   const { id: currentLotteryId, history } = lotteryData
   const [latestRoundId, setLatestRoundId] = useState(null)
   const [selectedRoundId, setSelectedRoundId] = useState('')
@@ -56,7 +58,7 @@ const AllHistoryCard = ({ currentTokenId }) => {
     setSelectedLotteryNodeData(null)
 
     const fetchLotteryData = async () => {
-      const _lotteryData = await fetchLottery(selectedRoundId)
+      const _lotteryData = await fetchLottery(selectedRoundId, chainId)
       setSelectedLotteryNodeData(_lotteryData)
     }
 
