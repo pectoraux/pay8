@@ -4,15 +4,18 @@ import { batch, useSelector } from 'react-redux'
 import { useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
-import { fetchPotteryUserDataAsync } from './index'
-import { potterDataSelector } from './selectors'
-import { State } from '../types'
 import { fetchGameAsync } from 'state/games'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+
+import { State } from '../types'
+import { potterDataSelector } from './selectors'
+import { fetchPotteryUserDataAsync } from './index'
 
 export const usePotteryFetch = () => {
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const { chainId } = useActiveChainId()
   const game = useMemo(() => router.query.game, [router.query.game])
 
   useFastRefreshEffect(() => {
@@ -20,7 +23,7 @@ export const usePotteryFetch = () => {
 
     if (game) {
       batch(() => {
-        dispatch(fetchGameAsync(game))
+        dispatch(fetchGameAsync(game, chainId))
         // dispatch(fetchPublicPotteryDataAsync())
         // if (account) {
         // dispatch(fetchPotteryUserDataAsync(account))
