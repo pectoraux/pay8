@@ -24,6 +24,7 @@ import BuyTicketsButton from '../BuyTicketsButton'
 import PreviousRoundCardBody from '../PreviousRoundCard/Body'
 import { getDrawnDate } from '../../helpers'
 import PreviousRoundCardFooter from '../PreviousRoundCard/Footer'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface YourHistoryCardProps {
   handleShowMoreClick: () => void
@@ -52,6 +53,7 @@ const YourHistoryCard: React.FC<any> = ({ currentTokenId, handleShowMoreClick, n
     currentLanguage: { locale },
   } = useTranslation()
   const { account } = useWeb3React()
+  const { chainId } = useActiveChainId()
   const [shouldShowRoundDetail, setShouldShowRoundDetail] = useState(false)
   const [selectedLotteryNodeData, setSelectedLotteryNodeData] = useState<any>(null)
   const [selectedLotteryId, setSelectedLotteryId] = useState<string>(null)
@@ -68,7 +70,7 @@ const YourHistoryCard: React.FC<any> = ({ currentTokenId, handleShowMoreClick, n
   const handleHistoryRowClick = async (lotteryId: string) => {
     setShouldShowRoundDetail(true)
     setSelectedLotteryId(lotteryId)
-    const _lotteryData = await fetchLottery(lotteryId)
+    const _lotteryData = await fetchLottery(lotteryId, chainId)
     // const processedLotteryData = processLotteryResponse(lotteryData)
     setSelectedLotteryNodeData(_lotteryData)
   }
