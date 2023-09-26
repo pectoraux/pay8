@@ -154,7 +154,6 @@ const CreateGaugeModal: React.FC<any> = ({
   )
   const { theme } = useTheme()
   const { t } = useTranslation()
-  const { chainId } = useActiveChainId()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { account, chainId } = useAccountActiveChain()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
