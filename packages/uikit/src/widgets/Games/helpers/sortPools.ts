@@ -10,7 +10,7 @@ export function sortPools<T>(sortOption: string, poolsToSort: any) {
       return orderBy(poolsToSort, (pool: any) => Number(pool?.mintFee), "desc");
     case "burnFee":
       return orderBy(poolsToSort, (pool: any) => Number(pool?.burnFee), "desc");
-    case "users":
+    case "userCount":
       return orderBy(poolsToSort, (pool: any) => pool?.accounts?.length, "desc");
     default:
       return poolsToSort;
