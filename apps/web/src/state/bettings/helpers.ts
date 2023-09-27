@@ -254,12 +254,12 @@ export const fetchBetting = async (bettingAddress, chainId) => {
         currStart,
         currEnd: currStart + parseInt(bettingEvent.bracketDuration),
         token: new Token(
-          56,
+          chainId,
           _token,
           decimals.result,
           symbol.result?.toString(),
           name.result?.toString(),
-          'https://www.trueusd.com/',
+          `https://tokens.payswap.org/images/${symbol.result?.toLowerCase()}`,
         ),
       }
     }),

@@ -54,19 +54,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Identity Token Id')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="identityTokenId"
-          value={state.identityTokenId}
-          placeholder={t('input an identity token id')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Price Per Ticket')}
         </Text>
         <Input

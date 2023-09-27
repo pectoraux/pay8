@@ -53,14 +53,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount Receivable')}
+          {t('Price Per Minute')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="amountReceivable"
           value={state.amountReceivable}
-          placeholder={t('input an amount receivable')}
+          placeholder={t('input price per minute')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

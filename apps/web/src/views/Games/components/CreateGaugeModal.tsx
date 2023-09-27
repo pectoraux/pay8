@@ -85,7 +85,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
   [LockStage.UPDATE_OBJECT]: t('Update Object'),
   [LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT]: t('Update Burn Token For Credit'),
-  [LockStage.UPDATE_MAX_USE]: t('Update Maximum User'),
+  [LockStage.UPDATE_MAX_USE]: t('Update Maximum Use'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.UPDATE_TASK_CONTRACT]: t('Update Task Contract'),
   [LockStage.BLACKLIST_AUDITOR]: t('Blacklist Auditor'),
