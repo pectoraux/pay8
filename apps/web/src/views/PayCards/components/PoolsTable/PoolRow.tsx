@@ -7,6 +7,7 @@ import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
@@ -21,9 +22,9 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalUsersCell labelText={t('Total Balances')} amount={pool?.balances?.length} />
       <TotalValueCell
         labelText={t('Balance')}
-        amount={currAccount?.balance}
-        decimals={currAccount?.decimals ?? 18}
-        symbol={currAccount?.token?.symbol ?? ''}
+        amount={getBalanceNumber(currAccount?.balance, currAccount?.decimals ?? 18)}
+        decimals={5}
+        symbol={currAccount?.symbol ?? ''}
       />
       <TotalValueCell labelText={t('Token ID')} amount={pool?.tokenId} decimals={0} symbol="" />
     </>

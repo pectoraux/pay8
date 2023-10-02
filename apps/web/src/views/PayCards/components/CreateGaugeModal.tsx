@@ -89,7 +89,7 @@ const CreateGaugeModal: React.FC<any> = ({
     avatar: pool?.collection?.avatar,
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
-    tokenId: pool?.tokenId,
+    tokenId: pool?.tokenId ?? '',
     extraMint: '',
     category: '',
     optionId: currAccount?.optionId ?? '0',

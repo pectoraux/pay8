@@ -112,7 +112,7 @@ export const fetchCards = async ({ fromCard, chainId }) => {
   const fromGraph = await getCards(0, 0, {})
   const cards = await Promise.all(
     fromGraph
-      .map(async (card, index) => {
+      ?.map(async (card, index) => {
         const bscClient = publicClient({ chainId: chainId })
         const [tokenId] = await bscClient.multicall({
           allowFailure: true,
@@ -149,15 +149,15 @@ export const fetchCards = async ({ fromCard, chainId }) => {
             })
             return {
               ...tk,
-              name: name?.toString(),
-              symbol: symbol?.toString()?.toUpperCase(),
+              name: name?.result?.toString(),
+              symbol: symbol?.result?.toString()?.toUpperCase(),
               decimals: decimals.result,
             }
           }),
         )
         return {
           sousId: index,
-          tokenId: tokenId.toString(),
+          tokenId: tokenId.result?.toString(),
           ...card,
           balances,
         }

@@ -21,9 +21,10 @@ import { fetchCardsAsync } from 'state/cards'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCardContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+
 import { Divider, GreyedOutContainer } from './styles'
 import CreateGaugeModal from './CreateGaugeModal'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any

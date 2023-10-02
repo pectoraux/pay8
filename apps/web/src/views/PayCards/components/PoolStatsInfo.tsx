@@ -26,7 +26,9 @@ import { useCurrPool } from 'state/cards/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/cards'
+
 import WebPagesModal from './WebPagesModal'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -44,21 +46,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = currProtocol?.tokenAddress || ''
   const dispatch = useAppDispatch()
   const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} />)
-  // const [onPresentNFTs] = useModal(<WebPagesModal2 height="500px" nfts={currProtocol?.tokens} />)
-
   return (
     <>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
             {t('View Owner Info')}
-          </ScanLink>
-        </Flex>
-      )}
-      {pool?.devaddr_ && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.devaddr_, 'address', chainId)} bold={false} small>
-            {t('View Admin Info')}
           </ScanLink>
         </Flex>
       )}
@@ -91,64 +84,21 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((balance) => (
+        {pool?.balances?.map((balance) => (
           <Button
-            key={balance.token.address}
+            key={balance.id}
             onClick={() => {
-              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
+              const newState = { ...currState, [pool.id]: balance.id }
               dispatch(setCurrPoolData(newState))
             }}
             mt="4px"
             mr={['2px', '2px', '4px', '4px']}
             scale="sm"
-            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+            variant={currState[pool.id] === balance.id ? 'subtle' : 'tertiary'}
           >
-            {balance.token.symbol}
+            {balance.symbol}
           </Button>
         ))}
-      </Flex>
-      <Flex>
-        <FlexGap gap="16px" pt="24px" pl="4px">
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentProject}
-          >
-            <LanguageIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentArticle}
-          >
-            <ProposalIcon color="textSubtle" />
-          </IconButton>
-          <IconButton
-            as={Link}
-            style={{ cursor: 'pointer' }}
-            // onClick={onPresentPayChat}
-          >
-            <SmartContractIcon color="textSubtle" />
-          </IconButton>
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTwitter}
-            >
-              <TwitterIcon color="textSubtle" />
-            </IconButton>
-          )}
-          {true && (
-            <IconButton
-              as={Link}
-              style={{ cursor: 'pointer' }}
-              // onClick={onPresentTelegram}
-            >
-              <TelegramIcon color="textSubtle" />
-            </IconButton>
-          )}
-        </FlexGap>
       </Flex>
     </>
   )
