@@ -305,7 +305,7 @@ const config: (
         },
         {
           label: t('Docs'),
-          href: '/cancan/collections/1',
+          href: 'https://docs.payswap.org',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),

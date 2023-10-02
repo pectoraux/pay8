@@ -1,8 +1,8 @@
-# 🥞 Pancake Frontend
+# PaySwap Frontend
 
 <p align="center">
-  <a href="https://pancakeswap.finance">
-      <img src="https://pancakeswap.finance/logo.png" height="128">
+  <a href="https://payswap.org">
+      <img src="https://payswap.org/logo.png" height="128">
   </a>
 </p>
 
@@ -79,4 +79,3 @@ pnpm build:blog
 | [swap-sdk-core](/packages/swap-sdk-core)                      | Swap SDK Shared code                                                                                                   |
 | [wagmi](/packages/wagmi)                                      | Extension for [wagmi](https://github.com/wagmi-dev/wagmi), including bsc chain and binance wallet connector            |
 | [awgmi](/packages/awgmi)                                      | connect to Aptos with similar wagmi React hooks.                                                                       |
-
