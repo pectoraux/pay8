@@ -17,11 +17,11 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
     <ActionContainer>
       <ActionTitles>{actionTitle}</ActionTitles>
       <ActionContent>
-        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-          <CopyAddress title={truncateHash(pool?.auditor)} account={pool?.auditor} />
+        <Flex flexDirection="column" alignSelf="flex-center">
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Auditor')}
           </Text>
+          <CopyAddress title={truncateHash(pool?.auditor)} account={pool?.auditor} />
           <Box mr="8px" height="32px">
             <Balance
               lineHeight="1"
@@ -34,12 +34,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
               {t('Channel Fund')}
             </Text>
           </Box>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {pool?.table?.join(' ')}
+          </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Estimation Table')}
+          </Text>
         </Flex>
-        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-          <CopyAddress title={truncateHash(pool?.owner)} account={pool?.owner} />
+        <Flex flexDirection="column" alignSelf="flex-center">
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Owner')}
           </Text>
+          <CopyAddress title={truncateHash(pool?.owner)} account={pool?.owner} />
         </Flex>
       </ActionContent>
     </ActionContainer>

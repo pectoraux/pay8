@@ -2,7 +2,18 @@ import axios from 'axios'
 import { firestore } from 'utils/firebase'
 import { loadStripe } from '@stripe/stripe-js'
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, AutoRenewIcon, Input, ErrorIcon } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  AutoRenewIcon,
+  Input,
+  ErrorIcon,
+  useTooltip,
+  HelpIcon,
+} from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
@@ -32,37 +43,103 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
 
-  const processCharge = async () => {
-    setIsLoading(true)
-    const { data } = await axios.post('/api/charge', { account, price: state.amountPayable, currency, rampAddress })
-    if (data.error) {
-      console.log('data.error=====================>', data.error)
-    }
-    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY)
-    await firestore.collection('onramp').doc(data.id).set({
-      amount: state.amountPayable,
-      currency: currency?.address,
-      session_id: data.id,
-      state: 'pending',
-      account,
-      hash: '',
-    })
-    await stripe.redirectToCheckout({ sessionId: data?.id })
-    setIsLoading(false)
-  }
-
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        "You need and auditor to mint a new collateral. An auditor needs to have a color equals or superior to the minim auditor color for the future collaterals which can be checked for in the left section of this collateral's panel.",
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'This is the wallet address of the recipient of the loan that the future collateral being minted through this function will be backing.',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>{t('This is the ID of the stake through which the loan that the future collateral will be backing.')}</Text>
+  )
+  const TooltipComponent4 = () => (
+    <Text>
+      {t('This is the ID of the NFT bounty you have created. The future collateral will be sent to that NFT bounty')}
+    </Text>
+  )
+  const TooltipComponent5 = () => (
+    <Text>
+      {t(
+        'This is the bounty ID of the auditor. It is used to make sure the auditor has a bounty in place with a sufficient balance and lock duration to mint this future collateral.',
+      )}
+    </Text>
+  )
+  const TooltipComponent6 = () => (
+    <Text>
+      {t(
+        "Input the channel number for the future collateral. There are multiple channels each with their own estimation table so users can purchase collaterals that appreciate differently. Users need an admin permission on a specific channel to be able to purchase a collateral in it and that permission is granted given the user's credit worthiness. Some channels are easier to be admitted to than others.",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef6,
+    tooltip: tooltip6,
+    tooltipVisible: tooltipVisible6,
+  } = useTooltip(<TooltipComponent6 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Auditor')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Auditor')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -73,9 +150,13 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Recipient Address')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Recipient Address')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -86,9 +167,13 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Stake ID')}
-        </Text>
+        <Flex ref={targetRef3}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Stake ID')}
+          </Text>
+          {tooltipVisible3 && tooltip3}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -99,9 +184,13 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('User Bounty ID')}
-        </Text>
+        <Flex ref={targetRef4}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('User Bounty ID')}
+          </Text>
+          {tooltipVisible4 && tooltip4}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -112,9 +201,13 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Auditor Bounty ID')}
-        </Text>
+        <Flex ref={targetRef5}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Auditor Bounty ID')}
+          </Text>
+          {tooltipVisible5 && tooltip5}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -125,9 +218,13 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Channel Number')}
-        </Text>
+        <Flex ref={targetRef6}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Channel Number')}
+          </Text>
+          {tooltipVisible6 && tooltip6}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -143,7 +240,9 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will mint a future collateral for the recipient. Please read the documentation for more details.')}
+            {t(
+              'The will mint a future collateral for the recipient. Make sure you have added the recipient to the right channel and that you have an NFT bounty and a stake setup prior to running this function.',
+            )}
           </Text>
         </Box>
       </Grid>
@@ -153,7 +252,6 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
           mb="8px"
           onClick={continueToNextStage}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
           {t('Mint')}
         </Button>

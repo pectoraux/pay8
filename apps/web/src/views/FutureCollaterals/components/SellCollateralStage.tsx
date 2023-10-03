@@ -72,17 +72,15 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will sell your collateral. Please read the documentation for more details.')}
+            {t(
+              "The will sell your collateral. Use this function only when the user for which you minted this collateral defaulted on the loan. This should enable you to recover part or the entirety of the loan's principal.",
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Sell')}
         </Button>
       </Flex>

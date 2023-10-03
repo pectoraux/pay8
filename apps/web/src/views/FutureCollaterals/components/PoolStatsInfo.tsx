@@ -13,6 +13,7 @@ import {
   TelegramIcon,
   ProposalIcon,
   SmartContractIcon,
+  Text,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -25,6 +26,7 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/futureCollaterals'
 import WebPagesModal from './WebPagesModal'
+import { getFutureCollateralsAddress } from 'utils/addressHelpers'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -52,24 +54,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.devaddr_ && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.devaddr_, 'address', chainId)} bold={false} small>
-            {t('View Admin Info')}
-          </ScanLink>
-        </Flex>
-      )}
-      {pool?.rampAddress && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
-          </ScanLink>
-        </Flex>
-      )}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
-          {t('See Admin Channel')}
-        </LinkExternal>
+        <ScanLink href={getBlockExploreLink(getFutureCollateralsAddress(), 'address', chainId)} bold={false} small>
+          {t('View Contract')}
+        </ScanLink>
       </Flex>
       {pool?.metadataUrl ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -78,6 +66,41 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </LinkExternal>
         </Flex>
       ) : null}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Treasury Fee')} {`->`} {parseInt(pool?.treasuryFee?.toString()) / 100}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Treasury Balance')} {`->`} {pool?.treasury?.toString()}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Buffer Time')} {`->`} {parseInt(pool?.bufferTime ?? '0') / 60} {t('minutes')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Min. #auditors to blacklist profile')} {`->`} {parseInt(pool?.minToBlacklist ?? '0')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Min. Bounty as % of collateral price')} {`->`} {parseInt(pool?.minBountyPercent ?? '0') / 100}%
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Table Update Color')} {`->`} {t('GOLD')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Minimum Auditor Color')} {`->`} {t('BLACK')}
+        </Text>
+      </Flex>
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

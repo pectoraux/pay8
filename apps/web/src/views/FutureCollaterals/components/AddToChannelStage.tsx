@@ -1,5 +1,17 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Input, Button, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Input,
+  Button,
+  ErrorIcon,
+  ButtonMenu,
+  ButtonMenuItem,
+  useTooltip,
+  HelpIcon,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
@@ -22,13 +34,27 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       inputRef.current.focus()
     }
   }, [inputRef])
-
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        "Input the channel number for which you would like to update the estimation table. There are multiple channels each with their own estimation table so users can purchase collaterals that appreciate differently. Users need an admin permission on a specific channel to be able to purchase a collateral in it and that permission is granted given the user's credit worthiness. Some channels are easier to be admitted to than others.",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Channel Number')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Channel Number')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -58,7 +84,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified profile id to the specified channel. Please read the documentation for more information on this parameter',
+              'The will add the specified profile to the specified channel in order to enable its owner to buy a collateral from the specified channel. Collaterals from different channels appreciate differently week after week.',
             )}
           </Text>
         </Box>

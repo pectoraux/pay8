@@ -1,7 +1,5 @@
 import styled from 'styled-components'
-import every from 'lodash/every'
 import {
-  Balance,
   Box,
   Button,
   Card,
@@ -9,29 +7,23 @@ import {
   CheckmarkIcon,
   Container,
   Flex,
-  FlexGap,
   Heading,
   Link,
-  LogoRoundIcon,
   NextLinkFromReactRouter as RouterLink,
-  Skeleton,
   Step,
-  StepStatus,
   Stepper,
   Text,
-  TooltipText,
-  useTooltip,
+  useModal,
 } from '@pancakeswap/uikit'
 import { Address, useAccount } from 'wagmi'
 
 import { useTranslation } from '@pancakeswap/localization'
-import useTokenBalance from 'hooks/useTokenBalance'
 import { useProfile } from 'state/profile/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
-import { useIfoCredit, useIfoCeiling } from 'state/pools/hooks'
-import { getICakeWeekDisplay } from 'views/Pools/helpers'
+import CreateGaugeModal from './components/CreateGaugeModal'
+import CopyAddress from './components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import { getFutureCollateralsAddress } from 'utils/addressHelpers'
 
 interface TypeProps {
   ifoCurrencyAddress: Address
@@ -64,36 +56,11 @@ const InlineLink = styled(Link)`
 
 const IfoSteps: React.FC<any> = ({ title }) => {
   const { hasActiveProfile } = useProfile()
-  const { address: account } = useAccount()
   const { t } = useTranslation()
   const stepsValidationStatus = [hasActiveProfile, true, true, true]
+  const [openPresentControlPanel] = useModal(<CreateGaugeModal variant="mint" />)
 
   const renderCardBody = (step: number) => {
-    const isStepValid = stepsValidationStatus[step]
-
-    const renderAccountStatus = () => {
-      if (!account) {
-        return <ConnectWalletButton />
-      }
-
-      if (isStepValid) {
-        return (
-          <Flex alignItems="center">
-            <Text color="success" bold mr="8px">
-              {t('Profile Active!')}
-            </Text>
-            <CheckmarkIcon color="success" />
-          </Flex>
-        )
-      }
-
-      return (
-        <Button as={RouterLink} to={`/profile/${account.toLowerCase()}`}>
-          {t('Activate your Profile')}
-        </Button>
-      )
-    }
-
     switch (step) {
       case 0:
         return (
@@ -102,12 +69,22 @@ const IfoSteps: React.FC<any> = ({ title }) => {
               {t('Create an NFT Bounty')}
             </Heading>
             <Text color="textSubtle" small mb="16px">
-              {t('You’ll need this to mint the Future Collateral!')}
+              {t(
+                "You’ll need this to mint the Future Collateral. Make sure you input the future collateral's address as the NFT address of your NFT bounty.",
+              )}
             </Text>
+            <Flex justifyContent="row">
+              <Text color="textSubtle" small mr="16px">
+                {t("Future Collateral's address: ")}
+              </Text>
+              <CopyAddress
+                title={truncateHash(getFutureCollateralsAddress(), 15, 15)}
+                account={getFutureCollateralsAddress()}
+              />
+            </Flex>
             <InlineLink external href="/trustbounties">
               {t('Create a BOUNTY')}
             </InlineLink>
-            {/* {renderAccountStatus()} */}
           </CardBody>
         )
       case 1:
@@ -132,14 +109,15 @@ const IfoSteps: React.FC<any> = ({ title }) => {
         return (
           <CardBody>
             <Heading as="h4" color="secondary" mb="16px">
-              {t('Pick a channel')}
+              {t('Pick a channel & Mint away!')}
             </Heading>
             <Text color="textSubtle" small>
               {t(
-                'Come back to this page and pick the best channel for your loan. Congratulations, you can now mint your future collateral.',
+                'Read the Future Collateral section of the documentation to view the various estimation tables for all available channels, pick the best channel for your loan, get an auditor to add you to that channel and mint you a collateral to back a loan that he/she will be granting you. Congratulations, you now have borrowed money backed by a future collateral.',
               )}{' '}
               <br />
             </Text>
+            <Button onClick={openPresentControlPanel}>{t('Mint')}</Button>
           </CardBody>
         )
       case 3:

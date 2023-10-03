@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified profile or remove the specified address from the blacklist. Please read the documentation for more information',
+              'The will add/remove the specified profile to/from the blacklist. Once enough auditors blacklist a profile, that profile becomes unable to mint collaterals for users, add users to channels or blacklist users.',
             )}
           </Text>
         </Box>

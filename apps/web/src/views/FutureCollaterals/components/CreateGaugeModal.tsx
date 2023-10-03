@@ -38,7 +38,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
   [LockStage.UPDATE_PARAMETERS]: t('Update Parameters'),
   [LockStage.SELL_COLLATERAL]: t('Sell Collateral'),
-  [LockStage.NOTIFY_REWARD]: t('Notify Reward'),
+  [LockStage.NOTIFY_REWARD]: t('Donate To Fund'),
   [LockStage.ERASE_DEBT]: t('Erase Debt'),
   [LockStage.UPDATE_ADMIN]: t('Update Admin'),
   [LockStage.BURN]: t('Burn'),
@@ -62,7 +62,9 @@ interface BuyModalProps extends InjectedModalProps {
 }
 
 const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currAccount, currency, onDismiss }) => {
-  const [stage, setStage] = useState(variant === 'add' ? LockStage.CONFIRM_MINT : LockStage.SETTINGS)
+  const [stage, setStage] = useState(
+    variant === 'add' ? LockStage.CONFIRM_MINT : variant === 'mint' ? LockStage.MINT : LockStage.SETTINGS,
+  )
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -141,8 +143,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
     bufferTime: '',
     minToBlacklist: '',
     minBountyPercent: '',
-    updateColor: '',
-    minColor: '',
+    updateColor: 3,
+    minColor: 0,
     userBountyId: state2?.userBountyId ?? '',
     stakeId: state2?.stakeId ?? '',
     auditor: state2?.auditor ?? '',
@@ -202,6 +204,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
         setStage(LockStage.MINT)
         break
       case LockStage.MINT:
+        if (variant === 'mint') break
         if (variant !== 'add') setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_NOTIFY_REWARD:
@@ -330,10 +333,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
       }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
         const args = [
-          state.treasuryFee,
-          state.bufferTime,
+          parseInt(state.treasuryFee) * 100,
+          parseInt(state.bufferTime) * 60,
           state.minToBlacklist,
-          state.minBountyPercent,
+          parseInt(state.minBountyPercent) * 100,
           state.updateColor,
           state.minColor,
         ]
@@ -436,7 +439,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
             {t('UPDATE ADMIN')}
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.NOTIFY_REWARD)}>
-            {t('NOTIFY REWARD')}
+            {t('DONATE TO FUND')}
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.BURN)}>
             {t('BURN')}

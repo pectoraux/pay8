@@ -61,18 +61,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will either add or remove the specified account as an admin for the collaterals. Please read the documentation for more information.',
+              "The will add/remove the specified account to/from the admin list of the future collaterals' contract. Only an admin can call this function.",
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update')}
         </Button>
       </Flex>

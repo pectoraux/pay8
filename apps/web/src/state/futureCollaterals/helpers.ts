@@ -156,7 +156,7 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
   const collaterals = await Promise.all(
     fromGraph
       .map(async (collateral, index) => {
-        const [fund] = await bscClient.multicall({
+        const [fund, minToBlacklist, minBountyPercent, bufferTime, treasuryFee, treasury] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -165,14 +165,62 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
               functionName: 'fund',
               args: [BigInt(collateral.channel)],
             },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'minToBlacklist',
+            },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'minBountyPercent',
+            },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'bufferTime',
+            },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'treasuryFee',
+            },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'treasury',
+            },
           ],
         })
+        const arr2 = Array.from({ length: 52 }, (v, i) => i)
+        const table = await Promise.all(
+          arr2?.map(async (idx) => {
+            const [value] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: getFutureCollateralsAddress(),
+                  abi: futureCollateralsABI,
+                  functionName: 'estimationTable',
+                  args: [BigInt(collateral.channel), BigInt(idx)],
+                },
+              ],
+            })
+            return value.result
+          }),
+        )
         return {
           sousId: index,
           ...collateral,
+          table,
+          minToBlacklist: minToBlacklist.result,
+          minBountyPercent: minBountyPercent.result,
+          bufferTime: bufferTime.result,
+          treasuryFee: treasuryFee.result,
+          treasury: treasury.result,
           fund: fund.result.toString(),
           token: new Token(
-            56,
+            chainId,
             tokenAddress.result,
             decimals.result,
             symbol.result?.toString()?.toUpperCase() ?? 'symbol',

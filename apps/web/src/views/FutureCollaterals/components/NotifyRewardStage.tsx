@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, ErrorIcon, Input, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
@@ -51,12 +51,27 @@ const SetPriceStage: React.FC<any> = ({
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        "Input the channel number for the future collateral. There are multiple channels each with their own estimation table so users can purchase collaterals that appreciate differently. Users need an admin permission on a specific channel to be able to purchase a collateral in it and that permission is granted given the user's credit worthiness. Some channels are easier to be admitted to than others.",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Channel Number')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Channel Number')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -68,7 +83,7 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <BribeField
-          add="add"
+          add="donate"
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={currency?.decimals}
@@ -85,18 +100,16 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will transfer funds to the contract. Please read the documentation for more details.')}
+            {t(
+              "The will donate funds to the future collateral's fund for the specified channel. Each donation from this function as well as each sale of future collateral adds to the fund of the future collateral's channel. The more money there is in a channel's fund, the more future collaterals from that channel the contract is able to buy back and the more collaterals a channel's fund is able to buy back, the easier it is to find auditors willing to grant loans backed by collaterals from that channel.",
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
-          {t('Notify Reward')}
+        <Button mb="8px" onClick={continueToNextStage}>
+          {t('Donate')}
         </Button>
       </Flex>
     </>
