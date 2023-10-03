@@ -399,6 +399,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state={state}
           account={account}
           currency={currency}
+          currAccount={currAccount}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />

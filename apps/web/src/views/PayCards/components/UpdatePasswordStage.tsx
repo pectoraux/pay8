@@ -44,18 +44,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the password attached to this account. Please read the documentation for more information.',
+              'The will update the password attached to this account. The password will be necessary to transfer tokens from your card to another or to make purchases with your card. Your password will be stored in encrypted form so you are the only one who knows it.',
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Password')}
         </Button>
       </Flex>

@@ -233,7 +233,7 @@ const config: (
       ],
     },
     {
-      label: t('eCollectible'),
+      label: t('eCollectibles'),
       href: `${nftsBaseUrl}`,
       icon: NftIcon,
       fillIcon: NftFillIcon,

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Input, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Input, Text, Button, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
@@ -44,6 +44,12 @@ const SetPriceStage: React.FC<any> = ({
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <>
+      <Text>{t("The amount of %symbol% to transfer to the recipient's balance", { symbol: currency?.symbol })}</Text>
+    </>
+  )
+
   return (
     <>
       <GreyedOutContainer>
@@ -81,6 +87,7 @@ const SetPriceStage: React.FC<any> = ({
           lockedAmount={state.amountReceivable}
           usedValueStaked={usdValueStaked}
           stakingMax={stakingTokenBalance}
+          TooltipComponent={TooltipComponent}
           setLockedAmount={handleRawValueChange('amountReceivable')}
           stakingTokenBalance={stakingTokenBalance}
         />
@@ -91,18 +98,14 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will add funds to your card balance. Please read the documentation for more details.')}
+            {t("The will transfer funds from your card to your recipient's balance.")}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
-          {t('Add')}
+        <Button mb="8px" onClick={continueToNextStage}>
+          {t('Transfer')}
         </Button>
       </Flex>
     </>

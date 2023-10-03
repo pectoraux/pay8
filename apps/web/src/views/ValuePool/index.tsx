@@ -16,10 +16,12 @@ import {
   useModal,
   Breadcrumbs,
   Loading,
+  ReactMarkdown,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/valuepools/hooks'
 import Page from 'components/Layout/Page'
+import RichTextEditor from 'components/RichText'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
 import CreateGaugeModal from 'views/ValuePools/components/CreateGaugeModal'
@@ -66,7 +68,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('%vp%', { vp: valuepool ?? '' })}
             </Heading>
             <Heading scale="md" color="text">
-              {ogValuepool?.description}
+              <RichTextEditor value={ogValuepool?.description} readOnly style={{ width: '100%' }} id="rte" />
             </Heading>
             {isOwner ? (
               <Flex pt="17px">

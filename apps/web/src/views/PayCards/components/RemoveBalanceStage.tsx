@@ -21,14 +21,19 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({
+  state,
+  account,
+  currency,
+  currAccount,
+  handleRawValueChange,
+  continueToNextStage,
+}) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const [lockedAmount, setLockedAmount] = useState('')
   const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-  const stakingTokenBalance = balance
-    ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
-    : BIG_ZERO
+  const stakingTokenBalance = balance ? new BigNumber(currAccount?.balance) : BIG_ZERO
   const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   useEffect(() => {
@@ -37,17 +42,23 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <>
+      <Text>{t("The amount of %symbol% to remove from your paycard's balance", { symbol: currency?.symbol })}</Text>
+    </>
+  )
   return (
     <>
       <GreyedOutContainer>
         <BribeField
-          add="add"
+          add="remove"
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={currency?.decimals}
           lockedAmount={state.amountReceivable}
           usedValueStaked={usdValueStaked}
           stakingMax={stakingTokenBalance}
+          TooltipComponent={TooltipComponent}
           setLockedAmount={handleRawValueChange('amountReceivable')}
           stakingTokenBalance={stakingTokenBalance}
         />
@@ -58,18 +69,14 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will add funds to your card balance. Please read the documentation for more details.')}
+            {t("The will remove funds from your card's balance.")}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
-          {t('Add')}
+        <Button mb="8px" onClick={continueToNextStage}>
+          {t('Remove')}
         </Button>
       </Flex>
     </>

@@ -1,4 +1,4 @@
-import { BalanceInput, Button, Flex, Image, Slider, Text } from '@pancakeswap/uikit'
+import { BalanceInput, Button, Flex, HelpIcon, Image, Slider, Text, useTooltip } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from '@pancakeswap/localization'
 import { useMemo, memo, useCallback } from 'react'
@@ -32,9 +32,9 @@ const BribeField: React.FC<any> = ({
   lockedAmount,
   stakingMax,
   setLockedAmount,
-  usedValueStaked,
   stakingTokenBalance,
   setShare,
+  TooltipComponent = null,
   add = 'add',
 }) => {
   const { t } = useTranslation()
@@ -71,17 +71,26 @@ const BribeField: React.FC<any> = ({
     [stakingMax, setLockedAmount, stakingDecimals],
   )
 
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <Text color="textSubtle" textTransform="uppercase" bold fontSize="12px">
           {t('%currency% to %add%', { currency: stakingSymbol, add })}
         </Text>
+        {tooltipVisible && tooltip}
         <Flex alignItems="center" minWidth="70px">
           <Image src={getImageUrlFromToken(token)} width={24} height={24} alt={stakingSymbol} />
           <Text ml="4px" bold>
             {stakingSymbol}
           </Text>
+          <Flex ref={targetRef}>
+            <HelpIcon ml="4px" width="20px" height="20px" color="textSubtle" />
+          </Flex>
         </Flex>
       </Flex>
       <BalanceInput

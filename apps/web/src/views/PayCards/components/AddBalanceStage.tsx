@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Input, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Input, Text, Button, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
@@ -37,6 +37,12 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <>
+      <Text>{t("The amount of %symbol% to add to your paycard's balance", { symbol: currency?.symbol })}</Text>
+    </>
+  )
+
   return (
     <>
       <GreyedOutContainer>
@@ -48,6 +54,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
           lockedAmount={state.amountReceivable}
           usedValueStaked={usdValueStaked}
           stakingMax={stakingTokenBalance}
+          TooltipComponent={TooltipComponent}
           setLockedAmount={handleRawValueChange('amountReceivable')}
           stakingTokenBalance={stakingTokenBalance}
         />
