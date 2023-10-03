@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import every from 'lodash/every'
 import {
   Box,
   Button,
@@ -10,6 +9,7 @@ import {
   Flex,
   Heading,
   Link,
+  LinkExternal,
   NextLinkFromReactRouter as RouterLink,
   Step,
   Stepper,
@@ -18,8 +18,6 @@ import {
 import { Address, useAccount } from 'wagmi'
 
 import { useTranslation } from '@pancakeswap/localization'
-import useTokenBalance from 'hooks/useTokenBalance'
-import { useProfile } from 'state/profile/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 
 interface TypeProps {
@@ -54,7 +52,7 @@ const InlineLink = styled(Link)`
 const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
   const { address: account } = useAccount()
   const { t } = useTranslation()
-  const stepsValidationStatus = [true, true, true]
+  const stepsValidationStatus = [true, true, true, true]
 
   const renderCardBody = (step: number) => {
     const isStepValid = stepsValidationStatus[step]
@@ -87,15 +85,20 @@ const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
         return (
           <CardBody>
             <Heading as="h4" color="secondary" mb="16px">
-              {t('Attach a veNFT token')}
+              {t('Attach a vaFSTT & Create a PayCard')}
             </Heading>
             <Text color="textSubtle" small mb="16px">
-              {t('First attach your veNFT token and then create your pay card!')}
+              {t('First attach a Leviathan token and then create your PayCard!')}
             </Text>
+            <LinkExternal
+              href="/valuepools/0xd994a268b2288e997320f5a0ccd94411b75e2dd7"
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              {t('Mint your Leviathan token')}
+            </LinkExternal>
             <Button as="a" href="#current-ifo" mt="16px" onClick={onPresentCreateGauge}>
               {t('Attach')}
             </Button>
-            {/* {renderAccountStatus()} */}
           </CardBody>
         )
       case 1:
@@ -106,7 +109,9 @@ const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
             </Heading>
             <Box>
               <Text mb="4px" color="textSubtle" small>
-                {t('Once you have your payCard, you can start adding funds to it.')}
+                {t(
+                  'Once you have your PayCard, you can start adding funds to it. Pick the -Mine only- option to show all your PayCards, find the right one, click -Details- to open up its panel, select the currency you would like to add, select Control Panel and pick the Add Balance option. Input the amount of tokens to add, validate and confirm.',
+                )}
               </Text>
             </Box>
           </CardBody>
@@ -115,11 +120,25 @@ const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
         return (
           <CardBody>
             <Heading as="h4" color="secondary" mb="16px">
+              {t('Update Password')}
+            </Heading>
+            <Text color="textSubtle" small>
+              {t(
+                "Once you have created your PayCard, you will need to attach a password to it. Think of this like a Visa debit card for which you need to pick a pin code. Once that's setup and you've add a balance to it, you can just input your password into the Transfer Balance or Execute Purchase form from the card's Control Panel menu to access funds from your card. You will not even need to connect your wallet to the blockchain.",
+              )}{' '}
+              <br />
+            </Text>
+          </CardBody>
+        )
+      case 3:
+        return (
+          <CardBody>
+            <Heading as="h4" color="secondary" mb="16px">
               {t('Make Purchases')}
             </Heading>
             <Text color="textSubtle" small>
               {t(
-                'Once you have charged your payCard, you can start using it for purchases in the CanCan or eCollectible marketplace or even in real life.',
+                'Once you have charged your PayCard and updated its password, you can start using it for purchases in the CanCan or eCollectibles marketplace or even in real life. All you need is your password and you would not need to connect your own wallet to the blockchain to access funds from your card. Just have the merchant connect his/her wallet, find your PayCard, open its panel, select Control Panel, either select the Transfer Balance or Execute Purchase option, fill in the form, validate and confirm.',
               )}{' '}
               <br />
             </Text>

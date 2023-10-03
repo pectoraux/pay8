@@ -188,7 +188,7 @@ export function PoolControls<T>({
             <SearchInput
               initialValue={searchQuery}
               onChange={handleChangeSearchQuery}
-              placeholder={t("Search pay card ids")}
+              placeholder={t("Search by attached vaFSTT")}
             />
           </LabelWrapper>
         </FilterContainer>

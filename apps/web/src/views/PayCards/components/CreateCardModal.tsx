@@ -101,7 +101,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
   return (
     <Modal title={t('Create PayCard')} onDismiss={onDismiss}>
       <Button variant="secondary" mb="8px" disabled={stage === 'ATTACH'} onClick={() => setStage('ATTACH')}>
-        {t('1) ATTACH VENFT')}
+        {t('1) ATTACH vaFSTT')}
       </Button>
       <Button variant="secondary" mb="8px" disabled={stage === 'CREATE'} onClick={() => setStage('CREATE')}>
         {t('2) CREATE CARD')}
@@ -115,7 +115,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
             type="text"
             scale="sm"
             value={tokenId}
-            placeholder={t('input your veNFT token id')}
+            placeholder={t('input your vaFSTT token id')}
             onChange={(e) => setTokenId(e.target.value)}
           />
         </GreyedOutContainer>
@@ -155,7 +155,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
             isLoading={pendingTx || pendingFb}
             // disabled={firebaseDone}
           >
-            {stage === 'ATTACH' ? t('Attach VeNFT') : t('Create PayCard')}
+            {stage === 'ATTACH' ? t('Attach vaFSTT') : t('Create PayCard')}
           </Button>
         ) : (
           <ConnectWalletButton />

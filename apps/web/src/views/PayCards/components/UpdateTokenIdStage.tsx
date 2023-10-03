@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the token attached to this account. It has to be a token from the Free Software & Telecommunication & Other Leviathan.',
+              "The will update the token attached to this account. It has to be a token from the Free Software & Telecommunication & Other's Leviathan.",
             )}
           </Text>
           <LinkExternal

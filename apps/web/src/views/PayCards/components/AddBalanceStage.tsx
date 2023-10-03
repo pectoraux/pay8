@@ -65,17 +65,13 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will add funds to your card balance. Please read the documentation for more details.')}
+            {t('The will add funds to your card balance.')}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Add')}
         </Button>
       </Flex>

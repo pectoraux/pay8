@@ -39,13 +39,11 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
   )
   const TooltipComponent2 = () => (
-    <Text>{t('You need to specify the channel to which the item to purchase belongs.')}</Text>
-  )
-  const TooltipComponent3 = () => (
     <Text>
       {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
     </Text>
   )
+  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
   const TooltipComponent4 = () => (
     <Text>
       {t(
@@ -272,7 +270,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will execute the purchase of the item in the PRODUCT ID field from the markeplace. This will make a purchase using funds added to this card and does not require the owner of the card to be connected to the blockchain as long as the password is correct and belongs to the owner of this card.',
+              'The will execute the purchase of the item in the PRODUCT ID field from the markeplace. This will make a purchase using funds added to this card and does not require the owner of the card to be connected to the blockchain as long as the password is correct and belongs to the owner of this card. An easier way to make this purchase without having to fill in the form is through the product page in the marketplace.',
             )}
           </Text>
         </Box>

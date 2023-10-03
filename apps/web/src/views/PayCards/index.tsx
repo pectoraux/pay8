@@ -19,13 +19,13 @@ import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import styled from 'styled-components'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateCardModal from './components/CreateCardModal'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -57,7 +57,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('PayCard Accounts')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Create a paycard and use it to transact without the need to connect your wallet')}
+              {t('Create a PayCard and use it to transact without the need to connect your wallet')}
             </Heading>
             <Heading scale="md" color="text">
               {t('Use just your account id and password for transactions')}
@@ -65,7 +65,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create a paycard')}{' '}
+                  {t('Create a PayCard')}{' '}
                 </Text>
                 <CurrencyInputPanel
                   id="cards-currency"

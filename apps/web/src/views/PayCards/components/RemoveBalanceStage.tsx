@@ -75,7 +75,7 @@ const SetPriceStage: React.FC<any> = ({
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage}>
+        <Button mb="8px" variant="danger" onClick={continueToNextStage}>
           {t('Remove')}
         </Button>
       </Flex>
