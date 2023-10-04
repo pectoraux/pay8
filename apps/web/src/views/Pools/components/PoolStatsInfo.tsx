@@ -1,10 +1,12 @@
 import { memo, useMemo } from 'react'
-import { Flex, LinkExternal, Button, Text } from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Button, Text, ScanLink } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { setCurrPoolData } from 'state/pools'
 import { useCurrPool } from 'state/pools/hooks'
 import { useAppDispatch } from 'state'
+import { getBlockExploreLink } from 'utils'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface ExpandedFooterProps {
   pool?: any
@@ -18,6 +20,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { id: tokenAddress } = pool
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
+  const { chainId } = useActiveChainId()
   const currAccount = useMemo(() => pool?.accounts?.find((bal) => bal.id === currState[pool?.id]), [currState])
   const accounts = pool?.accounts?.filter((acct) => acct?.owner?.toLowerCase() === account?.toLowerCase())
   return (
@@ -36,18 +39,27 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('User Accounts')} {`->`} {pool?.accounts?.length ?? 0}
         </Text>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/info/token/${pool?.id}`} bold={false} small>
-          {t('See Token Info')}
-        </LinkExternal>
-      </Flex>
-      {currAccount ? (
+      {pool?.id && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <LinkExternal href={`/info/token/${currAccount?.ve}`} bold={false} small>
-            {t('See Current Token Info')}
-          </LinkExternal>
+          <ScanLink href={getBlockExploreLink(pool?.id, 'address', chainId)} bold={false} small>
+            {t('View Pair Token Info')}
+          </ScanLink>
         </Flex>
-      ) : null}
+      )}
+      {currAccount?.owner && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(currAccount?.owner, 'address', chainId)} bold={false} small>
+            {t('View Owner Info')}
+          </ScanLink>
+        </Flex>
+      )}
+      {currAccount?.ve && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(currAccount?.ve, 'address', chainId)} bold={false} small>
+            {t('View Leviathan Token Info')}
+          </ScanLink>
+        </Flex>
+      )}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

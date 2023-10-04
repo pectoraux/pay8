@@ -8,13 +8,6 @@ import {
   useModal,
   Button,
   Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -26,7 +19,9 @@ import { useCurrPool } from 'state/valuepools/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/valuepools'
+
 import WebPagesModal from './WebPagesModal'
+import WebPagesModal2 from './WebPagesModal2'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface ExpandedFooterProps {
@@ -41,16 +36,16 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, id: valuepoolAddress } = pool
-  const tokenAddress = valuepoolAddress || ''
+  const tokenAddress = pool?.id || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.tokens} />)
-  // const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />,)
+  const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
+      {/* {pool?.description ? <Box><ReactMarkdown>{pool?.description}</ReactMarkdown></Box>:null} */}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Button
           as={Link}
@@ -65,7 +60,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
               <ArrowForwardIcon
                 onClick={() => {
                   setPendingTx(true)
-                  router.push(`/valuepools/${valuepoolAddress}`)
+                  router.push(`/valuepools/${pool?.id}`)
                 }}
                 color="primary"
               />
@@ -74,7 +69,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           isLoading={pendingTx}
           onClick={() => {
             setPendingTx(true)
-            router.push(`/valuepools/${valuepoolAddress}`)
+            router.push(`/valuepools/${pool?.id}`)
           }}
         >
           {t('View All Accounts')}
@@ -94,10 +89,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
+      {pool?._va && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
+          <ScanLink href={getBlockExploreLink(pool?._va, 'address', chainId)} bold={false} small>
+            {t('View Leviathan Token Contract')}
           </ScanLink>
         </Flex>
       )}
@@ -121,28 +116,44 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             marginTextBetweenLogo="4px"
             textOptions={AddToWalletTextOptions.TEXT}
             tokenAddress={tokenAddress}
-            tokenSymbol={earningToken.symbol}
-            tokenDecimals={earningToken.decimals}
+            tokenSymbol={pool?.token?.symbol}
+            tokenDecimals={pool?.token?.decimals}
             tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
           />
         </Flex>
       )}
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
-        {pool?.accounts?.map((balance) => (
+        {pool?.tokens?.length
+          ? pool.tokens
+              .filter((token) => account?.toLowerCase() === token?.owner?.toLowerCase())
+              .map((balance) => (
+                <Button
+                  key={balance.id}
+                  onClick={() => {
+                    const newState = { ...currState, [pool?.id]: balance.id }
+                    dispatch(setCurrPoolData(newState))
+                    onPresentNFT()
+                  }}
+                  mt="4px"
+                  mr={['2px', '2px', '4px', '4px']}
+                  scale="sm"
+                  variant={currState[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+                >
+                  {balance.tokenId}
+                </Button>
+              ))
+          : null}
+        {pool?.tokens?.length ? (
           <Button
-            key={balance.token.address}
-            onClick={() => {
-              const newState = { ...currState, [pool.rampAddress]: balance.token.address }
-              dispatch(setCurrPoolData(newState))
-            }}
-            mt="4px"
-            mr={['2px', '2px', '4px', '4px']}
+            key="clear-all"
+            variant="text"
             scale="sm"
-            variant={currState[pool.rampAddress] === balance.token.address ? 'subtle' : 'tertiary'}
+            onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
           >
-            {balance.token.symbol}
+            {t('Clear')}
           </Button>
-        ))}
+        ) : null}
       </Flex>
       <Contacts contactChannels={contactChannels} contacts={contacts} />
     </>

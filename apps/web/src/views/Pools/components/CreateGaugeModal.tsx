@@ -35,7 +35,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.DEPOSIT]: t('Deposit'),
   [LockStage.WITHDRAW_ALL]: t('Withdraw All'),
   [LockStage.UNSTAKE]: t('Unstake'),
-  [LockStage.ADD_REWARDS]: t('Add Rewards'),
+  [LockStage.ADD_REWARDS]: t('Donate'),
   [LockStage.CONFIRM_ADD_REWARDS]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW_ALL]: t('Back'),
@@ -314,7 +314,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, onDismiss }
             {t('DISTRIBUTE REWARDS')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_REWARDS)}>
-            {t('ADD REWARDS')}
+            {t('DONATE')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.CONFIRM_DEPOSIT_ALL)}>
             {t('DEPOSIT ALL')}

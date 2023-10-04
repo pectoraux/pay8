@@ -58,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({ state, isAdmin, handleChange, continueTo
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the owner address of the %val%. Please read the documentation for more information.', {
+            {t('The will update the owner address of the current %val%.', {
               val: isAdmin ? 'contract' : 'protocol',
             })}
           </Text>

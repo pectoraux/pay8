@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
@@ -36,14 +36,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Protocol ID')}
+          {t('Deal Owner')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="protocolId"
-          value={state.protocolId}
-          placeholder={t('input protocol id')}
+          name="owner"
+          value={state.owner}
+          placeholder={t('input owner address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -53,14 +53,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will charge listed accounts. Please read the documentation for more details.')}
+            {t("The will send any pending payments to the deal owner's wallet address.")}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Pay')}
+          {t('Pay Pending Payments')}
         </Button>
       </Flex>
     </>

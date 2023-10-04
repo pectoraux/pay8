@@ -34,9 +34,7 @@ const LocationStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'The will update the location information of your ramp. Please read the documentation for more information.',
-            )}
+            {t('The will update the location information of your contract to enable users to find it more easily.')}
           </Text>
         </Box>
       </Grid>

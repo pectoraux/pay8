@@ -55,7 +55,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update parameters the type content in your sponsor kit. Please read the documentation for more information on content types',
+              'Please read the documentation for a complete list content names, pick the right content name for your marketing media and input it right here. This will enable contracts like Valuepools to automatically check whether your marketing content is appropriate for them before enabling you to buy ad-spots on their contracts.',
             )}
           </Text>
         </Box>

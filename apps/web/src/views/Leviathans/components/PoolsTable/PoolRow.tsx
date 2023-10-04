@@ -11,11 +11,12 @@ import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 
-const PoolRow: React.FC<any> = ({ id, account, initialActivity }) => {
+const PoolRow: React.FC<any> = ({ id, account, initialActivity, expanded, setExpanded }) => {
   const { pool } = usePool(id)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const vpCurrencyInput = useCurrency(pool?.tokenAddress)
+  console.log('PoolRow==============>', id, pool)
   const tabs = (
     <>
       <NameCell pool={pool} vpCurrencyInput={vpCurrencyInput} />
@@ -26,7 +27,11 @@ const PoolRow: React.FC<any> = ({ id, account, initialActivity }) => {
     </>
   )
   return (
-    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
+    <Pool.ExpandRow
+      key={`vava-poolrow-${pool?.id}`}
+      initialActivity={initialActivity}
+      panel={<ActionPanel account={account} pool={pool} expanded />}
+    >
       {isMobile ? (
         <TabMenu>
           {tabs}

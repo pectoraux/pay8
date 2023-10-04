@@ -37,7 +37,6 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
     ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
     : BIG_ZERO
   const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
-  console.log('stakingTokenBalance================>', currency, stakingTokenBalance, balance, state.amountPayable)
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
@@ -65,17 +64,15 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will withdraw funds from the pool. Please read the documentation for more details.')}
+            {t(
+              'The will withdraw tokens from your sponsorship contract. First pick the token you would like to withdraw from the drop down menu on top of the Control panel and then input the amount of tokens to withdraw in the field right above. You can only withdraw up to amount of the token available in the contract.',
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" variant="danger" onClick={continueToNextStage}>
           {t('Withdraw')}
         </Button>
       </Flex>

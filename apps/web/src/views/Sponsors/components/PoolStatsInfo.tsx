@@ -86,15 +86,17 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
       {pool?.profileId && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <Text color="primary" fontSize="14px">
-            {t('Profile ID')} {`->`} {pool.profileId}
+            {t('Profile ID')} {`->`} {pool.profileId.toString()}
           </Text>
         </Flex>
       )}
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <Text color="primary" fontSize="14px">
-          {t('Bounty Required')} {`->`} {pool.bountyRequired ? t('Yes') : t('No')}
-        </Text>
-      </Flex>
+      {pool?.maxNotesPerProtocol ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Max Notes Per Protocol')} {`->`} {pool.maxNotesPerProtocol.toString()}
+          </Text>
+        </Flex>
+      ) : null}
       {pool.requiredIdentity ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <Text color="primary" fontSize="14px">
@@ -142,11 +144,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
-          {t('View NFTs')}
-        </LinkExternal>
-      </Flex> */}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

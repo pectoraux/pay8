@@ -2,7 +2,20 @@ import BigNumber from 'bignumber.js'
 import { useAppDispatch } from 'state'
 import { useGetTokenData } from 'state/ramps/hooks'
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
-import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Input,
+  Modal,
+  Button,
+  AutoRenewIcon,
+  ErrorIcon,
+  useToast,
+  HelpIcon,
+  useTooltip,
+} from '@pancakeswap/uikit'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -133,12 +146,54 @@ const CreatePoolModal: React.FC<any> = ({ onDismiss }) => {
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>{t('Your pair address is the address of the LP token you get after providing liquidity in the AMM')}</Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'Pick anyone of the Leviathans from which you have minted a token. In case you have not, go to Mint > Leviathans and mint one then come back here. Input the address of your Leviathan token here',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Input the ID of your Leviathan token here. All rewards maded from staking you LP in this contract will be associated to this token ID and whomever owns it can withdraw all of its pending rewards.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Modal title={t('Deposit LP')} onDismiss={onDismiss}>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Address of Pair')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Address of Pair')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -150,26 +205,34 @@ const CreatePoolModal: React.FC<any> = ({ onDismiss }) => {
       {!needsApproval ? (
         <>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Address of veNFT Token')}
-            </Text>
+            <Flex ref={targetRef2}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Address of Leviathan Token')}
+              </Text>
+              {tooltipVisible2 && tooltip2}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
               value={_ve}
-              placeholder={t('input veNFT address')}
+              placeholder={t('input Leviathan token address')}
               onChange={(e) => setVe(e.target.value)}
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('veNFT Token ID')}
-            </Text>
+            <Flex ref={targetRef3}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Leviathan Token ID')}
+              </Text>
+              {tooltipVisible3 && tooltip3}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
               value={tokenId}
-              placeholder={t('input veNFT token id')}
+              placeholder={t('input Leviathan token id')}
               onChange={(e) => setTokenId(e.target.value)}
             />
           </GreyedOutContainer>

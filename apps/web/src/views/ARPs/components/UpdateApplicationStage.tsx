@@ -12,32 +12,6 @@ const UpdateApplicationStage: React.FC<any> = ({ state, handleChange, continueTo
   const { t } = useTranslation()
   return (
     <>
-      {/* <GreyedOutContainer style={{ paddingTop: '18px' }}>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Contact Channels')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="contactChannels"
-          value={state.contactChannels}
-          placeholder={t('comma separated contact channels')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer style={{ paddingTop: '18px' }}>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Contacts')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="contacts"
-          value={state.contacts}
-          placeholder={t('comma separated contacts')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer> */}
       <GreyedOutContainer style={{ paddingTop: '18px' }}>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Application Link')}
@@ -58,7 +32,7 @@ const UpdateApplicationStage: React.FC<any> = ({ state, handleChange, continueTo
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the specified information of your ramp. Please read the documentation for more information.',
+              'An application is a form that users fill in to request to work with you. You can setup a google form and put the link to the form in the field above to enable users willing to work with you to apply. You can then go through all the applications and pick the right ones to create an account for. Your form should ask them all necessary information to create their account in your contract.',
             )}
           </Text>
         </Box>

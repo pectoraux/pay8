@@ -60,17 +60,13 @@ const SetPriceStage: React.FC<any> = ({ state, balance, currency, handleRawValue
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will unstake funds from the pool. Please read the documentation for more details.')}
+            {t('The will unstake your LP tokens from the pool. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Unstake')}
         </Button>
       </Flex>

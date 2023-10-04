@@ -166,6 +166,7 @@ const Filters: React.FC<any> = ({ tags, nftFilters, workspace = true }) => {
     count: attr.count ? attr.count : undefined,
     attr,
   }))
+  console.log('tagstags============>', tags.length, productItems)
 
   return (
     <>

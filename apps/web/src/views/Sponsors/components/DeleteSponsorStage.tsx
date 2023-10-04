@@ -15,7 +15,9 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
           {t('Delete Protocol')}
         </Text>
         <Text mt="24px" color="textSubtle">
-          {t('Use this to delete this Protocol.')}
+          {t(
+            'Use this to delete this Protocol before its next due date. An end date cannot be programmed for deals that you create; you would have to manually delete a deal to stop their owners from continuing to get paid.',
+          )}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}

@@ -42,7 +42,7 @@ import UpdateApplicationStage from 'views/ARPs/components/UpdateApplicationStage
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
-  [LockStage.UPDATE_PROTOCOL]: t('Create Account'),
+  [LockStage.UPDATE_PROTOCOL]: t('Create Deal'),
   [LockStage.WITHDRAW]: t('Withdraw'),
   [LockStage.UPDATE_PARAMETERS]: t('Update Parameters'),
   [LockStage.UPDATE_CONTENT]: t('Update Content'),
@@ -51,7 +51,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_TOKEN_ID]: t('Update Attached veNFT Token'),
   [LockStage.UPDATE_BOUNTY_ID]: t('Update Attached Bounty'),
   [LockStage.VOTE]: t('Vote'),
-  [LockStage.PAY]: t('Pay'),
+  [LockStage.PAY]: t('Pay Pending Payments'),
   [LockStage.DELETE]: t('Delete'),
   [LockStage.CLAIM_NOTE]: t('Claim Note'),
   [LockStage.TRANSFER_TO_NOTE_RECEIVABLE]: t('Transfer Note Receivable'),
@@ -384,7 +384,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state.owner,
           currency?.address,
           amountPayable.toString(),
-          state.periodPayable,
+          parseInt(state.periodPayable) * 60,
           startDate.toString(),
           state.identityTokenId,
           state.protocolId,
@@ -411,7 +411,6 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_PAY) {
-        const method = 'payInvoicePayable'
         console.log('CONFIRM_PAY===============>', [currAccount?.owner])
         return callWithGasPrice(sponsorContract, 'payInvoicePayable', [currAccount?.owner]).catch((err) =>
           console.log('CONFIRM_PAY===============>', err, sponsorContract),
@@ -524,10 +523,10 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
-            {t('CREATE/UPDATE ACCOUNT')}
+            {t('CREATE DEAL')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.PAY)}>
-            {t('PAY')}
+            {t('PAY PENDING PAYMENTS')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}

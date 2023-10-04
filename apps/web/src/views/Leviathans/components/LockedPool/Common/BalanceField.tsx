@@ -23,7 +23,7 @@ interface PropsType {
   needApprove: boolean
 }
 
-const BalanceField: React.FC<React.PropsWithChildren<PropsType>> = ({
+const BalanceField: React.FC<any> = ({
   stakingAddress,
   stakingSymbol,
   stakingDecimals,
@@ -32,7 +32,6 @@ const BalanceField: React.FC<React.PropsWithChildren<PropsType>> = ({
   setLockedAmount,
   usedValueStaked,
   stakingTokenBalance,
-  needApprove,
 }) => {
   const { t } = useTranslation()
   const { userNotEnoughCake, notEnoughErrorMessage } = useUserEnoughCakeValidator(lockedAmount, stakingTokenBalance)
@@ -72,7 +71,7 @@ const BalanceField: React.FC<React.PropsWithChildren<PropsType>> = ({
     <>
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <Text color="textSubtle" textTransform="uppercase" bold fontSize="12px">
-          {t('CAKE to lock')}
+          {t('Token to lock')}
         </Text>
         <Flex alignItems="center" minWidth="70px">
           <Image src={`/images/tokens/${stakingAddress}.png`} width={24} height={24} alt={stakingSymbol} />
@@ -82,17 +81,12 @@ const BalanceField: React.FC<React.PropsWithChildren<PropsType>> = ({
         </Flex>
       </Flex>
       <BalanceInput
-        isWarning={userNotEnoughCake || needApprove}
+        isWarning={userNotEnoughCake}
         value={lockedAmount}
         onUserInput={handleStakeInputChange}
         currencyValue={`~${usedValueStaked || 0} USD`}
         decimals={stakingDecimals}
       />
-      {needApprove && !userNotEnoughCake ? (
-        <Text color="failure" textAlign="right" fontSize="12px" mt="8px">
-          {t('Insufficient token allowance. Click "Enable" to approve.')}
-        </Text>
-      ) : null}
       <Flex alignItems="center" justifyContent="flex-end" mt="4px" mb="12px">
         <Flex justifyContent="flex-end" flexDirection="column">
           {userNotEnoughCake && (

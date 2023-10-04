@@ -43,17 +43,15 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the bounty on this account. Please read the documentation for more information.')}
+            {t(
+              "The will update the bounty on this sponsorship contract. Bounties are necessary to prove your trustworthiness to users. If you haven't created one yet, go to Earn > Valuepools > Bounties and proceed to creating one.",
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Bounty ID')}
         </Button>
       </Flex>

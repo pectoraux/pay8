@@ -4,6 +4,7 @@ import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/cancan/types'
 import { GreyedOutContainer, Divider } from './styles'
+import RichTextEditor from 'components/RichText'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -21,7 +22,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, handleEasyMdeChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -50,14 +51,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Valuepool Description')}
         </Text>
-        <Input
-          type="text"
-          scale="lg"
-          name="description"
-          value={state.description}
-          placeholder={t('input valuepool description')}
-          onChange={handleChange}
-        />
+        <RichTextEditor value={state.description} onChange={handleEasyMdeChange} id="description" />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">

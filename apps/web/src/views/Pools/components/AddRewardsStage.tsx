@@ -58,19 +58,15 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleRawValueChange, c
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add rewards to this pool and incentivise more liquidity to it. Please read the documentation for more details.',
+              'Use this function to donate funds to be distributed to all liquidity providers of this pair and incentivise more liquidity to it. Please read the documentation for more details.',
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
-          {t('Add Rewards')}
+        <Button mb="8px" onClick={continueToNextStage}>
+          {t('Donate')}
         </Button>
       </Flex>
     </>

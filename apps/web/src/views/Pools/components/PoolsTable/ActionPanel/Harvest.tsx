@@ -4,6 +4,8 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -47,6 +49,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Amount Staked')}
             </Text>
           </Box>
+        </Flex>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          {currAccount ? (
+            <>
+              <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+                {t('Leviathan Token Address')}
+              </Text>
+              <CopyAddress title={truncateHash(currAccount?.ve)} account={currAccount?.ve} />
+            </>
+          ) : null}
         </Flex>
       </ActionContent>
     </ActionContainer>

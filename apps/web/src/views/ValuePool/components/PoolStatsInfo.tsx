@@ -33,7 +33,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const { chainId } = useActiveChainId()
   const earningToken = pool?.token?.address
   const tokenAddress = earningToken?.address || ''
-
+  const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
+  const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
       {pool?.devaddr_ && (
@@ -50,6 +51,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </LinkExternal>
         </Flex>
       ) : null}
+      {pool?._va && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?._va, 'address', chainId)} bold={false} small>
+            {t('View Valuepool Token Contract')}
+          </ScanLink>
+        </Flex>
+      )}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

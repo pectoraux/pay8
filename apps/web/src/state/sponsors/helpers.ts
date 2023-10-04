@@ -132,52 +132,66 @@ export const getSponsors = async (first = 5, skip = 0, where) => {
 export const fetchSponsor = async (sponsorAddress, chainId) => {
   const sponsor = await getSponsor(sponsorAddress.toLowerCase())
   const bscClient = publicClient({ chainId: chainId })
-  const [cosignEnabled, devaddr_, minCosigners, requiredIndentity, valueName, _ve, bountyRequired, collectionId] =
-    await bscClient.multicall({
-      allowFailure: true,
-      contracts: [
-        {
-          address: sponsorAddress,
-          abi: sponsorABI,
-          functionName: 'cosignEnabled',
-        },
-        {
-          address: sponsorAddress,
-          abi: sponsorABI,
-          functionName: 'devaddr_',
-        },
-        {
-          address: sponsorAddress,
-          abi: sponsorABI,
-          functionName: 'minCosigners',
-        },
-        {
-          address: sponsorAddress,
-          abi: sponsorABI,
-          functionName: 'requiredIndentity',
-        },
-        {
-          address: sponsorAddress,
-          abi: sponsorABI,
-          functionName: 'valueName',
-        },
-        {
-          address: sponsorAddress,
-          abi: sponsorABI,
-          functionName: '_ve',
-        },
-        {
-          address: sponsorAddress,
-          abi: sponsorABI,
-          functionName: 'bountyRequired',
-        },
-        {
-          address: sponsorAddress,
-          abi: sponsorABI,
-          functionName: 'collectionId',
-        },
-      ],
-    })
+  const [
+    cosignEnabled,
+    devaddr_,
+    minCosigners,
+    requiredIndentity,
+    valueName,
+    _ve,
+    bountyRequired,
+    collectionId,
+    maxNotesPerProtocol,
+  ] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: 'cosignEnabled',
+      },
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: 'devaddr_',
+      },
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: 'minCosigners',
+      },
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: 'requiredIndentity',
+      },
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: 'valueName',
+      },
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: '_ve',
+      },
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: 'bountyRequired',
+      },
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: 'collectionId',
+      },
+      {
+        address: sponsorAddress,
+        abi: sponsorABI,
+        functionName: 'maxNotesPerProtocol',
+      },
+    ],
+  })
   const collection = await getCollection(collectionId.result.toString())
   const accounts = await Promise.all(
     sponsor?.protocols?.map(async (protocol) => {
@@ -256,7 +270,7 @@ export const fetchSponsor = async (sponsorAddress, chainId) => {
         duePayable: nextDuePayable.result[0].toString(),
         nextDuePayable: nextDuePayable.result[1].toString(),
         token: new Token(
-          56,
+          chainId,
           _token,
           decimals.result,
           symbol.result?.toString()?.toUpperCase() ?? 'symbol',
@@ -279,6 +293,7 @@ export const fetchSponsor = async (sponsorAddress, chainId) => {
     collectionId: collectionId.result.toString(),
     minCosigners: minCosigners.result.toString(),
     requiredIndentity: requiredIndentity.result,
+    maxNotesPerProtocol: maxNotesPerProtocol.result,
     valueName: valueName.result,
     _ve: _ve.result,
     collection,
