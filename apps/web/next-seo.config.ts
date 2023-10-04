@@ -11,9 +11,9 @@ export const SEO: DefaultSeoProps = {
     site: '@payswaporg',
   },
   openGraph: {
-    title: '🥞 PaySwap - A next evolution DeFi exchange on BNB Smart Chain (BSC)',
+    title: 'PaySwap - A next evolution DeFi exchange on BNB Smart Chain (BSC)',
     description:
       'PaySwap helps you start your own online cryptocurrency business, online eCommerce business, online Healthcare business, online Gambling business, as well as multiple online businesses.',
-    images: [{ url: 'https://payswap.org/images/hero.png' }],
+    images: [{ url: 'https://payswap.org/images/logo.png' }],
   },
 }
