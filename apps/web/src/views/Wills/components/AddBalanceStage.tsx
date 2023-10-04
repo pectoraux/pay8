@@ -27,33 +27,26 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount Receivable')}
+          {t('Amount To Add')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="amountReceivable"
           value={state.amountReceivable}
-          placeholder={t('input amount receivable')}
+          placeholder={t('input amount to add')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('NFT Type')}
-          </Text>
-          <ButtonMenu
-            scale="xs"
-            variant="subtle"
-            activeIndex={state.nftype}
-            onItemClick={handleRawValueChange('nftype')}
-          >
-            <ButtonMenuItem>{t('Not NFT')}</ButtonMenuItem>
-            <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
-            <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
-          </ButtonMenu>
-        </StyledItemRow>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          {t('Input the type of the selected token')}
+        </Text>
+        <ButtonMenu scale="xs" variant="subtle" activeIndex={state.nftype} onItemClick={handleRawValueChange('nftype')}>
+          <ButtonMenuItem>{t('Not NFT')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
+        </ButtonMenu>
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
@@ -62,7 +55,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The adds the specified amount of the specified token to your will contract. Please read the documentation for more information on this parameter',
+              'Make sure you have selected a currency from the drop down menu on top of the Control Panel button. This adds the specified amount of the selected token to your Will contract. After you have added tokens to your contract to constitute its balance, you can start adding heirs to your Will, specifying the percentage of each balance you want to leave them.',
             )}
           </Text>
         </Box>

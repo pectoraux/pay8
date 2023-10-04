@@ -15,7 +15,9 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
           {t('Stop Withdrawal')}
         </Text>
         <Text mt="24px" color="textSubtle">
-          {t('Use this to stop an ungoing withdrawal.')}
+          {t(
+            'Use this to stop an ongoing Will withdrawal countdown. If you are the owner of this Will and its withdrawal countdown has been launched by an heir even though you did not yet pass, you can use this function to stop the countdown.',
+          )}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}

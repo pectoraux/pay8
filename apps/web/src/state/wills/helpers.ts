@@ -221,7 +221,6 @@ export const fetchWill = async (willAddress, chainId) => {
       const media = protocolInfo.result[2]
       const description = protocolInfo.result[3]
 
-      console.log('tokens===============>', protocol)
       const _tokens = await Promise.all(
         protocol?.percentages?.map(async (perct, idx) => {
           const [tk] = await bscClient.multicall({
@@ -238,7 +237,6 @@ export const fetchWill = async (willAddress, chainId) => {
           return tk.result
         }),
       )
-      console.log('tokens===============>', _tokens)
       const percentages = protocol?.percentages?.map((percentage) => parseInt(percentage) / 100)
       const tokenData = await Promise.all(
         _tokens?.map(async (token) => {
@@ -324,7 +322,7 @@ export const fetchWill = async (willAddress, chainId) => {
             totalLiquidity: totalLiquidity.result.toString(),
             tokenType: tokenType.result,
             token: new Token(
-              56,
+              chainId,
               token,
               decimals.result,
               symbol.result?.toString(),
@@ -381,14 +379,11 @@ export const fetchWills = async ({ fromWill, chainId }) => {
       },
     ],
   })
-  console.log('1fetchWills==================>', willAddresses.result)
   const wills = await Promise.all(
     willAddresses.result
       .filter((willAddress) => (fromWill ? willAddress?.toLowerCase() === fromWill?.toLowerCase() : true))
       .map(async (willAddress, index) => {
-        console.log('2fetchWills==================>2')
         const data = await fetchWill(willAddress, chainId)
-        console.log('3fetchWills==================>', data)
         return {
           sousId: index,
           ...data,

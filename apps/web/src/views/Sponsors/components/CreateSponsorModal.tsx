@@ -9,8 +9,9 @@ import { fetchSponsorsAsync } from 'state/sponsors'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useSponsorFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { Divider, GreyedOutContainer } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+
+import { Divider, GreyedOutContainer } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -96,7 +97,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new Sponsor Pool with you as its Admin. Please read the documentation to learn more about Sponsor Pools.',
+              'The will create a new Sponsorship contract with you as its Admin. Sponsorship contracts enable you to setup sponsorship deals as well as their periodic or non periodic payments. Please read the documentation to learn more about Sponsorship contracts.',
             )}
           </Text>
         </Box>
@@ -109,7 +110,6 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
             onClick={handleCreateGauge}
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
-            // disabled={firebaseDone}
           >
             {t('Create Sponsor Contract')}
           </Button>

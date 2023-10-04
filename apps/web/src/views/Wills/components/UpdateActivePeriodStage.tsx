@@ -11,11 +11,10 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
   return (
     <>
       <Box p="16px" maxWidth="360px">
-        <Text fontSize="24px" bold>
-          {t('Update Active Period')}
-        </Text>
         <Text mt="24px" color="textSubtle">
-          {t('Use this to update the active period of your will for the selected token.')}
+          {t(
+            'Use this to reset the withdrawal balance of a token so that you can withdraw more of it from the contract.',
+          )}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}

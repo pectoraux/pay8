@@ -1,16 +1,6 @@
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Loading,
-} from '@pancakeswap/uikit'
+import styled from 'styled-components'
+import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/wills/hooks'
 import Page from 'components/Layout/Page'
@@ -21,8 +11,6 @@ import PoolRow from './components/PoolsTable/PoolRow'
 import CreateWillModal from './components/CreateWillModal'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
-import { useRouter } from 'next/router'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;

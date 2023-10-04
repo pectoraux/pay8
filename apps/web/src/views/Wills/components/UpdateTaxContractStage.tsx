@@ -44,18 +44,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update your tax contract for this contract. Please read the documentation for more information.',
+              'This will update your tax contract for this Will. You might need to signal your transactions with this Will to your tax contract, if that is the case, you should add your tax contract right here.',
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Tax Contract')}
         </Button>
       </Flex>

@@ -84,7 +84,7 @@ const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new WILL contract with you as its Admin. Please read the documentation to learn more about WILLs.',
+              'The will create a new WILL contract with you as its Admin. WILL contracts enable you to program your will as well as how your assets should be shared after your passing. Please read the documentation to learn more about WILLs.',
             )}
           </Text>
         </Box>

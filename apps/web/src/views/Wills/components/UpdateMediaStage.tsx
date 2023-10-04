@@ -44,18 +44,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'Use this to add a message, a set of instructions that can be useful when you are not able to express by yourself. Please read the documentation for more information.',
+              'Use this to add a message, a set of instructions that can be useful when you are not able to express yourself. Please read the documentation for more information.',
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Media')}
         </Button>
       </Flex>

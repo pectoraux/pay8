@@ -38,8 +38,8 @@ import PayStage from './PayStage'
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
-  [LockStage.PAY]: t('Pay'),
-  [LockStage.UPDATE_PROTOCOL]: t('Create/Update Account'),
+  [LockStage.PAY]: t('Claim Inheritance'),
+  [LockStage.UPDATE_PROTOCOL]: t('Add/Modify Heir Inheritance'),
   [LockStage.UPDATE_TAX]: t('Update Tax Contract'),
   [LockStage.TRANSFER_TO_NOTE_PAYABLE]: t('Transfer Note Payable'),
   [LockStage.UPDATE_PARAMETERS]: t('Update Parameters'),
@@ -49,7 +49,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.REMOVE_BALANCE]: t('Remove Balance'),
   [LockStage.CLAIM_NOTE]: t('Claim Note'),
   [LockStage.DELETE]: t('Delete'),
-  [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
+  [LockStage.DELETE_PROTOCOL]: t('Delete Heir'),
   [LockStage.UPDATE_ACTIVE_PERIOD]: t('Update Active Period'),
   [LockStage.STOP_WITHDRAWAL_COUNTDOWN]: t('Stop Withdrawal Countdown'),
   [LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN]: t('Back'),
@@ -407,10 +407,10 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
         const args = [
           state.profileId,
-          state.updatePeriod,
+          parseInt(state.updatePeriod) * 60,
           state.minWithdrawableNow,
           state.minNFTWithdrawableNow,
-          state.willWithdrawalPeriod,
+          parseInt(state.willWithdrawalPeriod) * 60,
         ]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(willContract, 'updateParameters', args).catch((err) =>
@@ -465,11 +465,11 @@ const CreateGaugeModal: React.FC<any> = ({
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Flex justifyContent="center" style={{ cursor: 'pointer' }} alignSelf="center" mb="10px">
             <LinkExternal color="success" href={pool.will?.applicationLink} bold>
-              {t('APPLY FOR AN ACCOUNT')}
+              {t('APPLY FOR INHERITANCE')}
             </LinkExternal>
           </Flex>
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
-            {t('PAY')}
+            {t('CLAIM INHERITANCE')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_TAX)}>
             {t('UPDATE TAX CONTRACT')}
@@ -482,10 +482,10 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
-            {t('CREATE/UPDATE ACCOUNT')}
+            {t('ADD/MODIFY HEIR INHERITANCE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
-            {t('PAY')}
+            {t('CLAIM INHERITANCE')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_MEDIA)}>
             {t('UPDATE MEDIA')}
@@ -514,7 +514,7 @@ const CreateGaugeModal: React.FC<any> = ({
           {location === 'fromStake' ? (
             <>
               <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
-                {t('DELETE PROTOCOL')}
+                {t('DELETE HEIR')}
               </Button>
             </>
           ) : null}
@@ -618,7 +618,9 @@ const CreateGaugeModal: React.FC<any> = ({
         <ClaimNoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
-      {stage === LockStage.DELETE_PROTOCOL && <DeleteWillStage continueToNextStage={continueToNextStage} />}
+      {stage === LockStage.DELETE_PROTOCOL && (
+        <DeleteWillStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"
