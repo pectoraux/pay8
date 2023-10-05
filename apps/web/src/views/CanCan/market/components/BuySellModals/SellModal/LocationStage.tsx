@@ -19,6 +19,7 @@ import RichTextEditor from 'components/RichText'
 import Filters from './Filters'
 import { GreyedOutContainer } from './styles'
 import { Divider, RoundedImage } from '../shared/styles'
+import { noop } from 'lodash'
 
 interface RemoveStageProps {
   variant: 'product' | 'paywall'
@@ -69,10 +70,10 @@ const LocationStage: React.FC<any> = ({
   return (
     <>
       <Box p="16px" maxWidth="360px">
-        <Text fontSize="24px" bold>
+        {/* <Text fontSize="24px" bold>
           {t('%variantName% Locations Data', { variantName })}
-        </Text>
-        <Flex p="16px">
+        </Text> */}
+        {/* <Flex p="16px">
           <RoundedImage src={thumbnail} height={68} width={68} mr="8px" />
           <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
             <Text bold>{nftToSell?.tokenId}</Text>
@@ -80,10 +81,10 @@ const LocationStage: React.FC<any> = ({
               {`Collection #${collectionId}`}
             </Text>
           </Grid>
-        </Flex>
+        </Flex> */}
         {variantName !== 'Paywall' ? (
           <Flex justifyContent="center" alignItems="center" mb="10px">
-            <ButtonMenu scale="sm" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
+            <ButtonMenu scale="sm" variant="subtle" activeIndex={activeButtonIndex} onItemClick={noop}>
               <ButtonMenuItem>{t('Image/Video')}</ButtonMenuItem>
               <ButtonMenuItem>
                 <LinkExternal href={variant === 'item' ? 'createArticle' : `${collectionAddress}/createArticle`}>
@@ -101,14 +102,14 @@ const LocationStage: React.FC<any> = ({
           <>
             <GreyedOutContainer>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Product Name (same name)')}
+                {t('Product Name')}
               </Text>
               <Input
                 type="text"
                 scale="sm"
                 name="tokenId"
                 value={state.tokenId}
-                placeholder={t('same name as in previous step')}
+                placeholder={t('input product name')}
                 onChange={handleChange}
               />
             </GreyedOutContainer>
@@ -172,22 +173,6 @@ const LocationStage: React.FC<any> = ({
             )}
             <GreyedOutContainer>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Product is article')}
-              </Text>
-              <StyledItemRow>
-                <ButtonMenu
-                  scale="xs"
-                  variant="subtle"
-                  activeIndex={state.isArticle}
-                  onItemClick={handleRawValueChange('isArticle')}
-                >
-                  <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-                </ButtonMenu>
-              </StyledItemRow>
-            </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
                 {t('Description')}
               </Text>
               <Input
@@ -198,59 +183,6 @@ const LocationStage: React.FC<any> = ({
                 placeholder={t('input a description')}
                 onChange={handleChange}
               />
-            </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Dynamic Prices')}
-              </Text>
-              <Input
-                type="text"
-                scale="sm"
-                name="prices"
-                value={state.prices}
-                placeholder={t('input dynamic prices')}
-                onChange={handleChange}
-              />
-            </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Dynamic pricing start and period')}
-              </Text>
-              <StyledItemRow>
-                <Input
-                  type="text"
-                  scale="sm"
-                  name="start"
-                  value={state.start}
-                  placeholder={t('input start')}
-                  onChange={handleChange}
-                />
-                <span style={{ padding: '8px' }} />
-                <Input
-                  type="text"
-                  scale="sm"
-                  name="period"
-                  value={state.period}
-                  placeholder={t('input period')}
-                  onChange={handleChange}
-                />
-              </StyledItemRow>
-            </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Is the item tradable?')}
-              </Text>
-              <StyledItemRow>
-                <ButtonMenu
-                  scale="xs"
-                  variant="subtle"
-                  activeIndex={state.isTradable}
-                  onItemClick={handleRawValueChange('isTradable')}
-                >
-                  <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-                </ButtonMenu>
-              </StyledItemRow>
             </GreyedOutContainer>
             <Text mt="24px" color="textSubtle" mb="8px">
               {t("Click on each one of these to set your %variantName%'s location data", { variantName })}
@@ -274,13 +206,13 @@ const LocationStage: React.FC<any> = ({
                 onChange={handleChange}
               />
             </GreyedOutContainer>
-            <Text mt="16px" color="textSubtle">
+            {/* <Text mt="16px" color="textSubtle">
               {t('Continue?')}
-            </Text>
+            </Text> */}
           </>
         )}
       </Box>
-      <Divider />
+      {/* <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button
           mb="8px"
@@ -290,7 +222,7 @@ const LocationStage: React.FC<any> = ({
         >
           {t('Save Product Data')}
         </Button>
-      </Flex>
+      </Flex> */}
     </>
   )
 }

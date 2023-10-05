@@ -115,20 +115,18 @@ const ModifyCollectionModal: React.FC<any> = ({ state, handleChange, handleRawVa
           </StyledItemRow>
         </GreyedOutContainer>
         <GreyedOutContainer>
-          <StyledItemRow>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-              {t('Partner Permission Required')}
-            </Text>
-            <ButtonMenu
-              scale="xs"
-              variant="subtle"
-              activeIndex={state.requestPartnerRegistration}
-              onItemClick={handleRawValueChange('requestPartnerRegistration')}
-            >
-              <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-            </ButtonMenu>
-          </StyledItemRow>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+            {t('Partner Permission Required')}
+          </Text>
+          <ButtonMenu
+            scale="xs"
+            variant="subtle"
+            activeIndex={state.requestPartnerRegistration}
+            onItemClick={handleRawValueChange('requestPartnerRegistration')}
+          >
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
         </GreyedOutContainer>
       </Box>
       <Divider />

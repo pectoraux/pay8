@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useCallback, useState, useMemo } from 'react'
-import { Text, Row, Button, useModal, Flex, FlexGap, LinkExternal, ReactMarkdown } from '@pancakeswap/uikit'
+import { Text, Row, Button, useModal, Flex, FlexGap, LinkExternal, ReactMarkdown, useTooltip } from '@pancakeswap/uikit'
 import { useCurrency } from 'hooks/Tokens'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { Collection } from 'state/cancan/types'
@@ -27,6 +27,7 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 
 const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
@@ -55,6 +56,7 @@ const Header: React.FC<any> = ({ collection }) => {
   const defaultCurrency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(defaultCurrency)
   const [launch, setLaunch] = useState(false)
+  const [launch2, setLaunch2] = useState(false)
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
@@ -99,6 +101,42 @@ const Header: React.FC<any> = ({ collection }) => {
       content: t('Use this section for filtering products based on workspace, country, city or product tags'),
     },
   ]
+  const steps2 = [
+    {
+      target: '.tour2-1',
+      content: (
+        <>
+          <ReactMarkdown>{t("The **Items**' tab displays all products available on the channel.")}</ReactMarkdown>
+          <ReactMarkdown>{t("The **Activity**'s tab display all product sales & listings.")}</ReactMarkdown>
+          <ReactMarkdown>{t("The **Requests**' tab displays all partnership & membership requests.")}</ReactMarkdown>
+          <ReactMarkdown>
+            {t("The **Contracts**' tab displays all stakes, bounties and valuepools relevant to this channel.")}
+          </ReactMarkdown>
+          <ReactMarkdown>
+            {t("The **Legal & Info**'s tab displays the channel's terms of service and essential announcements.")}
+          </ReactMarkdown>
+          <ReactMarkdown>{t("The **Stats**' tab displays all stats relevant to the channel")}</ReactMarkdown>
+        </>
+      ),
+      disableBeacon: true,
+    },
+    {
+      target: '.tour2-2',
+      content: t('The Home tab displays all products listed by this channel'),
+    },
+    {
+      target: '.tour2-3',
+      content: t('The Partner tab displays all products listed by channel partners'),
+    },
+    {
+      target: '.tour2-4',
+      content: t("The Users' tab displays all channel users"),
+    },
+    {
+      target: '.tour2-5',
+      content: t('Use this section for filtering products based on workspace, country, city or product tags'),
+    },
+  ]
   const itemsConfig = [
     {
       label: t('Items'),
@@ -134,6 +172,14 @@ const Header: React.FC<any> = ({ collection }) => {
     return router.asPath.replace('?chainId=4002', '')
   }, [router, collectionAddress])
 
+  const TooltipComponent = () => (
+    <Text>{t("Only a channel admin can list products. Connect the channel admin's wallet and come back.")}</Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <Tour steps={steps} launch={launch} />
@@ -163,52 +209,58 @@ const Header: React.FC<any> = ({ collection }) => {
               id={collectionAddress}
             />
           </Flex>
-          <Row>
-            {isOwner && (
+          {account ? (
+            <Row>
+              {isOwner && (
+                <ActionContainer>
+                  <ActionTitles>
+                    <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+                      {t('Channel Settings')}
+                    </Text>
+                  </ActionTitles>
+                  <ActionContent>
+                    <Button width="100%" onClick={onPresentSettings} variant="secondary">
+                      {t('Settings')}
+                    </Button>
+                  </ActionContent>
+                </ActionContainer>
+              )}
               <ActionContainer>
                 <ActionTitles>
                   <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-                    {t('Channel Settings')}
+                    {isOwner ? t('Paid content') : t('Willing to do business with us?')}
                   </Text>
                 </ActionTitles>
                 <ActionContent>
-                  <Button width="100%" onClick={onPresentSettings} variant="secondary">
-                    {t('Settings')}
+                  <Button width="100%" onClick={isOwner ? onPresentPaywall : onPresentPartner} variant="secondary">
+                    {isOwner ? t('List Paywall') : t('Partner')}
                   </Button>
                 </ActionContent>
               </ActionContainer>
-            )}
-            <ActionContainer>
-              <ActionTitles>
-                <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-                  {isOwner ? t('Paid content') : t('Willing to do business with us?')}
-                </Text>
-              </ActionTitles>
-              <ActionContent>
-                <Button width="100%" onClick={isOwner ? onPresentPaywall : onPresentPartner} variant="secondary">
-                  {isOwner ? t('Paywall') : t('Partner')}
-                </Button>
-              </ActionContent>
-            </ActionContainer>
-            <ActionContainer>
-              <ActionTitles>
-                <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-                  {isOwner ? t('Ship faster') : t('Become a user')}
-                </Text>
-              </ActionTitles>
-              <ActionContent>
-                <Button
-                  // key="product-register"
-                  width="100%"
-                  data-test="product-register"
-                  onClick={isOwner ? onPresentShip : onPresentRegister}
-                  variant="secondary"
-                >
-                  {isOwner ? t('Poduct') : t('Register')}
-                </Button>
-              </ActionContent>
-            </ActionContainer>
-          </Row>
+              <ActionContainer className="tour2-1">
+                <ActionTitles>
+                  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+                    {isOwner ? t('Ship faster') : t('Become a user')}
+                  </Text>
+                </ActionTitles>
+                <ActionContent>
+                  <Button
+                    // key="product-register"
+                    width="100%"
+                    data-test="product-register"
+                    onClick={isOwner ? onPresentShip : onPresentRegister}
+                    variant="secondary"
+                  >
+                    {isOwner ? t('List Product') : t('Register')}
+                  </Button>
+                </ActionContent>
+              </ActionContainer>
+            </Row>
+          ) : (
+            <Flex justifyContent="center" alignItems="center">
+              <ConnectWalletButton width="100%" />
+            </Flex>
+          )}
         </MarketPageTitle>
         <Flex>
           <Contacts contactChannels={contactChannels} contacts={contacts} />

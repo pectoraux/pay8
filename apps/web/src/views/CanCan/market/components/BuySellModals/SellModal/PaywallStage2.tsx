@@ -53,9 +53,6 @@ const EnlistStage: React.FC<any> = ({
 
   return (
     <>
-      <Text fontSize="24px" bold p="16px">
-        {t('Create Paywall')}
-      </Text>
       <Flex alignSelf="center">
         <Filters
           nftFilters={nftFilters}
@@ -65,7 +62,7 @@ const EnlistStage: React.FC<any> = ({
           showProduct={false}
         />
       </Flex>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Paywall name')}
         </Text>
@@ -77,7 +74,7 @@ const EnlistStage: React.FC<any> = ({
           placeholder={t('input paywall name')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Pick drop-in date')}
@@ -195,7 +192,7 @@ const EnlistStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-          {t('Did you pick a tFIAT token ?')}
+          {t('Did you pick a FIAT token ?')}
         </Text>
         <ButtonMenu
           scale="xs"

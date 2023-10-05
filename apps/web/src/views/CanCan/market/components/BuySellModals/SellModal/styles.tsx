@@ -63,12 +63,12 @@ export const stagesWithBackButton = [
   SellingStage.ADD_LOCATION,
   SellingStage.ADD_LOCATION1,
   SellingStage.ADD_LOCATION2,
-  SellingStage.CREATE_PAYWALL,
   SellingStage.CREATE_PAYWALL1,
   SellingStage.CREATE_PAYWALL2,
-  SellingStage.CREATE_ASK_ORDER,
   SellingStage.CONFIRM_CREATE_PAYWALL1,
   SellingStage.CONFIRM_CREATE_PAYWALL2,
+
+  SellingStage.EMAIL_LIST,
 ]
 
 export const stagesWithApproveButton = [SellingStage.CONFIRM_FUND_PENDING_REVENUE]

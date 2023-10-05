@@ -1,7 +1,7 @@
 import { differenceInSeconds } from 'date-fns'
 import { useState, ChangeEvent } from 'react'
 import { requiresApproval } from 'utils/requiresApproval'
-import { Flex, Grid, Text, Button, useToast } from '@pancakeswap/uikit'
+import { Flex, Grid, Text, Button, useToast, Modal } from '@pancakeswap/uikit'
 import { MaxUint256 } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -156,6 +156,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
 
   const goBack = () => {
     switch (stage) {
+      case SellingStage.EMAIL_LIST:
+        setStage(SellingStage.SETTINGS)
+        break
       case SellingStage.CLAIM_PENDING_REVENUE:
         setStage(SellingStage.SETTINGS)
         break
@@ -428,9 +431,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
 
   return (
-    <StyledModal
+    <Modal
       title={t('Channel Settings')}
-      stage={stage}
+      // stage={stage}
       // expand={false}
       onDismiss={onDismiss}
       onBack={showBackButton ? goBack : null}
@@ -441,14 +444,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           <AvatarImage src={collection.avatar} />
         </Flex>
         <Grid flex="1" alignItems="center">
-          <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {collection?.collectionName}
-          </Text>
-          <Text bold>
-            {t(
-              'Change settings about your collection, claim earnings, tranfer future earnings to NFT notes, update auditors...',
-            )}
-          </Text>
+          <Text bold>{collection?.name}</Text>
         </Grid>
       </Flex>
       {stage === SellingStage.SETTINGS && (
@@ -601,7 +597,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         <ConfirmStage isConfirming={isConfirming} handleConfirm={handleConfirm} />
       )}
       {stage === SellingStage.TX_CONFIRMED && <TransactionConfirmed txHash={confirmedTxHash} onDismiss={onDismiss} />}
-    </StyledModal>
+    </Modal>
   )
 }
 
