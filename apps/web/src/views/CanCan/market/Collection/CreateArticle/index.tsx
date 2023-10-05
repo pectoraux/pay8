@@ -99,7 +99,6 @@ const CreateProposal = () => {
   const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
   const collectionAddress = useRouter().query.collectionAddress as string
-  const [pendingFb, setPendingFb] = useState(false)
   const { collection } = useGetCollection(collectionAddress)
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const formErrors = getFormErrors(state, t)
@@ -108,7 +107,6 @@ const CreateProposal = () => {
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-  console.log('nftFilters2=========>', nftFilters2)
   const [onPresentShip] = useModal(
     <ShipStage
       variant="article"
