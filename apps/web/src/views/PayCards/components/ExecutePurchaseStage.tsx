@@ -270,7 +270,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will execute the purchase of the item in the PRODUCT ID field from the markeplace. This will make a purchase using funds added to this card and does not require the owner of the card to be connected to the blockchain as long as the password is correct and belongs to the owner of this card. An easier way to make this purchase without having to fill in the form is through the product page in the marketplace.',
+              'This will execute the purchase of the item in the PRODUCT ID field from the markeplace. This will make a purchase using funds added to this card and does not require the owner of the card to be connected to the blockchain as long as the password is correct and belongs to the owner of this card. An easier way to make this purchase without having to fill in the form is through the product page in the marketplace.',
             )}
           </Text>
         </Box>

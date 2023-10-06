@@ -21,6 +21,8 @@ import {
   Input,
   ReactMarkdown,
   ScanLink,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
@@ -196,6 +198,13 @@ const ReviewsCard: React.FC<any> = ({ nft }) => {
       hideIcons: ['guide', 'fullscreen', 'preview', 'side-by-side', 'image'],
     }
   }, [])
+  const TooltipComponent = () => (
+    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   const content = (
     <>
       <StyledBox p="24px">
@@ -217,14 +226,18 @@ const ReviewsCard: React.FC<any> = ({ nft }) => {
                   <CardHeader>
                     <Flex flexDirection="row" mb="8px">
                       <Flex justifyContent="center" alignItems="center" width="30%">
-                        <Input
-                          type="number"
-                          scale="sm"
-                          name="userTId"
-                          value={userTId}
-                          placeholder={t('input id of veNFT')}
-                          onChange={(e) => setUserTId(e.target.value)}
-                        />
+                        <Flex ref={targetRef}>
+                          <Input
+                            type="number"
+                            scale="sm"
+                            name="userTId"
+                            value={userTId}
+                            placeholder={t('input id of veNFT')}
+                            onChange={(e) => setUserTId(e.target.value)}
+                          />
+                          {tooltipVisible && tooltip}
+                          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                        </Flex>
                       </Flex>
                       <Flex justifyContent="center" alignItems="center" mt="8px">
                         <ButtonMenu

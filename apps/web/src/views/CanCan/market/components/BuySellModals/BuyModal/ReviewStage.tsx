@@ -16,6 +16,8 @@ import {
   MinusIcon,
   IconButton,
   ExpandableSectionButton,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { useTranslation } from '@pancakeswap/localization'
@@ -132,6 +134,109 @@ const ReviewStage: React.FC<any> = ({
     if (curr?.symbol === secondaryCurrency?.symbol) return mainCurrency
     return secondaryCurrency
   }
+
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        "Input the token id of the Leviathan from this product's workspace. If you do not have a token in that Leviathan, you should mint one from the Leviathans' page at Mint > Leviathan. Once you have one, you can input its address right here.",
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        "Input the token id of the Leviathan from this product's workspace. If you do not have a token in that Leviathan, you should mint one from the Leviathans' page at Mint > Leviathan. Once you have one, you can input its address right here.",
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+      )}
+    </Text>
+  )
+  const TooltipComponent4 = () => (
+    <Text>
+      {t(
+        'In case customer might want to purchase this item through the stake market, this parameters sets whether or not they should be required to send the purchase price to the stake when creating it. If you want to be sure the customers have the money for the purchase before being allowed to create a stake to purchase your item, you can set this parameter to Yes, if that is not a requirement, you can set it to No.',
+      )}
+    </Text>
+  )
+  const TooltipComponent5 = () => (
+    <Text>
+      {t(
+        'The merchant id is the identity token id of the merchant and is used to check that the merchant is elligbible for your valuepool. In case your valuepool does not impose any identity requirements on merchnts, just input 0.',
+      )}
+    </Text>
+  )
+  const TooltipComponent6 = () => (
+    <Text>
+      {t(
+        'If you do not have enough of the tokens accepeted for this product, you can purchase more of the tokens from the dRamp on page Trade > dRamps.',
+      )}
+    </Text>
+  )
+  const TooltipComponent7 = () => (
+    <Text>
+      {t(
+        'If you do not have enough of the tokens accepeted for this product, you can purchase more of the tokens from the dRamp on page Trade > dRamps.',
+      )}
+    </Text>
+  )
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef6,
+    tooltip: tooltip6,
+    tooltipVisible: tooltipVisible6,
+  } = useTooltip(<TooltipComponent6 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef7,
+    tooltip: tooltip7,
+    tooltipVisible: tooltipVisible7,
+  } = useTooltip(<TooltipComponent7 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   return (
     <>
       <Flex px="24px" pt="24px" flexDirection="column">
@@ -343,35 +448,47 @@ const ReviewStage: React.FC<any> = ({
           <StyledBorderedBox>
             {paymentCurrency === 2 ? (
               <GreyedOutContainer>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('veNFT ID')}
-                </Text>
+                <Flex ref={targetRef}>
+                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                    {t('Leviathan Token ID')}
+                  </Text>
+                  {tooltipVisible && tooltip}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Input
                   type="number"
                   scale="sm"
                   value={tokenId}
-                  placeholder={t('input veNFT id')}
+                  placeholder={t('input Leviathan token id')}
                   onChange={(e) => setTokenId(e.target.value)}
                 />
               </GreyedOutContainer>
             ) : (
               <GreyedOutContainer>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Product veNFT ID')}
-                </Text>
+                <Flex ref={targetRef2}>
+                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                    {t('Product Leviathan Token ID')}
+                  </Text>
+                  {tooltipVisible2 && tooltip2}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Input
                   type="number"
                   scale="sm"
                   value={userTokenId}
-                  placeholder={t('input veNFT id of product')}
+                  placeholder={t('input product Leviathan token id')}
                   onChange={(e) => setUserTokenId(e.target.value)}
                 />
               </GreyedOutContainer>
             )}
             <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Identity Token ID')}
-              </Text>
+              <Flex ref={targetRef3}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Identity Token ID')}
+                </Text>
+                {tooltipVisible3 && tooltip3}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
               <Input
                 type="number"
                 scale="sm"
@@ -383,16 +500,13 @@ const ReviewStage: React.FC<any> = ({
             {paymentCurrency === 1 ? (
               <GreyedOutContainer style={{ paddingTop: '50px' }}>
                 <StyledItemRow>
-                  <Text
-                    fontSize="12px"
-                    color="secondary"
-                    textTransform="uppercase"
-                    paddingTop="3px"
-                    paddingRight="50px"
-                    bold
-                  >
-                    {t('Require Upfront Payment')}
-                  </Text>
+                  <Flex ref={targetRef4} paddingRight="50px">
+                    <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+                      {t('Require Upfront Payment')}
+                    </Text>
+                    {tooltipVisible4 && tooltip4}
+                    <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                  </Flex>
                   <ButtonMenu
                     scale="xs"
                     variant="subtle"
@@ -407,9 +521,13 @@ const ReviewStage: React.FC<any> = ({
             ) : null}
             {paymentCurrency === 2 ? (
               <GreyedOutContainer>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Merchant Identity ID (For Check Rank)')}
-                </Text>
+                <Flex ref={targetRef5}>
+                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                    {t('Merchant Identity ID (For Check Rank)')}
+                  </Text>
+                  {tooltipVisible5 && tooltip5}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Input
                   type="number"
                   scale="sm"
@@ -422,13 +540,16 @@ const ReviewStage: React.FC<any> = ({
           </StyledBorderedBox>
         </Flex>
         <Flex alignItems="center">
-          <Text my="16px" mr="4px">
-            {t('Convert between %symb1% and %symb2%', {
-              symb1: mainCurrency?.symbol || '',
-              symb2: secondaryCurrency?.symbol || '',
-            })}
-            :
-          </Text>
+          <Flex ref={targetRef6} mr="4px">
+            <Text my="16px">
+              {t('Convert between %symb1% and %symb2%', {
+                symb1: mainCurrency?.symbol || '',
+                symb2: secondaryCurrency?.symbol || '',
+              })}
+            </Text>
+            {tooltipVisible6 && tooltip6}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <Button
             as={Link}
             p="0px"
@@ -441,9 +562,11 @@ const ReviewStage: React.FC<any> = ({
           </Button>
         </Flex>
         <Flex alignItems="center">
-          <Text my="16px" mr="4px">
-            {t('Buy with credit card')}:
-          </Text>
+          <Flex ref={targetRef7} mr="4px">
+            <Text my="16px">{t('Buy with credit card')}:</Text>
+            {tooltipVisible7 && tooltip7}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <Button
             as={Link}
             p="0px"

@@ -11,6 +11,8 @@ import {
   Input,
   ErrorIcon,
   Skeleton,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import multiplyPriceByAmount from '@pancakeswap/utils/multiplyPriceByAmount'
@@ -88,6 +90,114 @@ const SetPriceStage: React.FC<any> = ({
     return t('Enable Listing')
   }
 
+  const TooltipComponent = () => <Text>{t('Use this field to update the price of your product.')}</Text>
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'This parameter is useful for product auctions and sets a duration in minutes after which the auction automatically closes. If for instance you set that number to 10, the auction will automatically close 10 minutes after the last bid unless a new bid is made.',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        "NFTickets are eReceipts on the blockchain that users receive after each purchase as proof of purchase. If you don't want users to be able to transfer their NFTickets to other wallets, you can set this parameter to No. For instance when selling tickets to a concert or an event, you might want to prevent users from reselling their tickets and this might help you do just that.",
+      )}
+    </Text>
+  )
+  const TooltipComponent4 = () => (
+    <Text>
+      {t(
+        'In case customer might want to purchase this item through the stake market, this parameters sets whether or not they should be required to send the purchase price to the stake when creating it. If you want to be sure the customers have the money for the purchase before being allowed to create a stake to purchase your item, you can set this parameter to Yes, if that is not a requirement, you can set it to No.',
+      )}
+    </Text>
+  )
+  const TooltipComponent5 = () => (
+    <Text>
+      {t(
+        'In case your product has some ESG badge or some other one delivered by an auditor, you can attach that badge to your product by inputting its id right here. This adds to the credibility of your product in the marketplace, you can use it to prove that you are a trustworthy merchant, that your luxury items are authentic, etc.',
+      )}
+    </Text>
+  )
+  const TooltipComponent6 = () => (
+    <Text>
+      {t(
+        'This parameter is useful for product drops and sets a date the product will drop in the marketplace i.e. become available for purchase.',
+      )}
+    </Text>
+  )
+  const TooltipComponent7 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent8 = () => (
+    <Text>{t('This sets the maximum number of the current product you have in stock for users.')}</Text>
+  )
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef6,
+    tooltip: tooltip6,
+    tooltipVisible: tooltipVisible6,
+  } = useTooltip(<TooltipComponent6 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef7,
+    tooltip: tooltip7,
+    tooltipVisible: tooltipVisible7,
+  } = useTooltip(<TooltipComponent7 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef8,
+    tooltip: tooltip8,
+    tooltipVisible: tooltipVisible8,
+  } = useTooltip(<TooltipComponent8 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <Text fontSize="24px" bold p="16px">
@@ -103,9 +213,13 @@ const SetPriceStage: React.FC<any> = ({
         </Grid>
       </Flex>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Adjust Price')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Adjust Price')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Flex>
           <Flex flex="1" alignItems="center">
             <CurrencyLogo currency={currency} size="24px" style={{ marginRight: '8px' }} />
@@ -154,9 +268,13 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Bid Duration (in minutes)')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Bid Duration (in minutes)')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="number"
           scale="sm"
@@ -168,9 +286,13 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Min Bid Increment Percentage')}
-        </Text>
+        <Flex ref={targetRef3}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Min Bid Increment Percentage')}
+          </Text>
+          {tooltipVisible3 && tooltip3}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Slider
           min={0}
           max={100}
@@ -184,9 +306,13 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="5px" bold>
-            {t('Make NFTickets Transferrable')}
-          </Text>
+          <Flex ref={targetRef4} paddingRight="5px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {t('Make NFTickets Transferrable')}
+            </Text>
+            {tooltipVisible4 && tooltip4}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu
             scale="sm"
             variant="subtle"
@@ -200,9 +326,13 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="5px" bold>
-            {t('Require Upfront Payment For Staking')}
-          </Text>
+          <Flex ref={targetRef5} paddingRight="5px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {t('Require Upfront Payment For Staking')}
+            </Text>
+            {tooltipVisible5 && tooltip5}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu
             scale="sm"
             variant="subtle"
@@ -215,9 +345,13 @@ const SetPriceStage: React.FC<any> = ({
         </StyledItemRow>
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Auditor Badge Id')}
-        </Text>
+        <Flex ref={targetRef6}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Auditor Badge ID')}
+          </Text>
+          {tooltipVisible6 && tooltip6}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="number"
           scale="sm"
@@ -229,9 +363,13 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Pick drop-in date')}
-        </Text>
+        <Flex ref={targetRef7}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Pick drop-in date')}
+          </Text>
+          {tooltipVisible7 && tooltip7}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <DatePicker
           onChange={handleRawValueChange('dropinTimer')}
           selected={dropinTimer ?? 0}
@@ -240,9 +378,13 @@ const SetPriceStage: React.FC<any> = ({
         <DatePickerPortal />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Maximum Supply')}
-        </Text>
+        <Flex ref={targetRef8}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Maximum Supply')}
+          </Text>
+          {tooltipVisible8 && tooltip8}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="number"
           scale="sm"
@@ -253,65 +395,6 @@ const SetPriceStage: React.FC<any> = ({
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      {/* <GreyedOutContainer>
-      {Object.keys(state.behindPaywall).map((pAddr) => 
-        <Input
-        type="text"
-        scale="sm"
-        name='paywalls'
-        value={pAddr}
-        // onChange={handleChange}
-      />
-      )}
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Paywall addresses')}
-        </Text>
-        <Input
-        type="text"
-        scale="sm"
-        name='paywall_list'
-        // value={blacklist_accounts}
-        placeholder={t('comma separated paywall addresses')}
-        // onChange={handleRawValueChange('blacklist_accounts')}
-      />
-    </GreyedOutContainer>
-    <GreyedOutContainer>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Action on listed paywalls')}
-          </Text>
-          <ButtonMenu scale="xs" variant='subtle' activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
-            <ButtonMenuItem >{t("Add")}</ButtonMenuItem>
-            <ButtonMenuItem >{t("Remove")}</ButtonMenuItem>
-          </ButtonMenu> 
-    </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Add Paywall')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name='addPaywall'
-          value={addPaywall}
-          placeholder={t('address of paywall to add')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Remove Paywall')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name='removePaywall'
-          value={removePaywall}
-          placeholder={t('address of paywall to remove')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

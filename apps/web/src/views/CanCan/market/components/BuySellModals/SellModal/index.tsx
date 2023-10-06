@@ -424,7 +424,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           nftToSell?.tokenId,
           currentAskPrice.toString(),
           state.bidDuration,
-          state.minBidIncrementPercentage,
+          parseInt(state.minBidIncrementPercentage) * 100,
           !!state.transferrable,
           !!state.requireUpfrontPayment,
           state.rsrcTokenId,
@@ -436,7 +436,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           nftToSell?.tokenId,
           currentAskPrice.toString(),
           state.bidDuration,
-          state.minBidIncrementPercentage,
+          parseInt(state.minBidIncrementPercentage) * 100,
           !!state.transferrable,
           !!state.requireUpfrontPayment,
           state.rsrcTokenId,
@@ -558,14 +558,14 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           )
           const cursor = state.cashbackNumbers?.length ? state.cashbackNumbers[0] : 0
           const size = state.cashbackNumbers?.length ? state.cashbackNumbers[1] : 0
-          const perct = state.cashbackNumbers?.length ? state.cashbackNumbers[2] : 0
+          const perct = state.cashbackNumbers?.length ? parseInt(state.cashbackNumbers[2]) * 100 : 0
           const lowerThreshold = state.cashbackNumbers?.length ? getDecimalAmount(state.cashbackNumbers[3] ?? 0) : 0
           const upperThreshold = state.cashbackNumbers?.length ? getDecimalAmount(state.cashbackNumbers[4] ?? 0) : 0
           const limit = state.cashbackNumbers?.length ? state.cashbackNumbers[5] : 0
 
           const cursor2 = state.cashbackCost?.length ? state.cashbackCost[0] : 0
           const size2 = state.cashbackCost?.length ? state.cashbackCost[1] : 0
-          const perct2 = state.cashbackCost?.length ? state.cashbackCost[2] : 0
+          const perct2 = state.cashbackCost?.length ? parseInt(state.cashbackCost[2]) * 100 : 0
           const lowerThreshold2 = state.cashbackCost?.length ? getDecimalAmount(state.cashbackCost[3] ?? 0) : 0
           const upperThreshold2 = state.cashbackCost?.length ? getDecimalAmount(state.cashbackCost[4] ?? 0) : 0
           const limit2 = state.cashbackCost?.length ? state.cashbackCost[5] : 0
@@ -591,14 +591,14 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
         )
         const cursor = state.discountNumbers?.length ? state.discountNumbers[0] : 0
         const size = state.discountNumbers?.length ? state.discountNumbers[1] : 0
-        const perct = state.discountNumbers?.length ? state.discountNumbers[2] : 0
+        const perct = state.discountNumbers?.length ? parseInt(state.discountNumbers[2]) * 100 : 0
         const lowerThreshold = state.discountNumbers?.length ? getDecimalAmount(state.discountNumbers[3] ?? 0) : 0
         const upperThreshold = state.discountNumbers?.length ? getDecimalAmount(state.discountNumbers[4] ?? 0) : 0
         const limit = state.discountNumbers?.length ? state.discountNumbers[5] : 0
 
         const cursor2 = state.discountCost?.length ? state.discountCost[0] : 0
         const size2 = state.discountCost?.length ? state.discountCost[1] : 0
-        const perct2 = state.discountCost?.length ? state.discountCost[2] : 0
+        const perct2 = state.discountCost?.length ? parseInt(state.discountCost[2]) * 100 : 0
         const lowerThreshold2 = state.discountCost?.length ? getDecimalAmount(state.discountCost[3] ?? 0) : 0
         const upperThreshold2 = state.discountCost?.length ? getDecimalAmount(state.discountCost[4] ?? 0) : 0
         const limit2 = state.discountCost?.length ? state.discountCost[5] : 0

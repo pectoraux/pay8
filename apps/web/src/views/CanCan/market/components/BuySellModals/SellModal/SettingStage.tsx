@@ -292,7 +292,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         // const recurringBounty = getDecimalAmount(state.recurringBounty ?? 0)
         console.log('CONFIRM_MODIFY_COLLECTION===========>', [
           state.collection || account,
-          state.referrerFee,
+          parseInt(state.referrerFee) * 100,
           state.badgeId || 0,
           minBounty.toString(),
           userMinBounty.toString(),
@@ -302,7 +302,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         ])
         return callWithGasPrice(marketCollectionsContract, 'modifyCollection', [
           state.collection || account,
-          state.referrerFee,
+          parseInt(state.referrerFee) * 100,
           state.badgeId || 0,
           minBounty.toString(),
           userMinBounty.toString(),

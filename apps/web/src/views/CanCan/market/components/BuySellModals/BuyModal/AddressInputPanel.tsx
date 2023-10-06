@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import styled from 'styled-components'
-import { Text, Link, AutoColumn, ScanLink } from '@pancakeswap/uikit'
+import { Text, Link, AutoColumn, ScanLink, useTooltip, Flex, HelpIcon } from '@pancakeswap/uikit'
 import { getBlockExploreLink, isAddress } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -91,14 +91,25 @@ export default function AddressInputPanel({
   )
 
   const error = Boolean(value.length > 0 && !address)
+  const TooltipComponent = () => (
+    <Text>{t('Input the address of the valuepool you plan to use to fund your purchase.')}</Text>
+  )
 
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   return (
     <InputPanel id={id}>
       <ContainerRow error={error}>
         <InputContainer>
           <AutoColumn gap="md">
             <RowBetween>
-              <Text>{t('Funding Contract')}</Text>
+              <Flex ref={targetRef}>
+                <Text>{t('Funding Contract')}</Text>
+                {tooltipVisible && tooltip}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
               {address && chainId && (
                 <ScanLink href={getBlockExploreLink(address, 'address', chainId)} small>
                   ({t('View on Blockchain Scan')})

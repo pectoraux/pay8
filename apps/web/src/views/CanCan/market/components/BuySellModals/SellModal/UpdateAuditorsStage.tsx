@@ -1,4 +1,4 @@
-import { Flex, Box, Text, Button, Input, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import { Flex, Box, Text, Button, Input, ButtonMenu, ButtonMenuItem, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { MarketPlace } from './types'
@@ -56,6 +56,18 @@ const UpdateAuditorsStage: React.FC<RemoveStageProps> = ({
           </StyledItemRow>
         </GreyedOutContainer>
       </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              "This will add/remove auditors to/from the channel's list of approved auditors. Approved auditors are auditors that you personally authorize to deliver identity tokens to your customers.",
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>

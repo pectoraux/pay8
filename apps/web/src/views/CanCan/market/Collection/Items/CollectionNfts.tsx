@@ -12,6 +12,8 @@ import {
   Text,
   useModal,
   Dots,
+  HelpIcon,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { Collection } from 'state/cancan/types'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -357,6 +359,14 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     }
   })
 
+  const TooltipComponent = () => (
+    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   if (!account) {
     return (
       <Flex justifyContent="center" alignItems="center" mt="18px" mb="18px">
@@ -421,13 +431,17 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
           <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
             <NFTMedia key={paywall.tokenId} nft={paywall} width={440} height={440} />
             <Divider />
-            <Input
-              type="text"
-              scale="sm"
-              value={nfticketId}
-              placeholder={t('input your nfticket id')}
-              onChange={(e) => setNfticketId(e.target.value)}
-            />
+            <Flex ref={targetRef}>
+              <Input
+                type="text"
+                scale="sm"
+                value={nfticketId}
+                placeholder={t('input your nfticket id')}
+                onChange={(e) => setNfticketId(e.target.value)}
+              />
+              {tooltipVisible && tooltip}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <LinkExternal
               mt="8px"
               href={`${cancanBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`}
