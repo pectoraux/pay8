@@ -2,7 +2,7 @@ import EncryptRsa from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
 import { differenceInSeconds } from 'date-fns'
 import { ChangeEvent, useState, useMemo, useCallback } from 'react'
-import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box } from '@pancakeswap/uikit'
+import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -12,6 +12,7 @@ import { Divider, GreyedOutContainer } from 'views/Auditors/components/styles'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useMarketEventsContract, usePaywallContract } from 'hooks/useContract'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
+import { useGetPaywallPricePerMinute } from 'state/cancan/hooks'
 
 interface DepositModalProps {
   max: BigNumber
@@ -43,11 +44,13 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
     partnerCollectionId: '',
     numOfSeconds: '',
   }))
+  console.log('PartnerModalPartnerModal=====================>', paywallARP)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
   const marketEventsContract = useMarketEventsContract()
+  const pricePerMinute = useGetPaywallPricePerMinute(paywallARP?.paywallAddress ?? '')
   const paywallContract = usePaywallContract(paywallARP?.paywallAddress ?? '')
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [isDone, setIsDone] = useState(false)
@@ -183,10 +186,22 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
         </>
       ) : null}
       <Box>
-        <Text small color="textSubtle">
-          {t('The will add the specified partner to your paywall. Please read the documentation for more details.')}
+        <Text bold color="textSubtle">
+          {t('Price Per Minute: %val%', { val: pricePerMinute?.toString() })}
         </Text>
       </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              'The will add the specified partner to your paywall. When a paywall partners with another one, all its content become available to subscribers of that paywall and vice versa. Check the price per minute listed above to compute the price of your partnership. Multiply the price per minute with the amount of minutes between now and the end date of your partnership.',
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         {account ? (

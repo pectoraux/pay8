@@ -39,7 +39,10 @@ const Collections: React.FC<any> = ({ title, testId, collections }) => {
                 <Text fontSize="12px" color="textSubtle">
                   {t('Volume')}
                 </Text>
-                <BNBAmountLabel amount={collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0} />
+                <BNBAmountLabel
+                  collection={collection}
+                  amount={collection.totalVolumeBNB ? parseFloat(collection.totalVolumeBNB) : 0}
+                />
               </Flex>
             </CollectionCard>
           )

@@ -18,10 +18,13 @@ import {
   usePaywallMarketHelperContract,
   useNFTicketHelper,
 } from 'hooks/useContract'
-import { NftToken } from 'state/cancan/types'
 import BigNumber from 'bignumber.js'
 import { useGetLowestPriceFromNft } from 'views/CanCan/market/hooks/useGetLowestPrice'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { decryptContent, getThumbnailNContent } from 'utils/cancan'
+import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
+
 import EditStage from './EditStage'
 import SetPriceStage from './SetPriceStage'
 import SetOptionsStage from './SetOptionsStage'
@@ -37,9 +40,6 @@ import ResetIdentityLimits from './ResetIdentityLimits'
 import ResetDiscountLimits from './ResetDiscountLimits'
 import ResetCashbackLimits from './ResetCashbackLimits'
 import LocationStage from './LocationStage'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import { decryptContent, getThumbnailNContent } from 'utils/cancan'
-import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
 
 const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
@@ -754,6 +754,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
       )}
       {stage === SellingStage.ADD_LOCATION && (
         <LocationStage
+          show
           thumbnail={_thumbnail}
           nftToSell={nftToSell}
           collectionId={collectionId}

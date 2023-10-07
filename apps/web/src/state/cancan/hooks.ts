@@ -26,6 +26,7 @@ import {
   getCollectionId,
   getTag,
   getPricePerMinute,
+  getPaywallPricePerMinute,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -55,6 +56,13 @@ export const useGetProfileId = (account: string) => {
 
 export const useGetPricePerMinute = (merchantId: string) => {
   const { data } = useSWR(['pricePerMinute', merchantId], async () => getPricePerMinute(merchantId))
+  return data
+}
+
+export const useGetPaywallPricePerMinute = (paywallAddress: string) => {
+  const { data } = useSWR(['paywallPricePerMinute', paywallAddress], async () =>
+    getPaywallPricePerMinute(paywallAddress),
+  )
   return data
 }
 

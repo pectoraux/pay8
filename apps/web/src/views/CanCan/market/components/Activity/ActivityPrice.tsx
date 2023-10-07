@@ -1,15 +1,16 @@
-import { Flex, BinanceIcon, Text, Skeleton } from '@pancakeswap/uikit'
+import { Flex, Text, Skeleton, CurrencyLogo } from '@pancakeswap/uikit'
+import { useWorkspaceCurrency } from 'hooks/Tokens'
 import { multiplyPriceByAmount } from 'utils/prices'
 
-const ActivityPrice = ({ bnbBusdPrice, price }) => {
+const ActivityPrice = ({ nft, bnbBusdPrice, price }) => {
   const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, price)
-
+  const { mainCurrency } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   return (
     <Flex flexDirection="column" alignItems="flex-end">
       {price ? (
         <>
           <Flex justifySelf="flex-start" alignItems="center">
-            <BinanceIcon width="12px" height="12px" mr="4px" />
+            <CurrencyLogo currency={mainCurrency} size="24px" style={{ marginRight: '8px' }} />
             <Text maxWidth="80px" bold>
               {price.toLocaleString(undefined, {
                 minimumFractionDigits: 0,

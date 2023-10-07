@@ -1,6 +1,6 @@
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useState } from 'react'
-import { Flex, Box, Text, Button, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import { Flex, Box, Text, Button, ButtonMenu, ButtonMenuItem, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
@@ -20,7 +20,7 @@ interface RemoveStageProps {
   continueToNextStage: () => void
 }
 
-const ClaimPendingRevenue: React.FC<any> = ({ state, currency, handleRawValueChange, continueToNextStage }) => {
+const FundPendingRevenue: React.FC<any> = ({ state, currency, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const [lockedAmount, setLockedAmount] = useState('')
@@ -69,6 +69,18 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, currency, handleRawValueCha
           {t('Continue?')}
         </Text>
       </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              "This will either fund your cashback account or general account. When you are running a cashback but there is not enough money in your channel's cashback fund, you can use this function to add more money into the account. Your general revenue account holds all your earnings from sales made on the marketplace, you can use this function to add revenue from sales generated outside of the marketplace for accounting purposes.",
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
@@ -79,4 +91,4 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, currency, handleRawValueCha
   )
 }
 
-export default ClaimPendingRevenue
+export default FundPendingRevenue

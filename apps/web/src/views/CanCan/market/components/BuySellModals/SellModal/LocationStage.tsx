@@ -41,6 +41,7 @@ const LocationStage: React.FC<any> = ({
   handleChange,
   handleRawValueChange,
   continueToNextStage,
+  show = false,
 }) => {
   const { t } = useTranslation()
   const variantName = capitalize(variant)
@@ -333,6 +334,21 @@ const LocationStage: React.FC<any> = ({
           </>
         )}
       </Box>
+      {show ? (
+        <>
+          <Divider />
+          <Flex flexDirection="column" px="16px" pb="16px">
+            <Button
+              mb="8px"
+              disabled={pendingFb}
+              onClick={continueToNextStage}
+              endIcon={pendingFb ? <AutoRenewIcon spin color="currentColor" /> : undefined}
+            >
+              {t('Save Product Data')}
+            </Button>
+          </Flex>
+        </>
+      ) : null}
     </>
   )
 }

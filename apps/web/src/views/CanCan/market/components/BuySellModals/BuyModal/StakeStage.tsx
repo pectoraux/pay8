@@ -413,7 +413,7 @@ const ReviewStage: React.FC<any> = ({
             variant="text"
             href="/ramps?inputCurrency=BNB&outputCurrency=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
           >
-            {t('Get tFIATs')}
+            {t('Get FIATs')}
           </Button>
         </Flex>
       </Flex>

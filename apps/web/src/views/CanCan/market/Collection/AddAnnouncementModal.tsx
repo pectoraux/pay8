@@ -11,6 +11,10 @@ import {
   Box,
   CardBody,
   ReactMarkdown,
+  Grid,
+  ErrorIcon,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import dynamic from 'next/dynamic'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -49,7 +53,7 @@ const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
 })
 
-const PartnerModal: React.FC<any> = ({ position = 0, onConfirm, onDismiss }) => {
+const AddAnnouncementModal: React.FC<any> = ({ position = 0, onDismiss }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
@@ -87,12 +91,29 @@ const PartnerModal: React.FC<any> = ({ position = 0, onConfirm, onDismiss }) => 
     }
   }, [t, body, title, _position, toastSuccess, callWithGasPrice, marketEventsContract, fetchWithCatchTxError])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'The position is the id of the announcement, you can use this form to update a previously posted announcement by just inputting its id right here. If your annoucement is a new one, then its id will be that of the last announcement + 1.',
+      )}
+    </Text>
+  )
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Modal title={t('Add Announcement')} onDismiss={onDismiss}>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Position')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Position')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -124,11 +145,18 @@ const PartnerModal: React.FC<any> = ({ position = 0, onConfirm, onDismiss }) => 
           <EasyMde id="body" name="body" onTextChange={(e) => setBody(e)} value={body} options={options} required />
         </Box>
       </GreyedOutContainer>
-      <Box>
-        <Text small color="textSubtle">
-          {t('The will add an announcement to this page. Please read the documentation for more details.')}
-        </Text>
-      </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              "The will add an announcement to this page. You can add your terms of service, guides on how to use your product as well as any announcement you deem necessary. It is advised to keep the announcements on this page to the stict minumum and only post really important ones like terms of service or guides on how to use your product. You can post the rest in your channel's PayChat group.",
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         {account ? (
@@ -148,4 +176,4 @@ const PartnerModal: React.FC<any> = ({ position = 0, onConfirm, onDismiss }) => 
   )
 }
 
-export default PartnerModal
+export default AddAnnouncementModal

@@ -256,7 +256,7 @@ export const fetchArp = async (arpAddress, chainId) => {
         totalLiquidity: totalLiquidity.result.toString(),
         nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
         token: new Token(
-          56,
+          chainId,
           _token,
           decimals.result,
           symbol.result?.toString()?.toUpperCase() ?? 'symbol',

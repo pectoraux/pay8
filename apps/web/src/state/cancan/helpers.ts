@@ -1147,3 +1147,18 @@ export const getPricePerMinute = async (merchantId, chainId = 4002) => {
   })
   return pricePerMinute.result
 }
+
+export const getPaywallPricePerMinute = async (paywallAddress, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [pricePerMinute] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: paywallAddress,
+        abi: paywallABI,
+        functionName: 'pricePerSecond',
+      },
+    ],
+  })
+  return pricePerMinute.result
+}

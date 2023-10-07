@@ -29,7 +29,7 @@ export function CurrencyLogo({
     if (currency?.isNative) return [];
 
     if (currency?.isToken) {
-      const logoUrls = getCurrencyLogoUrls(currency);
+      const logoUrls = [`https://tokens.payswap.org/images/${currency?.symbol?.toLowerCase()}.svg`]; // getCurrencyLogoUrls(currency);
 
       if (currency instanceof WrappedTokenInfo) {
         return [...uriLocations, ...logoUrls];
@@ -39,19 +39,19 @@ export function CurrencyLogo({
     return [];
   }, [currency, uriLocations]);
 
-  if (currency?.isNative) {
-    if (currency.chainId === ChainId.BSC) {
-      return <BinanceIcon width={size} style={style} />;
-    }
-    return (
-      <StyledLogo
-        size={size}
-        srcs={[`https://assets.pancakeswap.finance/web/native/${currency.chainId}.png`]}
-        width={size}
-        style={style}
-      />
-    );
-  }
+  // if (currency?.isNative) {
+  //   if (currency.chainId === ChainId.BSC) {
+  //     return <BinanceIcon width={size} style={style} />;
+  //   }
+  //   return (
+  //     <StyledLogo
+  //       size={size}
+  //       srcs={[`https://tokens.payswap.org/images/${currency?.symbol?.toLowerCase()}.svg`]}
+  //       width={size}
+  //       style={style}
+  //     />
+  //   );
+  // }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? "token"} logo`} style={style} />;
 }

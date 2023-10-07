@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useState, useMemo, useCallback } from 'react'
-import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box } from '@pancakeswap/uikit'
+import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -126,11 +126,18 @@ const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <Box>
-        <Text small color="textSubtle">
-          {t('The will start your subscription to the paywall. Please read the documentation for more details.')}
-        </Text>
-      </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              "The will start your subscription to the paywall. Subscriptions don't start when you purchase them, you would have to activate them through this function. This is a feature that enables you to treat subscriptions like an investment. If you beleive a paywall will become more popular and its subscription price will increase in the future, you can purchase as many subcriptions as you want today, from that paywall, not activate them but wait till the subscription price of the paywall accrues in value so you can resell the subscriptions you bought on a second hand marketplace, at a slightly lesser price than it is been offered from the paywall but still at a higher price than what you bought it for.",
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         {account ? (

@@ -11,6 +11,8 @@ import {
   Box,
   useTooltip,
   HelpIcon,
+  ErrorIcon,
+  Grid,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
@@ -190,11 +192,18 @@ const RegisterModal: React.FC<any> = ({ collection, onDismiss }) => {
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <Box>
-        <Text small color="textSubtle">
-          {t('The will add you as a user of this channel. Please read the documentation for more details.')}
-        </Text>
-      </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              "The will add you as a user of this channel. If the channel requires admin approval, you will not be added as a user straight away but only after the admin has accepted your request for membership. Becoming a channel user enables you to receive news in your email inbox from the channel. Your profile also shows in the user section of the channel's main page so other users can view and maybe contact you if you share you contact details.",
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         {account ? (

@@ -165,11 +165,11 @@ const Header: React.FC<any> = ({ collection }) => {
   ]
 
   const getActiveItem = useMemo(() => {
-    const hash = router.asPath.match(/#([a-z0-9]+)/gi)?.[0]
+    const hash = router.asPath.match(/#([a-z0-9]+)/gi)?.[0] ?? ''
     if (hash === '#valuepools' || hash === '#trustbounties') {
       return `${cancanBaseUrl}/collections/${collectionAddress}#stakemarket`
     }
-    return router.asPath.replace('?chainId=4002', '')
+    return `${router.asPath?.split('?chain=')[0]}${hash}`
   }, [router, collectionAddress])
 
   const TooltipComponent = () => (

@@ -73,7 +73,9 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update options associated with this item. Please read the documentation for more details')}
+            {t(
+              "This enables you to add options to your product. Options enable users to customize their orders. The category field sets the category of the option, the element field set the actual option, the currency field sets the unit of the count - set this to # if you want each count to be an increment in the number of the item; the element price is the price of each element; the element min parameter is min amount of the element customers can order; the element max is the maximum amount of the element customers can order. In case you want to enable users to pick between options $1 Tilapia and $2 Tilapia for the meat on top of their food, you add 2 options, the first one (category='Meat'; Element='$1 Tilapia'; Currency='#', Element Price='1', Element Min='0', Element Max='100') & the second one (category='Meat'; Element='$2 Tilapia'; Currency='#', Element Price='2', Element Min='0', Element Max='100'). You can add as many options as you want to your product and you can add multiple categories each with their own list of options.",
+            )}
           </Text>
         </Box>
       </Grid>

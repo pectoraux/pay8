@@ -99,12 +99,11 @@ const BurnTokenForCreditStage: React.FC<any> = ({
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>
         <Text small color="textSubtle">
-          {t("This action will create payment credit for the specified user's address.")}
+          {t(
+            "This action will add payment credits for the specified user's account. You can use this function to reward users with payment credits on specific products so that they can buy the product at a discounted price",
+          )}
         </Text>
       </Grid>
-      <Flex flexDirection="column" alignItems="center" justifyContent="space-between" height="150px">
-        <LinkExternal href="">{t('Learn more about payment credits')}</LinkExternal>
-      </Flex>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage} disabled={isInvalidField1 || isInvalidField2}>

@@ -76,18 +76,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will exclude a specific content type from the specified tag. Please read the documentation for more details on content types.',
+              "This will exclude a specific content type from the specified tag. For instance if you don't want sponsors that are in the NSFW to buy ad spots on your NFTickets, you can exclude the NSFW content type. Please read the documentation for a complete list of content types so that you can exclude the ones you don't want to sell ad spots in.",
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Excluded Content')}
         </Button>
       </Flex>

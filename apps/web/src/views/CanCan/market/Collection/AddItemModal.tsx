@@ -1,7 +1,7 @@
 import EncryptRsa from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useState, useMemo, useCallback } from 'react'
-import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box } from '@pancakeswap/uikit'
+import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -181,11 +181,18 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
           </GreyedOutContainer>
         </>
       ) : null}
-      <Box>
-        <Text small color="textSubtle">
-          {t('The will add the specified item to your paywall. Please read the documentation for more details.')}
-        </Text>
-      </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              "The will add the specified item behind your paywall so that only subscribers to the paywall can view it. You have to first deploy the item before you can add it behind a paywall. Once you've deployed the item, get its product id and paste it right here",
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         {account ? (

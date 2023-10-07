@@ -72,7 +72,7 @@ const ActivityRow: React.FC<any> = ({
         onClick: onPresentMobileModal,
       }
     : {}
-
+  console.log('2onClickProp==================>', activity)
   return (
     <tr {...((isXs || isSm) && onClickProp)} data-test="nft-activity-row">
       {!isNftActivity ? (
@@ -123,12 +123,12 @@ const ActivityRow: React.FC<any> = ({
             }
           />
         </Flex>
-        {isXs || isSm ? <ActivityPrice price={priceAsFloat} bnbBusdPrice={bnbBusdPrice} /> : null}
+        {isXs || isSm ? <ActivityPrice nft={nft} price={priceAsFloat} bnbBusdPrice={bnbBusdPrice} /> : null}
       </Td>
       {isXs || isSm ? null : (
         <>
           <Td>
-            <ActivityPrice price={priceAsFloat} bnbBusdPrice={bnbBusdPrice} />
+            <ActivityPrice nft={nft} price={priceAsFloat} bnbBusdPrice={bnbBusdPrice} />
           </Td>
           {isUserActivity ? (
             <Td>
@@ -140,12 +140,30 @@ const ActivityRow: React.FC<any> = ({
             <>
               <Td>
                 <Flex justifyContent="center" alignItems="center">
-                  {activity.seller ? <ProfileCell accountAddress={activity.seller} tokenId={tokenId} /> : '-'}
+                  {activity.seller ? (
+                    <ProfileCell
+                      accountAddress={
+                        activity?.item?.currentSeller ?? activity?.paywall?.currentSeller ?? activity.seller
+                      }
+                      tokenId={tokenId}
+                    />
+                  ) : (
+                    '-'
+                  )}
                 </Flex>
               </Td>
               <Td>
                 <Flex justifyContent="center" alignItems="center">
-                  {activity.buyer ? <ProfileCell accountAddress={activity.buyer} tokenId={tokenId} /> : '-'}
+                  {activity.buyer ? (
+                    <ProfileCell
+                      accountAddress={
+                        activity?.item?.currentSeller ?? activity?.paywall?.currentSeller ?? activity.buyer
+                      }
+                      tokenId={tokenId}
+                    />
+                  ) : (
+                    '-'
+                  )}
                 </Flex>
               </Td>
             </>

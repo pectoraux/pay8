@@ -57,7 +57,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
         >
           {nfts.map((nft) => {
-            const currentAskPrice = nft.marketData?.isTradable ? parseFloat(nft.marketData?.currentAskPrice) : undefined
+            const currentAskPrice = nft?.isTradable ? parseFloat(nft?.currentAskPrice) : undefined
             return (
               <CollectibleLinkCard
                 data-test="newest-nft-card"

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useState, useEffect, useCallback, useMemo } from 'react'
-import { Flex, Text, Button, Input, useToast, AutoRenewIcon, Box } from '@pancakeswap/uikit'
+import { Flex, Text, Button, Input, useToast, AutoRenewIcon, Box, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useGetNftFilters } from 'state/cancan/hooks'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
@@ -179,13 +179,18 @@ const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <Box>
-        <Text small color="textSubtle">
-          {t(
-            'The will mint an nfticket for the external sale entered for bookkeeping purposes. Please read the documentation for more details.',
-          )}
-        </Text>
-      </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              'The will mint an nfticket for the external sale entered for bookkeeping purposes. Sales that occur on the blockchain are automatically recorded but those you make offline or on other platform have to be recorded manually. This function enables you to do just that.',
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         {account ? (

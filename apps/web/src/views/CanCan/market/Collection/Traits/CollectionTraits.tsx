@@ -3,7 +3,7 @@ import times from 'lodash/times'
 import capitalize from 'lodash/capitalize'
 import sum from 'lodash/sum'
 import orderBy from 'lodash/orderBy'
-import { ArrowDownIcon, ArrowUpIcon, Flex, Skeleton, Table, Td, Th } from '@pancakeswap/uikit'
+import { ArrowDownIcon, ArrowUpIcon, Text, Skeleton, Table, Td, Th, Flex } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import CollapsibleCard from 'components/CollapsibleCard'
 import { useTranslation } from '@pancakeswap/localization'
@@ -52,7 +52,12 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
   }
 
   return (
-    <>
+    <Flex justifyContent="center" alignItems="center">
+      <Text>
+        {t(
+          'This page is under construction and when done will be showing real time business statistics on the current channel.',
+        )}
+      </Text>
       {/* {data &&
         Object.keys(data).map((traitType, index) => {
           const total = sum(Object.values(data[traitType]))
@@ -122,7 +127,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
             </CollapsibleCard>
           )
         })} */}
-    </>
+    </Flex>
   )
 }
 

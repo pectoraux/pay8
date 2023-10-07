@@ -11,6 +11,8 @@ import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import ProfileCell from '../../../components/ProfileCell'
 import { ButtonContainer, TableHeading } from '../shared/styles'
+import { CurrencyLogo } from 'components/Logo'
+import { useWorkspaceCurrency } from 'hooks/Tokens'
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -41,7 +43,8 @@ const OwnerCard: React.FC<any> = ({ nft, isOwnNft, isPaywall, onSuccess }) => {
 
   // const { owner, isLoadingOwner } = useNftOwner(nft, isOwnNft)
   const owner = nft.currentSeller
-  const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, parseFloat(nft?.marketData?.currentAskPrice))
+  const priceInUsd = multiplyPriceByAmount(bnbBusdPrice, parseFloat(nft?.currentAskPrice))
+  const { mainCurrency } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
 
   const [onPresentBuyModal] = useModal(<BuyModal nftToBuy={nft} />)
   const [onPresentAdjustPriceModal] = useModal(
@@ -75,11 +78,11 @@ const OwnerCard: React.FC<any> = ({ nft, isOwnNft, isPaywall, onSuccess }) => {
           </TableHeading>
           <OwnerRow>
             <Box pl="24px">
-              {nft.marketData?.isTradable ? (
+              {nft?.isTradable ? (
                 <>
                   <Flex justifySelf="flex-start" alignItems="center" width="max-content">
-                    <BinanceIcon width="24px" height="24px" mr="8px" />
-                    <Text bold>{formatNumber(parseFloat(nft?.marketData?.currentAskPrice), 0, 5)}</Text>
+                    <CurrencyLogo currency={mainCurrency} size="24px" style={{ marginRight: '8px' }} />
+                    <Text bold>{formatNumber(parseFloat(nft?.currentAskPrice), 0, 5)}</Text>
                   </Flex>
                   {bnbBusdPrice ? (
                     <Text fontSize="12px" color="textSubtle">
@@ -103,11 +106,11 @@ const OwnerCard: React.FC<any> = ({ nft, isOwnNft, isPaywall, onSuccess }) => {
             <ButtonContainer>
               {isOwnNft ? (
                 <Button scale="sm" variant="secondary" maxWidth="128px" onClick={onPresentAdjustPriceModal}>
-                  {nft.marketData?.isTradable ? t('Manage') : t('Sell')}
+                  {nft?.isTradable ? t('Manage') : t('Sell')}
                 </Button>
               ) : (
                 <Button
-                  disabled={!nft.marketData?.isTradable}
+                  disabled={!nft?.isTradable}
                   scale="sm"
                   variant="secondary"
                   maxWidth="128px"
