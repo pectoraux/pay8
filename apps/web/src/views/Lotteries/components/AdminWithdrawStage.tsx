@@ -8,7 +8,6 @@ import BigNumber from 'bignumber.js'
 
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 import BribeField from './LockedPool/Common/BribeField'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -91,11 +90,7 @@ const SetPriceStage: React.FC<any> = ({
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Withdraw')}
         </Button>
       </Flex>

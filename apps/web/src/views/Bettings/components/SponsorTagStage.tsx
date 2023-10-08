@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, ErrorIcon, Input, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
@@ -51,6 +51,18 @@ const SetPriceStage: React.FC<any> = ({
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
@@ -67,9 +79,13 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Tag Name')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Tag Name')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -119,11 +135,7 @@ const SetPriceStage: React.FC<any> = ({
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Sponsor')}
         </Button>
       </Flex>

@@ -28,26 +28,38 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
 
-  const { tooltip, tooltipVisible, targetRef } = useTooltip(
-    <>
-      <Text>
-        {t(
-          'There are 6 brackets going from 0 to 5. To check for multiple brackets at the same time, for instance brackets 0-5 for ticket #1, you will input 1,1,1,1,1,1 in the field above and 0,1,2,3,4,5 in this field',
-        )}
-      </Text>
-      {/* {creatorFeeAsNumber > 0 && (
-        <Text>{t('%percentage%% royalties to the collection owner', { percentage: creatorFee })}</Text>
-      )}
-      <Text>{t('%percentage%% trading fee will be used to buy & burn CAKE', { percentage: tradingFee })}</Text> */}
-    </>,
-    { placement: 'auto' },
-  )
-
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
     }
   }, [inputRef])
+
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'There are 6 brackets going from 0 to 5. To check for multiple brackets at the same time, for instance brackets 0-5 for ticket #1, you will input 1,1,1,1,1,1 in the field above and 0,1,2,3,4,5 in this field',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <>
@@ -65,9 +77,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Ticket IDs')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Ticket IDs')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -78,15 +94,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex flexDirection="row">
+        <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Brackets')}
           </Text>
-          <Flex ref={targetRef}>
-            <HelpIcon color="textSubtle" ml="6px" />
-          </Flex>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
-        {tooltipVisible && tooltip}
         <Input
           type="text"
           scale="sm"
@@ -108,11 +122,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Claim Tickets')}
         </Button>
       </Flex>

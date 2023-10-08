@@ -19,7 +19,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
+const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -80,7 +80,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     <Modal title={t('Create Sponsor Contract')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Profile Id')}
+          {t('Profile ID')}
         </Text>
         <Input
           type="text"
@@ -121,4 +121,4 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   )
 }
 
-export default CreateAuditorModal
+export default CreateSponsorModal

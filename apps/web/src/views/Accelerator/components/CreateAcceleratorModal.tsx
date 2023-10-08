@@ -1,5 +1,18 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Input,
+  Modal,
+  Button,
+  AutoRenewIcon,
+  ErrorIcon,
+  useToast,
+  useTooltip,
+  HelpIcon,
+} from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
@@ -86,21 +99,71 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Modal title={t('Create Accelerator Pitch')} onDismiss={onDismiss}>
       <Flex alignSelf="center" mt={20}>
-        <Filters
-          nftFilters={nftFilters}
-          setNftFilters={setNftFilters}
-          showCountry={false}
-          showCity={false}
-          showProduct={false}
-        />
+        <Flex ref={targetRef}>
+          <Filters
+            nftFilters={nftFilters}
+            setNftFilters={setNftFilters}
+            showCountry={false}
+            showCity={false}
+            showProduct={false}
+          />
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
       </Flex>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Media Link')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Media Link')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -110,9 +173,13 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Thumbnail')}
-        </Text>
+        <Flex ref={targetRef3}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Thumbnail')}
+          </Text>
+          {tooltipVisible3 && tooltip3}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"

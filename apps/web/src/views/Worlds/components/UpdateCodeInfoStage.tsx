@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, ErrorIcon, Input, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
@@ -28,22 +28,9 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({
-  state,
-  account,
-  currency,
-  handleChange,
-  handleRawValueChange,
-  continueToNextStage,
-}) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const [lockedAmount, setLockedAmount] = useState('')
-  const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-  const stakingTokenBalance = balance
-    ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
-    : BIG_ZERO
-  const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -51,12 +38,58 @@ const SetPriceStage: React.FC<any> = ({
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('World')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('World')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -67,9 +100,13 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token IDs')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Token IDs')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -80,9 +117,13 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Rating')}
-        </Text>
+        <Flex ref={targetRef3}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Rating')}
+          </Text>
+          {tooltipVisible3 && tooltip3}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -106,11 +147,7 @@ const SetPriceStage: React.FC<any> = ({
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update')}
         </Button>
       </Flex>

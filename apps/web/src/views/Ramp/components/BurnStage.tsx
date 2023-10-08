@@ -43,7 +43,6 @@ const BurnStage: React.FC<any> = ({
   const { data: accountData, refetch } = useGetAccountSg(account, 'stripe')
   const [linking, setLinking] = useState<boolean>(false)
   const [linked, setLinked] = useState<boolean>(accountData?.id && accountData?.active)
-  console.log('1accountData===================>', accountData, account, rampAddress, state.sk)
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -60,7 +59,7 @@ const BurnStage: React.FC<any> = ({
       sk: state.sk,
       accountId: state.accountId,
     })
-    console.log('1linkAccount=============>', data, account, rampAddress, state.sk, state.accountId)
+
     if (!linked) {
       if (data?.err) {
         setLinked(false)
@@ -68,7 +67,6 @@ const BurnStage: React.FC<any> = ({
         return
       }
       const args = ['stripe', data.accountId, state.moreInfo?.split(',')]
-      console.log('confirm_link============>', args)
       await callWithGasPrice(rampHelperContract, 'linkAccount', args).catch((err) => {
         console.log('createGauge=================>', err)
       })
@@ -84,15 +82,6 @@ const BurnStage: React.FC<any> = ({
     }
   }
 
-  console.log(
-    '2state.amountReceivable================>',
-    !linked,
-    accountData?.active,
-    accountData,
-    // state.amountReceivable,
-    // Number(state.amountReceivable),
-    // Number(state.amountReceivable) <= 1,
-  )
   return !(accountData?.id && accountData?.active) ? (
     <>
       <Divider />

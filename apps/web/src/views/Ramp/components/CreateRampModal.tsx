@@ -97,7 +97,6 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
             onClick={handleCreateGauge}
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
-            // disabled={firebaseDone}
           >
             {t('Create Ramp Contract')}
           </Button>

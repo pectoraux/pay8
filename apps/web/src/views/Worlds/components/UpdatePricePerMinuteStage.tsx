@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
-import { useCurrencyBalance } from 'state/wallet/hooks'
-import BribeField from './LockedPool/Common/BribeField'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -66,11 +60,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Price')}
         </Button>
       </Flex>

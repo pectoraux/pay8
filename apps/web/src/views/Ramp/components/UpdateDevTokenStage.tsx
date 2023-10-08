@@ -25,15 +25,6 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
 
   return (
     <>
-      {/* <Flex alignSelf='center' mt={20}>
-      <Filters
-        nftFilters={nftFilters} 
-        setNftFilters={setNftFilters}
-        showCountry={false}
-        showCity={false}
-        showProduct={false}
-      />
-    </Flex> */}
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Token ID')}
@@ -61,11 +52,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Token')}
         </Button>
       </Flex>

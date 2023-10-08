@@ -1,5 +1,17 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, ButtonMenuItem, ButtonMenu, ErrorIcon, Input } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  ButtonMenuItem,
+  ButtonMenu,
+  ErrorIcon,
+  Input,
+  HelpIcon,
+  useTooltip,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
@@ -25,12 +37,37 @@ const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToN
     }
   }, [inputRef])
 
+  const TooltipComponent = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Start Payable')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Start Payable')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <DatePicker
           selected={state.startPayable}
           placeholderText="YYYY/MM/DD"
@@ -40,9 +77,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToN
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Close Application Entries')}
-          </Text>
+          <Flex ref={targetRef2}>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+              {t('Close Application Entries')}
+            </Text>
+            {tooltipVisible2 && tooltip2}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu
             scale="xs"
             variant="subtle"
@@ -68,11 +109,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToN
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Accept')}
         </Button>
       </Flex>

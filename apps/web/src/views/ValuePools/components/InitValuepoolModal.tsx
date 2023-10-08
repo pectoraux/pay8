@@ -111,45 +111,6 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
 
   return (
     <Modal title={t('Initialize Value Pool')} onDismiss={onDismiss}>
-      {/* <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Va Name')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name='name'
-          value={state.name}
-          placeholder={t('input va name')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Va Symbol')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name='symbol'
-          value={state.symbol}
-          placeholder={t('input va symbol')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Va Decimals')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name='decimals'
-          value={state.decimals}
-          placeholder={t('input va decimals')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

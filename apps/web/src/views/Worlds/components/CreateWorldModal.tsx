@@ -83,7 +83,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     <Modal title={t('Create World Contract')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Profile Id')}
+          {t('Profile ID')}
         </Text>
         <Input
           type="text"
@@ -113,7 +113,6 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
             onClick={handleCreateGauge}
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
-            // disabled={firebaseDone}
           >
             {t('Create')}
           </Button>

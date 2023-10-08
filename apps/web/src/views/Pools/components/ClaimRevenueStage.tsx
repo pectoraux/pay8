@@ -78,11 +78,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Claim Revenue')}
         </Button>
       </Flex>

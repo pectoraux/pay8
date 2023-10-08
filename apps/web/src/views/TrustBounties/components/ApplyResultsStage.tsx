@@ -28,7 +28,7 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, continueToNextS
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Claim Id')}
+          {t('Claim ID')}
         </Text>
         <Input
           type="text"
@@ -66,11 +66,7 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, continueToNextS
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Apply')}
         </Button>
       </Flex>

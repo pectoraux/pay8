@@ -53,7 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleEasyMdeChange
         </Text>
         <RichTextEditor value={state.description} onChange={handleEasyMdeChange} id="description" />
       </GreyedOutContainer>
-      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+      <Grid gridTemplateColumns="32px 1fr" p="16px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>

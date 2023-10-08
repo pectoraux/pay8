@@ -10,6 +10,7 @@ import {
   Input,
   ErrorIcon,
   useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
@@ -44,6 +45,48 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
@@ -60,9 +103,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Identity Token ID')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Identity Token ID')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -73,9 +120,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Answers')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Answers')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -86,9 +137,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Final Numbers')}
-        </Text>
+        <Flex ref={targetRef3}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Final Numbers')}
+          </Text>
+          {tooltipVisible3 && tooltip3}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         {state.finalNumbers
           ?.split(',')
           ?.filter((fn) => !!fn)
@@ -112,11 +167,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Set Betting Results')}
         </Button>
       </Flex>

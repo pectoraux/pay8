@@ -26,21 +26,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
-  const { tooltip, tooltipVisible, targetRef } = useTooltip(
-    <>
-      <Text>
-        {t(
-          'When selling NFTs from this collection, a portion of the BNB paid will be diverted before reaching the seller:',
-        )}
-      </Text>
-      {/* {creatorFeeAsNumber > 0 && (
-        <Text>{t('%percentage%% royalties to the collection owner', { percentage: creatorFee })}</Text>
-      )}
-      <Text>{t('%percentage%% trading fee will be used to buy & burn CAKE', { percentage: tradingFee })}</Text> */}
-    </>,
-    { placement: 'auto' },
-  )
-
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
@@ -76,11 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Claim Pending Revenue')}
         </Button>
       </Flex>

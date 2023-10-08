@@ -79,11 +79,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Sponsor Media')}
         </Button>
       </Flex>

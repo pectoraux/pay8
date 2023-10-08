@@ -76,7 +76,7 @@ const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Create WILL')} onDismiss={onDismiss}>
+    <Modal title={t('Create Will')} onDismiss={onDismiss}>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -84,7 +84,7 @@ const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new WILL contract with you as its Admin. WILL contracts enable you to program your will as well as how your assets should be shared after your passing. Please read the documentation to learn more about WILLs.',
+              'The will create a new Will contract with you as its Admin. Will contracts enable you to program your will as well as how your assets should be shared after your passing. Please read the documentation to learn more about Wills.',
             )}
           </Text>
         </Box>
@@ -98,7 +98,7 @@ const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create WILL')}
+            {t('Create Will')}
           </Button>
         ) : (
           <ConnectWalletButton />

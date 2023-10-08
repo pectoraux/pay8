@@ -37,7 +37,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleChange, handleRaw
       inputRef.current.focus()
     }
   }, [inputRef])
-  console.log('ucurrency==================>', currency)
+
   return (
     <>
       <GreyedOutContainer>
@@ -96,11 +96,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleChange, handleRaw
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Inject Funds')}
         </Button>
       </Flex>

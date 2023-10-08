@@ -12,6 +12,8 @@ import {
   useToast,
   ButtonMenu,
   ButtonMenuItem,
+  HelpIcon,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -115,12 +117,76 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+    </Text>
+  )
+  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent4 = () => (
+    <Text>
+      {t(
+        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+      )}
+    </Text>
+  )
+  const TooltipComponent5 = () => (
+    <Text>
+      {t(
+        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Modal title={t('Create ARP')} onDismiss={onDismiss}>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Profile Id')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Profile ID')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -130,9 +196,13 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Valuepool Address')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Valuepool Address')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -143,9 +213,13 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Is Automatic ?')}
-          </Text>
+          <Flex ref={targetRef3}>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+              {t('Is Automatic ?')}
+            </Text>
+            {tooltipVisible3 && tooltip3}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu scale="xs" variant="subtle" activeIndex={automatic ? 1 : 0} onItemClick={setAutomatic}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
             <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
@@ -154,9 +228,13 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Is Percentages ?')}
-          </Text>
+          <Flex ref={targetRef4}>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+              {t('Is Percentages ?')}
+            </Text>
+            {tooltipVisible4 && tooltip4}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu scale="xs" variant="subtle" activeIndex={percentages ? 1 : 0} onItemClick={setPercentages}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
             <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
@@ -165,9 +243,13 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Is Immutable Contract ?')}
-          </Text>
+          <Flex ref={targetRef5}>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+              {t('Is Immutable Contract ?')}
+            </Text>
+            {tooltipVisible5 && tooltip5}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu
             scale="xs"
             variant="subtle"

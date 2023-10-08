@@ -96,7 +96,6 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
             }
           }}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
         >
           {t('Mint')}
         </Button>

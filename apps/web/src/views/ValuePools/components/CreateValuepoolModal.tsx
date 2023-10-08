@@ -13,6 +13,8 @@ import {
   ButtonMenuItem,
   ErrorIcon,
   useToast,
+  HelpIcon,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -27,7 +29,6 @@ import { useValuepoolFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 
 import { GreyedOutContainer, Divider } from './styles'
-import { Address } from 'viem'
 
 interface SetPriceStageProps {
   currency?: any
@@ -36,7 +37,6 @@ interface SetPriceStageProps {
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
-  console.log('CreateValuepoolModal================+>', currency)
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -49,7 +49,6 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { toastSuccess, toastError } = useToast()
   const currencyAddress = currency?.address ?? ''
   const valuepoolFactoryContract = useValuepoolFactory()
-  console.log('valuepoolFactoryContract==============>', valuepoolFactoryContract)
   const [nftFilters] = useState({})
   const [state, setState] = useState<any>(() => ({
     marketplace: '',
@@ -99,7 +98,7 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
       ]
       return callWithGasPrice(valuepoolFactoryContract, 'createValuePool' as const, args).catch((err) => {
         setPendingFb(false)
-        console.log('rerr1===============>', args, err, valuepoolFactoryContract)
+        console.log('rerr1===============>', args, err)
         toastError(
           t('Issue creating valuepool'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
@@ -145,12 +144,58 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Modal title={t('Create Value Pool')} onDismiss={onDismiss}>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('%titleName% marketplace', { titleName })}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('%titleName% marketplace', { titleName })}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -162,9 +207,13 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Is Riskpool ?')}
-          </Text>
+          <Flex ref={targetRef2}>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+              {t('Is Riskpool ?')}
+            </Text>
+            {tooltipVisible2 && tooltip2}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu
             scale="xs"
             variant="subtle"
@@ -178,9 +227,13 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('One person one vote?')}
-          </Text>
+          <Flex ref={targetRef3}>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+              {t('One person one vote?')}
+            </Text>
+            {tooltipVisible3 && tooltip3}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu
             scale="xs"
             variant="subtle"

@@ -14,6 +14,8 @@ import {
   useToast,
   ButtonMenu,
   ButtonMenuItem,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { useAppDispatch } from 'state'
@@ -183,23 +185,211 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+    </Text>
+  )
+  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent4 = () => (
+    <Text>
+      {t(
+        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+      )}
+    </Text>
+  )
+  const TooltipComponent5 = () => (
+    <Text>
+      {t(
+        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+      )}
+    </Text>
+  )
+  const TooltipComponent6 = () => (
+    <Text>
+      {t(
+        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+      )}
+    </Text>
+  )
+  const TooltipComponent7 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent8 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent9 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent10 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent11 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent12 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent13 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef6,
+    tooltip: tooltip6,
+    tooltipVisible: tooltipVisible6,
+  } = useTooltip(<TooltipComponent6 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef7,
+    tooltip: tooltip7,
+    tooltipVisible: tooltipVisible7,
+  } = useTooltip(<TooltipComponent7 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef8,
+    tooltip: tooltip8,
+    tooltipVisible: tooltipVisible8,
+  } = useTooltip(<TooltipComponent8 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef9,
+    tooltip: tooltip9,
+    tooltipVisible: tooltipVisible9,
+  } = useTooltip(<TooltipComponent9 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef10,
+    tooltip: tooltip10,
+    tooltipVisible: tooltipVisible10,
+  } = useTooltip(<TooltipComponent10 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef11,
+    tooltip: tooltip11,
+    tooltipVisible: tooltipVisible11,
+  } = useTooltip(<TooltipComponent11 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef12,
+    tooltip: tooltip12,
+    tooltipVisible: tooltipVisible12,
+  } = useTooltip(<TooltipComponent12 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef13,
+    tooltip: tooltip13,
+    tooltipVisible: tooltipVisible13,
+  } = useTooltip(<TooltipComponent13 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Modal title={t('%titleName%', { titleName: needsApproval ? 'Enable' : 'Create Stake' })} onDismiss={onDismiss}>
       {!needsApproval ? (
         <>
           <Flex alignSelf="center" mt={20}>
-            <Filters
-              nftFilters={nftFilters}
-              setNftFilters={setNftFilters}
-              showCountry={false}
-              showCity={false}
-              showProduct={false}
-            />
+            <Flex ref={targetRef}>
+              <Filters
+                nftFilters={nftFilters}
+                setNftFilters={setNftFilters}
+                showCountry={false}
+                showCity={false}
+                showProduct={false}
+              />
+              {tooltipVisible && tooltip}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
           </Flex>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Source Address')}
-            </Text>
+            <Flex ref={targetRef2}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Source Address')}
+              </Text>
+              {tooltipVisible2 && tooltip2}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -210,9 +400,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Media CID')}
-            </Text>
+            <Flex ref={targetRef3}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Media CID')}
+              </Text>
+              {tooltipVisible3 && tooltip3}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -223,9 +417,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('User Token Id')}
-            </Text>
+            <Flex ref={targetRef4}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('User Token ID')}
+              </Text>
+              {tooltipVisible4 && tooltip4}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -236,9 +434,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Identity Token Id')}
-            </Text>
+            <Flex ref={targetRef5}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Identity Token ID')}
+              </Text>
+              {tooltipVisible5 && tooltip5}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -249,9 +451,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Amount Payable')}
-            </Text>
+            <Flex ref={targetRef6}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Amount Payable')}
+              </Text>
+              {tooltipVisible6 && tooltip6}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -262,9 +468,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Amount Receivable')}
-            </Text>
+            <Flex ref={targetRef7}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Amount Receivable')}
+              </Text>
+              {tooltipVisible7 && tooltip7}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -275,9 +485,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Period Payable')}
-            </Text>
+            <Flex ref={targetRef8}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Period Payable')}
+              </Text>
+              {tooltipVisible8 && tooltip8}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -288,9 +502,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Period Receivable')}
-            </Text>
+            <Flex ref={targetRef9}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Period Receivable')}
+              </Text>
+              {tooltipVisible9 && tooltip9}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -301,9 +519,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Waiting Period')}
-            </Text>
+            <Flex ref={targetRef10}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Waiting Period')}
+              </Text>
+              {tooltipVisible10 && tooltip10}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -314,9 +536,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Start Payable')}
-            </Text>
+            <Flex ref={targetRef11}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Start Payable')}
+              </Text>
+              {tooltipVisible11 && tooltip11}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <DatePicker
               selected={state.startPayable}
               placeholderText="YYYY/MM/DD"
@@ -325,9 +551,13 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
             <DatePickerPortal />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Start Receivable')}
-            </Text>
+            <Flex ref={targetRef12}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Start Receivable')}
+              </Text>
+              {tooltipVisible12 && tooltip12}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <DatePicker
               selected={state.startReceivable}
               placeholderText="YYYY/MM/DD"
@@ -337,16 +567,20 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
           </GreyedOutContainer>
           <GreyedOutContainer>
             <StyledItemRow>
-              <Text
-                fontSize="12px"
-                color="secondary"
-                textTransform="uppercase"
-                paddingTop="3px"
-                paddingRight="50px"
-                bold
-              >
-                {t('Require Upfront Payment')}
-              </Text>
+              <Flex ref={targetRef13}>
+                <Text
+                  fontSize="12px"
+                  color="secondary"
+                  textTransform="uppercase"
+                  paddingTop="3px"
+                  paddingRight="50px"
+                  bold
+                >
+                  {t('Require Upfront Payment')}
+                </Text>
+                {tooltipVisible13 && tooltip13}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
               <ButtonMenu
                 scale="xs"
                 variant="subtle"

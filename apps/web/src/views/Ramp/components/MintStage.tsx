@@ -42,7 +42,6 @@ const SetPriceStage: React.FC<any> = ({
 
   const processCharge = async () => {
     setIsLoading(true)
-    console.log('processCharge===============>', currency, state.sk)
     const { data } = await axios.post('/api/charge', {
       account,
       price: state.amountPayable,
@@ -54,14 +53,6 @@ const SetPriceStage: React.FC<any> = ({
       console.log('data.error=====================>', data.error)
     }
     const stripe = await loadStripe(state.pk)
-    console.log('7stripe=====================>', [
-      rampAddress,
-      account,
-      currency?.address,
-      state.amountPayable,
-      state.identityTokenId,
-      data.id,
-    ])
 
     await rampHelperContract
       .preMint(rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id)

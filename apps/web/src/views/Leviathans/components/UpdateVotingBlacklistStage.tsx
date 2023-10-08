@@ -38,12 +38,6 @@ const SetPriceStage: React.FC<any> = ({
 }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const [lockedAmount, setLockedAmount] = useState('')
-  const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-  const stakingTokenBalance = balance
-    ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
-    : BIG_ZERO
-  const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -109,11 +103,7 @@ const SetPriceStage: React.FC<any> = ({
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Update')}
         </Button>
       </Flex>

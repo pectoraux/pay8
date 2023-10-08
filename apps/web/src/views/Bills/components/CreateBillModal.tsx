@@ -96,7 +96,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
     <Modal title={t('Create BILL')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Profile Id')}
+          {t('Profile ID')}
         </Text>
         <Input
           type="text"
@@ -138,7 +138,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create BILL')}
+            {t('Create Bill')}
           </Button>
         ) : (
           <ConnectWalletButton />

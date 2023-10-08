@@ -25,9 +25,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_MINT_IOU,
   LockStage.CONFIRM_ACCEPT,
   LockStage.CONFIRM_UPDATE_LOCATION,
+  LockStage.CONFIRM_START_WAITING_PERIOD,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.START_WAITING_PERIOD,
+  LockStage.CONFIRM_START_WAITING_PERIOD,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.ACCEPT,

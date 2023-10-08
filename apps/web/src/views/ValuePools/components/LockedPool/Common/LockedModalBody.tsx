@@ -32,15 +32,7 @@ const LockedModalBody: React.FC<any> = ({
     lockedAmount,
     prepConfirmArg,
   })
-  console.log(
-    '8useLockedPool=================>',
-    pool,
-    identityTokenId,
-    stakingToken,
-    onDismiss,
-    lockedAmount,
-    prepConfirmArg,
-  )
+
   const { isValidAmount, isValidDuration, isOverMax }: ModalValidator = useMemo(() => {
     return typeof validator === 'function'
       ? validator({

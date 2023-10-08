@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import _toNumber from 'lodash/toNumber'
 import { useTranslation } from '@pancakeswap/localization'
-import { Text, Flex, Button, Input, Box } from '@pancakeswap/uikit'
+import { Text, Flex, Button, Input, Box, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { secondsToWeeks, weeksToSeconds } from '../../utils/formatSecondsToWeeks'
 
 const DURATIONS = [1, 5, 10, 25, 52, 52 * 4]
@@ -20,25 +20,60 @@ const LockDurationField: React.FC<any> = ({
 }) => {
   const { t } = useTranslation()
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <Box mb="16px">
-        <StyledInput
-          value={identityTokenId}
-          pattern="^[0-9]+$"
-          inputMode="numeric"
-          placeholder={t('input identity token id')}
-          onChange={(e) => setIdentityTokenId(e?.target?.value)}
-        />
+        <Flex ref={targetRef}>
+          <StyledInput
+            value={identityTokenId}
+            pattern="^[0-9]+$"
+            inputMode="numeric"
+            placeholder={t('input identity token id')}
+            onChange={(e) => setIdentityTokenId(e?.target?.value)}
+          />
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
       </Box>
       <Box mb="16px">
         <Flex mb="8px">
-          <Text fontSize="12px" color="secondary" bold mr="2px" textTransform="uppercase">
-            {t('Add')}
-          </Text>
-          <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
-            {t('duration')}
-          </Text>
+          <Flex ref={targetRef2}>
+            <Text fontSize="12px" color="secondary" bold mr="2px" textTransform="uppercase">
+              {t('Add')}
+            </Text>
+            <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
+              {t('duration')}
+            </Text>
+            {tooltipVisible2 && tooltip2}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
         </Flex>
         <Flex flexWrap="wrap">
           {DURATIONS.map((week) => (

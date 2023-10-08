@@ -50,7 +50,6 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
-  [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
   [LockStage.START_WAITING_PERIOD]: t('Start Waiting Period'),
   [LockStage.UPDATE]: t('Update Requirements'),
@@ -191,7 +190,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
   const goBack = () => {
     switch (stage) {
       case LockStage.UPDATE_LOCATION:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_LOCATION:
         setStage(LockStage.UPDATE_LOCATION)

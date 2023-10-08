@@ -78,17 +78,6 @@ const SetPriceStage: React.FC<any> = ({
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>
         <Box>
-          {/* {!activeButtonIndex &&
-            state.requests.map((request, index) => (
-              <CopyAddress
-                title={t('%amount% %symbol% Requested by %sender%', {
-                  amount: state.amounts[index],
-                  symbol,
-                  sender: truncateHash(request),
-                })}
-                account={request}
-              />
-            ))} */}
           <Divider />
           <Text small color="textSubtle">
             {t(
@@ -99,11 +88,7 @@ const SetPriceStage: React.FC<any> = ({
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={continueToNextStage}
-          // disabled={priceIsValid || adjustedPriceIsTheSame || priceIsOutOfRange}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('%action%', { action: !activeButtonIndex ? 'Cosign' : 'Request' })}
         </Button>
       </Flex>

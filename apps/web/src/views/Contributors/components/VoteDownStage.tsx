@@ -36,7 +36,7 @@ const SetPriceStage: React.FC<any> = ({ pool, tokenId, setTokenId, currency, con
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token Id')}
+          {t('Token ID')}
         </Text>
         <Input
           type="text"
