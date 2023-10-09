@@ -43,7 +43,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the bounty on this account. Please read the documentation for more information.')}
+            {t(
+              'This will update the bounty attached to this token market. The balance of the bounty attached to a token market determines the amount of tokens that token market can mint/burn. Adding partners to a token market will also attach their bounties to the token market. Ramps with no attached unique profile can only mint up to 40% of the value in their attached bounties; those with a unique attached profile can mint up to 80% of the value of their attached bounties. To create a unique profile, you need to first create an SSID, go to Earn > Auditors and find an SSID auditor.',
+            )}
           </Text>
         </Box>
       </Grid>

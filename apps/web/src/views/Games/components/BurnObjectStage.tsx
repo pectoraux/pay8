@@ -150,7 +150,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will burn the specified object from your gaming ticket. Please read the documentation for more information on this parameter',
+              'This will burn the specified object from your gaming ticket. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

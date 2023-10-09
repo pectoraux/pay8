@@ -53,7 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t("The will send any pending payments to the deal owner's wallet address.")}
+            {t("This will send any pending payments to the deal owner's wallet address.")}
           </Text>
         </Box>
       </Grid>

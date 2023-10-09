@@ -112,7 +112,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will display your media on NFTs from this contract. Please read the documentation for more details.',
+              'This will display your media on NFTs from this contract. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

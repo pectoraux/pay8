@@ -69,7 +69,7 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t("The will remove funds from your card's balance.")}
+            {t("This will remove funds from your card's balance.")}
           </Text>
         </Box>
       </Grid>

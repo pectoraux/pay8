@@ -127,7 +127,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
       </GreyedOutContainer>
       <Box>
         <Text small color="textSubtle">
-          {t('The will remove the specified item from your paywall. Please read the documentation for more details.')}
+          {t('This will remove the specified item from your paywall. Please read the documentation for more details.')}
         </Text>
       </Box>
       <Divider />

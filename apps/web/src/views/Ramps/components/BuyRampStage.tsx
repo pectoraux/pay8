@@ -82,7 +82,7 @@ const BuyRampStage: React.FC<any> = ({ state, handleChange, continueToNextStage 
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will buy this ramp and make you its sole owner. Please read the documentation for more details.')}
+            {t('This will buy this ramp and make you its sole owner. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>

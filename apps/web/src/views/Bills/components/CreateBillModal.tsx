@@ -124,7 +124,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new BILL contract with you as its Admin. Please read the documentation to learn more about BILLs.',
+              'This will create a new BILL contract with you as its Admin. Please read the documentation to learn more about BILLs.',
             )}
           </Text>
         </Box>

@@ -84,7 +84,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified profile to the specified channel in order to enable its owner to buy a collateral from the specified channel. Collaterals from different channels appreciate differently week after week.',
+              'This will add the specified profile to the specified channel in order to enable its owner to buy a collateral from the specified channel. Collaterals from different channels appreciate differently week after week.',
             )}
           </Text>
         </Box>

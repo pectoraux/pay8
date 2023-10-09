@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will withdraw revenues currently due to this note. Please read the documentation for more details.',
+              'This will withdraw revenues currently due to this note. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

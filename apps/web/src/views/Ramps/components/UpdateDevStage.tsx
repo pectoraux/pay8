@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the owner address of the specified contract. Please read the documentation for more information.',
+              "This will update the owner address of the current ramp. The owner of the ramp is different from an admin in that only the owner can add/remove admins as well as update the ramp's owner.",
             )}
           </Text>
         </Box>

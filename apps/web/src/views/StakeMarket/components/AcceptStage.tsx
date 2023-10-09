@@ -102,7 +102,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToN
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will accept the application for your stake. Please read the documentation for more information on each parameter',
+              'This will accept the application for your stake. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

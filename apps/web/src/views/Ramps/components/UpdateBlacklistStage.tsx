@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add or remove the specified address from your blacklist. Please read the documentation for more information on this parameter',
+              'This will add/remove the specified address to/from your blacklist. You might need to use this function to blacklist accounts that are known to be fraudulant and prevent them from using your ramp to transfer value on/off the blockchain.',
             )}
           </Text>
         </Box>

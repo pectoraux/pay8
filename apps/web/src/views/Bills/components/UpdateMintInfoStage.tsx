@@ -58,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update mint info of the specified protocol. Please read the documentation for more information on each parameter',
+              'This will update mint info of the specified protocol. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

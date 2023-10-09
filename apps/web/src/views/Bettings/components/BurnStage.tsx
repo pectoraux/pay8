@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will burn your ticket. Please read the documentation for more information about betting tickets')}
+            {t('This will burn your ticket. Please read the documentation for more information about betting tickets')}
           </Text>
         </Box>
       </Grid>

@@ -43,7 +43,7 @@ const AddExtraTokenStage: React.FC<any> = ({ state, handleChange, continueToNext
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will add an additional token to the ramp. Please read the documentation for more information.')}
+            {t('This will add an additional token to the ramp. Please read the documentation for more information.')}
           </Text>
         </Box>
       </Grid>

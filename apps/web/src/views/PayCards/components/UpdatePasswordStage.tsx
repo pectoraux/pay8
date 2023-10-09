@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the password attached to this account. The password will be necessary to transfer tokens from your card to another or to make purchases with your card. Your password will be stored in encrypted form so you are the only one who knows it.',
+              'This will update the password attached to this account. The password will be necessary to transfer tokens from your card to another or to make purchases with your card. Your password will be stored in encrypted form so you are the only one who knows it.',
             )}
           </Text>
         </Box>

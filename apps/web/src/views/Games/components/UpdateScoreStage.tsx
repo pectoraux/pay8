@@ -117,7 +117,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update your game score. Please read the documentation for more information on each parameter')}
+            {t(
+              'This will update your game score. Please read the documentation for more information on each parameter',
+            )}
           </Text>
         </Box>
       </Grid>

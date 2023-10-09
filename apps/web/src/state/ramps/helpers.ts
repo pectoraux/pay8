@@ -293,7 +293,7 @@ export const fetchRamp = async (address, chainId) => {
         !_tokens?.length
           ? []
           : _tokens.map(async (token, index) => {
-              const [protocolInfo, mintAvailable] = await bscClient.multicall({
+              const [protocolInfo, mintAvailable, partnerBounties] = await bscClient.multicall({
                 allowFailure: true,
                 contracts: [
                   {
@@ -308,8 +308,15 @@ export const fetchRamp = async (address, chainId) => {
                     functionName: 'mintAvailable',
                     args: [rampAddress, token],
                   },
+                  {
+                    address: getRampAdsAddress(),
+                    abi: rampABI,
+                    functionName: 'getAllPartnerBounties',
+                    args: [token, BigInt(0)],
+                  },
                 ],
               })
+              console.log('partnerBounties===========>', partnerBounties)
               const { name, symbol, decimals } = await getTokenData(token, chainId)
               return {
                 sousId: index,
@@ -325,8 +332,9 @@ export const fetchRamp = async (address, chainId) => {
                 burnt: protocolInfo.result[6]?.toString(),
                 salePrice: protocolInfo.result[7]?.toString(),
                 maxPartners: protocolInfo.result[8]?.toString(),
+                partnerBounties: partnerBounties.result?.toString(),
                 cap: protocolInfo.result[9]?.toString(),
-                token: new Token(chainId, token, 18, symbol, name, 'https://www.payswap.org/'),
+                token: new Token(chainId, token, decimals ?? 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),
               }
             }),

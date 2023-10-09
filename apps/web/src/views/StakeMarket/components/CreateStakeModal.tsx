@@ -601,9 +601,9 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {needsApproval
-              ? t('The will enable the stake market to withdraw from your wallet')
+              ? t('This will enable the stake market to withdraw from your wallet')
               : t(
-                  'The will create a new stake in the market for you. Please read the documentation to learn more about the stake market.',
+                  'This will create a new stake in the market for you. Please read the documentation to learn more about the stake market.',
                 )}
           </Text>
         </Box>

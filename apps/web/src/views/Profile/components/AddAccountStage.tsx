@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add a new account to your profile. Please read the documentation for more information on each parameter',
+              'This will add a new account to your profile. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

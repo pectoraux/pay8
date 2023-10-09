@@ -58,7 +58,7 @@ const UpdateInfoStage: React.FC<any> = ({ state, handleChange, handleRawValueCha
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update info about the game. Please read the documentation for more information on each parameter',
+              'This will update info about the game. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

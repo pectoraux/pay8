@@ -54,7 +54,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will transfer all revenue currently due to this note to your account. Please read the documentation for more details.',
+              'This will transfer all revenue currently due to this note to your account. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

@@ -74,7 +74,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add or remove a ticket from the blacklist of the corresponding game. Please read the documentation for more information.',
+              'This will add or remove a ticket from the blacklist of the corresponding game. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

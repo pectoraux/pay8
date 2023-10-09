@@ -268,7 +268,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new ARP contract with you as its Admin. Please read the documentation to learn more about ARPs.',
+              'This will create a new ARP contract with you as its Admin. Please read the documentation to learn more about ARPs.',
             )}
           </Text>
         </Box>

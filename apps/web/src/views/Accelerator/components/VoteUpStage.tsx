@@ -43,7 +43,7 @@ const SetPriceStage: React.FC<any> = ({ tokenId, setTokenId, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add voting power to this pitch increasing its share of emissions. Please read the documentation for more details.',
+              'This will add voting power to this pitch increasing its share of emissions. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

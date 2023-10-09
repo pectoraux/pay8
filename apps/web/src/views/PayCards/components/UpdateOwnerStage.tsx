@@ -56,7 +56,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the owner address of this paycard.')}
+            {t('This will update the owner address of this paycard.')}
           </Text>
         </Box>
       </Grid>

@@ -67,7 +67,7 @@ const BuyAccountStage: React.FC<any> = ({ state, handleChange, continueToNextSta
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will buy this account and make you its sole owner. Please read the documentation for more details.',
+              'This will buy this account and make you its sole owner. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

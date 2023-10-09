@@ -129,7 +129,7 @@ const BurnModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will burn your object and send you its ingredients. Please read the documentation to learn more about game objects.',
+              'This will burn your object and send you its ingredients. Please read the documentation to learn more about game objects.',
             )}
           </Text>
         </Box>

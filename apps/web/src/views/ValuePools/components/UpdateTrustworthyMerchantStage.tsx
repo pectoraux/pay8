@@ -80,7 +80,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update trustworthy merchants for the specified valuepool. Please read the documentation for more information on each parameter',
+              'This will update trustworthy merchants for the specified valuepool. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

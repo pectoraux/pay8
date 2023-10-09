@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will transfer funds currently due to the specified protocol to the contract so the protocol owner can withdraw them.',
+              'This will transfer funds currently due to the specified protocol to the contract so the protocol owner can withdraw them.',
             )}
           </Text>
         </Box>

@@ -80,7 +80,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will notify the contract of a debit on the protocol of the specified owner. Please read the documentation for more details.',
+              'This will notify the contract of a debit on the protocol of the specified owner. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

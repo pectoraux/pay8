@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ currency, lockedAmount, setLockedAmount,
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will create or add funds into an existing bribe. Please read the documentation for more details.')}
+            {t('This will create or add funds into an existing bribe. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>

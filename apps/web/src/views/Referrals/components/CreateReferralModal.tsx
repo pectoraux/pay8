@@ -94,7 +94,7 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a gauge for your business. Please read the documentation to learn more about referral gauges.',
+              'This will create a gauge for your business. Please read the documentation to learn more about referral gauges.',
             )}
           </Text>
         </Box>

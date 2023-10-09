@@ -181,7 +181,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a claim for the bounty in the stake market. Please read the documentation for more details.',
+              'This will create a claim for the bounty in the stake market. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

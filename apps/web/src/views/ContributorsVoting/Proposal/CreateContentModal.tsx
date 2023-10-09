@@ -137,7 +137,7 @@ const CreateContentModal: React.FC<any> = ({ litigation, onSuccess, onDismiss })
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update your statement for this litigation')}
+            {t('This will update your statement for this litigation')}
           </Text>
         </Box>
       </Grid>

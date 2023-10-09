@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will burn your future collateral. Use this function when everything goes well and the loan backed by this future collateral has been reimbursed. This is only callable by the current owner of the future collateral.',
+              'This will burn your future collateral. Use this function when everything goes well and the loan backed by this future collateral has been reimbursed. This is only callable by the current owner of the future collateral.',
             )}
           </Text>
         </Box>

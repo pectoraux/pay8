@@ -92,7 +92,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add recurring balance to the specified bounty. Please read the documentation for more information.',
+              'This will add recurring balance to the specified bounty. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

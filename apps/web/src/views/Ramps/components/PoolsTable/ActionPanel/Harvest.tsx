@@ -4,6 +4,8 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { t } = useTranslation()
@@ -147,7 +149,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached veNFT Token Id')}
+              {t('Leviathan Token ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -166,7 +168,26 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Bounty Id')}
+              {t('Attached Bounty ID')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            {parseInt(rampAccount?.partnerBounties) ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={rampAccount?.partnerBounties}
+                prefix="# "
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Partner Bounty IDs')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -185,7 +206,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Profile Id')}
+              {t('Attached Profile ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -204,9 +225,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Badge Id')}
+              {t('Attached Badge ID')}
             </Text>
           </Box>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t("Ramp's Leviathan")}
+          </Text>
+          <CopyAddress title={truncateHash(pool?._ve)} account={pool?._ve} />
         </Flex>
       </ActionContent>
     </ActionContainer>

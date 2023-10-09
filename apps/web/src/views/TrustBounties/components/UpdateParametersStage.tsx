@@ -143,7 +143,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update parameters of the bounty. Please read the documentation for more information on each parameter',
+              'This will update parameters of the bounty. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

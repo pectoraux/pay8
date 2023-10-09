@@ -445,7 +445,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will start a new lottery with you as its admin. Please read the documentation for more information on each parameter',
+              'This will start a new lottery with you as its admin. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

@@ -68,7 +68,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update whether users that owe you can still withdraw funds. Please read the documentation for more information on each parameter',
+              'This will update whether users that owe you can still withdraw funds. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

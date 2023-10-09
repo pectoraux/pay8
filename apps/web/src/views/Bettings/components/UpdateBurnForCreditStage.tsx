@@ -206,7 +206,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update burn for credit options. Please read the documentation for more information.')}
+            {t('This will update burn for credit options. Please read the documentation for more information.')}
           </Text>
         </Box>
       </Grid>

@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will migrate the contract to a new set of parameters. Please read the documentation for more information on each parameter',
+              'This will migrate the contract to a new set of parameters. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

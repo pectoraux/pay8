@@ -130,7 +130,7 @@ const MintModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will mint a new object for you. Please read the documentation to learn more about game objects.')}
+            {t('This will mint a new object for you. Please read the documentation to learn more about game objects.')}
           </Text>
         </Box>
       </Grid>

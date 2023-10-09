@@ -84,7 +84,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new Ramp Pool with you as its Admin. Please read the documentation to learn more about Ramp Pools.',
+              'This will create a new Ramp Pool with you as its Admin. Please read the documentation to learn more about Ramp Pools.',
             )}
           </Text>
         </Box>

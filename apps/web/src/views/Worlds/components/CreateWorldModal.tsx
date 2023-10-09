@@ -100,7 +100,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new World contract with you as its Admin. Please read the documentation to learn more about Auditor Pools.',
+              'This will create a new World contract with you as its Admin. Please read the documentation to learn more about Auditor Pools.',
             )}
           </Text>
         </Box>

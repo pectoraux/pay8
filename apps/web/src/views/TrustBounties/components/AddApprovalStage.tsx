@@ -132,7 +132,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the approved amount to the balance of the partner bounty. Please read the documentation for more information on each parameter',
+              'This will add the approved amount to the balance of the partner bounty. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

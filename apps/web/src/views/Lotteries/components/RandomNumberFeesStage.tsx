@@ -60,7 +60,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleChange, handleRaw
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add funds to the random number generator so it can keep getting random numbers. Please read the documentation for more information on each parameter',
+              'This will add funds to the random number generator so it can keep getting random numbers. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified address or remove as the contract admin. Please read the documentation for more information on this parameter',
+              "This will add/remove the specified address to/from your ramp's list of admins. Be careful about giving users admin privileges to your ramp as they might be able to update your ramp's parameters, add/update/remove token markets or withdraw tokens from your ramp.",
             )}
           </Text>
         </Box>

@@ -53,7 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will withdraw revenues currently due to this note. How do notes work? A note that unlocks an inheritance of 10 tokens after the passing of a Will's owner, can be minted and sold today for 8 tokens for instance. A note is basically like an IOU that gives its owner the right to claim a certain amount from the will contract in the future. A Will's heir can mint notes that they can sell at a slightly lesser price than the payment the note will be able to unlock in the future. That way they get to access their future inheritance early and the party that buys the note gets to earn some interest from the note when it becomes due.",
+              "This will withdraw revenues currently due to this note. How do notes work? A note that unlocks an inheritance of 10 tokens after the passing of a Will's owner, can be minted and sold today for 8 tokens for instance. A note is basically like an IOU that gives its owner the right to claim a certain amount from This will contract in the future. A Will's heir can mint notes that they can sell at a slightly lesser price than the payment the note will be able to unlock in the future. That way they get to access their future inheritance early and the party that buys the note gets to earn some interest from the note when it becomes due.",
             )}
           </Text>
         </Box>

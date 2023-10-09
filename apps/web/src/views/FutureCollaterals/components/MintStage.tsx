@@ -241,7 +241,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will mint a future collateral for the recipient. Make sure you have added the recipient to the right channel and that you have an NFT bounty and a stake setup prior to running this function.',
+              'This will mint a future collateral for the recipient. Make sure you have added the recipient to the right channel and that you have an NFT bounty and a stake setup prior to running this function.',
             )}
           </Text>
         </Box>

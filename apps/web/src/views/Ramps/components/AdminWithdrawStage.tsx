@@ -66,13 +66,15 @@ const AdminWithdrawStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will withdraw funds from the ramp. Please read the documentation for more details.')}
+            {t(
+              'This will withdraw funds from the ramp. You can use this function to withdraw earnings or any token mistakenly sent to your ramp.',
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage}>
+        <Button mb="8px" variant="danger" onClick={continueToNextStage}>
           {t('Withdraw from Ramp')}
         </Button>
       </Flex>

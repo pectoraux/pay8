@@ -194,7 +194,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will attach, kill the timer or detach the specified token id. Please read the documentation for more details.',
+              'This will attach, kill the timer or detach the specified token id. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

@@ -32,47 +32,55 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        "Use this field to attach your unique profile id to the ramp. Attaching a unique profile id to your ramp enable your token markets to mint up to 80% of their attached bounties' value whereas not attaching a unique profile only let your token markets mint 40% of their attached bounties' value. To create a unique profile, you first need to find an SSID auditor to create your SSID; go to Earn > Auditors",
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'This is only relevant in the case of automatic ramps. Channels are payment processors you want to use. We currently only support Stripe. You can add up to 5 payment processors in a comma seprated format e.g: Stripe, PayPal, Visa, MasterCard, BrainTree.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This is only relevant in the case of automatic ramps and only relevant for the Stripe payment processor. You can find your publishable key in the settings of your Stripe account.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This is only relevant in the case of automatic ramps and only relevant for the Stripe payment processor. You can find your secret key in the settings of your Stripe account.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This is only relevant in the case of automatic ramps and only relevant for the Stripe payment processor. You can find your client id in the settings of your Stripe account.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Use this parameter to describe your ramp. In the case of manual ramp, you can list all payment methods that you accept for instance.',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
+      {t('This sets a link to your ramps avatar. It can be a link to your logo or any image that defines your brand.')}
     </Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
@@ -155,7 +163,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Application Link')}
@@ -171,7 +179,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           placeholder={t('input application link')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -202,14 +210,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="publishableKeys"
           value={state.publishableKeys}
-          placeholder={t('input comma separated publishable keys')}
+          placeholder={t('input your publishable key')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Secret Keys')}
+            {t('Secret Key')}
           </Text>
           {tooltipVisible5 && tooltip5}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -219,14 +227,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="secretKeys"
           value={state.secretKeys}
-          placeholder={t('input comma separated secret keys')}
+          placeholder={t('input your secret key')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef6}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Client IDs')}
+            {t('Client ID')}
           </Text>
           {tooltipVisible6 && tooltip6}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -236,7 +244,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="clientIds"
           value={state.clientIds}
-          placeholder={t('input comma separated client ids')}
+          placeholder={t('input your client id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -281,7 +289,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update parameters of the ramp. Please read the documentation for more information on each parameter',
+              'This will update parameters of the ramp. Please read the description of each parameter for more details.',
             )}
           </Text>
         </Box>

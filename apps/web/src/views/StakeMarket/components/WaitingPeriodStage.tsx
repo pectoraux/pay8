@@ -104,7 +104,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will start a timer at the end of which you can create a litigation. Please read the documentation for more information on each parameter',
+              'This will start a timer at the end of which you can create a litigation. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

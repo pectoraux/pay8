@@ -199,7 +199,7 @@ const RegisterModal: React.FC<any> = ({ collection, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will add you as a user of this channel. If the channel requires admin approval, you will not be added as a user straight away but only after the admin has accepted your request for membership. Becoming a channel user enables you to receive news in your email inbox from the channel. Your profile also shows in the user section of the channel's main page so other users can view and maybe contact you if you share you contact details.",
+              "This will add you as a user of this channel. If the channel requires admin approval, you will not be added as a user straight away but only after the admin has accepted your request for membership. Becoming a channel user enables you to receive news in your email inbox from the channel. Your profile also shows in the user section of the channel's main page so other users can view and maybe contact you if you share you contact details.",
             )}
           </Text>
         </Box>

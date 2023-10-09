@@ -218,7 +218,7 @@ const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add you as a partner of this channel. If the channel requires admin approval, you will not be added as a partner straight away but only after the admin has accepted your request for partnership. Becoming a channel partner enables you to publish your own content on the channel.',
+              'This will add you as a partner of this channel. If the channel requires admin approval, you will not be added as a partner straight away but only after the admin has accepted your request for partnership. Becoming a channel partner enables you to publish your own content on the channel.',
             )}
           </Text>
         </Box>

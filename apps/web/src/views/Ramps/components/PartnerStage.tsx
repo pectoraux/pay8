@@ -53,7 +53,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will add you as a partner of this account. Please read the documentation for more details.')}
+            {t(
+              "This will add you as a partner of the selected token market. You can only partner with currently under-collateralized token markets, the goal being to help them become overcollateralized again by adding your bounty to theirs. Partnering with a token market that becomes under-collateralized and thus unable to mint new tokens will reward you with a share of its earnings. Your share is computed as the percentage of the total token market's bounty balance. If the sum of all the token market's bounties' balances is 100 and you have contributed 40% of than, then you will earn 40% of all the proceeds made by the token market. A token market becoming under-collateralized is therefore a huge opportunity for investors to partner with it. A token market might become under-collateralized if its blockchain's native token loses so much in value that the total balance of the bounties attached to the token market is now worth less than the total number of tokens minted by that token market.",
+            )}
           </Text>
         </Box>
       </Grid>

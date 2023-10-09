@@ -47,14 +47,14 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="560px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the veNFT token attached to this account. Please read the documentation for more information.',
+              "This will update the Leviathan attached to this ramp as well as its admin's token in the Leviathan, to the ramp. Click on Workspace to pick a Leviathan's workspace and update the token id field to attach your token in that Leviathan. If you don't yet have a token in any Leviathan, go to the Leviathan page (Mint > Leviathan), pick one and mint a token in it. Attaching a Leviathan token will enable you to regain admin privileges to your ramp in the event you lost access to your admin wallet but still have access to your Leviathan token.",
             )}
           </Text>
         </Box>

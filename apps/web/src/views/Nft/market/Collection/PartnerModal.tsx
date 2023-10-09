@@ -151,7 +151,7 @@ const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
       </GreyedOutContainer>
       <Box>
         <Text small color="textSubtle">
-          {t('The will add you as a partner of this channel. Please read the documentation for more details.')}
+          {t('This will add you as a partner of this channel. Please read the documentation for more details.')}
         </Text>
       </Box>
       <Divider />

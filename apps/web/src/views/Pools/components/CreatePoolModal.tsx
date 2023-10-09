@@ -256,9 +256,9 @@ const CreatePoolModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {needsApproval
-              ? t('The will enable the pool contract to withdraw from your wallet')
+              ? t('This will enable the pool contract to withdraw from your wallet')
               : t(
-                  'The will deposit LPs and make you elligible to earn trading fees from the liquidity pool. Please read the documentation to learn more about Pools.',
+                  'This will deposit LPs and make you elligible to earn trading fees from the liquidity pool. Please read the documentation to learn more about Pools.',
                 )}
           </Text>
         </Box>

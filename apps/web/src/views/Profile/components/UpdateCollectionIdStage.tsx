@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update your collection id. Please read the documentation for more information on this parameter',
+              'This will update your collection id. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

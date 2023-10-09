@@ -67,7 +67,7 @@ const BuyAccountStage: React.FC<any> = ({ state, handleChange, continueToNextSta
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will buy this account and make you its sole owner. Please read the documentation for more details.',
+              "This will buy the selected token market and make you its sole owner. You can only purchase a token market when it is for sale .i.e. its sale price is bigger than 0. You need a Leviathan token (which you can mint from the Leviathan page on Mint > Leviathan. Make sure you mint a token from this ramp's Leviathan. Find its address in the parameters section of this ramp's panel) and a bounty with a balance bigger or equals to the current balance of the bounty currently attached to the token market.",
             )}
           </Text>
         </Box>

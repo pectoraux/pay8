@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will clean up approvals of the specified bounty. Please read the documentation for more information.',
+              'This will clean up approvals of the specified bounty. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

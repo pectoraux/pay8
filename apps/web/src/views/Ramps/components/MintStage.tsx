@@ -1,7 +1,18 @@
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, AutoRenewIcon, Input, ErrorIcon } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  AutoRenewIcon,
+  Input,
+  ErrorIcon,
+  useTooltip,
+  HelpIcon,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -79,25 +90,60 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        "Identity tokens are used to confirm identity requirements minters need to fulfill to proceed with the mint. If your ramp doesn't have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the ramp to deliver you an identity token and input its ID in this field.",
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        "Make sure you take the minting fee into account. If your ramp's minting fee is 10% then inputting 100 will only send you 100 - (100 * 10 / 100) = 90 tokens.",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Amount')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
           name="amountPayable"
           value={state.amountPayable}
-          placeholder={t('input of amount to mint')}
+          placeholder={t('input an amount to mint')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Identity Token ID')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Identity Token ID')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -114,7 +160,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will mint the specified amount of token to the recipient. Please read the documentation for more details.',
+              "This will mint the specified amount of the selected token to your wallet. The minted tokens are the equivalent of the FIAT currency being minted on the blockchain. To mint a token on an automatic ramp, the platform uses a payment processor like Stripe to retreive payments from the minter's debit card then notifies the ramp contract which mints the requested amount of tokens on the blockchain and sends it to the minter's wallet minus the ramp's minting fee. To mint tokens on a manual ramp, the minter would have to send a request for mint through PayChat to the admin of the ramp who will then manually run the mint function through this form after having received the necessary payment from the minter. Manual ramps will list all payment methods they accept and will have guidelines in their descriptions (available at the top left of their ramp's panel) about how to proceed. With manual ramps, you should be able to find a ramp that accepts your payment method no matter what it is: cash, mobile money, etc.",
             )}
           </Text>
         </Box>

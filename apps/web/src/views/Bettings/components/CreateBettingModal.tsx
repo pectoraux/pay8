@@ -113,7 +113,7 @@ const CreateBettingModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new betting contract with you as its Admin. Please read the documentation to learn more about bettings.',
+              'This will create a new betting contract with you as its Admin. Please read the documentation to learn more about bettings.',
             )}
           </Text>
         </Box>

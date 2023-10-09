@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will add/remove the specified account to/from the admin list of the future collaterals' contract. Only an admin can call this function.",
+              "This will add/remove the specified account to/from the admin list of the future collaterals' contract. Only an admin can call this function.",
             )}
           </Text>
         </Box>

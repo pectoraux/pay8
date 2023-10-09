@@ -130,7 +130,7 @@ const BurnStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will burn the specified amount of token from your wallet. Please read the documentation for more details.',
+              'This will burn the specified amount of token from your wallet. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

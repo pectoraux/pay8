@@ -34,7 +34,9 @@ const LocationStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the location information of your contract to enable users to find it more easily.')}
+            {t(
+              'This will update the location information of your contract to enable users to find it more easily. Location tags can be helpful for instance in the case of manual ramps that process cash and want their users to be able to locate them in the real world for their transactions. You can also add more custom tags related to your payment methods so users willing to transact in those payment methods can discover your ramp faster.',
+            )}
           </Text>
         </Box>
       </Grid>

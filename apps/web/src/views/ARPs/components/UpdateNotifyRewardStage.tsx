@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add to the total amount of rewards for the specified token. Please read the documentation for more details.',
+              'This will add to the total amount of rewards for the specified token. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

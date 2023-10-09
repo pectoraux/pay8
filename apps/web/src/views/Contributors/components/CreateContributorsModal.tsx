@@ -174,7 +174,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new pitch in the voter and enable you to get support for your work. Please read the documentation to learn more about contribution teams.',
+              'This will create a new pitch in the voter and enable you to get support for your work. Please read the documentation to learn more about contribution teams.',
             )}
           </Text>
         </Box>

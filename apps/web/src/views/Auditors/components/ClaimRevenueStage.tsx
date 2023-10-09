@@ -15,7 +15,7 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
           {t('Claim Pending From Sponsors')}
         </Text>
         <Text mt="24px" color="textSubtle">
-          {t('The will withdraw revenue from sponsors. Please read the documentation for more details.')}
+          {t('This will withdraw revenue from sponsors. Please read the documentation for more details.')}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}

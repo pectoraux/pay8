@@ -283,7 +283,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update requirements on this stake. Please read the documentation for more information on each parameter',
+              'This will update requirements on this stake. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

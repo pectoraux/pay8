@@ -139,7 +139,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will your pending rewards in the specified lottery. Please read the documentation for more information.',
+              'This will your pending rewards in the specified lottery. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

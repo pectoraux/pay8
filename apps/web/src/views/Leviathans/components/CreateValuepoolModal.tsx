@@ -255,7 +255,7 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new %titleName% with you as its Admin. Please read the documentation to learn more about %titleName%s.',
+              'This will create a new %titleName% with you as its Admin. Please read the documentation to learn more about %titleName%s.',
               { titleName },
             )}
           </Text>

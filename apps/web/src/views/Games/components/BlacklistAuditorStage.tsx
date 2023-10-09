@@ -67,7 +67,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add or remove an auditor from your blacklist. Please read the documentation for more details.',
+              'This will add or remove an auditor from your blacklist. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

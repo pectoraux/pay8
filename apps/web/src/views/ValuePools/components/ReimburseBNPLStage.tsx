@@ -66,7 +66,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will process the BNPL loan of the specified veNFT token. Please read the documentation for more information',
+              'This will process the BNPL loan of the specified veNFT token. Please read the documentation for more information',
             )}
           </Text>
         </Box>

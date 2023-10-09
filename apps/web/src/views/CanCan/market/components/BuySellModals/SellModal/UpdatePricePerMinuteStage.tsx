@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the price per minute to post an ad on your NFTickets.')}
+            {t('This will update the price per minute to post an ad on your NFTickets.')}
           </Text>
         </Box>
       </Grid>

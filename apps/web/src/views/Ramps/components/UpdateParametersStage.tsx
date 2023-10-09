@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import {
   Flex,
   Grid,
@@ -13,10 +13,8 @@ import {
   HelpIcon,
 } from '@pancakeswap/uikit'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -46,25 +44,37 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        "This sets whether your ramp is automatic or not. Automatic ramps do not need their admin's intervention to process minting/burning operations. To activate them, their admin have to update information about confidential keys from their chosen payment processors. In the case of Stripe for instance, admins would have to update information about their publishable key, secret key and client id. This information is used by the platform to interact with the API system of the payment processor to launch the necessary transfer operations needed for the minting/burning operations. All this confidential info is never available to anyone apart from the ramp's admin as it is stored in encrypted form and only decrypted during minting/burning operations.",
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'This sets the percentage of the processed amounts during mints that your ramp takes as processing fee. If your minting fee is 10% for instance, your ramp will automatically take a 10% fee on each mint operation.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'This sets the percentage of the processed amounts during burns that your ramp takes as processing fee. If your burning fee is 10% for instance, your ramp will automatically take a 10% fee on each burn operation.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        "Badges are certificates you get from auditors on the audit page (EARN > Auditors). These are ways for you to get an auditor to vouch for you and can help increase trust with your users. Once you get an auditor to deliver you a badge, you can put that badge's id right here to attach it to your ramp.",
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This parameter is set to 0 by default meaning that the ramp is not for sale. Whenever you want to sell your ramp, you can update it, to notify users that the ramp is for sale.',
       )}
     </Text>
   )
@@ -109,8 +119,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer style={{ paddingTop: '50px' }}>
         <StyledItemRow>
-          <Flex ref={targetRef}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Automatic')}
             </Text>
             {tooltipVisible && tooltip}
@@ -130,7 +140,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Mint Fee')}
+            {t('Mint Fee')} (%)
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -147,7 +157,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Burn Fee')}
+            {t('Burn Fee')} (%)
           </Text>
           {tooltipVisible3 && tooltip3}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -202,7 +212,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update parameters of the ramp. Please read the documentation for more information on each parameter',
+              'This will update parameters of the ramp. Please read the description of each parameter for further details.',
             )}
           </Text>
         </Box>

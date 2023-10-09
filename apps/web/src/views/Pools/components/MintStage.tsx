@@ -79,7 +79,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will mint the specified amount of token to the recipient. Please read the documentation for more details.',
+              'This will mint the specified amount of token to the recipient. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

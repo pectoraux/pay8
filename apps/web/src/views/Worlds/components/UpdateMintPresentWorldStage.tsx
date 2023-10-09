@@ -207,7 +207,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will mint a world for the specified contract. Please read the documentation for more information.')}
+            {t(
+              'This will mint a world for the specified contract. Please read the documentation for more information.',
+            )}
           </Text>
         </Box>
       </Grid>

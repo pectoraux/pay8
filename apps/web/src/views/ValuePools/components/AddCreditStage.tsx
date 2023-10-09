@@ -52,7 +52,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will credit from your eReceipt to your account. Please read the documentation for more information',
+              'This will credit from your eReceipt to your account. Please read the documentation for more information',
             )}
           </Text>
         </Box>

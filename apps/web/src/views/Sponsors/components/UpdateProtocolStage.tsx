@@ -258,7 +258,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new sponsorship deal with scheduled payments over the entire duration of the deal. You cannot program an end date though so you would have to manually terminate the deal by deleting it at the end of the deal.',
+              'This will create a new sponsorship deal with scheduled payments over the entire duration of the deal. You cannot program an end date though so you would have to manually terminate the deal by deleting it at the end of the deal.',
             )}
           </Text>
         </Box>

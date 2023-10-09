@@ -53,7 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets the value in minutes of the Will withdrawal countdown period. The countdown can be launched by running the Claim Inheritance function.',
+        'This sets the value in minutes of This will withdrawal countdown period. The countdown can be launched by running the Claim Inheritance function.',
       )}
     </Text>
   )

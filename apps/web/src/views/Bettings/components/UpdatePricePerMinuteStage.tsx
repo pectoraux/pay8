@@ -59,7 +59,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the price per minute for this contract. Please read the documentation for more details.',
+              'This will update the price per minute for this contract. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

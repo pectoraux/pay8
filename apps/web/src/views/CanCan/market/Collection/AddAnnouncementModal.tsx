@@ -152,7 +152,7 @@ const AddAnnouncementModal: React.FC<any> = ({ position = 0, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will add an announcement to this page. You can add your terms of service, guides on how to use your product as well as any announcement you deem necessary. It is advised to keep the announcements on this page to the stict minumum and only post really important ones like terms of service or guides on how to use your product. You can post the rest in your channel's PayChat group.",
+              "This will add an announcement to this page. You can add your terms of service, guides on how to use your product as well as any announcement you deem necessary. It is advised to keep the announcements on this page to the stict minumum and only post really important ones like terms of service or guides on how to use your product. You can post the rest in your channel's PayChat group.",
             )}
           </Text>
         </Box>

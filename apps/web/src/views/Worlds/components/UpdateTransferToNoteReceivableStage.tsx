@@ -137,7 +137,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will transfer future payments on a transferrable note. Please read the documentation for more information on each parameter',
+              'This will transfer future payments on a transferrable note. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

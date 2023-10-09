@@ -273,7 +273,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new Game contract with you as its Admin. Please read the documentation to learn more about Games.',
+              'This will create a new Game contract with you as its Admin. Please read the documentation to learn more about Games.',
             )}
           </Text>
         </Box>

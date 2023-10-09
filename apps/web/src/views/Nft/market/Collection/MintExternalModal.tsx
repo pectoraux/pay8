@@ -182,7 +182,7 @@ const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
       <Box>
         <Text small color="textSubtle">
           {t(
-            'The will mint an nfticket for the external sale entered for bookkeeping purposes. Please read the documentation for more details.',
+            'This will mint an nfticket for the external sale entered for bookkeeping purposes. Please read the documentation for more details.',
           )}
         </Text>
       </Box>

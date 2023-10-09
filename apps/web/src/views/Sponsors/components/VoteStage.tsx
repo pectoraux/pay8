@@ -60,7 +60,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will vote either positively or negatively for the sponsor. Votes from the community help users understand how trustworthy various sponsors are in order to determine whether they should work with them or not. If you have worked with a sponsor, please vote either for/against his/her contract to indicate to the community how trustworthy the sponsor is.',
+              'This will vote either positively or negatively for the sponsor. Votes from the community help users understand how trustworthy various sponsors are in order to determine whether they should work with them or not. If you have worked with a sponsor, please vote either for/against his/her contract to indicate to the community how trustworthy the sponsor is.',
             )}
           </Text>
         </Box>

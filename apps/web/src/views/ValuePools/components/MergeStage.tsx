@@ -88,7 +88,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, handleChange, continueToNex
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will merge 2 of your vaNFT tokens into a single one. Please read the documentation for more details.',
+              'This will merge 2 of your vaNFT tokens into a single one. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

@@ -54,7 +54,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will withdraw revenues currently due to this note. How do notes work? A note that unlocks a payment of 10 tokens in 2 weeks from now, can be minted and sold today for 8 tokens for instance. A note is basically like an IOU that gives its owner the right to claim a certain amount from a sponsorship deal in the future. Deal owners can mint notes on deals created for them which they can sell at a slightly lesser price than the payment the note will be able to unlock in the future. That way they get to access their future payments early and the party that buys the note gets to earn some interest from the note when it becomes due. You cannot mint more notes than the maximum allowed by the protocol',
+              'This will withdraw revenues currently due to this note. How do notes work? A note that unlocks a payment of 10 tokens in 2 weeks from now, can be minted and sold today for 8 tokens for instance. A note is basically like an IOU that gives its owner the right to claim a certain amount from a sponsorship deal in the future. Deal owners can mint notes on deals created for them which they can sell at a slightly lesser price than the payment the note will be able to unlock in the future. That way they get to access their future payments early and the party that buys the note gets to earn some interest from the note when it becomes due. You cannot mint more notes than the maximum allowed by the protocol',
             )}
           </Text>
         </Box>

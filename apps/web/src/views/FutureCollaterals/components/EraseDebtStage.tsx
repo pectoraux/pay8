@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will erase the debt of the specified account. This works by transferring the neccessary amount to erase the debt from your account to the contract's and erasing the debt balance of the specified account so that it can use future collaterals again to back new loans.",
+              "This will erase the debt of the specified account. This works by transferring the neccessary amount to erase the debt from your account to the contract's and erasing the debt balance of the specified account so that it can use future collaterals again to back new loans.",
             )}
           </Text>
         </Box>

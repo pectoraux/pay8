@@ -140,7 +140,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the code information for the specified tokens in the specified world. Please read the documentation for more details.',
+              'This will update the code information for the specified tokens in the specified world. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

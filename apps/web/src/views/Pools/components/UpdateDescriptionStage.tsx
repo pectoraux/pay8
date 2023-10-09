@@ -202,7 +202,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, nftFilters, setNewF
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update information on your pool.')}
+            {t('This will update information on your pool.')}
           </Text>
         </Box>
       </Grid>

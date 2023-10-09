@@ -127,7 +127,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will claim rewards for the specified tickets. Please read the documentation to learn more about claiming tickets.',
+              'This will claim rewards for the specified tickets. Please read the documentation to learn more about claiming tickets.',
             )}
           </Text>
         </Box>

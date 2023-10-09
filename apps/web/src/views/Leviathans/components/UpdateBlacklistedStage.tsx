@@ -95,7 +95,7 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update excluded contents of this valuepool. Please read the documentation for more details.')}
+            {t('This will update excluded contents of this valuepool. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>

@@ -35,18 +35,30 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        'This either opens or closes your token market. If you do not wish to process transactions on a token market anymore, you can set this parameter to Close',
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'This parameter is set to 0 by default meaning that the token market is not for sale. Whenever you want to sell your token market, you can update it, to notify users that the token market is for sale.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'This sets a cap on the minting/burning processing fees. If you set your cap to 100 for instance and your ramp will be taking a maximum of 10 tokens for both minting/burning operations meaning even if your minting fee is 10% and a users is minting/burning 1000 tokens, your ramp will only take 10 tokens whereas if you did not put a 10 tokens cap, it would have taken 100 tokens. You can leave this parameter at 0 to remove the cap.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets a limit on the number of partners you are willing to have on your token market. Partners help you get your token market to an over-collateralized state which is the only state in which your token market can mint tokens. The bounty attached to your token market is considered to be the addition of your attached bounty and that of all partners and with a higher attached bounty balance, your token market can mint/burn much more tokens.',
       )}
     </Text>
   )
@@ -83,8 +95,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Flex alignSelf="center" justifyContent="center">
-          <Flex ref={targetRef}>
-            <Text fontSize="12px" mr="10px" color="secondary" textTransform="uppercase" bold>
+          <Flex ref={targetRef} mr="10px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
               {t('Account State')}
             </Text>
             {tooltipVisible && tooltip}
@@ -159,7 +171,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update parameters of the account. Please read the documentation for more information on each parameter',
+              'This will update parameters of the selected token market. Please read the description of each parameter for further details.',
             )}
           </Text>
         </Box>

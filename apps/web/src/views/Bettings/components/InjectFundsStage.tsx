@@ -99,7 +99,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will inject funds into the contract. Please read the documentation for more information on each parameter',
+              'This will inject funds into the contract. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

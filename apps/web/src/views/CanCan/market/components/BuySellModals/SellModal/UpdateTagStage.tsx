@@ -59,7 +59,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified product to the specified tag. Please read the documentation for more information on each parameter',
+              'This will add the specified product to the specified tag. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

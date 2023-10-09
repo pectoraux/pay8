@@ -73,7 +73,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will sell your collateral. Use this function only when the user for which you minted this collateral defaulted on the loan. This should enable you to recover part or the entirety of the loan's principal.",
+              "This will sell your collateral. Use this function only when the user for which you minted this collateral defaulted on the loan. This should enable you to recover part or the entirety of the loan's principal.",
             )}
           </Text>
         </Box>

@@ -48,7 +48,7 @@ const UpdateStake: React.FC<SetPriceStageProps> = ({ state, handleRawValueChange
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update your level of agreement with your partners on this stake. Please read the documentation for more information on each parameter',
+              'This will update your level of agreement with your partners on this stake. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

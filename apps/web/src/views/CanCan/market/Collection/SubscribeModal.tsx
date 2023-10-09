@@ -133,7 +133,7 @@ const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will start your subscription to the paywall. Subscriptions don't start when you purchase them, you would have to activate them through this function. This is a feature that enables you to treat subscriptions like an investment. If you beleive a paywall will become more popular and its subscription price will increase in the future, you can purchase as many subcriptions as you want today, from that paywall, not activate them but wait till the subscription price of the paywall accrues in value so you can resell the subscriptions you bought on a second hand marketplace, at a slightly lesser price than it is been offered from the paywall but still at a higher price than what you bought it for.",
+              "This will start your subscription to the paywall. Subscriptions don't start when you purchase them, you would have to activate them through this function. This is a feature that enables you to treat subscriptions like an investment. If you beleive a paywall will become more popular and its subscription price will increase in the future, you can purchase as many subcriptions as you want today, from that paywall, not activate them but wait till the subscription price of the paywall accrues in value so you can resell the subscriptions you bought on a second hand marketplace, at a slightly lesser price than it is been offered from the paywall but still at a higher price than what you bought it for.",
             )}
           </Text>
         </Box>

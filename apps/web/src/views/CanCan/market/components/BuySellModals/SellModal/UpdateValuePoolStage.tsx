@@ -63,7 +63,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified valuepool to your channel. Please read the documentation for more details on displaying valuepools on your channel.',
+              'This will add the specified valuepool to your channel. Please read the documentation for more details on displaying valuepools on your channel.',
             )}
           </Text>
         </Box>

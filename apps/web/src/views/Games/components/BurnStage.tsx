@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will burn your NFT. Please read the documentation for more information about game NFT')}
+            {t('This will burn your NFT. Please read the documentation for more information about game NFT')}
           </Text>
         </Box>
       </Grid>

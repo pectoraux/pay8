@@ -59,7 +59,7 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, continueToNextS
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will appeal or apply results from a previous claim. Please read the documentation to learn more about trust bounties.',
+              'This will appeal or apply results from a previous claim. Please read the documentation to learn more about trust bounties.',
             )}
           </Text>
         </Box>

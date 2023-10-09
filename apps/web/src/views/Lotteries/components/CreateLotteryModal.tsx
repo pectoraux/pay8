@@ -519,7 +519,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new lottery session with you as its Admin. Please read the documentation to learn more about Lotteries.',
+              'This will create a new lottery session with you as its Admin. Please read the documentation to learn more about Lotteries.',
             )}
           </Text>
         </Box>

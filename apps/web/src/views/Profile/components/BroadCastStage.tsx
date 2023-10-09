@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will broad cast a message to all your followers. Please read the documentation for more information on this',
+              'This will broad cast a message to all your followers. Please read the documentation for more information on this',
             )}
           </Text>
         </Box>

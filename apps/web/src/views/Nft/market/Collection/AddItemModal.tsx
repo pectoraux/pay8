@@ -186,7 +186,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
       ) : null}
       <Box>
         <Text small color="textSubtle">
-          {t('The will add the specified item to your paywall. Please read the documentation for more details.')}
+          {t('This will add the specified item to your paywall. Please read the documentation for more details.')}
         </Text>
       </Box>
       <Divider />

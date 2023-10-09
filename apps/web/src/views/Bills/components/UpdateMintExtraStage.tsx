@@ -58,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update how much extra token the specified protocol can mint. Please read the documentation for more information on each parameter',
+              'This will update how much extra token the specified protocol can mint. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

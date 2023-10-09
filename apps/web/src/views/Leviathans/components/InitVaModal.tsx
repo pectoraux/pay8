@@ -395,7 +395,7 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will set the name, symbol and decimals of your Va')}
+            {t('This will set the name, symbol and decimals of your Va')}
           </Text>
         </Box>
       </Grid>

@@ -188,7 +188,7 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will add the specified item behind your paywall so that only subscribers to the paywall can view it. You have to first deploy the item before you can add it behind a paywall. Once you've deployed the item, get its product id and paste it right here",
+              "This will add the specified item behind your paywall so that only subscribers to the paywall can view it. You have to first deploy the item before you can add it behind a paywall. Once you've deployed the item, get its product id and paste it right here",
             )}
           </Text>
         </Box>

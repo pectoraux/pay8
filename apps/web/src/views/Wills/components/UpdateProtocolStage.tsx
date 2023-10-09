@@ -28,7 +28,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Input a comma separated list of the addresses of the tokens you are leaving this heir. Each one of the listed tokens need to have already been added to the Will contract.',
+        'Input a comma separated list of the addresses of the tokens you are leaving this heir. Each one of the listed tokens need to have already been added to This will contract.',
       )}
     </Text>
   )

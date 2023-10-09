@@ -92,7 +92,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the estimation table of the specified channel. This table enables the contract to compute the price of a collateral at any specific week after its purchase. Please read the documentation for more information.',
+              'This will update the estimation table of the specified channel. This table enables the contract to compute the price of a collateral at any specific week after its purchase. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

@@ -169,7 +169,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will mint the specified object in the game. Please read the documentation for more information on this parameter',
+              'This will mint the specified object in the game. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

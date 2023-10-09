@@ -152,7 +152,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will buy tickets in the specified lottery. Please read the documentation for more details.')}
+            {t('This will buy tickets in the specified lottery. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>

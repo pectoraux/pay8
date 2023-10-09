@@ -334,7 +334,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will mint a new future collateral to your address. Please read the documentation to learn more about future collaterals.',
+              'This will mint a new future collateral to your address. Please read the documentation to learn more about future collaterals.',
             )}
           </Text>
         </Box>

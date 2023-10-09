@@ -175,7 +175,7 @@ const PartnerModal: React.FC<any> = ({ registration, onDismiss }) => {
       </GreyedOutContainer>
       <Box>
         <Text small color="textSubtle">
-          {t('The will remove the specified item from your wall. Please read the documentation for more details.')}
+          {t('This will remove the specified item from your wall. Please read the documentation for more details.')}
         </Text>
       </Box>
       <Divider />

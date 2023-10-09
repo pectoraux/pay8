@@ -127,7 +127,7 @@ const PartnerModal: React.FC<any> = ({ position = 0, onConfirm, onDismiss }) => 
       </GreyedOutContainer>
       <Box>
         <Text small color="textSubtle">
-          {t('The will add an announcement to this page. Please read the documentation for more details.')}
+          {t('This will add an announcement to this page. Please read the documentation for more details.')}
         </Text>
       </Box>
       <Divider />

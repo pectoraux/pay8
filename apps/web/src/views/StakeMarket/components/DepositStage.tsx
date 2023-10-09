@@ -58,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleRawValueChange, c
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will deposit funds into your account in the valuepool. Please read the documentation for more details.',
+              'This will deposit funds into your account in the valuepool. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

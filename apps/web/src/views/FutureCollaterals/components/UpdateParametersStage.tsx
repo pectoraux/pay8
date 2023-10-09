@@ -236,7 +236,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the parameters of the future collateral contract. Only admins can call this function.')}
+            {t(
+              'This will update the parameters of the future collateral contract. Only admins can call this function.',
+            )}
           </Text>
         </Box>
       </Grid>

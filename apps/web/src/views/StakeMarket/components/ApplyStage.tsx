@@ -301,7 +301,7 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create an application to the current stake. Please read the documentation to learn more about the stake market.',
+              'This will create an application to the current stake. Please read the documentation to learn more about the stake market.',
             )}
           </Text>
         </Box>

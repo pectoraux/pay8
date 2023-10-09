@@ -130,7 +130,7 @@ const RegisterModal: React.FC<any> = ({ collection, onDismiss }) => {
       </GreyedOutContainer>
       <Box>
         <Text small color="textSubtle">
-          {t('The will add you as a user of this channel. Please read the documentation for more details.')}
+          {t('This will add you as a user of this channel. Please read the documentation for more details.')}
         </Text>
       </Box>
       <Divider />

@@ -59,8 +59,8 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
-  [LockStage.UPDATE_PROTOCOL]: t('Update Account'),
-  [LockStage.UPDATE_INDIVIDUAL_PROTOCOL]: t('Update Account'),
+  [LockStage.UPDATE_PROTOCOL]: t('Update Token Market'),
+  [LockStage.UPDATE_INDIVIDUAL_PROTOCOL]: t('Update Token Market'),
   [LockStage.ADMIN_WITHDRAW]: t('Withdraw'),
   [LockStage.PRE_MINT]: t('tFIAT Mint'),
   [LockStage.INIT_RAMP]: t('Update Ramp Info'),
@@ -71,7 +71,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_BOUNTY]: t('Update Attached Bounty'),
   [LockStage.UNLOCK_BOUNTY]: t('Unlock Attached Bounty'),
   [LockStage.UPDATE_TOKEN_ID]: t('Update veNFT Token'),
-  [LockStage.UPDATE_DEV_TOKEN_ID]: t('Update Ramp veNFT Token'),
+  [LockStage.UPDATE_DEV_TOKEN_ID]: t('Update Ramp Leviathan Token'),
   [LockStage.UPDATE_BADGE_ID]: t('Update Attached Badge'),
   [LockStage.UPDATE_PROFILE_ID]: t('Update Attached Profile'),
   [LockStage.BUY_RAMP]: t('Buy Ramp'),
@@ -81,9 +81,9 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.MINT]: t('Mint'),
   [LockStage.DELETE]: t('Delete'),
   [LockStage.DELETE_RAMP]: t('Delete Ramp'),
-  [LockStage.CREATE_PROTOCOL]: t('Create Account'),
-  [LockStage.UPDATE_ADMIN]: t('Update Contract Admin'),
-  [LockStage.UPDATE_DEV]: t('Update Contract Owner'),
+  [LockStage.CREATE_PROTOCOL]: t('Add Token Market'),
+  [LockStage.UPDATE_ADMIN]: t('Update Ramp Admin'),
+  [LockStage.UPDATE_DEV]: t('Update Ramp Owner'),
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
   [LockStage.ADD_EXTRA_TOKEN]: t('Add Extra Token'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
@@ -241,8 +241,8 @@ const CreateGaugeModal: React.FC<any> = ({
     bountyIds: [],
     badgeId: pool?.rampBadgeId,
     _ve: pool?._ve || stakingTokenContract?.address || rampAccount?.token?.address,
-    mintFee: pool?.mintFee,
-    burnFee: pool?.burnFee,
+    mintFee: parseInt(pool?.mintFee ?? '0') / 100,
+    burnFee: parseInt(pool?.burnFee ?? '0') / 100,
     title: '',
     content: '',
     sessionId: session?.id || sessionId || '',
@@ -775,7 +775,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [
           pool.rampAddress,
           state.profileId,
-          state.applicationLink,
+          '', // state.applicationLink,
           [pk0, pk1, pk2, pk3, pk4],
           [sk0, sk1, sk2, sk3, sk4],
           [cId0, cId1, cId2, cId3, cId4],
@@ -981,10 +981,10 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE SPONSOR MEDIA')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.BUY_ACCOUNT)}>
-            {t('BUY ACCOUNT')}
+            {t('BUY TOKEN MARKET')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_INDIVIDUAL_PROTOCOL)}>
-            {t('UPDATE ACCOUNT')}
+            {t('UPDATE TOKEN MARKET')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM)}>
             {t('CLAIM')}
@@ -997,7 +997,7 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL)}>
-            {t('CREATE ACCOUNT')}
+            {t('ADD TOKEN MARKET')}
           </Button>
           <Button
             mb="8px"
@@ -1033,17 +1033,14 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
           </Button>
+          {location !== 'header' ? (
+            <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
+              {t('UPDATE TOKEN MARKET')}
+            </Button>
+          ) : null}
           <Button mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
             {t('ADD EXTRA TOKEN')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.CONFIRM_REMOVE_EXTRA_TOKEN)}>
-            {t('REMOVE EXTRA TOKEN')}
-          </Button>
-          {location !== 'header' ? (
-            <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
-              {t('UPDATE ACCOUNT')}
-            </Button>
-          ) : null}
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
             {t('UPDATE BOUNTY')}
           </Button>
@@ -1051,17 +1048,17 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE RAMP INFO')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_DEV_TOKEN_ID)}>
-            {t('UPDATE RAMP veNFT ID')}
+            {t('UPDATE RAMP LEVIATHAN TOKEN ID')}
           </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_PROFILE_ID)}>
+          {/* <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_PROFILE_ID)}>
             {t('UPDATE PROFILE ID')}
-          </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
+          </Button> */}
+          {/* <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
             {t('UPDATE BADGE ID')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID)}>
             {t('UPDATE ACCOUNT TOKEN ID')}
-          </Button>
+          </Button> */}
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE)}>
             {t('CLAIM REVENUE FROM SPONSORS')}
           </Button>

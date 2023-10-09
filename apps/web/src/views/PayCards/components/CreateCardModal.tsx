@@ -140,7 +140,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new PayCard with you as its owner. Please read the documentation to learn more about PayCards.',
+              'This will create a new PayCard with you as its owner. Please read the documentation to learn more about PayCards.',
             )}
           </Text>
         </Box>

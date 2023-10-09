@@ -56,7 +56,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the current sponsored media on specified channel. Please read the documentation for more information.',
+              'This will update the current sponsored media on specified channel. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

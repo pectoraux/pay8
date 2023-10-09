@@ -577,9 +577,9 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {needsApproval
-              ? t('The will enable the trust bounty to withdraw from your wallet')
+              ? t('This will enable the trust bounty to withdraw from your wallet')
               : t(
-                  'The will create a new bounty for you. Please read the documentation to learn more about the trust bounty.',
+                  'This will create a new bounty for you. Please read the documentation to learn more about the trust bounty.',
                 )}
           </Text>
         </Box>

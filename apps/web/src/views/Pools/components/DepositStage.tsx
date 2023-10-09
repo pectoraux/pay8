@@ -58,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleRawValueChange, c
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will deposit LP tokens into your account in the pool. Please read the documentation for more details.',
+              'This will deposit LP tokens into your account in the pool. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

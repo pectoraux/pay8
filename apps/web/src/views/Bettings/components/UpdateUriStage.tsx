@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the uri generator of this betting. Please read the documentation for more information.',
+              'This will update the uri generator of this betting. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

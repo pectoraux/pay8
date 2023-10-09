@@ -191,7 +191,7 @@ const PartnerModal: React.FC<any> = ({ registration, handleRawValueChange, onDis
       </GreyedOutContainer>
       <Box>
         <Text small color="textSubtle">
-          {t('The will add the specified item to your wall. Please read the documentation for more details.')}
+          {t('This will add the specified item to your wall. Please read the documentation for more details.')}
         </Text>
       </Box>
       <Divider />

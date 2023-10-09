@@ -62,7 +62,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will set the category of your world. Please read the documentation for more information on this parameter',
+              'This will set the category of your world. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

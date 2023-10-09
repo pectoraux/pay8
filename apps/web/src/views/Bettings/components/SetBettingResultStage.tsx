@@ -160,7 +160,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will set final results for this betting event. Please read the documentation for more information on each parameter',
+              'This will set final results for this betting event. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

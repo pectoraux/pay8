@@ -237,7 +237,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the late days of this profile. Please read the documentation for more information on each parameter',
+              'This will update the late days of this profile. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

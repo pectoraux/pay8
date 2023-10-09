@@ -55,7 +55,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will transfer your revenue from the account to your wallet. Please read the documentation for more details.',
+              'This will transfer your revenue from the selected token market to your wallet. Only admins or partners of a token market can generate revenue from it.',
             )}
           </Text>
         </Box>

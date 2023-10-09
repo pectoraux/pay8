@@ -239,7 +239,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will mint a past world for the specified contract. Please read the documentation for more information.',
+              'This will mint a past world for the specified contract. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

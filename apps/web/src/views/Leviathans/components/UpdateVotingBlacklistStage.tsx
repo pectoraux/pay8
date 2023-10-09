@@ -96,7 +96,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the voting blacklist of this valuepool. Please read the documentation for more details.',
+              'This will update the voting blacklist of this valuepool. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

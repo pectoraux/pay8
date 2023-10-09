@@ -186,7 +186,7 @@ const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will mint an nfticket for the external sale entered for bookkeeping purposes. Sales that occur on the blockchain are automatically recorded but those you make offline or on other platform have to be recorded manually. This function enables you to do just that.',
+              'This will mint an nfticket for the external sale entered for bookkeeping purposes. Sales that occur on the blockchain are automatically recorded but those you make offline or on other platform have to be recorded manually. This function enables you to do just that.',
             )}
           </Text>
         </Box>

@@ -84,7 +84,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new Ramp Pool with you as its Admin. Please read the documentation to learn more about Ramp Pools.',
+              'This will deploy a new Ramp contract with you as its Admin. Ramp contracts enable you to tokenize various FIAT currencies or receive tokenized currencies in exchange for FIAT currencies. With Ramps you can basically enable users to transfer value on or off various blockchains.',
             )}
           </Text>
         </Box>

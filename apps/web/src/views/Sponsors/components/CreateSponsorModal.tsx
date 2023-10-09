@@ -97,7 +97,7 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will create a new Sponsorship contract with you as its Admin. Sponsorship contracts enable you to setup sponsorship deals as well as their periodic or non periodic payments. Please read the documentation to learn more about Sponsorship contracts.',
+              'This will create a new Sponsorship contract with you as its Admin. Sponsorship contracts enable you to setup sponsorship deals as well as their periodic or non periodic payments. Please read the documentation to learn more about Sponsorship contracts.',
             )}
           </Text>
         </Box>

@@ -139,12 +139,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Mint Fee')} {`->`} {Number(pool?.mintFee ?? 0) / 100}
+          {t('Mint Fee')} {`->`} {Number(pool?.mintFee ?? 0) / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Burn Fee')} {`->`} {Number(pool?.burnFee ?? 0) / 100}
+          {t('Burn Fee')} {`->`} {Number(pool?.burnFee ?? 0) / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

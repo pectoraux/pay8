@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will update the bounty on this sponsorship contract. Bounties are necessary to prove your trustworthiness to users. If you haven't created one yet, go to Earn > Valuepools > Bounties and proceed to creating one.",
+              "This will update the bounty on this sponsorship contract. Bounties are necessary to prove your trustworthiness to users. If you haven't created one yet, go to Earn > Valuepools > Bounties and proceed to creating one.",
             )}
           </Text>
         </Box>

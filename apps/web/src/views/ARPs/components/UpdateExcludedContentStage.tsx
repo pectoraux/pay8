@@ -74,7 +74,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update excluded contents of this pool. Please read the documentation for more details.')}
+            {t('This will update excluded contents of this pool. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>

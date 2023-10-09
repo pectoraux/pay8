@@ -65,7 +65,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will register or unregister to the specified tag. Please read the documentation for more details.')}
+            {t(
+              'This will register or unregister to the specified tag. Please read the documentation for more details.',
+            )}
           </Text>
         </Box>
       </Grid>

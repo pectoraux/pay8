@@ -101,7 +101,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              "The will donate funds to the future collateral's fund for the specified channel. Each donation from this function as well as each sale of future collateral adds to the fund of the future collateral's channel. The more money there is in a channel's fund, the more future collaterals from that channel the contract is able to buy back and the more collaterals a channel's fund is able to buy back, the easier it is to find auditors willing to grant loans backed by collaterals from that channel.",
+              "This will donate funds to the future collateral's fund for the specified channel. Each donation from this function as well as each sale of future collateral adds to the fund of the future collateral's channel. The more money there is in a channel's fund, the more future collaterals from that channel the contract is able to buy back and the more collaterals a channel's fund is able to buy back, the easier it is to find auditors willing to grant loans backed by collaterals from that channel.",
             )}
           </Text>
         </Box>

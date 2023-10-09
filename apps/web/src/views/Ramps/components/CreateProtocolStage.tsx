@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -22,18 +22,34 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'The Leviathan token id enables the contract to recognize you as the owner of the token market. If you do not yet have a Leviathan token, please go to Mint > Leviathan, pick your favorite Leviathan and mint a token in it. Input that token id right here to attach it to the token market.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token ID (Optional)')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Leviathan Token ID (Optional)')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input your veNFT token id')}
+          placeholder={t('input your Leviathan token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -43,7 +59,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will create a new account in this ramp. Please read the documentation for more information.')}
+            {t(
+              'This will add a new token market to your ramp. Token markets enable you to process minting and burning operations for various tokens. For instance, the USD token market will enable you to mint/burn USD tokens for users. You can add token markets for most FIAT currencies. All available token markets for this ramp are listed in the bottom left section of the panel as soon as they are created.',
+            )}
           </Text>
         </Box>
       </Grid>

@@ -43,7 +43,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will update the badge on this account. Please read the documentation for more information.')}
+            {t(
+              "This will attach the specified badge to this token market. Badges are certificates delivered by auditors on the audit page (Earn > Auditors) and are used to create trust with users. You can have an auditor audit your operations with this specific token market and attach that auditor's audit badge to the token market with this function.",
+            )}
           </Text>
         </Box>
       </Grid>

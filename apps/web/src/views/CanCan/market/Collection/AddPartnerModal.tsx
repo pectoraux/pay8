@@ -197,7 +197,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will add the specified partner to your paywall. When a paywall partners with another one, all its content become available to subscribers of that paywall and vice versa. Check the price per minute listed above to compute the price of your partnership. Multiply the price per minute with the amount of minutes between now and the end date of your partnership.',
+              'This will add the specified partner to your paywall. When a paywall partners with another one, all its content become available to subscribers of that paywall and vice versa. Check the price per minute listed above to compute the price of your partnership. Multiply the price per minute with the amount of minutes between now and the end date of your partnership.',
             )}
           </Text>
         </Box>

@@ -60,7 +60,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleEasyMdeChange
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The will update the description of the specified valuepool. Please read the documentation for more information on each parameter',
+              'This will update the description of the specified valuepool. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

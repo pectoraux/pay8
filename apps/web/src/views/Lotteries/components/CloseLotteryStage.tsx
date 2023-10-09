@@ -54,7 +54,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('The will close the specified lottery. Please read the documentation for more details.')}
+            {t('This will close the specified lottery. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>
