@@ -28,7 +28,12 @@ import { FetchStatus } from 'config/constants/types'
 import { fetchStakesAsync } from 'state/stakemarket'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
+import {
+  getMarketTradesAddress,
+  getNftMarketTradesAddress,
+  getPaywallMarketTradesAddress,
+  getVeFromWorkspace,
+} from 'utils/addressHelpers'
 import { useERC20, useStakeMarketContract } from 'hooks/useContract'
 import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -40,6 +45,8 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { useApprovePool } from '../hooks/useApprove'
 import { GreyedOutContainer, Divider } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 
 interface SetPriceStageProps {
   currency?: any
@@ -85,7 +92,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
     waitingPeriod: '',
     startPayable: '',
     startReceivable: '',
-    requireUpfrontPayment: 0,
+    requireUpfrontPayment: 1,
     userTokenId: 0,
     identityTokenId: 0,
   })
@@ -118,9 +125,9 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
         [
           amountPayable.toString(),
           amountReceivable.toString(),
-          state.periodPayable,
-          state.periodReceivable,
-          state.waitingPeriod,
+          parseInt(state.periodPayable) * 60,
+          parseInt(state.periodReceivable) * 60,
+          parseInt(state.waitingPeriod) * 60,
           startPayable,
           startReceivable,
         ],
@@ -186,81 +193,91 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        'This sets the workspace of your stake or the workspace to which belongs the community that will vote on potential future litigations around this stake. If you pick Real Estate for instance, only users holding a Real Estate Leviathan token will be able to vote on any enventual litigations around your stake.',
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'This sets the marketplace of your stake. If you are creating this stake to make a purchase in the marketplace, input the address of that marketplace right here. The addresses of the marketplaces for subscriptions, NFTs and products/services are listed below. If your stake is not meant to make purchases on any marketplace, you can input your wallet address here.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t('This sets the ID of your product in case you are using the stake to make a purchase on the marketplace.')}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        "This is only relevant in case you are using the stake to make a purchase in the marketplace. Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This is mostly relevant in case your are using the stake to make a purchase in the marketplace. Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This sets the amount you will be receiving (periodically for periodic stakes and a one time payment for non periodic stakes) from the stake. In case you are making a purchase in the marketplace, that amount is 0. For other stakes that amount might not be depending on the purpose of the stake.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the amount you will be paying (periodically for periodic stakes and a one time payment for non periodic stakes) to other parties in the stake. In case you are making a purchase in the marketplace, that amount is the price of the item you are buying.',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the duration in minutes of each cycle of payment from the stake to you. If you do not receive payment from the stake or the stake is non periodic, just input 0',
       )}
     </Text>
   )
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the duration in minutes of each cycle of payment from you to the stake. If you do not issue payments to the stake or the stake is non periodic, just input 0',
       )}
     </Text>
   )
   const TooltipComponent10 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the wating period in minutes that separates a disagreement between parties on a stake and a litigation being created to resolve that disagreement. You should have at least 24 hours notice so set this parameter to at least 24 * 60 minutes unless you have strong reason to not want to.',
       )}
     </Text>
   )
   const TooltipComponent11 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the start date of the payment cycle from the contract to you. You should set this value even in the case of non periodic stakes. If this is not relevant to your stake, just leave this field empty.',
       )}
     </Text>
   )
   const TooltipComponent12 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the start date of the payment cycle from you to the contract. You should set this value even in the case of non periodic stakes. If this is not relevant to your stake, just leave this field empty.',
       )}
     </Text>
   )
   const TooltipComponent13 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets whether you want the stake market to retreive funds (the amount receivable) from your wallet when creating this stake.',
       )}
     </Text>
   )
@@ -402,7 +419,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
           <GreyedOutContainer>
             <Flex ref={targetRef3}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Media CID')}
+                {t('Product ID')}
               </Text>
               {tooltipVisible3 && tooltip3}
               <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -412,7 +429,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
               scale="sm"
               name="tokenId"
               value={state.tokenId}
-              placeholder={t('input media cid')}
+              placeholder={t('input product id')}
               onChange={handleChange}
             />
           </GreyedOutContainer>
@@ -487,7 +504,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
           <GreyedOutContainer>
             <Flex ref={targetRef8}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Period Payable')}
+                {t('Period Payable (in minutes)')}
               </Text>
               {tooltipVisible8 && tooltip8}
               <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -504,7 +521,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
           <GreyedOutContainer>
             <Flex ref={targetRef9}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Period Receivable')}
+                {t('Period Receivable (in minutes)')}
               </Text>
               {tooltipVisible9 && tooltip9}
               <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -521,7 +538,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
           <GreyedOutContainer>
             <Flex ref={targetRef10}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Waiting Period')}
+                {t('Waiting Period (in minutes)')}
               </Text>
               {tooltipVisible10 && tooltip10}
               <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -531,7 +548,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
               scale="sm"
               name="waitingPeriod"
               value={state.waitingPeriod}
-              placeholder={t('input period receivable')}
+              placeholder={t('input waiting period')}
               onChange={handleChange}
             />
           </GreyedOutContainer>
@@ -567,15 +584,8 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
           </GreyedOutContainer>
           <GreyedOutContainer>
             <StyledItemRow>
-              <Flex ref={targetRef13}>
-                <Text
-                  fontSize="12px"
-                  color="secondary"
-                  textTransform="uppercase"
-                  paddingTop="3px"
-                  paddingRight="50px"
-                  bold
-                >
+              <Flex ref={targetRef13} paddingRight="50px">
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
                   {t('Require Upfront Payment')}
                 </Text>
                 {tooltipVisible13 && tooltip13}
@@ -606,6 +616,24 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
                   'This will create a new stake in the market for you. Please read the documentation to learn more about the stake market.',
                 )}
           </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Product/Services Market Trades Contract Address')}
+          </Text>
+          <CopyAddress
+            title={truncateHash(getPaywallMarketTradesAddress(), 15, 15)}
+            account={getPaywallMarketTradesAddress()}
+          />
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Paywall/Subscriptions Market Trades Contract Address')}
+          </Text>
+          <CopyAddress
+            title={truncateHash(getNftMarketTradesAddress(), 15, 15)}
+            account={getNftMarketTradesAddress()}
+          />
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('NFT Market Trades Contract Address')}
+          </Text>
+          <CopyAddress title={truncateHash(getMarketTradesAddress(), 15, 15)} account={getMarketTradesAddress()} />
         </Box>
       </Grid>
       <Divider />

@@ -53,7 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will cancel the specified stake. Please read the documentation for more details.')}
+            {t('This will cancel/delete the specified stake.')}
           </Text>
         </Box>
       </Grid>

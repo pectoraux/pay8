@@ -58,7 +58,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.WITHDRAW]: t('Withdraw from Account'),
   [LockStage.MINT_NOTE]: t('Mint Transfer Note'),
   [LockStage.CLAIM_NOTE]: t('Claim Revenue from Note'),
-  [LockStage.UPDATE_STAKE]: t('Update Stake'),
+  [LockStage.UPDATE_STAKE]: t('Update Agreement'),
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
   [LockStage.UPDATE_TAX_CONTRACT]: t('Update Tax Contract'),
   [LockStage.UPDATE_BEFORE_LITIGATIONS]: t('Update Before Litigations'),
@@ -401,9 +401,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
           [
             amountPayable.toString(),
             amountReceivable.toString(),
-            state.periodPayable,
-            state.periodReceivable,
-            state.waitingPeriod,
+            parseInt(state.periodPayable) * 60,
+            parseInt(state.periodReceivable) * 60,
+            parseInt(state.waitingPeriod) * 60,
             startPayable,
             startReceivable,
           ],
@@ -455,7 +455,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
         )
       }
       if (stage === LockStage.CONFIRM_MINT_IOU) {
-        const args = [state.stakeId, state.defenderStakeId, state.start, state.tag]
+        const args = [state.stakeId, state.defenderStakeId, 0, state.tag]
         console.log('CONFIRM_MINT_IOU===============>', args)
         return callWithGasPrice(stakeMarketNoteContract, 'createIOU', args).catch((err) =>
           console.log('CONFIRM_MINT_IOU===============>', err),

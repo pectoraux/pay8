@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import { getMarketTradesAddress, getNftMarketTradesAddress, getPaywallMarketTradesAddress } from 'utils/addressHelpers'
 
 interface SetPriceStageProps {
   state: any
@@ -25,21 +28,21 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This sets the amount you will be receiving (periodically for periodic stakes and a one time payment for non periodic stakes) from the stake. In case you are making a purchase in the marketplace, that amount is 0. For other stakes that amount might not be depending on the purpose of the stake.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the amount you will be paying (periodically for periodic stakes and a one time payment for non periodic stakes) to other parties in the stake. In case you are making a purchase in the marketplace, that amount is the price of the item you are buying.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the marketplace of your stake. If you are creating this stake to make a purchase in the marketplace, input the address of that marketplace right here. The addresses of the marketplaces for subscriptions, NFTs and products/services are listed below. If your stake is not meant to make purchases on any marketplace, you can input your wallet address here.',
       )}
     </Text>
   )
@@ -124,9 +127,27 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update your stake info before litigations. Please read the documentation for more information.',
+              'This will update your stake info before litigations. Input in the amount payable field how much you would like your partner(s) to pay you and in the amount receivable field how much you agree to pay your partner(s). Make sure you update these parameters before the waiting period of your stake is expired and a litigation is created.',
             )}
           </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Product/Services Market Trades Contract Address')}
+          </Text>
+          <CopyAddress
+            title={truncateHash(getPaywallMarketTradesAddress(), 15, 15)}
+            account={getPaywallMarketTradesAddress()}
+          />
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Paywall/Subscriptions Market Trades Contract Address')}
+          </Text>
+          <CopyAddress
+            title={truncateHash(getNftMarketTradesAddress(), 15, 15)}
+            account={getNftMarketTradesAddress()}
+          />
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('NFT Market Trades Contract Address')}
+          </Text>
+          <CopyAddress title={truncateHash(getMarketTradesAddress(), 15, 15)} account={getMarketTradesAddress()} />
         </Box>
       </Grid>
       <Divider />

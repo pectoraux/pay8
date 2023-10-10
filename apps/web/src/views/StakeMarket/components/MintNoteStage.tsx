@@ -33,18 +33,10 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This sets the ID of the stake from which you want to transfer future payments')}</Text>
   )
   const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This sets the number of future payment cycles you are willing to transfer to the note')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -101,7 +93,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will create a note for the specified stake. Please read the documentation for more details.')}
+            {t(
+              'This will create a note for the specified stake. How do notes work? They are mechanism through which a stake owner can sell his/her right to future rounds of earnings in order to access almost the totality of that round of earnings today. Once you have purchased the note and it becomes due, you can use withdraw the round of earnings of the note you purchased once it becomes due. You will actually be making some interest since you will not buy the note at the full value of the earnings it will unlock (95% or so for instance)',
+            )}
           </Text>
         </Box>
       </Grid>

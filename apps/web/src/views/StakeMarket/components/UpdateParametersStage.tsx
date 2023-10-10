@@ -45,46 +45,48 @@ const SetPriceStage: React.FC<any> = ({
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        'This attaches your profile ID to the stake. Attaching your profile can be useful in case users want to find more about you to gauge how trustworthy you are. It is also required in case you want to change the address of the stake owner.',
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'Use this parameter to attach a bounty to your stake. This can help create more trust. This can also be useful in case of stakes that use NFTs as collaterals for loans, the loan can be processed through the stake whereas the bounty id specified here, can lock the NFT collateral that guarantees the loan.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t('This sets a lower bound on the amount payable parameter of any stake that applies to the current one.')}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets the percentage of the stake balance that is paid to the voting community in case a litigation is submitted to it involving this stake.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
-    <Text>
-      {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
-      )}
-    </Text>
+    <Text>{t('This sets a requirement of having an attached bounty, on stakes applying for this stake.')}</Text>
   )
   const TooltipComponent6 = () => (
-    <Text>
-      {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
-      )}
-    </Text>
+    <Text>{t('This sets a requirement of having an attached profile, on stakes applying for this stake.')}</Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the terms of your stake which is basically a description of the purpose of your stake and the type of users you would like to receive applications from.',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Use this parameter to update relevant locations tags on your stake in order to enable users to discover your stake much more easily using location filters.',
       )}
     </Text>
   )
@@ -221,8 +223,8 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef5}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="5px" paddingTop="10px" bold>
+          <Flex ref={targetRef5} paddingRight="5px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="10px" bold>
               {t('Is Bounty Required')}
             </Text>
             {tooltipVisible5 && tooltip5}
@@ -241,8 +243,8 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef6}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="5px" paddingTop="10px" bold>
+          <Flex ref={targetRef6} paddingRight="5px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="10px" bold>
               {t('Is Profile Required')}
             </Text>
             {tooltipVisible6 && tooltip6}
@@ -276,7 +278,7 @@ const SetPriceStage: React.FC<any> = ({
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
       </Flex>
-      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+      <Grid gridTemplateColumns="32px 1fr" p="16px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>

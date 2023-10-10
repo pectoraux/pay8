@@ -54,7 +54,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will transfer all revenue currently due to this note to your account. Please read the documentation for more details.',
+              'This will transfer all revenue currently due to this note to your account. Notes are mechanisms through which a stake owner can sell his/her rights to a future round of revenue from stake in order to access the revenues faster. A note unlocking a future round of revenue of 100 tokens can be sold for 95 tokens today for instance.',
             )}
           </Text>
         </Box>

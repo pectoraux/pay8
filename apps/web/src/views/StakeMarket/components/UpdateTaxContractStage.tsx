@@ -53,7 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update your tax contract for this stake. Please read the documentation for more information on each parameter',
+              'This will update your tax contract for this stake. This is useful if you have a tax contract set up as it will notify your tax contract of any transactions made on your stake.',
             )}
           </Text>
         </Box>

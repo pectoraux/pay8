@@ -34,20 +34,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('Input your stake ID as the attacker')}</Text>
+  const TooltipComponent2 = () => <Text>{t('Input the stake ID of the partner who you are attacking')}</Text>
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -104,7 +92,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will start a timer at the end of which you can create a litigation. Please read the documentation for more information on each parameter',
+              'This will start a timer at the end of which you can create a litigation. The timer is meant to leave time for the partner to update his amount payable/receivable before the start of the litigation. Make sure you have updated yours as well by going to the UPDATE BEFORE LITIGATIONS option.',
             )}
           </Text>
         </Box>

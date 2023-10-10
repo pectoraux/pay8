@@ -1,5 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  ErrorIcon,
+  ButtonMenu,
+  ButtonMenuItem,
+  HelpIcon,
+  useTooltip,
+} from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
@@ -39,6 +50,18 @@ const SetPriceStage: React.FC<any> = ({
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Use this parameter to specify whether you would like to withdraw all your funds from the stake and stop being part of the stake.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
@@ -54,9 +77,13 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="5px" paddingTop="10px" bold>
-          {t('Remove yourself as partner')}
-        </Text>
+        <Flex ref={targetRef} paddingRight="5px">
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="10px" bold>
+            {t('Remove yourself as partner')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <StyledItemRow>
           <ButtonMenu
             scale="sm"
@@ -76,7 +103,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will withdraw funds from this stake or pay your partner in the marketplace. Please read the documentation for more details.',
+              'This will withdraw funds from this stake. In case you are using the stake to make a purchase in the marketplace, it will send funds to the marketplace to make the purchase.',
             )}
           </Text>
         </Box>

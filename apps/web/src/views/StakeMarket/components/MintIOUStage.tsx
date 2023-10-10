@@ -33,18 +33,16 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>{t('This sets your stake ID. You can only deliver IOUs to stakes that you have partnered with.')}</Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
-    </Text>
+  const TooltipComponent2 = () => <Text>{t('This sets the stake ID of the IOU recipient.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>{t("This specifies the position of recipient's stake ID in your list of stake partners.")}</Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets the reason for the IOU. Specify here why you are delivering this IOU to the specified stake owner. It can be any testament for services rendered or action rendered.',
       )}
     </Text>
   )
@@ -91,7 +89,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="stakeId"
           value={state.stakeId}
-          placeholder={t('input id of recipient stake')}
+          placeholder={t('input id of your stake')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -112,7 +110,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Partner Array Start Index')}
@@ -128,7 +126,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           placeholder={t('input partner array start index')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -152,7 +150,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will create an IOU for the specified stake. Please read the documentation for more details.')}
+            {t(
+              "This will create an IOU for the specified stake. IOU notes are a bit different from normal notes in that, they don't transfer future revenue; they are more testaments of some action performed by their owners.",
+            )}
           </Text>
         </Box>
       </Grid>

@@ -24,25 +24,37 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        'This sets the amount you will be receiving (periodically for periodic stakes and a one time payment for non periodic stakes) from the stake. In case you are making a purchase in the marketplace, that amount is 0. For other stakes that amount might not be depending on the purpose of the stake.',
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'This sets the amount you will be paying (periodically for periodic stakes and a one time payment for non periodic stakes) to other parties in the stake. In case you are making a purchase in the marketplace, that amount is the price of the item you are buying.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'This sets the duration in minutes of each cycle of payment from the stake to you. If you do not receive payment from the stake or the stake is non periodic, just input 0',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets the duration in minutes of each cycle of payment from you to the stake. If you do not issue payments to the stake or the stake is non periodic, just input 0',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This sets the wating period in minutes that separates a disagreement between parties on a stake and a litigation being created to resolve that disagreement. You should have at least 24 hours notice so set this parameter to at least 24 * 60 minutes unless you have strong reason to not want to.',
       )}
     </Text>
   )
@@ -56,21 +68,21 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Use this parameter to set a deadline on your application. After the deadline, the bounty you are applying to will not be able to accept your application anymore. This useful if you want to put a time component on your application and render it unavailable in case the owner of the stake you are applying to takes too long to accept the application.',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the start date of the payment cycle from the contract to you. You should set this value even in the case of non periodic stakes. If this is not relevant to your stake, just leave this field empty.',
       )}
     </Text>
   )
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the start date of the payment cycle from you to the contract. You should set this value even in the case of non periodic stakes. If this is not relevant to your stake, just leave this field empty.',
       )}
     </Text>
   )
@@ -182,7 +194,7 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Period Payable')}
+            {t('Period Payable (in minutes)')}
           </Text>
           {tooltipVisible3 && tooltip3}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -199,7 +211,7 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Period Receivable')}
+            {t('Period Receivable (in minutes)')}
           </Text>
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -216,7 +228,7 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
       <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Waiting Period')}
+            {t('Waiting Period (in minutes)')}
           </Text>
           {tooltipVisible5 && tooltip5}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -301,7 +313,7 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create an application to the current stake. Please read the documentation to learn more about the stake market.',
+              'This will create an application to the current stake. Please read the description of each parameter for more details.',
             )}
           </Text>
         </Box>
