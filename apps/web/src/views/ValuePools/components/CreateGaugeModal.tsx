@@ -60,8 +60,9 @@ import AddCreditStage from './AddCreditStage'
 import UpdateUserIDProofStage from './UpdateUserIDProofStage'
 import UpdateVotingParametersStage from './UpdateVotingParametersStage'
 import UpdateVotingBlacklistStage from './UpdateVotingBlacklistStage'
+import LocationStage from './LocationStage'
 import NotifyPaymentStage from './NotifyPaymentStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
+import SwitchPoolStage from './SwitchPoolStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -72,6 +73,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.REIMBURSE]: t('Reimburse Loan'),
   [LockStage.MERGE]: t('Merge IDs'),
   [LockStage.ADD_CREDIT]: t('Add Credits'),
+  [LockStage.SWITCH_POOL]: t('Switch to Valuepool/Riskpool'),
   [LockStage.CREATE_LOCK]: t('Create Account'),
   [LockStage.HISTORY]: t('Transactions History'),
   [LockStage.SPONSORS]: t('SPONSORS'),
@@ -463,6 +465,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_SWITCH_POOL:
+        setStage(LockStage.SWITCH_POOL)
+        break
+      case LockStage.SWITCH_POOL:
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.UPDATE_VP:
@@ -504,6 +509,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         break
       case LockStage.ADD_CREDIT:
         setStage(LockStage.CONFIRM_ADD_CREDIT)
+        break
+      case LockStage.SWITCH_POOL:
+        setStage(LockStage.CONFIRM_SWITCH_POOL)
         break
       case LockStage.REIMBURSE_BNPL:
         setStage(LockStage.CONFIRM_REIMBURSE_BNPL)
@@ -827,8 +835,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
       if (stage === LockStage.CONFIRM_UPDATE_VOTING_PARAMETERS) {
         const args = [
           state.vava,
-          state.period,
-          state.minPeriod,
+          parseInt(state.period) * 60,
+          parseInt(state.minPeriod) * 60,
           parseInt(state.minDifference) * 100,
           state.userTokenId,
           state.minBountyRequired,
@@ -1022,7 +1030,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.UPDATE_VOTING_BLACKLIST)}>
                 {t('UPDATE VOTING BLACKLIST')}
               </Button>
-              <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_SWITCH_POOL)}>
+              <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.SWITCH_POOL)}>
                 {t('SWITCH POOL')}
               </Button>
               {/* <Button variant="tertiary" mb="8px" onClick={()=> setStage(LockStage.UPDATE_COLLECTION_ID) }>
@@ -1217,6 +1225,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           continueToNextStage={continueToNextStage}
         />
       )}
+      {stage === LockStage.SWITCH_POOL && <SwitchPoolStage continueToNextStage={continueToNextStage} />}
       {stage === LockStage.UPDATE_BLACKLISTED_MERCHANTS && (
         <UpdateBlacklistedStage
           state={state}

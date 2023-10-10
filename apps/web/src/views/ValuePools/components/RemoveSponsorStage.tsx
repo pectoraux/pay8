@@ -53,7 +53,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will remove the sponsor card from the Valuepool. Please read the documentation for more information on each parameter',
+              'This will remove the sponsor card from the Valuepool. In case of disagreement with a sponsor or else, the owner of the Valuepool has the ability through this function to remove that sponsor from the Valuepool.',
             )}
           </Text>
         </Box>

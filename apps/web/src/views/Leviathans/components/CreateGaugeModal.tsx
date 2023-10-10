@@ -61,7 +61,7 @@ import UpdateUserIDProofStage from './UpdateUserIDProofStage'
 import UpdateVotingParametersStage from './UpdateVotingParametersStage'
 import UpdateVotingBlacklistStage from './UpdateVotingBlacklistStage'
 import NotifyPaymentStage from './NotifyPaymentStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
+import LocationStage from './LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),

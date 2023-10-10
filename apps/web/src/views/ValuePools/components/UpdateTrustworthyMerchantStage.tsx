@@ -80,7 +80,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update trustworthy merchants for the specified valuepool. Please read the documentation for more information on each parameter',
+              'This will update trustworthy merchant auditors for the specified valuepool. If a merchant auditor is set as trustworthy, the Valuepool will consider all identity tokens delivered to a merchant by such an auditor as trustworthy.',
             )}
           </Text>
         </Box>

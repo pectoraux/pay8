@@ -68,14 +68,14 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Content Name')}
+          {t('Content Type')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="contentType"
           value={state.contentType}
-          placeholder={t('input content to exclude')}
+          placeholder={t('input content type to exclude')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -101,7 +101,9 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update excluded contents of this valuepool. Please read the documentation for more details.')}
+            {t(
+              "This will exclude a specific content type from being given ad space on your Valuepool. For instance if you don't want sponsors that are in the NSFW workspce to buy ad spots in your Valuepool, you can exclude the NSFW content type. Please read the documentation for a complete list of content types so that you can exclude the ones you don't want to sell ad spots in.",
+            )}
           </Text>
         </Box>
       </Grid>

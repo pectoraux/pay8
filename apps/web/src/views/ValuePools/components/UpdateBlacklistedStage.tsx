@@ -101,7 +101,9 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update excluded contents of this valuepool. Please read the documentation for more details.')}
+            {t(
+              'This will add/remove the specified merchant address to/from the specified Valuepool. This can help you prevent users from using your Valuepool to make purchases with merchant that are fraudulous.',
+            )}
           </Text>
         </Box>
       </Grid>

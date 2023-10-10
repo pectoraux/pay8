@@ -6,16 +6,18 @@ interface RemoveStageProps {
   continueToNextStage: () => void
 }
 
-const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
+const SwitchPoolStage: React.FC<any> = ({ continueToNextStage }) => {
   const { t } = useTranslation()
   return (
     <>
       <Box p="16px" maxWidth="360px">
         <Text fontSize="24px" bold>
-          {t('Delete Valuepool')}
+          {t('Switch to/from a Valuepool')}
         </Text>
         <Text mt="24px" color="textSubtle">
-          {t('Use this to delete your Valuepool.')}
+          {t(
+            'Use this to switch a Valuepool to a Riskpool or a Riskpool to a Valuepool. This is only possible if you have each a total amount of tokens in your Valuepool equals or greater than the minimum you need to switch. The minimum needed to switch is set by the owner when deploying the Valuepool.',
+          )}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}
@@ -31,4 +33,4 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
   )
 }
 
-export default RemoveStage
+export default SwitchPoolStage

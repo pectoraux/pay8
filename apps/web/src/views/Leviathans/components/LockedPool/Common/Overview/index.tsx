@@ -80,7 +80,9 @@ const Overview: React.FC<any> = ({
         <Box mt="16px" maxWidth="370px">
           <Message variant="warning">
             <MessageText>
-              {t('You will be able to withdraw the staked token and profit only when the staking position is unlocked')}
+              {t(
+                'This will mint a new token for you in this Valuepool or add funds to a previously minted token. Enter the amount to add as well as the lock duration.',
+              )}
             </MessageText>
           </Message>
         </Box>

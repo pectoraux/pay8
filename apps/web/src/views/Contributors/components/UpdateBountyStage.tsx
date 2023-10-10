@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ tokenId, setTokenId, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will attach a bounty to your gauge. You can only withdraw up to the amount in your bounty each week. Please read the documentation for more details.',
+              'This will attach a bounty to your gauge. You can only withdraw up to the balance of your bounty each week.',
             )}
           </Text>
         </Box>

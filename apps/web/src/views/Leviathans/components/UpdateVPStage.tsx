@@ -45,60 +45,66 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        'This sets the maximum number of tokens a single account can mint, leave it at 0 if you want that number to be infinite.',
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'Queues in a Valuepool are the backlog of users requesting funds from the Valuepool. That queue is reinitialised every period of time. This parameter sets the duration of that period of time.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t('This parameter sets the share of the fund that is rewarded to the treasury. It is in percentages.')}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets a limit on the previous amount and is gurantee enforced by the contract that the value of the treasury share will never exceed this amount. Once set, it can only be updated to a lesser value, never a higher one.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This sets a limit on the maximum percentage of the Valuepool that can be withdrawn. If that number is 50% for instance then only 50% of the Valuepool will be withdrawable by users.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
-    <Text>
-      {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
-      )}
-    </Text>
+    <Text>{t('This parameter sets a lower bound on the amount necessary to sponsor the Valuepool.')}</Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets an interest rate on loans made by the Valuepool. If the lender factor is 110% for instance, that implies an interest rate on loans of 10%',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets a lower bound on the percentile in which a sponsor needs to be to shown on the Valuepool's list of sponsors.",
       )}
     </Text>
   )
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets whether the Valuepool functions as a BNPL fund or not. In case it does, users will be required to reimburse the funds they withdraw before being able to withdraw additional funds in the future.',
       )}
     </Text>
   )
   const TooltipComponent10 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "In case your Valuepool functions as a BNPL fund, this sets the amount after which users cannot withdraw funds from the Valuepool anymore unless they reimburse the funds they've previously withdrawn.",
       )}
     </Text>
   )
@@ -319,8 +325,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef9}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef9} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               BNPL
             </Text>
             {tooltipVisible9 && tooltip9}
@@ -361,7 +367,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update parameters of your Valuepool. Please read the documentation for more information on each parameter',
+              'This will update parameters of your Valuepool. Please read the description of each parameter for more details.',
             )}
           </Text>
         </Box>

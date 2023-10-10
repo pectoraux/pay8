@@ -65,7 +65,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will process the loan of the specified ARP. Please read the documentation for more information')}
+            {t(
+              "This will process the loan of the specified ARP. Valuepools can lend tokens to auditors operating ARPs, this function enables you to process a loan once it has been approved by the Valuepool's members through votes.",
+            )}
           </Text>
         </Box>
       </Grid>

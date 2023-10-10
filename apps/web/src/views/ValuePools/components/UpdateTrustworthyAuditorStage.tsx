@@ -49,14 +49,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Merchant address')}
+          {t('Member Auditor address')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="taxAddress"
           value={state.taxAddress}
-          placeholder={t('input merchant address')}
+          placeholder={t('input auditor address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -80,7 +80,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update trustworthy merchants for the specified valuepool. Please read the documentation for more information on each parameter',
+              'This will update trustworthy member auditors for the specified valuepool. If an auditor is set as trustworthy, the Valuepool will consider all identity tokens delivered to a member by such an auditor as trustworthy.',
             )}
           </Text>
         </Box>

@@ -34,21 +34,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        "Input the address of your sponsor contract. Before you run this function, you first need to create an account for the current Valuepool in your sponsor contract. Make sure you set an amount to pay the Valuepool in your sponsor contract bigger than the minimum required for this Valuepool which is available in the Valuepool's panel.",
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
+      {t("Once you've created an account for this Valuepool in your sponsor contract, you can add its ID right here.")}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'In case you only want to show you ad to users in specific geo location, you can input the plus code of that location right here. Please read the documentation for more details about geo tags.',
       )}
     </Text>
   )
@@ -133,7 +131,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add the sponsor card to the Valuepool. Please read the documentation for more information on each parameter',
+              'This will add the sponsor card to the Valuepool. Once you add your sponsor card, you can start advertising on the Valuepool.',
             )}
           </Text>
         </Box>

@@ -43,22 +43,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
   const TooltipComponent2 = () => (
     <Text>
       {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
     </Text>
   )
   const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
-  const TooltipComponent4 = () => (
-    <Text>
-      {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
-      )}
-    </Text>
-  )
+  const TooltipComponent4 = () => <Text>{t('This sets the options of the item you are purchasing.')}</Text>
   const TooltipComponent5 = () => (
     <Text>
       {t(
@@ -76,28 +67,12 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "Identity tokens are used to confirm requirements merchants of an item need to fulfill for their items to be purchased by the Valuepool. If your Valuepool doesn't have any requirements on merchants, you can just input 0. If it does, make sure you get the identity token id of your merchant and input it in this field.",
       )}
     </Text>
   )
-  const TooltipComponent8 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent9 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
+  const TooltipComponent8 = () => <Text>{t('Input the id of the token from the Valuepool.')}</Text>
+  const TooltipComponent9 = () => <Text>{t('Input the price of the item you are trying to purchase.')}</Text>
   const {
     targetRef: targetRef2,
     tooltip: tooltip2,
@@ -166,13 +141,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   return (
     <>
       <GreyedOutContainer>
-        <Flex ref={targetRef}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Valuepool Address')}
-          </Text>
-          {tooltipVisible && tooltip}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Valuepool Address')}
+        </Text>
         <Input
           type="text"
           scale="sm"
@@ -185,7 +156,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Collection Address')}
+            {t('Channel Owner Address')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -304,7 +275,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef9}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount receivable')}
+            {t('Product Price')}
           </Text>
           {tooltipVisible9 && tooltip9}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -326,7 +297,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           <Divider />
           <Text small color="textSubtle">
             {t(
-              'This checks your rank of withdrawal from the valuepool. Please read the documentation for more information on each parameter',
+              'This will randomly pick a rank for you in the withdrawal queue. Please read the description of each parameter for more details.',
             )}
           </Text>
         </Box>

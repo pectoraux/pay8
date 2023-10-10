@@ -46,6 +46,7 @@ export const stagesWithConfirmButton = [
 export const stagesWithBackButton = [
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
+  LockStage.SWITCH_POOL,
   LockStage.CONFIRM_SWITCH_POOL,
   LockStage.UPDATE_VOTING_PARAMETERS,
   LockStage.UPDATE_VOTING_BLACKLIST,

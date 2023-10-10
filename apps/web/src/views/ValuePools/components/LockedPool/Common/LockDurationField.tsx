@@ -23,14 +23,14 @@ const LockDurationField: React.FC<any> = ({
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Identity tokens are used to confirm requirements users need to fulfill to become Valuepool members. If your Valuepool does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the Valuepool to deliver you an identity token and input its ID in this field.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Pick the duration of the lock period. Once locked, you will not be able to withdraw the totality of the token before the end of the lock period. Please refer to your Valuepool recommendations for its recommended lock period. Some Valuepools that are riskpool do not enable you to withdraw your tokens ever and function more like insurances. If the Valuepool enables you to withdraw you locked tokens, the amount you can withdraw at any moment t1 is computed as this with t0 being the end of lock time: (locked_amount * t1 * 100 / t0)',
       )}
     </Text>
   )

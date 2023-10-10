@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the owner address of the specified contract. Please read the documentation for more information.',
+              'This will update the owner address of this Valuepool. Here is a list of activities the owner is able to perform: remove sponsors, update parameters/merchant & member identity requirements, delete the Valuepool, update its marketplace, excluded ad content, update its geo-location, update its voting parameters/blacklist and withdraw treasury money from your Valuepool.',
             )}
           </Text>
         </Box>

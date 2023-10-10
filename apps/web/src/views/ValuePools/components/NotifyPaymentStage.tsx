@@ -52,7 +52,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will process payment for this sponsor. Please read the documentation for more information')}
+            {t(
+              "This will process payment for this sponsor. Valuepools make money by selling ad spots to sponsor. This function enables you to instantiate payments to the valuepool from an existing sponsor, input the sponsor's contract address and validate the form.",
+            )}
           </Text>
         </Box>
       </Grid>

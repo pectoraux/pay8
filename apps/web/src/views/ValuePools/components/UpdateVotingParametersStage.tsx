@@ -45,58 +45,55 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
-  const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'This sets the duration of each voting window in minutes. If you set 7 days (7 * 24 * 6 minutes) for instance, each voting session will last 7 days before it can be closed.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'This sets the minimum percentage of the total votes a winning proposal needs to get to be considered valid. If you set it to 50% for instance and a proposal made by a Valuepool member gets 50 positive votes and 50 negative votes, it is considered a successful proposal since it managed to get the minimum vote percentage. If that percentage was 51%, then the proposal would be considered unsuccessful.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        "This sets the channel ID of the Valuepool. This is useful in case you want to only allow certain users to vote, it will use the same requirements as those set for users allowed to register to the Valuepool's channel. Basically if you want to prevent users below a certain age to vote, set that requirements on your channel for user memberships then update the Valuepool's channel to be your channel and that's it, only users above a certain age would be able to vote in your Valuepool.",
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This sets a lower bound on the total amount of tokens, users need to have locked in a Valuepool to be elligible to submit proposals on that Valuepool.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This sets a lower bound in minutes, on the lock duration of the bounties of ARPs where this Valuepool is allowed to send funds. Valuepools can decide through votes to   send funds to operators of various ARPs in order for them to put the funds to work through investments, laons, etc. This parameter can be used to make sure that all ARPs that this Valuepool sends money to have a collateral in place in the trustbounties contract and that the collateral is locked there for a certain minimum time.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This parameter is relevant in the same context as the previous one and sets a lower bound on the balance of the bounty that the ARPs this Valuepool sends funds to, must have .',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the voting scheme to use for this Valuepool. If you select Percentile, then the weight of each vote will be the percentile of the voter in the Valuepool (that value is available for each user on his/her Valuepool NFT); if you select Voting Power then each vote weight will be the user's voting power in the Valuepool (also available of the NFT) and lastly if you select unique, then each user's vote counts as 1. The last option will require each voter to have a unique profile which is the only way it can make sure each user only counts for one vote.",
       )}
     </Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
-    targetRef: targetRef2,
-    tooltip: tooltip2,
-    tooltipVisible: tooltipVisible2,
-  } = useTooltip(<TooltipComponent2 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
@@ -167,7 +164,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Period')}
+            {t('Voting Window (in minutes)')}
           </Text>
           {tooltipVisible && tooltip}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -177,31 +174,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="period"
           value={state.period}
-          placeholder={t('input period')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Flex ref={targetRef2}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Product ID')}
-          </Text>
-          {tooltipVisible2 && tooltip2}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="item"
-          value={state.item}
-          placeholder={t('input product id')}
+          placeholder={t('input your voting window')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Minimum Difference')}
+            {t('Minimum Valid Vote Percentage')}(%)
           </Text>
           {tooltipVisible3 && tooltip3}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -211,7 +191,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="minDifference"
           value={state.minDifference}
-          placeholder={t('input minimum difference')}
+          placeholder={t('input minimum valid vote share')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -252,7 +232,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef6}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Minimum Period')}
+            {t('Minimum Period (in minutes)')}
           </Text>
           {tooltipVisible6 && tooltip6}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -285,8 +265,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef8}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef8} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Voting Option')}
             </Text>
             {tooltipVisible8 && tooltip8}
