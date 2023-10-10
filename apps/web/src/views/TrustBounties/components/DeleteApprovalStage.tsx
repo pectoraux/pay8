@@ -56,7 +56,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will remove the approved amount from your previous approved amount. Please read the documentation for more information on each parameter',
+              'This will remove the approved amount from your previous approved amount. You can only delete an approval when it is passed its expiration date.',
             )}
           </Text>
         </Box>

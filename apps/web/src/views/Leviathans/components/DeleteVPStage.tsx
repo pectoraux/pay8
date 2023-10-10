@@ -12,10 +12,10 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
     <>
       <Box p="16px" maxWidth="360px">
         <Text fontSize="24px" bold>
-          {t('Delete Value Pool')}
+          {t('Delete Valuepool')}
         </Text>
         <Text mt="24px" color="textSubtle">
-          {t('Use this to delete this Value Pool.')}
+          {t('Use this to delete your Valuepool.')}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}

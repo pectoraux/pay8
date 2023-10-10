@@ -2,6 +2,9 @@ import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import { getMarketTradesAddress, getNftMarketTradesAddress, getPaywallMarketTradesAddress } from 'utils/addressHelpers'
 
 interface SetPriceStageProps {
   state: any
@@ -22,24 +25,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This is the address of the contract that holds the recurring balance of this bounty. Input the market trades contract with a recurring balance for the channel of this bounty to claim that balance to the bounties' contract.",
       )}
     </Text>
   )
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
   const {
     targetRef: targetRef2,
     tooltip: tooltip2,
@@ -52,13 +44,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   return (
     <>
       <GreyedOutContainer>
-        <Flex ref={targetRef}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Bounty ID')}
-          </Text>
-          {tooltipVisible && tooltip}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Bounty ID')}
+        </Text>
         <Input
           type="text"
           scale="sm"
@@ -92,9 +80,27 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add recurring balance to the specified bounty. Please read the documentation for more information.',
+              'This is only relevant in the context of recurring bounties and will transfer funds from the marketplace into the current bounty. The funds transferred are fees taken from sales in the marketplace made by the owner of the bounty.',
             )}
           </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Item Market Trades Contract Address')}
+          </Text>
+          <CopyAddress
+            title={truncateHash(getPaywallMarketTradesAddress(), 15, 15)}
+            account={getPaywallMarketTradesAddress()}
+          />
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Paywall Market Trades Contract Address')}
+          </Text>
+          <CopyAddress
+            title={truncateHash(getNftMarketTradesAddress(), 15, 15)}
+            account={getNftMarketTradesAddress()}
+          />
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('NFT Market Trades Contract Address')}
+          </Text>
+          <CopyAddress title={truncateHash(getMarketTradesAddress(), 15, 15)} account={getMarketTradesAddress()} />
         </Box>
       </Grid>
       <Divider />

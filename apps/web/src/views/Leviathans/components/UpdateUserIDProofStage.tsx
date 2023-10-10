@@ -45,42 +45,42 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the minimum color a members' auditors must have for members to be able to make purchases  using this Valuepool.",
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets a required identity to check for on members allowed to make purchases using your Valuepool. If you want to require a minimum age for the member for instance, you can set this parameter to testify_age_gte and set the actual value in the field below.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the actual value the previous parameter must verify. For instance is the previous parameter tests for age greater than or equals (testify_age_gte), this parameter can be 18 if you're willing to require members allowed to use the Valuepool for purchases to have an age greathan or equals to 18. Please check the documentation for more information on identity tokens.",
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This parameter makes sure only members with unique profiles are allowed to use the Valuepool to make purchases or withdraw funds from it.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets whether to only accept a member's identity token as valid if it delivered by an auditor who is a data keeper. Data keepers are auditors that keep the data that they create for users. This can be useful for compliance reasons for some types of businesses.",
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets whether to only trust members' auditors that you have inputted manually as trustworthy or to also trust those with the minimum color defined above. To manually input auditors as trustworthy, go to the main menu and select the option UPDATE TRUSTWORTHY AUDITORS",
       )}
     </Text>
   )

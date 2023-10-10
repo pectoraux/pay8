@@ -15,6 +15,9 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
+import { getTrustBountiesAddress } from 'utils/addressHelpers'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 
 interface SetPriceStageProps {
   state: any
@@ -39,31 +42,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'Set this parameter to the address of the trustbounty contract which you can find below if you will be providing the tokens to your bounty from your wallet, otherwise input the address of the Valuepool contract where the funds you want to add are locked.',
       )}
     </Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
-      )}
-    </Text>
-  )
+  const TooltipComponent2 = () => <Text>{t("This set the amount of tokens to add to the bounty's balance.")}</Text>
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'If you are adding tokens currently locked in a Valuepool, input the id of your Valuepool token right here otherwise just input 0.',
       )}
     </Text>
   )
-  const TooltipComponent4 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent4 = () => <Text>{t('Specify whether you are locking native tokens or non native tokens')}</Text>
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -148,8 +139,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer style={{ paddingTop: '50px' }}>
         <StyledItemRow>
-          <Flex ref={targetRef4}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef4} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Picked Native Coin ?')}
             </Text>
             {tooltipVisible4 && tooltip4}
@@ -173,9 +164,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add a new balance to your bounty. Please read the documentation for more information on each parameter',
+              "This will add tokens into your bounty's balance. The bigger the balance of your bounty, the more trustworthy you are to people.",
             )}
           </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Trustbounty Contract Address')}
+          </Text>
+          <CopyAddress title={truncateHash(getTrustBountiesAddress(), 15, 15)} account={getTrustBountiesAddress()} />
         </Box>
       </Grid>
       <Divider />

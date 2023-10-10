@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the owner address of the specified bounty. Please read the documentation for more information.',
+              'This will update the owner address of the specified bounty to the address of the currently connected wallet. This only works if you had created a profile prior to creating the current bounty as it uses your profile id to recognise that you are the same person that created this bounty.',
             )}
           </Text>
         </Box>

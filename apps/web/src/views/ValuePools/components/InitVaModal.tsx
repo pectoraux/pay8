@@ -136,47 +136,37 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
-    </Text>
-  )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent = () => <Text>{t('This sets the name of the NFT token of your Valuepool.')}</Text>
+  const TooltipComponent2 = () => <Text>{t('This sets the symbol of the NFT token of your Valuepool.')}</Text>
+  const TooltipComponent3 = () => <Text>{t('This sets the decimal value of the NFT token of your Valuepool.')}</Text>
   const TooltipComponent4 = () => (
-    <Text>
-      {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
-      )}
-    </Text>
+    <Text>{t('This puts an upper bound on the total amount of tokens that can be locked in this Valuepool.')}</Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        "This sets the minimum amount of tokens that need to be locked in the Valuepool for its admin to be able to turn it into a Riskpool. If you don't plan to ever turn your Valuepool into a Riskpool, you should set its value to a very high number.",
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This sets the goal the Valuepool is trying to reach in terms of total tokens locked. It is used also to compute the percentile of each token.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets a lower bound on the amount users have to lock to mint a token in the Valuepool. If you do not plan to have a minimum amount, you can just set this parameter to 0.',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Set this parameter to yes if you want your users to be able to withdraw funds from your Valuepool before their lock duration is passed. If set to Yes, the amount users will be able to withdraw from the Valuepool at any moment t1 in time is: amount_locked * 100 * t1 / end_of_lock_time',
       )}
     </Text>
   )
@@ -395,7 +385,7 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will set the name, symbol and decimals of your Va')}
+            {t('This will set the name, symbol and decimals of your Valuepool token')}
           </Text>
         </Box>
       </Grid>

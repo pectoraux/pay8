@@ -18,6 +18,8 @@ import { useAppDispatch } from 'state'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { differenceInSeconds } from 'date-fns'
 import { fetchBountiesAsync } from 'state/trustbounties'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -30,9 +32,7 @@ import CleanUpBalanceStage from './CleanUpBalanceStage'
 import CleanUpApprovalStage from './CleanUpApprovalStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import LocationStage from './LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),

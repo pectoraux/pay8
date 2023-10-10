@@ -33,7 +33,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Identity tokens are used to confirm requirements Valuepool members need to fulfill to purchase items with this Valuepool. If your Valuepool does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the Valuepool to deliver you an identity token and input its ID in this field.',
       )}
     </Text>
   )
@@ -46,14 +46,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('VeNFT Token ID')}
+          {t('Valuepool Token ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input ve nft token id')}
+          placeholder={t('input valuepool token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -82,7 +82,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           <Divider />
           <Text small color="textSubtle">
             {t(
-              'This picks your rank of withdrawal from the valuepool. Please read the documentation for more information on each parameter',
+              "This starts the picking process of your rank of withdrawal from the Valuepool's queue. Please read the description of each parameter for more details",
             )}
           </Text>
         </Box>

@@ -39,24 +39,12 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This is your bounty id and not the current bounty id. If the current bounty is your bounty, please find the bounty you are trying to approve and go to its <<Add Approval>> form.',
       )}
     </Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent3 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent2 = () => <Text>{t('This sets the amount you want to approve for the current bounty.')}</Text>
+  const TooltipComponent3 = () => <Text>{t('This sets the expiration date of your approval.')}</Text>
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -132,7 +120,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add the approved amount to the balance of the partner bounty. Please read the documentation for more information on each parameter',
+              'This will add the approved amount to the balance of the current bounty until the end date is passed. If a bounty has 100 tokens, you can approve it for 900 tokens to make it worth 1000 tokens for instance. Approving balances for bounties puts your approved balance in a position where it can be attacked when the approved bounty is attacked.',
             )}
           </Text>
         </Box>

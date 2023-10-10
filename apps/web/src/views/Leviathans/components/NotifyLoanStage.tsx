@@ -35,27 +35,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('ARP Address')}
+          {t('Sponsor Card Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="cardAddress"
           value={state.cardAddress}
-          placeholder={t('input arp address')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount Receivable')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="amountReceivable"
-          value={state.amountReceivable}
-          placeholder={t('input loan amount')}
+          placeholder={t('input card address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -65,14 +52,16 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will process the loan of the specified ARP. Please read the documentation for more information')}
+            {t(
+              "This will process payment for this sponsor. Valuepools make money by selling ad spots to sponsor. This function enables you to instantiate payments to the valuepool from an existing sponsor, input the sponsor's contract address and validate the form.",
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Process Loan')}
+          {t('Process Payment')}
         </Button>
       </Flex>
     </>

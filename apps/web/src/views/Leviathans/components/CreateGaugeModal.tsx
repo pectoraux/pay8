@@ -1022,9 +1022,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.UPDATE_VOTING_BLACKLIST)}>
                 {t('UPDATE VOTING BLACKLIST')}
               </Button>
-              <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_SWITCH_POOL)}>
+              {/* <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_SWITCH_POOL)}>
                 {t('SWITCH POOL')}
-              </Button>
+              </Button> */}
               {/* <Button variant="tertiary" mb="8px" onClick={()=> setStage(LockStage.UPDATE_COLLECTION_ID) }>
             {t('UPDATE COLLECTION ID IN VE')}
           </Button> */}

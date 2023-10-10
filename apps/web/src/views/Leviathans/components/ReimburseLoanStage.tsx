@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
-
+import { NftToken } from 'state/cancan/types'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -35,27 +35,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('ARP Address')}
+          {t('Sponsor Card Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="cardAddress"
           value={state.cardAddress}
-          placeholder={t('input arp address')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount Receivable')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="amountReceivable"
-          value={state.amountReceivable}
-          placeholder={t('input loan amount')}
+          placeholder={t('input card address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -65,14 +52,16 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will process the loan of the specified ARP. Please read the documentation for more information')}
+            {t(
+              'This will remove the sponsor card from the Valuepool. In case of disagreement with a sponsor or else, the owner of the Valuepool has the ability through this function to remove that sponsor from the Valuepool.',
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage}>
-          {t('Process Loan')}
+        <Button mb="8px" variant="danger" onClick={continueToNextStage}>
+          {t('Remove')}
         </Button>
       </Flex>
     </>

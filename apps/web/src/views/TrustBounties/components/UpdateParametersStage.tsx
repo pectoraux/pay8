@@ -22,18 +22,22 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>{t('Use this parameter to update the address of the owner of the trustbounty.')}</Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'Use this parameter to update to ID of the channel of the trustbounty. Attaching your channel to your bounty enables users to discover more about you, your business as well as how to contact you.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>{t('This sets a link to your logo or an image of your brand as a business.')}</Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets the terms of your bounty and the conditions under which your bounty can be attacked. Make sure you use non-ambiguous terms, and that you are very clear and succint in the enumeration of your terms. Your terms are not updatable once they are set and ambiguity can harm you since in case of ambiguity, voters are advised to favor the attacker.',
       )}
     </Text>
   )
@@ -143,7 +147,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update parameters of the bounty. Please read the documentation for more information on each parameter',
+              'This will update parameters of the bounty. If you are ever found to violate any of the terms you list, your bounty can be claimed/attacked and you would have to defend yourself. If the community of peers from the workspace you picked for your bounty when creating it, votes against you, then you will have up to a week to appeal their decision and go through another vote (keep in mind that appealing a decision is not free with the cost depending on how much the attacker is claiming from your bounty). If you never succeed in convincing the community of non violation of your own terms, then part or all of your bounty balance (depending on how much your attacker claims) will be sent to the attacker.',
             )}
           </Text>
         </Box>

@@ -38,6 +38,12 @@ const SetPriceStage: React.FC<any> = ({
 }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
+  const [lockedAmount, setLockedAmount] = useState('')
+  const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+  const stakingTokenBalance = balance
+    ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
+    : BIG_ZERO
+  const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -76,7 +82,7 @@ const SetPriceStage: React.FC<any> = ({
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Blacklist ?')}
+            {t('Blacklist?')}
           </Text>
           <ButtonMenu
             scale="xs"
@@ -96,7 +102,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the voting blacklist of this valuepool. Please read the documentation for more details.',
+              'This will update the voting blacklist of this Valuepool meaning either add/remove address from the list of users prevented from voting due to previous fraudulant activities.',
             )}
           </Text>
         </Box>

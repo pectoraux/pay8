@@ -66,7 +66,9 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will withdraw funds from the ramp. Please read the documentation for more details.')}
+            {t(
+              "This will withdraw funds from the Valuepool. This can be used to withdraw funds from the Valuepool's treasury.",
+            )}
           </Text>
         </Box>
       </Grid>

@@ -147,21 +147,21 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'Input the marketplace of your Valuepool. The marketplace of a Valuepool is the contract it interacts with to make purchases. If you want your users to use your Valuepool to make purchases of subscriptions, input the subscription market trades contract address, if you want them to purchase NFTs on the eCollectibles marketplace, input the NFT market trades contract, in case of regular products/services on Cancan, use the market trades contract. If you want your users to purchase lottery tickets, use the lottery contract address. For purchases of gaming minutes, use the game factory contract address. For purchases of betting tickets, use the betting contract address, etc. All those contract addresses are available in the documentation..',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'The main difference between a Valuepool and a Riskpool is that memebers of a Riskpool cannot withdraw tokens from. They work more like insurances whereas Valuepools work like banks from which you can withdraw funds..',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'By setting this parameter to Yes, each member of your Valuepool will be identified by a unique profile id during votes in the Valuepool.',
       )}
     </Text>
   )

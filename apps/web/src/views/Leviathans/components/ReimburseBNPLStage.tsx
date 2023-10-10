@@ -35,27 +35,27 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('VENFT Token ID')}
+          {t('Valuepool Token ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input ve token id')}
+          placeholder={t('input valuepool token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount Receivable')}
+          {t('Amount To Reimburse')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="amountReceivable"
           value={state.amountReceivable}
-          placeholder={t('input loan amount')}
+          placeholder={t('input amount to reimburse')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -65,9 +65,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will process the BNPL loan of the specified veNFT token. Please read the documentation for more information',
-            )}
+            {t('This will reimburse the BNPL loan made to the owner of the Valuepool token.')}
           </Text>
         </Box>
       </Grid>
