@@ -52,32 +52,12 @@ const SetPriceStage: React.FC<any> = ({
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('Input the address of the World contract you would like to buy ad space on.')}</Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent3 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent2 = () => <Text>{t('Input the address of your sponsor contract.')}</Text>
+  const TooltipComponent3 = () => <Text>{t('Input the tag name you would like to sponsor.')}</Text>
   const TooltipComponent4 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('Input the link to the media you would like to show in the purchased ad-spot')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -198,7 +178,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will display your media on NFTs from this contract. Please read the documentation for more details.',
+              'This will display your media on NFTs from this World contract. Use the price per minute for this World contract to compute how much you need to pay for the number of ad-minutes you want to purchase.',
             )}
           </Text>
         </Box>

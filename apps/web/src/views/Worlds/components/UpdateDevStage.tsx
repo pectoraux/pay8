@@ -43,9 +43,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will update the owner address of the specified contract. Please read the documentation for more information.',
-            )}
+            {t('This will update the owner address of the current World contract.')}
           </Text>
         </Box>
       </Grid>

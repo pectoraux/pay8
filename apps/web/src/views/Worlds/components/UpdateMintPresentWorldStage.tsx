@@ -23,32 +23,36 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>{t('Input the address of the world contract you want to use to mint your World NFT.')}</Text>
   )
   const TooltipComponent2 = () => (
+    <Text>{t('Input the address of the wallet where the NFTs should be sent when minted.')}</Text>
+  )
+  const TooltipComponent3 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'Input the id of the planet of World you want to mint. If that planet is Earth, just input 0 otherwise, get the right id from the documentation.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        "Enter the first 4 characters of your World's plus codes (please visit the site https://plus.codes to learn about plus codes). A World is defined by a list of dozens/hundreds of plus codes. If for instance a World's plus codes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: 8FW4, 8FW4, 8FW4,...",
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        "Enter the last 4 characters of your World's plus codes (please visit the site https://plus.codes to learn about plus codes). A World is defined by a list of dozens/hundreds of plus codes. If for instance a World's plus codes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: V942, V943, V943,...",
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        "Enter the extension codes of your World's plus codes (please visit the site https://plus.codes to learn about plus codes). A World is defined by a list of dozens/hundreds of plus codes. If for instance a World's plus codes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: P4, G3, HR,...",
       )}
     </Text>
   )
@@ -207,9 +211,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will mint a world for the specified contract. Please read the documentation for more information.',
-            )}
+            {t('This will mint NFTs for plus codes of a World. Please read the documentation for more information.')}
           </Text>
         </Box>
       </Grid>

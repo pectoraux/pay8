@@ -23,63 +23,46 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
+  const TooltipComponent = () => <Text>{t('This sets the address of protocol owner.')}</Text>
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        "Identity tokens are used to confirm requirements on users' identities. If you do not have any requirements, you can just input 0. If you do, make sure you get an identity token id from the user, that is delivered by an auditor approved by your business and input it in this field.",
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Options are discount/penalty packages that you can maintain for your World contract. Use this parameter to pick a specific option by its index. If you have no option setup for now, you can just input 0.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets the amount the protocol owner will be paying (periodically for periodic protocols and a one time payment for non periodic protocols) to your World contract.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This sets the duration in minutes of each cycle of payment from the protocol owner to your World contract. If the protocol is non periodic, just input 0',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This sets the beginning date of the first payment cycle for this protocol. The World contract starts the cycle only after this date passes.',
       )}
     </Text>
   )
-  const TooltipComponent7 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent8 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent7 = () => <Text>{t('This sets a rating value for the protocol being created.')}</Text>
+  const TooltipComponent8 = () => <Text>{t('Use this field to give some explanation for the rating above.')}</Text>
   const TooltipComponent9 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent10 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('Use this field to attach a media to your protocol by inputing a link to that media.')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -310,7 +293,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new account or update parameters of an old one. Please read the documentation for more information on each parameter',
+              'This will create a new protocol or update parameters of an old one. Protocols are mechanisms through which you schedule periodic/non-periodic payments from the owner of a World NFT in exchange for you, maintaining their virtual Worlds. Some Worlds like the red pill Worlds need to be updated at least every 6 months to reflect the changes in the physical world otherwise the World NFTs of those Worlds might get burnt.',
             )}
           </Text>
         </Box>

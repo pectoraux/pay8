@@ -59,9 +59,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will vote either positively or negatively for the auditor. Please read the documentation for more information.',
-            )}
+            {t('This will vote either positively or negatively for the World contract.')}
           </Text>
         </Box>
       </Grid>

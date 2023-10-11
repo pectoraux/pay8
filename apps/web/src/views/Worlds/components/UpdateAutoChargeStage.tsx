@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will enable the auditor to charge your wallet automatically. Please read the documentation for more information on this parameter',
+              'This will enable the auditor to charge your wallet automatically when your account is due for billing.',
             )}
           </Text>
         </Box>

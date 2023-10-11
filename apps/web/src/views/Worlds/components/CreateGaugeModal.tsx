@@ -45,6 +45,7 @@ import SponsorTagStage from './SponsorTagStage'
 import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 import UpdateTransferToNoteReceivableStage from './UpdateTransferToNoteReceivableStage'
 import UpdateBountyStage from './UpdateBountyStage'
+import UpdateProfileStage from './UpdateProfileStage'
 import VoteStage from './VoteStage'
 import ClaimNoteStage from './ClaimNoteStage'
 import AutoChargeStage from './AutoChargeStage'
@@ -55,7 +56,7 @@ import DeleteStage from './DeleteStage'
 import DeleteRampStage from './DeleteRampStage'
 import UpdateDiscountDivisorStage from './UpdateDiscountDivisorStage'
 import UpdatePenaltyDivisorStage from './UpdatePenaltyDivisorStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
+import LocationStage from './LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -313,6 +314,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
         setStage(LockStage.UPDATE_PENALTY_DIVISOR)
         break
       case LockStage.CONFIRM_UPDATE_PROFILE_ID:
+        setStage(LockStage.UPDATE_PROFILE_ID)
+        break
+      case LockStage.UPDATE_PROFILE_ID:
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_CLAIM_NOTE:
@@ -405,6 +409,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
     switch (stage) {
       case LockStage.UPDATE_LOCATION:
         setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
+      case LockStage.UPDATE_PROFILE_ID:
+        setStage(LockStage.CONFIRM_UPDATE_PROFILE_ID)
         break
       case LockStage.UPDATE_AUTOCHARGE:
         setStage(LockStage.CONFIRM_UPDATE_AUTOCHARGE)
@@ -584,14 +591,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR) {
-        const args = [state.optionId, state.factor, state.period, state.cap]
+        const args = [state.optionId, parseInt(state.factor) * 100, parseInt(state.period) * 60, state.cap]
         console.log('CONFIRM_UPDATE_DISCOUNT_DIVISOR===============>', args)
         return callWithGasPrice(worldContract, 'updateDiscountDivisor', args).catch((err) =>
           console.log('CONFIRM_UPDATE_DISCOUNT_DIVISOR===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR) {
-        const args = [state.optionId, state.factor, state.period, state.cap]
+        const args = [state.optionId, parseInt(state.factor) * 100, parseInt(state.period) * 60, state.cap]
         console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', args)
         return callWithGasPrice(worldContract, 'updatePenaltyDivisor', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', err),
@@ -704,9 +711,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
             state.world,
             startReceivable.toString(),
             state.planet,
-            [state.first4[0], state.first4[1], state.first4[2], state.first4[3]],
-            [state.last4[0], state.last4[1], state.last4[2], state.last4[3]],
-            [state.nfts],
+            state.first4?.split(',')?.map((first4) => [first4[0], first4[1], first4[2], first4[3]]),
+            state.last4?.split(',')?.map((last4) => [last4[0], last4[1], last4[2], last4[3]]),
+            state.nfts?.split(',')?.map((nft) => [nft]),
           ]
           console.log('CONFIRM_MINT_PAST_WORLD===============>', args)
           return callWithGasPrice(worldHelper2Contract, 'mintPastWorld', args).catch((err) =>
@@ -808,9 +815,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_TOKEN_IDS)}>
             {t('UPDATE TOKEN IDS')}
           </Button>
-          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
+          {/* <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
             {t('UPDATE BOUNTY')}
-          </Button>
+          </Button> */}
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_SPONSOR_MEDIA)}>
             {t('UPDATE SPONSOR MEDIA')}
           </Button>
@@ -824,6 +831,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
       )}
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
+          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROFILE_ID)}>
+            {t('UPDATE PROFILE ID')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
             {t('CREATE/UPDATE ACCOUNT')}
           </Button>
@@ -839,9 +849,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
           <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_WORLD_BOUNTY)}>
             {t('UPDATE WORLD BOUNTY')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
+          {/* <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
             {t('UPDATE BOUNTY REQUIRED')}
-          </Button>
+          </Button> */}
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_CODE_INFO)}>
             {t('UPDATE CODE NFO')}
           </Button>
@@ -866,12 +876,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
           <Button mb="8px" variant="tertiary" onClick={() => setStage(LockStage.UPDATE_DEV)}>
             {t('UPDATE CONTRACT OWNER')}
           </Button>
-          <Button mb="8px" variant="tertiary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
+          {/* <Button mb="8px" variant="tertiary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
             {t('UPDATE BOUNTY')}
-          </Button>
-          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_PROFILE_ID)}>
-            {t('UPDATE PROFILE ID')}
-          </Button>
+          </Button> */}
           <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_TAG_REGISTRATION)}>
             {t('UPDATE TAG REGISTRATION')}
           </Button>
@@ -1007,6 +1014,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
       {stage === LockStage.UPDATE_BOUNTY && (
         <UpdateBountyStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
+      {stage === LockStage.UPDATE_PROFILE_ID && <UpdateProfileStage continueToNextStage={continueToNextStage} />}
       {stage === LockStage.ADMIN_AUTOCHARGE && (
         <AutoChargeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}

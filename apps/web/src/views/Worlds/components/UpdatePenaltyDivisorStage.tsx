@@ -1,17 +1,5 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  Input,
-  ErrorIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  HelpIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
@@ -38,28 +26,24 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This is the id of this penalty package. If you are adding a new penalty package, just input 0. If you want to update an existing one, input its id right here.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This is your penalty percentage. A penalty of 10% for instance will be 10 on an amount of 100.')}</Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This is the period of time in minutes that unlocks the penalty. For instance take a protocol that pays your contract 100 tokens periodically; if you set this parameter to 10 minutes and the protocol makes payment 10 minutes late of its payment due date, it gets a penalty of 10% on its payment (pays 110 tokens), if it makes payments 20 minutes late, then it gets a penalty of 20% (pays 120 tokens) unless you set a cap representing 15 tokens on the package which will only give it a penalty of 15 tokens meaning it will pay 115 tokens instead of 120.',
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets a cap on the penalty; for instance a penalty of 10% on an amount of 100 will be 10 and 20 on an amount of 200 but if you set your penalty cap of 10 then it will be 10 on an amount of 100 and still 10 on an amount of 200.',
       )}
     </Text>
   )
@@ -107,7 +91,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="optionId"
           value={state.optionId}
-          placeholder={t('input discount option id')}
+          placeholder={t('input penalty option id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -124,7 +108,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="factor"
           value={state.factor}
-          placeholder={t('input discount factor')}
+          placeholder={t('input penalty factor')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -141,7 +125,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="period"
           value={state.period}
-          placeholder={t('input discount period')}
+          placeholder={t('input penalty period')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -158,7 +142,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="cap"
           value={state.cap}
-          placeholder={t('input discount cap')}
+          placeholder={t('input penalty cap')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -168,9 +152,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will update parameters of penalties for the contract. Please read the documentation for more information on each parameter',
-            )}
+            {t('This will update parameters of the specified penalty package for the current World contract.')}
           </Text>
         </Box>
       </Grid>

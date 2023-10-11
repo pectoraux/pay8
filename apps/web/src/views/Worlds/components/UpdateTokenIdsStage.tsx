@@ -47,27 +47,10 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
 
   const TooltipComponent = () => (
     <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
+      {t('Input the ids of the World NFTs you would like to add to this World contract seperated by commas.')}
     </Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
-    targetRef: targetRef2,
-    tooltip: tooltip2,
-    tooltipVisible: tooltipVisible2,
-  } = useTooltip(<TooltipComponent2 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
@@ -88,23 +71,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           name="accounts"
           value={state.accounts}
           placeholder={t('comma separated token ids')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Flex ref={targetRef2}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Number of Periods')}
-          </Text>
-          {tooltipVisible2 && tooltip2}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="numPeriods"
-          value={state.numPeriods}
-          placeholder={t('input number of periods to pay for')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -130,7 +96,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will charge listed accounts. Please read the documentation for more details.')}
+            {t(
+              'This will add the listed token ids to your World contract. Please read the documentation for more details.',
+            )}
           </Text>
         </Box>
       </Grid>

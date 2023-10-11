@@ -33,16 +33,12 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('Input a comma separated list of account IDs you would like to charge.')}</Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Enter the number of cycle of payments over which you would like to charge the previously listed accounts. Input 0 to charge for the last cycle of payments.',
       )}
     </Text>
   )
@@ -101,7 +97,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will charge listed accounts. Please read the documentation for more details.')}
+            {t('This will charge listed accounts over the number of cycle of payments specified.')}
           </Text>
         </Box>
       </Grid>

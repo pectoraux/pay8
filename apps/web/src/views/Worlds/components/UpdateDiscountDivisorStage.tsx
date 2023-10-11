@@ -24,7 +24,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -37,28 +37,24 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This is the id of this discount package. If you are adding a new discount package, just input 0. If you want to update an existing one, input its id right here.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This is your discount percentage. A discount of 10% for instance will be 10 on an amount of 100.')}</Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This is the period of time in minutes that unlocks the discount. For instance take a protocol that pays your contract 100 tokens periodically; if you set this parameter to 10 minutes and the protocol makes payment 10 minutes in advance of its payment due date, it gets a discount of 10% on its payment (only pays 90 tokens), if it makes payments 20 minutes in advance, then it gets a discount of 20% (only pays 80 tokens) unless you set a cap representing 15 tokens on the package which will only give it a discount of 15 tokens meaning it will pay 85 tokens instead of 80.',
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets a cap on the discount; for instance a discount of 10% on an amount of 100 will be 10 and 20 on an amount of 200 but if you set your discount cap of 10 then it will be 10 on an amount of 100 and still 10 on an amount of 200.',
       )}
     </Text>
   )
@@ -167,9 +163,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will update parameters of discounts for the contract. Please read the documentation for more information on each parameter',
-            )}
+            {t('This will update parameters of the specified discount package for the current World contract.')}
           </Text>
         </Box>
       </Grid>

@@ -49,43 +49,12 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
-    targetRef: targetRef2,
-    tooltip: tooltip2,
-    tooltipVisible: tooltipVisible2,
-  } = useTooltip(<TooltipComponent2 />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-
   return (
     <>
       <GreyedOutContainer>
-        <Flex ref={targetRef}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Tag Name')}
-          </Text>
-          {tooltipVisible && tooltip}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Tag Name')}
+        </Text>
         <Input
           type="text"
           scale="sm"
@@ -96,13 +65,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex ref={targetRef2}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Content Type')}
-          </Text>
-          {tooltipVisible2 && tooltip2}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Content Type')}
+        </Text>
         <Input
           type="text"
           scale="sm"
@@ -134,7 +99,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update excluded contents of this contract. Please read the documentation for more details.')}
+            {t(
+              "This will exclude a specific content type from being given ad space on your World contract. For instance if you don't want sponsors that are in the NSFW workspce to buy ad spots in your World contract, you can exclude the NSFW content type. Please read the documentation for a complete list of content types so that you can exclude the ones you don't want to sell ad spots in.",
+            )}
           </Text>
         </Box>
       </Grid>
