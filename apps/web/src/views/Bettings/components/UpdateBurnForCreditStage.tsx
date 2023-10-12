@@ -38,35 +38,29 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This specifies the address of the contract that checks whether a user's token is elligible or not for a discount.",
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This is the address where 'burnt' tokens go, it can be the zero address (0x0000000000000000000000000000000000000000) in case you want users tokens burnt, your betting contract address in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the id of the product for which to grant customers betting credits in exchange for 'burning' their tokens.",
       )}
     </Text>
   )
-  const TooltipComponent4 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent4 = () => <Text>{t('This specifies the value of the discount in percentages.')}</Text>
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This specifies whether to remove all burn for credit token incentives that have been previously added or to add the current one in addition to them.',
       )}
     </Text>
   )
@@ -179,15 +173,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef5}>
-            <Text
-              fontSize="12px"
-              color="secondary"
-              textTransform="uppercase"
-              paddingTop="13px"
-              paddingRight="50px"
-              bold
-            >
+          <Flex ref={targetRef5} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" bold>
               {t('Clear')}
             </Text>
             {tooltipVisible5 && tooltip5}
@@ -206,7 +193,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update burn for credit options. Please read the documentation for more information.')}
+            {t(
+              "This action will create discounts on this betting event for users who burn the selected token (make sure you selected a token in the drop down menu on top of the Control Panel button). Discount = discount number * number of token burned. You can for instance create an incentive that rewards users with 10% of ticket prices in exchange for them 'burning' 1 BTC. Notice the way we use the term 'burn' in here doesn't necessarily imply actually burning the tokens, it might but it might just also send the tokens back to the users.",
+            )}
           </Text>
         </Box>
       </Grid>

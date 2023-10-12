@@ -71,7 +71,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_EXCLUDED_CONTENT]: t('Update Excluded Content'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.INJECT_FUNDS]: t('Inject Funds'),
-  [LockStage.REGISTER_TAG]: t('Register Tag'),
+  [LockStage.REGISTER_TAG]: t('Register To Tag'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
   [LockStage.CONFIRM_CLAIM_TICKETS]: t('Back'),
@@ -464,6 +464,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
         const time = combineDateAndTime(state.startReceivable, state.startTime)
         const startReceivable = Math.max(Number(time) - Number(Date.now() / 1000), 0)
+        const rewardsBreakdown = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') - 1 }, (v, i) => i)
         const args = [
           currency?.address,
           !!state.alphabetEncoding,
@@ -477,10 +478,11 @@ const CreateGaugeModal: React.FC<any> = ({
             amountReceivable.toString(),
             parseFloat(state.discountDivisor) * 100,
           ],
-          state.rewardsBreakdown
-            ?.split(',')
-            ?.map((rwb) => rwb?.trim())
-            .map((rwb) => parseInt(rwb) * 100),
+          [...rewardsBreakdown, 100],
+          // state.rewardsBreakdown
+          //   ?.split(',')
+          //   ?.map((rwb) => rwb?.trim())
+          //   .map((rwb) => parseInt(rwb) * 100),
           state.action,
           state.media,
           state.description,
@@ -492,7 +494,10 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
-        const args = [state.collectionId, state.newMinTicketNumber, state.newTicketRange, state.ticketSize]
+        const padding = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') }, (v, i) => i?.toString())
+        const newMinTicketNumber = ['1', ...padding]
+        const newTicketRange = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') }, (v, i) => '9')
+        const args = [state.collectionId, newMinTicketNumber?.toString(), newTicketRange?.toString(), state.ticketSize]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(bettingContract, 'updateParameters', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PARAMETERS===============>', err),
@@ -728,7 +733,7 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE PARAMETERS')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.REGISTER_TAG)}>
-            {t('REGISTER TAG')}
+            {t('REGISTER TO TAG')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_ADMIN)}>
             {t('UPDATE ADMIN')}
@@ -737,7 +742,7 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE EXCLUDED CONTENT')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_PRICE_PER_MINUTE)}>
-            {t('UPDATE SPONSOR PRICE PER MINUTES')}
+            {t('UPDATE PRICE PER MINUTES')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_URI_GENERATOR)}>
             {t('UPDATE URI GENERATOR')}

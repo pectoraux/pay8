@@ -38,21 +38,15 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This attaches a channel to this betting contract. It helps users discover your channel where you can put further details about your betting events or your business. Attaching your channel also attaches all contact info available on your channel.',
       )}
     </Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent2 = () => <Text>{t('')}</Text>
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Your ticket size is the lenght of each option. The recommended size for betting events that have letters in their options is 27 otherwise the recommended size is 6',
       )}
     </Text>
   )
@@ -80,9 +74,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Collection ID')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Collection ID')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -92,7 +90,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('New Minimum Ticket Number')}
@@ -125,7 +123,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           placeholder={t('input new ticket range')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -150,7 +148,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update parameters of the contract. Please read the documentation for more information on each parameter',
+              "This will update the ticket size of the betting contract. Use a value of 6 if the options of your betting event don't include letterSpacing. Use 27 if they do. You have to update the ticket size before creating the betting event.",
             )}
           </Text>
         </Box>

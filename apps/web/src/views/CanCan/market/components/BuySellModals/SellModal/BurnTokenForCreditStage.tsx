@@ -269,7 +269,7 @@ const BurnTokenForCreditStage: React.FC<any> = ({
         </Flex>
         <Text small color="textSubtle">
           {t(
-            "This action will create discounts on this product for users who burn this token. Discount = discount number * number of token burned. You can for instance create an incentive that rewards users with 10% of the current item's price in channel credits for this item in exchange for them 'burning' 1 BTC. Notice the way we use the term 'burn' in here doesn't necessarily implies actually burning the tokens, it might but it might just also send the tokens back to your users if you input the marketplace trades address in the destination field. For subscription products, you should instead input the paywall market trades contracts and for eCollectibles, you should input the NFT market trades address if your want the tokens to be sent back their owners.",
+            "This action will create discounts on this product for users who burn this token. Discount = discount number * number of token burned. You can for instance create an incentive that rewards users with 10% of the current item's price in channel credits for this item in exchange for them 'burning' 1 BTC. Notice the way we use the term 'burn' in here doesn't necessarily imply actually burning the tokens, it might but it might just also send the tokens back to your users if you input the marketplace trades address in the destination field. For subscription products, you should instead input the paywall market trades contracts and for eCollectibles, you should input the NFT market trades address if your want the tokens to be sent back their owners.",
           )}
         </Text>
       </Grid>

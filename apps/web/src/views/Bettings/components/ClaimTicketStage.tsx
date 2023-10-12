@@ -34,17 +34,11 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('Input the ids of the tickets you would like to claim')}</Text>
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input the corresponding bracket that you would like to claim for each ticket specified above. For instance to claim brackets 0-5 for ticket id 1, you would input 1,1,1,1,1,1 in the previous field and 0,1,2,3,4,5 in the current one.',
       )}
     </Text>
   )

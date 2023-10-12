@@ -48,23 +48,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Identity tokens are used to confirm requirements auditors need to fulfill to be able to set betting results for your betting event. If you are not an auditor for this betting event but an admin, just input 0. If you are, make sure you get an auditor approved by the betting admins to deliver you an identity token and input its ID in this field.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "Input the final answers to the betting event for each period separated by commas. Start from the first period that has closed but doesn't have a final answer set yet",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('These field lists all final answers already set for previous periods.')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -149,7 +145,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           ?.filter((fn) => !!fn)
           ?.map((fn) => (
             <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {encodeAlphabet(fn, state?.ticketSize)}
+              {encodeAlphabet(fn, state?.ticketSize) ?? 'N/A'}
             </Text>
           ))}
       </GreyedOutContainer>

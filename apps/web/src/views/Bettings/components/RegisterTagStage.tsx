@@ -66,7 +66,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will register or unregister to the specified tag. Please read the documentation for more details.',
+              'This will register or unregister your betting contract to the specified tag so that all sponsors available on those tags can have their ad content appear on your NFTs and you can earn revenue from those sponsors. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

@@ -35,21 +35,21 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Identity tokens are used to confirm requirements users need to fulfill to be able to buy tickets in this betting event. If this betting event does not have any identity requirements, just input 0. If it does, make sure you get an auditor approved by the betting admins to deliver you an identity token and input its ID in this field.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input the betting period you want to buy tickets in. If you want to bet in the current betting period, just input 0. Betting periods are windows during which a betting event enables people to bet.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input your options in encoded format and seperated with commas. Each comma seperate your option pick for 2 tickets. It is recommended to buy tickets from the betting event page which has an easier form to fill.',
       )}
     </Text>
   )
@@ -146,7 +146,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will process your bet in this betting event. Please read the documentation for more details.')}
+            {t('This will process your bet in this betting event.')}
           </Text>
         </Box>
       </Grid>

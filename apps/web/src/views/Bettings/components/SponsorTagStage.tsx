@@ -51,13 +51,8 @@ const SetPriceStage: React.FC<any> = ({
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('Input the tag name you would like to sponsor.')}</Text>
+
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -128,7 +123,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will display your media on NFTs from this contract. Please read the documentation for more details.',
+              'This will display your media on NFTs from this Betting contract. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

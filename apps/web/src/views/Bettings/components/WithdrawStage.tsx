@@ -75,7 +75,7 @@ const SetPriceStage: React.FC<any> = ({
             scale="sm"
             name="ticketId"
             value={state.ticketId}
-            placeholder={t('input ticket size')}
+            placeholder={t('input ticket id')}
             onChange={handleChange}
           />
         </GreyedOutContainer>
@@ -86,7 +86,9 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will withdraw funds from the pool. Please read the documentation for more details.')}
+            {t(
+              'This will withdraw revenue from the contract both for winners and referrers. Please read the documentation for more details.',
+            )}
           </Text>
         </Box>
       </Grid>

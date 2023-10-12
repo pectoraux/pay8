@@ -1,17 +1,5 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  Input,
-  ErrorIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  HelpIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
@@ -36,11 +24,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This sets the betting period which prize pot you want to inject funds in.')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -99,7 +83,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will inject funds into the contract. Please read the documentation for more information on each parameter',
+              "This will inject funds into the specified betting period's prize pot. Please read the documentation for more information on each parameter",
             )}
           </Text>
         </Box>

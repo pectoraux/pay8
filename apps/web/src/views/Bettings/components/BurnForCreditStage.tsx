@@ -43,21 +43,21 @@ const BurnForCreditStage: React.FC<SetPriceStageProps> = ({
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the position/index of the burn for credit discount for which you would like to claim discounts. The index is available in the parameters section of this betting contract.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This is necessary for the betting contract to understand how to transfer your token. Pick No if it is not an NFT and Yes otherwise.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input your NFT token id in case your token is not fungible and the amount of token to burn in case your token is fungible.',
       )}
     </Text>
   )
@@ -158,7 +158,7 @@ const BurnForCreditStage: React.FC<SetPriceStageProps> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The burns your tokens for payment credits in the lottery. Please read the documentation for more information.',
+              'The burns your tokens for discount on your ticket prices in the betting event. Please read the documentation for more information.',
             )}
           </Text>
         </Box>
