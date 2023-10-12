@@ -36,55 +36,51 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
-  const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        "This sets a lower bound on the balance of account owners' bounties. If you do not require account owners to have a bounty in place, just input 0.",
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent2 = () => (
+    <Text>{t("To update your ARP's channel, input its ID right here otherwise just input 0.")}</Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'This sets a lower bound (in minutes) on the number of time that must separate the moment account owners make withdrawals and the expiration time of their bounties.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets an upper bound on the number of notes you want to let each account owner mint. How do notes work? A note that unlocks a payment of 10 tokens in 2 weeks from now, can be minted and sold today for 8 tokens for instance. A note is basically like an IOU that gives its owner the right to claim a certain amount from an ARP contract in the future. Account owners can mint notes on accounts created for them which they can sell at a slightly lesser price than the payment the note will be able to unlock in the future. That way they get to access their future payments early and the party that buys the note gets to earn some interest from the note when it becomes due. Account owners cannot mint more notes than the amount set here.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'Use this to require all admins of the ARP to have a bounty attached. This sets a lower bound on the balance attached to that bounty.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This sets a timelock between the time an admin request funds withdrawal from the ARP and the time the funds are actually transferred. This is a security mechanism you can use to reassure your users or partners.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This sets the percentage your ARP will be taking on all account deposits.')}</Text>
   )
   const TooltipComponent8 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This sets the percentage your ARP will be taking on all account withdrawals.')}</Text>
   )
   const TooltipComponent9 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This sets whether you want to require account owners to attach their profiles to their accounts.')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -177,7 +173,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Collection ID')}
+            {t('Channel ID')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -187,14 +183,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="collectionId"
           value={state.collectionId}
-          placeholder={t('input collection id')}
+          placeholder={t('input channel id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Buffer Time')}
+            {t('Buffer Time (in minutes)')}
           </Text>
           {tooltipVisible3 && tooltip3}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -245,7 +241,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef6}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Period')}
+            {t('Time lock (in minutes)')}
           </Text>
           {tooltipVisible6 && tooltip6}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -255,7 +251,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="period"
           value={state.period}
-          placeholder={t('input period duration')}
+          placeholder={t('input time lock duration')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -320,7 +316,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update parameters of the contract. Please read the documentation for more information on each parameter',
+              'This will update parameters of your ARP. Please read the description of each parameter for more information',
             )}
           </Text>
         </Box>

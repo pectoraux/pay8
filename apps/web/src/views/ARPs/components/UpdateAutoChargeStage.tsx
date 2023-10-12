@@ -26,14 +26,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Input VeNFT Token ID')}
+          {t('Input Leviathan Token ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input associate veNFT ID')}
+          placeholder={t('input Leviathan ID')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -60,7 +60,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will enable the arp to charge your wallet automatically. Please read the documentation for more information on this parameter',
+              'This will enable the ARP to charge your wallet automatically. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

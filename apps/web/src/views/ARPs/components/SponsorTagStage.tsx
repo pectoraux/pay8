@@ -90,13 +90,13 @@ const SetPriceStage: React.FC<any> = ({
   return (
     <>
       <GreyedOutContainer>
-        <Flex ref={targetRef}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Sponsor Contract Address')}
-          </Text>
-          {tooltipVisible && tooltip}
+        {/* <Flex ref={targetRef}> */}
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Sponsor Contract Address')}
+        </Text>
+        {/* {tooltipVisible && tooltip}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        </Flex> */}
         <Input
           type="text"
           scale="sm"
@@ -107,13 +107,13 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex ref={targetRef2}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Tag Name')}
-          </Text>
-          {tooltipVisible2 && tooltip2}
+        {/* <Flex ref={targetRef2}> */}
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Tag Name')}
+        </Text>
+        {/* {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        </Flex> */}
         <Input
           type="text"
           scale="sm"
@@ -124,13 +124,13 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex ref={targetRef3}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Link to Media')}
-          </Text>
-          {tooltipVisible3 && tooltip3}
+        {/* <Flex ref={targetRef3}> */}
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Link to Media')}
+        </Text>
+        {/* {tooltipVisible3 && tooltip3}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        </Flex> */}
         <Input
           type="text"
           scale="sm"
@@ -159,7 +159,7 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will display your media on NFTs from this pool. Please read the documentation for more details.')}
+            {t('This will display your media on NFTs from this ARP. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>

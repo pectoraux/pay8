@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { differenceInSeconds } from 'date-fns'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -58,8 +59,7 @@ import UpdatePenaltyDivisorStage from './UpdatePenaltyDivisorStage'
 import UpdateAdminStage from './UpdateAdminStage'
 import UpdateUserOwnerStage from './UpdateUserOwnerStage'
 import UpdateApplicationStage from './UpdateApplicationStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import LocationStage from './LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -649,7 +649,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_AUTOCHARGE) {
-        const args = [!!state.autoCharge, state.protocolId]
+        const args = [state.accounts?.split(','), state.numPeriods]
         console.log('CONFIRM_AUTOCHARGE===============>', args)
         return callWithGasPrice(arpContract, 'updateAutoCharge', args).catch((err) =>
           console.log('CONFIRM_AUTOCHARGE===============>', err),
@@ -858,10 +858,10 @@ const CreateGaugeModal: React.FC<any> = ({
           currency?.address,
           [
             amountReceivable.toString(),
-            state.periodReceivable,
+            parseInt(state.periodReceivable) * 60,
             startReceivable.toString(),
             amountPayable.toString(),
-            state.periodPayable,
+            parseInt(state.periodPayable) * 60,
             startPayable.toString(),
             state.bountyRequired,
           ],
@@ -881,12 +881,12 @@ const CreateGaugeModal: React.FC<any> = ({
           !!state.profileRequired,
           state.bountyRequired,
           state.collectionId,
-          state.bufferTime,
+          parseInt(state.bufferTime) * 60,
           state.maxNotesPerProtocol,
           state.adminBountyRequired,
-          state.adminCreditShare,
-          state.adminDebitShare,
-          state.period,
+          parseInt(state.adminCreditShare) * 100,
+          parseInt(state.adminDebitShare) * 100,
+          parseInt(state.period) * 60,
         ]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(arpContract, 'updateParameters', args).catch((err) =>
@@ -1103,9 +1103,9 @@ const CreateGaugeModal: React.FC<any> = ({
               <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_EXCLUDED_CONTENT)}>
                 {t('UPDATE EXCLUDED CONTENT')}
               </Button>
-              <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_CATEGORY)}>
+              {/* <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_CATEGORY)}>
                 {t('UPDATE CATEGORY')}
-              </Button>
+              </Button> */}
               <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.WITHDRAW)}>
                 {t('WITHDRAW')}
               </Button>

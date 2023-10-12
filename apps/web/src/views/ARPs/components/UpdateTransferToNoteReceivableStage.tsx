@@ -35,25 +35,15 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This is the wallet address you want the note to be sent to when minted')}</Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
+      {t('This is the amount that is periodically paid to the ARP by the owner of the account specified above.')}
     </Text>
   )
   const TooltipComponent3 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('This is the number of payment cycles of the account you want to transfer to the note.')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -127,7 +117,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Number of Periods')}
+            {t('Number of Payment Cycles')}
           </Text>
           {tooltipVisible3 && tooltip3}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -148,7 +138,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will future payments on a transferrable note. Please read the documentation for more information on each parameter',
+              'This will transfer future payments of the specified protocol id to the ARP to a transferrable note. How do notes work? A note that unlocks a payment of 10 tokens in 2 weeks from now, can be minted and sold today for 8 tokens for instance. A note is basically like an IOU that gives its owner the right to claim a certain amount from an ARP contract in the future. Account owners can mint notes on accounts created for them which they can sell at a slightly lesser price than the payment the note will be able to unlock in the future. That way they get to access their future payments early and the party that buys the note gets to earn some interest from the note when it becomes due.',
             )}
           </Text>
         </Box>

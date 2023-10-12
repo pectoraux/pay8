@@ -26,27 +26,27 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token ID')}
+          {t('Protocol ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input token id')}
+          placeholder={t('input account id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Mint Extra')}
+          {t('Number of NFTs to Mint')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="extraMint"
           value={state.extraMint}
-          placeholder={t('input mint extra')}
+          placeholder={t('input number of nfts to mint')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update parameters of the pool. Please read the documentation for more information on each parameter',
+              'This will mint NFT tokens for the current ARP to the owner of the protocol id specified above. Just input the number of NFT tokens to mint. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

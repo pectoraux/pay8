@@ -26,9 +26,9 @@ import { useARPFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import { Divider, GreyedOutContainer } from './styles'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   onDismiss?: any
@@ -117,28 +117,28 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
+  const TooltipComponent = () => <Text>{t('Make sure you have created a profile and input its id here.')}</Text>
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t('In case your ARP uses Valuepools, input the address of the Valuepool here otherwise just leave it empty.')}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Automatic ARPs use Valuepool to compute the payments of each one of their accounts. If you are not using a Valuepool and are planning to manually specify the amount paid to each account, you should pick No here.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This parameter specifies whether the ARP uses percentages to compute the amount paid to each account at each period or pays the same amount each period to each account.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
-    <Text>
-      {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
-      )}
-    </Text>
+    <Text>{t('Pick No if you want to be able to change the amount paid by any account in your ARP.')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -213,8 +213,8 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef3}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef3} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Is Automatic ?')}
             </Text>
             {tooltipVisible3 && tooltip3}
@@ -228,8 +228,8 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef4}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef4} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Is Percentages ?')}
             </Text>
             {tooltipVisible4 && tooltip4}
@@ -243,8 +243,8 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef5}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef5} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Is Immutable Contract ?')}
             </Text>
             {tooltipVisible5 && tooltip5}

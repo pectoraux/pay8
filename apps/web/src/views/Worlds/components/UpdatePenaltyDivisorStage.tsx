@@ -43,7 +43,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets a cap on the penalty; for instance a penalty of 10% on an amount of 100 will be 10 and 20 on an amount of 200 but if you set your penalty cap of 10 then it will be 10 on an amount of 100 and still 10 on an amount of 200.',
+        'This sets a cap on the penalty; for instance a penalty of 10% on an amount of 100 will be 10 and 20 on an amount of 200 but if you set a penalty cap of 10 then it will be 10 on an amount of 100 and still 10 on an amount of 200.',
       )}
     </Text>
   )

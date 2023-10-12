@@ -74,7 +74,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update excluded contents of this pool. Please read the documentation for more details.')}
+            {t(
+              "This will exclude a specific content type from being given ad space on your World contract. For instance if you don't want sponsors that are in the NSFW workspce to buy ad spots in your World contract, you can exclude the NSFW content type. Please read the documentation for a complete list of content types so that you can exclude the ones you don't want to sell ad spots in.",
+            )}
           </Text>
         </Box>
       </Grid>

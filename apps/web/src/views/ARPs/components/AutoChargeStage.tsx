@@ -23,16 +23,12 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
-      )}
-    </Text>
+    <Text>{t('Input the ids of all the accounts you would like to charge seperated with commas.')}</Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input the number of payment cycles over which you would like to charge the accounts listed above. If you would like to just charge the latest payment cycle, just input 0.',
       )}
     </Text>
   )
@@ -71,7 +67,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount Receivable')}
+            {t('Number of Payment Cycles')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -79,9 +75,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Input
           type="text"
           scale="sm"
-          name="amountReceivable"
-          value={state.amountReceivable}
-          placeholder={t('input amount receivable')}
+          name="numPeriods"
+          value={state.numPeriods}
+          placeholder={t('input number of periods')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -91,7 +87,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will charge listed accounts. Please read the documentation for more details.')}
+            {t('This will charge listed account ids over the number of payment cycles specified.')}
           </Text>
         </Box>
       </Grid>

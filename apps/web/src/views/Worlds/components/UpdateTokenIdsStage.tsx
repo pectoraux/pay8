@@ -105,7 +105,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update Token Ids')}
+          {t('Update Token IDs')}
         </Button>
       </Flex>
     </>

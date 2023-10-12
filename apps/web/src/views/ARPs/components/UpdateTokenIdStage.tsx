@@ -25,7 +25,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token ID')}
+          {t('Valuepool Token ID')}
         </Text>
         <Input
           type="text"
@@ -43,7 +43,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the token id associate to the specified account. Please read the documentation for more information.',
+              "This will update the Valuepool token id associated to the specified account. This is only relevant for ARPs that use Valuepool tokens to compute their accounts' payments. Please read the documentation for more information.",
             )}
           </Text>
         </Box>
@@ -51,7 +51,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update Token Id')}
+          {t('Update Token ID')}
         </Button>
       </Flex>
     </>
