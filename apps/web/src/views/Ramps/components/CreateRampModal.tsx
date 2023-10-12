@@ -76,7 +76,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Create Ramp Pool')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy Ramp Contract')} onDismiss={onDismiss}>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -84,7 +84,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will deploy a new Ramp contract with you as its Admin. Ramp contracts enable you to tokenize various FIAT currencies or receive tokenized currencies in exchange for FIAT currencies. With Ramps you can basically enable users to transfer value on or off various blockchains.',
+              'This will deploy a new Ramp contract with you as its Admin. Ramp contracts enable you to receive tokenized FIAT currencies (on the blockchain) in exchange for FIAT currencies (sent through a tradFi payment processor like Stripe) or the reverse (receive FIAT currencies in exchange for tokenized FIAT currencies). With Ramps you can basically enable users to transfer value on or off various blockchains.',
             )}
           </Text>
         </Box>

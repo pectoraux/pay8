@@ -43,7 +43,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the category of the pool. Please read the documentation for more information on this parameter',
+              'This will update the category of the contract. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

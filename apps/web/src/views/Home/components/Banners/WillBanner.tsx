@@ -165,7 +165,7 @@ export const WillBanner = () => {
   const { t } = useTranslation()
   const { isMobile, isDesktop } = useMatchBreakpoints()
 
-  const title = t('Program your will with This will contract')
+  const title = t('Program your will with the Will contract')
 
   return (
     <S.Wrapper

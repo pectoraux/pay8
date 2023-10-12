@@ -38,7 +38,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Enter the number of cycle of payments over which you would like to charge the previously listed accounts. Input 0 to charge for the last cycle of payments.',
+        'Enter the number of cycle of payments over which you would like to charge the previously listed accounts. Input 0 to only charge the latest cycle of payments.',
       )}
     </Text>
   )

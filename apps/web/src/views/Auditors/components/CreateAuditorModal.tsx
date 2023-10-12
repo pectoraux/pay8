@@ -97,7 +97,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new Auditor Pool with you as its Admin. Please read the documentation to learn more about Auditor Pools.',
+              'This will deploy a new Auditor contract with you as its Admin. Auditor contracts enable you to setup a payment schedule on your audit contracts or mint badges (i.e. audit certifications) to users.',
             )}
           </Text>
         </Box>
@@ -111,7 +111,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create Auditor Pool')}
+            {t('Deploy Auditor Contract')}
           </Button>
         ) : (
           <ConnectWalletButton />

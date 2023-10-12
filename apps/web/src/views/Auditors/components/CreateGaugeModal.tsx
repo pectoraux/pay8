@@ -17,6 +17,8 @@ import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { differenceInSeconds } from 'date-fns'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import UpdateApplicationStage from 'views/ARPs/components/UpdateApplicationStage'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -47,9 +49,7 @@ import ClaimNoteStage from './ClaimNoteStage'
 import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import UpdateRatingLegendStage from './UpdateRatingLegendStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import UpdateApplicationStage from 'views/ARPs/components/UpdateApplicationStage'
+import LocationStage from './LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -787,9 +787,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
             {t('CREATE/UPDATE ACCOUNT')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
+          {/* <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
             {t('UPDATE BOUNTY REQUIRED')}
-          </Button>
+          </Button> */}
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
           </Button>

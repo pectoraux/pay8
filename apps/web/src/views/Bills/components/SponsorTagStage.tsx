@@ -111,7 +111,9 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will display your media on NFTs from this pool. Please read the documentation for more details.')}
+            {t(
+              'This will display your media on NFTs from this Bill contract. Please read the documentation for more details.',
+            )}
           </Text>
         </Box>
       </Grid>

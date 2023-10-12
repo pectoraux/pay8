@@ -55,12 +55,12 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </Heading>
             <Heading scale="md" color="text">
               {t(
-                'Create a contract and start managing your receivables & payables. ARP contracts are mostly useful for scheduling future payments.',
+                'Create a contract and start managing your receivables & payables. ARP contracts are mostly useful for scheduling future payments whether the amount of those payments are known in advance or not (as long as their schedule is known).',
               )}
             </Heading>
             <Heading scale="md" color="text">
               {t(
-                'Browse between different arps and apply for an account in one offering the services you are looking for.',
+                'Browse between different ARPs and apply for an account in one offering the services you are looking for.',
               )}
             </Heading>
             <Flex>

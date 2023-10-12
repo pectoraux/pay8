@@ -120,7 +120,7 @@ const Steps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
             <Box>
               <Text mb="4px" color="textSubtle" small>
                 {t(
-                  "Find your ramp by selecting the Mine Only filter. If you still can't find your ramp, reload the page. Click the Details arrow to expose the entire ramp, then in the Control Panel, pick the Update Ramp Info option. Fill in the form with your payment processor information. We currently only support Stripe",
+                  "Find your ramp by selecting the 'Mine Only' filter. If you still can't find your ramp, reload the page and try again. Then on your ramp widget, click the 'Details' arrow to expose the entire ramp, then in the Control Panel, pick the Update Ramp Info option. Fill in the form with your payment processor information (This is only relevant for automatic ramps and we currently only support the Stripe payment processor)",
                 )}
               </Text>
             </Box>

@@ -67,7 +67,9 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update the legend of the auditor contract. Please read the documentation for more details.')}
+            {t(
+              'This will update the legend of the ratings of your Auditor contract. Please read the documentation for more details.',
+            )}
           </Text>
         </Box>
       </Grid>

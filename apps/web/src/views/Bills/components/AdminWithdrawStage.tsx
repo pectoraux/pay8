@@ -76,7 +76,9 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will withdraw funds from the contract. Please read the documentation for more details.')}
+            {t(
+              "This will withdraw funds from the contract. It will also enable you to withdraw revenue from sponsors if you select 'Yes' in the first field above. Please read the documentation for more details.",
+            )}
           </Text>
         </Box>
       </Grid>

@@ -58,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update mint info of the specified protocol. Please read the documentation for more information on each parameter',
+              'This will update mint info of the specified protocol. If you want your account owners to be able to mint NFT tokens of your Bill, specify in the mint extra field, the number of tokens you want to enable each account owner to mint.',
             )}
           </Text>
         </Box>

@@ -27,7 +27,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token ID')}
+          {t('Protocol ID')}
         </Text>
         <Input
           type="text"
@@ -58,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update parameters of the pool. Please read the documentation for more information on each parameter',
+              'This will mint NFT tokens for the current Auditor contract to the owner of the protocol id specified above. Just input the number of NFT tokens to mint. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

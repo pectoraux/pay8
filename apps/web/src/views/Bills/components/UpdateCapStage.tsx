@@ -59,7 +59,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the cap price for discounts and penalties. Please read the documentation for more details.',
+              'This will update the cap price for discounts and penalties. For instance a discount of 10% on an amount of 100 will be 10 and 20 on an amount of 200 but if you set a discount cap of 10 then it will be 10 on an amount of 100 and still 10 on an amount of 200.',
             )}
           </Text>
         </Box>

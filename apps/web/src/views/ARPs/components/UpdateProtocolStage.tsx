@@ -75,7 +75,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Input the position of a discount package you would like to use for this account. If this is not relevant to this account, just input 0',
+        'Input the position of a discount/penalty package you would like to use for this account. If this is not relevant to this account, just input 0',
       )}
     </Text>
   )

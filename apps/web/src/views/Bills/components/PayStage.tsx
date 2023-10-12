@@ -85,7 +85,9 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will withdraw funds from the contract. Please read the documentation for more details.')}
+            {t(
+              "This will transfer all payments due to the specified account from the Bill contract to the account owner's wallet address.",
+            )}
           </Text>
         </Box>
       </Grid>

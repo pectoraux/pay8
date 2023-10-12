@@ -65,7 +65,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValue
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will withdraw funds from the pool. Please read the documentation for more details.')}
+            {t('This will withdraw the specified amount of funds from the Auditor contract.')}
           </Text>
         </Box>
       </Grid>

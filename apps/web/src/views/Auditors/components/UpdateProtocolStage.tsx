@@ -24,55 +24,45 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        "Identity tokens are used to confirm requirements on users' identities. If your Auditor contract does not have any requirements, you can just input 0. If it does, make sure you get from the owner of the current account, an identity token id delivered by an auditor approved by your business and input its ID in this field.",
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'Input the position of a discount package you would like to use for this account. If this is not relevant to this account, just input 0',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'This sets the amount the account owner will be paying the Auditor (periodically for periodic accounts and on a one time payment for non periodic accounts).',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets the duration in minutes of each cycle of payment from the account owner to the Auditor. If the account owner does not pay the Auditor, just input 0.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This sets the start date of the payment cycle from the account owner to the Auditor. You should set this value even in the case of non periodic accounts.',
       )}
     </Text>
   )
-  const TooltipComponent6 = () => (
-    <Text>
-      {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
-      )}
-    </Text>
-  )
-  const TooltipComponent7 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent8 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent6 = () => <Text>{t('Input your ESG rating for the account owner')}</Text>
+  const TooltipComponent7 = () => <Text>{t('Input your Auditor specific ratings.')}</Text>
+  const TooltipComponent8 = () => <Text>{t('Use this field to input a legend description of your ratings above')}</Text>
   const TooltipComponent9 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('Input a link to any media going into details of your audit of the account owner.')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',

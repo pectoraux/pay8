@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'Use this to specify whether you keep customers data or not. Please read the documentation for more information on this parameter',
+              'Use this to specify whether you keep customers data or not. A data keeper is an auditor that keeps the data of users he/she creates identity tokens for; if you do, you need to update that information with this function so users that work with you know, you keep their data. Some businesses might only accept identity tokens created by auditors that are also data keepers for compliance reasons. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

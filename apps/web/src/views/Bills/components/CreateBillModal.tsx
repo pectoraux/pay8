@@ -124,7 +124,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new BILL contract with you as its Admin. Please read the documentation to learn more about BILLs.',
+              "This will create a new Bill contract with you as its Admin. Pick 'Yes' for 'Is Payable' parameter if your Bill contract will be paying users instead of just receiving payments from users. Please read the documentation to learn more about Bills.",
             )}
           </Text>
         </Box>

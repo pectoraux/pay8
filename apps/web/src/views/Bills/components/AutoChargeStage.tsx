@@ -1,22 +1,12 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
-  nftToSell?: any
-  variant?: 'set' | 'adjust'
-  currency?: any
-  currentPrice?: string
-  lowestPrice?: number
   state: any
-  account?: any
   handleChange?: (any) => void
-  handleChoiceChange?: (any) => void
-  handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
@@ -32,12 +22,39 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>{t('Input the ids of all the accounts you would like to charge seperated with commas.')}</Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'Input the number of payment cycles over which you would like to charge the accounts listed above. If you would like to just charge the latest payment cycle, just input 0.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Account IDs')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Account IDs')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -48,15 +65,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount Receivable')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Number of Payment Cycles')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
-          name="amountReceivable"
-          value={state.amountReceivable}
-          placeholder={t('input amount receivable')}
+          name="numPeriods"
+          value={state.numPeriods}
+          placeholder={t('input number of periods')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -66,7 +87,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will charge listed accounts. Please read the documentation for more details.')}
+            {t('This will charge listed account ids over the number of payment cycles specified.')}
           </Text>
         </Box>
       </Grid>

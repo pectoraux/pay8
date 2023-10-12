@@ -23,75 +23,64 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        "Identity tokens are used to confirm requirements on users' identity. If your Bill contract does not have any requirements, you can just input 0. If it does, make sure you get from the owner of the current account, an identity token id delivered by an auditor approved by your business and input its ID in this field.",
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Input 0 to create a new account or an account id to update an existing account. You can only update the media link and description.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'This sets the duration in minutes of each cycle of payment from the Bill contract to the account owner. If the Bill contract does not pay the account owner, just input 0.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This sets the duration in minutes of each cycle of payment from the account owner to the Bill contract. If the account owner does not pay the Bill contract, just input 0.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This sets the start date of the payment cycle from the account owner to the Auditor contract. You should set this value even in the case of non periodic accounts.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the start date of the payment cycle from the Auditor contract to the account owner. You should set this value even in the case of non periodic accounts.',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "Use this field to set a lower bound on this account owner's bounty. If you do not require a bounty, just input 0",
       )}
     </Text>
   )
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input the position of a discount/penalty package you would like to use for this account. If this is not relevant to this account, just input 0',
       )}
     </Text>
   )
-  const TooltipComponent10 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent11 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
+  const TooltipComponent10 = () => <Text>{t('Input a description of the account and its purpose.')}</Text>
+  const TooltipComponent11 = () => <Text>{t('Input a link to a media specific to this account')}</Text>
   const {
     targetRef: targetRef2,
     tooltip: tooltip2,
@@ -176,13 +165,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   return (
     <>
       <GreyedOutContainer>
-        <Flex ref={targetRef}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Account Owner')}
-          </Text>
-          {tooltipVisible && tooltip}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Account Owner')}
+        </Text>
         <Input
           type="text"
           scale="sm"
@@ -229,7 +214,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Period Payable')}
+            {t('Period Payable (in minutes)')}
           </Text>
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -246,7 +231,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Period Receivable')}
+            {t('Period Receivable (in minutes)')}
           </Text>
           {tooltipVisible5 && tooltip5}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -337,7 +322,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="description"
           value={state.description}
-          placeholder={t('input rating description')}
+          placeholder={t('input account description')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

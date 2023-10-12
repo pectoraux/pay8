@@ -51,27 +51,9 @@ const SetPriceStage: React.FC<any> = ({
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent3 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('Input your sponsor contract address')}</Text>
+  const TooltipComponent2 = () => <Text>{t('Input the tag where you want to buy ad-spot')}</Text>
+  const TooltipComponent3 = () => <Text>{t('Input a link to the media you are buying ad-spot for')}</Text>
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -165,7 +147,9 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will display your media on NFTs from this pool. Please read the documentation for more details.')}
+            {t(
+              'This will display your media on NFTs from this contract. Please read the documentation for more details.',
+            )}
           </Text>
         </Box>
       </Grid>

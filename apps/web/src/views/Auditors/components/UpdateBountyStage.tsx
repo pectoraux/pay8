@@ -43,7 +43,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update the bounty on this account. Please read the documentation for more information.')}
+            {t(
+              'This will update the bounty attached to this account/contract. Please read the documentation for more information.',
+            )}
           </Text>
         </Box>
       </Grid>
