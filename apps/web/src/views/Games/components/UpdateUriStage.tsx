@@ -26,7 +26,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Collection ID')}
+          {t('Game/Collection ID')}
         </Text>
         <Input
           type="text"
@@ -56,7 +56,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update the uri generator of this game. Please read the documentation for more information.')}
+            {t('This will update the uri generator of this arp. Please read the documentation for more information.')}
           </Text>
         </Box>
       </Grid>

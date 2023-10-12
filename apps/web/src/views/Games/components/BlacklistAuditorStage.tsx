@@ -36,7 +36,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Collection ID')}
+          {t('Game/Collection ID')}
         </Text>
         <Input
           type="text"
@@ -67,7 +67,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add or remove an auditor from your blacklist. Please read the documentation for more details.',
+              "This will add/remove an auditor to/from the auditor's blacklist for the specified game. Please read the documentation for more details.",
             )}
           </Text>
         </Box>

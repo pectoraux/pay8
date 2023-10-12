@@ -61,7 +61,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('Game Contracts')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Create a contract and start managing your receivables & payables')}
+              {t('Create game protocol to setup a play and earn scheme around your game.')}
             </Heading>
             <Heading scale="md" color="text">
               {t(
@@ -71,7 +71,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create contract ')}{' '}
+                  {t('Create Game ')}{' '}
                 </Text>
                 <CurrencyInputPanel
                   id="game-currency"

@@ -15,6 +15,9 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import { getGameFactoryAddress } from 'utils/addressHelpers'
 
 interface SetPriceStageProps {
   state: any
@@ -35,45 +38,33 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('This is the id of your game')}</Text>
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This specifies the address of the contract that checks whether a user's token is elligible or not for a discount.",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This is the address where 'burnt' tokens go, it can be the zero address (0x0000000000000000000000000000000000000000) in case you want users tokens burnt, the game factory contract address (available below) in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.",
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the id of the product for which to grant customers gaming credits in exchange for 'burning' their tokens.",
       )}
     </Text>
   )
-  const TooltipComponent5 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent5 = () => <Text>{t('This specifies the value of the discount in percentages.')}</Text>
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This specifies whether to remove all burn for credit token incentives that have been previously added or to add the current one in addition to them.',
       )}
     </Text>
   )
@@ -127,7 +118,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Collection ID')}
+            {t('Game/Collection ID')}
           </Text>
           {tooltipVisible && tooltip}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -211,15 +202,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef6}>
-            <Text
-              fontSize="12px"
-              color="secondary"
-              textTransform="uppercase"
-              paddingTop="13px"
-              paddingRight="50px"
-              bold
-            >
+          <Flex ref={targetRef6} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" bold>
               {t('Clear')}
             </Text>
             {tooltipVisible6 && tooltip6}
@@ -238,8 +222,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update burn for credit options. Please read the documentation for more information.')}
+            {t(
+              "This action will create discounts on this game for users who burn the selected token (make sure you selected a token in the drop down menu on top of the Control Panel button). Discount = discount number * number of token burned. You can for instance create an incentive that rewards users with 10% of ticket prices in exchange for them 'burning' 1 BTC. Notice the way we use the term 'burn' in here doesn't necessarily imply actually burning the tokens, it might but it might just also send the tokens back to the users.",
+            )}
           </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Game Factory Contract')}
+          </Text>
+          <CopyAddress title={truncateHash(getGameFactoryAddress())} account={getGameFactoryAddress()} />
         </Box>
       </Grid>
       <Divider />

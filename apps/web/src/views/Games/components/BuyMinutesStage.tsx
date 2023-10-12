@@ -26,21 +26,15 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "Identity tokens are used to confirm requirements on users' identity. If your Game does not have any requirements, you can just input 0. If it does, make sure you get an identity token delivered by an auditor approved by this game and input its ID in this field.",
       )}
     </Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent2 = () => <Text>{t('Input your gaming ticket id here.')}</Text>
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input the number of minutes you are willing to purchase. It is recommended to run this function from the gaming page for a more comprehensive form',
       )}
     </Text>
   )
@@ -138,7 +132,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will buy minutes for the game. Please read the documentation for more information on each parameter',
+              'This will buy minutes for you in the game. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

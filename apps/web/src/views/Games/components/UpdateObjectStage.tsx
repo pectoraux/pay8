@@ -44,24 +44,18 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('This sets the id of the game in which you want to create an object')}</Text>
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the name of the object to create. If you are adding a sword for instance, you would just input the name of the sword here. The recommended format for object names is their name followed by an underscore followed their rarity percentile i.e. sword_90 (an object's rarity percentile is the percentage of objects in your game that are less rare than the object. If your score is rarer than 90% of objects in your game, then its rarity percentile is 90%)",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets a list of resource tokens needed to mint the object seperated by commas. The order of the resources is relevant. If to mint a sword for instance, you want users to bring a diamond and a ruby (in that order), you would get a diamond & ruby NFTs (which you can get an auditor on the page 'Earn>Auditors' to mint you) and input their ids here in the right order. That way users willing to mint a sword will also go to the auditor's page to get a diamond and a ruby's NFT minted to them, come back to this game and input their NFTs' ids in order to mint a sword. to  You only need this field when adding objects, not when removing objects.",
       )}
     </Text>
   )
@@ -91,7 +85,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Collection ID')}
+            {t('Game/Collection ID')}
           </Text>
           {tooltipVisible && tooltip}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -162,7 +156,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the recipes of objects attached to your game. Please read the documentation for more information on each parameter',
+              'This will either add/remove objects to/from your game. Objects can earned while playing games, bought from a secondary market or minted using a specific set of NFTs called a recipe. This function enables you to define that recipe. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

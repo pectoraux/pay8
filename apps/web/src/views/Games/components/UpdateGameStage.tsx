@@ -35,45 +35,37 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('This sets the owner of the game.')}</Text>
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the address of the entity responsible for update the scores in this game which consists of writing users' scores in the games on the blockchain. It can be another smart contract that you've deployed on the blockchain or your wallet address or a game's auditor's wallet address.",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the price users will have to pay to purchase one minute in this game. Make sure you have selected the game's currency from the drop down menu next to the 'Create Game' button.",
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
+      {t('This sets the percentage of the prize pot that is shared with the creator of the game which is you.')}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the percentage of the price paid by a referred user that you are willing to share with his/her referrer. This is a mechanism that incentivises users to refer other users to your game.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets whether the game will be claimable straight away or just later one. You can update this parameter later on. By picking Yes, you enable players to start earning from the game. Some game might want to wait for the prize pot to get big enough before activating this parameter.',
       )}
     </Text>
   )
@@ -211,8 +203,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef6}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef6} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Make claimable?')}
             </Text>
             {tooltipVisible6 && tooltip6}
@@ -236,7 +228,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update parameters of the game. Please read the documentation for more information on each parameter',
+              'This will update parameters of the game. Please read the description of each parameter for more information',
             )}
           </Text>
         </Box>

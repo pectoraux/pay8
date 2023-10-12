@@ -26,14 +26,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Collection ID')}
+          {t('Game ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="collectionId"
           value={state.collectionId}
-          placeholder={t('input your collection id')}
+          placeholder={t('input your game id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the owner address of the corresponding game. Please read the documentation for more information.',
+              'This will update the owner address of the specified game. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

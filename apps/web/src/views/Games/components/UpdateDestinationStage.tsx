@@ -56,7 +56,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update the recipient of your winnings. Please read the documentation for more information.')}
+            {t(
+              'This will update the recipient of your winnings. You can set it up to be an ARP contract in a use case where you will be buying gaming minutes for players. This will enable you to transfer all their earnings to the ARP contract from which you can decide on how to distribute the earnings and what percentage you will be taking as the person that buys the minutes. Please read the documentation for more information.',
+            )}
           </Text>
         </Box>
       </Grid>

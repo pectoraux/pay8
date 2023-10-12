@@ -27,7 +27,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Collection ID')}
+          {t('Game/Collection ID')}
         </Text>
         <Input
           type="text"
@@ -74,7 +74,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add or remove a ticket from the blacklist of the corresponding game. Please read the documentation for more information.',
+              "This will add/remove a gaming NFT to/from the players' blacklist of the specified game. Please read the documentation for more information.",
             )}
           </Text>
         </Box>

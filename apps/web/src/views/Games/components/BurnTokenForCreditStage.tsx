@@ -40,31 +40,25 @@ const BurnForCreditStage: React.FC<SetPriceStageProps> = ({
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('This is the address of the game owner.')}</Text>
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the position/index of the burn for credit discount for which you would like to claim discounts. The index is available in the parameters section of this game.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This is necessary for the gaming contract to understand how to transfer your token. Pick No if it is not an NFT and Yes otherwise.',
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input your NFT token id in case your token is not fungible and the amount of token to burn in case your token is fungible.',
       )}
     </Text>
   )
@@ -102,7 +96,7 @@ const BurnForCreditStage: React.FC<SetPriceStageProps> = ({
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Collection Address')}
+            {t('Game Owner Address')}
           </Text>
           {tooltipVisible && tooltip}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -135,8 +129,8 @@ const BurnForCreditStage: React.FC<SetPriceStageProps> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef3}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef3} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Is Credit token fungible ?')}
             </Text>
             {tooltipVisible3 && tooltip3}
@@ -177,7 +171,7 @@ const BurnForCreditStage: React.FC<SetPriceStageProps> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The burns your tokens for payment credits in your game. Please read the documentation for more information.',
+              'The burns your tokens for discount on your ticket prices in the game. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

@@ -39,14 +39,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Collection ID')}
+          {t('Game ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="collectionId"
           value={state.collectionId}
-          placeholder={t('input your collection id')}
+          placeholder={t('input your game id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the token id attached to the corresponding. Please read the documentation for more information.',
+              'This will update the token id attached to the current game. This will enable you to regain admin privileges to your game in the event you were to lose access to your admin wallet as long as you still have access to the token specified above. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

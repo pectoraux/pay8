@@ -81,7 +81,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.BURN_TOKEN]: t('Burn Token'),
   [LockStage.UPDATE_GAME]: t('Update Game'),
   [LockStage.UPDATE_INFO]: t('Update Info'),
-  [LockStage.UPDATE_TOKEN_ID]: t('Update Token Id'),
+  [LockStage.UPDATE_TOKEN_ID]: t('Update Token ID'),
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
   [LockStage.UPDATE_OBJECT]: t('Update Object'),
   [LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT]: t('Update Burn Token For Credit'),
@@ -788,9 +788,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_SPONSOR_MEDIA)}>
             {t('UPDATE SPONSOR MEDIA')}
           </Button>
-          <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.ATTACH_KILL_DETACH_TOKEN)}>
+          {/* <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.ATTACH_KILL_DETACH_TOKEN)}>
             {t('ATTACH/KILL/DETACH TOKEN')}
-          </Button>
+          </Button> */}
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.BURN_TOKEN)}>
             {t('BURN TOKEN')}
           </Button>

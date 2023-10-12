@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the maximum usage per user. Please read the documentation for more information on this parameter',
+              'This will update the maximum usage per user or in other words, the number of time each user can buy minutes in this game. Input 0 for an infinite amount. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

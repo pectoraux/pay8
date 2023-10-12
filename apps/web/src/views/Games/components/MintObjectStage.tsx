@@ -1,19 +1,6 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Input,
-  Text,
-  Button,
-  ErrorIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  HelpIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Input, Text, Button, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -38,28 +25,16 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the name of the object to mint. You can get this game's object names from its gaming page. Go there by clicking on the 'View Game' button in the panel",
       )}
     </Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent3 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent2 = () => <Text>{t("Input the game's id")}</Text>
+  const TooltipComponent3 = () => <Text>{t('Input your gaming NFT id')}</Text>
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "Input the ids of the NFTs that you need to mint the specified object. You can get the recipe from the game's page, find auditors on the auditor page (Earn > Auditors) to mint the required resources for you and then input the ids of those NFTs right here in the order of the recipe.",
       )}
     </Text>
   )
@@ -114,7 +89,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Collection ID')}
+            {t('Game/Collection ID')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -169,7 +144,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will mint the specified object in the game. Please read the documentation for more information on this parameter',
+              "This will mint the specified object in the game for your gaming ticket i.e. it will write the object's name on your gaming NFT. Please read the documentation for more information on this parameter",
             )}
           </Text>
         </Box>

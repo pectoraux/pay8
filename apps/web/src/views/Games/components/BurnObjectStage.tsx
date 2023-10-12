@@ -38,23 +38,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "This sets the name of the object to mint. You can get this game's object names from its gaming page. Go there by clicking on the 'View Game' button in the panel",
       )}
     </Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent2 = () => <Text>{t('Input the id of your game here')}</Text>
   const TooltipComponent3 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t('Input the address to which you want to send the resources from the burn operation')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -99,7 +89,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Collection ID')}
+            {t('Game/Collection ID')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -114,26 +104,26 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex ref={targetRef3}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Token ID')}
-          </Text>
-          {tooltipVisible3 && tooltip3}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token ID')}
+        </Text>
         <Input
           type="text"
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input gaming ticket id')}
+          placeholder={t('input gaming nft id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Recipient')}
-        </Text>
+        <Flex ref={targetRef3}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Recipient')}
+          </Text>
+          {tooltipVisible3 && tooltip3}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -150,7 +140,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will burn the specified object from your gaming ticket. Please read the documentation for more information on this parameter',
+              "This will burn the specified object from your gaming ticket and send the resources available in the object's recipe to the recipient's address specified above. Please read the documentation for more information on this parameter",
             )}
           </Text>
         </Box>
