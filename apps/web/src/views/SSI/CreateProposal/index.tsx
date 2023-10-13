@@ -13,6 +13,8 @@ import {
   Text,
   Select,
   useToast,
+  HelpIcon,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import useSWR from 'swr'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -172,6 +174,77 @@ const CreateProposal = () => {
     }
   }, [initialBlock, setState])
 
+  const TooltipComponent = () => (
+    <Text>{t('This set the wallet address of the user you are creating the data for')}</Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'This is the type of data you are creating, pick the category to which it belongs the most. If does not fit any category, just pick the option Other',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => <Text>{t('This sets the profile id of the user you are creating the data for')}</Text>
+  const TooltipComponent4 = () => <Text>{t('This sets your own profile id as the auditor of that user')}</Text>
+  const TooltipComponent5 = () => (
+    <Text>
+      {t(
+        'This sets the date from which this data is valid, use the field below to set a time in that day from which this data is valid',
+      )}
+    </Text>
+  )
+  const TooltipComponent6 = () => (
+    <Text>
+      {t(
+        'This sets the date after which this data becomes invalid, use the field below to set a time in that day after which this data becomes invalid',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef6,
+    tooltip: tooltip6,
+    tooltipVisible: tooltipVisible6,
+  } = useTooltip(<TooltipComponent6 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Container py="40px">
       <PageMeta />
@@ -185,7 +258,11 @@ const CreateProposal = () => {
       <Layout>
         <Box>
           <Box mb="24px">
-            <Label htmlFor="name">{t('Owner Wallet Address')}</Label>
+            <Flex ref={targetRef}>
+              <Label htmlFor="name">{t('Owner Wallet Address')}</Label>
+              {tooltipVisible && tooltip}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
             {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
           </Box>
@@ -201,7 +278,11 @@ const CreateProposal = () => {
             </CardHeader>
             <CardBody>
               <Box mb="24px">
-                <SecondaryLabel>{t('Entry Type')}</SecondaryLabel>
+                <Flex ref={targetRef2}>
+                  <SecondaryLabel>{t('Entry Type')}</SecondaryLabel>
+                  {tooltipVisible2 && tooltip2}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Select
                   // name="dataType"
                   options={[
@@ -237,7 +318,11 @@ const CreateProposal = () => {
                 {formErrors.dataType && fieldsState.dataType && <FormErrors errors={formErrors.dataType} />}
               </Box>
               <Box mb="24px">
-                <SecondaryLabel>{t('Entry Profile ID')}</SecondaryLabel>
+                <Flex ref={targetRef3}>
+                  <SecondaryLabel>{t('Entry Profile ID')}</SecondaryLabel>
+                  {tooltipVisible3 && tooltip3}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Input
                   id="profileId"
                   name="profileId"
@@ -249,7 +334,11 @@ const CreateProposal = () => {
                 {formErrors.profileId && fieldsState.profileId && <FormErrors errors={formErrors.profileId} />}
               </Box>
               <Box mb="24px">
-                <SecondaryLabel>{t("Entry Auditor's Profile ID")}</SecondaryLabel>
+                <Flex ref={targetRef4}>
+                  <SecondaryLabel>{t("Entry Auditor's Profile ID")}</SecondaryLabel>
+                  {tooltipVisible4 && tooltip4}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Input
                   id="auditorProfileId"
                   name="auditorProfileId"
@@ -263,7 +352,11 @@ const CreateProposal = () => {
                 )}
               </Box>
               <Box mb="24px">
-                <SecondaryLabel>{t('Start Date')}</SecondaryLabel>
+                <Flex ref={targetRef5}>
+                  <SecondaryLabel>{t('Start Date')}</SecondaryLabel>
+                  {tooltipVisible5 && tooltip5}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <DatePicker
                   name="startDate"
                   onChange={handleDateChange('startDate')}
@@ -283,7 +376,11 @@ const CreateProposal = () => {
                 {formErrors.startTime && fieldsState.startTime && <FormErrors errors={formErrors.startTime} />}
               </Box>
               <Box mb="24px">
-                <SecondaryLabel>{t('End Date')}</SecondaryLabel>
+                <Flex ref={targetRef6}>
+                  <SecondaryLabel>{t('End Date')}</SecondaryLabel>
+                  {tooltipVisible6 && tooltip6}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <DatePicker
                   name="endDate"
                   onChange={handleDateChange('endDate')}
@@ -318,7 +415,6 @@ const CreateProposal = () => {
                     isLoading={isLoading}
                     onClick={handleCreateData}
                     endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
-                    // disabled={!isEmpty(formErrors)}
                     mb="16px"
                   >
                     {t('Publish')}

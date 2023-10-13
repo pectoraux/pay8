@@ -8,11 +8,13 @@ import {
   CardHeader,
   Flex,
   Heading,
+  HelpIcon,
   Input,
   LinkExternal,
   Text,
   useModal,
   useToast,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { ChangeEvent, useEffect, useCallback, useState } from 'react'
@@ -129,6 +131,33 @@ const CreateKeys = () => {
     }
   }, [initialBlock, setState])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        "Go to the Key generator link at the bottom of this form, on the page that opens select a key length of 1024 and click 'Generate key pair'. That will generate 2 keys, one private and another one public. Copy the private key without the '----- BEGIN RSA PRIVATE KEY-----' and '----- END RSA PRIVATE KEY-----' part and paste it here.",
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        "Do what you did in the previous field for this field but for the public key. Copy the generated public key without the '----- BEGIN PUBLIC KEY-----' and '----- END PUBLIC KEY-----' part and paste it in here",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Container py="40px">
       <PageMeta />
@@ -160,7 +189,11 @@ const CreateKeys = () => {
                 />
               </Box>
               <Box mb="24px">
-                <SecondaryLabel>{t('Entry Private Key of length 2048 or above')}</SecondaryLabel>
+                <Flex ref={targetRef}>
+                  <SecondaryLabel>{t('Entry Private Key of length 2048 or above')}</SecondaryLabel>
+                  {tooltipVisible && tooltip}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Input
                   id="privateKey"
                   name="privateKey"
@@ -172,7 +205,11 @@ const CreateKeys = () => {
                 />
               </Box>
               <Box mb="24px">
-                <SecondaryLabel>{t('Enter Public Key of length 2048 or above')}</SecondaryLabel>
+                <Flex ref={targetRef2}>
+                  <SecondaryLabel>{t('Enter Public Key of length 2048 or above')}</SecondaryLabel>
+                  {tooltipVisible2 && tooltip2}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Input
                   id="publicKey"
                   name="publicKey"

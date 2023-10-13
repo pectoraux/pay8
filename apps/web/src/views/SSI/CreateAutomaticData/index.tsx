@@ -13,6 +13,8 @@ import {
   Text,
   Select,
   useToast,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import uniqueId from 'lodash/uniqueId'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -219,6 +221,18 @@ const CreateProposal = () => {
     }
   }, [initialBlock, setState])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Use this to create your email data which is necessary to create a channel or to register/partner with existing channels. This form will send a code to your email inbox. Copy and paste the code in the corresponding field on this page (the field will show up once the email is sent to your inbox).',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Container py="40px">
       <PageMeta />
@@ -260,7 +274,11 @@ const CreateProposal = () => {
                     />
                   </Box>
                   <Box mb="24px">
-                    <SecondaryLabel>{t('Email')}</SecondaryLabel>
+                    <Flex ref={targetRef}>
+                      <SecondaryLabel>{t('Email')}</SecondaryLabel>
+                      {tooltipVisible && tooltip}
+                      <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                    </Flex>
                     <Input id="name" name="name" value={state.name} scale="lg" onChange={handleChange} required />
                   </Box>
                 </>
