@@ -6,7 +6,7 @@ import useTheme from 'hooks/useTheme'
 import { fetchProfilesAsync } from 'state/profile'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useTranslation, TranslateFunction, ContextApi } from '@pancakeswap/localization'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
+import { getARPNoteAddress, getVeFromWorkspace } from 'utils/addressHelpers'
 import { useERC20, useProfileContract, useProfileHelperContract } from 'hooks/useContract'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -368,7 +368,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       }
       if (stage === LockStage.CONFIRM_UPDATE_LATE_DAYS) {
         const ve = getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase())
-        const args = [state.helper, state.arp, state.owner, ve, state.tokenId, state.protocolId, state.profileId]
+        const args = [getARPNoteAddress(), state.arp, state.owner, ve, state.tokenId, state.protocolId, state.profileId]
         console.log('CONFIRM_UPDATE_LATE_DAYS==================>', args)
         return callWithGasPrice(profileContract, 'updateLateDays', args).catch((err) =>
           console.log('CONFIRM_UPDATE_LATE_DAYS==================>', err),

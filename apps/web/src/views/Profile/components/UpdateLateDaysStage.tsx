@@ -23,43 +23,25 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
-    </Text>
-  )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
-  const TooltipComponent4 = () => (
-    <Text>
-      {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t("This sets your ARP's workspace.")}</Text>
+  const TooltipComponent2 = () => <Text>{t('')}</Text>
+  const TooltipComponent3 = () => <Text>{t('Input your ARP contract address.')}</Text>
+  const TooltipComponent4 = () => <Text>{t('Input the address of the owner of the ARP contract.')}</Text>
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'Input the id of your token in the Leviathan of the workspace specified above. Make sure it is the same token you attached to your ARP contract.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'Input the id of the account in your ARP contract your would like to report. Make sure that account belongs to the current profile.',
       )}
     </Text>
   )
-  const TooltipComponent7 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent7 = () => <Text>{t('')}</Text>
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -128,7 +110,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
       </Flex>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Helper Address')}
@@ -144,7 +126,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
           placeholder={t('input helper contract address')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -182,7 +164,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
       <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('veNFT Token ID')}
+            {t('Leviathan Token ID')}
           </Text>
           {tooltipVisible5 && tooltip5}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -192,7 +174,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input veNFT token id')}
+          placeholder={t('input Leviathan token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -213,7 +195,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef7}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Your Profile ID')}
@@ -229,7 +211,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
           placeholder={t('input your profile id')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -237,7 +219,7 @@ const SetPriceStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the late days of this profile. Please read the documentation for more information on each parameter',
+              'Use this form to report the owner of the current profile if he/she is late on due payments in your ARP. This will contribute to computing the credit score of the profile.',
             )}
           </Text>
         </Box>
