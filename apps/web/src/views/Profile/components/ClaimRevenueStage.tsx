@@ -58,7 +58,9 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleRawValueChange, c
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will withdraw funds from your profile. Please read the documentation for more details.')}
+            {t(
+              'This will withdraw funds from your profile. You will need to have a bounty with a high enough balance to withdraw funds sent to your profile.',
+            )}
           </Text>
         </Box>
       </Grid>

@@ -71,7 +71,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will inject funds from the marketplace and is only available for the marketplace lottery. Please read the documentation for more details.',
+              'This is only relevant for the marketplace lottery and is used to transfer either the sponsor fund or ticket fund from the marketplace to the marketplace lottery. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

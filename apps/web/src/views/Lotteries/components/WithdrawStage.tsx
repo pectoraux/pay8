@@ -70,15 +70,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef}>
-            <Text
-              fontSize="12px"
-              color="secondary"
-              textTransform="uppercase"
-              paddingTop="13px"
-              paddingRight="50px"
-              bold
-            >
+          <Flex ref={targetRef} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" bold>
               {t('Are you a referrer')}
             </Text>
             {tooltipVisible && tooltip}
@@ -139,7 +132,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will your pending rewards in the specified lottery. Please read the documentation for more information.',
+              'This will withdraw revenue from the contract both for winners and referrers. Please read the documentation for more details.',
             )}
           </Text>
         </Box>

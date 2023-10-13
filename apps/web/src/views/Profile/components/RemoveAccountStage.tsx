@@ -44,9 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will detach the specified account from your profile. Please read the documentation for more details',
-            )}
+            {t("This will remove the specified account from your profile's list of accounts.")}
           </Text>
         </Box>
       </Grid>

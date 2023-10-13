@@ -60,9 +60,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will update profiles in your black list. Please read the documentation for more information on each parameter',
-            )}
+            {t("This will add/remove profiles to/from your profile's blacklist.")}
           </Text>
         </Box>
       </Grid>

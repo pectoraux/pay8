@@ -53,7 +53,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.BUY_TICKETS]: t('Buy Tickets'),
   [LockStage.CLOSE_LOTTERY]: t('Close Lottery'),
   [LockStage.CLAIM_TICKETS]: t('Claim Tickets'),
-  [LockStage.ADMIN_WITHDRAW]: t('Withdraw'),
+  [LockStage.ADMIN_WITHDRAW]: t('Withdraw From Treasury'),
   [LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_START_LOTTERY]: t('Back'),
@@ -159,13 +159,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.INJECT_FUNDS)
         break
       case LockStage.INJECT_FUNDS:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_DRAW_FINAL_NUMBER:
         setStage(LockStage.DRAW_FINAL_NUMBER)
         break
       case LockStage.DRAW_FINAL_NUMBER:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_BUY_TICKETS:
         setStage(LockStage.BUY_TICKETS)
@@ -192,19 +192,19 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_CLOSE_LOTTERY:
         setStage(LockStage.CLOSE_LOTTERY)
         break
       case LockStage.CLOSE_LOTTERY:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_START_LOTTERY:
         setStage(LockStage.START_LOTTERY)
         break
       case LockStage.START_LOTTERY:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_BURN_TOKEN_FOR_CREDIT:
         setStage(LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT)
@@ -216,7 +216,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.CLAIM_LOTTERY_REVENUE)
         break
       case LockStage.CLAIM_LOTTERY_REVENUE:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       default:
         break
@@ -309,9 +309,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           startReceivable.toString(),
           endReceivable.toString(),
           endAmount.toString(),
-          state.lockDuration,
+          parseInt(state.lockDuration) * 60,
           !!state.useNFTicket,
-          [state.treasuryFee, state.referrerFee, amountReceivable.toString(), state.discountDivisor],
+          [
+            parseInt(state.treasuryFee ?? '0') * 100,
+            parseInt(state.referrerFee ?? '0') * 100,
+            amountReceivable.toString(),
+            parseInt(state.discountDivisor ?? '0') * 100,
+          ],
           state.rewardsBreakdown?.split(',').map((rwb) => parseInt(rwb) * 100),
         ]
         console.log('CONFIRM_START_LOTTERY===============>', lotteryHelperContract, args)
@@ -332,7 +337,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           currency?.address,
           state.checker,
           state.destination,
-          state.discount,
+          parseInt(state.discount ?? '0') * 100,
           state.collectionId,
           !!state.clear,
           state.item,

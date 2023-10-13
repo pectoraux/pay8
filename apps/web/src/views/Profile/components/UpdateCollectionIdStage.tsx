@@ -27,7 +27,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Collection ID')}
+          {t('Channel ID')}
         </Text>
         <Input
           type="text"
@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update your collection id. Please read the documentation for more information on this parameter',
+              'This will update your channel id which will enble users to discover your channel or get your contact info through your profile. Please read the documentation for more information on this parameter',
             )}
           </Text>
         </Box>

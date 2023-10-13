@@ -89,7 +89,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleChange, handleRaw
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will inject funds and/or add new tokens to the specified lottery. Please read the documentation for more information on each parameter',
+              'This will inject funds and/or add new tokens to the specified lottery. Pick the reinject option to reinject funds from the previous run of the lottery. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

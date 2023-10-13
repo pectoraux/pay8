@@ -15,6 +15,9 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import { getLotteryAddress } from 'utils/addressHelpers'
 
 interface SetPriceStageProps {
   state: any
@@ -35,33 +38,33 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
-  )
+  const TooltipComponent = () => <Text>{t("Input the id of your lottery's channel here.")}</Text>
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        "This specifies the address of the contract that checks whether a user's token is elligible or not for a discount.",
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        "This is the address where 'burnt' tokens go, it can be the zero address (0x0000000000000000000000000000000000000000) in case you want users' tokens burnt, the lottery contract address (available below) in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.",
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        "This sets the id of the product for which to grant customers gaming credits in exchange for 'burning' their tokens.",
       )}
     </Text>
   )
-  const TooltipComponent5 = () => (
-    <Text>
-      {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
-      )}
-    </Text>
-  )
+  const TooltipComponent5 = () => <Text>{t('This specifies the value of the discount in percentages.')}</Text>
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This specifies whether to remove all burn for credit token incentives that have been previously added or to add the current one in addition to them.',
       )}
     </Text>
   )
@@ -199,15 +202,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef6}>
-            <Text
-              fontSize="12px"
-              color="secondary"
-              textTransform="uppercase"
-              paddingTop="13px"
-              paddingRight="50px"
-              bold
-            >
+          <Flex ref={targetRef6} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" bold>
               {t('Clear')}
             </Text>
             {tooltipVisible6 && tooltip6}
@@ -228,6 +224,10 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           <Text small color="textSubtle">
             {t('This will update burn for credit options. Please read the documentation for more information.')}
           </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Lottery Contract')}
+          </Text>
+          <CopyAddress title={truncateHash(getLotteryAddress())} account={getLotteryAddress()} />
         </Box>
       </Grid>
       <Divider />

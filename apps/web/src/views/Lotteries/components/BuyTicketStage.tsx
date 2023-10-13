@@ -41,21 +41,21 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This is only relevant for the marketplace lottery. If you are not purchasing tickets in the marketplace lottery, just input 0 otherwise, input the id of an NFTicket you received from making purchase on any of the marketplaces.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "Identity tokens are used to confirm requirements on users' identity. If your lottery does not have any requirements, you can just input 0. If it does, make sure you get an identity token delivered by an auditor approved by this lottery and input its ID in this field.",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Input the ticket numbers you pick for each ticket you are buying. It is recommended to purchase tickets using the wizard available on the lottery page instead of this form.',
       )}
     </Text>
   )

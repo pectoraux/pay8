@@ -37,81 +37,65 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        'Some lotteries are setup to create an account for their winners in a Valuepool and lock their winnings in those accounts. If your lottery uses a Valuepool, input its address right here, otherwise leave this field empty.',
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        "This sets a lower bound on the size of the lottery prize pot (the prize pot of the primary currency of your lottery) that enables anyone to stop the lottery. Lotteries can be stopped automatically after their end date has passed or manually (by anyone) once their end amount is reached. This field enables you to set that value. If you don't want the lottery to be stopped before its end date, just input 0.",
+      )}
     </Text>
   )
   const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        "In case your lottery uses a Valuepool, use this parameter to set a lock duration for users' winnings in the Valuepool ",
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
+        'This sets the start date of your lottery and the field below enables you to set the specific time the lottery should start.',
       )}
     </Text>
   )
-  const TooltipComponent6 = () => (
-    <Text>
-      {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
-      )}
-    </Text>
-  )
+  const TooltipComponent6 = () => <Text>{t('')}</Text>
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the end date of your lottery and the field below enables you to set the specific time the lottery should end.',
       )}
     </Text>
   )
-  const TooltipComponent8 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
-  const TooltipComponent9 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent8 = () => <Text>{t('')}</Text>
+  const TooltipComponent9 = () => <Text>{t('')}</Text>
   const TooltipComponent10 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
+    <Text>{t("This sets the percentage of the prize pot that goes to the lottery's admin.")}</Text>
   )
   const TooltipComponent11 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the percentage of a ticket price you are willing to share with the referrer in the case of users that were referred by users. This is a mechanism that enables you to incentivise users to refer other users and the higher your referrer fee, the bigger the incentive.',
       )}
     </Text>
   )
   const TooltipComponent12 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the discount percentage on bulk ticket purchases. The price of N tickets is computed as this: ticket_price * N * (discount_divisor + 1 - N) / discount_divisor. There is a minimum requirement of 3% on this variable for all lotterues, meaning you cannot put any value lower than 3 in this field.',
       )}
     </Text>
   )
   const TooltipComponent13 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This is a series of 6 percentages seperated by commas; each percentage corresponds to a different bracket (there are a total of 6 brackets) and represents the share of the prize pot earned by users that have the winning number in that bracket. For a better explanation, checkout the page of a lottery',
       )}
     </Text>
   )
@@ -253,26 +237,22 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex ref={targetRef3}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount Receivable')}
-          </Text>
-          {tooltipVisible3 && tooltip3}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Ticket Price')}
+        </Text>
         <Input
           type="text"
           scale="sm"
           name="amountReceivable"
           value={state.amountReceivable}
-          placeholder={t('input an amount receivable')}
+          placeholder={t('input ticket price')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Lock Duration')}
+            {t('Lock Duration (in minutes)')}
           </Text>
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -302,21 +282,16 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <DatePickerPortal />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Box mb="24px">
-          <Flex ref={targetRef6}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Start Time')}
-            </Text>
-            {tooltipVisible6 && tooltip6}
-            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-          </Flex>
-          <TimePicker
-            name="startTime"
-            onChange={handleRawValueChange('startTime')}
-            selected={state.startTime}
-            placeholderText="00:00"
-          />
-        </Box>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Start Time')}
+        </Text>
+        <TimePicker
+          name="startTime"
+          onChange={handleRawValueChange('startTime')}
+          selected={state.startTime}
+          placeholderText="00:00"
+        />
+        <DatePickerPortal />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef7}>
@@ -334,23 +309,18 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <DatePickerPortal />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Box mb="24px">
-          <Flex ref={targetRef8}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('End Time')}
-            </Text>
-            {tooltipVisible8 && tooltip8}
-            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-          </Flex>
-          <TimePicker
-            name="endTime"
-            onChange={handleRawValueChange('endTime')}
-            selected={state.endTime}
-            placeholderText="00:00"
-          />
-        </Box>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('End Time')}
+        </Text>
+        <TimePicker
+          name="endTime"
+          onChange={handleRawValueChange('endTime')}
+          selected={state.endTime}
+          placeholderText="00:00"
+        />
+        <DatePickerPortal />
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <StyledItemRow>
           <Flex ref={targetRef9}>
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
@@ -369,7 +339,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
             <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
           </ButtonMenu>
         </StyledItemRow>
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <GreyedOutContainer>
         <Flex ref={targetRef10}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

@@ -61,7 +61,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update badges attached to your profile. Please read the documentation for more information on this',
+              'This will attach/detach badges to/from your profile. You can attach certification badges so your followers can trust you more. Please read the documentation for more information on this',
             )}
           </Text>
         </Box>

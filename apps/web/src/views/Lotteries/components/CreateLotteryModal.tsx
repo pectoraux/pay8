@@ -29,11 +29,11 @@ import { useLotteryHelperContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-
-import { Divider, GreyedOutContainer } from './styles'
 import { TimePicker } from 'views/AcceleratorVoting/components/DatePicker'
 import { combineDateAndTime } from 'views/AcceleratorVoting/CreateProposal/helpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+
+import { Divider, GreyedOutContainer } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -110,7 +110,12 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         endAmount.toString(),
         parseInt(state.lockDuration) * 60,
         !!state.useNFTicket,
-        [state.treasuryFee, state.referrerFee, priceTicket.toString(), parseInt(state.discountDivisor) * 100],
+        [
+          parseInt(state.treasuryFee) * 100,
+          parseInt(state.referrerFee) * 100,
+          priceTicket.toString(),
+          parseInt(state.discountDivisor) * 100,
+        ],
         state.rewardsBreakdown?.split(',')?.map((val) => parseFloat(val.trim()) * 100),
       ]
       console.log('receipt================>', lotteryHelperContract, args)
@@ -155,70 +160,66 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        'This sets the start date of your lottery and the field below enables you to set the specific time the lottery should start.',
+      )}
+    </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
+      {t(
+        'This sets the end date of your lottery and the field below enables you to set the specific time the lottery should end.',
+      )}
     </Text>
   )
-  const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Some lotteries are setup to create an account for their winners in a Valuepool and lock their winnings in those accounts. If your lottery uses a Valuepool, input its address right here, otherwise leave this field empty.',
+      )}
+    </Text>
+  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        "This sets a lower bound on the size of the lottery prize pot (the prize pot of the primary currency of your lottery) that enables anyone to stop the lottery. Lotteries can be stopped automatically after their end date has passed or manually (by anyone) once their end amount is reached. This field enables you to set that value. If you don't want the lottery to be stopped before its end date, just input 0.",
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
-    <Text>
-      {t(
-        "Every purchase in the marketplace generates a vote for the corresponding business. If you have a token from the purchased item's associated workspace, input its ID right here to vote for the business.",
-      )}
-    </Text>
+    <Text>{t("This sets the percentage of the prize pot that goes to the lottery's admin.")}</Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'This sets the percentage of a ticket price you are willing to share with the referrer in the case of users that were referred by users. This is a mechanism that enables you to incentivise users to refer other users and the higher your referrer fee, the bigger the incentive.',
       )}
     </Text>
   )
-  const TooltipComponent7 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent7 = () => <Text>{t('')}</Text>
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        "In case your lottery uses a Valuepool, use this parameter to set a lock duration for users' winnings in the Valuepool ",
       )}
     </Text>
   )
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the discount percentage on bulk ticket purchases. The price of N tickets is computed as this: ticket_price * N * (discount_divisor + 1 - N) / discount_divisor. There is a minimum requirement of 3% on this variable for all lotterues, meaning you cannot put any value lower than 3 in this field.',
       )}
     </Text>
   )
   const TooltipComponent10 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This is a series of 6 percentages seperated by commas; each percentage corresponds to a different bracket (there are a total of 6 brackets) and represents the share of the prize pot earned by users that have the winning number in that bracket. For a better explanation, checkout the page of a lottery',
       )}
     </Text>
   )
-  const TooltipComponent11 = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent11 = () => <Text>{t('')}</Text>
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -393,7 +394,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
       <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Treasury Fee')}
+            {t('Treasury Fee')}(%)
           </Text>
           {tooltipVisible5 && tooltip5}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -410,7 +411,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
       <GreyedOutContainer>
         <Flex ref={targetRef6}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Referrer Fee')}
+            {t('Referrer Fee')}(%)
           </Text>
           {tooltipVisible6 && tooltip6}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -425,26 +426,22 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex ref={targetRef7}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Price Ticket')}
-          </Text>
-          {tooltipVisible7 && tooltip7}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Ticket Price')}
+        </Text>
         <Input
           type="text"
           scale="sm"
           name="priceTicket"
           value={state.priceTicket}
-          placeholder={t('input price ticket')}
+          placeholder={t('input ticket price')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef8}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Lock Duration in minutes')}
+            {t('Lock Duration (in minutes)')}
           </Text>
           {tooltipVisible8 && tooltip8}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -461,7 +458,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
       <GreyedOutContainer>
         <Flex ref={targetRef9}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Discount Divisor')}
+            {t('Discount Divisor')}(%)
           </Text>
           {tooltipVisible9 && tooltip9}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -492,11 +489,11 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef11}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-              {t('Use NFTicket ?')}
+          <Flex ref={targetRef11} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+              {t('Use NFTicket?')}
             </Text>
             {tooltipVisible11 && tooltip11}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -511,7 +508,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
             <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
           </ButtonMenu>
         </StyledItemRow>
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -519,7 +516,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new lottery session with you as its Admin. Please read the documentation to learn more about Lotteries.',
+              'This will create a new lottery with you as its Admin. Please read the documentation to learn more about Lotteries.',
             )}
           </Text>
         </Box>

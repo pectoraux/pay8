@@ -60,14 +60,14 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleChange, handleRaw
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add funds to the random number generator so it can keep getting random numbers. Please read the documentation for more information on each parameter',
+              'This will add funds to the random number generator so it can keep getting random numbers. Each lottery uses a random number generator to generate its final numbers and those generators use chainlink oracles which need to be paid. You can use this function to add funds to the random generator of the current lottery so it can keep generating random numbers for the lottery. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage}>
+        <Button mb="8px" variant="danger" onClick={continueToNextStage}>
           {t('Add Funds')}
         </Button>
       </Flex>

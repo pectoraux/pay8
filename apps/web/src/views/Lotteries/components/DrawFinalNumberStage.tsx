@@ -55,7 +55,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           <Divider />
           <Text small color="textSubtle">
             {t(
-              'This will draw final numbers for the specified lottery. Please read the documentation for more information on each parameter',
+              'This will draw final numbers for the specified lottery. You need to close the lottery before you can draw its final numbers and draw the final numbers before users can start claiming their earnings. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

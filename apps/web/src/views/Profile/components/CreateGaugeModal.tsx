@@ -48,7 +48,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_COLLECTION_ID]: t('Update Collection'),
   [LockStage.UPDATE_BOUNTY]: t('Update Bounty'),
   [LockStage.DELETE]: t('Delete'),
-  [LockStage.UPDATE_BADGE_ID]: t('Update Badge ID'),
+  [LockStage.UPDATE_BADGE_ID]: t('Attach Badge'),
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
   [LockStage.BROADCAST]: t('Broadcast'),
   [LockStage.CLAIM_REVENUE]: t('Withdraw'),
@@ -180,7 +180,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         setStage(LockStage.SETTINGS)
         break
       case LockStage.PAY:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_PAY:
         setStage(LockStage.PAY)
@@ -189,7 +189,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         setStage(LockStage.SETTINGS)
         break
       case LockStage.ADD_ACCOUNT:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_ADD_ACCOUNT:
         setStage(LockStage.ADD_ACCOUNT)
@@ -523,7 +523,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
             {t('UPDATE BOUNTY')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
-            {t('UPDATE BADGE ID')}
+            {t('ATTACH BADGE')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BLACKLIST)}>
             {t('UPDATE BLACKLIST')}
