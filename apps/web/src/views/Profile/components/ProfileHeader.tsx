@@ -185,7 +185,7 @@ const ProfileHeader: React.FC<any> = ({
           <Flex>
             <Button p="0" variant="text">
               <Text color="primary" onClick={onPresentTrustBounties} bold fontSize="16px" mr="4px">
-                {t('Create an Bounty in ')}{' '}
+                {t('Create a Bounty in ')}{' '}
               </Text>
               <CurrencyInputPanel
                 showInput={false}

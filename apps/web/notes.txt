@@ -1,0 +1,252 @@
+# Guides
+
+## Ramps
+
+* setup ramp
+* automatic mint
+* automatic burn
+* manual mint
+* manual burn
+* sponsor ramp
+
+We provide a marketplace for money movers and people looking to move money
+Ramps solve remittances
+Ramps solve tuition payment for international students
+Ramps help you pay for services that don't accept your payment method
+Ramps + our AMM = Forex Bureau
+Ramps help you transfer value on/off blockchains
+Ramps help you bridge value between 2 different blockchains
+Ramps help you tokenize and store you FIAT money on the blockchain and convert part/all of it back to FIAT as needed
+
+You can use manual ramps to send money into your own account, send cash to people, pay tuition fees (the admin does all the payment when you burn enough tFIATs), etc.
+
+## Accelerator
+
+* Publish Pitch
+* Vote
+* Withdraw earnings
+* Bribe
+
+## Businesses
+
+* Start Gauge
+* Vote
+* Withdraw earnings
+* Bribe
+
+## Contributors
+
+* Start Gauge
+* Vote
+* Withdraw earnings
+* Bribe
+
+## Referrals
+
+* Start Gauge
+* Vote
+* Withdraw earnings
+* Bribe
+
+## Red Pill Worlds
+
+* Setup Red Pill Worlds
+* Publish world implementation to receive votes
+* Mint Red Pill WorldNFTs
+* Sponsor Red Pill World
+* Attach WorldNFT to World
+* Withdraw earnings
+
+## Blue Pill Worlds
+
+* Setup Blue Pill Worlds
+* Publish world implementation to receive votes
+* Mint Blue Pill WorldNFTs
+* Sponsor Blue Pill World
+* Attach WorldNFT to World
+* Withdraw earnings
+
+## Green Pill Worlds
+
+* Setup Green Pill Worlds
+* Publish world implementation to receive votes
+* Mint Green Pill WorldNFTs
+* Sponsor Green Pill World
+* Attach WorldNFT to World
+* Withdraw earnings
+* Mint a transfer note
+
+## ARPs
+
+* Payroll
+* Tontine
+* Valuepool Revenue Share
+* Percentage Based Revenue Distribution
+* Sponsor ARP
+* Mint a transfer note
+
+## Bills
+
+* Tax
+* Utility Bills
+* Bank Account
+* Sponsor Bill
+* Mint a transfer note
+
+## Auditors
+
+* Mines Auditor
+* SSID Auditor
+* Luxury Bag Auditor
+* Sponsor Auditor
+* Mint a transfer note
+
+## Paycards
+
+* Setup your own Paycard
+* Add funds to your card
+* Make a Purchase
+* Account to Account Transfer
+
+## Future Collaterals
+
+* Mint a Future Collateral
+* Reimburse a FC
+* Sell a FC
+
+## Pools
+
+* Stake
+* Claim
+* Unstake
+
+## Sponsors
+
+* Setup Sponsor Card
+* Create Sponsorship Deal
+* Mint a transfer note
+
+## Wills
+
+* Setup a Will
+* Add Balance to Will
+* Add Heirs
+* Claim Inheritance
+* Mint a transfer note
+
+## Bettings
+
+* Setup Sports Bet
+* Setup Stock Market Bet
+* Setup Bet With Partner Betting Events
+* Setup Quizzes
+* Exclude Underaged Betters
+* Buy Tickets
+* Bet Discounts & Burn To Earn Programs
+* Sponsor Betting
+
+## Games
+
+* Setup Play to earn for Mario
+* Setup Play to earn for FIFA 2023
+* Buy Minutes
+* Adding Objects to Games
+* Minting Objects
+* Burning Objects
+* Removing Objects from Games 
+* Game Discounts & Burn To Earn Programs
+* Sponsor Game
+
+## Lotteries
+
+* Setup classic Lottery
+* Setup Valuepool based Lottery
+* Buy Tickets
+* Relaunch New Lottery & Reinject Funds from previous Lottery
+* Exclude Underaged Users
+* Lottery Discounts & Burn To Earn Programs
+* Sponsor Lottery
+
+## Valuepool
+
+* Setup a Valuepool
+* Mint a Valuepool Token
+* Create a Proposal
+* Vote
+* Lend with Valuepool
+* Reimburse Loan
+* Sponsor Valuepool
+* Adding Credits
+* Making a Purchase Using a Valuepool
+* Exclude Underaged Users
+
+## Bounties
+
+* Setup a Bounty for a fungible token
+* Setup a Bounty with funds locked in a Valuepool
+* Setup a Bounty for a non fungible token
+* Claim Bounty
+* Appeal Vote Results
+* Add Approval
+* End Approval
+
+## Stakes
+
+* Buy item through stake
+* Create a request for applications
+* Apply with a deadline
+* Create a periodic stake
+* Create an NFT Collateral loan request
+* Mint a transfer note
+* Mint an IOU
+
+## Profile
+
+* Create a Profile
+* Make a unique profile
+* Follow a Profile
+* Pay Profile
+* Withdraw funds from Profile
+* Buy a VIP profile
+* Report late days
+
+## SSI
+
+* Create an SSI Account
+* Create an SSID
+* Create non searchable data
+* Create searchable data
+* Share data
+* Create ZK Identity tokens
+
+
+## CanCan
+
+* Create channel
+* List normal product
+* List Article
+* List Paywall
+* Add products to Paywall
+* Partner with Paywall
+* Buy & Start subscription
+* Product Discounts
+* Burn for credit incentives
+* Permissionless Partnership with Channel
+* Permissionned Partnership with Channel
+* Permissionless Membership with Channel
+* Permissionned Membership with Channel
+* List Products as Partner
+* Identity Requirements
+* Auctions & Bid  s
+* Drops
+* List Partner Valuepools
+* Update Announcements
+* Add a Normal/Super Review
+* Vote for channel
+* Sponsor channel
+
+## eCollectibles
+
+* List existing NFT token
+* List existing NFT minter
+* List default NFT minter

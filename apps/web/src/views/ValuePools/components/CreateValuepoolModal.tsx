@@ -207,8 +207,8 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef2}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef2} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Is Riskpool ?')}
             </Text>
             {tooltipVisible2 && tooltip2}
@@ -227,8 +227,8 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef3}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef3} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('One person one vote?')}
             </Text>
             {tooltipVisible3 && tooltip3}

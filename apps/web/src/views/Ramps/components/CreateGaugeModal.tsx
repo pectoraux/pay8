@@ -774,7 +774,7 @@ const CreateGaugeModal: React.FC<any> = ({
           : ''
         const args = [
           pool.rampAddress,
-          state.profileId,
+          state.profileId ?? 0,
           '', // state.applicationLink,
           [pk0, pk1, pk2, pk3, pk4],
           [sk0, sk1, sk2, sk3, sk4],
@@ -834,7 +834,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
-        const amount = getDecimalAmount(state.salePrice, currency.decimals)
+        const amount = getDecimalAmount(state.salePrice ?? '0', currency?.decimals)
         const args = [
           parseInt(state.mintFee) * 100,
           parseInt(state.burnFee) * 100,

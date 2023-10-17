@@ -107,7 +107,7 @@ const BurnStage: React.FC<any> = ({
     tooltipOffset: [20, 10],
   })
 
-  return !(accountData?.id && accountData?.active) ? (
+  return !(accountData?.id && accountData?.active) && state.automatic ? (
     <>
       <Divider />
       <Flex flexDirection="column">

@@ -347,9 +347,10 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       }
       if (stage === LockStage.CONFIRM_CREATE) {
         console.log('CONFIRM_CREATE================>', [state.name, state.referrerProfileId])
-        return callWithGasPrice(profileContract, 'createProfile', [state.name, state.referrerProfileId]).catch((err) =>
-          console.log('CONFIRM_CREATE==================>', err),
-        )
+        return callWithGasPrice(profileContract, 'createProfile', [
+          state.name?.toUpperCase(),
+          state.referrerProfileId,
+        ]).catch((err) => console.log('CONFIRM_CREATE==================>', err))
       }
       if (stage === LockStage.CONFIRM_FOLLOW) {
         console.log('CONFIRM_FOLLOW================>', [state.profileId])

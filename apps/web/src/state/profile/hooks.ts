@@ -172,7 +172,9 @@ export const useGetProfileData = (profileId) => {
 
 export const useGetIsNameUsed = (name) => {
   const { chainId } = useActiveChainId()
-  const { data, status, mutate } = useSWR(['isNameUsed', name, chainId], async () => getIsNameUsed(name, chainId))
+  const { data, status, mutate } = useSWR(['isNameUsed', name, chainId], async () =>
+    getIsNameUsed(name?.toUpperCase(), chainId),
+  )
   return {
     status,
     refetch: mutate,

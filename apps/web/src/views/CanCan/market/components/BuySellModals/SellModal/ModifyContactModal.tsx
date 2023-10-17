@@ -23,14 +23,14 @@ const ModifyCollectionModal: React.FC<any> = ({
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Use this field to add contacts to your channel. If for instance you want to add both you Paychat account and telephone, you would input this field: paychat, telephone.',
+        'Use this field to add contacts to your channel. If for instance you want to add both your Paychat account and telephone, you would input int this field: paychat, telephone.',
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This field works with the previous one to set your contact. If for instance you want to add both you Paychat account and telephone, you would input the field above: paychat, telephone and the current field, you would input the actual contacts such as: ali@gmail.com,+250555666897.',
+        'This field works with the previous one to set your contact. If for instance you want to add both your Paychat account and telephone, you would input in the field above: paychat, telephone and in the current field, you would input the actual contacts such as: ali@gmail.com,+250555666897.',
       )}
     </Text>
   )

@@ -77,7 +77,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentTrustBounties} bold fontSize="16px" mr="4px">
-                  {t('Create an Bounty in ')}{' '}
+                  {t('Create a Bounty in ')}{' '}
                 </Text>
                 <CurrencyInputPanel
                   id="bounties-currency"

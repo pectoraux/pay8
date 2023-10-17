@@ -153,7 +153,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES)
         break
       case LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_INJECT_FUNDS:
         setStage(LockStage.INJECT_FUNDS)
@@ -191,9 +191,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       case LockStage.ADMIN_WITHDRAW:
         setStage(LockStage.ADMIN_SETTINGS)
         break
-      case LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES:
-        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
-        break
       case LockStage.CONFIRM_CLOSE_LOTTERY:
         setStage(LockStage.CLOSE_LOTTERY)
         break
@@ -210,7 +207,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT)
         break
       case LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_CLAIM_LOTTERY_REVENUE:
         setStage(LockStage.CLAIM_LOTTERY_REVENUE)
