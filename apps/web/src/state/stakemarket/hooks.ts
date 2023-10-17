@@ -88,9 +88,10 @@ export const usePoolsWithFilterSelector = () => {
 }
 
 export const useGetRequiresApproval = (c, a, s) => {
-  const { data, status } = useSWR(['sm', 'allowance', s.toLowerCase()], async () => requiresApproval(c, a, s))
+  const { data, status, mutate } = useSWR(['sm', 'allowance', s.toLowerCase()], async () => requiresApproval(c, a, s))
   return {
     status,
+    refetch: mutate,
     needsApproval: data ?? true,
   }
 }

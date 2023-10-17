@@ -56,7 +56,7 @@ const EnlistStage: React.FC<any> = ({
   const TooltipComponent = () => (
     <Text>
       {t(
-        "This sets the workspace of your product. In case you can't one that works for your product, pick Software & Telco & Other. The workspace of your product helps users find your products more easily and makes you eligible for weekly token rewards.",
+        "This sets the workspace of your product. In case you can't find one that works for your product, pick Software & Telco & Other. The workspace of your product helps users find your products more easily and makes you eligible for weekly token rewards.",
       )}
     </Text>
   )

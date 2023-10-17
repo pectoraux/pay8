@@ -37,11 +37,15 @@ const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToN
     }
   }, [inputRef])
 
-  const TooltipComponent = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
+  const TooltipComponent = () => (
+    <Text>
+      {t('This sets the date your stake becomes active. You can generally just set it to today or leave it empty.')}
+    </Text>
+  )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
+        'If set to Yes, this will prevent anyone else from applying to the stake after accepting this application, otherwise it will leave the stake open for further applications.',
       )}
     </Text>
   )
@@ -77,8 +81,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToN
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef2}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          <Flex ref={targetRef2} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Close Application Entries')}
             </Text>
             {tooltipVisible2 && tooltip2}

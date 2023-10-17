@@ -237,7 +237,7 @@ You can use manual ramps to send money into your own account, send cash to peopl
 * Permissionned Membership with Channel
 * List Products as Partner
 * Identity Requirements
-* Auctions & Bid  s
+* Auctions & Bids
 * Drops
 * List Partner Valuepools
 * Update Announcements

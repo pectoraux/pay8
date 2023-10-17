@@ -45,6 +45,7 @@ const DataCard = ({ pool, sousId, token }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { pool: partnerPool } = usePool(sousId)
+  console.log('partnerPool===============>', partnerPool)
   const {
     days: daysPayable,
     hours: hoursPayable,
@@ -153,7 +154,7 @@ const DataCard = ({ pool, sousId, token }) => {
               <Button
                 scale="sm"
                 variant="secondary"
-                disabled={partnerPool.owner !== account}
+                disabled={partnerPool.owner?.toLowerCase() !== account?.toLowerCase()}
                 onClick={openPresentAccept}
               >
                 {t('Accept')}

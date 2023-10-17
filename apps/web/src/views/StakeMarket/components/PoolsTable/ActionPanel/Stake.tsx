@@ -13,6 +13,9 @@ import { getStakeMarketAddress } from 'utils/addressHelpers'
 
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import CreateGaugeModal from '../../CreateGaugeModal'
+import EnableButton from 'views/Game/components/Pot/Deposit/EnableButton'
+import { noop } from 'lodash'
+import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -31,7 +34,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
   const token = useCurrency(pool.tokenAddress) as any
   const stakemarketAddress = getStakeMarketAddress()
   const stakingTokenContract = useERC20(token?.address || '')
-  const { needsApproval } = useGetRequiresApproval(stakingTokenContract, account, stakemarketAddress)
+  const { needsApproval, refetch } = useGetRequiresApproval(stakingTokenContract, account, stakemarketAddress)
   const currencyA = token
   const [currency, setCurrency] = useState(currencyA)
   const handleInputSelect = useCallback((currencyInput) => {
@@ -40,6 +43,12 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
   const variant = pool.owner === account ? 'admin' : 'user'
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal variant={variant} pool={currPool} sousId={pool?.sousId} currency={currency ?? token} />,
+  )
+  const { handleApprove, pendingTx } = useApprovePool(
+    stakingTokenContract,
+    stakemarketAddress,
+    currency?.symbol,
+    refetch,
   )
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
 
@@ -63,15 +72,13 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
       <ActionContainer>
         <ActionTitles>
           <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-            {t('Enable contract')}
+            {t('Enable Stake Market')}
           </Text>
         </ActionTitles>
         <ActionContent>
-          {/* <EnableButton
-            refetch={null} 
-            tokenContract={stakingTokenContract} 
-            gameFactoryAddress={stakemarketAddress} 
-          /> */}
+          <Button width="100%" disabled={pendingTx} onClick={handleApprove} variant="secondary">
+            {t('Enable')}
+          </Button>
         </ActionContent>
       </ActionContainer>
     )
