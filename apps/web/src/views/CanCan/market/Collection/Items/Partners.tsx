@@ -99,7 +99,7 @@ const Cart: React.FC<any> = ({ mirrors }) => {
           <DataCard
             key={`partner-wall-${mirror?.id}`}
             wallName={mirror?.id?.split('-')?.length ? mirror?.id?.split('-')[2] : ''}
-            paywall={mirror.paywall}
+            paywall={mirror.sharedPaywall}
           />
         ))}
       </ScrollableRow>

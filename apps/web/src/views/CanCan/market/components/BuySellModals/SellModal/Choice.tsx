@@ -107,7 +107,7 @@ const Choice: React.FC<any> = ({
         <Box position="relative" mb="5px">
           <Input
             {...props}
-            placeholder={t('Value (%txt%)', { txt: props.addValue ? '2592000' : '' })}
+            placeholder={t('Value (%txt%)', { txt: props.addValue ? '43200 minutes in a month' : '' })}
             value={props.value}
             onChange={handleChangeValue}
             isWarning={isWarning}

@@ -452,7 +452,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
                 nftToSell.tokenId,
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
-                state.options?.reduce((accum, attr) => [...accum, attr.value], []), // value
+                state.options?.reduce((accum, attr) => [...accum, parseInt(attr.value) * 60], []), // value
                 state.options?.reduce((accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.category], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.element], []),

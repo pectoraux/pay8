@@ -328,7 +328,12 @@ const EnlistStage: React.FC<any> = ({
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
-        <Options name="options" choices={state.options} onChange={handleChoiceChange} />
+        <Options
+          name="options"
+          addValue={variant === 'paywall'}
+          choices={state.options}
+          onChange={handleChoiceChange}
+        />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef5}>

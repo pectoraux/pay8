@@ -67,7 +67,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought, onDism
   const collectionId = useRouter().query.collectionAddress as string
   const [stage, setStage] = useState(variant === 'paywall' ? BuyingStage.PAYWALL_REVIEW : BuyingStage.REVIEW)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
-  const [tokenId, setTokenId] = useState<any>(null)
+  const [tokenId, setTokenId] = useState<any>(0)
   const [credit, setCredit] = useState<any>(0)
   const [userTokenId, setUserTokenId] = useState(0)
   const [identityTokenId, setIdentityTokenId] = useState(0)
@@ -145,8 +145,9 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought, onDism
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
       return (
-        requiresApproval(bnbContractReader, account, callContract.address) ||
-        requiresApproval(bnbContractReader, account, stakeMarketContract.address)
+        paymentCurrency === 2 ??
+        (requiresApproval(bnbContractReader, account, callContract.address) ||
+          requiresApproval(bnbContractReader, account, stakeMarketContract.address))
       )
       // requiresApproval(bnbContractReader, account, helperContract.address) ||
     },
@@ -222,7 +223,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought, onDism
         const contract = !checkRank ? valuepoolContract : valuepoolHelperContract
         const method = !checkRank ? 'pickRank' : 'checkRank'
         const args = !checkRank
-          ? [tokenId, identityTokenId]
+          ? [tokenId ?? 0, identityTokenId ?? 0]
           : [
               recipient,
               nftToBuy?.currentSeller,

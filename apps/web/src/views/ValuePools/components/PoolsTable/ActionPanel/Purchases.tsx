@@ -32,11 +32,10 @@ export const ScrollableRow = styled.div`
 `
 
 const DataCard = ({ t, schedulePurchase }) => {
+  const { chainId } = useActiveChainId()
   const collectionId = useGetCollectionId(schedulePurchase.collection) as any
   const nft = useGetItem(collectionId, schedulePurchase.productId) as any
-  console.log('DataCard===================>', collectionId, nft, schedulePurchase)
   const currentAskPriceAsNumber = nft && parseFloat(nft?.currentAskPrice)
-  const { chainId } = useActiveChainId()
   return (
     <CardWrapper style={{ whiteSpace: 'break-spaces' }}>
       <Flex mb="2px" justifyContent="center" alignSelf="center">

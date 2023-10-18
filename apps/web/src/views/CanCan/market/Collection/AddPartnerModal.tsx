@@ -2,7 +2,20 @@ import EncryptRsa from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
 import { differenceInSeconds } from 'date-fns'
 import { ChangeEvent, useState, useMemo, useCallback } from 'react'
-import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box, Grid, ErrorIcon } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Text,
+  Button,
+  Modal,
+  Input,
+  useToast,
+  AutoRenewIcon,
+  Box,
+  Grid,
+  ErrorIcon,
+  useTooltip,
+  HelpIcon,
+} from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -117,7 +130,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
         ? [state.partnerCollectionId, paywall?.tokenId, state.productId, numOfSeconds, false]
         : [state.productId, paywall?.id, true, false, `${img0},${img1}`]
       return callWithGasPrice(contract, method, args).catch((err) => {
-        console.log('handleAddPartner====================>', err)
+        console.log('handleAddPartner====================>', err, method, args)
       })
     })
     if (receipt?.status) {
@@ -142,27 +155,69 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
     fetchWithCatchTxError,
   ])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t('Input the id of your paywall here, which is its entire name with the spaces replaced with dashes (-)')}
+    </Text>
+  )
+  const TooltipComponent2 = () => <Text>{t('Input your channel id here')}</Text>
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Input the end date of your partnership. The cost of partnership is the number of minutes between now and the end date of your partnership multiplied by the price per minute. The price per minute is displayed below.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <Modal title={t('Add Partner to Wall')} onDismiss={onDismiss}>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Product ID')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Paywall ID')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
           name="productId"
           value={state.productId}
-          placeholder={t('input your product id')}
+          placeholder={t('input your paywall id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       {partner ? (
         <>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Collection ID')}
-            </Text>
+            <Flex ref={targetRef2}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Collection ID')}
+              </Text>
+              {tooltipVisible2 && tooltip2}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <Input
               type="text"
               scale="sm"
@@ -173,9 +228,13 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, paywallARP, partner,
             />
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('End Date')}
-            </Text>
+            <Flex ref={targetRef3}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('End Date')}
+              </Text>
+              {tooltipVisible3 && tooltip3}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <DatePicker
               onChange={handleRawValueChange('numOfSeconds')}
               selected={state.numOfSeconds}

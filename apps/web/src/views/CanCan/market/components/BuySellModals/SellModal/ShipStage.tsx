@@ -32,6 +32,7 @@ import ProgressSteps from '../../ProgressSteps'
 import AvatarImage from '../../BannerHeader/AvatarImage'
 import PublishMediaStage from './PublishMediaStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { useGetPaywallARP } from 'state/cancan/hooks'
 
 interface EditStageProps {
   variant: 'product' | 'paywall' | 'article'
@@ -89,7 +90,8 @@ const EditStage: React.FC<any> = ({
       : SellingStage.CREATE_ASK_ORDER,
   )
   const [expand, setExpand] = useState(false)
-  const [step1Complete, setStep1Complete] = useState(false)
+  const paywallARP = useGetPaywallARP(collection?.id ?? '') as any as any
+  const [step1Complete, setStep1Complete] = useState(!!paywallARP?.paywallAddress)
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
@@ -263,9 +265,9 @@ const EditStage: React.FC<any> = ({
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
       if (stage === SellingStage.CONFIRM_CREATE_PAYWALL1) {
-        return callWithGasPrice(paywallARPFactoryContract, 'createGauge', [])
-          .then(() => setStep1Complete(true))
-          .catch((err) => console.log('CONFIRM_CREATE_PAYWALL1==================>', err))
+        return callWithGasPrice(paywallARPFactoryContract, 'createGauge', []).catch((err) =>
+          console.log('CONFIRM_CREATE_PAYWALL1==================>', err),
+        )
       }
       if (stage === SellingStage.CONFIRM_CREATE_PAYWALL2) {
         const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
@@ -298,7 +300,7 @@ const EditStage: React.FC<any> = ({
                 state.tokenId?.split(' ')?.join('-')?.trim(),
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
-                state.options?.reduce((accum, attr) => [...accum, attr.value], []),
+                state.options?.reduce((accum, attr) => [...accum, parseInt(attr.value) * 60], []),
                 state.options?.reduce((accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.category], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.element], []),
@@ -445,6 +447,7 @@ const EditStage: React.FC<any> = ({
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       if (state.emailList) onSuccessSale()
       setConfirmedTxHash(receipt?.transactionHash)
+      if (stage === SellingStage.CONFIRM_CREATE_PAYWALL1) setStep1Complete(true)
       setStage(SellingStage.TX_CONFIRMED)
     },
   })
@@ -495,7 +498,7 @@ const EditStage: React.FC<any> = ({
         <Flex flexDirection="row">
           <ProgressSteps steps={[step1Complete]} />
           <Flex flexDirection="column" width="100%" px="16px" pb="16px">
-            <Button mb="8px" onClick={() => setStage(SellingStage.CONFIRM_CREATE_PAYWALL1)}>
+            <Button mb="8px" disabled={step1Complete} onClick={() => setStage(SellingStage.CONFIRM_CREATE_PAYWALL1)}>
               {t('STEP 1')}
             </Button>
             <Button mb="8px" variant="success" onClick={() => setStage(SellingStage.CREATE_PAYWALL2)}>

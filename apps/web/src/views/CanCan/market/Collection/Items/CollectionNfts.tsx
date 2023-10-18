@@ -126,7 +126,10 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
         !showOnlyNftsUsers &&
         collection?.paywalls?.map((paywall) => {
           const mirrors = paywall?.mirrors.filter(
-            (mirror) => !!mirror.sharedPaywall && Number(mirror.endTime) * 1000 > Date.now(),
+            (mirror) =>
+              !!mirror.sharedPaywall &&
+              Number(mirror.endTime) * 1000 > Date.now() &&
+              mirror?.sharedPaywall?.id !== paywall?.id,
           )
           return (
             <>

@@ -176,7 +176,13 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                         width={['100%', null, 'max-content']}
                         onClick={onPresentBuyModal}
                       >
-                        {isAuction ? t('Bid') : !dropInDatePassed ? t('Drop Pending') : t('Buy')}
+                        {isAuction
+                          ? t('Bid')
+                          : !dropInDatePassed
+                          ? t('Drop Pending')
+                          : isArticle
+                          ? t('Tip Writer')
+                          : t('Buy')}
                       </Button>
                       {isAuction && <Countdown nextEventTime={Number(nft?.firstBidTime) + Number(nft?.bidDuration)} />}
                       {!dropInDatePassed && <Countdown nextEventTime={Number(nft?.dropinTimer)} />}

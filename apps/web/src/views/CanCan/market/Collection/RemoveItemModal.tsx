@@ -1,7 +1,7 @@
 import NodeRSA from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useState, useMemo, useCallback } from 'react'
-import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box } from '@pancakeswap/uikit'
+import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -125,11 +125,18 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <Box>
-        <Text small color="textSubtle">
-          {t('This will remove the specified item from your paywall. Please read the documentation for more details.')}
-        </Text>
-      </Box>
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+        <Flex alignSelf="flex-start">
+          <ErrorIcon width={24} height={24} color="textSubtle" />
+        </Flex>
+        <Box>
+          <Text small color="textSubtle">
+            {t(
+              'This will remove the specified item from your paywall. Please read the documentation for more details.',
+            )}
+          </Text>
+        </Box>
+      </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         {account ? (

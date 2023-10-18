@@ -138,14 +138,14 @@ const ReviewStage: React.FC<any> = ({
   const TooltipComponent = () => (
     <Text>
       {t(
-        "Input the token id of the Leviathan from this product's workspace. If you do not have a token in that Leviathan, you should mint one from the Leviathans' page at Mint > Leviathan. Once you have one, you can input its address right here.",
+        "Input the id of your token in the Valuepool provided above. If you do not have a token in that Valuepool, you should mint one from the Valuepool's page (at Win > Valuepool). Once you have one, you can input its id right here.",
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "Input the token id of the Leviathan from this product's workspace. If you do not have a token in that Leviathan, you should mint one from the Leviathans' page at Mint > Leviathan. Once you have one, you can input its address right here.",
+        "Input the token id of the Leviathan from this product's workspace. If you do not have a token in that Leviathan, you should mint one from the Leviathans' page at Mint > Leviathan. Once you have one, you can input its id right here.",
       )}
     </Text>
   )
@@ -450,7 +450,7 @@ const ReviewStage: React.FC<any> = ({
               <GreyedOutContainer>
                 <Flex ref={targetRef}>
                   <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                    {t('Leviathan Token ID')}
+                    {t('Valuepool Token ID')}
                   </Text>
                   {tooltipVisible && tooltip}
                   <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -459,7 +459,7 @@ const ReviewStage: React.FC<any> = ({
                   type="number"
                   scale="sm"
                   value={tokenId}
-                  placeholder={t('input Leviathan token id')}
+                  placeholder={t('input Valuepool token id')}
                   onChange={(e) => setTokenId(e.target.value)}
                 />
               </GreyedOutContainer>
