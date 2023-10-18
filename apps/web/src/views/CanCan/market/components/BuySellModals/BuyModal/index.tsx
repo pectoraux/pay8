@@ -62,7 +62,7 @@ interface BuyModalProps extends InjectedModalProps {
 // NFT WBNB in testnet contract is different
 const TESTNET_WBNB_NFT_ADDRESS = '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
-const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
+const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought, onDismiss }) => {
   const referrer = useRouter().query.referrer as string
   const collectionId = useRouter().query.collectionAddress as string
   const [stage, setStage] = useState(variant === 'paywall' ? BuyingStage.PAYWALL_REVIEW : BuyingStage.REVIEW)
@@ -238,8 +238,9 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
     onSuccess: async ({ receipt }) => {
       setConfirmedTxHash(receipt.transactionHash)
       setStage(BuyingStage.TX_CONFIRMED)
+      setBought(true)
       toastSuccess(
-        t('Your purchase has been successfully processed'),
+        t('Your purchase has been successfully processed. Notify the seller on PaySwap or somewhere else.'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
       )
     },

@@ -11,6 +11,7 @@ import {
   TabMenu,
   ChevronLeftIcon,
   NextLinkFromReactRouter,
+  LinkExternal,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -34,6 +35,8 @@ import { cancanBaseUrl } from '../../../constants'
 import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
 import { getThumbnailNContent } from 'utils/cancan'
+import { useState } from 'react'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface MainNFTCardProps {
   nft: NftToken
@@ -49,7 +52,7 @@ const BackLink = styled(NextLinkFromReactRouter)`
   font-weight: 600;
 `
 
-const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess }) => {
+const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic, onSuccess }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const isAuction = Number(nft?.bidDuration) > 0
@@ -66,8 +69,13 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
   } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   const { isMobile } = useMatchBreakpoints()
   let { mp4, isArticle } = getThumbnailNContent(nft)
+  const [bought, setBought] = useState(false)
+  const contactChannels = collection?.contactChannels?.split(',') ?? []
+  const contacts = collection?.contacts?.split(',') ?? []
   const { itemColor, textColor } = useColor(nft?.superLikes ?? '0', nft?.superDisLikes ?? '0')
-  const [onPresentBuyModal] = useModal(<BuyModal variant={isPaywall ? 'paywall' : 'item'} nftToBuy={nft} />)
+  const [onPresentBuyModal] = useModal(
+    <BuyModal setBought={setBought} variant={isPaywall ? 'paywall' : 'item'} nftToBuy={nft} />,
+  )
   const [onPresentSellModal] = useModal(
     <SellModal variant={isPaywall ? 'paywall' : 'item'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
@@ -172,14 +180,6 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
                       </Button>
                       {isAuction && <Countdown nextEventTime={Number(nft?.firstBidTime) + Number(nft?.bidDuration)} />}
                       {!dropInDatePassed && <Countdown nextEventTime={Number(nft?.dropinTimer)} />}
-                      {/* <Button
-                  minWidth="168px"
-                  mr="16px"
-                  width={['100%', null, 'max-content']}
-                  onClick={onPresentBuyModal}
-                >
-                  {t('Register')}
-                </Button> */}
                     </Flex>
                   )}
                 </Flex>
@@ -194,6 +194,14 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
                   />
                 ) : null}
               </Flex>
+              {bought && (
+                <Flex flexDirection="column" mt="50px">
+                  <LinkExternal href="https://paychat.payswap.org" bold textTransform="uppercase">
+                    {t('Notify Seller On PayChat or elsewhere!')}
+                  </LinkExternal>
+                  <Contacts contactChannels={contactChannels} contacts={contacts} />
+                </Flex>
+              )}
             </Box>
           </Flex>
           {!isArticle ? (
