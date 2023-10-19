@@ -124,7 +124,7 @@ const Home = () => {
             </Heading>
             {account && (
               <Button as={NextLinkFromReactRouter} to={`/profile/${account.toLowerCase()}`} mt="32px">
-                {t('Manage/Sell')}
+                {t('Manage Profile')}
               </Button>
             )}
           </div>

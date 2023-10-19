@@ -135,7 +135,7 @@ export const useProfile = (): {
   const { account } = useWeb3React()
   const { chainId } = useActiveChainId()
   const { data, status, mutate } = useSWRImmutable(
-    account ? [account, 'profile38'] : null,
+    account ? [account, 'profile'] : null,
     () => getProfile(account, chainId),
     {
       use: [localStorageMiddleware],

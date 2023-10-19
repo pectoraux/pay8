@@ -305,6 +305,10 @@ export const getProfile = async (address, chainId) => {
           },
         ],
       })
+      let collection
+      if (Number(_profileInfo.result[6]?.toString())) {
+        collection = await getCollection(_profileInfo.result[6]?.toString())
+      }
       profileInfo = {
         ssid: _profileInfo.result[0],
         name: _profileInfo.result[1],
@@ -313,6 +317,7 @@ export const getProfile = async (address, chainId) => {
         activePeriod: _profileInfo.result[4]?.toString(),
         paidPayable: _profileInfo.result[5]?.toString(),
         collectionId: _profileInfo.result[6]?.toString(),
+        collection,
         black: {
           lateSeconds: _profileInfo.result[7][0]?.toString(),
           lateValue: _profileInfo.result[7][1]?.toString(),

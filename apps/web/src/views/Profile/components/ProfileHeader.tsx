@@ -24,7 +24,7 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { Profile } from 'state/types'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useMemo, useState, useCallback } from 'react'
-import { useGetSharedEmail } from 'state/profile/hooks'
+import { useGetSharedEmail, useProfile } from 'state/profile/hooks'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateBountyModal from 'views/TrustBounties/components/CreateBountyModal'
 import EditProfileAvatar from './EditProfileAvatar'
@@ -57,18 +57,20 @@ const ProfileHeader: React.FC<any> = ({
   const { sharedEmail } = useGetSharedEmail(account)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
+  const p = useProfile()
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [openPresentCreateProfile] = useModal(
     <CreateGaugeModal variant="create" profile={profile} onSuccess={onSuccess} />,
   )
   const [openPresentAddAccount] = useModal(<CreateGaugeModal variant="add" profile={profile} onSuccess={onSuccess} />)
+  console.log('profileprofile==============================>', profile, p)
 
   const isConnectedAccount = isAddress(account) === isAddress(accountPath)
   const numNftCollected = profile ? (nftCollected ? formatNumber(nftCollected, 0, 0) : '-') : '-'
   const numFollowers = profile ? (profile.followers?.length ? formatNumber(profile.followers?.length, 0, 0) : '-') : '-'
   const numFollowees = profile ? (profile.followees?.length ? formatNumber(profile.followees?.length, 0, 0) : '-') : '-'
 
-  const avatarImage = profile?.nft?.image?.thumbnail || '/images/nfts/no-profile-md.png'
+  const avatarImage = p?.profile?.collection?.avatar || '/images/nfts/no-profile-md.png'
   const profileTeamId = profile?.teamId
   const hasProfile = !!profile
   const toggleUsername = () => setShowUsername(!showUsername)
@@ -77,21 +79,6 @@ const ProfileHeader: React.FC<any> = ({
   const Icon = !showUsername ? VisibilityOff : VisibilityOn
   const isBounties = useRouter().asPath.includes('bounties')
   const [onPresentTrustBounties] = useModal(<CreateBountyModal currency={currency ?? inputCurency} />)
-
-  const bannerImage = useMemo(() => {
-    const imagePath = '/images/teams'
-    switch (profileTeamId) {
-      case 1:
-        return `${imagePath}/storm-banner.png`
-      case 2:
-        return `${imagePath}/flippers-banner.png`
-      case 3:
-        return `${imagePath}/cakers-banner.png`
-      default:
-        break
-    }
-    return `${imagePath}/no-team-banner.png`
-  }, [profileTeamId])
 
   const avatar = useMemo(() => {
     const getIconButtons = () => {
@@ -212,10 +199,14 @@ const ProfileHeader: React.FC<any> = ({
       </Flex>
     )
   }, [accountPath, isConnectedAccount, sharedEmail, openPresentCreateProfile, openPresentAddAccount, profile, t])
-
+  const imagePath = '/images/teams'
   return (
     <>
-      <BannerHeader bannerImage={bannerImage} bannerAlt={t('User team banner')} avatar={avatar} />
+      <BannerHeader
+        bannerImage={p?.profile?.collection?.large ?? `${imagePath}/no-team-banner.png`}
+        bannerAlt={t('user profile banner')}
+        avatar={avatar}
+      />
       <Grid
         pb="48px"
         gridGap="16px"
