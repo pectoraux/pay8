@@ -244,7 +244,9 @@ export const useGetDiscounted = (
 }
 
 export const useGetPaywallARP = (collectionAddress: string) => {
-  const { data } = useSWRImmutable(['cancan', 'getPaywallARP3'], async () => getPaywallARP(collectionAddress))
+  const { data } = useSWRImmutable(['cancan', 'getPaywallARP', collectionAddress], async () =>
+    getPaywallARP(collectionAddress),
+  )
   return data as any
 }
 

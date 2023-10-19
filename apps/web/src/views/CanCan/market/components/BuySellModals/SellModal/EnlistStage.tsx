@@ -270,7 +270,7 @@ const EnlistStage: React.FC<any> = ({
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
-
+  console.log('state.options===============>', state.options, !!state.options[0]?.category)
   return (
     <>
       <Flex alignSelf="center">
@@ -323,7 +323,7 @@ const EnlistStage: React.FC<any> = ({
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Add or remove options')}
+            {t('Add or remove options (Required)')}
           </Text>
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -556,7 +556,24 @@ const EnlistStage: React.FC<any> = ({
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage} disabled={!state.usetFIAT}>
+        <Button
+          mb="8px"
+          onClick={continueToNextStage}
+          disabled={
+            !state.usetFIAT ||
+            (variant === 'paywall' &&
+              (!state.options.length ||
+                (state.options.length &&
+                  (!state.options[0]?.category ||
+                    !state.options[0]?.element ||
+                    !state.options[0]?.currency ||
+                    !state.options[0]?.value ||
+                    !state.options[0]?.unitPrice ||
+                    !state.options[0]?.value ||
+                    !state.options[0]?.min ||
+                    !state.options[0]?.max))))
+          }
+        >
           {t('Create Listing')}
         </Button>
       </Flex>

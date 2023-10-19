@@ -130,7 +130,20 @@ const ActivityRow: React.FC<any> = ({
           <Td>
             <ActivityPrice price={priceAsFloat} bnbBusdPrice={bnbBusdPrice} />
           </Td>
-          {isUserActivity ? (
+          {activity.marketEvent === 'SELL' ? (
+            <>
+              <Td>
+                <Flex justifyContent="center" alignItems="center">
+                  {activity.seller ? <ProfileCell accountAddress={activity.seller} tokenId={tokenId} /> : '-'}
+                </Flex>
+              </Td>
+              <Td>
+                <Flex justifyContent="center" alignItems="center">
+                  {activity.buyer ? <ProfileCell accountAddress={activity.buyer} tokenId={tokenId} /> : '-'}
+                </Flex>
+              </Td>
+            </>
+          ) : isUserActivity ? (
             <Td>
               <Flex justifyContent="center" alignItems="center">
                 {activity.otherParty ? <ProfileCell accountAddress={activity.otherParty} tokenId={tokenId} /> : '-'}

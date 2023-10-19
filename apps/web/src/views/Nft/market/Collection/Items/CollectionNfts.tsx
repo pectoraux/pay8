@@ -377,6 +377,11 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
         <Button mt="5px" ml="5px" variant="danger" onClick={onPresentRemoveItem}>
           {t('Remove')}
         </Button>
+        <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
+          <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
+            {t('View Paywall')}
+          </LinkExternal>
+        </Flex>
       </Flex>
       <Grid
         style={{ padding: '20px' }}
