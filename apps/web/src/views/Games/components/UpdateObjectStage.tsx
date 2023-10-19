@@ -55,7 +55,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        "This sets a list of resource tokens needed to mint the object seperated by commas. The order of the resources is relevant. If to mint a sword for instance, you want users to bring a diamond and a ruby (in that order), you would get a diamond & ruby NFTs (which you can get an auditor on the page 'Earn>Auditors' to mint you) and input their ids here in the right order. That way users willing to mint a sword will also go to the auditor's page to get a diamond and a ruby's NFT minted to them, come back to this game and input their NFTs' ids in order to mint a sword. to  You only need this field when adding objects, not when removing objects.",
+        "This sets a list of resource tokens needed to mint the object separated by commas. The order of the resources is relevant. If to mint a sword for instance, you want users to bring a diamond and a ruby (in that order), you would get a diamond & ruby NFTs (which you can get an auditor on the page 'Earn>Auditors' to mint you) and input their ids here in the right order. That way users willing to mint a sword will also go to the auditor's page to get a diamond and a ruby's NFT minted to them, come back to this game and input their NFTs' ids in order to mint a sword. to  You only need this field when adding objects, not when removing objects.",
       )}
     </Text>
   )

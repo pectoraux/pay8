@@ -386,27 +386,29 @@ const DiscountsNCashbacks: React.FC<any> = ({
         <ButtonMenuItem>{t('Cashbacks')}</ButtonMenuItem>
       </ButtonMenu>
       {!activeButtonIndex ? discountSection : cashbackSection}
-      <GreyedOutContainer>
-        <Divider />
-        <StyledItemRow>
-          <Flex ref={targetRef9} paddingRight="50px">
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" bold>
-              {t('Rewards in')}
-            </Text>
-            {tooltipVisible9 && tooltip9}
-            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-          </Flex>
-          <ButtonMenu
-            scale="sm"
-            variant="subtle"
-            activeIndex={cashNotCredit}
-            onItemClick={handleRawValueChange('cashNotCredit')}
-          >
-            <ButtonMenuItem>{t('Credits')}</ButtonMenuItem>
-            <ButtonMenuItem>{t('Cash')}</ButtonMenuItem>
-          </ButtonMenu>
-        </StyledItemRow>
-      </GreyedOutContainer>
+      {!activeButtonIndex ? null : (
+        <GreyedOutContainer>
+          <Divider />
+          <StyledItemRow>
+            <Flex ref={targetRef9} paddingRight="50px">
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" bold>
+                {t('Rewards in')}
+              </Text>
+              {tooltipVisible9 && tooltip9}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
+            <ButtonMenu
+              scale="sm"
+              variant="subtle"
+              activeIndex={cashNotCredit}
+              onItemClick={handleRawValueChange('cashNotCredit')}
+            >
+              <ButtonMenuItem>{t('Credits')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Cash')}</ButtonMenuItem>
+            </ButtonMenu>
+          </StyledItemRow>
+        </GreyedOutContainer>
+      )}
       {!activeButtonIndex ? (
         <GreyedOutContainer>
           <StyledItemRow>
@@ -461,7 +463,9 @@ const DiscountsNCashbacks: React.FC<any> = ({
         </Text>
       </Grid>
       <Flex flexDirection="column" alignItems="center" justifyContent="space-between" height="150px">
-        <LinkExternal href="">{t('Learn more about discounts & cashbacks')}</LinkExternal>
+        <LinkExternal href="https://docs.payswap.org/products/cancan/discounts">
+          {t('Learn more about discounts & cashbacks')}
+        </LinkExternal>
       </Flex>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">

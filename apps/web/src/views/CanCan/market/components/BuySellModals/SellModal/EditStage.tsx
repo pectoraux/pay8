@@ -101,7 +101,7 @@ const EditStage: React.FC<any> = ({
           {t('Update Identity Requirements')}
         </Button>
         <Button variant="success" mb="8px" onClick={continueToUpdateBurnForCreditStage}>
-          {t('Update Burn For Credit tokens')}
+          {t('Update Burn For Credit Tokens')}
         </Button>
         <Button variant="success" mb="8px" onClick={continueToUpdateDiscountsAndCashbackStage}>
           {t('Update Discounts & Cashbacks')}

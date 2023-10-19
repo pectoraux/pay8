@@ -39,6 +39,7 @@ import LocationStage from './LocationStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
 import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
+import { getSSIContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
@@ -47,7 +48,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.ADD_LOCATION]: t('Adjust Location Data'),
   [SellingStage.UPDATE_IDENTITY_REQUIREMENTS]: t('Update Identity Requirements'),
   [SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS]: t('Update Tokens To Burn For Credit'),
-  [SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS]: t('Update Discounts and Cashback'),
+  [SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS]: t('Update Discounts and Cashbacks'),
   [SellingStage.ADD_USERS_PAYMENT_CREDIT]: t('Users Payment Credits'),
   [SellingStage.REMOVE_FROM_MARKET]: t('Remove From Market'),
   [SellingStage.REINITIALIZE_IDENTITY_LIMITS]: t('Reset Identity Limits'),
@@ -175,6 +176,8 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
     period: nftToSell?.period ?? '0',
     isTradable: Number(nftToSell?.isTradable) ?? 0,
     isPaywall: 0,
+    profileId: '',
+    proofType: '',
   }))
   const [stage, setStage] = useState(SellingStage.EDIT)
   const [price, setPrice] = useState(nftToSell?.currentAskPrice)
@@ -344,6 +347,10 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
 
   const continueToUpdateBurnForCreditStage = () => {
     setStage(SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS)
+  }
+
+  const continueToUpdateMerchantProofTypeStage = () => {
+    setStage(SellingStage.UPDATE_MERCHANT_PROOF_TYPE)
   }
 
   const continueToUpdateDiscountsAndCashbackStage = () => {
@@ -525,6 +532,12 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           (err) => console.log('CONFIRM_UPDATE_BURN_FOR_CREDIT_TOKENS===========>', err),
         )
       }
+      if (stage === SellingStage.CONFIRM_UPDATE_MERCHANT_PROOF_TYPE) {
+        console.log('CONFIRM_UPDATE_MERCHANT_PROOF_TYPE===========>', [state.profileId, state.proofType])
+        return callWithGasPrice(getSSIContract(), 'updateMerchantProofType', [state.profileId, state.proofType]).catch(
+          (err) => console.log('CONFIRM_UPDATE_MERCHANT_PROOF_TYPE===========>', err),
+        )
+      }
       if (stage === SellingStage.CONFIRM_ADD_USERS_PAYMENT_CREDIT) {
         const amount = getDecimalAmount(new BigNumber(paymentCredits ?? 0))
         console.log('CONFIRM_ADD_USERS_PAYMENT_CREDIT===========>', [
@@ -666,6 +679,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           continueToLocationStage={continueToLocationStage}
           continueToUpdateIdentityStage={continueToUpdateIdentityStage}
           continueToUpdateBurnForCreditStage={continueToUpdateBurnForCreditStage}
+          continueToUpdateMerchantProofTypeStage={continueToUpdateMerchantProofTypeStage}
           continueToAddUsersPaymentCreditStage={continueToAddUsersPaymentCreditStage}
           continueToUpdateDiscountsAndCashbackStage={continueToUpdateDiscountsAndCashbackStage}
           continueToReinitializeIdentityLimitsStage={continueToReinitializeIdentityLimitsStage}

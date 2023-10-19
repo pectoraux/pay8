@@ -35,7 +35,8 @@ export const stagesWithBackButton = [
   SellingStage.CONFIRM_REINITIALIZE_CASHBACK_LIMITS,
   SellingStage.ADD_USERS_PAYMENT_CREDIT,
   SellingStage.CONFIRM_ADD_USERS_PAYMENT_CREDIT,
-
+  SellingStage.UPDATE_MERCHANT_PROOF_TYPE,
+  SellingStage.CONFIRM_UPDATE_MERCHANT_PROOF_TYPE,
   SellingStage.CLAIM_PENDING_REVENUE,
   SellingStage.CONFIRM_CLAIM_PENDING_REVENUE,
   SellingStage.FUND_PENDING_REVENUE,
@@ -77,6 +78,7 @@ export const stagesWithConfirmButton = [
   SellingStage.CONFIRM_ADD_LOCATION2,
   SellingStage.CONFIRM_MODIFY_CONTACT,
   SellingStage.CONFIRM_ADJUST_OPTIONS,
+  SellingStage.CONFIRM_UPDATE_MERCHANT_PROOF_TYPE,
 ]
 
 export const StyledModal = styled(Modal)<{ stage: SellingStage; expand?: boolean }>`

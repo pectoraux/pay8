@@ -81,7 +81,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'List your betting event options seperated by commas. If for instance you want your users to pick between Ali1 and Ali2, you will input Ali1, Ali2 here. If you are using alphabet encoding, then just input a-z here.',
+        'List your betting event options separated by commas. If for instance you want your users to pick between Ali1 and Ali2, you will input Ali1, Ali2 here. If you are using alphabet encoding, then just input a-z here.',
       )}
     </Text>
   )
@@ -95,7 +95,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'The rewards breakdown is how you are willing to distribute the prize pot between users. There are six brackets and your input here will need 6 comma seperated numbers, each between 0 and 100 and all summing up to 100 (e.g: 0,0,0,0,25,75). All betting options are series numbers',
+        'The rewards breakdown is how you are willing to distribute the prize pot between users. There are six brackets and your input here will need 6 comma separated numbers, each between 0 and 100 and all summing up to 100 (e.g: 0,0,0,0,25,75). All betting options are series numbers',
       )}
     </Text>
   )

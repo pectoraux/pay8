@@ -40,6 +40,8 @@ import ResetIdentityLimits from './ResetIdentityLimits'
 import ResetDiscountLimits from './ResetDiscountLimits'
 import ResetCashbackLimits from './ResetCashbackLimits'
 import LocationStage from './LocationStage'
+import UserMerchantProofType from './UserMerchantProofType'
+import { getSSIContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
@@ -48,8 +50,9 @@ const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.ADD_LOCATION]: t('Adjust Location Data'),
   [SellingStage.UPDATE_IDENTITY_REQUIREMENTS]: t('Update Identity Requirements'),
   [SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS]: t('Update Tokens To Burn For Credit'),
-  [SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS]: t('Update Discounts and Cashback'),
+  [SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS]: t('Update Discounts and Cashbacks'),
   [SellingStage.ADD_USERS_PAYMENT_CREDIT]: t('Users Payment Credits'),
+  [SellingStage.UPDATE_MERCHANT_PROOF_TYPE]: t('Update Merchant Proof Type'),
   [SellingStage.UPDATE_TAG]: t('Update Tag'),
   [SellingStage.UPDATE_TAG_REGISTRATION]: t('Update Tag Registration'),
   [SellingStage.UPDATE_PRICE_PER_MINUTE]: t('Update Price Per Minute'),
@@ -60,6 +63,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.CONFIRM_ADJUST_PRICE]: t('Back'),
   [SellingStage.CONFIRM_ADJUST_OPTIONS]: t('Back'),
   [SellingStage.CONFIRM_ADD_LOCATION]: t('Back'),
+  [SellingStage.CONFIRM_UPDATE_MERCHANT_PROOF_TYPE]: t('Back'),
   [SellingStage.CONFIRM_REMOVE_FROM_MARKET]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS]: t('Back'),
@@ -180,6 +184,8 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     isPaywall: 0,
     tag: '',
     add: 0,
+    profileId: '',
+    proofType: 0,
   }))
   const [stage, setStage] = useState(SellingStage.EDIT)
   const [price, setPrice] = useState(nftToSell?.currentAskPrice)
@@ -360,6 +366,10 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     setStage(SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS)
   }
 
+  const continueToUpdateMerchantProofTypeStage = () => {
+    setStage(SellingStage.UPDATE_MERCHANT_PROOF_TYPE)
+  }
+
   const continueToUpdateDiscountsAndCashbackStage = () => {
     setStage(SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS)
   }
@@ -533,6 +543,12 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           console.log('CONFIRM_UPDATE_BURN_FOR_CREDIT_TOKENS===========>', err),
         )
       }
+      if (stage === SellingStage.CONFIRM_UPDATE_MERCHANT_PROOF_TYPE) {
+        console.log('CONFIRM_UPDATE_MERCHANT_PROOF_TYPE===========>', [state.profileId, state.proofType])
+        return callWithGasPrice(getSSIContract(), 'updateMerchantProofType', [state.profileId, state.proofType]).catch(
+          (err) => console.log('CONFIRM_UPDATE_MERCHANT_PROOF_TYPE===========>', err),
+        )
+      }
       if (stage === SellingStage.CONFIRM_ADD_USERS_PAYMENT_CREDIT) {
         const amount = getDecimalAmount(new BigNumber(paymentCredits ?? 0))
         console.log('CONFIRM_ADD_USERS_PAYMENT_CREDIT===========>', [
@@ -666,6 +682,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           continueToLocationStage={continueToLocationStage}
           continueToUpdateIdentityStage={continueToUpdateIdentityStage}
           continueToUpdateBurnForCreditStage={continueToUpdateBurnForCreditStage}
+          // continueToUpdateMerchantProofTypeStage={continueToUpdateMerchantProofTypeStage}
           continueToAddUsersPaymentCreditStage={continueToAddUsersPaymentCreditStage}
           continueToUpdateDiscountsAndCashbackStage={continueToUpdateDiscountsAndCashbackStage}
           continueToReinitializeIdentityLimitsStage={continueToReinitializeIdentityLimitsStage}
@@ -752,6 +769,18 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           continueToNextStage={continueToNextStage}
         />
       )}
+      {/* {stage === SellingStage.UPDATE_MERCHANT_PROOF_TYPE && (
+        <UserMerchantProofType
+          state={state}
+          thumbnail={_thumbnail}
+          nftToSell={nftToSell}
+          collectionId={collectionId}
+          lowestPrice={lowestPrice}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )} */}
       {stage === SellingStage.ADD_LOCATION && (
         <LocationStage
           show

@@ -23,7 +23,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   }, [inputRef])
 
   const TooltipComponent = () => (
-    <Text>{t('Input the ids of all the accounts you would like to charge seperated with commas.')}</Text>
+    <Text>{t('Input the ids of all the accounts you would like to charge separated with commas.')}</Text>
   )
   const TooltipComponent2 = () => (
     <Text>

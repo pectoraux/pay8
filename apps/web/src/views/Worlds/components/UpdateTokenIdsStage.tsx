@@ -47,7 +47,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
 
   const TooltipComponent = () => (
     <Text>
-      {t('Input the ids of the World NFTs you would like to add to this World contract seperated by commas.')}
+      {t('Input the ids of the World NFTs you would like to add to this World contract separated by commas.')}
     </Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {

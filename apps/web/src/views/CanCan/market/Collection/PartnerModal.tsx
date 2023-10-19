@@ -119,19 +119,23 @@ const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
   const TooltipComponent = () => (
     <Text>
       {t(
-        'Identity tokens are used to confirm requirements customers of an item need to fulfill to purchase the item. If your item does not have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the business to deliver you an identity token and input its ID in this field.',
+        'Some channels require their partners to have a bounty with a certain minimum balance setup. If that is the case for this channel, make sure to setup your bounty an input its id right here.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'This sets the percentage on each sale you make through this channel, that you are willing to share with the owner of the channel.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
-    <Text>{t('You need the password of the card to unlock enough funds from it to make the purchase.')}</Text>
+    <Text>
+      {t(
+        'Identity requirements are used to check some information about partners before they can partner with the channel. If this channel does not have any identity requirements for its partners, just input 0. If it does, make sure to get an auditor (approved by the channel) to deliver you with the right identity token and input your identity token id right here. To learn more about identity tokens, read the PaySwap documentation',
+      )}
+    </Text>
   )
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {

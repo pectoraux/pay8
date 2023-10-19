@@ -32,7 +32,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Are your an admin? Input your estimation table in comma seperated format. Each number represents the value of the collateral at a different week of the year starting from the first week of the year to the 52nd week. An example of an estimation table will be something like: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12. For this table, 1 is the price of the collateral at week 1 after its purchase and its price at week 52 is 12',
+        'Are your an admin? Input your estimation table in comma separated format. Each number represents the value of the collateral at a different week of the year starting from the first week of the year to the 52nd week. An example of an estimation table will be something like: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12. For this table, 1 is the price of the collateral at week 1 after its purchase and its price at week 52 is 12',
       )}
     </Text>
   )

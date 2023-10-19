@@ -95,7 +95,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent13 = () => (
     <Text>
       {t(
-        'This is a series of 6 percentages seperated by commas; each percentage corresponds to a different bracket (there are a total of 6 brackets) and represents the share of the prize pot earned by users that have the winning number in that bracket. For a better explanation, checkout the page of a lottery',
+        'This is a series of 6 percentages separated by commas; each percentage corresponds to a different bracket (there are a total of 6 brackets) and represents the share of the prize pot earned by users that have the winning number in that bracket. For a better explanation, checkout the page of a lottery',
       )}
     </Text>
   )
