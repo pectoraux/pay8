@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   BunnyPlaceholderIcon,
   Spinner,
@@ -340,12 +340,13 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
   const { account } = useWeb3React()
   const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any
   const [nfticketId, setNfticketId] = useState('')
-  const { ongoingSubscription, status } = useGetSubscriptionStatus(
+  const { ongoingSubscription, status, refetch } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',
     nfticketId ?? '0',
     paywall?.tokenId ?? '',
   )
+  console.log('paywallnfticketId======================>', nfticketId, ongoingSubscription, paywallARP, paywall)
   const isAdmin = paywall?.currentSeller?.toLowerCase() === account?.toLowerCase()
   const [onPresentAddItem] = useModal(<AddItemModal collection={collection} paywall={paywall} />)
   const [onPresentAddItem2] = useModal(<AddItemModal partner collection={collection} paywall={paywall} />)
@@ -361,6 +362,10 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
       ...option,
     }
   })
+
+  useEffect(() => {
+    refetch()
+  }, [paywallARP, nfticketId, account, paywall])
 
   const TooltipComponent = () => (
     <Text>

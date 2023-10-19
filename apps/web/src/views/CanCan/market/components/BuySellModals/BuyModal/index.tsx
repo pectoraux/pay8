@@ -40,6 +40,7 @@ import CashbackStage from './CashbackStage'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
+import { noop } from 'lodash'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
@@ -62,7 +63,7 @@ interface BuyModalProps extends InjectedModalProps {
 // NFT WBNB in testnet contract is different
 const TESTNET_WBNB_NFT_ADDRESS = '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
-const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought, onDismiss }) => {
+const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought = noop, onDismiss }) => {
   const referrer = useRouter().query.referrer as string
   const collectionId = useRouter().query.collectionAddress as string
   const [stage, setStage] = useState(variant === 'paywall' ? BuyingStage.PAYWALL_REVIEW : BuyingStage.REVIEW)
@@ -118,6 +119,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought, onDism
     })
     return opt
   }, [variant, nftToBuy, nftFilters])
+  console.log('userOptions====================>', userOptions)
   const { discount, discounted, status } = useGetDiscounted(
     nftToBuy?.currentSeller,
     account,
@@ -144,11 +146,10 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought, onDism
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
-      return (
-        paymentCurrency === 2 ??
-        (requiresApproval(bnbContractReader, account, callContract.address) ||
-          requiresApproval(bnbContractReader, account, stakeMarketContract.address))
-      )
+      return paymentCurrency === 2
+        ? true
+        : requiresApproval(bnbContractReader, account, callContract.address) ||
+            requiresApproval(bnbContractReader, account, stakeMarketContract.address)
       // requiresApproval(bnbContractReader, account, helperContract.address) ||
     },
     // eslint-disable-next-line consistent-return

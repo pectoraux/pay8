@@ -268,17 +268,18 @@ export const useGetSubscriptionStatus = (
   nfticketId: string,
   tokenId: string,
 ): any => {
-  const { data, status } = useSWR(
-    ['subscription3', paywallAddress, nfticketId, tokenId, account?.toLowerCase()],
+  const { data, status, mutate } = useSWR(
+    ['subscription', paywallAddress, nfticketId, tokenId, account?.toLowerCase()],
     async () => getSubscriptionStatus(paywallAddress, account?.toLowerCase(), nfticketId, tokenId),
     {
       revalidateIfStale: true,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
     },
   )
   return {
     ongoingSubscription: data,
     status,
+    refetch: mutate,
   }
 }
