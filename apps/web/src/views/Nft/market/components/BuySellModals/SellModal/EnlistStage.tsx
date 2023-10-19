@@ -33,6 +33,7 @@ interface SetPriceStageProps {
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
 const EnlistStage: React.FC<any> = ({
+  variant,
   state,
   nftFilters,
   setNftFilters,

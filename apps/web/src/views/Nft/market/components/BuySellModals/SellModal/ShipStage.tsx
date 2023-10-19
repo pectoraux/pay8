@@ -457,6 +457,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
       {stage === SellingStage.CREATE_ASK_ORDER && (
         <EnlistStage
           state={state}
+          variant={variant}
           nftFilters={nftFilters}
           setNftFilters={setNftFilters}
           updateValue={updateValue}
