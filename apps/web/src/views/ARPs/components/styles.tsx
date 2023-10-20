@@ -7,7 +7,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
     padding: 0;
   }
 `
-export const stagesWithApproveButton = [LockStage.CONFIRM_UPDATE_AUTOCHARGE]
+export const stagesWithApproveButton = [LockStage.CONFIRM_NOTIFY_REWARDS, LockStage.CONFIRM_UPDATE_AUTOCHARGE]
 
 export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_APPLICATION,
@@ -38,7 +38,6 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR,
   LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR,
   LockStage.CONFIRM_NOTIFY_DEBT,
-  LockStage.CONFIRM_NOTIFY_REWARDS,
   LockStage.CONFIRM_TRANSFER_TO_NOTE_PAYABLE,
   LockStage.CONFIRM_TRANSFER_TO_NOTE_RECEIVABLE,
   LockStage.CONFIRM_CLAIM_NOTE,

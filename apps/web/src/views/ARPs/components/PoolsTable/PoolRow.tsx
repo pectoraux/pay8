@@ -23,8 +23,8 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.protocols?.length} />
       <VotesCell pool={pool} />
       <TotalValueCell
-        labelText={t('Amount Due')}
         amount={currAccount?.amountReceivable}
+        totalLiquidity={currAccount?.totalLiquidity}
         symbol={currAccount?.token?.symbol ?? ''}
         decimals={currAccount?.token?.decimals}
       />

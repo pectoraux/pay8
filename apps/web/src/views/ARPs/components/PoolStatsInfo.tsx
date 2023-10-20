@@ -144,14 +144,17 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
         {pool?.accounts?.length && !hideAccounts
           ? pool?.accounts
-              .filter((protocol) => account?.toLowerCase() === protocol?.owner?.toLowerCase())
+              .filter(
+                (protocol) =>
+                  account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
+                  account?.toLowerCase() === pool?.owner?.toLowerCase(),
+              )
               .map((balance) => (
                 <Button
                   key={balance.id}
                   onClick={() => {
                     const newState = { ...currState, [pool?.id]: balance.id }
                     dispatch(setCurrPoolData(newState))
-                    onPresentNFT()
                   }}
                   mt="4px"
                   mr={['2px', '2px', '4px', '4px']}

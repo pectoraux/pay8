@@ -170,7 +170,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const arpNoteContract = useARPNote()
   const arpHelperContract = useARPHelper()
   const arpMinterContract = useARPMinter()
-  console.log('mcurrencyy===============>', currAccount, currency, pool, arpContract)
+  console.log('mcurrencyy===============>', currAccount, currency, pool, arpContract, stakingTokenContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
 
   const [state, setState] = useState<any>(() => ({

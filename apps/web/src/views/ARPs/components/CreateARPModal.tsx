@@ -87,7 +87,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('ARP successfully created'),
+        t('ARP successfully deployed'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
           {t('You can now start processing transactions through your ARP contract.')}
         </ToastDescriptionWithTx>,
@@ -178,7 +178,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   })
 
   return (
-    <Modal title={t('Create ARP')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy ARP')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -268,7 +268,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new ARP contract with you as its Admin. Please read the documentation to learn more about ARPs.',
+              'This will deploy a new ARP contract with you as its Admin. Please read the documentation to learn more about ARPs.',
             )}
           </Text>
         </Box>
@@ -282,7 +282,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create ARP')}
+            {t('Deploy ARP')}
           </Button>
         ) : (
           <ConnectWalletButton />
