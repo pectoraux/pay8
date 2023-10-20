@@ -1,7 +1,20 @@
 import EncryptRsa from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useState, useMemo, useCallback } from 'react'
-import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box, Grid, ErrorIcon } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Text,
+  Button,
+  Modal,
+  Input,
+  useToast,
+  AutoRenewIcon,
+  Box,
+  Grid,
+  ErrorIcon,
+  useTooltip,
+  HelpIcon,
+} from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -135,6 +148,49 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
     fetchWithCatchTxError,
     paywallMarketOrdersContract,
   ])
+
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Some channels require their members to have a bounty with a certain minimum balance setup. If that is the case for this channel, make sure to setup your bounty an input its id right here.',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'In order to register to this channel, you need to have your own channel. This is where you input the id of your channel',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Identity requirements are used to check some information about members before they can register to the channel. If this channel does not have any identity requirements for its members, just input 0. If it does, make sure to get an auditor (approved by the channel) to deliver you with the right identity token and input your identity token id right here. To learn more about identity tokens, read the PaySwap documentation',
+      )}
+    </Text>
+  )
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <Modal title={t('Add Item to Wall')} onDismiss={onDismiss}>

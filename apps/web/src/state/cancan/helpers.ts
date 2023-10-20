@@ -1148,6 +1148,25 @@ export const getPricePerMinute = async (merchantId, chainId = 4002) => {
   return pricePerMinute.result
 }
 
+export const getEstimateVotes = async (collectionId, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [votes] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getNFTicketHelperAddress(),
+        abi: nfticketHelperABI,
+        functionName: 'estimateVotes',
+        args: [collectionId],
+      },
+    ],
+  })
+  return {
+    likes: votes.result?.length ? votes.result[0]?.toString() : '0',
+    dislikes: votes.result?.length ? votes.result[1]?.toString() : '0',
+  }
+}
+
 export const getPaywallPricePerMinute = async (paywallAddress, chainId = 4002) => {
   const bscClient = publicClient({ chainId: chainId })
   const [pricePerMinute] = await bscClient.multicall({

@@ -16,6 +16,8 @@ export enum SellingStage {
   // Transfer flow
   TRANSFER,
   CONFIRM_TRANSFER,
+  VOTE,
+  CONFIRM_VOTE,
   // update tag
   UPDATE_TAG,
   CONFIRM_UPDATE_TAG,

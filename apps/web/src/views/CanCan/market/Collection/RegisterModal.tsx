@@ -110,7 +110,7 @@ const RegisterModal: React.FC<any> = ({ collection, onDismiss }) => {
   const TooltipComponent = () => (
     <Text>
       {t(
-        'In order to register to this channel, you need to have your own channel. This is where you input your the id of your channel',
+        'In order to register to this channel, you need to have your own channel. This is where you input the id of your channel',
       )}
     </Text>
   )

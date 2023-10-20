@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useCallback, useState, useMemo } from 'react'
 import { Text, Row, Button, useModal, Flex, FlexGap, LinkExternal, ReactMarkdown, useTooltip } from '@pancakeswap/uikit'
-import { useCurrency } from 'hooks/Tokens'
+import { useCurrency, useWorkspaceCurrency } from 'hooks/Tokens'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { Collection } from 'state/cancan/types'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
@@ -28,6 +28,7 @@ import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useGetEstimateVotes } from 'state/cancan/hooks'
 
 const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
@@ -53,6 +54,8 @@ const Header: React.FC<any> = ({ collection }) => {
         maximumFractionDigits: 3,
       })
     : '0'
+  const votes = useGetEstimateVotes(collection?.id)
+  console.log('votes_votes==============>', votes)
   const defaultCurrency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(defaultCurrency)
   const [launch, setLaunch] = useState(false)
@@ -198,7 +201,9 @@ const Header: React.FC<any> = ({ collection }) => {
               stat={numberTokensListed ? formatNumber(Number(numberPartnerTokensListed), 0, 0) : '0'}
             />
             <LowestPriceStatBoxItem collectionAddress={collection?.id} />
-            <StatBoxItem title={t('Vol. (%symbol%)', { symbol: 'BNB' })} stat={(volume ?? 0)?.toString()} />
+            <StatBoxItem title={t('Vol.')} stat={(volume ?? 0)?.toString()} />
+            <StatBoxItem title={t('Likes')} stat={votes?.likes} />
+            <StatBoxItem title={t('Dislikes')} stat={votes?.dislikes} />
           </StatBox>
           <Flex justifyContent="center" alignItems="center">
             <CurrencyInputPanel

@@ -141,14 +141,14 @@ const ReviewsCard: React.FC<any> = ({ nft }) => {
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
   const marketCollectionsContract = useMarketCollectionsContract()
-  const [userTId, setUserTId] = useState<any>(false)
+  const [userTId, setUserTId] = useState<any>(0)
   const [isDone, setIsDone] = useState(false)
   const collectionId = useRouter().query.collectionAddress as string
 
   const handleCreateReview = useCallback(async () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const args = [collectionId, nft?.tokenId, userTId, isPaywall, !!superLike, body]
+      const args = [collectionId, nft?.tokenId, userTId ?? 0, isPaywall, !!superLike, body]
       console.log('emitReview====================>', args)
       return callWithGasPrice(marketCollectionsContract, 'emitReview', args).catch((err) => {
         console.log('emitReview====================>', err)
@@ -232,7 +232,7 @@ const ReviewsCard: React.FC<any> = ({ nft }) => {
                             scale="sm"
                             name="userTId"
                             value={userTId}
-                            placeholder={t('input id of veNFT')}
+                            placeholder={t('input id of Leviathan')}
                             onChange={(e) => setUserTId(e.target.value)}
                           />
                           {tooltipVisible && tooltip}
@@ -269,7 +269,7 @@ const ReviewsCard: React.FC<any> = ({ nft }) => {
                     </Heading>
                     <Flex justifyContent="flex-end">
                       <Button
-                        disabled={isDone || !userTId}
+                        disabled={isDone}
                         onClick={handleCreateReview}
                         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : undefined}
                       >

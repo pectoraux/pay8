@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { getBep20Contract } from 'utils/contractHelpers'
+import { getBep20Contract, getNFTicketHelper } from 'utils/contractHelpers'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import {
   useMarketCollectionsContract,
@@ -39,6 +39,7 @@ import UpdateValuePoolStage from './UpdateValuePoolStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import BigNumber from 'bignumber.js'
 import EmailStage from './EmailStage'
+import VoteStage from './VoteStage'
 
 interface EditStageProps {
   variant: 'ProductPage' | 'ChannelPage'
@@ -195,6 +196,12 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
       case SellingStage.CONFIRM_UPDATE_AUDITORS:
         setStage(SellingStage.UPDATE_AUDITORS)
         break
+      case SellingStage.VOTE:
+        setStage(SellingStage.SETTINGS)
+        break
+      case SellingStage.CONFIRM_VOTE:
+        setStage(SellingStage.VOTE)
+        break
       case SellingStage.UPDATE_TAG:
         setStage(SellingStage.SETTINGS)
         break
@@ -249,6 +256,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         break
       case SellingStage.UPDATE_AUDITORS:
         setStage(SellingStage.CONFIRM_UPDATE_AUDITORS)
+        break
+      case SellingStage.VOTE:
+        setStage(SellingStage.CONFIRM_VOTE)
         break
       case SellingStage.UPDATE_TAG:
         setStage(SellingStage.CONFIRM_UPDATE_TAG)
@@ -370,6 +380,13 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           !!state.addAuditors,
         ]).catch((err) => console.log('CONFIRM_UPDATE_AUDITORS===========>', err))
       }
+      if (stage === SellingStage.CONFIRM_VOTE) {
+        const args = [collection?.id, state.profileId, !!state.add]
+        console.log('CONFIRM_VOTE===========>', args)
+        return callWithGasPrice(getNFTicketHelper(), 'vote', args).catch((err) =>
+          console.log('CONFIRM_VOTE===========>', err),
+        )
+      }
       if (stage === SellingStage.CONFIRM_CLAIM_PENDING_REVENUE) {
         if (state.fromNote) {
           console.log('CONFIRM_CLAIM_PENDING_REVENUE1===========>', [state.token, state.tokenId, state.identityTokenId])
@@ -457,6 +474,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(SellingStage.UPDATE_VALUEPOOL)}>
             {t('Update ValuePool List')}
+          </Button>
+          <Button mb="8px" variant="success" onClick={() => setStage(SellingStage.VOTE)}>
+            {t('Vote')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(SellingStage.UPDATE_AUDITORS)}>
             {t('Update auditors')}
@@ -569,6 +589,14 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
       )}
       {stage === SellingStage.UPDATE_EXCLUDED_CONTENT && (
         <UpdateExcludedContentStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === SellingStage.VOTE && (
+        <VoteStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}

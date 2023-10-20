@@ -27,6 +27,7 @@ import {
   getTag,
   getPricePerMinute,
   getPaywallPricePerMinute,
+  getEstimateVotes,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -36,7 +37,6 @@ const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
 const EMPTY_OBJECT = {}
 
 export const useGetCollections = (where = {}) => {
-  console.log('useGetCollections==========>', where)
   const { data, status, mutate } = useSWR(['cancan', 'collections', where], async () => getCollections(where))
   const collections = data ?? ({} as ApiCollections)
   return { data: collections, status, refetch: mutate }
@@ -50,18 +50,28 @@ export const useGetTransactions = (userAddress) => {
 
 export const useGetProfileId = (account: string) => {
   const { chainId } = useActiveChainId()
-  const { data, status } = useSWR(['profileId', account], async () => getProfile(account, chainId))
+  const { data, status } = useSWR(['profileId', account, chainId], async () => getProfile(account, chainId))
   return { data, status }
 }
 
 export const useGetPricePerMinute = (merchantId: string) => {
-  const { data } = useSWR(['pricePerMinute', merchantId], async () => getPricePerMinute(merchantId))
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['pricePerMinute', merchantId, chainId], async () => getPricePerMinute(merchantId, chainId))
+  return data
+}
+
+export const useGetEstimateVotes = (collectionId: string) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['estimatevotes1', collectionId, chainId], async () =>
+    getEstimateVotes(collectionId, chainId),
+  )
   return data
 }
 
 export const useGetPaywallPricePerMinute = (paywallAddress: string) => {
-  const { data } = useSWR(['paywallPricePerMinute', paywallAddress], async () =>
-    getPaywallPricePerMinute(paywallAddress),
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['paywallPricePerMinute', paywallAddress, chainId], async () =>
+    getPaywallPricePerMinute(paywallAddress, chainId),
   )
   return data
 }
@@ -83,7 +93,8 @@ export const useGetCollection = (collectionAddress: string) => {
 }
 
 export const useGetVeToken = (veAddress) => {
-  const { data } = useSWRImmutable('veToken', async () => getVeToken(veAddress))
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['veToken', chainId], async () => getVeToken(veAddress, chainId))
   return data
 }
 
@@ -180,15 +191,16 @@ export const useGetCollectionContracts = (collectionAddress: string) => {
 }
 
 export const useGetPaymentCredits = (collectionAddress: string, tokenId: string, address: string) => {
-  const { data } = useSWRImmutable(['cancan', 'paymentCredits'], async () =>
-    getPaymentCredits(collectionAddress, tokenId, address),
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['cancan', 'paymentCredits', chainId], async () =>
+    getPaymentCredits(collectionAddress, tokenId, address, chainId),
   )
   return data?.length === 0 ? 0 : data
 }
 
 export const useGetItem = (collectionAddress: string, tokenId: string) => {
   const { data } = useSWR(
-    ['cancan-getItem1', collectionAddress, tokenId],
+    ['cancan-getItem', collectionAddress, tokenId],
     async () => getItemSg(`${collectionAddress}-${tokenId}`),
     {
       revalidateIfStale: true,
@@ -201,9 +213,10 @@ export const useGetItem = (collectionAddress: string, tokenId: string) => {
 
 export const useGetCollectionId = (collectionAddress) => {
   try {
+    const { chainId } = useActiveChainId()
     const { data } = useSWR(
-      ['cancan-getCollectionId', collectionAddress],
-      async () => getCollectionId(collectionAddress),
+      ['cancan-getCollectionId', collectionAddress, chainId],
+      async () => getCollectionId(collectionAddress, chainId),
       {
         revalidateIfStale: true,
         revalidateOnFocus: true,
@@ -225,10 +238,20 @@ export const useGetDiscounted = (
   identityTokenId = 0,
   isPaywall = false,
 ) => {
+  const { chainId } = useActiveChainId()
   const { data, status } = useSWR(
-    ['cancan', 'getDiscounted2', account?.toLowerCase() ?? ''],
+    ['cancan', 'getDiscounted2', account?.toLowerCase() ?? '', chainId],
     async () =>
-      getDiscounted(collectionAddress, account?.toLowerCase(), tokenId, price, options, identityTokenId, isPaywall),
+      getDiscounted(
+        collectionAddress,
+        account?.toLowerCase(),
+        tokenId,
+        price,
+        options,
+        identityTokenId,
+        isPaywall,
+        chainId,
+      ),
     {
       revalidateIfStale: true,
       revalidateOnFocus: true,
@@ -251,15 +274,17 @@ export const useGetPaywallARP = (collectionAddress: string) => {
 }
 
 export const useGetTokenForCredit = (collectionAddress: string, isPaywall: boolean) => {
-  const { data } = useSWRImmutable(['cancan', 'burnTokenForCredit'], async () =>
-    getTokenForCredit(collectionAddress, isPaywall),
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['cancan', 'burnTokenForCredit', chainId], async () =>
+    getTokenForCredit(collectionAddress, isPaywall, chainId),
   )
   return data as any
 }
 
 export const useGetNFTMarketTokenForCredit = (collectionAddress: string) => {
-  const { data } = useSWRImmutable(['nft', 'burnTokenForCredit'], async () =>
-    getNFTMarketTokenForCredit(collectionAddress),
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['nft', 'burnTokenForCredit', chainId], async () =>
+    getNFTMarketTokenForCredit(collectionAddress, chainId),
   )
   return data as any
 }
@@ -270,9 +295,10 @@ export const useGetSubscriptionStatus = (
   nfticketId: string,
   tokenId: string,
 ): any => {
+  const { chainId } = useActiveChainId()
   const { data, status, mutate } = useSWR(
-    ['subscription', paywallAddress, nfticketId, tokenId, account?.toLowerCase()],
-    async () => getSubscriptionStatus(paywallAddress, account?.toLowerCase(), nfticketId, tokenId),
+    ['subscription', paywallAddress, nfticketId, tokenId, account?.toLowerCase(), chainId],
+    async () => getSubscriptionStatus(paywallAddress, account?.toLowerCase(), nfticketId, tokenId, chainId),
     {
       revalidateIfStale: true,
       revalidateOnFocus: true,
