@@ -82,6 +82,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent9 = () => (
     <Text>{t('This sets whether you want to require account owners to attach their profiles to their accounts.')}</Text>
   )
+  const TooltipComponent10 = () => (
+    <Text>
+      {t(
+        'This sets an upper bound on the number of accounts that can ever be create by this ARP contract. Once this parameter is set, it can no longer be changed. You can leave it at 0 to be able to create an infinite amount of accounts.',
+      )}
+    </Text>
+  )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -147,6 +154,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     tooltip: tooltip9,
     tooltipVisible: tooltipVisible9,
   } = useTooltip(<TooltipComponent9 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef10,
+    tooltip: tooltip10,
+    tooltipVisible: tooltipVisible10,
+  } = useTooltip(<TooltipComponent10 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
@@ -218,6 +233,23 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           name="maxNotesPerProtocol"
           value={state.maxNotesPerProtocol}
           placeholder={t('input max notes per protocol')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex ref={targetRef10}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Max Number Of Accounts')}
+          </Text>
+          {tooltipVisible10 && tooltip10}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="maxAccounts"
+          value={state.maxAccounts}
+          placeholder={t('input max number of accounts')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

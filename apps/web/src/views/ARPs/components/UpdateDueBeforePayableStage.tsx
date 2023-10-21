@@ -38,7 +38,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToN
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Add')}
+            {t('Can users owe the ARP and still withdraw?')}
           </Text>
           <ButtonMenu
             scale="xs"

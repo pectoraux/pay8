@@ -18,7 +18,6 @@ import {
   ProposalIcon,
   SmartContractIcon,
   ReactMarkdown,
-  CopyButton,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'

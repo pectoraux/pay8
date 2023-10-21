@@ -33,14 +33,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'This sets the amount the account owner will be paying the ARP (periodically for periodic accounts and on a one time payment for non periodic accounts).',
+        'This sets the amount the account owner will be paying the ARP (periodically for periodic accounts and on a one time payment for non periodic accounts). For percentage based ARPs, this number is a percentage. For non percentage based ARPs, it is an absolute value.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'This sets the amount the ARP will be paying the account owner  (periodically for periodic accounts and on a one time payment for non periodic accounts).',
+        'This sets the amount the ARP will be paying the account owner (periodically for periodic accounts and on a one time payment for non periodic accounts). For percentage based ARPs, this number is a percentage. For non percentage based ARPs, it is an absolute value.',
       )}
     </Text>
   )
@@ -82,6 +82,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent9 = () => <Text>{t('Use this field to describe of the purpose of this account.')}</Text>
   const TooltipComponent10 = () => (
     <Text>{t('This sets a link to any media you would like to attach to this account.')}</Text>
+  )
+  const TooltipComponent11 = () => (
+    <Text>
+      {t(
+        'This sets a lower bound on the balance of the bounty that this account owner needs to setup to be able to use the account.',
+      )}
+    </Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -159,6 +166,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
+  const {
+    targetRef: targetRef11,
+    tooltip: tooltip11,
+    tooltipVisible: tooltipVisible11,
+  } = useTooltip(<TooltipComponent11 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <>
@@ -195,7 +210,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount Receivable')}
+            {t('Amount Receivable')} {state.percentages ? '(%)' : ''}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -212,7 +227,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount Payable')}
+            {t('Amount Payable')} {state.percentages ? '(%)' : ''}
           </Text>
           {tooltipVisible3 && tooltip3}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -321,6 +336,23 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           name="description"
           value={state.description}
           placeholder={t('input account description')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex ref={targetRef11}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Bounty Required')}
+          </Text>
+          {tooltipVisible11 && tooltip11}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="bountyRequired"
+          value={state.bountyRequired}
+          placeholder={t('input account bounty required')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

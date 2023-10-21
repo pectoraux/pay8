@@ -157,7 +157,7 @@ const CreateGaugeModal: React.FC<any> = ({
   currency,
   onDismiss,
 }) => {
-  const [stage, setStage] = useState(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
+  const [stage, setStage] = useState(variant === 'admin' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -181,21 +181,25 @@ const CreateGaugeModal: React.FC<any> = ({
     extraMint: '',
     category: '',
     contractAddress: '',
-    optionId: '',
+    optionId: '0',
     maxNotesPerProtocol: pool?.maxNotesPerProtocol,
     pricePerMinute: '',
     factor: '',
     period: '',
     cap: '',
     tokenId: '',
-    startPayable: '',
+    startPayable: convertTimeToSeconds(currAccount?.startPayable ?? 0),
     creditFactor: '',
     toAddress: '',
-    amountPayable: '',
-    periodPayable: '',
+    amountPayable: pool?.percentages
+      ? parseInt(currAccount?.amountPayable ?? '0') / 100
+      : getBalanceNumber(currAccount?.amountPayable ?? 0, currency?.decimals),
+    periodPayable: parseInt(currAccount?.periodPayable ?? '0') / 60,
     bufferTime: '',
-    amountReceivable: getBalanceNumber(currAccount?.amountReceivable ?? 0, currency?.decimals),
-    periodReceivable: currAccount?.periodReceivable,
+    amountReceivable: pool?.percentages
+      ? parseInt(currAccount?.amountReceivable ?? '0') / 100
+      : getBalanceNumber(currAccount?.amountReceivable ?? 0, currency?.decimals),
+    periodReceivable: parseInt(currAccount?.periodReceivable ?? '0') / 60,
     startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
     description: currAccount?.description ?? '',
     ratings: currAccount?.ratings?.toString() ?? '',
@@ -210,14 +214,14 @@ const CreateGaugeModal: React.FC<any> = ({
     like: 0,
     bountyRequired: pool?.bountyRequired,
     ve: pool?._ve,
-    cosignEnabled: pool?.cosignEnabled,
-    minCosigners: pool?.minCosigners || '',
     token: currency?.address,
     add: 0,
     contentType: '',
     numPeriods: '',
     name: pool?.name,
     collectionId: '',
+    maxAccounts: '0',
+    percentages: pool?.percentages,
     applicationLink: pool?.applicationLink ?? '',
     arpDescription: pool?.arpDescription ?? '',
     owner: currAccount?.owner || account,
@@ -857,11 +861,11 @@ const CreateGaugeModal: React.FC<any> = ({
           state.owner,
           currency?.address,
           [
-            amountReceivable.toString(),
-            parseInt(state.periodReceivable) * 60,
+            pool?.percentages ? parseInt(state.amountReceivable) * 100 : amountReceivable.toString(),
+            parseInt(state.periodReceivable ?? '0') * 60,
             startReceivable.toString(),
-            amountPayable.toString(),
-            parseInt(state.periodPayable) * 60,
+            pool?.percentages ? parseInt(state.amountPayable) * 100 : amountPayable.toString(),
+            parseInt(state.periodPayable ?? '0') * 60,
             startPayable.toString(),
             state.bountyRequired,
           ],
@@ -887,6 +891,7 @@ const CreateGaugeModal: React.FC<any> = ({
           parseInt(state.adminCreditShare) * 100,
           parseInt(state.adminDebitShare) * 100,
           parseInt(state.period) * 60,
+          state.maxAccounts,
         ]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(arpContract, 'updateParameters', args).catch((err) =>

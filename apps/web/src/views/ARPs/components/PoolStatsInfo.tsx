@@ -8,13 +8,7 @@ import {
   useModal,
   Button,
   Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
+  Text,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -30,6 +24,7 @@ import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 import WebPagesModal from './WebPagesModal'
 import WebPagesModal2 from './WebPagesModal2'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -106,6 +101,20 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           </ScanLink>
         </Flex>
       )}
+      {pool?._ve !== ADDRESS_ZERO && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?.id, 'address', chainId)} bold={false} small>
+            {t('View Leviathan')}
+          </ScanLink>
+        </Flex>
+      )}
+      {pool?.valuepool !== ADDRESS_ZERO && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?.id, 'address', chainId)} bold={false} small>
+            {t('View Valuepool')}
+          </ScanLink>
+        </Flex>
+      )}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
           {t('See Admin Channel')}
@@ -125,6 +134,61 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           </LinkExternal>
         </Flex>
       ) : null}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Admin Bounty Required')} {`->`} {pool?.adminBountyRequired}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Admin Credit Share')} {`->`} {pool?.adminCreditShare}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Admin Debit Share')} {`->`} {pool?.adminDebitShare}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Automatic')} {`->`} {pool?.automatic ? t('Yes') : t('No')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('User Minimum Bounty Required')} {`->`} {pool?.bountyRequired}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Buffer Time')} {`->`} {pool?.bufferTime}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Immutable Contract')} {`->`} {pool?.immutableContract ? t('Yes') : t('No')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Max Notes Per Protocol')} {`->`} {pool?.maxNotesPerProtocol}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Percentage Based')} {`->`} {pool?.percentages ? t('Yes') : t('No')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Period')} {`->`} {pool?.period}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Profile Required')} {`->`} {pool?.profileRequired ? t('Yes') : t('No')}
+        </Text>
+      </Flex>
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

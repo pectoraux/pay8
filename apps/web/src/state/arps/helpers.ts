@@ -134,7 +134,23 @@ export const fetchArp = async (arpAddress, chainId) => {
   const arp = await getArp(arpAddress.toLowerCase())
 
   const bscClient = publicClient({ chainId: chainId })
-  const [devaddr_, bountyRequired, profileRequired, collectionId] = await bscClient.multicall({
+  const [
+    devaddr_,
+    bountyRequired,
+    profileRequired,
+    collectionId,
+    percentages,
+    immutableContract,
+    automatic,
+    bufferTime,
+    adminCreditShare,
+    adminDebitShare,
+    _ve,
+    valuepool,
+    adminBountyRequired,
+    period,
+    maxNotesPerProtocol,
+  ] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -156,6 +172,61 @@ export const fetchArp = async (arpAddress, chainId) => {
         address: arpAddress,
         abi: arpABI,
         functionName: 'collectionId',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'percentages',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'immutableContract',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'automatic',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'bufferTime',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'adminCreditShare',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'adminDebitShare',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: '_ve',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'valuepool',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'adminBountyRequired',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'period',
+      },
+      {
+        address: arpAddress,
+        abi: arpABI,
+        functionName: 'maxNotesPerProtocol',
       },
     ],
   })
@@ -198,45 +269,51 @@ export const fetchArp = async (arpAddress, chainId) => {
       const startPayable = protocolInfo.result[10]
       const startReceivable = protocolInfo.result[11]
 
-      const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: arpAddress,
-            abi: arpABI,
-            functionName: 'adminBountyId',
-            args: [_token],
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'name',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'symbol',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'decimals',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'balanceOf',
-            args: [arpAddress],
-          },
-          {
-            address: getARPNoteAddress(),
-            abi: arpNoteABI,
-            functionName: 'getDueReceivable',
-            args: [arpAddress, BigInt(protocolId), BigInt(0)],
-          },
-        ],
-      })
-      console.log('nextDueReceivable================>', nextDueReceivable, protocolId)
+      const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable, nextDuePayable] =
+        await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: arpAddress,
+              abi: arpABI,
+              functionName: 'adminBountyId',
+              args: [_token],
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'decimals',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'balanceOf',
+              args: [arpAddress],
+            },
+            {
+              address: getARPNoteAddress(),
+              abi: arpNoteABI,
+              functionName: 'getDueReceivable',
+              args: [arpAddress, BigInt(protocolId), BigInt(0)],
+            },
+            {
+              address: getARPNoteAddress(),
+              abi: arpNoteABI,
+              functionName: 'getDuePayable',
+              args: [arpAddress, BigInt(protocolId), BigInt(0)],
+            },
+          ],
+        })
       return {
         ...protocol,
         protocolId,
@@ -255,7 +332,10 @@ export const fetchArp = async (arpAddress, chainId) => {
         startPayable: startPayable.toString(),
         startReceivable: startReceivable.toString(),
         totalLiquidity: totalLiquidity.result.toString(),
+        amountDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[0].toString() : BIG_ZERO,
+        amountDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[0].toString() : BIG_ZERO,
         nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
+        nextDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[1].toString() : BIG_ZERO,
         token: new Token(
           chainId,
           _token,
@@ -276,7 +356,18 @@ export const fetchArp = async (arpAddress, chainId) => {
     arpAddress,
     accounts,
     collection,
+    percentages: percentages.result,
+    immutableContract: immutableContract.result,
+    automatic: automatic.result,
+    bufferTime: bufferTime.result?.toString(),
     profileRequired: profileRequired.result,
+    adminCreditShare: adminCreditShare.result?.toString(),
+    adminDebitShare: adminDebitShare.result?.toString(),
+    valuepool: valuepool.result,
+    _ve: _ve.result,
+    adminBountyRequired: adminBountyRequired.result?.toString(),
+    period: period.result?.toString(),
+    maxNotesPerProtocol: maxNotesPerProtocol.result?.toString(),
     devaddr_: devaddr_.result,
     collectionId: collectionId.result.toString(),
     bountyRequired: bountyRequired.result.toString(),
