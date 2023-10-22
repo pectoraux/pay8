@@ -36,10 +36,34 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     }
   }, [inputRef])
 
-  const TooltipComponent = () => <Text>{t('')}</Text>
-  const TooltipComponent2 = () => <Text>{t('')}</Text>
-  const TooltipComponent3 = () => <Text>{t('')}</Text>
-  const TooltipComponent4 = () => <Text>{t('')}</Text>
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'This sets the time from which your Bill contract should start using the value specified above for the debit factor',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'This sets the time from which your Bill contract should start using the value specified above for the credit factor',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'This sets the credit factor for your bill contract. The amount bill contracts are supposed to pay an account is computed with the formula: credit_factor * account_credit - debit_factor * account_debit. The amount an account is supposed to pay a bill contract is computed as such: debit_factor * account_debit - credit_factor * account_credit.',
+      )}
+    </Text>
+  )
+  const TooltipComponent4 = () => (
+    <Text>
+      {t(
+        'This sets the debit factor for your bill contract. The amount bill contracts are supposed to pay an account is computed with the formula: credit_factor * account_credit - debit_factor * account_debit. The amount an account is supposed to pay a bill contract is computed as such: debit_factor * account_debit - credit_factor * account_credit.',
+      )}
+    </Text>
+  )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -72,6 +96,40 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   return (
     <>
       <GreyedOutContainer>
+        <Flex ref={targetRef3}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Credit Factor')}(%)
+          </Text>
+          {tooltipVisible3 && tooltip3}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="creditFactor"
+          value={state.creditFactor}
+          placeholder={t('input credit factor')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex ref={targetRef4}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Debit Factor')}(%)
+          </Text>
+          {tooltipVisible4 && tooltip4}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="debitFactor"
+          value={state.debitFactor}
+          placeholder={t('input debit factor')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Start Payable')}
@@ -101,40 +159,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
         <DatePickerPortal />
       </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Flex ref={targetRef3}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Credit Factor')}
-          </Text>
-          {tooltipVisible3 && tooltip3}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="creditFactor"
-          value={state.creditFactor}
-          placeholder={t('input credit factor')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Flex ref={targetRef4}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Debit Factor')}
-          </Text>
-          {tooltipVisible4 && tooltip4}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="debitFactor"
-          value={state.debitFactor}
-          placeholder={t('input debit factor')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -142,7 +166,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the contract to a new migration point. Please read the documentation for more information on each parameter',
+              'This will update the contract to a new migration point or set the debit and credit factors for your Bill contract. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

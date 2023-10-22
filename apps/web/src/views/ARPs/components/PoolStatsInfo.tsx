@@ -219,6 +219,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
                   onClick={() => {
                     const newState = { ...currState, [pool?.id]: balance.id }
                     dispatch(setCurrPoolData(newState))
+                    onPresentNFT()
                   }}
                   mt="4px"
                   mr={['2px', '2px', '4px', '4px']}

@@ -36,7 +36,7 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Contract Address')}
+          {t('Debit Address')}
         </Text>
         <Input
           type="text"

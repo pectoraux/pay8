@@ -157,7 +157,7 @@ const CreateGaugeModal: React.FC<any> = ({
   currency,
   onDismiss,
 }) => {
-  const [stage, setStage] = useState(variant === 'admin' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
+  const [stage, setStage] = useState(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const { t } = useTranslation()
   const { theme } = useTheme()

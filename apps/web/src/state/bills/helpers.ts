@@ -141,7 +141,19 @@ export const getBills = async (first = 5, skip = 0, where) => {
 export const fetchBill = async (billAddress, chainId) => {
   const bill = await getBill(billAddress.toLowerCase())
   const bscClient = publicClient({ chainId: chainId })
-  const [devaddr_, bountyRequired, profileRequired, collectionId] = await bscClient.multicall({
+  const [
+    devaddr_,
+    bountyRequired,
+    profileRequired,
+    collectionId,
+    adminCreditShare,
+    adminDebitShare,
+    maxNotesPerProtocol,
+    period,
+    adminBountyRequired,
+    isPayable,
+    bufferTime,
+  ] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -163,6 +175,41 @@ export const fetchBill = async (billAddress, chainId) => {
         address: billAddress,
         abi: billABI,
         functionName: 'collectionId',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'adminCreditShare',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'adminDebitShare',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'maxNotesPerProtocol',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'period',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'adminBountyRequired',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'isPayable',
+      },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'bufferTime',
       },
     ],
   })
@@ -206,7 +253,19 @@ export const fetchBill = async (billAddress, chainId) => {
       const creditFactor = protocolInfo.result[10]
       const debitFactor = protocolInfo.result[11]
 
-      const [adminBountyId, name, symbol, decimals, totalLiquidity, receivables, payables] = await bscClient.multicall({
+      const [
+        adminBountyId,
+        name,
+        symbol,
+        decimals,
+        totalLiquidity,
+        receivables,
+        payables,
+        media,
+        description,
+        userBountyRequired,
+        taxContract,
+      ] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
           {
@@ -248,6 +307,36 @@ export const fetchBill = async (billAddress, chainId) => {
             functionName: 'getDuePayable',
             args: [billAddress, BigInt(protocolId)],
           },
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'adminBountyId',
+            args: [_token],
+          },
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'media',
+            args: [BigInt(protocolId)],
+          },
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'description',
+            args: [BigInt(protocolId)],
+          },
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'userBountyRequired',
+            args: [BigInt(protocolId)],
+          },
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'taxContract',
+            args: [BigInt(protocolId)],
+          },
         ],
       })
       return {
@@ -272,8 +361,13 @@ export const fetchBill = async (billAddress, chainId) => {
         nextDueReceivable: receivables.result[1].toString(),
         duePayable: payables.result[0].toString(),
         nextDuePayable: payables.result[1].toString(),
+        bountyRequired: bountyRequired.result?.toString(),
+        media: media.result?.toString(),
+        description: description.result?.toString(),
+        userBountyRequired: userBountyRequired.result?.toString(),
+        taxContract: taxContract.result?.toString(),
         token: new Token(
-          56,
+          chainId,
           _token,
           decimals.result,
           symbol.result?.toString()?.toUpperCase() ?? 'symbol',
@@ -292,6 +386,13 @@ export const fetchBill = async (billAddress, chainId) => {
     collection,
     profileRequired: profileRequired.result,
     devaddr_: devaddr_.result,
+    adminCreditShare: adminCreditShare.result?.toString(),
+    adminDebitShare: adminDebitShare.result?.toString(),
+    maxNotesPerProtocol: maxNotesPerProtocol.result?.toString(),
+    period: period?.result?.toString(),
+    adminBountyRequired: adminBountyRequired?.result?.toString(),
+    isPayable: isPayable.result?.toString(),
+    bufferTime: bufferTime.result?.toString(),
     collectionId: collectionId.result.toString(),
     bountyRequired: bountyRequired.result.toString(),
   }

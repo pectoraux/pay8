@@ -54,7 +54,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </Heading>
             <Heading scale="md" color="text">
               {t(
-                'Create a contract and start managing your receivables & payables. Bill contracts are mostly useful for record keeping.',
+                'Create a contract and start managing your receivables & payables. Bill contracts can be used for bookkeeping, accounting, taxe processing, etc.',
               )}
             </Heading>
             <Heading scale="md" color="text">
@@ -65,7 +65,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create contract ')}{' '}
+                  {t('Deploy Bill ')}{' '}
                 </Text>
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />

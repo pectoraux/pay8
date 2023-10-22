@@ -23,7 +23,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-        {t('BILL Uses')}{' '}
+        {t('Bill Contract Uses')}{' '}
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
         {currAccount?.token?.symbol ?? ''}
@@ -121,13 +121,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           <Box mr="8px" height="32px">
             <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currAccount?.creditFactor} />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Credit Factor')}
+              {t('Credit Factor')}(%)
             </Text>
           </Box>
           <Box mr="8px" height="32px">
             <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currAccount?.debitFactor} />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Debit Factor')}
+              {t('Debit Factor')}(%)
             </Text>
           </Box>
           <Text lineHeight="1" mt="2px" fontSize="12px" color="textSubtle" as="span">

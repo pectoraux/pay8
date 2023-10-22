@@ -12,6 +12,8 @@ import {
   useToast,
   ButtonMenu,
   ButtonMenuItem,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useAppDispatch } from 'state'
@@ -56,7 +58,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
         console.log('err================>', err)
         setPendingFb(false)
         toastError(
-          t('Issue creating bill'),
+          t('Issue deploying bill'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
         )
       })
@@ -64,9 +66,9 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('BILL successfully created'),
+        t('Bill successfully deployed'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start processing transactions through your BILL contract.')}
+          {t('You can now start processing transactions through your Bill contract.')}
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchBillsAsync({ fromBill: true, chainId }))
@@ -92,8 +94,18 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t('Set this parameter to Yes if your bill contract will be enabling account owners to make withdrawals.')}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
-    <Modal title={t('Create BILL')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy Bill Contract')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Profile ID')}
@@ -108,9 +120,13 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Is Payable ?')}
-          </Text>
+          <Flex ref={targetRef} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+              {t('Is Payable?')}
+            </Text>
+            {tooltipVisible && tooltip}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu scale="xs" variant="subtle" activeIndex={isPayable ? 1 : 0} onItemClick={setIsPayable}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
             <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
@@ -138,7 +154,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create Bill')}
+            {t('Deploy Bill')}
           </Button>
         ) : (
           <ConnectWalletButton />
