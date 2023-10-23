@@ -158,7 +158,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
   const auditor = await getAuditor(auditorAddress.toLowerCase())
 
   const bscClient = publicClient({ chainId: chainId })
-  const [devaddr_, bountyRequired, collectionId, category] = await bscClient.multicall({
+  const [devaddr_, bountyRequired, collectionId, category, percentiles] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -180,6 +180,12 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
         address: getAuditorHelperAddress(),
         abi: auditorHelperABI,
         functionName: 'categories',
+        args: [auditorAddress],
+      },
+      {
+        address: getAuditorNoteAddress(),
+        abi: auditorNoteABI,
+        functionName: 'percentiles',
         args: [auditorAddress],
       },
     ],
@@ -267,7 +273,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
         totalLiquidity: totalLiquidity.result.toString(),
         nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
         token: new Token(
-          56,
+          chainId,
           _token,
           decimals.result,
           symbol.result?.toString()?.toUpperCase() ?? 'symbol',
@@ -278,7 +284,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
       }
     }),
   )
-
+  const percentile = parseInt(percentiles.result?.toString())
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...auditor,
@@ -287,8 +293,10 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
     accounts,
     category: category.result?.toString(),
     bountyRequired: bountyRequired.result,
+    percentiles: percentiles.result?.toString(),
+    color: percentile >= 75 ? 'Gold' : percentile >= 50 ? 'Silver' : percentile >= 25 ? 'Brown' : 'Black',
     devaddr_: devaddr_.result,
-    collectionId: collectionId.toString(),
+    collectionId: collectionId.result.toString(),
   }
 }
 

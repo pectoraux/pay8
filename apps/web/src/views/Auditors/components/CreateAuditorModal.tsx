@@ -41,7 +41,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         console.log('err================>', err)
         setPendingFb(false)
         toastError(
-          t('Issue creating auditor'),
+          t('Issue deploying auditor'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
         )
       })
@@ -49,9 +49,9 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Auditor successfully created'),
+        t('Auditor successfully deployed'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start processing transactions through your Auditor pool.')}
+          {t('You can now start processing transactions through your Auditor contract.')}
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchAuditorsAsync({ fromAuditor: true, chainId }))
@@ -77,7 +77,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Create Auditor Pool')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy Auditor Contract')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Profile ID')}

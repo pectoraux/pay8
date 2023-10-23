@@ -50,6 +50,7 @@ import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import UpdateRatingLegendStage from './UpdateRatingLegendStage'
 import LocationStage from './LocationStage'
+import UpdateMintInfoStage from './UpdateMintInfoStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -70,7 +71,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_PRICE_PER_MINUTE]: t('Update Price Per Minute'),
   [LockStage.UPDATE_EXCLUDED_CONTENT]: t('Update Excluded Content'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
-  [LockStage.ADMIN_AUTOCHARGE]: t('Autocharge'),
+  [LockStage.ADMIN_AUTOCHARGE]: t('Charge Wallet'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.MINT_EXTRA]: t('Mint Extra'),
   [LockStage.DELETE]: t('Delete'),
@@ -82,6 +83,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_TAG_REGISTRATION]: t('Update Tag Registration'),
   [LockStage.UPDATE_DATA_KEEPER]: t('Update Data Keeper'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.UPDATE_MINT_INFO]: t('Update Mint Info'),
   [LockStage.UPDATE_APPLICATION]: t('Update Application Link'),
   [LockStage.CONFIRM_UPDATE_APPLICATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
@@ -226,6 +228,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CONFIRM_UPDATE_APPLICATION:
         setStage(LockStage.UPDATE_APPLICATION)
+        break
+      case LockStage.UPDATE_MINT_INFO:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_MINT_INFO:
+        setStage(LockStage.UPDATE_MINT_INFO)
         break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
@@ -402,6 +410,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.UPDATE_APPLICATION:
         setStage(LockStage.CONFIRM_UPDATE_APPLICATION)
         break
+      case LockStage.UPDATE_MINT_INFO:
+        setStage(LockStage.CONFIRM_UPDATE_MINT_INFO)
+        break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA)
         break
@@ -528,6 +539,13 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_UPDATE_APPLICATION===============>', args)
         return callWithGasPrice(auditorNoteContract, 'emitUpdateMiscellaneous', args).catch((err) =>
           console.log('CONFIRM_UPDATE_APPLICATION===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_MINT_INFO) {
+        const args = [pool?.id, state.extraMint, state.protocolId]
+        console.log('CONFIRM_UPDATE_MINT_INFO===============>', args)
+        return callWithGasPrice(auditorHelperContract, 'updateMintInfo', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_MINT_INFO===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA) {
@@ -760,7 +778,7 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('SPONSOR TAG')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
-            {t('AUTOCHARGE')}
+            {t('CHARGE WALLET')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_AUTOCHARGE)}>
             {t('UPDATE AUTOCHARGE')}
@@ -787,9 +805,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
             {t('CREATE/UPDATE ACCOUNT')}
           </Button>
-          {/* <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PARAMETERS)}>
-            {t('UPDATE BOUNTY REQUIRED')}
-          </Button> */}
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_MINT_INFO)}>
+            {t('UPDATE MINT INFO')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
           </Button>
@@ -797,7 +815,7 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE APPLICATION')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
-            {t('AUTOCHARGE')}
+            {t('CHARGE WALLET')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.UPDATE_DATA_KEEPER)}>
             {t('UPDATE DATA KEEPER')}
@@ -859,7 +877,7 @@ const CreateGaugeModal: React.FC<any> = ({
           ) : null}
           {location === 'fromAuditor' ? (
             <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
-              {t('DELETE POOL')}
+              {t('DELETE CONTRACT')}
             </Button>
           ) : null}
         </Flex>
@@ -875,6 +893,9 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.UPDATE_APPLICATION && (
         <UpdateApplicationStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_MINT_INFO && (
+        <UpdateMintInfoStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_DISCOUNT_DIVISOR && (
         <UpdateDiscountDivisorStage

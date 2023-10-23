@@ -11,6 +11,7 @@ import {
   useModal,
   Loading,
 } from '@pancakeswap/uikit'
+import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/auditors/hooks'
 import Page from 'components/Layout/Page'
@@ -22,8 +23,6 @@ import CreateAuditorModal from './components/CreateAuditorModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
-import { useRouter } from 'next/router'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -62,7 +61,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create contract ')}{' '}
+                  {t('Deploy Auditor')}{' '}
                 </Text>
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
@@ -78,7 +77,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       </PageHeader>
       <Page>
         <PoolControls pools={pools}>
-          {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
+          {({ chosenPools, normalizedUrlSearch }) => (
             <>
               {!userDataLoaded && (
                 <Flex justifyContent="center" mb="4px">

@@ -1,19 +1,17 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   state: any
   handleChange?: (any) => void
-  handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -27,14 +25,27 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Category')}
+          {t('Protocol ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="category"
-          value={state.category}
-          placeholder={t('input category id')}
+          name="protocolId"
+          value={state.protocolId}
+          placeholder={t('input protocol id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Mint Extra')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="extraMint"
+          value={state.extraMint}
+          placeholder={t('input mint extra')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -45,7 +56,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the category of the Auditor contract. Please read the documentation for more information on the various categories of Auditors and pick the right one for you.',
+              'This will update mint info of the specified protocol. If you want your account owner to be able to mint more NFT tokens, specify in the mint extra field, the number of tokens you want to enable the account owner to mint.',
             )}
           </Text>
         </Box>
@@ -53,7 +64,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update Category')}
+          {t('Update Mint Info')}
         </Button>
       </Flex>
     </>

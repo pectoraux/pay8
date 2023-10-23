@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, ReactElement } from "react";
 import styled from "styled-components";
-import BigNumber from "bignumber.js";
 import partition from "lodash/partition";
 import { useTranslation } from "@pancakeswap/localization";
 import { useIntersectionObserver } from "@pancakeswap/hooks";
@@ -195,6 +194,14 @@ export function PoolControls<T>({
                   {
                     label: t("Dislikes"),
                     value: "dislikes",
+                  },
+                  {
+                    label: t("Color"),
+                    value: "color",
+                  },
+                  {
+                    label: t("Percentiles"),
+                    value: "percentiles",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}
