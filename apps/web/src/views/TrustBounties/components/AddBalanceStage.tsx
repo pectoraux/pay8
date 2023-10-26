@@ -14,10 +14,10 @@ import {
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { GreyedOutContainer, Divider } from './styles'
 import { getTrustBountiesAddress } from 'utils/addressHelpers'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   state: any
@@ -46,7 +46,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       )}
     </Text>
   )
-  const TooltipComponent2 = () => <Text>{t("This set the amount of tokens to add to the bounty's balance.")}</Text>
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        "This sets the amount of tokens to add to the bounty's balance in case of fungible collaterals and the NFT ID in case of non fungible collaterals.",
+      )}
+    </Text>
+  )
   const TooltipComponent3 = () => (
     <Text>
       {t(
@@ -106,7 +112,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount from source')}
+            {t('Amount from source or NFT ID')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

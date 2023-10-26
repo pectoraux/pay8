@@ -33,6 +33,7 @@ import CleanUpApprovalStage from './CleanUpApprovalStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import LocationStage from './LocationStage'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -80,6 +81,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
   const trustBountiesContract = useTrustBountiesContract()
   const trustBountiesHelperContract = useTrustBountiesHelperContract()
   const stakingTokenContract = useERC20(pool?.tokenAddress || '')
+  const defaultTokenContract = useERC20(DEFAULT_TFIAT || '')
   const router = useRouter()
   const fromAccelerator = router.pathname.includes('accelerator')
   const fromContributors = router.pathname.includes('contributors')
@@ -139,6 +141,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
     content: '',
     sourceAddress: trustBountiesContract.address,
     customTags: '',
+    collateral: currency?.address ?? '',
   }))
   const [nftFilters, setNftFilters] = useState<any>({
     workspace: pool?.workspaces,
@@ -158,6 +161,10 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
   }
   const handleRawValueChange = (key: string) => (value: string | Date) => {
     updateValue(key, value)
+  }
+
+  const handleEasyMdeChange = (value: string) => {
+    updateValue('terms', value)
   }
 
   const goBack = () => {
@@ -272,6 +279,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       try {
         return (
           requiresApproval(stakingTokenContract, account, trustBountiesContract.address) &&
+          requiresApproval(defaultTokenContract, account, trustBountiesContract.address) &&
           requiresApproval(stakingTokenContract, account, trustBountiesHelperContract.address)
         )
       } catch (error) {
@@ -279,9 +287,19 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       }
     },
     onApprove: () => {
-      return callWithGasPrice(stakingTokenContract, 'approve', [trustBountiesContract.address, MaxUint256]).then(() =>
-        callWithGasPrice(stakingTokenContract, 'approve', [trustBountiesHelperContract.address, MaxUint256]),
-      )
+      return callWithGasPrice(stakingTokenContract, 'approve', [
+        trustBountiesContract.address,
+        parseInt(pool?.isNFT) ? state.amountReceivable : MaxUint256,
+      ])
+        .then(() =>
+          callWithGasPrice(stakingTokenContract, 'approve', [
+            trustBountiesHelperContract.address,
+            parseInt(pool?.isNFT) ? state.amountReceivable : MaxUint256,
+          ]),
+        )
+        .then(() =>
+          callWithGasPrice(defaultTokenContract, 'approve', [trustBountiesHelperContract.address, MaxUint256]),
+        )
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
@@ -312,7 +330,12 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         const method = state.nativeCoin ? 'addBalanceETH' : 'addBalance'
         const args = state.nativeCoin
           ? [pool?.id, state.sourceAddress, state.tokenId]
-          : [pool?.id, state.sourceAddress, state.tokenId, amount.toString()]
+          : [
+              pool?.id,
+              state.sourceAddress,
+              state.tokenId,
+              parseInt(pool?.isNFT) ? state.amountReceivable : amount.toString(),
+            ]
         console.log('CONFIRM_ADD_BALANCE===============>', method, args)
         return callWithGasPrice(trustBountiesContract, method, args).catch((err) =>
           console.log('CONFIRM_ADD_BALANCE===============>', err),
@@ -507,7 +530,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         <UpdateParametersStage
           state={state}
           handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
+          handleEasyMdeChange={handleEasyMdeChange}
           continueToNextStage={continueToNextStage}
         />
       )}

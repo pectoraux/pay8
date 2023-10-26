@@ -63,7 +63,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
     )
   }
 
-  if (needsApproval) {
+  if (needsApproval && !parseInt(pool?.isNFT)) {
     return (
       <ActionContainer>
         <ActionTitles>

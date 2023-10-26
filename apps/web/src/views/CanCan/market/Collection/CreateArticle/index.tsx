@@ -38,6 +38,8 @@ import { getBlockExploreLink } from 'utils'
 import RichTextEditor from 'components/RichText'
 import { DatePicker, DatePickerPortal } from 'views/ValuePoolVoting/components/DatePicker'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useCurrency } from 'hooks/Tokens'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 import { makeChoice, MINIMUM_CHOICES } from './Choices'
 import { getFormErrors } from './helpers'
@@ -45,8 +47,6 @@ import ShipStage from '../../components/BuySellModals/SellModal/ShipStage'
 import Filters from '../../components/BuySellModals/SellModal/Filters'
 import Options from '../../components/BuySellModals/SellModal/Options'
 import { FormErrors, Label, SecondaryLabel } from './styles'
-import { useCurrency } from 'hooks/Tokens'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 const Layout = styled.div`
   align-items: start;

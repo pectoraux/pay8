@@ -1,20 +1,4 @@
-import {
-  Flex,
-  LinkExternal,
-  Text,
-  Pool,
-  ScanLink,
-  useModal,
-  Button,
-  Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
-} from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Text, Pool, ScanLink, useModal, Button } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -25,8 +9,12 @@ import { useCurrPool } from 'state/trustbounties/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/trustbounties'
-import WebPagesModal from './WebPagesModal'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+
+import WebPagesModal from './WebPagesModal'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { getTrustBountiesAddress } from 'utils/addressHelpers'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -53,16 +41,36 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
     <>
       <Flex flex="1" flexDirection="column" alignSelf="flex-center">
         <Text color="primary" fontSize="14px">
-          {t('Minimum Badge Color')} {`->`} {pool?.minIDBadgeColor}
+          {pool?.isNFT?.toString() === '0' ? t('FT Bounty') : t('NFT Bounty')}
         </Text>
-        {pool?.valueName ? (
+        {pool?.claims?.length ? (
           <Text color="primary" fontSize="14px">
-            {t('Testimony value')} {`->`} {pool.valueName}
+            {t('Number of claims')} {`->`} {pool?.claims?.length}
           </Text>
         ) : null}
-        {pool?.collection?.workspace ? (
+        {pool?.friendlyClaims?.length ? (
           <Text color="primary" fontSize="14px">
-            {t('Workspace')} {`->`} {pool.workspace}
+            {t('Number of friendly claims')} {`->`} {pool?.friendlyClaims?.length}
+          </Text>
+        ) : null}
+        {pool?.minToClaim ? (
+          <Text color="primary" fontSize="14px">
+            {t('Claim Fee')} {`->`} {parseInt(pool?.minToClaim) / 100}%
+          </Text>
+        ) : null}
+        {parseInt(pool?.parentBountyId) ? (
+          <Text color="primary" fontSize="14px">
+            {t('Parent Bounty ID')} {`->`} {pool?.parentBountyId}
+          </Text>
+        ) : null}
+        {pool?.receivedApprovals?.length ? (
+          <Text color="primary" fontSize="14px">
+            {t('Received Approvals')} {`->`} {pool?.receivedApprovals?.length}
+          </Text>
+        ) : null}
+        {pool?.sentApprovals?.length ? (
+          <Text color="primary" fontSize="14px">
+            {t('Sent Approvals')} {`->`} {pool?.sentApprovals?.length}
           </Text>
         ) : null}
         {pool?.collection?.countries ? (
@@ -81,27 +89,25 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </Text>
         ) : null}
       </Flex>
-      {pool?.owner && (
+      {pool?.tokenAddress && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
-            {t('View Owner Info')}
+          <ScanLink href={getBlockExploreLink(pool?.tokenAddress, 'address', chainId)} bold={false} small>
+            {t('View Collateral Info')}
           </ScanLink>
         </Flex>
       )}
-      {pool?.devaddr_ && (
+      {pool?.claimableBy && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.devaddr_, 'address', chainId)} bold={false} small>
-            {t('View Admin Info')}
+          <ScanLink href={getBlockExploreLink(pool?.claimableBy, 'address', chainId)} bold={false} small>
+            {t('Claimable By')} {pool?.claimableBy === ADDRESS_ZERO ? 'Anyone' : ''}
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
-          </ScanLink>
-        </Flex>
-      )}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <ScanLink href={getBlockExploreLink(getTrustBountiesAddress(), 'address', chainId)} bold={false} small>
+          {t('View TrustBounties Contract')}
+        </ScanLink>
+      </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
           {t('See Admin Channel')}
@@ -112,6 +118,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('View NFTs')}
         </LinkExternal>
       </Flex>
+      {pool?.workspaces && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?.workspaces, 'address', chainId)} bold={false} small>
+            {t('View Workspace Info')}
+          </ScanLink>
+        </Flex>
+      )}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

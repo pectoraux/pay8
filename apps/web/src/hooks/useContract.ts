@@ -177,7 +177,7 @@ export const useIfoV3Contract = (address: Address) => {
   return useContract(address, ifoV3ABI)
 }
 
-export const useERC20 = (address: Address) => {
+export const useERC20 = (address: any) => {
   return useContract(address, erc20ABI)
 }
 

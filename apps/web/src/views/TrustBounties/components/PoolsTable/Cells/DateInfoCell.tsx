@@ -15,10 +15,10 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-const DateInfoCell: React.FC<any> = ({ labelText, pool }) => {
-  const getDate = () => {
+const DateInfoCell: React.FC<any> = ({ t, pool }) => {
+  const getDate = (endTime) => {
     try {
-      return Number(pool?.endTime) ? format(convertTimeToSeconds(pool?.endTime), 'MMM do, yyyy HH:mm') : '-'
+      return Number(endTime) ? format(convertTimeToSeconds(endTime), 'MMM do, yyyy HH:mm') : '-'
     } catch (err) {
       return '-'
     }
@@ -27,10 +27,16 @@ const DateInfoCell: React.FC<any> = ({ labelText, pool }) => {
     <StyledCell role="cell">
       <Pool.CellContent>
         <Text fontSize="12px" color="textSubtle" textAlign="left">
-          {labelText}
+          {t('Lock End Date')}
         </Text>
         <Flex height="20px" alignItems="center">
-          {getDate()}
+          {getDate(pool?.endTime)}
+        </Flex>
+        <Text fontSize="12px" color="textSubtle" textAlign="left">
+          {t('Lock Start Date')}
+        </Text>
+        <Flex height="20px" alignItems="center">
+          {getDate(pool?.startTime)}
         </Flex>
       </Pool.CellContent>
     </StyledCell>

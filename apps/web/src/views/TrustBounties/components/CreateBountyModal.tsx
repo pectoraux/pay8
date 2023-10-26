@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, ChangeEvent } from 'react'
+import { useEffect, useRef, useState, useCallback, ChangeEvent, useMemo } from 'react'
 import {
   Flex,
   Grid,
@@ -38,6 +38,7 @@ import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/st
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { fetchBountiesAsync } from 'state/trustbounties'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 
 interface SetPriceStageProps {
   currency?: any
@@ -55,10 +56,41 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
-  const currencyAddress = currency?.address ?? DEFAULT_INPUT_CURRENCY
   const { toastSuccess, toastError } = useToast()
   const [allowing, setAllowing] = useState(false)
   const { chainId } = useActiveChainId()
+  const [state, setState] = useState<any>({
+    ve: '',
+    claimableBy: ADDRESS_ZERO,
+    collectionId: '',
+    avatar: '',
+    parentBountyId: '',
+    minToClaim: '',
+    endTime: '',
+    isNFT: 0,
+    recurring: 0,
+    bountySource: '',
+    token: '',
+    tokenId: '',
+    collateral: currency?.address ?? DEFAULT_INPUT_CURRENCY,
+  })
+  const updateValue = (key: any, value: any) => {
+    setState((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }))
+  }
+  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    const { name: inputName, value } = evt.currentTarget
+    updateValue(inputName, value)
+  }
+  const handleRawValueChange = (key: string) => (value: string | Date) => {
+    updateValue(key, value)
+  }
+  const handleTypeChange = (bountySource: string) => {
+    updateValue('bountySource', bountySource)
+  }
+  const currencyAddress = useMemo(() => state.collateral, [state.collateral, handleChange]) as any
   const stakingTokenContract = useERC20(currencyAddress || '')
   const [nftFilters, setNftFilters] = useState<any>({})
   const { handleApprove: handlePoolApprove } = useApprovePool(
@@ -74,21 +106,16 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const fromBusinesses = router.pathname.includes('businesses')
   const fromRamps = router.pathname.includes('ramps')
   const fromTransfers = router.pathname.includes('transfers')
-  const { status, needsApproval } = useGetRequiresApproval(stakingTokenContract, account, trustBountiesContract.address)
+  const { status, needsApproval, refetch } = useGetRequiresApproval(
+    stakingTokenContract,
+    account,
+    trustBountiesContract.address,
+  )
 
-  const [state, setState] = useState<any>({
-    ve: '',
-    claimableBy: ADDRESS_ZERO,
-    collectionId: '',
-    avatar: '',
-    parentBountyId: '',
-    minToClaim: '',
-    endTime: '',
-    isNFT: 0,
-    recurring: 0,
-    bountySource: '',
-    token: '',
-  })
+  useEffect(() => {
+    refetch()
+  }, [state.collateral, stakingTokenContract])
+
   const handleCreateGauge = useCallback(async () => {
     console.log('handleCreateGauge==================>')
     setPendingFb(true)
@@ -118,7 +145,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       const ve = getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase(), chainId)
       const args = [
         account,
-        !state.isNFT ? currencyAddress : state.token,
+        state.collateral,
         ve,
         state.claimableBy,
         state.parentBountyId,
@@ -184,23 +211,6 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     fromTransfers,
   ])
 
-  const updateValue = (key: any, value: any) => {
-    setState((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }))
-  }
-  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { name: inputName, value } = evt.currentTarget
-    updateValue(inputName, value)
-  }
-  const handleRawValueChange = (key: string) => (value: string | Date) => {
-    updateValue(key, value)
-  }
-  const handleTypeChange = (bountySource: string) => {
-    updateValue('bountySource', bountySource)
-  }
-
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
@@ -217,7 +227,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'This sets the address of the party that is allowed to claim this bounty. You can set it to the zero address (0x0000000000000000000000000000000000000000) in case you want anyone to be able to claim it. If you are creating this bounty for other contracts like the Future Collaterals or the Ramps contracts for instance, you have to input the addresses of those contracts in this field. You should read the guidelines on how to create bounties for those contracts in the documentation for more details.',
+        'This sets the address of the party that is allowed to claim this bounty. You can set it to the zero address in case you want anyone to be able to claim it. If you are creating this bounty for other contracts like the Future Collaterals or the Ramps contracts for instance, you have to input the addresses of those contracts in this field. You should read the guidelines on how to create bounties for those contracts in the documentation for more details.',
       )}
     </Text>
   )
@@ -249,7 +259,11 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     </Text>
   )
   const TooltipComponent8 = () => (
-    <Text>{t('This sets the address of the contract of the NFT that you will be locking in this bounty.')}</Text>
+    <Text>
+      {t(
+        'This sets the address of the collateral that you will be locking in this bounty. You might need to give the trustbounty contract access to your wallet.',
+      )}
+    </Text>
   )
   const TooltipComponent9 = () => (
     <Text>
@@ -343,8 +357,41 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   })
 
   return (
-    <Modal title={t('%titleName%', { titleName: needsApproval ? 'Enable' : 'Create Bounty' })} onDismiss={onDismiss}>
-      {!needsApproval ? (
+    <Modal title={t('Create Bounty')} onDismiss={onDismiss}>
+      <GreyedOutContainer style={{ paddingTop: '50px' }}>
+        <StyledItemRow>
+          <Flex ref={targetRef7} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+              {t('Token Type')}
+            </Text>
+            {tooltipVisible7 && tooltip7}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
+          <ButtonMenu scale="xs" variant="subtle" activeIndex={state.isNFT} onItemClick={handleRawValueChange('isNFT')}>
+            <ButtonMenuItem>{t('Fungible')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex ref={targetRef8}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Collateral Address')}
+          </Text>
+          {tooltipVisible8 && tooltip8}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="collateral"
+          value={state.collateral}
+          placeholder={t('input address of collateral')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      {!needsApproval || state.isNFT ? (
         <>
           <Flex alignSelf="center" mt={20}>
             <Flex ref={targetRef}>
@@ -442,47 +489,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
             />
             <DatePickerPortal />
           </GreyedOutContainer>
-          <GreyedOutContainer style={{ paddingTop: '50px' }}>
-            <StyledItemRow>
-              <Flex ref={targetRef7} paddingRight="50px">
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-                  {t('Token Type')}
-                </Text>
-                {tooltipVisible7 && tooltip7}
-                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-              </Flex>
-              <ButtonMenu
-                scale="xs"
-                variant="subtle"
-                activeIndex={state.isNFT}
-                onItemClick={handleRawValueChange('isNFT')}
-              >
-                <ButtonMenuItem>{t('Fungible')}</ButtonMenuItem>
-                <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
-                <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
-              </ButtonMenu>
-            </StyledItemRow>
-          </GreyedOutContainer>
-          {state.isNFT ? (
-            <GreyedOutContainer>
-              <Flex ref={targetRef8}>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('NFT Address')}
-                </Text>
-                {tooltipVisible8 && tooltip8}
-                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-              </Flex>
-              <Input
-                type="text"
-                scale="sm"
-                name="token"
-                value={state.token}
-                placeholder={t('input address of nft contract')}
-                onChange={handleChange}
-              />
-            </GreyedOutContainer>
-          ) : null}
-          <GreyedOutContainer style={{ paddingTop: '50px' }}>
+          <GreyedOutContainer>
             <StyledItemRow>
               <Flex ref={targetRef9} paddingRight="50px">
                 <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
@@ -581,7 +588,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {needsApproval
+            {needsApproval && !state.isNFT
               ? t('This will enable the trust bounty to withdraw from your wallet')
               : t(
                   'This will create a new bounty for you. Bounties/TrustBounties are a collateralization mechanism through which businesses or individuals lock a certain amount of collateral (in the form of fungible/non-fungible tokens) for a certain amount of time. Bounties can be attacked by the party defined in the << Claimable By >> field in case that party has proof of bounty terms violation by the bounty owner. Each bounty states certain terms which they should be claimed for violating.',
@@ -593,7 +600,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       <Flex flexDirection="column" px="16px" pb="16px">
         {!account ? (
           <ConnectWalletButton />
-        ) : needsApproval ? (
+        ) : needsApproval && !state.isNFT ? (
           <Button
             mb="8px"
             onClick={handlePoolApprove}

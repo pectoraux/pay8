@@ -171,8 +171,7 @@ export const fetchBounties = async (
         const startTime = bountyInfo.result[5]
         const endTime = bountyInfo.result[6]
         const parentBountyId = bountyInfo.result[7]
-        const isNFT = bountyInfo.result[7]
-
+        const isNFT = bountyInfo.result[8]
         const collection = await getCollection(bounty.collectionId)
         const claims = await Promise.all(
           bounty.claims.map(async (claim) => {

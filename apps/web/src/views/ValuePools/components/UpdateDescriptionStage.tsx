@@ -3,8 +3,9 @@ import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/ui
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/cancan/types'
-import { GreyedOutContainer, Divider } from './styles'
 import RichTextEditor from 'components/RichText'
+
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   nftToSell?: any

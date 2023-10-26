@@ -3,6 +3,7 @@ import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon }
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
+import RichTextEditor from 'components/RichText'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -11,7 +12,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, handleEasyMdeChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -131,16 +132,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="terms"
-          value={state.terms}
-          placeholder={t('input terms for your bounty')}
-          onChange={handleChange}
-        />
+        <RichTextEditor value={state.terms} onChange={handleEasyMdeChange} id="terms" />
       </GreyedOutContainer>
-      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="760px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>
