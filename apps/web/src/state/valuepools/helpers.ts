@@ -215,17 +215,54 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
         },
       ],
     })
-    const [collectionId] = await bscClient.multicall({
-      allowFailure: true,
-      contracts: [
-        {
-          address: getValuepoolVoterAddress(),
-          abi: valuePoolVoterABI,
-          functionName: 'collectionId',
-          args: [_va.result],
-        },
-      ],
-    })
+    const [collectionId, period, voteOption, minPeriod, minBountyRequired, minDifference, minimumLockValue] =
+      await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: getValuepoolVoterAddress(),
+            abi: valuePoolVoterABI,
+            functionName: 'collectionId',
+            args: [_va.result],
+          },
+          {
+            address: getValuepoolVoterAddress(),
+            abi: valuePoolVoterABI,
+            functionName: 'period',
+            args: [_va.result],
+          },
+          {
+            address: getValuepoolVoterAddress(),
+            abi: valuePoolVoterABI,
+            functionName: 'voteOption',
+            args: [_va.result],
+          },
+          {
+            address: getValuepoolVoterAddress(),
+            abi: valuePoolVoterABI,
+            functionName: 'minPeriod',
+            args: [_va.result],
+          },
+          {
+            address: getValuepoolVoterAddress(),
+            abi: valuePoolVoterABI,
+            functionName: 'minBountyRequired',
+            args: [_va.result],
+          },
+          {
+            address: getValuepoolVoterAddress(),
+            abi: valuePoolVoterABI,
+            functionName: 'minDifference',
+            args: [_va.result],
+          },
+          {
+            address: getValuepoolVoterAddress(),
+            abi: valuePoolVoterABI,
+            functionName: 'minimumLockValue',
+            args: [_va.result],
+          },
+        ],
+      })
     const maxUse = getParams.result[0]
     const queueDuration = getParams.result[1]
     const minReceivable = getParams.result[2]
@@ -340,6 +377,12 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
       maxDueReceivable: maxDueReceivable.toString(),
       queueDuration: queueDuration.toString(),
       collection,
+      period: period.result?.toString(),
+      voteOption: voteOption.result,
+      minPeriod: minPeriod.result?.toString(),
+      minBountyRequired: minBountyRequired.result?.toString(),
+      minDifference: minDifference.result?.toString(),
+      minimumLockValue: minimumLockValue.result?.toString(),
     }
   } catch (err) {
     console.log('rerr==============>', err)

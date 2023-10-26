@@ -129,8 +129,7 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
                   {t('Max').toUpperCase()}
                 </Button>
               )}
-              <LogoRoundIcon m="0 4px" width="24px" height="24px" />
-              <Text>{symb}</Text>
+              <Text ml="5px">{symb}</Text>
             </Flex>
           </Flex>
         </Container>

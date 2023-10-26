@@ -84,7 +84,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADD_SPONSORS]: t('Add Sponsors'),
   [LockStage.REMOVE_SPONSORS]: t('Remove Sponsors'),
   [LockStage.NOTIFY_PAYMENT]: t('Notify Payment'),
-  [LockStage.NOTIFY_LOAN]: t('Notify Loan'),
+  [LockStage.NOTIFY_LOAN]: t('Withdraw Approved Funds'),
   [LockStage.UPDATE_MERCHANT_IDENTITY_PROOFS]: t('Update Merchants ID Proof'),
   [LockStage.UPDATE_USER_IDENTITY_PROOFS]: t('Update Users ID Proof'),
   [LockStage.PICK_RANK]: t('Pick Rank'),
@@ -930,7 +930,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
             {t('NOTIFY PAYMENT')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.NOTIFY_LOAN)}>
-            {t('NOTIFY LOAN')}
+            {t('WITHDRAW FUNDS APPROVED')}
           </Button>
         </Flex>
       )}

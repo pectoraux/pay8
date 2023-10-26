@@ -21,7 +21,7 @@ export const ConnectWalletButton = ({ children, ...props }: ButtonProps) => {
       </Button>
       <WalletModalV2
         docText={t('Learn How to Create and Connect')}
-        docLink="https://docs.pancakeswap.finance/get-started-aptos/wallet-guide"
+        docLink="https://docs.payswap.org/get-started-aptos/wallet-guide"
         isOpen={open}
         wallets={wallets}
         login={login}

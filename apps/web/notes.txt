@@ -7,6 +7,9 @@ Wht is a crypto startup
 How do I create a crypto startup?
 How do I accept crypto
 
+
+error with generateShareProof
+
 ## Ramps
 
 * setup ramp

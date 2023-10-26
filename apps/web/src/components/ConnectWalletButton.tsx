@@ -47,7 +47,8 @@ const ConnectWalletButton = ({ children, ...props }: ButtonProps) => {
       `}</style>
       <WalletModalV2
         docText={t('Learn How to Connect')}
-        docLink={docLink}
+        docLink="https://docs.payswap.org/get-started-aptos/wallet-guide"
+        // docLink={docLink}
         isOpen={open}
         wallets={wallets}
         login={login}

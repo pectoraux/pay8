@@ -29,6 +29,7 @@ import { useCurrPool } from 'state/ramps/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/ramps'
+
 import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {

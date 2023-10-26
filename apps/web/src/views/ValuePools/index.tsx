@@ -21,6 +21,7 @@ import { useCallback, useState } from 'react'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import { useGetCollection } from 'state/cancan/hooks'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
@@ -28,7 +29,6 @@ import CreateValuepoolModal from './components/CreateValuepoolModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import { useGetCollection } from 'state/cancan/hooks'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -74,7 +74,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create contract ')}{' '}
+                  {t('Deploy Valuepool in ')}{' '}
                 </Text>
                 <CurrencyInputPanel
                   id="valuepool-currency"

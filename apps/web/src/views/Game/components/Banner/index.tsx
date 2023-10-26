@@ -75,10 +75,10 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
   // const cakePriceBusd = usePriceCakeBusd()
   // const { data } = usePotteryData()
   const symb = ` ${data?.token?.symbol?.toUpperCase() ?? '$'}`
-  console.log('ball==============>', data)
   const userTickets = useMemo(() => {
     return data?.accounts?.filter((protocol) => protocol.owner?.toLowerCase() === account?.toLowerCase())
   }, [data, account])
+  console.log('ball==============>', data, userTickets)
   // const prizeInBusd = publicData.totalPrize.times(cakePriceBusd)
   const prizeTotal = getBalanceNumber(data?.totalPaid ?? 0, data?.token?.decimals ?? 18)
   const pricePerMinutes = getBalanceNumber(data?.pricePerMinutes ?? 0, data?.token?.decimals ?? 18)
@@ -215,8 +215,14 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
                   {t('You have')}
                 </Text>
                 <DarkTextStyle ml="3px" bold as="span">
-                  {`${userTickets?.length ?? 0} tickets`}
+                  {`${userTickets?.length ?? 0} ticket(s)`}
                 </DarkTextStyle>
+                {userTickets?.length ? ' => ' : ''}
+                {userTickets?.map((ticket) => (
+                  <DarkTextStyle ml="3px" bold as="span">
+                    {t('Ticket #%val% | ', { val: ticket?.id })}
+                  </DarkTextStyle>
+                ))}
               </Box>
             ) : null}
             {/* <BannerTimer /> */}

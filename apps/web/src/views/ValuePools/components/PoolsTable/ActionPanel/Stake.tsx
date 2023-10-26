@@ -32,7 +32,7 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { pool } = usePool(id)
-  const variant = pool?.devaddr_ !== account ? 'admin' : 'user'
+  const variant = pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const vpCurrencyInput = useCurrency(pool?.tokenAddress)
   const [currency, setCurrency] = useState(vpCurrencyInput)
   const stakingTokenContract = useERC20(pool?.tokenAddress || '')
@@ -43,7 +43,7 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
     pool?.ve ?? '',
   )
   const numOfScheduledPurchases = pool?.purchaseHistory?.filter((ph) => ph.active)?.length
-  console.log('pool.id=================>', pool)
+  console.log('1pool.id=================>', pool?.devaddr_?.toLowerCase() === account?.toLowerCase())
   const { handleApprove: handleVAPoolApprove, pendingTx: pendingVAPoolTx } = useApprovePool(
     stakingTokenContract,
     pool?.id,
