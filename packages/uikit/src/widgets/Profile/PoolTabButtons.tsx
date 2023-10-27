@@ -97,7 +97,7 @@ const PoolTabButtons = ({
   const mineOnlySwitch = (
     <ToggleWrapper>
       <Toggle checked={mineOnly} onChange={() => setMineOnly(!mineOnly)} scale="sm" />
-      <Text> {t("Mine")}</Text>
+      <Text> {t("Mine Only")}</Text>
     </ToggleWrapper>
   );
 

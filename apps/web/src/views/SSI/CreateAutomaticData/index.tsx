@@ -40,7 +40,7 @@ import Layout from '../components/Layout'
 import { useProfileFromSSI } from 'state/ssi/hooks'
 import { addYears } from 'date-fns'
 import { privateKeyToAccount } from 'viem/accounts'
-import { createPublicClient, createWalletClient, custom, http } from 'viem'
+import { Address, createPublicClient, createWalletClient, custom, http } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { getProfileAddress, getSSIAddress } from 'utils/addressHelpers'
 import { profileABI } from 'config/abi/profile'
@@ -74,14 +74,14 @@ const CreateProposal = () => {
   const profile = userProfile ?? payswapProfile
   const randomCode = useMemo(() => uniqueId(Date.now()?.toString()), [])
 
-  console.log(
-    'randomCode==============>',
-    randomCode,
-    profile,
-    payswapProfile,
-    userProfile,
-    process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS,
-  )
+  // console.log(
+  //   'randomCode==============>',
+  //   randomCode,
+  //   profile,
+  //   payswapProfile,
+  //   userProfile,
+  //   process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS,
+  // )
   const handleSubmit = async () => {
     setIsLoading(true)
     const messageHtml = `
@@ -176,17 +176,17 @@ const CreateProposal = () => {
       })
       await walletClient
         .writeContract(rq2)
+        //   setIsLoading(false)
+        //   toastSuccess(
+        //     t('Data Created'),
+        //     <ToastDescriptionWithTx>
+        //       {t('You can now start sharing this data with different services/users')}
+        //     </ToastDescriptionWithTx>,
+        //   )
         .catch((err) => console.log('rerr2=================>', err, rq2, getProfileAddress(), client))
     } catch (err) {
-      console.log('try err====================>', err)
-    } finally {
       setIsLoading(false)
-      toastSuccess(
-        t('Data Created'),
-        <ToastDescriptionWithTx>
-          {t('You can now start sharing this data with different services/users')}
-        </ToastDescriptionWithTx>,
-      )
+      console.log('try err====================>', err)
     }
   }, [t, profile, state, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
 

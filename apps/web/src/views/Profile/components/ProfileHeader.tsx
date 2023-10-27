@@ -145,25 +145,25 @@ const ProfileHeader: React.FC<any> = ({
     const getActivateButton = () => {
       if (!sharedEmail) {
         return (
-          <ReactRouterLink to="/ssi/createAutomaticData">
+          <ReactRouterLink to="/ssi/proposal/createAutomaticData">
             <Button mt="16px">{t('Verify Your Email')}</Button>
           </ReactRouterLink>
         )
       }
-      if (!profile) {
+      if (profile) {
         return (
           <Button width="fit-content" mt="16px" onClick={openPresentCreateProfile}>
             {t('Create Profile')}
           </Button>
         )
       }
-      if (profile && !profile?.accounts?.length) {
-        return (
-          <Button width="fit-content" mt="16px" onClick={openPresentAddAccount}>
-            {t('Add Account')}
-          </Button>
-        )
-      }
+      // if (profile && !profile?.accounts?.length) {
+      //   return (
+      //     <Button width="fit-content" mt="16px" onClick={openPresentAddAccount}>
+      //       {t('Add Account')}
+      //     </Button>
+      //   )
+      // }
       if (isBounties) {
         return (
           // <Button width="fit-content" mt="16px" onClick={openPresentAddAccount}>
