@@ -82,7 +82,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                   fontSize="16px"
                   mr="4px"
                 >
-                  {t('Create an Stake in ')}{' '}
+                  {t('Create a Stake in ')}{' '}
                 </Text>
                 <CurrencyInputPanel
                   id="stakes-currency"

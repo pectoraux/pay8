@@ -22,7 +22,7 @@ const ArticleModal: React.FC<any> = ({ currPool, onDismiss }) => {
 
   return (
     <Modal title={t('Terms of stake %id%', { id: currPool?.sousId })} onDismiss={onDismiss}>
-      <Box mb="24px">
+      <Box mb="24px" maxWidth="700px">
         <Card>
           <RichTextEditor readOnly value={currPool?.terms} id="rte" />
         </Card>

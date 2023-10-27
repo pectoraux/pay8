@@ -261,7 +261,7 @@ const SetPriceStage: React.FC<any> = ({
           </ButtonMenu>
         </StyledItemRow>
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      <GreyedOutContainer maxWidth="800px">
         <Flex ref={targetRef7}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="5px" paddingTop="10px" bold>
             {t('Terms of your stake')}

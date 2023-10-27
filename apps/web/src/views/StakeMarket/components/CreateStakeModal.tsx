@@ -41,12 +41,13 @@ import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useGetRequiresApproval } from 'state/stakemarket/hooks'
 import BigNumber from 'bignumber.js'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-
-import { useApprovePool } from '../hooks/useApprove'
-import { GreyedOutContainer, Divider } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+
+import { useApprovePool } from '../hooks/useApprove'
+import { GreyedOutContainer, Divider } from './styles'
+import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 
 interface SetPriceStageProps {
   currency?: any
@@ -78,7 +79,6 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   )
 
   const { status, needsApproval } = useGetRequiresApproval(stakingTokenContract, account, stakeMarketContract.address)
-
   const [state, setState] = useState<any>({
     ve: '',
     source: account,

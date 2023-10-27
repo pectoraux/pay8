@@ -175,15 +175,19 @@ const config: (
           image: '/images/decorations/lottery.png',
         },
         {
+          label: t('StakeMarket'),
+          href: '/stakemarket',
+        },
+        {
+          label: t('TrustBounties'),
+          href: '/trustbounties',
+          image: '/images/decorations/prediction.png',
+        },
+        {
           label: t('ValuePools'),
           href: '/valuepools',
           image: '/images/decorations/tc.png',
         },
-        // {
-        //   label: t('Bettings'),
-        //   href: '/prediction',
-        //   image: '/images/decorations/prediction.png',
-        // },
         // {
         //   type: DropdownMenuItemType.DIVIDER,
         // },
