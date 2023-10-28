@@ -72,7 +72,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Accelerator pitch successfully created'),
+        t('Accelerator pitch successfully deployed'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
           {t('You can now start receiving funding through your accelerator pitch.')}
         </ToastDescriptionWithTx>,
@@ -142,7 +142,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   })
 
   return (
-    <Modal title={t('Create Accelerator Pitch')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy Accelerator Pitch')} onDismiss={onDismiss}>
       <Flex alignSelf="center" mt={20}>
         <Flex ref={targetRef}>
           <Filters
@@ -195,7 +195,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new pitch in the voter and enable you to raise funds. Please read the documentation to learn more about the Accelerator.',
+              'This will deploy a new pitch in the voter and enable you to raise funds. Please read the documentation to learn more about the Accelerator.',
             )}
           </Text>
         </Box>
@@ -209,7 +209,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create Pitch')}
+            {t('Deploy Pitch')}
           </Button>
         ) : (
           <ConnectWalletButton />

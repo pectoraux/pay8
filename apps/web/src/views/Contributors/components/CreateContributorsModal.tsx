@@ -61,7 +61,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
           console.log('rerr=====================>', err, [ve])
           setPendingFb(false)
           toastError(
-            t('Issue creating contributor team'),
+            t('Issue deploying contributor'),
             <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
           )
         })
@@ -69,9 +69,9 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Contributor team successfully created'),
+        t('Contributor successfully deployed'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start receiving support through your contributor team.')}
+          {t('You can now start receiving support through your contributor.')}
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchContributorsGaugesAsync({ chainId }))
@@ -125,7 +125,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   })
 
   return (
-    <Modal title={t('Create Contributor Pitch')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy Contributor')} onDismiss={onDismiss}>
       <Flex alignSelf="center" mt={20}>
         <Filters
           nftFilters={nftFilters}
@@ -174,7 +174,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new pitch in the voter and enable you to get support for your work. Please read the documentation to learn more about contribution teams.',
+              'This will deploy a new contributor in the voter and enable you to get support for your work. Please read the documentation to learn more about contribution teams.',
             )}
           </Text>
         </Box>
@@ -188,7 +188,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create Pitch')}
+            {t('Deploy')}
           </Button>
         ) : (
           <ConnectWalletButton />

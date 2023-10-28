@@ -47,7 +47,7 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         setPendingFb(false)
         console.log('createGauge==========>', err, ve)
         toastError(
-          t('Issue creating gauge'),
+          t('Issue launching referrer'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
         )
       })
@@ -55,9 +55,9 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Gauge successfully created'),
+        t('Referrer successfully launched'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start earning token rewards each sale you make.')}
+          {t('You can now start earning token rewards each purchase your referrees make.')}
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchReferralGaugesAsync({ chainId }))
@@ -77,7 +77,7 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   ])
 
   return (
-    <Modal title={t('Create a Referral Gauge')} onDismiss={onDismiss}>
+    <Modal title={t('Launch Referrer')} onDismiss={onDismiss}>
       <Flex alignSelf="center" mt={20}>
         <Filters
           nftFilters={nftFilters}
@@ -94,7 +94,7 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a gauge for your business. Please read the documentation to learn more about referral gauges.',
+              'This will launch your referrer so you can start receiving votes as a referrer on purchases made by your referrees. Please read the documentation to learn more about referral gauges.',
             )}
           </Text>
         </Box>
@@ -108,7 +108,7 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
           isLoading={pendingTx || pendingFb}
           disabled={pendingTx || pendingFb}
         >
-          {t('Create gauge')}
+          {t('Launch')}
         </Button>
       </Flex>
     </Modal>

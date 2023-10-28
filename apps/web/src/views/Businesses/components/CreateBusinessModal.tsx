@@ -47,7 +47,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         setPendingFb(false)
         console.log('createGauge==========>', err, [ve])
         toastError(
-          t('Issue creating gauge'),
+          t('Issue deploying business'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
         )
       })
@@ -55,7 +55,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Gauge successfully created'),
+        t('Business successfully deployed'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
           {t('You can now start earning token rewards each sale you make.')}
         </ToastDescriptionWithTx>,
@@ -76,7 +76,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   ])
 
   return (
-    <Modal title={t('Create a Business Gauge')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy Your Business')} onDismiss={onDismiss}>
       <Flex alignSelf="center" mt={20}>
         <Filters
           nftFilters={nftFilters}
@@ -93,7 +93,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a gauge for your business. Please read the documentation to learn more about business gauges.',
+              "This will deploy a your business in the businesses' voter. Please read the documentation to learn more about business gauges.",
             )}
           </Text>
         </Box>
@@ -107,7 +107,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
           isLoading={pendingTx || pendingFb}
           disabled={pendingTx || pendingFb}
         >
-          {t('Create gauge')}
+          {t('Deploy Business')}
         </Button>
       </Flex>
     </Modal>

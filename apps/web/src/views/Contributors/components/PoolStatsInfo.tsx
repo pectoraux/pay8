@@ -43,6 +43,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   console.log('PoolStatsInfo===============>', pool)
   return (
     <>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <LinkExternal color="failure" href={`/contributor/voting/${pool?.id}`} bold>
+          {t('OPEN PITCH')}
+        </LinkExternal>
+      </Flex>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>

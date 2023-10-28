@@ -68,7 +68,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create contract ')}{' '}
+                  {t('Deploy Contributor')}{' '}
                 </Text>
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />

@@ -40,7 +40,7 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
         setPendingFb(false)
         console.log('rerr=====================>', err, [profileId, account])
         toastError(
-          t('Issue creating sponsor'),
+          t('Issue deploying sponsor card'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
         )
       })
@@ -48,9 +48,9 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Sponsor successfully created'),
+        t('Sponsor successfully deployed'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start processing transactions through your Sponsor pool.')}
+          {t('You can now start processing transactions through your Sponsor contract.')}
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchSponsorsAsync({ fromSponsor: true, chainId }))
@@ -77,7 +77,7 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Create Sponsor Contract')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy Sponsor Card')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Profile ID')}
@@ -97,7 +97,7 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new Sponsorship contract with you as its Admin. Sponsorship contracts enable you to setup sponsorship deals as well as their periodic or non periodic payments. Please read the documentation to learn more about Sponsorship contracts.',
+              'This will deploy a new Sponsorship contract with you as its Admin. Sponsorship contracts enable you to setup sponsorship deals as well as their periodic or non periodic payments. Please read the documentation to learn more about Sponsorship contracts.',
             )}
           </Text>
         </Box>
@@ -111,7 +111,7 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create Sponsor Contract')}
+            {t('Deploy Sponsor Contract')}
           </Button>
         ) : (
           <ConnectWalletButton />

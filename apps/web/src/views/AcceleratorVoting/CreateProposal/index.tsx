@@ -83,17 +83,10 @@ const CreateProposal = () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('createClaim===============>', acceleratorContract, [
-        ['', '', '', state.original, state.thumbnail],
-        state.name,
-        state.body,
-      ])
+      const args = [['', '', '', state.original, state.thumbnail], state.name, state.body]
+      console.log('createClaim===============>', acceleratorContract, args)
       try {
-        return callWithGasPrice(acceleratorContract, 'updateContent', [
-          ['', '', '', state.original, state.thumbnail],
-          state.name,
-          state.body,
-        ])
+        return callWithGasPrice(acceleratorContract, 'updateContent', args)
       } catch (err) {
         setPendingFb(false)
         console.log('err0=================>', err)

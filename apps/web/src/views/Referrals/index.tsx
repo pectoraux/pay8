@@ -11,6 +11,7 @@ import {
   useModal,
   Loading,
 } from '@pancakeswap/uikit'
+import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import { useFilters, useGetTags, usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/referrals/hooks'
 import Page from 'components/Layout/Page'
@@ -22,7 +23,6 @@ import CreateReferralModal from './components/CreateReferralModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -61,7 +61,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create contract ')}{' '}
+                  {t('Launch Referrer')}{' '}
                 </Text>
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
