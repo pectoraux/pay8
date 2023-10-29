@@ -39,7 +39,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
       try {
         return callWithGasPrice(worldFactoryContract, 'createGauge', [profileId, account]).catch((err) => {
           toastError(
-            t('Issue creating world, make sure you have an active profile and a channel'),
+            t('Issue deploying world, make sure you have an active profile and a channel'),
             <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
           )
         })
@@ -51,7 +51,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('World successfully created'),
+        t('World successfully deployed'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
           {t('You can now start processing transactions through your World contract.')}
         </ToastDescriptionWithTx>,
@@ -80,7 +80,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Create World Contract')} onDismiss={onDismiss}>
+    <Modal title={t('Deploy World Contract')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Profile ID')}
@@ -100,7 +100,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will create a new World contract with you as its Admin. World contracts enable you to mint NFTs of lands in the real world.',
+              'This will deploy a new World contract with you as its Admin. World contracts enable you to mint NFTs of lands in the real world.',
             )}
           </Text>
         </Box>
@@ -114,7 +114,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
           >
-            {t('Create')}
+            {t('Deploy')}
           </Button>
         ) : (
           <ConnectWalletButton />
