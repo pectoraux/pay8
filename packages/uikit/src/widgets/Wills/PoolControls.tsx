@@ -156,7 +156,9 @@ export function PoolControls<T>({
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
-      return sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
+      return sortedPools.filter((pool: any) =>
+        latinise(`${pool?.id?.toLowerCase()} ${pool?.collection?.name?.toLowerCase()}` || "").includes(lowercaseQuery)
+      );
     }
     return sortedPools;
   }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);

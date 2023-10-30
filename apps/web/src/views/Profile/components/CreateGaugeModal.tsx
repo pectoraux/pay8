@@ -54,8 +54,10 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CLAIM_REVENUE]: t('Withdraw'),
   [LockStage.REMOVE_ACCOUNT]: t('Remove Account'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.ADD_ACCOUNT_FROM_SSI]: t('Add Account From SSID'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_PAY]: t('Back'),
+  [LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LATE_DAYS]: t('Back'),
   [LockStage.CONFIRM_ADD_ACCOUNT]: t('Back'),
   [LockStage.CONFIRM_ADD_ACCOUNT2]: t('Back'),
@@ -68,6 +70,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_SSID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BADGE_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BLACKLIST]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT]: t('Back'),
   [LockStage.CONFIRM_BROADCAST]: t('Back'),
   [LockStage.CONFIRM_CLAIM_REVENUE]: t('Back'),
   [LockStage.CONFIRM_REMOVE_ACCOUNT]: t('Back'),
@@ -103,6 +106,10 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       ? LockStage.CREATE
       : variant === 'add'
       ? LockStage.ADD_ACCOUNT2
+      : variant === 'follow'
+      ? LockStage.CONFIRM_FOLLOW
+      : variant === 'unfollow'
+      ? LockStage.CONFIRM_UNFOLLOW
       : LockStage.SETTINGS,
   )
   const { chainId } = useActiveChainId()
@@ -177,7 +184,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         setStage(LockStage.UPDATE_LATE_DAYS)
         break
       case LockStage.CONFIRM_FOLLOW:
-        setStage(LockStage.SETTINGS)
+        if (variant !== 'follow') setStage(LockStage.SETTINGS)
         break
       case LockStage.PAY:
         setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
@@ -186,7 +193,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         setStage(LockStage.PAY)
         break
       case LockStage.CONFIRM_UNFOLLOW:
-        setStage(LockStage.SETTINGS)
+        if (variant !== 'unfollow') setStage(LockStage.SETTINGS)
         break
       case LockStage.ADD_ACCOUNT:
         setStage(LockStage.SETTINGS)
@@ -223,6 +230,15 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         break
       case LockStage.CONFIRM_UPDATE_BLACKLIST:
         setStage(LockStage.UPDATE_BLACKLIST)
+        break
+      case LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI:
+        setStage(LockStage.ADD_ACCOUNT_FROM_SSI)
+        break
+      case LockStage.ADD_ACCOUNT_FROM_SSI:
+        setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_BOUNTY:
         setStage(LockStage.UPDATE_BOUNTY)
@@ -269,6 +285,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         break
       case LockStage.PAY:
         setStage(LockStage.CONFIRM_PAY)
+        break
+      case LockStage.ADD_ACCOUNT_FROM_SSI:
+        setStage(LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI)
         break
       case LockStage.UPDATE_LATE_DAYS:
         setStage(LockStage.CONFIRM_UPDATE_LATE_DAYS)
@@ -437,6 +456,18 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
           console.log('CONFIRM_UPDATE_BLACKLIST==================>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT) {
+        console.log('CONFIRM_UPDATE_TIME_CONSTRAINT===============>')
+        return callWithGasPrice(profileContract, 'updateTimeConstraint', []).catch((err) =>
+          console.log('CONFIRM_UPDATE_TIME_CONSTRAINT===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI) {
+        console.log('CONFIRM_ADD_ACCOUNT_FROM_SSI===============>')
+        return callWithGasPrice(profileContract, 'addAccountFromSSID', [state.profileId, state.identityTokenId]).catch(
+          (err) => console.log('CONFIRM_ADD_ACCOUNT_FROM_SSI===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_BROADCAST) {
         console.log('CONFIRM_BROADCAST==================>', [state.message, pool?.profileId || state.profileId])
         return callWithGasPrice(profileHelperContract, 'updateBroadcast', [
@@ -508,9 +539,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.PAY)}>
             {t('PAY PROFILE')}
           </Button>
-          {/* <Button mb="8px" variant='success' onClick={()=> setStage(LockStage.ADD_ACCOUNT_FROM_PROOF) }>
-            {t('ADD ACCOUNT FROM PROOF')}
-          </Button> */}
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_ACCOUNT_FROM_SSI)}>
+            {t('ADD ACCOUNT FROM SSID')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_COLLECTION_ID)}>
             {t('UPDATE COLLECTION ID')}
           </Button>
@@ -534,6 +565,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
           </Button>
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CLAIM_REVENUE)}>
             {t('CLAIM REVENUE')}
+          </Button>
+          <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT)}>
+            {t('UPDATE TIME CONSTRAINT')}
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.REMOVE_ACCOUNT)}>
             {t('REMOVE ACCOUNT')}
@@ -572,7 +606,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       {(stage === LockStage.ADD_ACCOUNT || stage === LockStage.ADD_ACCOUNT2) && (
         <AddAccountStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
-      {stage === LockStage.ADD_ACCOUNT_FROM_PROOF && (
+      {stage === LockStage.ADD_ACCOUNT_FROM_SSI && (
         <AddAccountFromProofStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_COLLECTION_ID && (

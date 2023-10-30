@@ -26,7 +26,7 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const variant = pool?.collection?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
+  const variant = pool?.collection?.owner?.toLowerCase() !== account?.toLowerCase() ? 'admin' : 'user'
   const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
   const inputCurrency = useCurrency(currencyId)
   const [currency, setCurrency] = useState(inputCurrency)

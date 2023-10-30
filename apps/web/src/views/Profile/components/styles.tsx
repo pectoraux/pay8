@@ -28,6 +28,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
 export const stagesWithApproveButton = [LockStage.CONFIRM_PAY]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.CONFIRM_FOLLOW,
   LockStage.CONFIRM_DELETE,
@@ -46,6 +47,7 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_CLAIM_REVENUE,
   LockStage.CONFIRM_REMOVE_ACCOUNT,
   LockStage.CONFIRM_CREATE,
+  LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI,
 ]
 
 export const stagesWithBackButton = [
@@ -83,6 +85,9 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_BROADCAST,
   LockStage.CONFIRM_CLAIM_REVENUE,
   LockStage.CONFIRM_REMOVE_ACCOUNT,
+  LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT,
+  LockStage.ADD_ACCOUNT_FROM_SSI,
+  LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI,
 ]
 
 export const Divider = styled.div`

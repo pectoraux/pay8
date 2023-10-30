@@ -27,14 +27,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Identity Token ID')}
+          {t('SSID Identity Token ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="identityTokenId"
           value={state.identityTokenId}
-          placeholder={t('input identity token id')}
+          placeholder={t('input your ssid identity token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add a new account to your profile. Please read the documentation for more information on each parameter',
+              'This will add a new account to your profile using your ssid instead of your wallet address. This can be helpful in case you lost access to your wallet. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

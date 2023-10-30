@@ -11,6 +11,7 @@ import Container from 'components/Layout/Container'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import dynamic from 'next/dynamic'
 import styled from 'styled-components'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 import MarketPageHeader from '../components/MarketPageHeader'
 import MarketPageTitle from '../components/MarketPageTitle'
@@ -26,7 +27,7 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import { useGetEstimateVotes } from 'state/cancan/hooks'
 
 const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
@@ -47,7 +48,7 @@ const Header: React.FC<any> = ({ collection }) => {
   const isOwner = account?.toLocaleLowerCase() === owner?.toLocaleLowerCase()
   const contactChannels = collection?.contactChannels?.split(',') ?? []
   const contacts = collection?.contacts?.split(',') ?? []
-
+  const votes = useGetEstimateVotes(collection?.id)
   const volume = totalVolumeBNB
     ? parseFloat(totalVolumeBNB ?? 0).toLocaleString(undefined, {
         minimumFractionDigits: 3,
@@ -60,6 +61,13 @@ const Header: React.FC<any> = ({ collection }) => {
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
+
+  const [onPresentSettings] = useModal(<SettingStage collection={collection} />)
+  const [onPresentPartner] = useModal(<PartnerModal collection={collection} />)
+  const [onPresentRegister] = useModal(<RegisterModal collection={collection} />)
+  const [onPresentShip] = useModal(<ShipStage variant="product" collection={collection} currency={currency} />)
+  const [onPresentPaywall] = useModal(<ShipStage variant="paywall" collection={collection} currency={currency} />)
+
   const steps = [
     {
       target: '.tour-1',
@@ -96,13 +104,6 @@ const Header: React.FC<any> = ({ collection }) => {
       content: t('Use this section for filtering products based on workspace, country, city or product tags'),
     },
   ]
-
-  const [onPresentSettings] = useModal(<SettingStage collection={collection} />)
-  const [onPresentPartner] = useModal(<PartnerModal collection={collection} />)
-  const [onPresentRegister] = useModal(<RegisterModal collection={collection} />)
-  const [onPresentShip] = useModal(<ShipStage variant="product" collection={collection} currency={currency} />)
-  const [onPresentPaywall] = useModal(<ShipStage variant="paywall" collection={collection} currency={currency} />)
-
   const itemsConfig = [
     {
       label: t('Items'),
@@ -131,11 +132,11 @@ const Header: React.FC<any> = ({ collection }) => {
   ]
 
   const getActiveItem = useMemo(() => {
-    const hash = router.asPath.match(/#([a-z0-9]+)/gi)?.[0]
+    const hash = router.asPath.match(/#([a-z0-9]+)/gi)?.[0] ?? ''
     if (hash === '#valuepools' || hash === '#trustbounties') {
       return `${nftsBaseUrl}/collections/${collectionAddress}#stakemarket`
     }
-    return router.asPath.replace('?chainId=4002', '')
+    return `${router.asPath?.split('?chain=')[0]}${hash}`
   }, [router, collectionAddress])
 
   return (
@@ -156,7 +157,9 @@ const Header: React.FC<any> = ({ collection }) => {
               stat={numberNftsListed ? formatNumber(Number(numberPartnerNftsListed), 0, 0) : '0'}
             />
             <LowestPriceStatBoxItem collectionAddress={collection?.id} />
-            <StatBoxItem title={t('Vol. (%symbol%)', { symbol: 'BNB' })} stat={(volume ?? 0)?.toString()} />
+            <StatBoxItem title={t('Vol.')} stat={(volume ?? 0)?.toString()} />
+            <StatBoxItem title={t('Likes')} stat={votes?.likes} />
+            <StatBoxItem title={t('Dislikes')} stat={votes?.dislikes} />
           </StatBox>
           <Flex justifyContent="center" alignItems="center">
             <CurrencyInputPanel

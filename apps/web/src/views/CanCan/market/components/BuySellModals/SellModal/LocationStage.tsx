@@ -39,7 +39,6 @@ const LocationStage: React.FC<any> = ({
   nftFilters,
   setNftFilters,
   handleChange,
-  handleRawValueChange,
   continueToNextStage,
   show = false,
 }) => {

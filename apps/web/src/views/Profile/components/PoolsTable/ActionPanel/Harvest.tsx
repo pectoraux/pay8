@@ -114,11 +114,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('SSID Auditor Profile ID')}
             </Text>
           </Box>
-          {pool?.accounts?.map((acct) => (
-            <ScanLink href={getBlockExploreLink(acct?.ownerAddress, 'address', chainId)} bold={false} small>
-              {truncateHash(acct?.ownerAddress)}
-            </ScanLink>
-          ))}
+          <Box mr="8px" height="32px">
+            {pool?.accounts?.map((acct) => (
+              <ScanLink href={getBlockExploreLink(acct?.ownerAddress, 'address', chainId)} bold={false} small>
+                {truncateHash(acct?.ownerAddress)}
+              </ScanLink>
+            ))}
+            <Text color="textSubtle" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Accounts')}
+            </Text>
+          </Box>
         </Flex>
       </ActionContent>
     </ActionContainer>

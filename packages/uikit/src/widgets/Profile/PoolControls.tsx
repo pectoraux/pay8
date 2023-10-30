@@ -162,9 +162,7 @@ export function PoolControls<T>({
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
-      return sortedPools.filter((pool: any) =>
-        latinise(pool?.earningToken?.symbol?.toLowerCase() || "").includes(lowercaseQuery)
-      );
+      return sortedPools.filter((pool: any) => latinise(pool?.name?.toLowerCase() || "").includes(lowercaseQuery));
     }
     return sortedPools;
   }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);

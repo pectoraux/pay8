@@ -24,6 +24,7 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN,
   LockStage.CONFIRM_DELETE,
   LockStage.CONFIRM_DELETE_PROTOCOL,
+  LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT,
 ]
 
 export const stagesWithBackButton = [
@@ -42,6 +43,8 @@ export const stagesWithBackButton = [
   LockStage.STOP_WITHDRAWAL_COUNTDOWN,
   LockStage.DELETE,
   LockStage.DELETE_PROTOCOL,
+  LockStage.UPDATE_TIME_CONSTRAINT,
+  LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT,
   LockStage.CONFIRM_PAY,
   LockStage.CONFIRM_UPDATE_TAX,
   LockStage.CONFIRM_TRANSFER_TO_NOTE_PAYABLE,

@@ -53,6 +53,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_ACTIVE_PERIOD]: t('Update Active Period'),
   [LockStage.STOP_WITHDRAWAL_COUNTDOWN]: t('Stop Withdrawal Countdown'),
   [LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT]: t('Back'),
   [LockStage.CONFIRM_UPDATE_OWNER]: t('Back'),
   [LockStage.CONFIRM_REMOVE_BALANCE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD]: t('Back'),
@@ -103,7 +104,7 @@ const CreateGaugeModal: React.FC<any> = ({
     bountyId: pool?.bountyId ?? '',
     protocolId: currAccount?.id,
     extraMint: '',
-    tokens: '',
+    tokens: `${currency?.address ?? ''}`,
     percentages: '',
     category: '',
     contractAddress: '',
@@ -235,6 +236,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN:
         setStage(LockStage.STOP_WITHDRAWAL_COUNTDOWN)
         break
+      case LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.DELETE:
         setStage(LockStage.ADMIN_SETTINGS)
         break
@@ -331,7 +335,7 @@ const CreateGaugeModal: React.FC<any> = ({
         if (state.nftype === 0) {
           amountReceivable = getDecimalAmount(amountReceivable ?? 0, currency?.decimals)
         }
-        const args = [currency?.address, amountReceivable.toString(), state.nftype]
+        const args = [state.token, amountReceivable.toString(), state.nftype]
         console.log('CONFIRM_ADD_BALANCE===============>', args)
         return callWithGasPrice(willContract, 'addBalance', args).catch((err) =>
           console.log('CONFIRM_ADD_BALANCE===============>', err),

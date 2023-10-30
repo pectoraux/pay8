@@ -1,4 +1,4 @@
-import { Button, Text, useModal, Pool, Skeleton } from '@pancakeswap/uikit'
+import { Button, Text, useModal, Pool, Skeleton, Flex } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallback, useState } from 'react'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
@@ -31,6 +31,8 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const [openPresentSettings] = useModal(
     <CreateGaugeModal variant={variant} pool={pool} currency={currency ?? currencyA} />,
   )
+  const [openFollow] = useModal(<CreateGaugeModal variant="follow" pool={pool} currency={currency ?? currencyA} />)
+  const [openUnfollow] = useModal(<CreateGaugeModal variant="unfollow" pool={pool} currency={currency ?? currencyA} />)
 
   if (!account) {
     return (
@@ -62,9 +64,17 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
         id={pool?.sousId}
       />
       <ActionContent>
-        <Button width="100%" onClick={openPresentSettings} variant="secondary">
-          {t('Control Panel')}
-        </Button>
+        <Flex flexDirection="column" width="100%">
+          <Button width="100%" mb="10px" onClick={openPresentSettings} variant="secondary">
+            {t('Control Panel')}
+          </Button>
+          <Button width="100%" mb="10px" onClick={openFollow} variant="primary">
+            {t('FOLLOW')}
+          </Button>
+          <Button width="100%" onClick={openUnfollow} variant="danger">
+            {t('UNFOLLOW')}
+          </Button>
+        </Flex>
       </ActionContent>
     </ActionContainer>
   )

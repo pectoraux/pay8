@@ -26,8 +26,33 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   return (
     <>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          {t('Input the type of the selected token')}
+        </Text>
+        <ButtonMenu scale="xs" variant="subtle" activeIndex={state.nftype} onItemClick={handleRawValueChange('nftype')}>
+          <ButtonMenuItem>{t('Not NFT')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
+        </ButtonMenu>
+      </GreyedOutContainer>
+      {parseInt(state.nftype) ? (
+        <GreyedOutContainer>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('NFT Contract Address')}
+          </Text>
+          <Input
+            type="text"
+            scale="sm"
+            name="token"
+            value={state.token}
+            placeholder={t('input nft collection address')}
+            onChange={handleChange}
+          />
+        </GreyedOutContainer>
+      ) : null}
+      <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount To Add')}
+          {parseInt(state.nftype) ? t('Token ID') : t('Amount To Add')}
         </Text>
         <Input
           type="text"
@@ -37,16 +62,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           placeholder={t('input amount to add')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-          {t('Input the type of the selected token')}
-        </Text>
-        <ButtonMenu scale="xs" variant="subtle" activeIndex={state.nftype} onItemClick={handleRawValueChange('nftype')}>
-          <ButtonMenuItem>{t('Not NFT')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
-        </ButtonMenu>
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">

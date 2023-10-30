@@ -90,7 +90,7 @@ const EditStage: React.FC<any> = ({
       : SellingStage.CREATE_ASK_ORDER,
   )
   const [expand, setExpand] = useState(false)
-  const paywallARP = useGetPaywallARP(collection?.id ?? '') as any as any
+  const paywallARP = useGetPaywallARP(collection?.id ?? '') as any
   const [step1Complete, setStep1Complete] = useState(!!paywallARP?.paywallAddress)
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -349,7 +349,7 @@ const EditStage: React.FC<any> = ({
         console.log('rerr0===========================>', [
           state.tokenId?.split(' ')?.join('-')?.trim(),
           currentAskPrice.toString(),
-          state.bidDuration,
+          parseInt(state.bidDuration) * 60,
           parseInt(state.minBidIncrementPercentage) * 100,
           !!state.transferrable,
           !!state.requireUpfrontPayment,

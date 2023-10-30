@@ -12,6 +12,8 @@ import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import dynamic from 'next/dynamic'
 import styled from 'styled-components'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useGetEstimateVotes } from 'state/cancan/hooks'
 
 import MarketPageHeader from '../components/MarketPageHeader'
 import MarketPageTitle from '../components/MarketPageTitle'
@@ -27,8 +29,6 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import { useGetEstimateVotes } from 'state/cancan/hooks'
 
 const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
@@ -55,11 +55,9 @@ const Header: React.FC<any> = ({ collection }) => {
       })
     : '0'
   const votes = useGetEstimateVotes(collection?.id)
-  console.log('votes_votes==============>', votes)
   const defaultCurrency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(defaultCurrency)
   const [launch, setLaunch] = useState(false)
-  const [launch2, setLaunch2] = useState(false)
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
@@ -101,42 +99,6 @@ const Header: React.FC<any> = ({ collection }) => {
     },
     {
       target: '.tour-5',
-      content: t('Use this section for filtering products based on workspace, country, city or product tags'),
-    },
-  ]
-  const steps2 = [
-    {
-      target: '.tour2-1',
-      content: (
-        <>
-          <ReactMarkdown>{t("The **Items**' tab displays all products available on the channel.")}</ReactMarkdown>
-          <ReactMarkdown>{t("The **Activity**'s tab display all product sales & listings.")}</ReactMarkdown>
-          <ReactMarkdown>{t("The **Requests**' tab displays all partnership & membership requests.")}</ReactMarkdown>
-          <ReactMarkdown>
-            {t("The **Contracts**' tab displays all stakes, bounties and valuepools relevant to this channel.")}
-          </ReactMarkdown>
-          <ReactMarkdown>
-            {t("The **Legal & Info**'s tab displays the channel's terms of service and essential announcements.")}
-          </ReactMarkdown>
-          <ReactMarkdown>{t("The **Stats**' tab displays all stats relevant to the channel")}</ReactMarkdown>
-        </>
-      ),
-      disableBeacon: true,
-    },
-    {
-      target: '.tour2-2',
-      content: t('The Home tab displays all products listed by this channel'),
-    },
-    {
-      target: '.tour2-3',
-      content: t('The Partner tab displays all products listed by channel partners'),
-    },
-    {
-      target: '.tour2-4',
-      content: t("The Users' tab displays all channel users"),
-    },
-    {
-      target: '.tour2-5',
       content: t('Use this section for filtering products based on workspace, country, city or product tags'),
     },
   ]

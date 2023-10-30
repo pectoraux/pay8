@@ -27,6 +27,8 @@ import { useAppDispatch } from 'state'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { useRouter } from 'next/router'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import { setCurrBribeData, setCurrPoolData } from 'state/wills'
+import { useCurrPool } from 'state/wills/hooks'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -74,6 +76,8 @@ const PoolStatsInfo: React.FC<any> = ({
   } = getTimePeriods(Number(pool?.willWithdrawalPeriod ?? '0'))
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
+  const currState = useCurrPool()
+  const dispatch = useAppDispatch()
   return (
     <>
       {!hideAccounts ? (
@@ -189,6 +193,36 @@ const PoolStatsInfo: React.FC<any> = ({
           />
         </Flex>
       )}
+      <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
+        {pool?.tokens?.length
+          ? pool?.tokens.map((balance) => (
+              <Button
+                key={balance.id}
+                onClick={() => {
+                  const newState = { ...currState2, [pool?.id]: balance.id }
+                  dispatch(setCurrBribeData(newState))
+                }}
+                mt="4px"
+                mr={['2px', '2px', '4px', '4px']}
+                scale="sm"
+                variant={currState2[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+              >
+                {balance.symbol}
+              </Button>
+            ))
+          : null}
+        {pool?.tokens?.length ? (
+          <Button
+            key="clear-all"
+            variant="text"
+            scale="sm"
+            onClick={() => dispatch(setCurrBribeData({}))}
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            {t('Clear')}
+          </Button>
+        ) : null}
+      </Flex>
       <Contacts contactChannels={contactChannels} contacts={contacts} />
     </>
   )

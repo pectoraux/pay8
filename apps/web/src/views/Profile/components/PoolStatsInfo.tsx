@@ -24,11 +24,12 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
 import { setCurrPoolData } from 'state/profile'
 import { useCurrPool } from 'state/profile/hooks'
+import { useToken } from 'hooks/Tokens'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 import WebPagesModal from './WebPagesModal'
 import ClearAllButton from './ClearAllButton'
-import { useToken } from 'hooks/Tokens'
-import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -43,14 +44,14 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
   const dispatch = useDispatch()
   const currState = useCurrPool()
   const tokenAddress = pool?.id || ''
-  const earningToken = useToken(currState[tokenAddress])
-  console.log('currAccount=============>', currAccount)
+  const firstAccount = pool?.accounts?.length && pool?.accounts[0]?.ownerAddress?.toLowerCase()
   const [onPresentNFT] = useModal(<WebPagesModal height="500px" pool={pool} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
+  console.log('firstAccount============>', firstAccount, pool?.accounts[0]?.ownerAddress)
   return (
     <>
-      {pool?.owner && (
+      {/* {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
             {t('View Owner Info')}
@@ -63,11 +64,18 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
             {t('View Admin Info')}
           </ScanLink>
         </Flex>
-      )}
-      {pool?.collectionId ? (
+      )} */}
+      {parseInt(pool?.collectionId) ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
             {t('See Admin Channel')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
+      {firstAccount && firstAccount !== ADDRESS_ZERO ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal href={`/profile/${firstAccount}`} bold={false} small>
+            {t('Open Profile Page')}
           </LinkExternal>
         </Flex>
       ) : null}

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { differenceInSeconds } from 'date-fns'
 import { useState, ChangeEvent } from 'react'
-import { Flex, Grid, Text, Button, useToast } from '@pancakeswap/uikit'
+import { Flex, Grid, Text, Button, useToast, Modal } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { Currency, MaxUint256 } from '@pancakeswap/sdk'
 import { useTranslation, TranslateFunction, ContextApi } from '@pancakeswap/localization'
@@ -34,6 +34,7 @@ import ProgressSteps from '../../ProgressSteps'
 import AvatarImage from '../../BannerHeader/AvatarImage'
 import PublishMediaStage from './PublishMediaStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
+import { useGetPaywallARP } from 'state/cancan/hooks'
 
 interface EditStageProps {
   variant: 'product' | 'paywall' | 'article'
@@ -75,8 +76,16 @@ const getToastText = (stage: SellingStage, t: ContextApi['t']) => {
 const EditStage: React.FC<any> = ({ variant, collection, articleState, currency, articleFilters = {}, onDismiss }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const [stage, setStage] = useState(variant === 'article' ? SellingStage.CONFIRM_ADD_LOCATION2 : SellingStage.SHIP)
+  const [stage, setStage] = useState(
+    variant === 'article'
+      ? SellingStage.CONFIRM_CREATE_ASK_ORDER
+      : variant === 'paywall'
+      ? SellingStage.CREATE_PAYWALL
+      : SellingStage.CREATE_ASK_ORDER,
+  )
   const [expand, setExpand] = useState(false)
+  const paywallARP = useGetPaywallARP(collection?.id ?? '') as any
+  const [step1Complete, setStep1Complete] = useState(!!paywallARP?.paywallAddress)
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
@@ -91,19 +100,19 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
   const [state, setState] = useState<any>(() => ({
     tokenId: articleState?.tokenId?.split()?.join('-') ?? '',
     direction: 0,
-    dropinDate: '',
-    maxSupply: '0',
+    dropinDate: articleState?.dropinDate ?? '',
+    maxSupply: articleState?.maxSupply ?? '0',
     ABTesting: 0,
     ABMin: 0,
     ABMax: 0,
-    bidDuration: '0',
-    minBidIncrementPercentage: '0',
-    rsrcTokenId: '0',
+    bidDuration: articleState?.bidDuration ?? '0',
+    minBidIncrementPercentage: articleState?.minBidIncrementPercentage ?? '0',
+    rsrcTokenId: articleState?.rsrcTokenId ?? '0',
     nftTokenId: '0',
-    options: [],
-    transferrable: 0,
-    requireUpfrontPayment: 0,
-    currentAskPrice: 0,
+    options: articleState?.options ?? [],
+    transferrable: articleState?.transferrable ?? 1,
+    requireUpfrontPayment: articleState?.requireUpfrontPayment ?? 1,
+    currentAskPrice: articleState?.currentAskPrice ?? 0,
     customMinter: 0,
     name: '',
     symbol: '',
@@ -116,7 +125,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
     product: {},
     behindPaywall: '',
     media: '',
-    usetFIAT: 0,
+    usetFIAT: articleState?.usetFIAT ?? 0,
     customTags: articleState?.customTags ?? '',
     thumbnail: articleState?.thumbnail ?? '',
     description: articleState?.description ?? '',
@@ -178,7 +187,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         setStage(SellingStage.CREATE_PAYWALL)
         break
       case SellingStage.CONFIRM_CREATE_PAYWALL1:
-        setStage(SellingStage.SHIP)
+        setStage(SellingStage.CREATE_PAYWALL)
         break
       case SellingStage.CREATE_PAYWALL2:
         setStage(SellingStage.CREATE_PAYWALL)
@@ -292,7 +301,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
                 state.tokenId?.split(' ')?.join('-')?.trim(),
                 state.options?.reduce((accum, attr) => [...accum, attr.min], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.max], []),
-                state.options?.reduce((accum, attr) => [...accum, attr.value], []),
+                state.options?.reduce((accum, attr) => [...accum, parseInt(attr.value) * 60], []),
                 state.options?.reduce((accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.category], []),
                 state.options?.reduce((accum, attr) => [...accum, attr.element], []),
@@ -305,6 +314,27 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
               )
             }
             return null
+          })
+          .then(() => {
+            let args = [
+              state.tokenId?.split(' ')?.join('-')?.trim(),
+              state.description,
+              state.prices?.split(',')?.filter((val) => !!val),
+              state.start,
+              state.period,
+              variant === 'product' || variant === 'article' ? '0' : '1',
+              !!state.isTradable,
+              `${state.thumbnail},${state.original}`,
+              nftFilters?.country?.toString(),
+              nftFilters?.city?.toString(),
+              nftFilters?.product
+                ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
+                : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
+            ]
+            console.log('7CONFIRM_CREATE_PAYWALL2==============>')
+            return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args).catch((err) =>
+              console.log('CONFIRM_ADD_LOCATION================>', err),
+            )
           })
           .catch((err) => console.log('rerr=============>', err))
       }
@@ -319,8 +349,8 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         const createArgs = [
           state.tokenId?.split(' ')?.join('-')?.trim(),
           currentAskPrice.toString(),
-          state.bidDuration,
-          state.minBidIncrementPercentage,
+          parseInt(state.bidDuration) * 60,
+          parseInt(state.minBidIncrementPercentage) * 100,
           !!state.transferrable,
           !!state.requireUpfrontPayment,
           !!state.usetFIAT,
@@ -364,7 +394,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             state.prices?.split(',')?.filter((val) => !!val),
             state.start,
             state.period,
-            variant === 'product' || variant === 'article' ? 2 : 1,
+            variant === 'product' || variant === 'article' ? '0' : '1',
             !!state.isTradable,
             `${state.thumbnail},${state.thumbnail}`,
             nftFilters?.country?.toString(),
@@ -394,10 +424,10 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
 
   return (
-    <StyledModal
+    <Modal
       title={modalTitles(t)[stage]}
-      stage={stage}
-      expand={expand}
+      // stage={stage}
+      // expand={expand}
       onDismiss={onDismiss}
       onBack={showBackButton ? goBack : null}
       headerBackground={theme.colors.gradientCardHeader}
@@ -407,17 +437,16 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           <AvatarImage src={collection?.avatar} />
         </Flex>
         <Grid flex="1" alignItems="center">
-          <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {collection?.collectionName}
-          </Text>
-          <Text bold>
+          {/* <Text fontSize="12px" color="textSubtle" textAlign="right"> */}
+          <Text>{collection?.name}</Text>
+          {/* <Text bold>
             {variant === 'product'
               ? t('First publish a media file on your product then enlist it for sale in the marketplace')
               : t('Create a paywall, add locations, surveys... and list products behind it.')}
-          </Text>
+          </Text> */}
         </Grid>
       </Flex>
-      {stage === SellingStage.SHIP && (
+      {/* {stage === SellingStage.SHIP && (
         <Flex flexDirection="row">
           <ProgressSteps steps={[true, true]} />
           <Flex flexDirection="column" width="100%" px="16px" pb="16px">
@@ -439,10 +468,10 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             </Button>
           </Flex>
         </Flex>
-      )}
+      )} */}
       {stage === SellingStage.CREATE_PAYWALL && (
         <Flex flexDirection="row">
-          <ProgressSteps steps={[true]} />
+          <ProgressSteps steps={[step1Complete]} />
           <Flex flexDirection="column" width="100%" px="16px" pb="16px">
             <Button mb="8px" onClick={() => setStage(SellingStage.CONFIRM_CREATE_PAYWALL1)}>
               {t('STEP 1')}
@@ -454,6 +483,19 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         </Flex>
       )}
       {stage === SellingStage.UPLOAD_MEDIA && <PublishMediaStage state={state} updateValue={updateValue} />}
+      {(stage === SellingStage.CREATE_ASK_ORDER || stage === SellingStage.CREATE_PAYWALL2) && (
+        <LocationStage
+          state={state}
+          variant={variant}
+          updateValue={updateValue}
+          collection={collection}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stage === SellingStage.CREATE_ASK_ORDER && (
         <EnlistStage
           state={state}
@@ -474,21 +516,9 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           }}
         />
       )}
-      {stage === SellingStage.ADD_LOCATION && (
-        <LocationStage
-          state={state}
-          variant={variant}
-          updateValue={updateValue}
-          collection={collection}
-          nftFilters={nftFilters}
-          setNftFilters={setNftFilters}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
       {stage === SellingStage.CREATE_PAYWALL2 && (
-        <PaywallStage2
+        <EnlistStage
+          variant="paywall"
           state={state}
           nftFilters={nftFilters}
           setNftFilters={setNftFilters}
@@ -512,7 +542,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
         <ConfirmStage isConfirming={isConfirming} handleConfirm={handleConfirm} />
       )}
       {stage === SellingStage.TX_CONFIRMED && <TransactionConfirmed txHash={confirmedTxHash} onDismiss={onDismiss} />}
-    </StyledModal>
+    </Modal>
   )
 }
 

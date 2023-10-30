@@ -9,6 +9,8 @@ import {
   ButtonMenu,
   ButtonMenuItem,
   Grid,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
@@ -32,15 +34,15 @@ const LocationStage: React.FC<any> = ({
   thumbnail,
   nftToSell,
   collection,
-  collectionId,
   nftFilters,
   setNftFilters,
   handleChange,
-  handleRawValueChange,
   continueToNextStage,
+  show = false,
 }) => {
   const { t } = useTranslation()
   const [value, onChange] = useState('')
+  const variantName = capitalize(variant)
   const [value3, onChange3] = useState('')
   const [pendingFb, setPendingFb] = useState(false)
   const collectionAddress = useRouter().query.collectionAddress as string
@@ -67,6 +69,107 @@ const LocationStage: React.FC<any> = ({
       }),
     [],
   )
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        "This will be your product's name in the marketplace, your product id will be the same but with the spaces replaced with a dash -.",
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        "This is the link to your video, leave it empty if you are note planning on adding a video. If you do though, you can input the embed link to your video right here, to get the embed link for a Youtube video for instance, go to the page of the video, double clik on the video and select 'Copy embed code'. This will copy the entire embed code with the embed link your clipboard, get the embed link in the code which is a youtube link that looks like this: https://www.youtube.com/embed/1CpCdolHdeA. Copy the link right here.",
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>{t('You can either add a link to an image on the internet or upload a new image right here.')}</Text>
+  )
+  const TooltipComponent4 = () => (
+    <Text>{t('A good example for dimensions is 640 x 640 pixels for your image to appear perfectly.')}</Text>
+  )
+  const TooltipComponent5 = () => (
+    <Text>
+      {t('To upload an image, click on the icon below to open a window so you can pick an image locally to upload.')}
+    </Text>
+  )
+  const TooltipComponent6 = () => <Text>{t('Use this field to provide a summary description of your product.')}</Text>
+  const TooltipComponent7 = () => (
+    <Text>
+      {t(
+        'Use this field to set a geotag on your product, pick all the countries or cities where it is available for purchase. In case it is available everywhere, just pick the option All for countries and cities. As for the product tags, they should describe a core functionality or category of your product.',
+      )}
+    </Text>
+  )
+  const TooltipComponent8 = () => (
+    <Text>
+      {t(
+        'Use this field to add a custom tag in case you did not find an appropriate one above. Your tag name should be one worded and preferably not too long.',
+      )}
+    </Text>
+  )
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef6,
+    tooltip: tooltip6,
+    tooltipVisible: tooltipVisible6,
+  } = useTooltip(<TooltipComponent6 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef7,
+    tooltip: tooltip7,
+    tooltipVisible: tooltipVisible7,
+  } = useTooltip(<TooltipComponent7 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef8,
+    tooltip: tooltip8,
+    tooltipVisible: tooltipVisible8,
+  } = useTooltip(<TooltipComponent8 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <>
@@ -79,20 +182,22 @@ const LocationStage: React.FC<any> = ({
           <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
             <Text bold>{nftToSell?.tokenId}</Text>
             <Text fontSize="12px" color="textSubtle" textAlign="right">
-              {`Collection #${collectionId}`}
+              {`Collection #${collection?.id}`}
             </Text>
           </Grid>
         </Flex>
-        <Flex justifyContent="center" alignItems="center" mb="10px">
-          <ButtonMenu scale="sm" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
-            <ButtonMenuItem>{t('Image/Video')}</ButtonMenuItem>
-            <ButtonMenuItem>
-              <LinkExternal href={variant === 'item' ? 'createArticle' : `${collectionAddress}/createArticle`}>
-                {t('Article')}
-              </LinkExternal>
-            </ButtonMenuItem>
-          </ButtonMenu>
-        </Flex>
+        {variantName !== 'Paywall' ? (
+          <Flex justifyContent="center" alignItems="center" mb="10px">
+            <ButtonMenu scale="sm" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
+              <ButtonMenuItem>{t('Image/Video')}</ButtonMenuItem>
+              <ButtonMenuItem>
+                <LinkExternal href={variant === 'item' ? 'createArticle' : `${collectionAddress}/createArticle`}>
+                  {t('Article')}
+                </LinkExternal>
+              </ButtonMenuItem>
+            </ButtonMenu>
+          </Flex>
+        ) : null}
         {activeButtonIndex ? (
           <Text mt="24px" color="textSubtle" mb="8px">
             {t('Write your article in the opened page.')}
@@ -100,22 +205,30 @@ const LocationStage: React.FC<any> = ({
         ) : (
           <>
             <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Product Name (same name)')}
-              </Text>
+              <Flex ref={targetRef}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Product Name')}
+                </Text>
+                {tooltipVisible && tooltip}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
               <Input
                 type="text"
                 scale="sm"
                 name="tokenId"
                 value={state.tokenId}
-                placeholder={t('same name as in previous step')}
+                placeholder={t('input item name')}
                 onChange={handleChange}
               />
             </GreyedOutContainer>
             <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Link to Video')}
-              </Text>
+              <Flex ref={targetRef2}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Link to Video')}
+                </Text>
+                {tooltipVisible2 && tooltip2}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
               <RichTextEditor
                 id="mp4"
                 value={value}
@@ -127,9 +240,13 @@ const LocationStage: React.FC<any> = ({
               />
             </GreyedOutContainer>
             <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Image')}
-              </Text>
+              <Flex ref={targetRef3}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Image')}
+                </Text>
+                {tooltipVisible3 && tooltip3}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
               <StyledItemRow>
                 <ButtonMenu
                   scale="xs"
@@ -144,9 +261,13 @@ const LocationStage: React.FC<any> = ({
             </GreyedOutContainer>
             {activeButtonIndex3 ? (
               <GreyedOutContainer>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Link to Image/Gif')}
-                </Text>
+                <Flex ref={targetRef4}>
+                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                    {t('Link to Image/Gif')}
+                  </Text>
+                  {tooltipVisible4 && tooltip4}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <Input
                   type="text"
                   scale="sm"
@@ -158,9 +279,13 @@ const LocationStage: React.FC<any> = ({
               </GreyedOutContainer>
             ) : (
               <GreyedOutContainer>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Upload Image/Gif')}
-                </Text>
+                <Flex ref={targetRef5}>
+                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                    {t('Upload Image/Gif')}
+                  </Text>
+                  {tooltipVisible5 && tooltip5}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <RichTextEditor
                   id="thumbnail"
                   value={value3}
@@ -171,25 +296,13 @@ const LocationStage: React.FC<any> = ({
               </GreyedOutContainer>
             )}
             <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Product is article')}
-              </Text>
-              <StyledItemRow>
-                <ButtonMenu
-                  scale="xs"
-                  variant="subtle"
-                  activeIndex={state.isArticle}
-                  onItemClick={handleRawValueChange('isArticle')}
-                >
-                  <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-                </ButtonMenu>
-              </StyledItemRow>
-            </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Description')}
-              </Text>
+              <Flex ref={targetRef6}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Description')}
+                </Text>
+                {tooltipVisible6 && tooltip6}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
               <Input
                 type="text"
                 scale="sm"
@@ -199,72 +312,27 @@ const LocationStage: React.FC<any> = ({
                 onChange={handleChange}
               />
             </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Dynamic Prices')}
-              </Text>
-              <Input
-                type="text"
-                scale="sm"
-                name="prices"
-                value={state.prices}
-                placeholder={t('input dynamic prices')}
-                onChange={handleChange}
-              />
-            </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Dynamic pricing start and period')}
-              </Text>
-              <StyledItemRow>
-                <Input
-                  type="text"
-                  scale="sm"
-                  name="start"
-                  value={state.start}
-                  placeholder={t('input start')}
-                  onChange={handleChange}
-                />
-                <span style={{ padding: '8px' }} />
-                <Input
-                  type="text"
-                  scale="sm"
-                  name="period"
-                  value={state.period}
-                  placeholder={t('input period')}
-                  onChange={handleChange}
-                />
-              </StyledItemRow>
-            </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Is the item tradable?')}
-              </Text>
-              <StyledItemRow>
-                <ButtonMenu
-                  scale="xs"
-                  variant="subtle"
-                  activeIndex={state.isTradable ? 1 : 0}
-                  onItemClick={handleRawValueChange('isTradable')}
-                >
-                  <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-                </ButtonMenu>
-              </StyledItemRow>
-            </GreyedOutContainer>
             <Text mt="24px" color="textSubtle" mb="8px">
-              {t('Click on each one of these to set location data of your collectible')}
+              {t("Click on each one of these to set your %variantName%'s location data", { variantName })}
             </Text>
-            <Filters
-              collection={collection}
-              showWorkspace={false}
-              nftFilters={nftFilters}
-              setNftFilters={setNftFilters}
-            />
+            <Flex ref={targetRef7}>
+              <Filters
+                collection={collection}
+                showWorkspace={false}
+                nftFilters={nftFilters}
+                setNftFilters={setNftFilters}
+              />
+              {tooltipVisible7 && tooltip7}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
             <GreyedOutContainer style={{ paddingTop: '18px' }}>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Not satisfied with above tags ? Add custom tags')}
-              </Text>
+              <Flex ref={targetRef8}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Not satisfied with above tags ? Add custom tags')}
+                </Text>
+                {tooltipVisible8 && tooltip8}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
               <Input
                 type="text"
                 scale="sm"
@@ -274,23 +342,24 @@ const LocationStage: React.FC<any> = ({
                 onChange={handleChange}
               />
             </GreyedOutContainer>
-            <Text mt="16px" color="textSubtle">
-              {t('Continue?')}
-            </Text>
           </>
         )}
       </Box>
-      <Divider />
-      <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          disabled={pendingFb}
-          onClick={continueToNextStage}
-          endIcon={pendingFb ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-        >
-          {t('Save Product Data')}
-        </Button>
-      </Flex>
+      {show ? (
+        <>
+          <Divider />
+          <Flex flexDirection="column" px="16px" pb="16px">
+            <Button
+              mb="8px"
+              disabled={pendingFb}
+              onClick={continueToNextStage}
+              endIcon={pendingFb ? <AutoRenewIcon spin color="currentColor" /> : undefined}
+            >
+              {t('Save Product Data')}
+            </Button>
+          </Flex>
+        </>
+      ) : null}
     </>
   )
 }
