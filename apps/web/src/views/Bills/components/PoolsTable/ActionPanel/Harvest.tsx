@@ -153,7 +153,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               value={getBalanceNumber(pool?.bountyRequired, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Minimum Bounty Required')}
+              {t('Min Bounty Required')}
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
@@ -178,7 +178,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Admin Bounty Id')}
+              {t('Admin Bounty ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -197,7 +197,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Profile Id')}
+              {t('Attached Profile ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -216,7 +216,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Bounty Id')}
+              {t('Attached Bounty ID')}
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">

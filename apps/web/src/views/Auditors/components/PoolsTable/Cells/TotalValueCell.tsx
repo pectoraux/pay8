@@ -1,4 +1,4 @@
-import { Flex, Text, Balance, Pool } from '@pancakeswap/uikit'
+import { Flex, Text, Balance, Pool, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
@@ -14,10 +14,11 @@ const StyledCell = styled(Pool.BaseCell)`
 `
 
 const TotalValueCell: React.FC<any> = ({ labelText, amount, symbol, decimals }) => {
+  const { isMobile } = useMatchBreakpoints()
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
-        <Text fontSize="12px" color="textSubtle" textAlign="left">
+        <Text fontSize="12px" mb={isMobile ? '10px' : '0px'} color="textSubtle" textAlign="left">
           {labelText}
         </Text>
         <Flex height="20px" alignItems="center">
