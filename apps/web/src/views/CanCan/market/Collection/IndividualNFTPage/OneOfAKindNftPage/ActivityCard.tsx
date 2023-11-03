@@ -12,6 +12,7 @@ import { Arrow, PageButtons } from '../../../components/PaginationButtons'
 import { getTokenActivity } from '../../../../../../state/cancan/helpers'
 import { sortActivity } from '../../../ActivityHistory/utils/sortActivity'
 import ActivityRow from '../../../components/Activity/ActivityRow'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface ActivityCardProps {
   nft: NftToken
@@ -31,11 +32,13 @@ const ActivityCard: React.FC<any> = ({ nft }) => {
   const bnbBusdPrice = useBNBBusdPrice()
   const { isXs, isSm } = useMatchBreakpoints()
   const collectionId = useRouter().query.collectionAddress as string
+  const { chainId } = useActiveChainId()
 
   useEffect(() => {
     const fetchTokenActivity = async () => {
       try {
-        const tokenActivity = await getTokenActivity(nft.tokenId, collectionId)
+        const tokenActivity = await getTokenActivity(chainId, nft.tokenId, collectionId)
+        console.log('tokenActivity============>', tokenActivity)
         setSortedTokenActivities(sortActivity(tokenActivity))
         setIsLoading(false)
       } catch (error) {

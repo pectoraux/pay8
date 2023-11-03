@@ -1,18 +1,18 @@
 import styled from 'styled-components'
-import { Flex, Card, Grid, SellIcon, Text, useModal, Box, BinanceIcon, Skeleton, Button } from '@pancakeswap/uikit'
+import { Flex, Card, Grid, SellIcon, Text, useModal, Box, Skeleton, Button } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { NftToken } from 'state/nftMarket/types'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { multiplyPriceByAmount } from 'utils/prices'
-import useNftOwner from 'views/Nft/market/hooks/useNftOwner'
+import { CurrencyLogo } from 'components/Logo'
+import { useWorkspaceCurrency } from 'hooks/Tokens'
+
 import BuyModal from '../../../components/BuySellModals/BuyModal'
 import SellModal from '../../../components/BuySellModals/SellModal'
 import ProfileCell from '../../../components/ProfileCell'
 import { ButtonContainer, TableHeading } from '../shared/styles'
-import { CurrencyLogo } from 'components/Logo'
-import { useWorkspaceCurrency } from 'hooks/Tokens'
 
 const StyledCard = styled(Card)`
   width: 100%;

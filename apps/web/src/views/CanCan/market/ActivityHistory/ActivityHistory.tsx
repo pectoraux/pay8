@@ -21,6 +21,8 @@ import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import useTheme from 'hooks/useTheme'
 import { useLastUpdated } from '@pancakeswap/hooks'
 import { useGetNftActivityFilters } from 'state/cancan/hooks'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+
 import { Arrow, PageButtons } from '../components/PaginationButtons'
 import NoNftsImage from '../components/Activity/NoNftsImage'
 import ActivityFilters from './ActivityFilters'
@@ -56,6 +58,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
   const { lastUpdated, setLastUpdated: refresh } = useLastUpdated()
   const bnbBusdPrice = useBNBBusdPrice()
   const { isXs, isSm, isMd } = useMatchBreakpoints()
+  const { chainId } = useActiveChainId()
 
   const nftActivityFiltersString = JSON.stringify(nftActivityFilters)
   useEffect(() => {
@@ -63,7 +66,12 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
       try {
         setIsLoading(true)
         const nftActivityFiltersParsed = JSON.parse(nftActivityFiltersString)
-        const collectionActivity = await getCollectionActivity(collectionId, nftActivityFiltersParsed, MAX_PER_QUERY)
+        const collectionActivity = await getCollectionActivity(
+          chainId,
+          collectionId,
+          nftActivityFiltersParsed,
+          MAX_PER_QUERY,
+        )
         const activity = sortActivity(collectionActivity)
         setPaginationData({
           activity,
@@ -136,6 +144,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
                     setIsLoading(true)
                     const nftActivityFiltersParsed = JSON.parse(nftActivityFiltersString)
                     const collectionActivity = await getCollectionActivity(
+                      chainId,
                       collectionAddress.toLowerCase(),
                       nftActivityFiltersParsed,
                       MAX_PER_QUERY * (queryPage + 1),

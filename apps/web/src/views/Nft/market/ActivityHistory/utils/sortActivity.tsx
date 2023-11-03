@@ -29,7 +29,18 @@ export const sortActivity = ({
       const tx = transactionHistory.id
       const buyer = transactionHistory.buyer.id
       const seller = transactionHistory.seller.id
-      return { marketEvent, price, timestamp, nft, paywall, item, tx, buyer, seller }
+      return {
+        marketEvent,
+        price,
+        timestamp,
+        nft,
+        item,
+        paywall,
+        tx,
+        buyer,
+        seller,
+        metadataUrl: transactionHistory?.metadataUrl,
+      }
     })
 
     return transformedTransactions

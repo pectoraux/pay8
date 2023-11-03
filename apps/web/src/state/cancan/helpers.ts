@@ -6,6 +6,7 @@ import {
   getMarketCollectionsAddress,
   getMarketHelperAddress,
   getMarketOrdersAddress,
+  getNFTicketHelper2Address,
   getNFTicketHelperAddress,
   getNftMarketHelper3Address,
   getNftMarketHelperAddress,
@@ -45,6 +46,7 @@ import { veABI } from 'config/abi/ve'
 import { marketCollectionsABI } from 'config/abi/marketCollections'
 import { nfticketHelperABI } from 'config/abi/nfticketHelper'
 import { ssiFields } from 'state/ssi/queries'
+import { nfticketHelper2ABI } from 'config/abi/nfticketHelper2'
 
 export const getTag = async () => {
   try {
@@ -131,21 +133,42 @@ export const getCollectionSg = async (collectionAddress: string): Promise<any> =
   }
 }
 
-export const getTransactionsSg = async (userAddress: string): Promise<any> => {
+export const getTransactionsSg = async (chainId, userAddress: string): Promise<any> => {
   try {
     const res = await request(
       GRAPH_API_CANCAN,
       gql`
         query getTransactionsData($userAddress: String!) {
           transactions(where: { buyer: $userAddress }) {
+            nfTicketId
             metadataUrl
           }
         }
       `,
       { userAddress },
     )
-    console.log('res.transactions=======================>', res.transactions, userAddress)
-    return res.transactions
+    const txs = await Promise.all(
+      res?.transactions?.map(async (tx) => {
+        const bscClient = publicClient({ chainId: chainId })
+        const [_tokenURI] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: getNFTicketHelper2Address(),
+              abi: nfticketHelper2ABI,
+              functionName: 'tokenURI',
+              args: [BigInt(tx.nfTicketId)],
+            },
+          ],
+        })
+        return {
+          ...tx,
+          metadataUrl: _tokenURI.result,
+        }
+      }),
+    )
+    console.log('res.transactions=======================>', txs, userAddress)
+    return txs
   } catch (error) {
     console.error('Failed to fetch userAddress==========>', error, userAddress)
     return {}
@@ -765,13 +788,13 @@ export const getUserActivity = async (address: string): Promise<UserActivity> =>
 }
 
 export const getCollectionActivity = async (
+  chainId,
   address: string,
   nftActivityFilter: NftActivityFilter,
   itemPerQuery,
   query = 'item_',
 ) => {
   const getAskOrderEvent = (orderType: MarketEvent) => {
-    console.log('getAskOrderEvent==============>', orderType)
     switch (orderType) {
       case MarketEvent.UNLISTED:
         return ['CancelItem', 'CancelPaywall', 'CancelNFT']
@@ -863,8 +886,29 @@ export const getCollectionActivity = async (
         }
       `,
     )
-    console.log('GRAPH_API_CANCAN============>', res, askOrderGql, transactionGql)
-    return res || { askOrders: [], transactions: [] }
+    const txs = await Promise.all(
+      res?.transactions?.map(async (tx) => {
+        const bscClient = publicClient({ chainId: chainId })
+        const [_tokenURI] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: getNFTicketHelper2Address(),
+              abi: nfticketHelper2ABI,
+              functionName: 'tokenURI',
+              args: [BigInt(tx.nfTicketId)],
+            },
+          ],
+        })
+        return {
+          ...tx,
+          metadataUrl: _tokenURI.result,
+        }
+      }),
+    )
+    const result = { askOrders: res?.askOrders, transactions: txs }
+    console.log('GRAPH_API_CANCAN============>', result, res, askOrderGql, transactionGql)
+    return result || { askOrders: [], transactions: [] }
   } catch (error) {
     console.error('1Failed to fetch collection Activity===========>', askOrderGql, error)
     return {
@@ -875,6 +919,7 @@ export const getCollectionActivity = async (
 }
 
 export const getTokenActivity = async (
+  chainId,
   tokenId: string,
   collectionAddress: string,
 ): Promise<{ askOrders: AskOrder[]; transactions: Transaction[] }> => {
@@ -896,7 +941,28 @@ export const getTokenActivity = async (
       { tokenId, collectionAddress },
     )
     if (res.items.length > 0) {
-      return { askOrders: res.items[0].askHistory, transactions: res.items[0].transactionHistory }
+      console.log('res.items=====================>', res.items)
+      const txs = await Promise.all(
+        res.items[0].transactionHistory?.map(async (tx) => {
+          const bscClient = publicClient({ chainId: chainId })
+          const [_tokenURI] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getNFTicketHelper2Address(),
+                abi: nfticketHelper2ABI,
+                functionName: 'tokenURI',
+                args: [BigInt(tx.nfTicketId)],
+              },
+            ],
+          })
+          return {
+            ...tx,
+            metadataUrl: _tokenURI.result,
+          }
+        }),
+      )
+      return { askOrders: res.items[0].askHistory, transactions: txs }
     }
     return { askOrders: [], transactions: [] }
   } catch (error) {

@@ -27,6 +27,7 @@ import ActivityFilters from './ActivityFilters'
 import ActivityRow from '../components/Activity/ActivityRow'
 import { sortActivity } from './utils/sortActivity'
 import MintExternalModal from '../Collection/MintExternalModal'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const MAX_PER_PAGE = 8
 
@@ -56,6 +57,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
   const { lastUpdated, setLastUpdated: refresh } = useLastUpdated()
   const bnbBusdPrice = useBNBBusdPrice()
   const { isXs, isSm, isMd } = useMatchBreakpoints()
+  const { chainId } = useActiveChainId()
 
   const nftActivityFiltersString = JSON.stringify(nftActivityFilters)
 
@@ -65,6 +67,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
         setIsLoading(true)
         const nftActivityFiltersParsed = JSON.parse(nftActivityFiltersString)
         const collectionActivity = await getCollectionActivity(
+          chainId,
           collectionId,
           nftActivityFiltersParsed,
           MAX_PER_QUERY,
@@ -142,6 +145,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
                     setIsLoading(true)
                     const nftActivityFiltersParsed = JSON.parse(nftActivityFiltersString)
                     const collectionActivity = await getCollectionActivity(
+                      chainId,
                       collectionAddress.toLowerCase(),
                       nftActivityFiltersParsed,
                       MAX_PER_QUERY * (queryPage + 1),

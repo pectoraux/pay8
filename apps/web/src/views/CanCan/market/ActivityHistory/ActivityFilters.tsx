@@ -67,7 +67,7 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
         <>
           <Button
             scale="sm"
-            disabled={isEmpty(nftActivityFilters.collectionFilters)}
+            // disabled={isEmpty(nftActivityFilters.collectionFilters)}
             onClick={sponsorTag}
             {...(isMd && { width: '100%' })}
           >

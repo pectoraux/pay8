@@ -43,7 +43,8 @@ export const useGetCollections = (where = {}) => {
 }
 
 export const useGetTransactions = (userAddress) => {
-  const { data, status } = useSWR(['cancan', 'transactions2'], async () => getTransactionsSg(userAddress))
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWR(['cancan', 'transactions'], async () => getTransactionsSg(chainId, userAddress))
   const transactions = data ?? ({} as any)
   return { data: transactions, status }
 }

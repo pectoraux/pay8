@@ -1,34 +1,19 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import {
-  Card,
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Modal,
-  Button,
-  CardBody,
-  CardHeader,
-  AutoRenewIcon,
-  ErrorIcon,
-  useToast,
-  Heading,
-  Input,
-  ButtonMenu,
-  ButtonMenuItem,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Modal, Button, ErrorIcon, useToast, Input } from '@pancakeswap/uikit'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { useNFTicketHelper } from 'hooks/useContract'
+import { useERC20, useNFTicketHelper } from 'hooks/useContract'
 import { Divider } from 'views/ARPs/components/styles'
 import { GreyedOutContainer } from 'views/Nft/market/components/BuySellModals/SellModal/styles'
 import { useGetPricePerMinute } from 'state/cancan/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { DEFAULT_SYMBOL } from 'config/constants/exchange'
-// import { Label, SecondaryLabel } from '../CreateProposal/styles'
-// import { combineDateAndTime } from '../CreateProposal/helpers'
+import { DEFAULT_SYMBOL, DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useGetRequiresApproval } from 'state/valuepools/hooks'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { getNFTicketHelperAddress } from 'utils/addressHelpers'
+import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 
 // interface SetPriceStageProps {
 //   entry: Entry
@@ -38,6 +23,7 @@ import { DEFAULT_SYMBOL } from 'config/constants/exchange'
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
   const inputRef = useRef<HTMLInputElement>()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -48,19 +34,36 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
   const [media, setMedia] = useState<any>('')
   const nfticketHelper = useNFTicketHelper()
   const price = useGetPricePerMinute(merchantId) as any
+  const stakingTokenContract = useERC20(DEFAULT_TFIAT)
+  const { isRequired: needsApproval, refetch } = useGetRequiresApproval(
+    stakingTokenContract,
+    account,
+    getNFTicketHelperAddress(),
+  )
+  const { handleApprove, pendingTx: pendingTFIATx } = useApprovePool(
+    stakingTokenContract,
+    getNFTicketHelperAddress(),
+    'USD',
+    refetch,
+  )
   const handleSponsorTag = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      return callWithGasPrice(nfticketHelper, 'sponsorTag', [sponsorAddress, merchantId, minutes, tag, media]).catch(
-        (err) => console.log('err=============>', err),
-      )
+      console.log('sponsorTag================>', [sponsorAddress, merchantId, minutes, tag ?? '', media])
+      return callWithGasPrice(nfticketHelper, 'sponsorTag', [
+        sponsorAddress,
+        merchantId,
+        minutes,
+        tag ?? '',
+        media,
+      ]).catch((err) => console.log('sponsorTag=============>', err))
     })
     if (receipt?.status) {
       toastSuccess(
-        t('Data successfully shared'),
+        t('Sponsoring successfully'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now show your NFTProof as proof of the data you shared.')}
+          {t('Your ad has been scheduled to appear of the NFTickets that have the correct tag.')}
         </ToastDescriptionWithTx>,
       )
     }
@@ -94,60 +97,64 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
       })}
       onDismiss={onDismiss}
     >
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Sponsor Card Address')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="sponsor"
-          value={sponsorAddress}
-          placeholder={t('input address of sponsor card')}
-          onChange={(e) => setSponsorAddress(e.target.value)}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Number of minutes')}
-        </Text>
-        <Input
-          type="number"
-          scale="sm"
-          name="sponsor"
-          value={minutes}
-          placeholder={t('number of minutes to buy')}
-          onChange={(e) => setMinutes(e.target.value)}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Media Link')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          value={media}
-          placeholder={t('link to sponsored content')}
-          onChange={(e) => setMedia(e.target.value)}
-        />
-      </GreyedOutContainer>
-      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
-        <Flex alignSelf="flex-start">
-          <ErrorIcon width={24} height={24} color="textSubtle" />
-        </Flex>
-        <Box>
-          <Text small color="textSubtle">
-            {t(
-              'This will display your media on NFTickets of users who purchased items from this collection with this tag.',
-            )}
-          </Text>
-        </Box>
-      </Grid>
+      {needsApproval ? null : (
+        <>
+          <GreyedOutContainer>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {t('Sponsor Card Address')}
+            </Text>
+            <Input
+              type="text"
+              scale="sm"
+              name="sponsor"
+              value={sponsorAddress}
+              placeholder={t('input address of sponsor card')}
+              onChange={(e) => setSponsorAddress(e.target.value)}
+            />
+          </GreyedOutContainer>
+          <GreyedOutContainer>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {t('Number of minutes')}
+            </Text>
+            <Input
+              type="number"
+              scale="sm"
+              name="sponsor"
+              value={minutes}
+              placeholder={t('number of minutes to buy')}
+              onChange={(e) => setMinutes(e.target.value)}
+            />
+          </GreyedOutContainer>
+          <GreyedOutContainer>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {t('Media Link')}
+            </Text>
+            <Input
+              type="text"
+              scale="sm"
+              value={media}
+              placeholder={t('link to sponsored content')}
+              onChange={(e) => setMedia(e.target.value)}
+            />
+          </GreyedOutContainer>
+          <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+            <Flex alignSelf="flex-start">
+              <ErrorIcon width={24} height={24} color="textSubtle" />
+            </Flex>
+            <Box>
+              <Text small color="textSubtle">
+                {t(
+                  'This will display your media on NFTickets of users who purchased items from this collection with this tag.',
+                )}
+              </Text>
+            </Box>
+          </Grid>
+        </>
+      )}
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={handleSponsorTag}>
-          {t('Confirm Sponsorship')}
+        <Button mb="8px" disabled={pendingTFIATx} onClick={needsApproval ? handleApprove : handleSponsorTag}>
+          {needsApproval ? t('Enable Contract') : t('Confirm Sponsorship')}
         </Button>
       </Flex>
     </Modal>
