@@ -1,7 +1,7 @@
 import { Flex, Text, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import isEmpty from 'lodash/isEmpty'
-import { MarketEvent } from 'state/nftMarket/types'
+import { MarketEvent } from 'state/cancan/types'
 import styled from 'styled-components'
 import { ListCollectionFilter } from '../components/Filters/ListCollectionFilter'
 import { ActivityFilter } from './ActivityFilter'
@@ -40,6 +40,7 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
   const [sponsorTag] = useModal(
     <SponsorTagModal merchantId={collection?.id} tag={nftActivityFilters.collectionFilters[0]} />,
   )
+  const [sponsorAllTag] = useModal(<SponsorTagModal referrerId={collection?.id} merchantId="1" tag="" />)
   return (
     <Container justifyContent="space-between" flexDirection={['column', 'column', 'row']}>
       <Text textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
@@ -51,7 +52,7 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
           products={collection?.products?.split(',')}
           nftActivityFilters={nftActivityFilters}
         />
-        {[MarketEvent.NEW, MarketEvent.CANCEL, MarketEvent.MODIFY, MarketEvent.SELL].map((eventType) => {
+        {[MarketEvent.SOLD, MarketEvent.LISTED, MarketEvent.MODIFIED, MarketEvent.UNLISTED].map((eventType) => {
           return (
             <ActivityFilter
               key={eventType}
@@ -62,18 +63,14 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
           )
         })}
       </ScrollableFlexContainer>
+      <Button scale="sm" onClick={sponsorTag} {...(isMd && { width: '100%' })}>
+        {t('Sponsor')}
+      </Button>
+      <Button scale="sm" onClick={sponsorAllTag} {...(isMd && { width: '100%' })}>
+        {t('Sponsor All Sellers')}
+      </Button>
       {!isEmpty(nftActivityFilters.typeFilters) || !isEmpty(nftActivityFilters.collectionFilters) ? (
-        <>
-          <Button
-            scale="sm"
-            disabled={isEmpty(nftActivityFilters.collectionFilters)}
-            onClick={sponsorTag}
-            {...(isMd && { width: '100%' })}
-          >
-            {t('Sponsor')}
-          </Button>
-          <ClearAllButton collectionAddress={collection?.id || ''} />
-        </>
+        <ClearAllButton collectionAddress={collection?.id || ''} />
       ) : null}
     </Container>
   )

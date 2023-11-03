@@ -40,7 +40,7 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
   const [sponsorTag] = useModal(
     <SponsorTagModal merchantId={collection?.id} tag={nftActivityFilters.collectionFilters[0]} />,
   )
-
+  const [sponsorAllTag] = useModal(<SponsorTagModal referrerId={collection?.id} merchantId="1" tag="" />)
   return (
     <Container justifyContent="space-between" flexDirection={['column', 'column', 'row']}>
       <Text textTransform="uppercase" color="textSubtle" fontSize="12px" bold>
@@ -63,18 +63,14 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
           )
         })}
       </ScrollableFlexContainer>
+      <Button scale="sm" onClick={sponsorTag} {...(isMd && { width: '100%' })}>
+        {t('Sponsor')}
+      </Button>
+      <Button scale="sm" onClick={sponsorAllTag} {...(isMd && { width: '100%' })}>
+        {t('Sponsor All Sellers')}
+      </Button>
       {!isEmpty(nftActivityFilters.typeFilters) || !isEmpty(nftActivityFilters.collectionFilters) ? (
-        <>
-          <Button
-            scale="sm"
-            // disabled={isEmpty(nftActivityFilters.collectionFilters)}
-            onClick={sponsorTag}
-            {...(isMd && { width: '100%' })}
-          >
-            {t('Sponsor')}
-          </Button>
-          <ClearAllButton collectionAddress={collection?.id || ''} />
-        </>
+        <ClearAllButton collectionAddress={collection?.id || ''} />
       ) : null}
     </Container>
   )

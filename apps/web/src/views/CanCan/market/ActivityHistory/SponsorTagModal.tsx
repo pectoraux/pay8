@@ -21,7 +21,7 @@ import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
+const SponsorTagModal: React.FC<any> = ({ tag, merchantId, referrerId = 0, onDismiss }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const inputRef = useRef<HTMLInputElement>()
@@ -50,14 +50,11 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('sponsorTag================>', [sponsorAddress, merchantId, minutes, tag ?? '', media])
-      return callWithGasPrice(nfticketHelper, 'sponsorTag', [
-        sponsorAddress,
-        merchantId,
-        minutes,
-        tag ?? '',
-        media,
-      ]).catch((err) => console.log('sponsorTag=============>', err))
+      const args = [sponsorAddress, merchantId, referrerId, parseInt(minutes) * 60, tag ?? '', media]
+      console.log('sponsorTag================>', args)
+      return callWithGasPrice(nfticketHelper, 'sponsorTag', args).catch((err) =>
+        console.log('sponsorTag=============>', err),
+      )
     })
     if (receipt?.status) {
       toastSuccess(
@@ -91,7 +88,7 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
   return (
     <Modal
       title={t('Sponsor Tag: [%tag%] (%price% %symb% per minute)', {
-        tag,
+        tag: tag ?? 'All Products',
         price: getBalanceNumber(price),
         symb: DEFAULT_SYMBOL,
       })}
@@ -143,9 +140,11 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
             </Flex>
             <Box>
               <Text small color="textSubtle">
-                {t(
-                  'This will display your media on NFTickets of users who purchased items from this collection with this tag.',
-                )}
+                {parseInt(referrerId)
+                  ? t('This will display your ad on NFTickets of users who purchased items from all sellers on PaySwap')
+                  : t(
+                      'This will display your ad on NFTickets of users who purchased items under this tag from this seller.',
+                    )}
               </Text>
             </Box>
           </Grid>
@@ -161,4 +160,4 @@ const CreateContentModal: React.FC<any> = ({ tag, merchantId, onDismiss }) => {
   )
 }
 
-export default CreateContentModal
+export default SponsorTagModal

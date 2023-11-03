@@ -126,6 +126,8 @@ export const DEFAULT_OUTPUT_CURRENCY = '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE
 export const DEFAULT_TFIAT = '0xbE04187288D198ed6F0d90eCAAca0fE42Dd434Fe'
 export const DEFAULT_SYMBOL = 'USD'
 
+export const DEFAULT_PRICE_PER_MINUTE = '1'
+
 export const DEFAULT_BET_SIZE = 50
 
 // Handler string is passed to Gelato to use PCS router
