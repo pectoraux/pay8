@@ -8,7 +8,11 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
   }
 `
 
-export const stagesWithApproveButton = [LockStage.CONFIRM_ADD_BALANCE, LockStage.CONFIRM_EXECUTE_PURCHASE]
+export const stagesWithApproveButton = [
+  LockStage.CONFIRM_ADD_BALANCE,
+  LockStage.CONFIRM_ADD_BALANCE2,
+  LockStage.CONFIRM_EXECUTE_PURCHASE,
+]
 
 export const stagesWithConfirmButton = [
   LockStage.CONFIRM_REMOVE_BALANCE,
@@ -20,6 +24,7 @@ export const stagesWithConfirmButton = [
 
 export const stagesWithBackButton = [
   LockStage.ADD_BALANCE,
+  LockStage.ADD_BALANCE2,
   LockStage.UPDATE_PASSWORD,
   LockStage.UPDATE_OWNER,
   LockStage.REMOVE_BALANCE,
@@ -28,6 +33,7 @@ export const stagesWithBackButton = [
   LockStage.TRANSFER_BALANCE,
   LockStage.CONFIRM_UPDATE_PASSWORD,
   LockStage.CONFIRM_ADD_BALANCE,
+  LockStage.CONFIRM_ADD_BALANCE2,
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.CONFIRM_REMOVE_BALANCE,
   LockStage.CONFIRM_UPDATE_TOKEN_ID,

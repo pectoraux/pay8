@@ -1,3 +1,4 @@
+import EncryptRsa from 'encrypt-rsa'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import {
   Flex,
@@ -43,20 +44,25 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const [stage, setStage] = useState('ATTACH')
-  const [tokenId, setTokenId] = useState('')
-  const [amountReceivable, setAmountReceivable] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const { toastSuccess, toastError } = useToast()
-
-  const [openPresentControlPanel] = useModal(
-    <CreateGaugeModal variant="add" amountReceivable={amountReceivable} currency={currency} />,
-  )
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('handleCreateGauge================>', cardContract, [tokenId])
-      return callWithGasPrice(cardContract, 'updateTokenId', [tokenId]).catch((err) => {
+      const encryptRsa = new EncryptRsa()
+      const _username = encryptRsa.encryptStringWithRsaPublicKey({
+        text: username,
+        publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+      })
+      const _password = encryptRsa.encryptStringWithRsaPublicKey({
+        text: password,
+        publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+      })
+      const args = [username, password]
+      return callWithGasPrice(cardContract, 'createAccount', args).catch((err) => {
         console.log('err================>', err)
         setPendingFb(false)
         toastError(
@@ -79,9 +85,9 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
   }, [
     t,
     account,
-    tokenId,
+    username,
     currency,
-    amountReceivable,
+    password,
     dispatch,
     onDismiss,
     toastError,
@@ -100,39 +106,30 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
 
   return (
     <Modal title={t('Create PayCard')} onDismiss={onDismiss}>
-      <Button variant="secondary" mb="8px" disabled={stage === 'ATTACH'} onClick={() => setStage('ATTACH')}>
-        {t('1) ATTACH vaFSTT')}
-      </Button>
-      <Button variant="secondary" mb="8px" disabled={stage === 'CREATE'} onClick={() => setStage('CREATE')}>
-        {t('2) CREATE CARD')}
-      </Button>
-      {stage === 'ATTACH' ? (
-        <GreyedOutContainer>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Token ID')}
-          </Text>
-          <Input
-            type="text"
-            scale="sm"
-            value={tokenId}
-            placeholder={t('input your vaFSTT token id')}
-            onChange={(e) => setTokenId(e.target.value)}
-          />
-        </GreyedOutContainer>
-      ) : (
-        <GreyedOutContainer>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount')}
-          </Text>
-          <Input
-            type="text"
-            scale="sm"
-            value={amountReceivable}
-            placeholder={t('input amount to send to your card')}
-            onChange={(e) => setAmountReceivable(e.target.value)}
-          />
-        </GreyedOutContainer>
-      )}
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Username')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          value={username}
+          placeholder={t('input your username')}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Password')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          value={password}
+          placeholder={t('input your password')}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -150,12 +147,11 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
         {account ? (
           <Button
             mb="8px"
-            onClick={stage === 'ATTACH' ? handleCreateGauge : openPresentControlPanel}
+            onClick={handleCreateGauge}
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
-            // disabled={firebaseDone}
           >
-            {stage === 'ATTACH' ? t('Attach vaFSTT') : t('Create PayCard')}
+            {t('Create PayCard')}
           </Button>
         ) : (
           <ConnectWalletButton />

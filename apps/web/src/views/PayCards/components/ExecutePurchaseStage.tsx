@@ -44,13 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     </Text>
   )
   const TooltipComponent3 = () => <Text>{t('You need to specify the id of the item to purchase.')}</Text>
-  const TooltipComponent4 = () => (
-    <Text>
-      {t(
-        "This is the ID of the token attached to the card when creating it. Whoever owns the token, also owns the paycard and can update it's password.",
-      )}
-    </Text>
-  )
+
   const TooltipComponent5 = () => (
     <Text>
       {t(
@@ -93,14 +87,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     tooltipOffset: [20, 10],
   })
   const {
-    targetRef: targetRef4,
-    tooltip: tooltip4,
-    tooltipVisible: tooltipVisible4,
-  } = useTooltip(<TooltipComponent4 />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
     targetRef: targetRef5,
     tooltip: tooltip5,
     tooltipVisible: tooltipVisible5,
@@ -127,6 +113,23 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
 
   return (
     <>
+      <GreyedOutContainer>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Enter Username')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="password"
+          scale="sm"
+          name="username"
+          value={state.username}
+          placeholder={t('input your username')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -192,23 +195,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex ref={targetRef4}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Token ID')}
-          </Text>
-          {tooltipVisible4 && tooltip4}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="tokenId"
-          value={state.tokenId}
-          placeholder={t('input token id')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('User Token ID')}
@@ -263,7 +249,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           </ButtonMenu>
         </StyledItemRow>
       </GreyedOutContainer>
-      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="560px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>

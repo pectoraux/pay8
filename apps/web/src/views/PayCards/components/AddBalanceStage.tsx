@@ -21,7 +21,14 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({
+  state,
+  account,
+  currency,
+  handleRawValueChange,
+  continueToNextStage,
+  creditCard = false,
+}) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const [lockedAmount, setLockedAmount] = useState('')

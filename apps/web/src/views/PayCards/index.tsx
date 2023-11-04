@@ -57,7 +57,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('PayCard Accounts')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Create a PayCard and use it to transact without the need to connect your wallet')}
+              {t(
+                'Create a PayCard account, add funds into it and use it to transact without the need to connect to the blockchain',
+              )}
             </Heading>
             <Heading scale="md" color="text">
               {t('Use just your account id and password for transactions')}
@@ -65,20 +67,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Create a PayCard')}{' '}
+                  {t('Create a PayCard Account')}{' '}
                 </Text>
-                <CurrencyInputPanel
-                  id="cards-currency"
-                  showUSDPrice
-                  showMaxButton
-                  showCommonBases
-                  showInput={false}
-                  showQuickInputButton
-                  currency={currency ?? inputCurency}
-                  onCurrencySelect={handleInputSelect}
-                />
               </Button>
-              <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
             </Flex>
           </Flex>
           <DesktopButton onClick={handleClick} variant="subtle">

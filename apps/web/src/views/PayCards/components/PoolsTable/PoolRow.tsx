@@ -26,7 +26,6 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
         decimals={5}
         symbol={currAccount?.symbol ?? ''}
       />
-      <TotalValueCell labelText={t('Token ID')} amount={pool?.tokenId} decimals={0} symbol="" />
     </>
   )
   return (

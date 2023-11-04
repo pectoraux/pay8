@@ -40,7 +40,7 @@ const ActivityFilters: React.FC<any> = ({ collection, nftActivityFilters, isMd }
   const [sponsorTag] = useModal(
     <SponsorTagModal merchantId={collection?.id} tag={nftActivityFilters.collectionFilters[0]} />,
   )
-  const [sponsorAllTag] = useModal(<SponsorTagModal referrerId={collection?.id} merchantId="1" tag="" />)
+  const [sponsorAllTag] = useModal(<SponsorTagModal referrerId={collection?.id} merchantId="1" />)
   return (
     <Container justifyContent="space-between" flexDirection={['column', 'column', 'row']}>
       <Text textTransform="uppercase" color="textSubtle" fontSize="12px" bold>

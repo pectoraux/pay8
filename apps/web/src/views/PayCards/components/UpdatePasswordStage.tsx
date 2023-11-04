@@ -26,7 +26,20 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Password')}
+          {t('Enter Username')}
+        </Text>
+        <Input
+          type="password"
+          scale="sm"
+          name="username"
+          value={state.username}
+          placeholder={t('input your username')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Enter Old Password')}
         </Text>
         <Input
           type="password"
@@ -34,6 +47,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           name="password"
           value={state.password}
           placeholder={t('input your password')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('New Password')}
+        </Text>
+        <Input
+          type="password"
+          scale="sm"
+          name="newPassword"
+          value={state.newPassword}
+          placeholder={t('input your new password')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

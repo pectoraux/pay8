@@ -19,6 +19,10 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import NodeRSA from 'encrypt-rsa'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { fantomTestnet } from 'viem/chains'
+import { privateKeyToAccount } from 'viem/accounts'
+import { cardABI } from 'config/abi/card'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -29,23 +33,22 @@ import RemoveBalanceStage from './RemoveBalanceStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import UpdatePasswordStage from './UpdatePasswordStage'
 import UpdateTokenIdStage from './UpdateTokenIdStage'
+import { getCardAddress } from 'utils/addressHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
-  [LockStage.UPDATE_OWNER]: t('Update Owner'),
-  [LockStage.ADD_BALANCE]: t('Add Balance'),
+  [LockStage.ADD_BALANCE]: t('Add Balance With Credit Card'),
+  [LockStage.ADD_BALANCE2]: t('Add Balance With Wallet'),
   [LockStage.REMOVE_BALANCE]: t('Remove Balance'),
   [LockStage.TRANSFER_BALANCE]: t('Transfer Balance'),
   [LockStage.EXECUTE_PURCHASE]: t('Execute Purchase'),
-  [LockStage.UPDATE_TOKEN_ID]: t('Update Token ID'),
   [LockStage.UPDATE_PASSWORD]: t('Update Password'),
   [LockStage.CONFIRM_UPDATE_PASSWORD]: t('Update Password'),
   [LockStage.CONFIRM_ADD_BALANCE]: t('Back'),
+  [LockStage.CONFIRM_ADD_BALANCE2]: t('Back'),
   [LockStage.CONFIRM_REMOVE_BALANCE]: t('Back'),
   [LockStage.CONFIRM_TRANSFER_BALANCE]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_TOKEN_ID]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_OWNER]: t('Back'),
   [LockStage.CONFIRM_EXECUTE_PURCHASE]: t('Back'),
   [LockStage.TX_CONFIRMED]: t('Transaction Confirmed'),
 })
@@ -77,13 +80,27 @@ const CreateGaugeModal: React.FC<any> = ({
   console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
+  let username
   let password
-  if (pool?.password) {
+  if (pool?.password && pool?.username) {
+    username = nodeRSA?.decryptStringWithRsaPrivateKey({
+      text: pool?.username,
+      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+    })
     password = nodeRSA?.decryptStringWithRsaPrivateKey({
       text: pool?.password,
       privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
     })
   }
+  const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
   const [state, setState] = useState<any>(() => ({
     owner: pool?.owner,
     avatar: pool?.collection?.avatar,
@@ -112,7 +129,9 @@ const CreateGaugeModal: React.FC<any> = ({
     identityTokenId: '0',
     message: '',
     tag: '',
+    username: '',
     password: '',
+    newPassword: '',
     protocolId: currAccount?.protocolId ?? '0',
     toAddress: '',
     uriGenerator: '',
@@ -131,6 +150,7 @@ const CreateGaugeModal: React.FC<any> = ({
     referrer: '',
     productId: '',
     userTokenId: '',
+    recipient: '',
     options: '',
     isPaywall: 0,
     applicationLink: pool?.applicationLink ?? '',
@@ -161,6 +181,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_ADD_BALANCE:
         setStage(LockStage.ADD_BALANCE)
         break
+      case LockStage.CONFIRM_ADD_BALANCE2:
+        setStage(LockStage.ADD_BALANCE2)
+        break
       case LockStage.REMOVE_BALANCE:
         setStage(LockStage.SETTINGS)
         break
@@ -179,18 +202,6 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_EXECUTE_PURCHASE:
         setStage(LockStage.EXECUTE_PURCHASE)
         break
-      case LockStage.UPDATE_TOKEN_ID:
-        setStage(LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_UPDATE_TOKEN_ID:
-        setStage(LockStage.UPDATE_TOKEN_ID)
-        break
-      case LockStage.UPDATE_OWNER:
-        setStage(LockStage.SETTINGS)
-        break
-      case LockStage.CONFIRM_UPDATE_OWNER:
-        setStage(LockStage.UPDATE_OWNER)
-        break
       case LockStage.UPDATE_PASSWORD:
         setStage(LockStage.SETTINGS)
         break
@@ -207,6 +218,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.ADD_BALANCE:
         setStage(LockStage.CONFIRM_ADD_BALANCE)
         break
+      case LockStage.ADD_BALANCE2:
+        setStage(LockStage.CONFIRM_ADD_BALANCE2)
+        break
       case LockStage.REMOVE_BALANCE:
         setStage(LockStage.CONFIRM_REMOVE_BALANCE)
         break
@@ -215,12 +229,6 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.TRANSFER_BALANCE:
         setStage(LockStage.CONFIRM_TRANSFER_BALANCE)
-        break
-      case LockStage.UPDATE_OWNER:
-        setStage(LockStage.CONFIRM_UPDATE_OWNER)
-        break
-      case LockStage.UPDATE_TOKEN_ID:
-        setStage(LockStage.CONFIRM_UPDATE_TOKEN_ID)
         break
       case LockStage.UPDATE_PASSWORD:
         setStage(LockStage.CONFIRM_UPDATE_PASSWORD)
@@ -248,7 +256,7 @@ const CreateGaugeModal: React.FC<any> = ({
       )
     },
     // eslint-disable-next-line consistent-return
-    onConfirm: () => {
+    onConfirm: async () => {
       if (stage === LockStage.CONFIRM_ADD_BALANCE) {
         const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
         const args = [account, currency?.address, amount?.toString()]
@@ -258,69 +266,102 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_TRANSFER_BALANCE) {
-        if (password && password === state.password) {
+        if (username && password && username === state.username && password === state.password) {
           const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
-          const args = [account, state.toAddress, currency?.address, amount?.toString()]
-          console.log('CONFIRM_TRANSFER_BALANCE===============>', args)
-          return callWithGasPrice(cardContractWithPayswapSigner, 'transferBalance', args).catch((err) =>
-            console.log('CONFIRM_TRANSFER_BALANCE===============>', err),
-          )
+          const args = [username, password, state.recipient, currency?.address, amount?.toString()]
+          const { request } = await client.simulateContract({
+            account: adminAccount,
+            address: getCardAddress(),
+            abi: cardABI,
+            functionName: 'transferBalance',
+            args: [pool?.username, pool?.password, state.recipient, currency?.address, amount?.toString()],
+          })
+          console.log('CONFIRM_TRANSFER_BALANCE===============>', [
+            pool?.username,
+            pool?.password,
+            currency?.address,
+            state.recipient,
+            amount?.toString(),
+          ])
+          await walletClient
+            .writeContract(request)
+            .catch((err) => console.log('CONFIRM_TRANSFER_BALANCE===============>', err))
         }
       }
       if (stage === LockStage.CONFIRM_EXECUTE_PURCHASE) {
-        if (password && password === state.password) {
+        if (username && password && username === state.username && password === state.password) {
           const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
           const args = [
             state.collection,
             ADDRESS_ZERO,
             currency?.address,
+            pool?.username,
             state.productId,
             state.isPaywall,
             amount?.toString(),
-            state.tokenId,
             state.userTokenId,
             state.identityTokenId,
             state.options?.split(',')?.filter((val) => !!val),
           ]
+          const { request } = await client.simulateContract({
+            account: adminAccount,
+            address: getCardAddress(),
+            abi: cardABI,
+            functionName: 'executePurchase',
+            args: [
+              state.collection,
+              ADDRESS_ZERO,
+              currency?.address,
+              pool?.username,
+              state.productId,
+              state.isPaywall,
+              amount?.toString(),
+              state.userTokenId,
+              state.identityTokenId,
+              state.options?.split(',')?.filter((val) => !!val),
+            ],
+          })
           console.log('CONFIRM_EXECUTE_PURCHASE===============>', args)
-          return callWithGasPrice(cardContractWithPayswapSigner, 'executePurchase', args).catch((err) =>
-            console.log('CONFIRM_EXECUTE_PURCHASE===============>', err),
-          )
+          await walletClient
+            .writeContract(request)
+            .catch((err) => console.log('CONFIRM_EXECUTE_PURCHASE===============>', err))
         }
       }
       if (stage === LockStage.CONFIRM_REMOVE_BALANCE) {
-        const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
-        const args = [currency?.address, amount?.toString()]
-        console.log('CONFIRM_REMOVE_BALANCE===============>', args)
-        return callWithGasPrice(cardContract, 'removeBalance', args).catch((err) =>
-          console.log('CONFIRM_REMOVE_BALANCE===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_TOKEN_ID) {
-        const args = [state.tokenId]
-        console.log('CONFIRM_UPDATE_TOKEN_ID===============>', args)
-        return callWithGasPrice(cardContract, 'updateTokenId', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_TOKEN_ID===============>', err),
-        )
+        if (username && password && username === state.username && password === state.password) {
+          const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
+          const { request } = await client.simulateContract({
+            account: adminAccount,
+            address: getCardAddress(),
+            abi: cardABI,
+            functionName: 'removeBalance',
+            args: [pool?.username, pool?.password, currency?.address, state.recipient, amount?.toString()],
+          })
+          console.log('CONFIRM_REMOVE_BALANCE===============>', [
+            pool?.username,
+            pool?.password,
+            currency?.address,
+            state.recipient,
+            amount?.toString(),
+          ])
+          await walletClient
+            .writeContract(request)
+            .catch((err) => console.log('CONFIRM_REMOVE_BALANCE===============>', err))
+        }
       }
       if (stage === LockStage.CONFIRM_UPDATE_PASSWORD) {
-        const encryptRsa = new EncryptRsa()
-        const password = encryptRsa.encryptStringWithRsaPublicKey({
-          text: state.password,
-          publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-        })
-        const args = [password]
-        console.log('CONFIRM_UPDATE_PASSWORD===============>', state.password, args)
-        return callWithGasPrice(cardContract, 'updatePassword', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_PASSWORD===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_OWNER) {
-        const args = [state.owner, state.tokenId]
-        console.log('CONFIRM_UPDATE_OWNER===============>', args)
-        return callWithGasPrice(cardContract, 'updateOwner', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_OWNER===============>', err),
-        )
+        if (username && password && username === state.username && password === state.password) {
+          const encryptRsa = new EncryptRsa()
+          const newPassword = encryptRsa.encryptStringWithRsaPublicKey({
+            text: state.newPassword,
+            publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+          })
+          const args = [pool?.username, pool?.password, newPassword]
+          console.log('CONFIRM_UPDATE_PASSWORD===============>', args)
+          return callWithGasPrice(cardContract, 'updatePassword', args).catch((err) =>
+            console.log('CONFIRM_UPDATE_PASSWORD===============>', err),
+          )
+        }
       }
     },
     onSuccess: async ({ receipt }) => {
@@ -343,7 +384,10 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_BALANCE)}>
-            {t('ADD BALANCE')}
+            {t('ADD BALANCE WITH CREDIT CARD')}
+          </Button>
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_BALANCE2)}>
+            {t('ADD BALANCE WITH WALLET')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.UPDATE_PASSWORD)}>
             {t('UPDATE PASSWORD')}
@@ -354,18 +398,22 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.EXECUTE_PURCHASE)}>
             {t('EXECUTE PURCHASE')}
           </Button>
-          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID)}>
-            {t('UPDATE TOKEN ID')}
-          </Button>
-          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_OWNER)}>
-            {t('UPDATE OWNER')}
-          </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.REMOVE_BALANCE)}>
             {t('REMOVE BALANCE')}
           </Button>
         </Flex>
       )}
       {stage === LockStage.ADD_BALANCE && (
+        <AddBalanceStage
+          creditCard
+          state={state}
+          account={account}
+          currency={currency}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.ADD_BALANCE2 && (
         <AddBalanceStage
           state={state}
           account={account}
@@ -400,15 +448,10 @@ const CreateGaugeModal: React.FC<any> = ({
           account={account}
           currency={currency}
           currAccount={currAccount}
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
-      )}
-      {stage === LockStage.UPDATE_TOKEN_ID && (
-        <UpdateTokenIdStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.UPDATE_OWNER && (
-        <UpdateOwnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_PASSWORD && (
         <UpdatePasswordStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

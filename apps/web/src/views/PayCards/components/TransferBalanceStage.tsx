@@ -54,6 +54,19 @@ const SetPriceStage: React.FC<any> = ({
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Enter Username')}
+        </Text>
+        <Input
+          type="password"
+          scale="sm"
+          name="username"
+          value={state.username}
+          placeholder={t('input your username')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Enter Password')}
         </Text>
         <Input

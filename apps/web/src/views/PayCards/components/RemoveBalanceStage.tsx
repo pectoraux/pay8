@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Input, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Input, Text, Button, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
@@ -26,6 +26,7 @@ const SetPriceStage: React.FC<any> = ({
   account,
   currency,
   currAccount,
+  handleChange,
   handleRawValueChange,
   continueToNextStage,
 }) => {
@@ -44,11 +45,60 @@ const SetPriceStage: React.FC<any> = ({
 
   const TooltipComponent = () => (
     <>
-      <Text>{t("The amount of %symbol% to remove from your paycard's balance", { symbol: currency?.symbol })}</Text>
+      <Text>
+        {t('This sets the wallet address of the recipient of the funds being removed', { symbol: currency?.symbol })}
+      </Text>
     </>
   )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   return (
     <>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Enter Username')}
+        </Text>
+        <Input
+          type="password"
+          scale="sm"
+          name="username"
+          value={state.username}
+          placeholder={t('input your username')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Enter Password')}
+        </Text>
+        <Input
+          type="password"
+          scale="sm"
+          name="password"
+          value={state.password}
+          placeholder={t('input your password')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex ref={targetRef}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Recipient')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="recipient"
+          value={state.recipient}
+          placeholder={t('input recipient address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <BribeField
           add="remove"
