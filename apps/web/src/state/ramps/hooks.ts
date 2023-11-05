@@ -177,6 +177,24 @@ export const useGetSessionInfo = (sessionId, sk) => {
   }
 }
 
+export const useGetSessionInfo2 = (sessionId, sk) => {
+  try {
+    const {
+      data,
+      status,
+      mutate: refetch,
+    } = useSWRImmutable(['stripe-session-info-paycard', sessionId ?? '0', sk], async () =>
+      axios.post('/api/check', { sessionId, sk }),
+    )
+    return { data: data?.data, refetch, status }
+  } catch (err) {
+    return {
+      data: null,
+      refetch: null,
+    }
+  }
+}
+
 export const useGetRamp = (rampAddress) => {
   const {
     data,

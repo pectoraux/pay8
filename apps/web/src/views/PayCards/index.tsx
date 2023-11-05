@@ -1,43 +1,35 @@
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Loading,
-} from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/cards/hooks'
-import Page from 'components/Layout/Page'
-import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import { useCurrency } from 'hooks/Tokens'
-import { useCallback, useState } from 'react'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useRouter } from 'next/router'
+import { Heading, Flex, Text, PageHeader, Pool, Button, useModal, Loading } from '@pancakeswap/uikit'
 import styled from 'styled-components'
+import Page from 'components/Layout/Page'
+import { useCurrency } from 'hooks/Tokens'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useTranslation } from '@pancakeswap/localization'
+import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
+import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/cards/hooks'
 
+import Steps from './Steps'
+import Questions from './components/Questions'
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
 import CreateCardModal from './components/CreateCardModal'
-import Steps from './Steps'
-import Questions from './components/Questions'
+import CreateGaugeModal from './components/CreateGaugeModal'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
 `
 const Pools: React.FC<React.PropsWithChildren> = () => {
+  const router = useRouter()
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  const { username, session_id: sessionId, state: status, userCurrency } = router.query
+  const [openedAlready, setOpenedAlready] = useState(false)
   const [onPresentCreateGauge] = useModal(<CreateCardModal currency={currency} />)
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
@@ -46,6 +38,26 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     } else {
     }
   }
+  const ogPool = useMemo(
+    () => pools?.find((pool) => pool?.username?.toLowerCase() === username?.toString()?.toLowerCase()),
+    [pools],
+  )
+  const [openPresentControlPanel] = useModal(
+    <CreateGaugeModal
+      variant={ogPool?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'}
+      pool={ogPool}
+      currency={currency ?? userCurrency}
+      sessionId={sessionId}
+    />,
+  )
+
+  useEffect(() => {
+    if (sessionId && status === 'success' && !openedAlready) {
+      openPresentControlPanel()
+      setOpenedAlready(true)
+    }
+  }, [status, sessionId, router.query, openedAlready, openPresentControlPanel])
+
   usePoolsPageFetch()
 
   return (

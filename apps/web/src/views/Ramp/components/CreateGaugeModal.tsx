@@ -174,8 +174,8 @@ const CreateGaugeModal: React.FC<any> = ({
   const { data } = useGetSessionInfoSg(sessionId, rampContract?.address?.toLowerCase())
   const { data: stripeData } = useGetSessionInfo(sessionId, pool?.secretKeys && pool?.secretKeys[0])
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
-  console.log('data=================>', data)
-  console.log('stripeData=================>', stripeData, tokenData)
+  // console.log('data=================>', data)
+  // console.log('stripeData=================>', stripeData, tokenData)
 
   const [state, setState] = useState<any>(() => ({
     sk: pool?.secretKeys && pool?.secretKeys[0],
