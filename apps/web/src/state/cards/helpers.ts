@@ -1,10 +1,9 @@
-import { GRAPH_API_CARDS } from 'config/constants/endpoints'
-import request, { gql } from 'graphql-request'
-import { cardFields, tokenBalanceFields } from './queries'
-import { publicClient } from 'utils/wagmi'
-import { getCardAddress } from 'utils/addressHelpers'
-import { cardABI } from 'config/abi/card'
 import { erc20ABI } from 'wagmi'
+import { publicClient } from 'utils/wagmi'
+import request, { gql } from 'graphql-request'
+import { GRAPH_API_CARDS } from 'config/constants/endpoints'
+
+import { cardFields, tokenBalanceFields } from './queries'
 
 export const getCard = async (ownerAddress) => {
   try {
@@ -59,17 +58,6 @@ export const getCards = async (first = 5, skip = 0, where) => {
 export const fetchCard = async (ownerAddress, chainId) => {
   const card = await getCard(ownerAddress.toLowerCase())
   const bscClient = publicClient({ chainId: chainId })
-  const [tokenId] = await bscClient.multicall({
-    allowFailure: true,
-    contracts: [
-      {
-        address: getCardAddress(),
-        abi: cardABI,
-        functionName: 'tokenIds',
-        args: [card.id],
-      },
-    ],
-  })
   const balances = await Promise.all(
     card?.balances?.map(async (tk) => {
       const [name, decimals, symbol] = await bscClient.multicall({
@@ -102,7 +90,6 @@ export const fetchCard = async (ownerAddress, chainId) => {
   )
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
-    tokenId,
     ...card,
     balances,
   }
@@ -114,17 +101,6 @@ export const fetchCards = async ({ fromCard, chainId }) => {
     fromGraph
       ?.map(async (card, index) => {
         const bscClient = publicClient({ chainId: chainId })
-        const [tokenId] = await bscClient.multicall({
-          allowFailure: true,
-          contracts: [
-            {
-              address: getCardAddress(),
-              abi: cardABI,
-              functionName: 'tokenIds',
-              args: [card.id],
-            },
-          ],
-        })
         const balances = await Promise.all(
           card?.balances?.map(async (tk) => {
             const [name, decimals, symbol] = await bscClient.multicall({
@@ -157,7 +133,6 @@ export const fetchCards = async ({ fromCard, chainId }) => {
         )
         return {
           sousId: index,
-          tokenId: tokenId.result?.toString(),
           ...card,
           balances,
         }
