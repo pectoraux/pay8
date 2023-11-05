@@ -61,7 +61,8 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
         text: password,
         publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
       })
-      const args = [username, password]
+      const args = [_username, _password]
+      console.log('CreateCardModal===================>', args)
       return callWithGasPrice(cardContract, 'createAccount', args).catch((err) => {
         console.log('err================>', err)
         setPendingFb(false)

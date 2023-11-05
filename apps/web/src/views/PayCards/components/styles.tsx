@@ -8,13 +8,10 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
   }
 `
 
-export const stagesWithApproveButton = [
-  LockStage.CONFIRM_ADD_BALANCE,
-  LockStage.CONFIRM_ADD_BALANCE2,
-  LockStage.CONFIRM_EXECUTE_PURCHASE,
-]
+export const stagesWithApproveButton = [LockStage.CONFIRM_ADD_BALANCE2, LockStage.CONFIRM_EXECUTE_PURCHASE]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_ADD_BALANCE,
   LockStage.CONFIRM_REMOVE_BALANCE,
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.CONFIRM_UPDATE_TOKEN_ID,

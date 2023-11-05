@@ -19,16 +19,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
     </>
   )
 
-  if (!account) {
-    return (
-      <ActionContainer>
-        <ActionContent>
-          <Button disabled>{t('Please Connect Your Wallet')}</Button>
-        </ActionContent>
-      </ActionContainer>
-    )
-  }
-
   if (!currAccount) {
     return (
       <ActionContainer>

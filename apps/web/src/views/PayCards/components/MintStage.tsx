@@ -19,10 +19,10 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
-
-import { GreyedOutContainer, Divider } from './styles'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { getRampHelperAddress } from 'utils/addressHelpers'
+
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -57,17 +57,15 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange, con
   const processCharge = async () => {
     setIsLoading(true)
     const { data } = await axios.post('/api/charge2', {
-      account,
       price: state.amountPayable,
       currency,
-      username: pool?.username,
+      username: pool?.id,
       sk: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
     })
     if (data.error) {
       console.log('data.error=====================>', data.error)
     }
     const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-
     const { request } = await client.simulateContract({
       account: acct,
       address: getRampHelperAddress(),
@@ -153,7 +151,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange, con
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="460px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>

@@ -2,7 +2,7 @@
 import Stripe from 'stripe'
 
 const handler = async (req, res) => {
-  const { account, price, currency, username, sk } = req.body
+  const { price, currency, username, sk } = req.body
   // const stripe = initStripe(sk)
   const stripe = new Stripe(sk, { apiVersion: '2020-08-27' })
   const lineItems = [
@@ -22,8 +22,8 @@ const handler = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
-      success_url: `${req.headers.origin}/cards/${username}?state=success&userAccount=${account}&session_id={CHECKOUT_SESSION_ID}&userCurrency=${currency?.address}&amount=${price}`,
-      cancel_url: `${req.headers.origin}/cards/${username}?state=failure&userAccount=${account}&session_id={CHECKOUT_SESSION_ID}&userCurrency=${currency?.address}&amount=${price}`,
+      success_url: `${req.headers.origin}/cards?username=${username}&state=success&session_id={CHECKOUT_SESSION_ID}&userCurrency=${currency?.address}&amount=${price}`,
+      cancel_url: `${req.headers.origin}/cards?username=${username}&state=failure&session_id={CHECKOUT_SESSION_ID}&userCurrency=${currency?.address}&amount=${price}`,
     })
 
     res.send({

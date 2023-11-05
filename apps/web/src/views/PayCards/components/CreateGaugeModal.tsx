@@ -41,7 +41,7 @@ import { getRampHelperContract } from 'utils/contractHelpers'
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
-  [LockStage.ADD_BALANCE]: t('Add Balance With Credit Card'),
+  [LockStage.ADD_BALANCE]: t('Add Balance With Debit Card'),
   [LockStage.ADD_BALANCE2]: t('Add Balance With Wallet'),
   [LockStage.REMOVE_BALANCE]: t('Remove Balance'),
   [LockStage.TRANSFER_BALANCE]: t('Transfer Balance'),
@@ -72,7 +72,13 @@ const CreateGaugeModal: React.FC<any> = ({
   onDismiss,
 }) => {
   const [stage, setStage] = useState(
-    sessionId ? LockStage.PRE_MINT : variant === 'add' ? LockStage.CONFIRM_ADD_BALANCE : LockStage.SETTINGS,
+    sessionId
+      ? LockStage.PRE_MINT
+      : variant === 'add_with_debit'
+      ? LockStage.ADD_BALANCE
+      : variant === 'add'
+      ? LockStage.CONFIRM_ADD_BALANCE
+      : LockStage.SETTINGS,
   )
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const { t } = useTranslation()
@@ -100,14 +106,6 @@ const CreateGaugeModal: React.FC<any> = ({
     })
   }
   const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
-  const client = createPublicClient({
-    chain: fantomTestnet,
-    transport: http(),
-  })
-  const walletClient = createWalletClient({
-    chain: fantomTestnet,
-    transport: custom(window.ethereum),
-  })
 
   const [state, setState] = useState<any>(() => ({
     rampAddress: '0x384582a8d93e91dbf6a399cd8241d374da2d7095',
@@ -170,7 +168,7 @@ const CreateGaugeModal: React.FC<any> = ({
   }))
 
   const { data } = useGetSessionInfoSg(sessionId, state.rampAddress.toLowerCase())
-  const { data: stripeData } = useGetSessionInfo2(sessionId, pool?.secretKeys && pool?.secretKeys[0])
+  const { data: stripeData } = useGetSessionInfo2(sessionId, process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
   console.log('data=================>', data)
   console.log('stripeData=================>', stripeData, tokenData)
@@ -207,7 +205,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const goBack = () => {
     switch (stage) {
       case LockStage.ADD_BALANCE:
-        if (variant !== 'add') setStage(LockStage.SETTINGS)
+        if (variant !== 'add' && variant !== 'add_with_debit') setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_ADD_BALANCE:
         setStage(LockStage.ADD_BALANCE)
@@ -298,14 +296,22 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: async () => {
-      if (stage === LockStage.CONFIRM_ADD_BALANCE2) {
-        const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
-        const args = [account, currency?.address, amount?.toString()]
-        console.log('CONFIRM_ADD_BALANCE===============>', args)
-        return callWithGasPrice(cardContract, 'addBalance', args).catch((err) =>
-          console.log('CONFIRM_ADD_BALANCE===============>', err),
-        )
-      }
+      const client = createPublicClient({
+        chain: fantomTestnet,
+        transport: http(),
+      })
+      const walletClient = createWalletClient({
+        chain: fantomTestnet,
+        transport: custom(window.ethereum),
+      })
+      // if (stage === LockStage.CONFIRM_ADD_BALANCE2) {
+      //   const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
+      //   const args = [account, currency?.address, amount?.toString()]
+      //   console.log('CONFIRM_ADD_BALANCE===============>', args)
+      //   return callWithGasPrice(cardContract, 'addBalance', args).catch((err) =>
+      //     console.log('CONFIRM_ADD_BALANCE===============>', err),
+      //   )
+      // }
       if (stage === LockStage.CONFIRM_TRANSFER_BALANCE) {
         if (username && password && username === state.username && password === state.password) {
           const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
@@ -407,48 +413,46 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_ADD_BALANCE) {
         const amount = getDecimalAmount(stripeData?.amount, 18)
         console.log('CONFIRM_ADD_BALANCE===============>', [
-          data?.tokenAddress,
-          account,
-          amount.toString(),
-          state.identityTokenId,
+          router?.query?.username?.toString(),
           state.sessionId,
+          data?.tokenAddress,
+          BigInt(amount.toString()),
+          state.identityTokenId,
         ])
         const { request } = await client.simulateContract({
           account: adminAccount,
-          address: state.rampAddress,
-          abi: rampABI,
-          functionName: 'mint',
-          args: [data?.tokenAddress, account, BigInt(amount.toString()), state.identityTokenId, state.sessionId],
+          address: getCardAddress(),
+          abi: cardABI,
+          functionName: 'notifyAddBalance',
+          args: [
+            router?.query?.username?.toString(),
+            state.sessionId?.toString(),
+            data?.tokenAddress,
+            BigInt(amount.toString()),
+            BigInt(state.identityTokenId),
+          ],
         })
-        await walletClient
+        return walletClient
           .writeContract(request)
           .catch((err) => console.log('CONFIRM_ADD_BALANCE===============>', err))
-        return callWithGasPrice(getRampHelperContract, 'postMint', [state.sessionId || ''])
-          .then(async () => {
-            const { request } = await client.simulateContract({
-              account: adminAccount,
-              address: getCardAddress(),
-              abi: cardABI,
-              functionName: 'notifyAddBalance',
-              args: [pool?.username, data?.tokenAddress, BigInt(amount.toString())],
-            })
-            await walletClient
-              .writeContract(request)
-              .catch((err) => console.log('1CONFIRM_ADD_BALANCE===============>', err))
-          })
-          .catch((err) => console.log('2CONFIRM_ADD_BALANCE===============>', err))
       }
     },
     onSuccess: async ({ receipt }) => {
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      onSuccessSale(receipt.transactionHash)
-      setConfirmedTxHash(receipt.transactionHash)
+      onSuccessSale(receipt?.transactionHash || '')
+      setConfirmedTxHash(receipt?.transactionHash || '')
       setStage(LockStage.TX_CONFIRMED)
     },
   })
 
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
-
+  console.log(
+    'ttt===================>',
+    tokenData,
+    stripeData?.currency?.toLowerCase(),
+    stripeData,
+    stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase(),
+  )
   return (
     <StyledModal
       title={modalTitles(t)[stage]}
@@ -459,9 +463,7 @@ const CreateGaugeModal: React.FC<any> = ({
     >
       {stage === LockStage.PRE_MINT && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
-          {!account ? (
-            <ConnectWalletButton />
-          ) : checked ? (
+          {checked ? (
             <Button
               mb="8px"
               variant="success"
@@ -476,7 +478,7 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_BALANCE)}>
-            {t('ADD BALANCE WITH CREDIT CARD')}
+            {t('ADD BALANCE WITH DEBIT CARD')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_BALANCE2)}>
             {t('ADD BALANCE WITH WALLET')}

@@ -595,7 +595,7 @@ export const rampHelperABI = [
     ],
     name: 'checkBounty',
     outputs: [],
-    stateMutability: 'view',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -666,6 +666,11 @@ export const rampHelperABI = [
       {
         internalType: 'uint256',
         name: 'amount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
         type: 'uint256',
       },
       {
@@ -937,6 +942,25 @@ export const rampHelperABI = [
         internalType: 'uint256',
         name: 'balance',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'isPayswapRamp',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
     stateMutability: 'view',
@@ -1241,6 +1265,24 @@ export const rampHelperABI = [
       },
     ],
     name: 'updateGauge',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_ramp',
+        type: 'address',
+      },
+      {
+        internalType: 'bool',
+        name: '_add',
+        type: 'bool',
+      },
+    ],
+    name: 'updateIsPayswapRamp',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

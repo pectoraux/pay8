@@ -1,3 +1,4 @@
+import NodeRSA from "encrypt-rsa";
 import { useCallback, useEffect, useMemo, useRef, useState, ReactElement } from "react";
 import styled from "styled-components";
 import BigNumber from "bignumber.js";
@@ -98,7 +99,9 @@ export function PoolControls<T>({
     [router.query]
   );
   const [_searchQuery, setSearchQuery] = useState("");
+  const [_searchQuery2, setSearchQuery2] = useState("");
   const searchQuery = normalizedUrlSearch && !_searchQuery ? normalizedUrlSearch : _searchQuery;
+  const searchQuery2 = normalizedUrlSearch && !_searchQuery2 ? normalizedUrlSearch : _searchQuery2;
   const [sortOption, setSortOption] = useState("hot");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const chosenPoolsLength = useRef(0);
@@ -140,6 +143,11 @@ export function PoolControls<T>({
     []
   );
 
+  const handleChangeSearchQuery2 = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery2(event.target.value),
+    []
+  );
+
   const handleSortOptionChange = useCallback((option: OptionProps) => setSortOption(option.value), []);
 
   let chosenPools: any;
@@ -154,12 +162,31 @@ export function PoolControls<T>({
       .slice(0, numberOfPoolsVisible)
       .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.id?.toLowerCase()) : true));
 
-    if (searchQuery) {
-      const lowercaseQuery = latinise(searchQuery.toLowerCase());
-      return sortedPools.filter((pool: any) => latinise(pool?.tokenId || "").includes(lowercaseQuery));
+    if (searchQuery && searchQuery2) {
+      const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY);
+      return sortedPools.filter((pool: any) => {
+        const _username = nodeRSA.decryptStringWithRsaPrivateKey({
+          text: pool?.username,
+          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+        });
+        const _password = nodeRSA.decryptStringWithRsaPrivateKey({
+          text: pool?.password,
+          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+        });
+        return _username === searchQuery && _password === searchQuery2;
+      });
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [
+    account,
+    sortOption,
+    chosenPools,
+    favoritesOnly,
+    numberOfPoolsVisible,
+    searchQuery,
+    searchQuery2,
+    watchlistTokens,
+  ]);
 
   chosenPoolsLength.current = chosenPools.length;
 
@@ -181,14 +208,21 @@ export function PoolControls<T>({
           setViewMode={setViewMode}
         />
         <FilterContainer>
+          <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+            {t("Find Your Card")}
+          </Text>
           <LabelWrapper style={{ marginLeft: 16 }}>
-            <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
-              {t("Search")}
-            </Text>
             <SearchInput
               initialValue={searchQuery}
               onChange={handleChangeSearchQuery}
-              placeholder={t("Search by attached vaFSTT")}
+              placeholder={t("enter username")}
+            />
+          </LabelWrapper>
+          <LabelWrapper style={{ marginLeft: 16 }}>
+            <SearchInput
+              initialValue={searchQuery2}
+              onChange={handleChangeSearchQuery2}
+              placeholder={t("enter password")}
             />
           </LabelWrapper>
         </FilterContainer>

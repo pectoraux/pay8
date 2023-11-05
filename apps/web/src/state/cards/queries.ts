@@ -8,7 +8,7 @@ tokenAddress
 
 export const cardFields = `
   id
-  owner
+  username
   active
   createdAt
   updatedAt

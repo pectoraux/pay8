@@ -39,28 +39,22 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       currency={currency ?? inputCurrency}
     />,
   )
+  const [openPresentControlPanel2] = useModal(
+    <CreateGaugeModal
+      variant="add_with_debit"
+      location="fromStake"
+      pool={pool}
+      currAccount={currAccount}
+      currency={currency ?? inputCurrency}
+    />,
+  )
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-
-  if (!account) {
-    return (
-      <ActionContainer>
-        <ActionTitles>
-          <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-            {t('Connect your Wallet')}
-          </Text>
-        </ActionTitles>
-        <ActionContent>
-          <ConnectWalletButton width="100%" />
-        </ActionContent>
-      </ActionContainer>
-    )
-  }
 
   return (
     <ActionContainer>
       <ActionTitles>
         <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-          {t('Adjust Settings')}{' '}
+          {!account ? t('Connect your Wallet') : t('Adjust Settings')}{' '}
         </Text>
       </ActionTitles>
       <CurrencyInputPanel
@@ -71,10 +65,19 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
         id={pool?.sousId}
       />
       <ActionContent>
-        <Button width="100%" onClick={openPresentControlPanel} variant="secondary">
-          {t('Control Panel')}
-        </Button>
+        {!account ? (
+          <ConnectWalletButton width="100%" />
+        ) : (
+          <Button width="100%" onClick={openPresentControlPanel} variant="secondary">
+            {t('Control Panel')}
+          </Button>
+        )}
         {/* <Flex mb="40px"><NotificationDot show={userData?.requests?.length} /></Flex> */}
+      </ActionContent>
+      <ActionContent>
+        <Button width="100%" onClick={openPresentControlPanel2} variant="secondary">
+          {t('ADD BALANCE WITH DEBIT CARD')}
+        </Button>
       </ActionContent>
       <ActionContent>
         <Button

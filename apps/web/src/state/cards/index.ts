@@ -59,6 +59,7 @@ export const PoolsSlice = createSlice({
   reducers: {
     setInitialCardsConfig: (state, action) => {
       state.data = [...action.payload]
+      console.log('state.data=================>', state.data)
       state.userDataLoaded = true
     },
     setCardsPublicData: (state, action) => {
