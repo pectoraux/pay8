@@ -1,11 +1,9 @@
-import NodeRSA from "encrypt-rsa";
 import { useCallback, useEffect, useMemo, useRef, useState, ReactElement } from "react";
 import styled from "styled-components";
 import BigNumber from "bignumber.js";
 import partition from "lodash/partition";
 import { useTranslation } from "@pancakeswap/localization";
 import { useIntersectionObserver } from "@pancakeswap/hooks";
-import latinise from "@pancakeswap/utils/latinise";
 import { useRouter } from "next/router";
 import { useWatchlistTokens } from "../../../../../apps/web/src/state/user/hooks";
 
@@ -81,6 +79,7 @@ interface PoolControlsPropsType<T> {
 
 export function PoolControls<T>({
   pools,
+  nodeRSA,
   children,
   stakedOnly,
   setStakedOnly,
@@ -163,7 +162,6 @@ export function PoolControls<T>({
       .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.id?.toLowerCase()) : true));
 
     if (searchQuery && searchQuery2) {
-      const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY);
       return sortedPools.filter((pool: any) => {
         const _username = nodeRSA.decryptStringWithRsaPrivateKey({
           text: pool?.username,
