@@ -85,19 +85,15 @@ const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
         return (
           <CardBody>
             <Heading as="h4" color="secondary" mb="16px">
-              {t('Attach a vaFSTT & Create a PayCard')}
+              {t('Create a PayCard account')}
             </Heading>
             <Text color="textSubtle" small mb="16px">
-              {t('First attach a Leviathan token and then create your PayCard!')}
+              {t(
+                'First create your paycard by picking a unique username and a password. Both your username and password should be secret unless you are receiving money in which case you should communicate the username to the sender.',
+              )}
             </Text>
-            <LinkExternal
-              href="/valuepools/0xd994a268b2288e997320f5a0ccd94411b75e2dd7"
-              style={{ width: '100%', justifyContent: 'center' }}
-            >
-              {t('Mint your Leviathan token')}
-            </LinkExternal>
             <Button as="a" href="#current-ifo" mt="16px" onClick={onPresentCreateGauge}>
-              {t('Attach')}
+              {t('Create Paycard')}
             </Button>
           </CardBody>
         )
@@ -110,7 +106,17 @@ const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
             <Box>
               <Text mb="4px" color="textSubtle" small>
                 {t(
-                  'Once you have your PayCard, you can start adding funds to it. Pick the -Mine only- option to show all your PayCards, find the right one, click -Details- to open up its panel, select the currency you would like to add, select Control Panel and pick the Add Balance option. Input the amount of tokens to add, validate and confirm.',
+                  'Once you have your PayCard, you can start adding funds to it. Enter your username and password in the fields next to the FIND YOUR CARD text above, to only display your PayCard.',
+                )}
+              </Text>
+              <Text mb="4px" color="textSubtle" small>
+                {t(
+                  'Click the -Details- button to open up its panel, select the currency you would like to add, select the Add Balance With Debit Card option. Input the amount of tokens to add, validate and confirm.',
+                )}
+              </Text>
+              <Text mb="4px" color="textSubtle" small>
+                {t(
+                  'You can also add tokens using your crypto wallet by picking the appropriate option from the control panel menu of your paycard.',
                 )}
               </Text>
             </Box>
@@ -124,9 +130,18 @@ const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
             </Heading>
             <Text color="textSubtle" small>
               {t(
-                "Once you have created your PayCard, you will need to attach a password to it. Think of this like a Visa debit card for which you need to pick a pin code. Once that's setup and you've add a balance to it, you can just input your password into the Transfer Balance or Execute Purchase form from the card's Control Panel menu to access funds from your card. You will not even need to connect your wallet to the blockchain.",
-              )}{' '}
-              <br />
+                "Once you have created your PayCard, a good practice is to update your password once every three months. To do so, pick the right option from your paycard's control panel menu, fill in the form and validate.",
+              )}
+            </Text>
+            <Text color="textSubtle" small>
+              {t(
+                'You can recover your account in the event of a loss of password provided you had previously attached a unique profile to your account. You can find the option to do that from the control panel menu of your paycard.',
+              )}
+            </Text>
+            <Text color="textSubtle" small>
+              {t(
+                'If you do not want to be linked to your paycard, you should not do so but that will also mean that if you lose your password, you lose access to your paycard and all the funds it holds.',
+              )}
             </Text>
           </CardBody>
         )
@@ -138,7 +153,7 @@ const IfoSteps: React.FC<any> = ({ title, onPresentCreateGauge }) => {
             </Heading>
             <Text color="textSubtle" small>
               {t(
-                'Once you have charged your PayCard and updated its password, you can start using it for purchases in the CanCan or eCollectibles marketplace or even in real life. All you need is your password and you would not need to connect your own wallet to the blockchain to access funds from your card. Just have the merchant connect his/her wallet, find your PayCard, open its panel, select Control Panel, either select the Transfer Balance or Execute Purchase option, fill in the form, validate and confirm.',
+                'Once you have charged and setup your PayCard as you please,  you can start using it for purchases in the CanCan or eCollectibles marketplace or even in real life. All you need is your username & password to access funds from your card. Just have the merchant connect his/her wallet, find your PayCard, open its panel, select Control Panel, either select the Transfer Balance or Execute Purchase option, fill in the form, validate and confirm.',
               )}{' '}
               <br />
             </Text>

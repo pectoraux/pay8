@@ -9,7 +9,7 @@ import { useWatchlistTokens } from "../../../../../apps/web/src/state/user/hooks
 
 import PoolTabButtons from "./PoolTabButtons";
 import { ViewMode } from "../../components/ToggleView/ToggleView";
-import { Flex, Text, SearchInput, Select, OptionProps } from "../../components";
+import { Flex, Text, SearchInput, Select, OptionProps, Input } from "../../components";
 
 import { DeserializedPool } from "./types";
 import { sortPools } from "./helpers";
@@ -159,7 +159,7 @@ export function PoolControls<T>({
   chosenPools = useMemo(() => {
     const sortedPools = sortPools<T>(sortOption, chosenPools)
       .slice(0, numberOfPoolsVisible)
-      .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.id?.toLowerCase()) : true));
+      .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.id) : true));
 
     if (searchQuery && searchQuery2) {
       return sortedPools.filter((pool: any) => {
@@ -210,17 +210,21 @@ export function PoolControls<T>({
             {t("Find Your Card")}
           </Text>
           <LabelWrapper style={{ marginLeft: 16 }}>
-            <SearchInput
-              initialValue={searchQuery}
+            <Input
+              type="password"
+              scale="sm"
+              value={searchQuery}
+              placeholder={t("input your username")}
               onChange={handleChangeSearchQuery}
-              placeholder={t("enter username")}
             />
           </LabelWrapper>
           <LabelWrapper style={{ marginLeft: 16 }}>
-            <SearchInput
-              initialValue={searchQuery2}
+            <Input
+              type="password"
+              scale="sm"
+              value={searchQuery2}
+              placeholder={t("input your password")}
               onChange={handleChangeSearchQuery2}
-              placeholder={t("enter password")}
             />
           </LabelWrapper>
         </FilterContainer>

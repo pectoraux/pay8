@@ -112,7 +112,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
           {t('Username')}
         </Text>
         <Input
-          type="text"
+          type="password"
           scale="sm"
           value={username}
           placeholder={t('input your username')}
@@ -124,7 +124,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
           {t('Password')}
         </Text>
         <Input
-          type="text"
+          type="password"
           scale="sm"
           value={password}
           placeholder={t('input your password')}

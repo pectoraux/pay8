@@ -24,6 +24,7 @@ import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
 import { cardABI } from 'config/abi/card'
 import { getCardAddress } from 'utils/addressHelpers'
+import { useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -32,11 +33,9 @@ import AddBalanceStage from './AddBalanceStage'
 import TransferBalanceStage from './TransferBalanceStage'
 import RemoveBalanceStage from './RemoveBalanceStage'
 import UpdatePasswordStage from './UpdatePasswordStage'
+import UpdatePassword2Stage from './UpdatePassword2Stage'
+import UpdateProfileStage from './UpdateProfileStage'
 import MintStage from './MintStage'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import { useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
-import { rampABI } from 'config/abi/ramp'
-import { getRampHelperContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -47,9 +46,13 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.TRANSFER_BALANCE]: t('Transfer Balance'),
   [LockStage.EXECUTE_PURCHASE]: t('Execute Purchase'),
   [LockStage.UPDATE_PASSWORD]: t('Update Password'),
+  [LockStage.UPDATE_PASSWORD2]: t('Update Password With Profile'),
+  [LockStage.UPDATE_PROFILE]: t('Attach Unique Profile'),
   [LockStage.PRE_MINT]: t('tFIAT Mint'),
   [LockStage.CONFIRM_PRE_MINT]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PASSWORD]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_PASSWORD2]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_PROFILE]: t('Back'),
   [LockStage.CONFIRM_ADD_BALANCE]: t('Back'),
   [LockStage.CONFIRM_ADD_BALANCE2]: t('Back'),
   [LockStage.CONFIRM_REMOVE_BALANCE]: t('Back'),
@@ -237,6 +240,18 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_UPDATE_PASSWORD:
         setStage(LockStage.UPDATE_PASSWORD)
         break
+      case LockStage.UPDATE_PASSWORD2:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_PASSWORD2:
+        setStage(LockStage.UPDATE_PASSWORD2)
+        break
+      case LockStage.UPDATE_PROFILE:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_PROFILE:
+        setStage(LockStage.UPDATE_PROFILE)
+        break
       default:
         break
     }
@@ -261,6 +276,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_PASSWORD:
         setStage(LockStage.CONFIRM_UPDATE_PASSWORD)
+        break
+      case LockStage.UPDATE_PASSWORD2:
+        setStage(LockStage.CONFIRM_UPDATE_PASSWORD2)
+        break
+      case LockStage.UPDATE_PROFILE:
+        setStage(LockStage.CONFIRM_UPDATE_PROFILE)
         break
       default:
         break
@@ -410,6 +431,29 @@ const CreateGaugeModal: React.FC<any> = ({
           )
         }
       }
+      if (stage === LockStage.CONFIRM_UPDATE_PASSWORD2) {
+        if (username && password && username === state.username) {
+          const encryptRsa = new EncryptRsa()
+          const newPassword = encryptRsa.encryptStringWithRsaPublicKey({
+            text: state.newPassword,
+            publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+          })
+          const args = [pool?.username, newPassword]
+          console.log('CONFIRM_UPDATE_PASSWORD2===============>', args)
+          return callWithGasPrice(cardContract, 'updatePasswordWithProfile', args).catch((err) =>
+            console.log('CONFIRM_UPDATE_PASSWORD2===============>', err),
+          )
+        }
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_PROFILE) {
+        if (username && password && username === state.username && password === state.password) {
+          const args = [pool?.username, pool?.password, account]
+          console.log('CONFIRM_UPDATE_PROFILE===============>', args)
+          return callWithGasPrice(cardContract, 'updateProfileId', args).catch((err) =>
+            console.log('CONFIRM_UPDATE_PROFILE===============>', err),
+          )
+        }
+      }
       if (stage === LockStage.CONFIRM_ADD_BALANCE) {
         const amount = getDecimalAmount(stripeData?.amount, 18)
         console.log('CONFIRM_ADD_BALANCE===============>', [
@@ -483,8 +527,14 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_BALANCE2)}>
             {t('ADD BALANCE WITH WALLET')}
           </Button>
-          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.UPDATE_PASSWORD)}>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_PASSWORD)}>
             {t('UPDATE PASSWORD')}
+          </Button>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_PASSWORD2)}>
+            {t('UPDATE PASSWORD WITH PROFILE')}
+          </Button>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_PROFILE)}>
+            {t('ATTACH UNIQUE PROFILE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.TRANSFER_BALANCE)}>
             {t('TRANSFER BALANCE')}
@@ -549,6 +599,12 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.UPDATE_PASSWORD && (
         <UpdatePasswordStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_PASSWORD2 && (
+        <UpdatePassword2Stage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_PROFILE && (
+        <UpdateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage

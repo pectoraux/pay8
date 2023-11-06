@@ -39,7 +39,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Enter Old Password')}
+          {t('Enter Password')}
         </Text>
         <Input
           type="password"
@@ -50,19 +50,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('New Password')}
-        </Text>
-        <Input
-          type="password"
-          scale="sm"
-          name="newPassword"
-          value={state.newPassword}
-          placeholder={t('input your new password')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -70,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the password attached to this card. The password will be necessary to transfer tokens from your card to another or to make purchases with your card. Your password will be stored in encrypted form so you are the only one who knows it.',
+              'This will attach your unique profile to this paycard. Make sure you have created a unique profile before running this function. Attaching a unique profile can help you recover access to your card in case of loss but also makes your card unique and identifiable.',
             )}
           </Text>
         </Box>
@@ -78,7 +65,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update Password')}
+          {t('Update Profile')}
         </Button>
       </Flex>
     </>

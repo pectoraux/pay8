@@ -99,7 +99,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
   return (
     <ViewControls>
       {/* {viewModeToggle} */}
-      {stakedOnlySwitch}
+      {/* {stakedOnlySwitch} */}
       {favoritesOnlySwitch}
       {liveOrFinishedSwitch}
     </ViewControls>

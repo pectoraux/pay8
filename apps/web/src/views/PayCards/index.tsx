@@ -69,9 +69,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('PayCard Accounts')}
             </Heading>
             <Heading scale="md" color="text">
-              {t(
-                'Create a PayCard account, add funds into it and use it to transact without the need to connect to the blockchain',
-              )}
+              {t('Create a PayCard account, add funds to it and use it to transact without a crypto wallet')}
             </Heading>
             <Heading scale="md" color="text">
               {t('Use just your account id and password for transactions')}
