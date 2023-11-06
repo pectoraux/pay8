@@ -69,7 +69,7 @@ const CollectionCard: React.FC<React.PropsWithChildren<CollectionCardProps>> = (
         flexDirection="column"
       >
         <CollectionAvatar src={avatarSrc} width={96} height={96} />
-        <Heading color={disabled ? 'textDisabled' : 'body'} as="h3" mb={children ? '8px' : '0'}>
+        <Heading color={disabled ? 'textDisabled' : 'body'} as="h3" mb={children ? '4px' : '0'}>
           {collectionName}
         </Heading>
         {children}

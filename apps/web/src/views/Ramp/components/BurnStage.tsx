@@ -54,7 +54,6 @@ const BurnStage: React.FC<any> = ({
   async function onAttemptToCreateLink() {
     setLinking(true)
     const { data } = await axios.post('/api/link', {
-      account,
       rampAddress,
       sk: state.sk,
       accountId: state.accountId,

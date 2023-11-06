@@ -106,16 +106,7 @@ const BurnStage: React.FC<any> = ({
     tooltipOffset: [20, 10],
   })
 
-  return !(accountData?.id && accountData?.active) && state.automatic ? (
-    <>
-      <Divider />
-      <Flex flexDirection="column">
-        <Button variant={linked ? 'success' : 'primary'} onClick={onAttemptToCreateLink}>
-          {linking ? <Dots>{t('Linking')}</Dots> : linked ? t('Linked') : t('Link')}
-        </Button>
-      </Flex>
-    </>
-  ) : (
+  return (
     <>
       <GreyedOutContainer>
         <Flex ref={targetRef2}>

@@ -1,6 +1,12 @@
 export const nfticketHelper2ABI = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
@@ -548,19 +554,6 @@ export const nfticketHelper2ABI = [
       },
     ],
     name: 'setApprovalForAll',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

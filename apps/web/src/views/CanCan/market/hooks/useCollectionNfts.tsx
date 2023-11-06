@@ -108,11 +108,12 @@ export const useCollectionNfts = (collectionAddress: string) => {
   )
 
   const uniqueNftList: NftToken[] = useMemo(
-    () => (nfts ? uniqBy(nfts.flat(), showOnlyNftsUsers ? 'address' : 'tokenId') : []),
+    () => (nfts ? uniqBy(nfts.flat(), showOnlyNftsUsers ? 'address' : 'id') : []),
     [nfts],
   )
   fetchedNfts.current = uniqueNftList
   const paywallMirrorsCount = collection?.paywalls?.reduce((acc, cur) => acc + cur?.mirrors?.length, 0)
+  console.log('uniqueNftList=====================>', nfts, uniqueNftList, paywallMirrorsCount)
   return {
     nfts: uniqueNftList,
     isFetchingNfts: status !== FetchStatus.Fetched,

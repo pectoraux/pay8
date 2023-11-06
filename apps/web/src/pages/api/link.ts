@@ -2,7 +2,7 @@
 import Stripe from 'stripe'
 
 const handler = async (req, res) => {
-  const { account: accountAddress, rampAddress, sk, accountId } = req.body
+  const { rampAddress, sk, accountId } = req.body
   // const stripe = initStripe(sk)
   const stripe = new Stripe(sk, { apiVersion: '2020-08-27' })
   let loginLink
@@ -16,8 +16,8 @@ const handler = async (req, res) => {
       })
       loginLink = await stripe.accountLinks.create({
         account: account?.id,
-        refresh_url: `http://localhost:3000/ramps/${rampAddress}`,
-        return_url: `http://localhost:3000/ramps/${rampAddress}`,
+        refresh_url: `${req.headers.origin}/ramps/${rampAddress}`,
+        return_url: `${req.headers.origin}/ramps/${rampAddress}`,
         type: 'account_onboarding',
       })
     }

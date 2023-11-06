@@ -126,6 +126,82 @@ export const marketHelperABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_item',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_indices',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'getOptions',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'uint256',
+            name: 'id',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'min',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'max',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'unitPrice',
+            type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'category',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'element',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'traitType',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'value',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'currency',
+            type: 'string',
+          },
+        ],
+        internalType: 'struct Option[]',
+        name: 'opt',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '_collection',
         type: 'address',
@@ -198,75 +274,6 @@ export const marketHelperABI = [
     name: 'mintNFTicket',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'options',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'id',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'min',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'max',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'unitPrice',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: 'category',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'element',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'traitType',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'value',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'currency',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {

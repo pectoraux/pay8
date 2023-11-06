@@ -56,8 +56,9 @@ const RequestHistory: React.FC<any> = ({ collection }) => {
       try {
         setIsLoading(true)
         const activity = [...collection.partnerRegistrations, ...collection.registrations].filter(
-          (registration) => !registration.active && !registration.unregister,
+          (registration) => !registration.active, // && !registration.unregister,
         )
+        console.log('collection.registrations==================>', collection.registrations)
         setPaginationData({
           activity,
           currentPage: 1,

@@ -108,7 +108,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
   )
 
   const uniqueNftList: NftToken[] = useMemo(
-    () => (nfts ? uniqBy(nfts.flat(), showOnlyNftsUsers ? 'address' : 'tokenId') : []),
+    () => (nfts ? uniqBy(nfts.flat(), showOnlyNftsUsers ? 'address' : 'id') : []),
     [nfts],
   )
   fetchedNfts.current = uniqueNftList

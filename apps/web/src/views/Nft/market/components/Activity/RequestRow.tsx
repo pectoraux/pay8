@@ -17,7 +17,12 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallback, useState } from 'react'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { useMarketEventsContract, useMarketOrdersContract, useMarketHelper2Contract } from 'hooks/useContract'
+import {
+  useMarketOrdersContract,
+  useMarketHelper2Contract,
+  useMarketHelper3Contract,
+  useNftMarketHelper3Contract,
+} from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import MobileModal from './MobileModal'
@@ -45,9 +50,8 @@ const RequestRow: React.FC<any> = ({
   const { isXs, isSm } = useMatchBreakpoints()
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const marketEventsContract = useMarketEventsContract()
+  const marketHelper3Contract = useNftMarketHelper3Contract()
   const marketOrdersContract = useMarketOrdersContract()
-  const marketHelper2Contract = useMarketHelper2Contract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { fetchWithCatchTxError: fetchWithCatchTxError2, loading: pendingTx2 } = useCatchTxError()
   const [isDone, setIsDone] = useState(false)
@@ -78,7 +82,7 @@ const RequestRow: React.FC<any> = ({
   const handleAccept = useCallback(async () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const contract = isPartnerRequest ? marketOrdersContract : marketEventsContract
+      const contract = isPartnerRequest ? marketOrdersContract : marketHelper3Contract
       const method = isPartnerRequest ? 'addReferral' : 'emitUserRegistration'
       const args = isPartnerRequest
         ? [
@@ -107,7 +111,7 @@ const RequestRow: React.FC<any> = ({
     activity,
     isPartnerRequest,
     marketOrdersContract,
-    marketEventsContract,
+    marketHelper3Contract,
     account,
     referrerFee,
     callWithGasPrice,
@@ -117,7 +121,7 @@ const RequestRow: React.FC<any> = ({
 
   const handleRemove = useCallback(async () => {
     const receipt = await fetchWithCatchTxError2(() => {
-      const contract = isPartnerRequest ? marketOrdersContract : marketEventsContract
+      const contract = isPartnerRequest ? marketOrdersContract : marketHelper3Contract
       const method = isPartnerRequest ? 'closeReferral' : 'emitUserRegistration'
       const args = isPartnerRequest
         ? [activity?.collection?.owner, account, activity?.bountyId ?? 0, '', true]
@@ -143,7 +147,7 @@ const RequestRow: React.FC<any> = ({
     isPartnerRequest,
     toastSuccess,
     callWithGasPrice,
-    marketEventsContract,
+    marketHelper3Contract,
     marketOrdersContract,
     fetchWithCatchTxError2,
   ])

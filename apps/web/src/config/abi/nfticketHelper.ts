@@ -90,6 +90,19 @@ export const nfticketHelperABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'adminFeeOnMarketWideAds',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -125,35 +138,6 @@ export const nfticketHelperABI = [
     name: 'cancanVote',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    name: 'channels',
-    outputs: [
-      {
-        internalType: 'string',
-        name: 'message',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'active_period',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -422,6 +406,11 @@ export const nfticketHelperABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: 'expires',
+        type: 'uint256',
+      },
+      {
         internalType: 'string',
         name: 'message',
         type: 'string',
@@ -453,6 +442,11 @@ export const nfticketHelperABI = [
       {
         internalType: 'uint256',
         name: '_merchantId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_referrerId',
         type: 'uint256',
       },
       {
@@ -546,6 +540,11 @@ export const nfticketHelperABI = [
       },
       {
         internalType: 'uint256',
+        name: '_adminFeeOnMarketWideAds',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
         name: '_lotteryFee',
         type: 'uint256',
       },
@@ -615,7 +614,13 @@ export const nfticketHelperABI = [
       },
     ],
     name: 'updateSponsorMedia',
-    outputs: [],
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'function',
   },

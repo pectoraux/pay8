@@ -17,7 +17,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallback, useState } from 'react'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { useMarketEventsContract, useMarketOrdersContract, useMarketHelper2Contract } from 'hooks/useContract'
+import { useMarketOrdersContract, useMarketHelper2Contract, useMarketHelper3Contract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import MobileModal from './MobileModal'
@@ -45,7 +45,7 @@ const RequestRow: React.FC<any> = ({
   const { isXs, isSm } = useMatchBreakpoints()
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const marketEventsContract = useMarketEventsContract()
+  const marketHelper3Contract = useMarketHelper3Contract()
   const marketOrdersContract = useMarketOrdersContract()
   const marketHelper2Contract = useMarketHelper2Contract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
@@ -78,7 +78,7 @@ const RequestRow: React.FC<any> = ({
   const handleAccept = useCallback(async () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const contract = isPartnerRequest ? marketOrdersContract : marketEventsContract
+      const contract = isPartnerRequest ? marketOrdersContract : marketHelper3Contract
       const method = isPartnerRequest ? 'addReferral' : 'emitUserRegistration'
       const args = isPartnerRequest
         ? [
@@ -107,7 +107,7 @@ const RequestRow: React.FC<any> = ({
     activity,
     isPartnerRequest,
     marketOrdersContract,
-    marketEventsContract,
+    marketHelper3Contract,
     account,
     referrerFee,
     callWithGasPrice,
@@ -117,7 +117,7 @@ const RequestRow: React.FC<any> = ({
 
   const handleRemove = useCallback(async () => {
     const receipt = await fetchWithCatchTxError2(() => {
-      const contract = isPartnerRequest ? marketHelper2Contract : marketEventsContract
+      const contract = isPartnerRequest ? marketHelper2Contract : marketHelper3Contract
       const method = isPartnerRequest ? 'closeReferral' : 'emitUserRegistration'
       const args = isPartnerRequest
         ? [activity?.collection?.owner, account, activity?.bountyId ?? 0, '', true]
@@ -143,7 +143,7 @@ const RequestRow: React.FC<any> = ({
     isPartnerRequest,
     toastSuccess,
     callWithGasPrice,
-    marketEventsContract,
+    marketHelper3Contract,
     marketHelper2Contract,
     fetchWithCatchTxError2,
   ])
@@ -157,40 +157,38 @@ const RequestRow: React.FC<any> = ({
           },
         })}
       >
-        <Grid gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null]} alignItems="start">
-          <CollectionCard
-            key={isPartnerRequest ? activity?.partnerCollection?.id : activity?.userCollection?.id}
-            bgSrc={isPartnerRequest ? activity?.partnerCollection?.small : activity?.userCollection?.small}
-            avatarSrc={isPartnerRequest ? activity?.partnerCollection?.avatar : activity?.userCollection?.avatar}
-            collectionName={isPartnerRequest ? activity?.partnerCollection?.name : activity?.userCollection?.name}
+        <Flex justifyContent="flex-end">
+          <LinkExternal
+            href={`${cancanBaseUrl}/collections/${
+              isPartnerRequest ? activity?.partnerCollection?.id : activity?.userCollection?.id
+            }`}
+            bold={false}
+            small
           >
-            <Flex alignItems="center">
-              <Text fontSize="12px" color="textSubtle">
-                {t('Volume')}
-              </Text>
-              <BNBAmountLabel
-                amount={
-                  isPartnerRequest && activity?.partnerCollection?.totalVolumeBNB
-                    ? parseFloat(activity.partnerCollection.totalVolumeBNB)
-                    : activity?.userCollection?.totalVolumeBNB
-                    ? parseFloat(activity.userCollection.totalVolumeBNB)
-                    : 0
-                }
-              />
-            </Flex>
-            <Flex mb="2px" justifyContent="flex-end">
-              <LinkExternal
-                href={`${cancanBaseUrl}/collections/${
-                  isPartnerRequest ? activity?.partnerCollection?.id : activity?.userCollection?.id
-                }`}
-                bold={false}
-                small
-              >
-                {t('See Channel')}
-              </LinkExternal>
-            </Flex>
-          </CollectionCard>
-        </Grid>
+            {t('See Channel')}
+          </LinkExternal>
+        </Flex>
+        <CollectionCard
+          key={isPartnerRequest ? activity?.partnerCollection?.id : activity?.userCollection?.id}
+          bgSrc={isPartnerRequest ? activity?.partnerCollection?.small : activity?.userCollection?.small}
+          avatarSrc={isPartnerRequest ? activity?.partnerCollection?.avatar : activity?.userCollection?.avatar}
+          collectionName={isPartnerRequest ? activity?.partnerCollection?.name : activity?.userCollection?.name}
+        >
+          <Flex alignItems="center">
+            <Text fontSize="12px" color="textSubtle">
+              {t('Volume')}
+            </Text>
+            <BNBAmountLabel
+              amount={
+                isPartnerRequest && activity?.partnerCollection?.totalVolumeBNB
+                  ? parseFloat(activity.partnerCollection.totalVolumeBNB)
+                  : activity?.userCollection?.totalVolumeBNB
+                  ? parseFloat(activity.userCollection.totalVolumeBNB)
+                  : 0
+              }
+            />
+          </Flex>
+        </CollectionCard>
       </Td>
       <Td>
         <Text textAlign="center" fontSize={isXs || isSm ? '12px' : '16px'}>

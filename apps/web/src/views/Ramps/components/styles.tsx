@@ -12,6 +12,7 @@ export const stagesWithApproveButton = [
   LockStage.CONFIRM_BUY_RAMP,
   LockStage.CONFIRM_BUY_ACCOUNT,
   LockStage.CONFIRM_BURN,
+  LockStage.CONFIRM_BURN2,
 ]
 
 export const stagesWithConfirmButton = [
@@ -91,11 +92,13 @@ export const stagesWithBackButton = [
   LockStage.BUY_ACCOUNT,
   LockStage.PARTNER,
   LockStage.BURN,
+  LockStage.BURN2,
   LockStage.MINT,
   LockStage.CREATE_PROTOCOL,
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.CONFIRM_MINT,
   LockStage.CONFIRM_BURN,
+  LockStage.CONFIRM_BURN2,
   LockStage.CONFIRM_PARTNER,
   LockStage.CONFIRM_BUY_ACCOUNT,
   LockStage.CONFIRM_BUY_RAMP,
