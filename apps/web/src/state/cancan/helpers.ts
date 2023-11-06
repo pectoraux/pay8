@@ -45,8 +45,8 @@ import { nftMarketHelper3ABI } from 'config/abi/nftMarketHelper3'
 import { veABI } from 'config/abi/ve'
 import { marketCollectionsABI } from 'config/abi/marketCollections'
 import { nfticketHelperABI } from 'config/abi/nfticketHelper'
-import { ssiFields } from 'state/ssi/queries'
 import { nfticketHelper2ABI } from 'config/abi/nfticketHelper2'
+import { keccak256 } from 'viem'
 
 export const getTag = async () => {
   try {
@@ -1101,6 +1101,27 @@ export const getPaymentCredits = async (collectionAddress, tokenId, address, cha
     return credits.result.toString()
   } catch (error) {
     console.error('===========>Failed to fetch payment credits', error)
+    return []
+  }
+}
+
+export const getAskOrder = async (collectionAddress, tokenId, chainId = 4002) => {
+  try {
+    const bscClient = publicClient({ chainId: chainId })
+    const [askOrder] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getMarketOrdersAddress(),
+          abi: marketOrdersABI,
+          functionName: 'getAskDetails',
+          args: [collectionAddress, keccak256(tokenId)],
+        },
+      ],
+    })
+    return askOrder.result
+  } catch (error) {
+    console.error('getAskOrder===========>Failed to fetch payment credits', error)
     return []
   }
 }

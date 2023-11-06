@@ -62,6 +62,7 @@ const Header: React.FC<any> = ({ collection }) => {
     setCurrency(currencyInput)
   }, [])
   const [onPresentSettings] = useModal(<SettingStage collection={collection} />)
+  const [onPresentVote] = useModal(<SettingStage variant="vote" collection={collection} />)
   const [onPresentPartner] = useModal(<PartnerModal collection={collection} />)
   const [onPresentRegister] = useModal(<RegisterModal collection={collection} />)
   const [onPresentShip] = useModal(<ShipStage variant="product" collection={collection} currency={currency} />)
@@ -178,24 +179,22 @@ const Header: React.FC<any> = ({ collection }) => {
           </Flex>
           {account ? (
             <Row>
-              {isOwner && (
-                <ActionContainer>
-                  <ActionTitles>
-                    <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-                      {t('Channel Settings')}
-                    </Text>
-                  </ActionTitles>
-                  <ActionContent>
-                    <Button width="100%" onClick={onPresentSettings} variant="secondary">
-                      {t('Settings')}
-                    </Button>
-                  </ActionContent>
-                </ActionContainer>
-              )}
               <ActionContainer>
                 <ActionTitles>
                   <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-                    {isOwner ? t('Paid content') : t('Willing to do business with us?')}
+                    {isOwner ? t('Channel Settings') : t('Rate Channel')}
+                  </Text>
+                </ActionTitles>
+                <ActionContent>
+                  <Button width="100%" onClick={isOwner ? onPresentSettings : onPresentVote} variant="secondary">
+                    {isOwner ? t('Settings') : t('Vote')}
+                  </Button>
+                </ActionContent>
+              </ActionContainer>
+              <ActionContainer>
+                <ActionTitles>
+                  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+                    {isOwner ? t('Paid content') : t('Do business ?')}
                   </Text>
                 </ActionTitles>
                 <ActionContent>
@@ -207,7 +206,7 @@ const Header: React.FC<any> = ({ collection }) => {
               <ActionContainer className="tour2-1">
                 <ActionTitles>
                   <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-                    {isOwner ? t('Ship faster') : t('Get Started With Us Today!')}
+                    {isOwner ? t('Ship faster') : t('Get Started Today!')}
                   </Text>
                 </ActionTitles>
                 <ActionContent>
