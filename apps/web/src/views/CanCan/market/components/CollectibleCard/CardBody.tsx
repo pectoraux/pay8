@@ -36,7 +36,7 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
     }),
     0,
   )
-  const { days, hours, minutes } = getTimePeriods(Number(diff ?? '0'))
+  const { days, hours, minutes } = getTimePeriods(Number(diff ?? 0))
   return (
     <CardBody
       p="8px"
