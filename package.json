@@ -10,7 +10,6 @@
   ],
   "packageManager": "pnpm@8.6.0",
   "scripts": {
-    "vercel-build": "yarn global add node-gyp",
     "preinstall": "npx only-allow pnpm",
     "dev": "turbo run dev --filter=web... --concurrency=19",
     "dev:aptos": "pnpm turbo run dev --filter=aptos-web... --concurrency=19",

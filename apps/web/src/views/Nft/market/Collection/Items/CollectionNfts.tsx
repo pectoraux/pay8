@@ -105,17 +105,6 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
           )}
         </Text>
       </Flex>
-      {showOnlyNftsOnSale && currentPartner ? (
-        <CollapsibleCard
-          key={currentPartner.id}
-          title={`${currentPartner.partnerCollection.name} -> ${
-            currentPartner.mirrors?.filter((mirror) => !!mirror.nft)?.length ?? 0
-          } ${t('Result(s)')}`}
-          mb="32px"
-        >
-          <Content owner={collection.owner} registration={currentPartner} />
-        </CollapsibleCard>
-      ) : null}
       {!showOnlyNftsOnSale &&
         !showOnlyNftsUsers &&
         collection?.paywalls?.map((paywall) => {
@@ -165,56 +154,68 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
           </Flex>
         </>
       ) : showOnlyNftsOnSale && collection.partnerRegistrations?.length > 0 ? (
-        collection.partnerRegistrations
-          .filter((registration) => registration.active && registration.partnerCollection?.id)
-          // registration.mirrors?.find((mirror) => !!mirror.nft))
-          .map((registration) => {
-            // PARTNERS
-            return (
-              <Grid
-                gridGap="16px"
-                onClick={() => {
-                  if (currentPartner && currentPartner.id === registration.id) {
-                    setCurrentPartner(null)
-                  } else {
-                    setCurrentPartner(registration)
-                  }
-                }}
-                gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
-                mb="64px"
-              >
-                <CollectionCard
-                  key={registration.partnerCollection?.id}
-                  bgSrc={registration.partnerCollection?.small}
-                  avatarSrc={registration.partnerCollection?.avatar}
-                  collectionName={registration.partnerCollection?.name}
-                >
-                  <Flex alignItems="center">
-                    <Text fontSize="12px" color="textSubtle">
-                      {t('Volume')}
-                    </Text>
-                    <BNBAmountLabel
-                      amount={
-                        registration.partnerCollection.totalVolumeBNB
-                          ? parseFloat(registration.partnerCollection.totalVolumeBNB)
-                          : 0
+        <>
+          {showOnlyNftsOnSale && currentPartner ? (
+            <CollapsibleCard
+              key={currentPartner.id}
+              title={`${currentPartner.partnerCollection.name} -> ${
+                currentPartner.mirrors?.filter((mirror) => !!mirror.nft)?.length ?? 0
+              } ${t('Result(s)')}`}
+              mb="32px"
+            >
+              <Content owner={collection.owner} registration={currentPartner} />
+            </CollapsibleCard>
+          ) : null}
+          <Grid mb="64px" gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}>
+            {collection.partnerRegistrations
+              .filter((registration) => registration.active && registration.partnerCollection?.id)
+              // registration.mirrors?.find((mirror) => !!mirror.nft))
+              .map((registration) => {
+                // PARTNERS
+                return (
+                  <div
+                    onClick={() => {
+                      if (currentPartner && currentPartner.id === registration.id) {
+                        setCurrentPartner(null)
+                      } else {
+                        setCurrentPartner(registration)
                       }
-                    />
-                  </Flex>
-                  <Flex mb="2px" justifyContent="flex-end">
-                    <LinkExternal
-                      href={`${nftsBaseUrl}/collections/${registration.partnerCollection.id}`}
-                      bold={false}
-                      small
+                    }}
+                  >
+                    <CollectionCard
+                      key={registration.partnerCollection?.id}
+                      bgSrc={registration.partnerCollection?.small}
+                      avatarSrc={registration.partnerCollection?.avatar}
+                      collectionName={registration.partnerCollection?.name}
                     >
-                      {t('See Channel')}
-                    </LinkExternal>
-                  </Flex>
-                </CollectionCard>
-              </Grid>
-            )
-          })
-      ) : showOnlyNftsUsers && collection.registrations?.length > 0 ? (
+                      <Flex alignItems="center">
+                        <Text fontSize="12px" color="textSubtle">
+                          {t('Volume')}
+                        </Text>
+                        <BNBAmountLabel
+                          amount={
+                            registration.partnerCollection.totalVolumeBNB
+                              ? parseFloat(registration.partnerCollection.totalVolumeBNB)
+                              : 0
+                          }
+                        />
+                      </Flex>
+                      <Flex mb="2px" justifyContent="flex-end">
+                        <LinkExternal
+                          href={`${nftsBaseUrl}/collections/${registration.partnerCollection.id}`}
+                          bold={false}
+                          small
+                        >
+                          {t('See Channel')}
+                        </LinkExternal>
+                      </Flex>
+                    </CollectionCard>
+                  </div>
+                )
+              })}
+          </Grid>
+        </>
+      ) : showOnlyNftsUsers && collection.registrations?.filter((registration) => registration.active)?.length > 0 ? (
         collection.registrations
           .filter((registration) => registration.active)
           .map((registration) => {
