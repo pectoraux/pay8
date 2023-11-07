@@ -4,23 +4,23 @@ import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import PreviewImage from './PreviewImage'
 import styled from 'styled-components'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+// import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import { CostLabel, MetaRow } from './styles'
 import NFTMedia from '../NFTMedia'
-import Timer from '../../Collection/IndividualNFTPage/OneOfAKindNftPage/Timer'
-import { differenceInSeconds } from 'date-fns'
-import { useGetOrder } from 'state/cancan/hooks'
+// import Timer from '../../Collection/IndividualNFTPage/OneOfAKindNftPage/Timer'
+// import { differenceInSeconds } from 'date-fns'
+// import { useGetOrder } from 'state/cancan/hooks'
 
 export const getTitle = (title) => {
   return title?.replaceAll('-', ' ')?.trim() ?? ''
 }
 
-const StyledTimerText = styled(Heading)`
-  background: ${({ theme }) => theme.colors.gradientGold};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-`
+// const StyledTimerText = styled(Heading)`
+//   background: ${({ theme }) => theme.colors.gradientGold};
+//   -webkit-background-clip: text;
+//   -webkit-text-fill-color: transparent;
+// `
 
 const CollectibleCardBody: React.FC<any> = ({ nft, currentAskPrice, isUserNft }) => {
   const { t } = useTranslation()
