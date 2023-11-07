@@ -29,7 +29,7 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
     }),
     0,
   )
-  // const { days, hours, minutes } = getTimePeriods(diff)
+  const { days, hours, minutes } = getTimePeriods(Number(diff ?? 0))
   return (
     <CardBody p="8px">
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
