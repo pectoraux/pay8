@@ -76,7 +76,7 @@ const getToastText = (stage: SellingStage, t: ContextApi['t']) => {
 const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCurrency, onDismiss }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const [stage, setStage] = useState(variant === 'vote' ? SellingStage.VOTE : SellingStage.SETTINGS)
+  const [stage, setStage] = useState(SellingStage.SETTINGS)
   const { toastSuccess } = useToast()
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -197,7 +197,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         setStage(SellingStage.UPDATE_AUDITORS)
         break
       case SellingStage.VOTE:
-        if (variant !== 'vote') setStage(SellingStage.SETTINGS)
+        setStage(SellingStage.SETTINGS)
         break
       case SellingStage.CONFIRM_VOTE:
         setStage(SellingStage.VOTE)

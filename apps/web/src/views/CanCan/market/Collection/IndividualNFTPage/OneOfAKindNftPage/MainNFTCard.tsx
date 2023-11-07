@@ -31,6 +31,8 @@ import RichTextEditor from 'components/RichText'
 import { useState } from 'react'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import { useGetOrder } from 'state/cancan/hooks'
+import { differenceInSeconds } from 'date-fns'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import MarketPageTitle from '../../../components/MarketPageTitle'
 import StatBox, { StatBoxItem } from '../../../components/StatBox'
@@ -41,8 +43,6 @@ import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
 import { getThumbnailNContent } from 'utils/cancan'
 import Timer from './Timer'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { differenceInSeconds } from 'date-fns'
 
 interface MainNFTCardProps {
   nft: NftToken
