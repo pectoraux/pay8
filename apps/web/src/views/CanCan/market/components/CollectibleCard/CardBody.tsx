@@ -3,13 +3,13 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useGetOrder } from 'state/cancan/hooks'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+// import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
-import { differenceInSeconds } from 'date-fns'
+// import { differenceInSeconds } from 'date-fns'
 
 export const getTitle = (title) => {
   return title?.replaceAll('-', ' ')?.trim() ?? ''
@@ -23,17 +23,17 @@ const CollectibleCardBody: React.FC<any> = ({ nft, currentAskPrice, isUserNft })
   const isAuction = Number(nft?.bidDuration) > 0
   const askOrder = useGetOrder(nft?.collection?.id, nft?.tokenId)?.data as any
   const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
-  const diff = Math.max(
-    differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {
-      roundingMethod: 'ceil',
-    }),
-    0,
-  )
-  const { days, hours, minutes } = getTimePeriods(diff)
+  // const diff = Math.max(
+  //   differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {
+  //     roundingMethod: 'ceil',
+  //   }),
+  //   0,
+  // )
+  // const { days, hours, minutes } = getTimePeriods(diff)
   return (
     <CardBody
       p="8px"
-      style={{ background: isAuction ? 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)' : 'white' }}
+      // style={{ background: isAuction ? 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)' : 'white' }}
     >
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
       <Flex alignItems="center" justifyContent="space-between">
