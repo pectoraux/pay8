@@ -7,6 +7,7 @@ import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import styled from 'styled-components'
 
+import Timer from './Timer'
 import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
@@ -66,6 +67,7 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
           <StyledTimerText pt="20px" pr="10px">
             {t('Drops in')}
           </StyledTimerText>
+          <Timer minutes={minutes} hours={hours} days={days} />
         </>
       ) : null}
     </CardBody>
