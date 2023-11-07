@@ -101,7 +101,7 @@ const EnlistStage: React.FC<any> = ({
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'This parameter is useful for product auctions and sets a minimum amount that has to separate a new bid from the last one in terms of its price percentages. If for instance the last bid was 10 tokens and this parameter is 10%, then any bid below 11 tokens will be invalid.',
+        "This parameter is useful for product auctions and sets the percentage increment between each bid. If this parameter is set to 10% with a starting price of 100 for instance, the first bid will be 100, the second bid will be 110, the third will be 120, etc. The bid price will keep increasing by 10% between each bid until there's no bidders left",
       )}
     </Text>
   )
@@ -385,7 +385,7 @@ const EnlistStage: React.FC<any> = ({
           <GreyedOutContainer>
             <Flex ref={targetRef8}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Min Bid Increment Percentage')}
+                {t('Bid Increment Percentage')}
               </Text>
               {tooltipVisible8 && tooltip8}
               <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
