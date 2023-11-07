@@ -129,7 +129,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
         mt="24px"
         onClick={onPresentSellModal}
       >
-        {nft?.isTradable ? t('Adjust settings') : t('List for sale')}
+        {nft?.isTradable ? t('Adjust Settings') : t('List for sale')}
       </Button>
     </Flex>
   )
