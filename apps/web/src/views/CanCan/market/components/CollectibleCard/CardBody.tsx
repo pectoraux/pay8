@@ -1,15 +1,22 @@
-import { Box, CardBody, Flex, Text } from '@pancakeswap/uikit'
+import { Box, CardBody, Flex, Heading, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useGetOrder } from 'state/cancan/hooks'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
 import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import styled from 'styled-components'
 
 import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
+
+const StyledTimerText = styled(Heading)`
+  background: ${({ theme }) => theme.colors.gradientGold};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`
 
 export const getTitle = (title) => {
   return title?.replaceAll('-', ' ')?.trim() ?? ''
@@ -54,7 +61,13 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
           </MetaRow>
         )}
       </Box>
-      {isDrop && (days || hours || minutes) ? <></> : null}
+      {isDrop && (days || hours || minutes) ? (
+        <>
+          <StyledTimerText pt="20px" pr="10px">
+            {t('Drops in')}
+          </StyledTimerText>
+        </>
+      ) : null}
     </CardBody>
   )
 }
