@@ -27,20 +27,20 @@ const CollectibleCardBody: React.FC<any> = ({ nft, currentAskPrice, isUserNft })
   const { tokenId: name } = nft
   const bnbBusdPrice = useBNBBusdPrice()
   const { mainCurrency } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
-  const isAuction = Number(nft?.bidDuration) > 0
-  const askOrder = useGetOrder(nft?.collection?.id, nft?.tokenId)?.data as any
-  const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
-  const diff = Math.max(
-    differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {
-      roundingMethod: 'ceil',
-    }),
-    0,
-  )
-  const { days, hours, minutes } = getTimePeriods(diff)
+  // const isAuction = Number(nft?.bidDuration) > 0
+  // const askOrder = useGetOrder(nft?.collection?.id, nft?.tokenId)?.data as any
+  // const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
+  // const diff = Math.max(
+  //   differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {
+  //     roundingMethod: 'ceil',
+  //   }),
+  //   0,
+  // )
+  // const { days, hours, minutes } = getTimePeriods(diff)
   return (
     <CardBody
       p="8px"
-      style={{ background: isAuction ? 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)' : 'white' }}
+      // style={{ background: isAuction ? 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)' : 'white' }}
     >
       ali
       {/* <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
