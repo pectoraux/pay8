@@ -280,7 +280,7 @@ const EditStage: React.FC<any> = ({
         const args = [
           state.tokenId?.split(' ')?.join('-')?.trim(),
           currentAskPrice.toString(),
-          state.bidDuration,
+          parseInt(state.bidDuration) * 60,
           parseInt(state.minBidIncrementPercentage) * 100,
           !!state.transferrable,
           !!state.requireUpfrontPayment,
@@ -363,7 +363,7 @@ const EditStage: React.FC<any> = ({
         return callWithGasPrice(marketOrdersContract, 'createAskOrder', [
           state.tokenId?.split(' ')?.join('-')?.trim(),
           currentAskPrice.toString(),
-          state.bidDuration,
+          parseInt(state.bidDuration) * 60,
           parseInt(state.minBidIncrementPercentage) * 100,
           !!state.transferrable,
           !!state.requireUpfrontPayment,
