@@ -54,6 +54,7 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
           </MetaRow>
         )}
       </Box>
+      {isDrop && (days || hours || minutes) ? <></> : null}
     </CardBody>
   )
 }
