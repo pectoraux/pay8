@@ -28,7 +28,6 @@ import {
   getPricePerMinute,
   getPaywallPricePerMinute,
   getEstimateVotes,
-  getAskOrder,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -53,14 +52,6 @@ export const useGetTransactions = (userAddress) => {
 export const useGetProfileId = (account: string) => {
   const { chainId } = useActiveChainId()
   const { data, status } = useSWR(['profileId', account, chainId], async () => getProfile(account, chainId))
-  return { data, status }
-}
-
-export const useGetOrder = (collectionId, tokenId) => {
-  const { chainId } = useActiveChainId()
-  const { data, status } = useSWR(['getOrder', collectionId, tokenId, chainId], async () =>
-    getAskOrder(collectionId, tokenId, chainId),
-  )
   return { data, status }
 }
 

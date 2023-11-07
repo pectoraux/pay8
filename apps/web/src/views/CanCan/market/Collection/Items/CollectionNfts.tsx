@@ -94,6 +94,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   if (isFetchingNfts) {
     return <GridPlaceholder />
   }
+
   return (
     <>
       <Flex p="16px">
@@ -179,7 +180,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
               } ${t('Result(s)')}`}
               mb="32px"
             >
-              <Content owner={collection.owner} referrerFee={collection?.referrerFee} registration={currentPartner} />
+              <Content owner={collection.owner} registration={currentPartner} />
             </CollapsibleCard>
           ) : null}
           <Grid mb="64px" gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}>
@@ -288,9 +289,9 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   )
 }
 
-const Content: React.FC<any> = ({ referrerFee, owner, registration }) => {
+const Content: React.FC<any> = ({ owner, registration }) => {
   const { t } = useTranslation()
-  const [onPresentAddReferral] = useModal(<AddReferralModal referrerFee={referrerFee} registration={registration} />)
+  const [onPresentAddReferral] = useModal(<AddReferralModal registration={registration} />)
   const [onPresentCloseReferral] = useModal(<CloseReferralModal registration={registration} />)
 
   return registration.mirrors?.length > 0 ? (

@@ -47,7 +47,7 @@ interface FormState {
   gameName: string
 }
 
-const PartnerModal: React.FC<any> = ({ registration, referrerFee, onDismiss }) => {
+const PartnerModal: React.FC<any> = ({ registration, onConfirm, onDismiss }) => {
   const [state, setState] = useState<any>(() => ({
     bountyId: registration?.bountyId ?? '0',
     productId: '',
@@ -127,7 +127,7 @@ const PartnerModal: React.FC<any> = ({ registration, referrerFee, onDismiss }) =
   const TooltipComponent = () => (
     <Text>
       {t(
-        "This is the percentage of each sale you make through this channel that you are willing to share with the owner of the channel. It has to be equal or higher than the channel's minimum referrer fee or this function will fail to run. The minimum referrer fee is available at the top of this form next to the title",
+        "This is the percentage of each sale you make through this channel that you are willing to share with the owner of the channel. It has to be higher than the channel's minimum referrer fee or you risk being delisted as a partner by a channel admin.",
       )}
     </Text>
   )
@@ -198,7 +198,7 @@ const PartnerModal: React.FC<any> = ({ registration, referrerFee, onDismiss }) =
   })
 
   return (
-    <Modal title={t('Add Item to Wall | Minimum Fee: %val%%', { val: referrerFee ?? '0' })} onDismiss={onDismiss}>
+    <Modal title={t('Add Item to Wall')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -269,8 +269,8 @@ const PartnerModal: React.FC<any> = ({ registration, referrerFee, onDismiss }) =
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef5} paddingRight="50px">
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+          <Flex ref={targetRef5}>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
               {t('Is this a Paywall?')}
             </Text>
             {tooltipVisible5 && tooltip5}

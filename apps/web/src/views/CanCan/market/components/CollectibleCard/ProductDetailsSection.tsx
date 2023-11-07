@@ -42,9 +42,7 @@ const ProductDetailsSection: React.FC<ExpandableSectionProps> = ({ paywall }) =>
   const dropInDatePassed = Number(paywall?.dropinTimer ?? 0) < Date.now()
 
   return (
-    <ExpandingWrapper
-      style={{ background: isAuction ? 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)' : 'white' }}
-    >
+    <ExpandingWrapper>
       <ExpandableSectionButton
         key={paywall.collectionAddress + paywall.tokenId}
         onClick={() => setShowExpandableSection(!showExpandableSection)}
