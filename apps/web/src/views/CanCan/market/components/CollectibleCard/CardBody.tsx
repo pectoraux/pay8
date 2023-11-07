@@ -1,11 +1,14 @@
 import { Box, CardBody, Flex, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
+import { useGetOrder } from 'state/cancan/hooks'
+import { useWorkspaceCurrency } from 'hooks/Tokens'
+
 import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
-import { useWorkspaceCurrency } from 'hooks/Tokens'
+import Timer from '../../Collection/IndividualNFTPage/OneOfAKindNftPage/Timer'
 
 export const getTitle = (title) => {
   return title?.replaceAll('-', ' ')?.trim() ?? ''
