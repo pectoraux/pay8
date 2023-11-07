@@ -12,7 +12,6 @@ import {
   ChevronLeftIcon,
   NextLinkFromReactRouter,
   LinkExternal,
-  Heading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 
@@ -28,12 +27,6 @@ import Countdown from 'views/Lottery/components/Countdown'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
 import RichTextEditor from 'components/RichText'
-import { useState } from 'react'
-import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
-import { useGetOrder } from 'state/cancan/hooks'
-import { differenceInSeconds } from 'date-fns'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-
 import MarketPageTitle from '../../../components/MarketPageTitle'
 import StatBox, { StatBoxItem } from '../../../components/StatBox'
 import BuyModal from '../../../components/BuySellModals/BuyModal'
@@ -42,7 +35,8 @@ import { cancanBaseUrl } from '../../../constants'
 import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
 import { getThumbnailNContent } from 'utils/cancan'
-import Timer from './Timer'
+import { useState } from 'react'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface MainNFTCardProps {
   nft: NftToken
@@ -58,16 +52,11 @@ const BackLink = styled(NextLinkFromReactRouter)`
   font-weight: 600;
 `
 
-const StyledTimerText = styled(Heading)`
-  background: ${({ theme }) => theme.colors.gradientGold};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-`
-
 const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic, onSuccess }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const isAuction = Number(nft?.bidDuration) > 0
+  const dropInDatePassed = Number(nft?.dropinTimer) < Date.now()
   const collectionId = useRouter().query.collectionAddress as string
   const isPaywall = useRouter().pathname.includes('[collectionAddress]/paywall')
   // const currentAskPriceAsNumber = nft?.currentAskPrice ? parseFloat(nft?.currentAskPrice) : 0
@@ -84,37 +73,8 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
   const contactChannels = collection?.contactChannels?.split(',') ?? []
   const contacts = collection?.contacts?.split(',') ?? []
   const { itemColor, textColor } = useColor(nft?.superLikes ?? '0', nft?.superDisLikes ?? '0')
-  const askOrder = useGetOrder(nft?.collection?.id, nft?.tokenId)?.data as any
-  const bidEndTime = parseInt(askOrder?.lastBidTime?.toString() ?? 0) + parseInt(askOrder?.bidDuration?.toString() ?? 0)
-  const bidPrice = !parseInt(askOrder?.lastBidTime?.toString() ?? 0)
-    ? currentAskPriceAsNumber
-    : currentAskPriceAsNumber +
-      (parseInt(askOrder?.minBidIncrementPercentage?.toString()) * currentAskPriceAsNumber) / 10000
-  const diff = Math.max(
-    differenceInSeconds(new Date(bidEndTime * 1000 ?? 0), new Date(), {
-      roundingMethod: 'ceil',
-    }),
-    0,
-  )
-  const { days, hours, minutes } = getTimePeriods(diff)
-
-  const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
-  const diff2 = Math.max(
-    differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {
-      roundingMethod: 'ceil',
-    }),
-    0,
-  )
-  const { days: days2, hours: hours2, minutes: minutes2 } = getTimePeriods(diff2)
-  const dropInDatePassed = !(days2 || hours2 || minutes2)
-
   const [onPresentBuyModal] = useModal(
-    <BuyModal
-      setBought={setBought}
-      bidPrice={isAuction ? bidPrice : 0}
-      variant={isPaywall ? 'paywall' : 'item'}
-      nftToBuy={nft}
-    />,
+    <BuyModal setBought={setBought} variant={isPaywall ? 'paywall' : 'item'} nftToBuy={nft} />,
   )
   const [onPresentSellModal] = useModal(
     <SellModal variant={isPaywall ? 'paywall' : 'item'} nftToSell={nft} onSuccessSale={onSuccess} />,
@@ -129,7 +89,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
         mt="24px"
         onClick={onPresentSellModal}
       >
-        {nft?.isTradable ? t('Adjust Settings') : t('List for sale')}
+        {nft?.isTradable ? t('Adjust settings') : t('List for sale')}
       </Button>
     </Flex>
   )
@@ -217,27 +177,15 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                         onClick={onPresentBuyModal}
                       >
                         {isAuction
-                          ? t('Bid %bidPrice%', { bidPrice })
+                          ? t('Bid')
                           : !dropInDatePassed
                           ? t('Drop Pending')
                           : isArticle
                           ? t('Tip Writer')
                           : t('Buy')}
                       </Button>
-                      {isAuction && parseInt(askOrder?.lastBidTime?.toString() ?? 0) && diff ? (
-                        <>
-                          <Timer minutes={minutes} hours={hours} days={days} />{' '}
-                          <StyledTimerText pt="30px">{t('until last bidder wins')}</StyledTimerText>
-                        </>
-                      ) : null}
-                      {isDrop && (days2 || hours2 || minutes2) ? (
-                        <>
-                          <StyledTimerText pt="20px" pr="10px">
-                            {t('Drops in ')}
-                          </StyledTimerText>
-                          <Timer minutes={minutes2} hours={hours2} days={days2} />
-                        </>
-                      ) : null}
+                      {isAuction && <Countdown nextEventTime={Number(nft?.firstBidTime) + Number(nft?.bidDuration)} />}
+                      {!dropInDatePassed && <Countdown nextEventTime={Number(nft?.dropinTimer)} />}
                     </Flex>
                   )}
                 </Flex>
@@ -252,14 +200,14 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                   />
                 ) : null}
               </Flex>
-              {bought && !isAuction ? (
+              {bought && (
                 <Flex flexDirection="column" mt="50px">
                   <LinkExternal href="https://paychat.payswap.org" bold textTransform="uppercase">
                     {t('Notify Seller On PayChat or elsewhere!')}
                   </LinkExternal>
                   <Contacts contactChannels={contactChannels} contacts={contacts} />
                 </Flex>
-              ) : null}
+              )}
             </Box>
           </Flex>
           {!isArticle ? (
@@ -295,7 +243,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
             {!isMobile && (
               <StatBoxItem
                 variant={textColor}
-                title={t('Dislikes')}
+                title={t('DisLikes')}
                 stat={nft?.dislikes ? formatNumber(Number(nft?.dislikes), 0, 0) : '0'}
               />
             )}
