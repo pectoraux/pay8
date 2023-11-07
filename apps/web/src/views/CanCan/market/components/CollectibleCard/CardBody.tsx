@@ -8,7 +8,6 @@ import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
-import Timer from '../../Collection/IndividualNFTPage/OneOfAKindNftPage/Timer'
 
 export const getTitle = (title) => {
   return title?.replaceAll('-', ' ')?.trim() ?? ''
