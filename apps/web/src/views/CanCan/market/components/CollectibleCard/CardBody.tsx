@@ -20,6 +20,9 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
   const { tokenId: name } = nft
   const bnbBusdPrice = useBNBBusdPrice()
   const { mainCurrency } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
+  const isAuction = Number(nft?.bidDuration) > 0
+  const askOrder = useGetOrder(nft?.collection?.id, nft?.tokenId)?.data as any
+  const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
   return (
     <CardBody p="8px">
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
