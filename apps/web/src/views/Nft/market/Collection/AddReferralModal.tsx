@@ -45,7 +45,7 @@ interface FormState {
   gameName: string
 }
 
-const PartnerModal: React.FC<any> = ({ referrerFee, registration, handleRawValueChange, onDismiss }) => {
+const PartnerModal: React.FC<any> = ({ registration, handleRawValueChange, onDismiss }) => {
   const [state, setState] = useState<any>(() => ({
     bountyId: registration?.bountyId ?? '0',
     productId: '',
@@ -120,7 +120,7 @@ const PartnerModal: React.FC<any> = ({ referrerFee, registration, handleRawValue
   ])
 
   return (
-    <Modal title={t('Add Item to Wall | Minimum Fee: %val%%', { val: referrerFee ?? '0' })} onDismiss={onDismiss}>
+    <Modal title={t('Add Item to Wall')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Product ID')}
