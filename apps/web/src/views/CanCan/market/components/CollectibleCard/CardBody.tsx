@@ -29,9 +29,12 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
     }),
     0,
   )
-  const { days, hours, minutes } = getTimePeriods(Number(diff ?? 0))
+  const { days, hours, minutes } = getTimePeriods(diff ?? 0)
   return (
-    <CardBody p="8px">
+    <CardBody
+      p="8px"
+      style={{ background: isAuction ? 'linear-gradient(111.68deg, #F2ECF2 0%, #E8F2F6 100%)' : 'white' }}
+    >
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
       <Flex alignItems="center" justifyContent="space-between">
         {nft?.tokenId && (
