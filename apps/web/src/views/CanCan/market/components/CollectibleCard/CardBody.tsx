@@ -23,6 +23,13 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
   const isAuction = Number(nft?.bidDuration) > 0
   const askOrder = useGetOrder(nft?.collection?.id, nft?.tokenId)?.data as any
   const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
+  const diff = Math.max(
+    differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {
+      roundingMethod: 'ceil',
+    }),
+    0,
+  )
+  const { days, hours, minutes } = getTimePeriods(diff)
   return (
     <CardBody p="8px">
       <NFTMedia as={PreviewImage} nft={nft} height={320} width={320} mb="8px" borderRadius="8px" />
