@@ -243,7 +243,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
             {!isMobile && (
               <StatBoxItem
                 variant={textColor}
-                title={t('DisLikes')}
+                title={t('Dislikes')}
                 stat={nft?.dislikes ? formatNumber(Number(nft?.dislikes), 0, 0) : '0'}
               />
             )}
