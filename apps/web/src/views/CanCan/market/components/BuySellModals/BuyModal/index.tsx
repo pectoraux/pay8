@@ -64,7 +64,7 @@ interface BuyModalProps extends InjectedModalProps {
 // NFT WBNB in testnet contract is different
 const TESTNET_WBNB_NFT_ADDRESS = '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
-const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought = noop, onDismiss }) => {
+const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBought = noop, onDismiss }) => {
   const referrer = useRouter().query.referrer as string
   const collectionId = useRouter().query.collectionAddress as string
   const [stage, setStage] = useState(variant === 'paywall' ? BuyingStage.PAYWALL_REVIEW : BuyingStage.REVIEW)
@@ -166,20 +166,30 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought = noop,
     onRequiresApproval: () => {
       if (paymentCurrency === 2) return true
       return needsApproval || needsApproval2 || needsApproval3
-      // return paymentCurrency === 2
-      //   ? true
-      //   : requiresApproval(bnbContractReader, account, callContract.address) ||
-      //       requiresApproval(bnbContractReader, account, stakeMarketContract.address)
-      // requiresApproval(bnbContractReader, account, helperContract.address) ||
     },
     // eslint-disable-next-line consistent-return
-    onApprove: () => {
+    onApprove: async () => {
       if (paymentCurrency === PaymentCurrency.BNB) {
-        return callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256])
+        if (bidPrice) {
+          return callWithGasPrice(bnbContractApprover, 'approve', [helperContract.address, MaxUint256]).then(() =>
+            refetch3(),
+          )
+        }
+        return callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256]).then(() =>
+          refetch(),
+        )
       }
       if (paymentCurrency === PaymentCurrency.WBNB) {
-        return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256])
+        return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256]).then(() =>
+          refetch2(),
+        )
       }
+      // if (paymentCurrency === PaymentCurrency.BNB) {
+      //   return callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256])
+      // }
+      // if (paymentCurrency === PaymentCurrency.WBNB) {
+      //   return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256])
+      // }
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
