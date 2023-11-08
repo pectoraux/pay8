@@ -184,12 +184,6 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           refetch2(),
         )
       }
-      // if (paymentCurrency === PaymentCurrency.BNB) {
-      //   return callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256])
-      // }
-      // if (paymentCurrency === PaymentCurrency.WBNB) {
-      //   return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256])
-      // }
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
