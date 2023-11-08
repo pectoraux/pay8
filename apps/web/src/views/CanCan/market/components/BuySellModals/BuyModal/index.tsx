@@ -146,6 +146,22 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought = noop,
   // BNB - returns ethers.BigNumber
   const stakeMarketContract = useStakeMarketContract()
 
+  const { isRequired: needsApproval, refetch } = useGetRequiresApproval(
+    bnbContractReader,
+    account,
+    callContract.address,
+  )
+  const { isRequired: needsApproval2, refetch: refetch2 } = useGetRequiresApproval(
+    bnbContractReader,
+    account,
+    stakeMarketContract.address,
+  )
+  const { isRequired: needsApproval3, refetch: refetch3 } = useGetRequiresApproval(
+    bnbContractReader,
+    account,
+    helperContract.address,
+  )
+
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
       return paymentCurrency === 2
