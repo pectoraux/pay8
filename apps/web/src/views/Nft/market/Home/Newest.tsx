@@ -37,7 +37,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
           <Heading data-test="nfts-newest">{t('Newest Arrivals')}</Heading>
           <Button
             as={NextLinkFromReactRouter}
-            to={`${nftsBaseUrl}/activity/`}
+            to={`${nftsBaseUrl}/collections/`}
             variant="secondary"
             scale="sm"
             endIcon={<ChevronRightIcon color="primary" />}
