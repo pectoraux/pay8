@@ -85,7 +85,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     nftToBuy?.ve?.toLowerCase(),
     nftToBuy?.tFIAT,
     nftToBuy?.usetFIAT,
-    nftToBuy?.currentAskPrice,
+    bidPrice ?? nftToBuy?.currentAskPrice,
   )
   const inputCurrency = mainCurrency?.address
   const bnbContractReader = useERC20(inputCurrency ?? '')
@@ -96,12 +96,12 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
   const callContract = variant === 'paywall' ? paywallMarketTradesContract : marketContract
   const helperContract = variant === 'paywall' ? paywallMarketHelperContract : marketHelperContract
-  const p = getDecimalAmount(nftToBuy?.currentAskPrice, 18)
+  const p = getDecimalAmount(bidPrice ?? nftToBuy?.currentAskPrice, 18)
   const { toastSuccess } = useToast()
   const nftFilters = useGetNftFilters(account)
   const [recipient, setRecipient] = useState<string>('')
   const [tokenId2, setTokenId2] = useState<string>('')
-  const nftPrice = parseFloat(nftToBuy?.currentAskPrice)
+  const nftPrice = parseFloat(bidPrice ?? nftToBuy?.currentAskPrice)
   const paymentCredits = useGetPaymentCredits(nftToBuy?.collection?.id, nftToBuy?.tokenId, account) as any
   const valuepoolContract = useValuepoolContract(recipient)
   const valuepoolHelperContract = useValuepoolHelperContract()
@@ -163,7 +163,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   )
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
-    onRequiresApproval: () => {
+    onRequiresApproval: async () => {
       if (paymentCurrency === 2) return true
       return needsApproval || needsApproval2 || needsApproval3
     },
@@ -179,11 +179,9 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           refetch(),
         )
       }
-      if (paymentCurrency === PaymentCurrency.WBNB) {
-        return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256]).then(() =>
-          refetch2(),
-        )
-      }
+      return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256]).then(() =>
+        refetch2(),
+      )
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
