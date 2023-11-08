@@ -163,11 +163,13 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, setBought = noop,
   )
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
-    onRequiresApproval: async () => {
-      return paymentCurrency === 2
-        ? true
-        : requiresApproval(bnbContractReader, account, callContract.address) ||
-            requiresApproval(bnbContractReader, account, stakeMarketContract.address)
+    onRequiresApproval: () => {
+      if (paymentCurrency === 2) return true
+      return needsApproval || needsApproval2 || needsApproval3
+      // return paymentCurrency === 2
+      //   ? true
+      //   : requiresApproval(bnbContractReader, account, callContract.address) ||
+      //       requiresApproval(bnbContractReader, account, stakeMarketContract.address)
       // requiresApproval(bnbContractReader, account, helperContract.address) ||
     },
     // eslint-disable-next-line consistent-return
