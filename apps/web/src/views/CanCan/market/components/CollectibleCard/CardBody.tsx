@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import Timer from './Timer'
 import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
+import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
 
 const StyledTimerText = styled(Heading)`
@@ -22,7 +23,7 @@ export const getTitle = (title) => {
   return title?.replaceAll('-', ' ')?.trim() ?? ''
 }
 
-const CollectibleCardBody: React.FC<any> = ({ nft, currentAskPrice, isUserNft }) => {
+const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice, isUserNft }) => {
   const { t } = useTranslation()
   const { tokenId: name } = nft
   const bnbBusdPrice = useBNBBusdPrice()
@@ -49,6 +50,7 @@ const CollectibleCardBody: React.FC<any> = ({ nft, currentAskPrice, isUserNft })
             {nft?.tokenId}
           </Text>
         )}
+        {nftLocation && <LocationTag nftLocation={nftLocation} />}
       </Flex>
       <Text as="h4" fontWeight="600" mb="8px">
         {getTitle(name)}
