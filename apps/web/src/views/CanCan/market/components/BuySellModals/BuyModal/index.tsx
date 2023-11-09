@@ -37,11 +37,17 @@ import { PaymentCurrency, BuyingStage } from './types'
 import TransactionConfirmed from '../shared/TransactionConfirmed'
 import PaymentCreditStage from './PaymentCreditStage'
 import CashbackStage from './CashbackStage'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { fantomTestnet } from 'viem/chains'
+import { privateKeyToAccount } from 'viem/accounts'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
 import { noop } from 'lodash'
 import { useGetRequiresApproval } from 'state/valuepools/hooks'
+import { getMarketEventsContract } from 'utils/contractHelpers'
+import { marketEventsABI } from 'config/abi/marketEvents'
+import { getMarketEventsAddress } from 'utils/addressHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
@@ -72,6 +78,8 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const [tokenId, setTokenId] = useState<any>(0)
   const [credit, setCredit] = useState<any>(0)
   const [userTokenId, setUserTokenId] = useState(0)
+  const [address, setAddress] = useState('')
+  const [note, setNote] = useState('')
   const [identityTokenId, setIdentityTokenId] = useState(0)
   const [merchantIdentityTokenId, setMerchantIdentityTokenId] = useState(0)
   const [requireUpfrontPayment, setRequireUpfrontPayment] = useState(0)
@@ -85,7 +93,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     nftToBuy?.ve?.toLowerCase(),
     nftToBuy?.tFIAT,
     nftToBuy?.usetFIAT,
-    bidPrice ?? nftToBuy?.currentAskPrice,
+    bidPrice ? bidPrice : nftToBuy?.currentAskPrice,
   )
   const inputCurrency = mainCurrency?.address
   const bnbContractReader = useERC20(inputCurrency ?? '')
@@ -96,12 +104,12 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
   const callContract = variant === 'paywall' ? paywallMarketTradesContract : marketContract
   const helperContract = variant === 'paywall' ? paywallMarketHelperContract : marketHelperContract
-  const p = getDecimalAmount(bidPrice ?? nftToBuy?.currentAskPrice, 18)
+  const p = getDecimalAmount(bidPrice ? bidPrice : nftToBuy?.currentAskPrice, 18)
   const { toastSuccess } = useToast()
   const nftFilters = useGetNftFilters(account)
   const [recipient, setRecipient] = useState<string>('')
   const [tokenId2, setTokenId2] = useState<string>('')
-  const nftPrice = parseFloat(bidPrice ?? nftToBuy?.currentAskPrice)
+  const nftPrice = parseFloat(bidPrice ? bidPrice : nftToBuy?.currentAskPrice)
   const paymentCredits = useGetPaymentCredits(nftToBuy?.collection?.id, nftToBuy?.tokenId, account) as any
   const valuepoolContract = useValuepoolContract(recipient)
   const valuepoolHelperContract = useValuepoolHelperContract()
@@ -190,7 +198,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
       )
     },
     // eslint-disable-next-line consistent-return
-    onConfirm: () => {
+    onConfirm: async () => {
       if (stage === BuyingStage.CONFIRM_CASHBACK) {
         const args = [nftToBuy?.currentSeller, nftToBuy.tokenId, !!credit, tokenId2]
         console.log('CONFIRM_CASHBACK================>', args)
@@ -199,6 +207,37 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
         )
       }
       if (paymentCurrency === PaymentCurrency.BNB) {
+        const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+        const client = createPublicClient({
+          chain: fantomTestnet,
+          transport: http(),
+        })
+        const walletClient = createWalletClient({
+          chain: fantomTestnet,
+          transport: custom(window.ethereum),
+        })
+        const { request } = await client.simulateContract({
+          account: adminAccount,
+          address: getMarketEventsAddress(),
+          abi: marketEventsABI,
+          functionName: 'emitUpdateMiscellaneous',
+          args: [BigInt(10), BigInt(collectionId), address, note, BigInt(0), BigInt(0), account, ''],
+        })
+        await walletClient
+          .writeContract(request)
+          .catch((err) =>
+            console.log('BNBmisc================>', err, [
+              BigInt(10),
+              BigInt(collectionId),
+              address,
+              note,
+              BigInt(0),
+              BigInt(0),
+              account,
+              '',
+            ]),
+          )
+
         console.log('BNB================>', [
           nftToBuy?.currentSeller,
           account,
@@ -216,7 +255,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           userTokenId,
           identityTokenId,
           userOptions,
-        ]).catch((err) => console.log('BNB================>', err))
+        ])
       }
       if (paymentCurrency === PaymentCurrency.WBNB) {
         // [amountPayable,amountReceivable,periodPayable,periodReceivable,waitingPeriod,startPayable,startReceivable]
@@ -342,6 +381,10 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           checkRank={checkRank}
           userTokenId={userTokenId}
           setUserTokenId={setUserTokenId}
+          address={address}
+          setAddress={setAddress}
+          note={note}
+          setNote={setNote}
           identityTokenId={identityTokenId}
           setIdentityTokenId={setIdentityTokenId}
           merchantIdentityTokenId={merchantIdentityTokenId}

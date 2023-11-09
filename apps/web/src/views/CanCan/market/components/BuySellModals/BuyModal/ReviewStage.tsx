@@ -100,7 +100,11 @@ const ReviewStage: React.FC<any> = ({
   setRequireUpfrontPayment,
   setCheckRank,
   merchantIdentityTokenId,
+  note,
+  address,
   setMerchantIdentityTokenId,
+  setNote,
+  setAddress,
   setUserTokenId,
   setIdentityTokenId,
   continueToNextStage,
@@ -184,6 +188,16 @@ const ReviewStage: React.FC<any> = ({
       )}
     </Text>
   )
+  const TooltipComponent8 = () => (
+    <Text>{t('Use this field to add any extra note you would like to send to the seller.')}</Text>
+  )
+  const TooltipComponent9 = () => (
+    <Text>
+      {t(
+        'Use this field to add an address if relevant. This field can be useful for items that need to be shipped or delivered.',
+      )}
+    </Text>
+  )
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -234,6 +248,22 @@ const ReviewStage: React.FC<any> = ({
     tooltip: tooltip7,
     tooltipVisible: tooltipVisible7,
   } = useTooltip(<TooltipComponent7 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef8,
+    tooltip: tooltip8,
+    tooltipVisible: tooltipVisible8,
+  } = useTooltip(<TooltipComponent8 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef9,
+    tooltip: tooltip9,
+    tooltipVisible: tooltipVisible9,
+  } = useTooltip(<TooltipComponent9 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
@@ -537,6 +567,40 @@ const ReviewStage: React.FC<any> = ({
                 />
               </GreyedOutContainer>
             ) : null}
+          </StyledBorderedBox>
+          <StyledBorderedBox>
+            <GreyedOutContainer>
+              <Flex ref={targetRef8}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Note')}
+                </Text>
+                {tooltipVisible8 && tooltip8}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
+              <Input
+                type="text"
+                scale="lg"
+                value={note}
+                placeholder={t('pass any note to the seller')}
+                onChange={(e) => setNote(e.target.value)}
+              />
+            </GreyedOutContainer>
+            <GreyedOutContainer>
+              <Flex ref={targetRef9}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Address Info')}
+                </Text>
+                {tooltipVisible9 && tooltip9}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
+              <Input
+                type="text"
+                scale="lg"
+                value={address}
+                placeholder={t('input your address information')}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </GreyedOutContainer>
           </StyledBorderedBox>
         </Flex>
         <Flex alignItems="center">
