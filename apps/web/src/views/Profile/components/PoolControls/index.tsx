@@ -8,7 +8,7 @@ import { useInitialBlockTimestamp } from 'state/block/hooks'
 const POOL_START_THRESHOLD = 60 * 4
 
 export default function PoolControlsContainer(props) {
-  const [mineOnly, setMineOnly] = useState(false)
+  const [stakedOnly, setStakedOnly] = useState(false)
   const [followingOnly, setFollowingOnly] = useState(false)
   const [followersOnly, setFollowersOnly] = useState(false)
   const [viewMode, setViewMode] = useUserPoolsViewMode()
@@ -19,8 +19,8 @@ export default function PoolControlsContainer(props) {
   return (
     <Profile.PoolControls<Token>
       {...props}
-      mineOnly={mineOnly}
-      setMineOnly={setMineOnly}
+      stakedOnly={stakedOnly}
+      setStakedOnly={setStakedOnly}
       followingOnly={followingOnly}
       followersOnly={followersOnly}
       setFollowersOnly={setFollowersOnly}
