@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Heading, Flex, Button, Grid, ChevronRightIcon, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { getLatestListedItems } from 'state/cancan/helpers'
-import { nftsBaseUrl } from 'views/CanCan/market/constants'
+import { cancanBaseUrl, nftsBaseUrl } from 'views/CanCan/market/constants'
 import { isAddress } from 'utils'
 
 import { CollectibleLinkCard } from '../components/CollectibleCard'
@@ -41,7 +41,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
           <Heading data-test="nfts-newest">{t('Newest Arrivals')}</Heading>
           <Button
             as={NextLinkFromReactRouter}
-            to={`${nftsBaseUrl}/activity/`}
+            to={`${cancanBaseUrl}/collections/`}
             variant="secondary"
             scale="sm"
             endIcon={<ChevronRightIcon color="primary" />}
@@ -52,9 +52,9 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
       ) : null}
       {nfts ? (
         <Grid
-          gridRowGap="24px"
-          gridColumnGap="16px"
-          gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
+          gridGap="16px"
+          gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
+          alignItems="start"
         >
           {nfts.map((nft) => {
             const currentAskPrice = nft?.isTradable ? parseFloat(nft?.currentAskPrice) : undefined

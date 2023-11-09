@@ -29,6 +29,8 @@ import { setCurrPoolData } from 'state/cards'
 
 import WebPagesModal from './WebPagesModal'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { getCardAddress } from 'utils/addressHelpers'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -55,17 +57,17 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
+      {pool?.owner && pool?.owner !== ADDRESS_ZERO ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
-          </ScanLink>
+          <LinkExternal href={`/profile/${pool?.owner}`} bold={false} small>
+            {t('Open Profile Page')}
+          </LinkExternal>
         </Flex>
-      )}
+      ) : null}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
-          {t('See Admin Channel')}
-        </LinkExternal>
+        <ScanLink href={getBlockExploreLink(getCardAddress(), 'address', chainId)} bold={false} small>
+          {t('View PayCard Contract')}
+        </ScanLink>
       </Flex>
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

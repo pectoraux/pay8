@@ -51,8 +51,8 @@ const Wrapper = styled.div`
 `;
 
 interface PoolTableButtonsPropsType {
-  mineOnly: boolean;
-  setMineOnly: (s: boolean) => void;
+  stakedOnly: boolean;
+  setStakedOnly: (s: boolean) => void;
   followersOnly: boolean;
   followingOnly: boolean;
   account: string;
@@ -64,9 +64,9 @@ interface PoolTableButtonsPropsType {
 }
 
 const PoolTabButtons = ({
-  mineOnly,
+  stakedOnly,
   account,
-  setMineOnly,
+  setStakedOnly,
   followingOnly,
   followersOnly,
   setFollowersOnly,
@@ -96,7 +96,7 @@ const PoolTabButtons = ({
 
   const mineOnlySwitch = (
     <ToggleWrapper>
-      <Toggle checked={mineOnly} onChange={() => setMineOnly(!mineOnly)} scale="sm" />
+      <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
       <Text> {t("Mine Only")}</Text>
     </ToggleWrapper>
   );

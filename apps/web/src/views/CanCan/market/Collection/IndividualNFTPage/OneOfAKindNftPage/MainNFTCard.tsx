@@ -96,7 +96,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     }),
     0,
   )
-  const { days, hours, minutes } = getTimePeriods(diff)
+  const { days, hours, minutes } = getTimePeriods(diff ?? 0)
 
   const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
   const diff2 = Math.max(
@@ -105,7 +105,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     }),
     0,
   )
-  const { days: days2, hours: hours2, minutes: minutes2 } = getTimePeriods(diff2)
+  const { days: days2, hours: hours2, minutes: minutes2 } = getTimePeriods(diff2 ?? 0)
   const dropInDatePassed = !(days2 || hours2 || minutes2)
 
   const [onPresentBuyModal] = useModal(
