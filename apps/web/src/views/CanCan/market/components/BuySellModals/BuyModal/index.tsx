@@ -163,7 +163,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   )
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
-    onRequiresApproval: () => {
+    onRequiresApproval: async () => {
       if (paymentCurrency === 2) return true
       return needsApproval || needsApproval2 || needsApproval3
     },

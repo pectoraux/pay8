@@ -97,47 +97,51 @@ export const fetchCard = async (ownerAddress, chainId) => {
 
 export const fetchCards = async ({ fromCard, chainId }) => {
   const fromGraph = await getCards(0, 0, {})
-  const cards = await Promise.all(
-    fromGraph
-      ?.map(async (card, index) => {
-        const bscClient = publicClient({ chainId: chainId })
-        const balances = await Promise.all(
-          card?.balances?.map(async (tk) => {
-            const [name, decimals, symbol] = await bscClient.multicall({
-              allowFailure: true,
-              contracts: [
-                {
-                  address: tk.tokenAddress,
-                  abi: erc20ABI,
-                  functionName: 'name',
-                },
-                {
-                  address: tk.tokenAddress,
-                  abi: erc20ABI,
-                  functionName: 'decimals',
-                },
-                {
-                  address: tk.tokenAddress,
-                  abi: erc20ABI,
-                  functionName: 'symbol',
-                },
-              ],
-            })
-            return {
-              ...tk,
-              name: name?.result?.toString(),
-              symbol: symbol?.result?.toString()?.toUpperCase(),
-              decimals: decimals.result,
-            }
-          }),
-        )
-        return {
-          sousId: index,
-          ...card,
-          balances,
-        }
-      })
-      .flat(),
-  )
-  return cards
+  try {
+    const cards = await Promise.all(
+      fromGraph
+        ?.map(async (card, index) => {
+          const bscClient = publicClient({ chainId: chainId })
+          const balances = await Promise.all(
+            card?.balances?.map(async (tk) => {
+              const [name, decimals, symbol] = await bscClient.multicall({
+                allowFailure: true,
+                contracts: [
+                  {
+                    address: tk.tokenAddress,
+                    abi: erc20ABI,
+                    functionName: 'name',
+                  },
+                  {
+                    address: tk.tokenAddress,
+                    abi: erc20ABI,
+                    functionName: 'decimals',
+                  },
+                  {
+                    address: tk.tokenAddress,
+                    abi: erc20ABI,
+                    functionName: 'symbol',
+                  },
+                ],
+              })
+              return {
+                ...tk,
+                name: name?.result?.toString(),
+                symbol: symbol?.result?.toString()?.toUpperCase(),
+                decimals: decimals.result,
+              }
+            }),
+          )
+          return {
+            sousId: index,
+            ...card,
+            balances,
+          }
+        })
+        .flat(),
+    )
+    return cards
+  } catch (err) {
+    console.log('fetchCards err========================>', err)
+  }
 }

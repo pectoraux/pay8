@@ -146,17 +146,14 @@ const ProfileHeader: React.FC<any> = ({
       if (!sharedEmail) {
         return (
           <ReactRouterLink to="/ssi/proposal/createAutomaticData">
-            <Button mt="16px">{t('Verify Your Email')}</Button>
+            <Button disabled={!isProfileLoading && !isValidating} mt="16px">
+              {t('Verify Your Email')}
+            </Button>
           </ReactRouterLink>
         )
       }
-      if (profile) {
-        return (
-          <Button width="fit-content" mt="16px" onClick={openPresentCreateProfile}>
-            {t('Create Profile')}
-          </Button>
-        )
-      }
+      // if (hasProfile) {
+      // }
       // if (profile && !profile?.accounts?.length) {
       //   return (
       //     <Button width="fit-content" mt="16px" onClick={openPresentAddAccount}>
@@ -170,7 +167,7 @@ const ProfileHeader: React.FC<any> = ({
           //   {t('Create Bounty')}
           // </Button>
           <Flex>
-            <Button p="0" variant="text">
+            <Button p="0" disabled={!isProfileLoading && !isValidating} variant="text">
               <Text color="primary" onClick={onPresentTrustBounties} bold fontSize="16px" mr="4px">
                 {t('Create a Bounty in ')}{' '}
               </Text>
@@ -186,6 +183,16 @@ const ProfileHeader: React.FC<any> = ({
           </Flex>
         )
       }
+      return (
+        <Button
+          width="fit-content"
+          mt="16px"
+          disabled={(!isProfileLoading && !isValidating) || hasProfile}
+          onClick={openPresentCreateProfile}
+        >
+          {t('Create Profile')}
+        </Button>
+      )
     }
 
     return (
@@ -218,7 +225,7 @@ const ProfileHeader: React.FC<any> = ({
             {title}
             {isConnectedAccount && profile?.name ? <Icon ml="4px" onClick={toggleUsername} cursor="pointer" /> : null}
           </Heading>
-          {!isProfileLoading && !isValidating ? description : null}
+          {description}
         </Box>
         <Box>
           <StatBox>
