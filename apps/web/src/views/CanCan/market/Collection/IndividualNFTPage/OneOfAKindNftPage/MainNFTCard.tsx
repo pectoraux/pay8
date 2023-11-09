@@ -70,7 +70,6 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
   const isAuction = Number(nft?.bidDuration) > 0
   const collectionId = useRouter().query.collectionAddress as string
   const isPaywall = useRouter().pathname.includes('[collectionAddress]/paywall')
-  // const currentAskPriceAsNumber = nft?.currentAskPrice ? parseFloat(nft?.currentAskPrice) : 0
   const {
     mainCurrency,
     secondaryCurrency,
