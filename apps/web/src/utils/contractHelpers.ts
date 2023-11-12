@@ -115,6 +115,7 @@ import {
   getRandomNumberGeneratorAddress,
   getLotteryRandomNumberGeneratorAddress,
   getProfileAddress,
+  getNFTSVGAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -220,6 +221,7 @@ import { gaugeABI } from 'config/abi/gauge'
 import { lotteryABI } from 'config/abi/lottery'
 import { lotteryHelperABI } from 'config/abi/lotteryHelper'
 import { lotteryRandomNumberGeneratorABI } from 'config/abi/lotteryRandomNumberGenerator'
+import { nftSVGABI } from 'config/abi/nftSVG'
 import { marketCollectionsABI } from 'config/abi/marketCollections'
 import { marketEventsABI } from 'config/abi/marketEvents'
 import { marketHelperABI } from 'config/abi/marketHelper'
@@ -1467,6 +1469,15 @@ export const getLotteryRandomNumberGeneratorContract = (signer?: WalletClient, c
   return getContract({
     abi: lotteryRandomNumberGeneratorABI,
     address: getLotteryRandomNumberGeneratorAddress(),
+    signer,
+    chainId,
+  })
+}
+
+export const getNFTSVGContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: nftSVGABI,
+    address: getNFTSVGAddress(),
     signer,
     chainId,
   })

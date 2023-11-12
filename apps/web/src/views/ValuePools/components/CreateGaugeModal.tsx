@@ -42,6 +42,7 @@ import UpdateVPStage from './UpdateVPStage'
 import PickRankStage from './PickRankStage'
 import CheckRankStage from './CheckRankStage'
 import UpdateDescriptionStage from './UpdateDescriptionStage'
+import UpdateDescriptionStage2 from './UpdateDescriptionStage2'
 import UpdateMediaStage from './UpdateMediaStage'
 import UpdateTaxContractStage from './UpdateTaxContractStage'
 import UpdateMarketPlaceStage from './UpdateMarketPlaceStage'
@@ -63,6 +64,7 @@ import UpdateVotingBlacklistStage from './UpdateVotingBlacklistStage'
 import LocationStage from './LocationStage'
 import NotifyPaymentStage from './NotifyPaymentStage'
 import SwitchPoolStage from './SwitchPoolStage'
+import { getNFTSVGContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -89,6 +91,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_USER_IDENTITY_PROOFS]: t('Update Users ID Proof'),
   [LockStage.PICK_RANK]: t('Pick Rank'),
   [LockStage.UPDATE_DESCRIPTION]: t('Update Description'),
+  [LockStage.UPDATE_DESCRIPTION2]: t('Update NFT Board'),
   [LockStage.UPDATE_TAX_CONTRACT]: t('Update Tax Contract'),
   [LockStage.UPDATE_MARKETPLACE]: t('Update MarketPlace'),
   [LockStage.UPDATE_TRUSTWORTHY_AUDITORS]: t('Update Trustworthy Auditors'),
@@ -113,6 +116,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_TRUSTWORTHY_AUDITORS]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TAX_CONTRACT]: t('Back'),
   [LockStage.CONFIRM_UPDATE_DESCRIPTION]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_DESCRIPTION2]: t('Back'),
   [LockStage.CONFIRM_PICK_RANK]: t('Back'),
   [LockStage.CONFIRM_EXECUTE_NEXT_PURCHASE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_USER_IDENTITY_PROOFS]: t('Back'),
@@ -303,6 +307,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     updateValue('description', value)
   }
 
+  const handleEasyMdeChange2 = (value: string) => {
+    if (value?.length <= 90) updateValue('description', value)
+  }
+
   const goBack = () => {
     switch (stage) {
       case LockStage.UPDATE_LOCATION:
@@ -391,6 +399,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         break
       case LockStage.CONFIRM_UPDATE_DESCRIPTION:
         setStage(LockStage.UPDATE_DESCRIPTION)
+        break
+      case LockStage.UPDATE_DESCRIPTION2:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_DESCRIPTION2:
+        setStage(LockStage.UPDATE_DESCRIPTION2)
         break
       case LockStage.UPDATE_MARKETPLACE:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -563,6 +577,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         break
       case LockStage.UPDATE_DESCRIPTION:
         setStage(LockStage.CONFIRM_UPDATE_DESCRIPTION)
+        break
+      case LockStage.UPDATE_DESCRIPTION2:
+        setStage(LockStage.CONFIRM_UPDATE_DESCRIPTION2)
         break
       case LockStage.UPDATE_MARKETPLACE:
         setStage(LockStage.CONFIRM_UPDATE_MARKETPLACE)
@@ -876,6 +893,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           console.log('CONFIRM_UPDATE_DESCRIPTION===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_UPDATE_DESCRIPTION2) {
+        const args = [pool?._va, state.description]
+        console.log('CONFIRM_UPDATE_DESCRIPTION===============>', args)
+        return callWithGasPrice(getNFTSVGContract(), 'updateDescription', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_DESCRIPTION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_UPDATE_MARKETPLACE) {
         const args = [state.vava, state.taxAddress]
         console.log('CONFIRM_UPDATE_MARKETPLACE===============>', args)
@@ -1045,6 +1069,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_DESCRIPTION)}>
                 {t('UPDATE DESCRIPTION')}
               </Button>
+              <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_DESCRIPTION2)}>
+                {t('UPDATE NFT BOARD')}
+              </Button>
               <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_MARKETPLACE)}>
                 {t('UPDATE MARKETPLACE')}
               </Button>
@@ -1105,6 +1132,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           state={state}
           handleChange={handleChange}
           handleEasyMdeChange={handleEasyMdeChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_DESCRIPTION2 && (
+        <UpdateDescriptionStage2
+          state={state}
+          handleChange={handleChange}
+          handleEasyMdeChange={handleEasyMdeChange2}
           continueToNextStage={continueToNextStage}
         />
       )}

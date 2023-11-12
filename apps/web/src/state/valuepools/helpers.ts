@@ -63,11 +63,13 @@ valuepool {
 const sponsorFields = `
 id
 card
+geoTag
 active
 timestamp
 updatedAt
 amount
 percentile
+
 `
 const loanFields = `
 id

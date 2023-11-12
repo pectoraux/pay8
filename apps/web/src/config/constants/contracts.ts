@@ -604,6 +604,10 @@ export default {
     56: '0x',
     4002: '0xf2Ca8333888cf3C673E81225228a000F9b7b4338',
   },
+  nftSVG: {
+    56: '0x',
+    4002: '0x36D1257A7E29E73A345D01F1e5F81d424C12a2c7',
+  },
   'real estate': {
     4002: '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
     56: '0x',

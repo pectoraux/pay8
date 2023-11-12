@@ -16,6 +16,7 @@ const initialState: any = {
   userDataLoaded: false,
   apiData: [],
   filters: initialFilterState,
+  filters2: initialFilterState,
   currBribe: {},
   currPool: {},
 }
@@ -99,6 +100,9 @@ export const PoolsSlice = createSlice({
     setFilters: (state, action) => {
       state.filters = action.payload
     },
+    setFilters2: (state, action) => {
+      state.filters2 = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetUserState, (state) => {
@@ -119,6 +123,7 @@ export const {
   setCurrBribeData,
   setCurrPoolData,
   setFilters,
+  setFilters2,
 } = PoolsSlice.actions
 
 export default PoolsSlice.reducer

@@ -393,6 +393,10 @@ export const getLotteryHelperAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.lotteryHelper, chainId)
 }
 
+export const getNFTSVGAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.nftSVG, chainId)
+}
+
 export const getGameFactoryAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.gameFactory, chainId)
 }

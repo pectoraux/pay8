@@ -15,6 +15,7 @@ import {
   makePoolWithUserDataLoadingSelector2,
   makePoolWithUserDataLoadingSelector3,
   filterSelector,
+  filterSelector2,
 } from './selectors'
 import { getTag, getTokenURIs } from './helpers'
 import { FAST_INTERVAL } from 'config/constants'
@@ -110,6 +111,10 @@ export const useGetRequiresApproval = (c, a, s) => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useFilters2 = () => {
+  return useSelector(filterSelector2)
 }
 
 export const useGetTokenURIs = (vaAddress, nfts) => {

@@ -19,6 +19,20 @@ const selectIfoUserCredit = (state: State) => state.valuepools.ifo.credit ?? BIG
 const selectCurrBribe = (state: State) => state.valuepools?.currBribe
 const selectCurrPool = (state: State) => state.valuepools?.currPool
 const selectFilters = (state: State) => state.valuepools?.filters
+const selectFilters2 = (state: State) => state.valuepools?.filters2
+
+function onlyUnique(value, index, array) {
+  return array.indexOf(value) === index
+}
+
+function treatTag(tag) {
+  return tag
+    ?.split(' ')
+    ?.filter((tg) => !!tg)
+    ?.map((tg) => tg?.split(','))
+    ?.flat()
+}
+
 const selectFilteredData = (state: State) => {
   return state.valuepools?.data.filter((valuepool) => {
     return (
@@ -34,12 +48,16 @@ const selectFilteredData = (state: State) => {
         )?.length > 0) &&
       (!state.valuepools.filters.product ||
         state.valuepools.filters.product.filter((value) =>
-          valuepool?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          treatTag(valuepool?.products?.toLowerCase())?.filter(onlyUnique)?.includes(value?.toLowerCase()),
         )?.length > 0)
     )
   })
 }
 export const filterSelector = createSelector([selectFilters], (filters) => {
+  return filters
+})
+
+export const filterSelector2 = createSelector([selectFilters2], (filters) => {
   return filters
 })
 

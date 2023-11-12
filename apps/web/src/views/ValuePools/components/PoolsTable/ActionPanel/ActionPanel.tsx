@@ -115,7 +115,7 @@ const ActionPanel: React.FC<any> = ({ account, pool, expanded }) => {
           </Box>
         </ActionContainer>
       </StyledActionPanel>
-      {showSponsors && <Sponsors sponsors={pool?.sponsors ?? []} />}
+      {showSponsors && <Sponsors pool={pool} sponsors={pool?.sponsors ?? []} />}
       {showScheduledPurchases && (
         <Purchases queue={pool?.purchaseHistory?.filter((ph) => ph.active)} valuepoolAddress={pool?.id} />
       )}

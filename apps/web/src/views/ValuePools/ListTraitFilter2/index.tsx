@@ -18,8 +18,8 @@ import styled from 'styled-components'
 import { FilterButton, ListOrderState, SearchWrapper } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { Item } from './types'
 import { TraitItemRow } from './styles'
-import { setFilters } from 'state/valuepools'
-import { useFilters } from 'state/valuepools/hooks'
+import { setFilters2 as setFilters } from 'state/valuepools'
+import { useFilters2 as useFilters } from 'state/valuepools/hooks'
 import { useAppDispatch } from 'state'
 
 interface ListTraitFilterProps {
