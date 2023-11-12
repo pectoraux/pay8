@@ -57,7 +57,7 @@ export const callWithEstimateGas = async <
     ? GetFunctionArgs<TAbi, _FunctionName>['args']
     : never,
 >(
-  contract: { abi: TAbi; account: Account; chain: Chain; address: Address; write: any; estimateGas: any },
+  contract: any, // { abi: TAbi; account: Account; chain: Chain; address: Address; write: any; estimateGas: any },
   methodName: InferFunctionName<TAbi, TFunctionName>,
   methodArgs: Args,
   overrides: Omit<CallParameters, 'chain' | 'to' | 'data'> = {},
