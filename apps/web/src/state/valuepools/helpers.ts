@@ -11,7 +11,7 @@ import { vaABI } from 'config/abi/va'
 import { getValuepoolHelperAddress, getValuepoolVoterAddress } from 'utils/addressHelpers'
 import { valuePoolHelperABI } from 'config/abi/valuePoolHelper'
 import { isAddress } from 'utils'
-import { getSponsors } from 'state/sponsors/helpers'
+import { fetchSponsor, getSponsors } from 'state/sponsors/helpers'
 import { getValuepoolContract } from '../../utils/contractHelpers'
 import { valuePoolVoterABI } from 'config/abi/valuePoolVoter'
 import { getCollection } from 'state/cancan/helpers'
@@ -206,7 +206,7 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
           address: valuepoolAddress,
           abi: valuePoolABI,
           functionName: 'getAllSponsors',
-          args: [BigInt(0), BigInt(1), false],
+          args: [BigInt(0), BigInt(0), false],
         },
         {
           address: valuepoolAddress,
@@ -278,8 +278,9 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
 
     const initialized = _va.result !== ADDRESS_ZERO
     const sponsorAddresses = _sponsorAddresses.result.map((sponsorAddress) => sponsorAddress?.toLowerCase())
-    const sponsors = await getSponsors(0, 0, { id_in: sponsorAddresses })
-    console.log('valuepoolsFromSg3_=============>', sponsors, sponsorAddresses)
+    const _sponsors = await getSponsors(0, 0, { id_in: sponsorAddresses })
+    const sponsors = await Promise.all(_sponsors.map(async (sp) => fetchSponsor(sp?.id, chainId)))
+    console.log('1valuepoolsFromSg3_=============>', sponsors, sponsorAddresses)
     const [name, symbol, decimals, totalLiquidity, vaParams, vaName, vaSymbol, vaDecimals, riskpool] =
       await bscClient.multicall({
         allowFailure: true,
@@ -425,6 +426,30 @@ export const getValuepoolsSg = async (first: number, skip: number, where) => {
     console.log('err sg================>', err)
   }
   return []
+}
+
+export const getTokenURIs = async (_vaAddress, nfts, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const nftsFromBc = await Promise.all(
+    nfts.map(async (nft) => {
+      const [metadataUrl] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: _vaAddress,
+            abi: vaABI,
+            functionName: 'tokenURI',
+            args: [BigInt(nft?.tokenId)],
+          },
+        ],
+      })
+      return {
+        ...nft,
+        metadataUrl: metadataUrl.result,
+      }
+    }),
+  )
+  return nftsFromBc
 }
 
 export const fetchValuepools = async ({ fromVesting, fromValuepool, chainId }) => {

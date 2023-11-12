@@ -33,17 +33,17 @@ export const ScrollableRow = styled.div`
 
 const DataCard: React.FC<any> = ({ sponsor }) => {
   return (
-    <CardWrapper to={`/sponsors/${sponsor.id}`}>
+    <CardWrapper to={`/cancan/collections/${sponsor.collection?.id}`}>
       <Flex flexDirection="column" justifyContent="center" alignSelf="center">
         <RoundedImage
           width={200}
           height={200}
-          src={sponsor?.avatar}
-          // alt={sponsor?.id}
+          src={sponsor?.collection?.avatar}
+          // alt={sponsor?.collection?.name}
           as={PreviewImage}
         />
         <Text fontSize={10} width="200px" style={{ whiteSpace: 'break-spaces' }}>
-          {sponsor.sponsorDescription}
+          {sponsor?.collection?.description}
         </Text>
       </Flex>
     </CardWrapper>

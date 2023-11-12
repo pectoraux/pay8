@@ -111,7 +111,7 @@ const CreateGaugeModal: React.FC<any> = ({
     sponsor: pool?.sponsorAddress,
     maxNotesPerProtocol: pool?.maxNotesPerProtocol,
     amountPayable: getBalanceNumber(currAccount?.amountPayable ?? '0', currency?.decimals),
-    periodPayable: currAccount?.periodPayable,
+    periodPayable: parseInt(currAccount?.periodPayable ?? '0') / 60,
     startPayable: convertTimeToSeconds(currAccount?.startPayable ?? '0'),
     startTime: '',
     description: currAccount?.description ?? '',
@@ -143,6 +143,7 @@ const CreateGaugeModal: React.FC<any> = ({
     owner: currAccount?.owner || account,
     content: pool?.content,
     customTags: '',
+    numPeriods: '',
   }))
   const [nftFilters, setNftFilters] = useState<any>({
     workspace: pool?.workspaces,
@@ -450,7 +451,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_DEPOSIT_DUE) {
-        const args = [state.protocol]
+        const args = [state.protocol, state.numPeriods]
         console.log('CONFIRM_DEPOSIT_DUE===============>', args)
         return callWithGasPrice(sponsorContract, 'depositDue', args).catch((err) =>
           console.log('CONFIRM_DEPOSIT_DUE===============>', err, args),

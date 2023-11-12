@@ -1625,7 +1625,7 @@ export const valuePoolHelperABI = [
         type: 'bool',
       },
     ],
-    name: 'updateMarketPlace',
+    name: 'updateIsMarketPlace',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

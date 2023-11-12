@@ -146,7 +146,7 @@ export const valuePoolVoterABI = [
       {
         indexed: false,
         internalType: 'string',
-        name: 'contries',
+        name: 'countries',
         type: 'string',
       },
       {
@@ -171,7 +171,7 @@ export const valuePoolVoterABI = [
       {
         indexed: true,
         internalType: 'address',
-        name: 'voter',
+        name: 've',
         type: 'address',
       },
       {
@@ -708,7 +708,7 @@ export const valuePoolVoterABI = [
       },
       {
         internalType: 'string',
-        name: '_contries',
+        name: '_countries',
         type: 'string',
       },
       {

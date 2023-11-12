@@ -27,9 +27,10 @@ import { useCurrPool } from 'state/sponsors/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/sponsors'
-import WebPagesModal from './WebPagesModal'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>

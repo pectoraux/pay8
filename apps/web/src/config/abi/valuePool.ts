@@ -76,6 +76,19 @@ export const valuePoolABI = [
   },
   {
     inputs: [],
+    name: 'contractAddress',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'devaddr_',
     outputs: [
       {
@@ -883,13 +896,7 @@ export const valuePoolABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '__ve',
-        type: 'address',
-      },
-    ],
+    inputs: [],
     name: 'updateVa',
     outputs: [],
     stateMutability: 'nonpayable',

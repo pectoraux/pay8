@@ -16,7 +16,7 @@ import {
   makePoolWithUserDataLoadingSelector3,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getTag, getTokenURIs } from './helpers'
 import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
@@ -110,4 +110,14 @@ export const useGetRequiresApproval = (c, a, s) => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetTokenURIs = (vaAddress, nfts) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetTokenURIs', vaAddress, nfts?.length], async () => getTokenURIs(vaAddress, nfts, chainId))
+  return { data, refetch, status }
 }

@@ -24,12 +24,12 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalUsersCell pr="200px" labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
       <TotalValueCell
         pr="200px"
-        labelText={t('Due Now')}
+        labelText={t('Amount Due')}
         amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
         symbol={currAccount?.token?.symbol ?? ''}
       />
       <VotesCell pr="200px" pool={pool} />
-      <EndsInCell pr="200px" currAccount={currAccount} />
+      <EndsInCell pr="200px" labelText={t('Due Date')} currAccount={currAccount} />
     </>
   )
   return (

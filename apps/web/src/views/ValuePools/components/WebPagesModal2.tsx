@@ -3,7 +3,7 @@ import { Modal, Grid } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import * as React from 'react'
 import Iframe from 'react-iframe'
-import { useCurrPool } from 'state/valuepools/hooks'
+import { useCurrPool, useGetTokenURIs } from 'state/valuepools/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 interface BuyTicketsModalProps {
@@ -17,6 +17,8 @@ const WebPageModal: React.FC<any> = ({ pool, height = '400px', onDismiss }) => {
   const { t } = useTranslation()
   const currState = useCurrPool()
   const nft = useMemo(() => pool?.tokens?.find((n) => n.id === currState[pool?.id]), [pool, currState])
+  const vaAddress = nft?.id?.split('-')?.length && nft?.id?.split('-')[0]
+  const { data } = useGetTokenURIs(vaAddress, [nft])
   return (
     <Modal
       title={t('NFT ID %val%', { val: nft.tokenId })}
@@ -24,7 +26,7 @@ const WebPageModal: React.FC<any> = ({ pool, height = '400px', onDismiss }) => {
       headerBackground={theme.colors.textSubtle}
     >
       <Grid alignItems="center">
-        <Iframe url={nft.metadataUrl} height={height} id="myId" />
+        <Iframe url={(data?.length && data[0])?.metadataUrl ?? nft.metadataUrl} height={height} id="myId" />
       </Grid>
     </Modal>
   )

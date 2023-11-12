@@ -132,24 +132,9 @@ export const getSponsors = async (first = 5, skip = 0, where) => {
 export const fetchSponsor = async (sponsorAddress, chainId) => {
   const sponsor = await getSponsor(sponsorAddress.toLowerCase())
   const bscClient = publicClient({ chainId: chainId })
-  const [
-    cosignEnabled,
-    devaddr_,
-    minCosigners,
-    requiredIndentity,
-    valueName,
-    _ve,
-    bountyRequired,
-    collectionId,
-    maxNotesPerProtocol,
-  ] = await bscClient.multicall({
+  const [devaddr_, _ve, collectionId, maxNotesPerProtocol] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
-      {
-        address: sponsorAddress,
-        abi: sponsorABI,
-        functionName: 'cosignEnabled',
-      },
       {
         address: sponsorAddress,
         abi: sponsorABI,
@@ -158,27 +143,7 @@ export const fetchSponsor = async (sponsorAddress, chainId) => {
       {
         address: sponsorAddress,
         abi: sponsorABI,
-        functionName: 'minCosigners',
-      },
-      {
-        address: sponsorAddress,
-        abi: sponsorABI,
-        functionName: 'requiredIndentity',
-      },
-      {
-        address: sponsorAddress,
-        abi: sponsorABI,
-        functionName: 'valueName',
-      },
-      {
-        address: sponsorAddress,
-        abi: sponsorABI,
         functionName: '_ve',
-      },
-      {
-        address: sponsorAddress,
-        abi: sponsorABI,
-        functionName: 'bountyRequired',
       },
       {
         address: sponsorAddress,
@@ -287,14 +252,9 @@ export const fetchSponsor = async (sponsorAddress, chainId) => {
     ...sponsor,
     sponsorAddress,
     accounts: accounts.filter((acct) => !!acct),
-    bountyRequired: bountyRequired.result,
     devaddr_: devaddr_.result,
-    cosignEnabled: cosignEnabled.result,
     collectionId: collectionId.result.toString(),
-    minCosigners: minCosigners.result.toString(),
-    requiredIndentity: requiredIndentity.result,
     maxNotesPerProtocol: maxNotesPerProtocol.result,
-    valueName: valueName.result,
     _ve: _ve.result,
     collection,
   }

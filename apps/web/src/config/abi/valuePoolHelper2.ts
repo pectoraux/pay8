@@ -219,6 +219,30 @@ export const valuePoolHelper2ABI = [
     inputs: [
       {
         internalType: 'address',
+        name: '_vava',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getMedia',
+    outputs: [
+      {
+        internalType: 'string[]',
+        name: 'mediaData',
+        type: 'string[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -263,45 +287,6 @@ export const valuePoolHelper2ABI = [
     name: 'setContractAddressAt',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_vava',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_attachments',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_locked_end',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_value',
-        type: 'uint256',
-      },
-    ],
-    name: 'tokenURI',
-    outputs: [
-      {
-        internalType: 'string',
-        name: 'output',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {

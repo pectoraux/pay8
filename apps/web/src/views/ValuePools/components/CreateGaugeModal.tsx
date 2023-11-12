@@ -363,7 +363,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         setStage(LockStage.UPDATE_VOTING_PARAMETERS)
         break
       case LockStage.UPDATE_MEDIA:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_MEDIA:
         setStage(LockStage.UPDATE_MEDIA)
@@ -958,7 +958,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           <Button variant="light" mb="8px" onClick={() => setStage(LockStage.CHECK_RANK)}>
             {t('CHECK RANK')}
           </Button>
-          <Button variant="light" mb="8px" onClick={() => setStage(LockStage.UPDATE_TAX_CONTRACT)}>
+          <Button variant="subtle" mb="8px" onClick={() => setStage(LockStage.UPDATE_MEDIA)}>
+            {t('UPDATE MEDIA')}
+          </Button>
+          <Button variant="subtle" mb="8px" onClick={() => setStage(LockStage.UPDATE_TAX_CONTRACT)}>
             {t('UPDATE TAX CONTRACT')}
           </Button>
           <Button mb="8px" variant="subtle" onClick={() => setStage(LockStage.CONFIRM_EXECUTE_NEXT_PURCHASE)}>
@@ -1012,14 +1015,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               <Button variant="text" mb="8px" onClick={() => setStage(LockStage.UPDATE_TRUSTWORTHY_AUDITORS)}>
                 {t('UPDATE TRUSTWORTHY AUDITORS')}
               </Button>
+              <Button variant="subtle" mb="8px" onClick={() => setStage(LockStage.UPDATE_MEDIA)}>
+                {t('UPDATE MEDIA')}
+              </Button>
               <Button variant="light" mb="8px" onClick={() => setStage(LockStage.UPDATE_BLACKLISTED_MERCHANTS)}>
                 {t('UPDATE BLACKLISTED MERCHANTS')}
               </Button>
               <Button variant="light" mb="8px" onClick={() => setStage(LockStage.UPDATE_EXCLUDED_CONTENT)}>
                 {t('UPDATE EXCLUDED CONTENT')}
-              </Button>
-              <Button variant="light" mb="8px" onClick={() => setStage(LockStage.UPDATE_MEDIA)}>
-                {t('UPDATE MEDIA')}
               </Button>
               {/* <Button variant="light" mb="8px" onClick={()=> setStage(LockStage.UPDATE_MINIMUM_LOCK) }>
             {t('UPDATE MINIMUM LOCK')}
