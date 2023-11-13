@@ -10,6 +10,7 @@ import {
   Text,
   Button,
   useToast,
+  Farm as FarmUI,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { format } from 'date-fns'
@@ -32,6 +33,7 @@ const DetailBox = styled(Box)`
 
 const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const { t } = useTranslation()
+  const { VotesTag } = FarmUI.Tags
   const startDate = new Date(proposal.creationTime * 1000)
   const endDate = new Date(proposal.endTime * 1000)
   const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
@@ -65,6 +67,12 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
         <DetailBox p="16px">
           <ProposalStateTag proposalState={proposal.active} mb="8px" style={{ marginRight: '10px' }} />
           <ColorTag votingPower={proposal.percentile} />
+          <Flex justifyContent="flex" mb="8px">
+            <VotesTag votingPower={parseInt(proposal?.upVotes ?? 0)?.toString()} color="green" />
+          </Flex>
+          <Flex justifyContent="flex" mb="8px">
+            <VotesTag votingPower={parseInt(proposal?.downVotes ?? 0)?.toString()} color="red" />
+          </Flex>
           <Flex alignItems="center">
             <Text color="textSubtle" fontSize="14px">
               {t('Start Date')}

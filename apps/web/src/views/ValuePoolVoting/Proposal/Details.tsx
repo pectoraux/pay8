@@ -36,9 +36,14 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const { VotesTag } = FarmUI.Tags
   const startDate = new Date(proposal?.created * 1000)
   const endDate = new Date(proposal?.endTime * 1000)
+  const isPercentile = parseInt(proposal?.upVotes) < 100 && parseInt(proposal?.downVotes) < 100
   const tokenData = useGetTokenData(proposal?.id?.split('-')[0]) as any
-  const upVotes = getBalanceNumber(proposal?.upVotes ?? 0, tokenData?.decimals)
-  const downVotes = getBalanceNumber(proposal?.downVotes ?? 0, tokenData?.decimals)
+  const upVotes = isPercentile
+    ? parseInt(proposal?.upVotes)
+    : getBalanceNumber(proposal?.upVotes ?? 0, tokenData?.decimals)
+  const downVotes = isPercentile
+    ? parseInt(proposal?.downVotes)
+    : getBalanceNumber(proposal?.downVotes ?? 0, tokenData?.decimals)
 
   return (
     <Card mb="16px">

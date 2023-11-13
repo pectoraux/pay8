@@ -98,7 +98,7 @@ const CreateProposal = () => {
             !!state.lockBounty,
             state.name,
             state.body,
-            nftFilters.product?.toString(),
+            nftFilters.product?.toString() ?? '',
           ]
       console.log('!createClaim===============>', method, args, nftFilters)
       return callWithGasPrice(trustBountiesContract, method, args).catch((err) => {
@@ -195,6 +195,20 @@ const CreateProposal = () => {
               <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
               {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
             </Box>
+            {body && (
+              <Box mb="24px">
+                <Card>
+                  <CardHeader>
+                    <Heading as="h3" scale="md">
+                      {t('Preview')}
+                    </Heading>
+                  </CardHeader>
+                  <CardBody p="0" px="24px">
+                    <ReactMarkdown>{body}</ReactMarkdown>
+                  </CardBody>
+                </Card>
+              </Box>
+            )}
             <Box mb="24px">
               <Label htmlFor="body">{t('Content')}</Label>
               <Text color="textSubtle" mb="8px">
@@ -210,20 +224,6 @@ const CreateProposal = () => {
               />
               {formErrors.body && fieldsState.body && <FormErrors errors={formErrors.body} />}
             </Box>
-            {body && (
-              <Box mb="24px">
-                <Card>
-                  <CardHeader>
-                    <Heading as="h3" scale="md">
-                      {t('Preview')}
-                    </Heading>
-                  </CardHeader>
-                  <CardBody p="0" px="24px">
-                    <ReactMarkdown>{body}</ReactMarkdown>
-                  </CardBody>
-                </Card>
-              </Box>
-            )}
           </Box>
         ) : null}
         <Box>

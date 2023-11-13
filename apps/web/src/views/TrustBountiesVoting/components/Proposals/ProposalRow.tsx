@@ -1,4 +1,12 @@
-import { ArrowForwardIcon, Box, IconButton, Flex, Text, NextLinkFromReactRouter } from '@pancakeswap/uikit'
+import {
+  ArrowForwardIcon,
+  Box,
+  IconButton,
+  Flex,
+  Text,
+  NextLinkFromReactRouter,
+  Farm as FarmUI,
+} from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Proposal } from 'state/types'
 import { isCoreProposal } from '../../helpers'
@@ -23,14 +31,18 @@ const StyledProposalRow = styled(NextLinkFromReactRouter)`
 
 const ProposalRow: React.FC<any> = ({ proposal }) => {
   const votingLink = `/trustbounties/voting/${proposal.id}`
-
+  const { VotesTag } = FarmUI.Tags
   return (
     <StyledProposalRow to={votingLink}>
       <Box as="span" style={{ flex: 1 }}>
         <Text bold mb="8px">
           {proposal.title}
         </Text>
-        <ColorTag votingPower={proposal.percentile} />
+        <Flex flexDirection="row" justifyContent="space-between">
+          <ColorTag votingPower={proposal.percentile} />
+          <VotesTag votingPower={parseInt(proposal?.upVotes ?? 0)?.toString()} color="green" />
+          <VotesTag votingPower={parseInt(proposal?.upVotes ?? 0)?.toString()} color="red" />
+        </Flex>
         <Flex alignItems="center" mb="8px">
           <TimeFrame startDate={proposal.creationTime} endDate={proposal.endTime} proposalState={proposal.active} />
         </Flex>

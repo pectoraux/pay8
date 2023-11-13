@@ -25,6 +25,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
   const { account } = useWeb3React()
   const token = useCurrency(pool?.tokenAddress ?? '')
   const stakingTokenContract = useERC20(pool?.tokenAddress || '')
+  console.log('stakemarketAddress====================>', pool, stakingTokenContract)
   const { needsApproval, refetch } = useGetRequiresApproval(
     stakingTokenContract,
     account,

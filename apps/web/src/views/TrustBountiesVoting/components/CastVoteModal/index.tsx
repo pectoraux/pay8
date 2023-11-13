@@ -28,12 +28,12 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)
 
   const { data, refetch, status } = useGetVotingPower(proposal?.ve, tokenId ?? '0')
-  const [total, setTotal] = useState<any>()
-
+  const [total, setTotal] = useState<any>(0)
   useEffect(() => {
     // const val = getBalanceNumber(data?.balance, data?.decimals)
-    setTotal(parseFloat((data?.percentile).toString()) + parseFloat((proposal?.percentile).toString()))
+    setTotal(parseFloat(data?.percentile?.toString()) + parseFloat(proposal?.percentile?.toString()))
   }, [data, proposal])
+  console.log('useGetVotingPower=================>', proposal?.ve, tokenId ?? '0', data, proposal)
 
   const title = {
     [ConfirmVoteView.MAIN]: t('Confirm Vote'),
@@ -117,7 +117,7 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
             isError={false}
             isLoading={false}
             isPending={isPending}
-            total={total}
+            total={total / 2}
             proposal={proposal}
             lockedCakeBalance={0}
             lockedEndTime={0}

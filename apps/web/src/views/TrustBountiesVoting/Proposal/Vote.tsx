@@ -57,13 +57,13 @@ const Vote: React.FC<any> = ({ proposal, onSuccess, ...props }) => {
     toastSuccess(t('Vote cast!'))
     onSuccess?.()
   }
-
+  console.log('presentCastVoteModal==================>', proposal)
   const [presentCastVoteModal] = useModal(
     <CastVoteModal
       onSuccess={handleSuccess}
       proposal={proposal}
       isChecked={isChecked}
-      block={Number(proposal.attackerId)}
+      block={Number(proposal?.attackerId ?? '0')}
     />,
   )
 

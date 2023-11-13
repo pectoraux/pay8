@@ -7,7 +7,7 @@ import useSWR from 'swr'
 import { ProposalState, ProposalType } from 'state/types'
 import { FetchStatus } from 'config/constants/types'
 import { useSessionStorage } from 'hooks/useSessionStorage'
-import { getLitigationsSg } from 'state/stakemarketvoting/helpers'
+import { getLitigationsSg } from 'state/trustbountiesvoting/helpers'
 import { filterProposalsByType } from '../../helpers'
 import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
@@ -46,7 +46,7 @@ const Proposals = () => {
   const { proposalType, filterState } = state
 
   // const { status, data } = useSWR(['proposals', filterState], async () => getProposals(1000, 0, filterState))
-  const { status, data } = useSWR('litigations', async () => getLitigationsSg())
+  const { status, data } = useSWR('litigations1', async () => getLitigationsSg())
   console.log('getLitigationsSg==============>', data, status)
 
   const handleProposalTypeChange = (newProposalType: ProposalType) => {

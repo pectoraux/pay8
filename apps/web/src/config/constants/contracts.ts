@@ -457,7 +457,7 @@ export default {
     56: '0x',
   },
   trustbountiesvoter: {
-    4002: '0xf94e32A706470af60a752C2167444D5218B1cF77',
+    4002: '0xFc18E7Ce66D1AB4c15A415aeaE48bDDF4a4dF1A9',
     56: '0x',
   },
   arpFactory: {
@@ -705,3 +705,4 @@ export default {
     56: '0x',
   },
 } as const satisfies Record<string, Record<number, `0x${string}`>>
+// 0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41
