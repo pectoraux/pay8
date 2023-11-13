@@ -6,7 +6,9 @@ import {
   CardBody,
   CardHeader,
   CardProps,
+  Flex,
   Heading,
+  LinkExternal,
   Radio,
   Text,
   useModal,
@@ -17,6 +19,8 @@ import { Proposal } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import CastVoteModal from '../components/CastVoteModal'
+import { getBlockExploreLink } from 'utils'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 
 interface VoteProps extends CardProps {
   proposal: Proposal
@@ -107,6 +111,12 @@ const Vote: React.FC<any> = ({ proposal, onSuccess, ...props }) => {
             </Text>
           </ChoiceText>
         </Choice>
+        <Flex alignItems="center" mb="8px">
+          <Text color="textSubtle" mr="16px">
+            {t('Leviathan NFT Collection')}
+          </Text>
+          <LinkExternal href={getBlockExploreLink(proposal?.ve, 'address')}>{proposal?.ve}</LinkExternal>
+        </Flex>
         {account ? <Button onClick={presentCastVoteModal}>{t('Cast Vote')}</Button> : <ConnectWalletButton />}
       </CardBody>
     </Card>

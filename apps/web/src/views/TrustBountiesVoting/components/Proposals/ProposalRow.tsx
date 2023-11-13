@@ -41,7 +41,7 @@ const ProposalRow: React.FC<any> = ({ proposal }) => {
         <Flex flexDirection="row" justifyContent="space-between">
           <ColorTag votingPower={proposal.percentile} />
           <VotesTag votingPower={parseInt(proposal?.upVotes ?? 0)?.toString()} color="green" />
-          <VotesTag votingPower={parseInt(proposal?.upVotes ?? 0)?.toString()} color="red" />
+          <VotesTag votingPower={parseInt(proposal?.downVotes ?? 0)?.toString()} color="red" />
         </Flex>
         <Flex alignItems="center" mb="8px">
           <TimeFrame startDate={proposal.creationTime} endDate={proposal.endTime} proposalState={proposal.active} />

@@ -7,8 +7,9 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import { trustBountiesABI } from 'config/abi/trustBounties'
 import { getCollection } from 'state/cancan/helpers'
-import { getTrustBountiesAddress } from 'utils/addressHelpers'
+import { getTrustBountiesAddress, getTrustBountiesHelperAddress } from 'utils/addressHelpers'
 import { erc20ABI } from 'wagmi'
+import { trustBountiesHelperABI } from 'config/abi/trustBountiesHelper'
 
 export const getTag = async () => {
   try {
@@ -59,6 +60,42 @@ export const getBounties = async (first: number, skip: number, where) => {
     console.log('err sg================>', err)
   }
   return []
+}
+
+export const getIsLocked = async (bountyId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [isLocked] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getTrustBountiesAddress(),
+        abi: trustBountiesABI,
+        functionName: 'lockedBounties',
+        args: [BigInt(bountyId)],
+      },
+    ],
+  })
+  return isLocked.result
+}
+
+export const getLatestClaim = async (bountyId, attackerId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+
+  if (parseInt(attackerId ?? 0) > 0) {
+    const [latestClaim] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getTrustBountiesAddress(),
+          abi: trustBountiesABI,
+          functionName: 'claims',
+          args: [BigInt(bountyId), BigInt(parseInt(attackerId) - 1)],
+        },
+      ],
+    })
+    return latestClaim.result
+  }
+  return null
 }
 
 export const getTokenData = async (tokenAddress, chainId) => {

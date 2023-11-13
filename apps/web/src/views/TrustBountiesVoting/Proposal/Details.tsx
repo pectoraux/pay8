@@ -17,9 +17,14 @@ import { format } from 'date-fns'
 import { Proposal } from 'state/types'
 import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
+import { useGetIsLocked, useGetLatestClaim } from 'state/trustbounties/hooks'
+
 import { IPFS_GATEWAY } from '../config'
 import { ColorTag, ProposalStateTag } from '../components/Proposals/tags'
 import CreateContentModal from './CreateContentModal'
+import { useGetTokenData } from 'state/ramps/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
 
 interface DetailsProps {
   proposal: Proposal
@@ -36,8 +41,14 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const { VotesTag } = FarmUI.Tags
   const startDate = new Date(proposal.creationTime * 1000)
   const endDate = new Date(proposal.endTime * 1000)
+  const isLocked = useGetIsLocked(proposal?.defenderId ?? '0')
+  const latestClaim = useGetLatestClaim(proposal?.defenderId ?? '0', proposal?.attackerId ?? '0')
+  const { data: tokenData } = useGetTokenData(proposal?.token ?? '')
+  const amountClaimed = latestClaim?.length
+    ? getBalanceNumber(new BigNumber(latestClaim[3]?.toString()), tokenData?.decimals)
+    : 0
   const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
-
+  console.log('latestClaim===================>', latestClaim, proposal, tokenData)
   return (
     <Card mb="16px">
       <CardHeader>
@@ -63,6 +74,24 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
           <LinkExternal href={getBlockExploreLink(proposal.defenderId, 'block')} ml="8px">
             {proposal.defenderId}
           </LinkExternal>
+        </Flex>
+        <Flex alignItems="center" mb="16px">
+          <Text color="textSubtle" bold mr="8px">
+            {t('Claim will lock bounty')}
+          </Text>
+          {'->'}
+          <Text color="primary" ml="8px">
+            {isLocked ? 'Yes' : 'No'}
+          </Text>
+        </Flex>
+        <Flex alignItems="center" mb="16px">
+          <Text color="textSubtle" bold mr="8px">
+            {t('Amount being claimed')}
+          </Text>
+          {'->'}
+          <Text color="primary" ml="8px">
+            {amountClaimed} {tokenData?.symbol?.toUpperCase()}
+          </Text>
         </Flex>
         <DetailBox p="16px">
           <ProposalStateTag proposalState={proposal.active} mb="8px" style={{ marginRight: '10px' }} />

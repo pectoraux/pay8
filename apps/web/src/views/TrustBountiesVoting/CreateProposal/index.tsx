@@ -16,6 +16,8 @@ import {
   ButtonMenu,
   ReactMarkdown,
   ButtonMenuItem,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -177,6 +179,41 @@ const CreateProposal = () => {
     }
   }, [initialBlock, setState])
 
+  const TooltipComponent = () => <Text>{t('This sets the amount you wish to claim from the trustBounty.')}</Text>
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        "A friendly claim does not submit your claim to the trustBounties' community for a vote. This is a form of claim you make in case the owner of the trustBounty agrees to let you have the amount you are claiming, from the trustBounty.",
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Not only can you claim an amount from the trustBounty, but you can also claim that the trustBounty be locked forever. If your claim is successful, not only will you be able to withdraw the claimed amount from the trustBounty, but the trustBounty will also be deactivated for life thus also locking all of its remaining funds forever.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   return (
     <Container py="40px">
       <PageMeta />
@@ -235,6 +272,10 @@ const CreateProposal = () => {
             </CardHeader>
             <CardBody>
               <Box mb="24px">
+                <Flex ref={targetRef}>
+                  {tooltipVisible && tooltip}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <SecondaryLabel>{t('Amount to claim')}</SecondaryLabel>
                 <Input
                   type="text"
@@ -246,6 +287,10 @@ const CreateProposal = () => {
                 />
               </Box>
               <Box mb="24px">
+                <Flex ref={targetRef2}>
+                  {tooltipVisible2 && tooltip2}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <SecondaryLabel>{t('Friendly Claim ?')}</SecondaryLabel>
                 <StyledItemRow>
                   <ButtonMenu
@@ -260,6 +305,10 @@ const CreateProposal = () => {
                 </StyledItemRow>
               </Box>
               <Box mb="24px">
+                <Flex ref={targetRef3}>
+                  {tooltipVisible3 && tooltip3}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <SecondaryLabel>{t('Lock Bounty ?')}</SecondaryLabel>
                 <StyledItemRow>
                   <ButtonMenu
