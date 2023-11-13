@@ -11,6 +11,9 @@ import {
   Text,
   useToast,
   ReactMarkdown,
+  useTooltip,
+  HelpIcon,
+  Flex,
 } from '@pancakeswap/uikit'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -36,6 +39,8 @@ import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filt
 import Layout from '../components/Layout'
 import { ADMINS } from '../config'
 import { Label, SecondaryLabel } from './styles'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import NextStepButton from 'views/ChannelCreation/NextStepButton'
 
 const hub = 'https://hub.snapshot.org'
 const client = new snapshot.Client712(hub)
@@ -55,11 +60,12 @@ const CreateProposal = () => {
     decimals: 18,
     tokenId: '',
     tokenAddress: '',
-    amount: '',
+    amount: '0',
     choices: ['Up Vote', 'Down Vote'],
   }))
   const [isLoading, setIsLoading] = useState(false)
-  const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
+  const [isDone, setIsDone] = useState('')
+  // const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { toastSuccess, toastError } = useToast()
@@ -81,7 +87,7 @@ const CreateProposal = () => {
       const args = [
         state.ve,
         state.pool,
-        state.tokenAddress,
+        state.tokenAddress?.trim()?.length ? state.tokenAddress : ADDRESS_ZERO,
         state.tokenId,
         amount?.toString(),
         state.title,
@@ -90,9 +96,10 @@ const CreateProposal = () => {
       const args2 = [
         state.ve,
         state.pool,
-        nftFilters?.country?.toString(),
-        nftFilters?.city?.toString(),
-        nftFilters?.product?.toString(),
+        state.title,
+        nftFilters?.country?.toString() ?? '',
+        nftFilters?.city?.toString() ?? '',
+        nftFilters?.product?.toString() ?? '',
       ]
       console.log('createGauge==================>', args, args2)
       return callWithGasPrice(valuepoolVoterContract, 'createGauge', args)
@@ -110,6 +117,7 @@ const CreateProposal = () => {
     })
     if (receipt?.status) {
       setIsLoading(false)
+      setIsDone(state.ve)
       toastSuccess(
         t('Proposal successfully created'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
@@ -125,11 +133,11 @@ const CreateProposal = () => {
       [key]: value,
     }))
 
-    // Keep track of what fields the user has attempted to edit
-    setFieldsState((prevFieldsState) => ({
-      ...prevFieldsState,
-      [key]: true,
-    }))
+    // // Keep track of what fields the user has attempted to edit
+    // setFieldsState((prevFieldsState) => ({
+    //   ...prevFieldsState,
+    //   [key]: true,
+    // }))
   }
 
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -149,6 +157,68 @@ const CreateProposal = () => {
           : ['guide', 'fullscreen', 'preview', 'side-by-side', 'image'],
     }
   }, [account])
+
+  const TooltipComponent = () => <Text>{t("Input the contract address of your valuepool's NFT collection")}</Text>
+  const TooltipComponent2 = () => (
+    <Text>{t('This sets the address of the creator of the proposal, so your address.')}</Text>
+  )
+  const TooltipComponent4 = () => (
+    <Text>
+      {t(
+        'This sets the address of the token you are trying to withdraw from the valuepool. Leave it empty if this proposal is not so you can withdraw some tokens from the valuepool.',
+      )}
+    </Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'Only members of valuepools can create proposals in them. This is the ID of your NFT token from the valuepool.',
+      )}
+    </Text>
+  )
+  const TooltipComponent5 = () => (
+    <Text>
+      {t(
+        "This sets the amount of the token which address you've specified above, you are willing to withdraw from the valuepool. This is only valid when you are trying to withdraw tokens from the valuepool, leave it at 0 otherwise",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <Container py="40px">
@@ -199,6 +269,10 @@ const CreateProposal = () => {
             </CardHeader>
             <CardBody>
               <Box mb="24px">
+                <Flex ref={targetRef}>
+                  {tooltipVisible && tooltip}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <SecondaryLabel>{t('veNFT Address')}</SecondaryLabel>
                 <Input
                   type="text"
@@ -221,6 +295,10 @@ const CreateProposal = () => {
                 />
               </Box>
               <Box mb="24px">
+                <Flex ref={targetRef2}>
+                  {tooltipVisible2 && tooltip2}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <SecondaryLabel>{t('Owner Address')}</SecondaryLabel>
                 <Input
                   type="text"
@@ -232,17 +310,10 @@ const CreateProposal = () => {
                 />
               </Box>
               <Box mb="24px">
-                <SecondaryLabel>{t('Token Address')}</SecondaryLabel>
-                <Input
-                  type="text"
-                  scale="sm"
-                  name="tokenAddress"
-                  value={state.tokenAddress}
-                  placeholder={t('input token address')}
-                  onChange={handleChange}
-                />
-              </Box>
-              <Box mb="24px">
+                <Flex ref={targetRef3}>
+                  {tooltipVisible3 && tooltip3}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <SecondaryLabel>{t('Token ID')}</SecondaryLabel>
                 <Input
                   type="text"
@@ -254,6 +325,25 @@ const CreateProposal = () => {
                 />
               </Box>
               <Box mb="24px">
+                <Flex ref={targetRef4}>
+                  {tooltipVisible4 && tooltip4}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
+                <SecondaryLabel>{t('Token Address')}</SecondaryLabel>
+                <Input
+                  type="text"
+                  scale="sm"
+                  name="tokenAddress"
+                  value={state.tokenAddress}
+                  placeholder={t('input token address')}
+                  onChange={handleChange}
+                />
+              </Box>
+              <Box mb="24px">
+                <Flex ref={targetRef5}>
+                  {tooltipVisible5 && tooltip5}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
                 <SecondaryLabel>{t('Amount')}</SecondaryLabel>
                 <Input
                   type="text"
@@ -282,6 +372,9 @@ const CreateProposal = () => {
                   {/* <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
                       {t('Check voting power')}
                     </Button> */}
+                  <NextStepButton onClick={() => push(`/valuepools/voting/valuepool/${state.ve}`)} disabled={!isDone}>
+                    {t('Go to Proposals')}
+                  </NextStepButton>
                 </>
               ) : (
                 <ConnectWalletButton width="100%" type="button" />

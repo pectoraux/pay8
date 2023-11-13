@@ -20,6 +20,12 @@ export const valuePoolVoterABI = [
         name: 'weight',
         type: 'int256',
       },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'title',
+        type: 'string',
+      },
     ],
     name: 'Abstained',
     type: 'event',
@@ -30,7 +36,7 @@ export const valuePoolVoterABI = [
       {
         indexed: false,
         internalType: 'address',
-        name: 'vava',
+        name: 'va',
         type: 'address',
       },
       {
@@ -146,6 +152,12 @@ export const valuePoolVoterABI = [
       {
         indexed: false,
         internalType: 'string',
+        name: 'title',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
         name: 'countries',
         type: 'string',
       },
@@ -209,6 +221,12 @@ export const valuePoolVoterABI = [
         internalType: 'bool',
         name: 'like',
         type: 'bool',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'title',
+        type: 'string',
       },
     ],
     name: 'Voted',
@@ -708,6 +726,11 @@ export const valuePoolVoterABI = [
       },
       {
         internalType: 'string',
+        name: '_title',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
         name: '_countries',
         type: 'string',
       },
@@ -782,6 +805,11 @@ export const valuePoolVoterABI = [
         internalType: 'bool',
         name: '_like',
         type: 'bool',
+      },
+      {
+        internalType: 'string',
+        name: '_title',
+        type: 'string',
       },
     ],
     name: 'vote',

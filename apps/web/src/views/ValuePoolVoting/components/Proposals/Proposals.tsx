@@ -13,6 +13,7 @@ import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
 import ProposalRow from './ProposalRow'
 import LocationFilters from './LocationFilters'
+import { useRouter } from 'next/router'
 
 interface State {
   proposalType: ProposalType
@@ -46,8 +47,9 @@ const Proposals = () => {
   const { proposalType, filterState } = state
 
   // const { status, data } = useSWR(['proposals', filterState], async () => getProposals(1000, 0, filterState))
-  const { status, data } = useSWR('proposals1', async () => getProposalsSg())
-  console.log('getProposalsSg==============>', data, status)
+  const valuepoolAddress = useRouter().query.valuepool as string
+  let where = valuepoolAddress ? { valuepool_: { id: valuepoolAddress?.toLowerCase() } } : {}
+  const { status, data } = useSWR('proposals1', async () => getProposalsSg(where))
 
   const handleProposalTypeChange = (newProposalType: ProposalType) => {
     setState((prevState) => ({
@@ -58,7 +60,7 @@ const Proposals = () => {
 
   const filteredProposals = filterProposalsByType(data, proposalType)
   const { isMobile } = useMatchBreakpoints()
-
+  console.log('proposalType==================>', proposalType, filteredProposals)
   return (
     <Container py="40px">
       <Box mb="48px">

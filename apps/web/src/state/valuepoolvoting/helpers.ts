@@ -134,6 +134,7 @@ export const getProposalsSg = async (
   orderDirection: 'asc' | 'desc' = 'desc',
   skip = 0,
 ) => {
+  console.log('getProposalsSg==============>', where)
   try {
     const res = await request(
       GRAPH_API_VP_VOTER,

@@ -1,4 +1,4 @@
-import { Text, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Text, Flex, useMatchBreakpoints, LinkExternal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import RichTextEditor from 'components/RichText'
 
@@ -9,6 +9,11 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { isMobile } = useMatchBreakpoints()
   return (
     <ActionContainer>
+      <Flex mb="2px" justifyContent="center">
+        <LinkExternal href={`/valuepools/voting/valuepool/${pool?.ve}`} bold={false} small>
+          {t('View Proposals')}
+        </LinkExternal>
+      </Flex>
       {pool?.description ? (
         <Flex flex="2" alignItems="center" overflow="auto" maxWidth={isMobile ? 250 : 1000}>
           <RichTextEditor value={pool?.description} readOnly id="rte" />
@@ -16,7 +21,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
       ) : null}
       <ActionContent>
         <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-          {t('Open the litigations tab to view current litigations')}
+          {t('Click the proposals link to view current proposals')}
         </Text>
       </ActionContent>
     </ActionContainer>

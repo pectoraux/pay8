@@ -34,10 +34,14 @@ const StyledProposalRow = styled(NextLinkFromReactRouter)`
 const ProposalRow: React.FC<any> = ({ proposal }) => {
   const votingLink = `/valuepools/voting/${proposal.id}`
   const { VotesTag } = FarmUI.Tags
+  const usingPercentiles = parseInt(proposal?.upVotes) < 100
   const tokenData = useGetTokenData(proposal?.id?.split('-')[0]) as any
-  const upVotes = getBalanceNumber(proposal?.upVotes ?? 0, tokenData?.decimals)
-  const downVotes = getBalanceNumber(proposal?.downVotes ?? 0, tokenData?.decimals)
-  console.log('votingLink===========>', proposal)
+  const upVotes = usingPercentiles
+    ? parseInt(proposal?.upVotes)
+    : getBalanceNumber(proposal?.upVotes ?? 0, tokenData?.decimals)
+  const downVotes = usingPercentiles
+    ? parseInt(proposal?.downVotes)
+    : getBalanceNumber(proposal?.downVotes ?? 0, tokenData?.decimals)
   return (
     <StyledProposalRow to={votingLink}>
       <Box as="span" style={{ flex: 1 }}>

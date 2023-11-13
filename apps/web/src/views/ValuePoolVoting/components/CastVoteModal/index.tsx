@@ -46,6 +46,7 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
         profileId ?? 0,
         identityTokenId ?? 0,
         isChecked,
+        proposal?.title,
       ]
       console.log('st2==============>', args)
       return callWithGasPrice(valuepoolVoterContract, 'vote', args).catch((err) => {
