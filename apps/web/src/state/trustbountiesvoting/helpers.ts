@@ -6,9 +6,10 @@ import request, { gql } from 'graphql-request'
 import { Proposal, Vote, VoteWhere } from 'state/types'
 import _chunk from 'lodash/chunk'
 import { publicClient } from 'utils/wagmi'
-import { getValuepoolVoterAddress } from 'utils/addressHelpers'
+import { getStakeMarketBribeAddress, getValuepoolVoterAddress } from 'utils/addressHelpers'
 import { valuePoolVoterABI } from 'config/abi/valuePoolVoter'
 import { litigationFields } from './queries'
+import { stakeMarketBribeABI } from 'config/abi/stakeMarketBribe'
 
 export const getProposals = async () => {
   return firestore.collection('proposals').get()

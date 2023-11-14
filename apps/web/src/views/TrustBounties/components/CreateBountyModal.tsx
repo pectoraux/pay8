@@ -93,11 +93,6 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const currencyAddress = useMemo(() => state.collateral, [state.collateral, handleChange]) as any
   const stakingTokenContract = useERC20(currencyAddress || '')
   const [nftFilters, setNftFilters] = useState<any>({})
-  const { handleApprove: handlePoolApprove } = useApprovePool(
-    stakingTokenContract,
-    trustBountiesContract.address,
-    currency?.symbol,
-  )
   const router = useRouter()
   const fromAccelerator = router.pathname.includes('accelerator')
   const fromContributors = router.pathname.includes('contributors')
@@ -110,6 +105,12 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     stakingTokenContract,
     account,
     trustBountiesContract.address,
+  )
+  const { handleApprove: handlePoolApprove } = useApprovePool(
+    stakingTokenContract,
+    trustBountiesContract.address,
+    currency?.symbol,
+    refetch,
   )
 
   useEffect(() => {
@@ -146,6 +147,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       const args = [
         account,
         state.collateral,
+        // ve,
         '0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41',
         state.claimableBy,
         state.parentBountyId,
@@ -569,12 +571,12 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
                   value: 'Transfers',
                 },
                 {
-                  label: t('RP Worlds'),
-                  value: 'RPWorlds',
+                  label: t('TrustBounties'),
+                  value: 'TrustBounties',
                 },
                 {
-                  label: t('BP Worlds'),
-                  value: 'BPWorlds',
+                  label: t('Worlds'),
+                  value: 'Worlds',
                 },
               ]}
               onOptionChange={(val) => handleTypeChange(val.value)}

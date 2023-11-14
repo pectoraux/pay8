@@ -39,16 +39,22 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { getBlockExploreLink } from 'utils'
 import { DatePickerPortal } from 'views/Voting/components/DatePicker'
-import { useTrustBountiesContract } from 'hooks/useContract'
+import { useERC20, useTrustBountiesContract } from 'hooks/useContract'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import BigNumber from 'bignumber.js'
+import { useGetRequiresApproval } from 'state/trustbounties/hooks'
+import { getStakeMarketBribeAddress } from 'utils/addressHelpers'
+import { useApprovePool } from 'views/TrustBounties/hooks/useApprove'
+
 import Layout from '../components/Layout'
 import VoteDetailsModal from '../components/VoteDetailsModal'
 import { ADMINS } from '../config'
 import { makeChoice, MINIMUM_CHOICES } from './Choices'
 import { getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
+import { FetchStatus } from 'config/constants/types'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
@@ -81,9 +87,23 @@ const CreateProposal = () => {
   const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal block={state.snapshot} />)
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const { name, body } = state
+  const [allowing, setAllowing] = useState(false)
   const formErrors = getFormErrors(state, t)
-  const { bountyId, decimals } = useRouter().query
+  const { bountyId, decimals, tokenAddress } = useRouter().query
   const [nftFilters, setNftFilters] = useState<any>({})
+  const stakingTokenContract = useERC20(tokenAddress || DEFAULT_TFIAT)
+  console.log('stakingTokenContract===============>', stakingTokenContract, tokenAddress)
+  const { status, needsApproval, refetch } = useGetRequiresApproval(
+    stakingTokenContract,
+    account,
+    getStakeMarketBribeAddress(),
+  )
+  const { handleApprove: handlePoolApprove } = useApprovePool(
+    stakingTokenContract,
+    getStakeMarketBribeAddress(),
+    tokenAddress,
+    refetch,
+  )
 
   const handleCreateClaim = useCallback(async () => {
     setPendingFb(true)
@@ -337,7 +357,21 @@ const CreateProposal = () => {
                   <LinkExternal href={getBlockExploreLink(account, 'address')}>{truncateHash(account)}</LinkExternal>
                 </Flex>
               )}
-              {account ? (
+              {!account ? (
+                <ConnectWalletButton width="100%" type="button" />
+              ) : needsApproval ? (
+                <Button
+                  mb="8px"
+                  onClick={handlePoolApprove}
+                  endIcon={
+                    allowing || status === FetchStatus.Fetching ? <AutoRenewIcon spin color="currentColor" /> : null
+                  }
+                  isLoading={allowing}
+                  disabled={allowing || status === FetchStatus.Fetching}
+                >
+                  {t('%text% StakeMarket Bribe', { text: status === FetchStatus.Fetching ? 'Enabling' : 'Enable' })}
+                </Button>
+              ) : (
                 <Button
                   type="submit"
                   width="100%"
@@ -348,8 +382,6 @@ const CreateProposal = () => {
                 >
                   {t('Publish')}
                 </Button>
-              ) : (
-                <ConnectWalletButton width="100%" type="button" />
               )}
             </CardBody>
           </Card>

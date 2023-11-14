@@ -1,9 +1,12 @@
-import { Flex } from '@pancakeswap/uikit'
+import { CloseIcon, Flex, IconButton, PageSection } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
 import styled from 'styled-components'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
 import { Proposals } from './components/Proposals'
+import CheckEarnings from './components/CheckEarnings'
+import { FINISHED_ROUNDS_BG_DARK } from 'views/Lottery/pageSectionStyles'
+import { useState } from 'react'
 
 const Chrome = styled.div`
   flex: none;
@@ -15,6 +18,7 @@ const Content = styled.div`
 `
 
 const Voting = () => {
+  const [hide, setHide] = useState(false)
   return (
     <>
       <PageMeta />
@@ -23,6 +27,14 @@ const Voting = () => {
           <Hero />
         </Chrome>
         <Content>
+          {!hide && (
+            <PageSection background={FINISHED_ROUNDS_BG_DARK} hasCurvedDivider={false} index={2}>
+              <IconButton onClick={() => setHide(true)} variant="text">
+                <CloseIcon color="#FFFFFF" />
+              </IconButton>
+              <CheckEarnings />
+            </PageSection>
+          )}
           <Proposals />
         </Content>
         <Chrome>

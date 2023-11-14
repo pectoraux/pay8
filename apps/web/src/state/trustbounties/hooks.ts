@@ -13,7 +13,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   poolsWithFilterSelector,
 } from './selectors'
-import { getIsLocked, getLatestClaim, getTag } from './helpers'
+import { getEarned, getIsLocked, getLatestClaim, getTag } from './helpers'
 import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
@@ -148,6 +148,19 @@ export const useGetIsLocked = (bountyId) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWR(['useGetIsLocked', bountyId, chainId], async () => getIsLocked(bountyId, chainId))
   return data
+}
+
+export const useGetEarned = (veAddress, tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, status, mutate } = useSWR(['useGetEarned4', veAddress, tokenId, chainId], async () =>
+    getEarned(veAddress, tokenId, chainId),
+  )
+  return {
+    status,
+    refetch: mutate,
+    earned: data?.earned,
+    tokenAddress: data?.tokenAddress,
+  }
 }
 
 export const useGetLatestClaim = (bountyId, attackerId) => {

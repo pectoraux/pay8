@@ -924,6 +924,25 @@ export const trustBountiesVoterABI = [
     inputs: [
       {
         internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'veToken',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '_ve',
         type: 'address',
       },
@@ -967,7 +986,7 @@ export const trustBountiesVoterABI = [
       },
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
       {

@@ -509,7 +509,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           <Flex mb="8px" justifyContent="center" alignSelf="center">
             <LinkExternal
               color="failure"
-              href={`/trustbounties/voting/create?bountyId=${pool?.id}&decimals=${pool?.token?.decimals}`}
+              href={`/trustbounties/voting/create?bountyId=${pool?.id}&tokenAddress=${pool?.token?.address}&decimals=${pool?.token?.decimals}`}
               bold
             >
               {t('START LITIGATIONS')}

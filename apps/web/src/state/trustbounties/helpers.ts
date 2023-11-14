@@ -7,9 +7,16 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import { trustBountiesABI } from 'config/abi/trustBounties'
 import { getCollection } from 'state/cancan/helpers'
-import { getTrustBountiesAddress, getTrustBountiesHelperAddress } from 'utils/addressHelpers'
-import { erc20ABI } from 'wagmi'
+import {
+  getStakeMarketBribeAddress,
+  getTrustBountiesAddress,
+  getTrustBountiesHelperAddress,
+  getTrustBountiesVoterAddress,
+} from 'utils/addressHelpers'
+import { Address, erc20ABI } from 'wagmi'
 import { trustBountiesHelperABI } from 'config/abi/trustBountiesHelper'
+import { stakeMarketBribeABI } from 'config/abi/stakeMarketBribe'
+import { trustBountiesVoterABI } from 'config/abi/trustBountiesVoter'
 
 export const getTag = async () => {
   try {
@@ -96,6 +103,38 @@ export const getLatestClaim = async (bountyId, attackerId, chainId) => {
     return latestClaim.result
   }
   return null
+}
+
+export const getEarned = async (veAddress, tokenId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [_tokenAddress] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getTrustBountiesVoterAddress(),
+        abi: trustBountiesVoterABI,
+        functionName: 'veToken',
+        args: [veAddress],
+      },
+    ],
+  })
+  const tokenAddress = _tokenAddress.result
+  const [earned] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getStakeMarketBribeAddress(),
+        abi: stakeMarketBribeABI,
+        functionName: 'earned',
+        args: [tokenAddress as Address, BigInt(tokenId)],
+      },
+    ],
+  })
+  console.log('getEarned===================>', earned, tokenAddress, tokenId)
+  return {
+    tokenAddress,
+    earned: earned.result,
+  }
 }
 
 export const getTokenData = async (tokenAddress, chainId) => {
