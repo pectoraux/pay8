@@ -38,7 +38,7 @@ const TornTicketImage = styled.img`
   }
 `
 
-const CheckEarnings = () => {
+const CheckEarnings = ({ fromStake = false }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   // const {
@@ -176,9 +176,13 @@ const CheckEarnings = () => {
               <ErrorIcon width={24} height={24} color="textSubtle" />
             </Flex>
             <Text small color="#F4EEFF">
-              {t(
-                "You can win tokens by voting on various litigations. Each litigation is associated with a trustBounty and voting on it will earn you a few of the tokens used as collateral in the trustBounty. In case the collateral is an NFT, you will be earning USD tFIAT tokens. The amount of tokens you earn depends on the number and type of litigations you vote on. Each litigation has a weight factor associated to it and the more weight a litigation has, the more voting on it either for/against the attacker, earns you. Litigations' weights are displayed on their panels next to the black hammer icon.",
-              )}
+              {fromStake
+                ? t(
+                    "You can win tokens by voting on various litigations. Each litigation is associated with a stake and voting on it will earn you a few of the tokens used in the stake. The amount of tokens you earn depends on the number and type of litigations you vote on. Each litigation has a weight factor associated to it and the more weight a litigation has, the more voting on it either for/against the attacker, earns you. Litigations' weights are displayed on their panels next to the black hammer icon.",
+                  )
+                : t(
+                    "You can win tokens by voting on various litigations. Each litigation is associated with a trustBounty and voting on it will earn you a few of the tokens used as collateral in the trustBounty. In case the collateral is an NFT, you will be earning USD tFIAT tokens. The amount of tokens you earn depends on the number and type of litigations you vote on. Each litigation has a weight factor associated to it and the more weight a litigation has, the more voting on it either for/against the attacker, earns you. Litigations' weights are displayed on their panels next to the black hammer icon.",
+                  )}
             </Text>
           </Grid>
         </Flex>

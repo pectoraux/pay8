@@ -12,7 +12,7 @@ import { getScores } from './getScores'
 import * as strategies from './strategies'
 
 export const isCoreProposal = (proposal: any) => {
-  return proposal?.active
+  return parseInt(proposal?.endTime ?? 0) * 1000 > Date.now()
 }
 
 export const filterProposalsByType = (proposals: Proposal[], proposalType: ProposalType) => {

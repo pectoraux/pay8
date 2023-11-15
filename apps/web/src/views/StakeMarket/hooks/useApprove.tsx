@@ -12,7 +12,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import useCakeApprove from 'hooks/useCakeApprove'
 import useCakeApprovalStatus from 'hooks/useCakeApprovalStatus'
 
-export const useApprovePool = (lpContract: ReturnType<typeof useERC20>, address, earningTokenSymbol) => {
+export const useApprovePool = (lpContract: ReturnType<typeof useERC20>, address, earningTokenSymbol, onSuccess) => {
   const { toastSuccess } = useToast()
   const { chainId } = useActiveChainId()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
@@ -27,6 +27,7 @@ export const useApprovePool = (lpContract: ReturnType<typeof useERC20>, address,
       return callWithGasPrice(lpContract, 'approve', [address, MaxUint256])
     })
     if (receipt?.status) {
+      onSuccess?.()
       toastSuccess(
         t('Contract Enabled'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
@@ -42,6 +43,7 @@ export const useApprovePool = (lpContract: ReturnType<typeof useERC20>, address,
     address,
     earningTokenSymbol,
     t,
+    onSuccess,
     toastSuccess,
     callWithGasPrice,
     fetchWithCatchTxError,

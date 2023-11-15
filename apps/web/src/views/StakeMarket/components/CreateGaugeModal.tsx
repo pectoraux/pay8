@@ -125,7 +125,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     profileId: pool?.profileId ?? '',
     tokenId: pool?.tokenId ?? '',
     amountPayable: getBalanceNumber(pool.amountReceivable ?? 0, currency?.decimals) ?? '0',
-    waitingPeriod: pool?.waitingPeriod,
+    waitingPeriod: parseInt(pool?.waitingPeriod ?? '0') / 60,
     amountReceivable: getBalanceNumber(pool.amountPayable ?? 0, currency?.decimals) ?? '0',
     deadline: '86400',
     terms: pool?.terms,
@@ -155,7 +155,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     period: pool?.period,
     stakeRequired: Number(pool?.stakeRequired ?? 0),
     profileRequired: Number(pool?.profileRequired ?? 0),
-    gasPercent: Number(pool?.gasPercent ?? 0),
+    gasPercent: parseInt(pool?.gasPercent ?? 0) / 100,
     bountyRequired: Number(pool?.bountyRequired ?? 0),
     agreement: pool?.ownerAgreement === 3 ? 1 : 0,
     cosignEnabled: pool?.cosignEnabled,
@@ -501,7 +501,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
         )
       }
       if (stage === LockStage.CONFIRM_START_WAITING_PERIOD) {
-        const args = [state.stakeId, state.defenderStakeId, '', '']
+        const args = [state.stakeId, state.defenderStakeId, '', '', '']
         console.log('CONFIRM_START_WAITING_PERIOD=============>', args)
         return callWithGasPrice(stakeMarketContract, 'createGauge', args).catch((err) =>
           console.log('CONFIRM_START_WAITING_PERIOD===============>', err),

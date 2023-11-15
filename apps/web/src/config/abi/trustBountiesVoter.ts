@@ -11,6 +11,12 @@ export const trustBountiesVoterABI = [
       {
         indexed: false,
         internalType: 'uint256',
+        name: 'litigationId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
         name: 'tokenId',
         type: 'uint256',
       },
@@ -416,29 +422,6 @@ export const trustBountiesVoterABI = [
     type: 'event',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_ve',
-        type: 'address',
-      },
-      {
-        internalType: 'address[]',
-        name: '_tokens',
-        type: 'address[]',
-      },
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'claimBribes',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'contractAddress',
     outputs: [
@@ -453,6 +436,11 @@ export const trustBountiesVoterABI = [
   },
   {
     inputs: [
+      {
+        internalType: 'address',
+        name: '_attacker',
+        type: 'address',
+      },
       {
         internalType: 'address',
         name: '_ve',
@@ -713,6 +701,11 @@ export const trustBountiesVoterABI = [
         internalType: 'address',
         name: '_ve',
         type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_litigationId',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',

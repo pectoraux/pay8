@@ -16,6 +16,7 @@ import CreateGaugeModal from '../../CreateGaugeModal'
 import EnableButton from 'views/Game/components/Pot/Deposit/EnableButton'
 import { noop } from 'lodash'
 import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
   const { account } = useWeb3React()
   const token = useCurrency(pool.tokenAddress) as any
   const stakemarketAddress = getStakeMarketAddress()
-  const stakingTokenContract = useERC20(token?.address || '')
+  const stakingTokenContract = useERC20(token?.address || DEFAULT_TFIAT)
   const { needsApproval, refetch } = useGetRequiresApproval(stakingTokenContract, account, stakemarketAddress)
   const currencyA = token
   const [currency, setCurrency] = useState(currencyA)

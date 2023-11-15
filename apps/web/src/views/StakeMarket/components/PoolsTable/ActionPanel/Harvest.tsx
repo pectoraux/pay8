@@ -56,6 +56,11 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
     hours: hoursReceivable,
     minutes: minutesReceivable,
   } = getTimePeriods(Number(currPool?.periodReceivable ?? '0'))
+  const {
+    days: daysWaiting,
+    hours: hoursWaiting,
+    minutes: minutesWaiting,
+  } = getTimePeriods(Number(currPool?.waitingPeriod ?? '0'))
 
   const [onPresentArticle] = useModal(<ArticleModal currPool={currPool} />)
 
@@ -156,6 +161,25 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Period Receivable')}
           </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {daysWaiting} {t('days')} {hoursWaiting} {t('hours')} {minutesWaiting} {t('minutes')}
+          </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Waiting Duration')}
+          </Text>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={0}
+              value={parseInt(currPool?.gasPercent) / 100}
+              unit="%"
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Gas Percentage')}
+            </Text>
+          </Box>
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center" mb="9px">
           <Box mr="8px" height="32px">

@@ -26,10 +26,10 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import styled from 'styled-components'
 
 import TextEllipsis from '../components/TextEllipsis'
 import Timer from './Timer'
-import styled from 'styled-components'
 
 // interface ResultsProps {
 //   choices: string[]

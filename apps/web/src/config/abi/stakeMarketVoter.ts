@@ -11,6 +11,12 @@ export const stakeMarketVoterABI = [
       {
         indexed: false,
         internalType: 'uint256',
+        name: 'litigationId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
         name: 'tokenId',
         type: 'uint256',
       },
@@ -416,29 +422,6 @@ export const stakeMarketVoterABI = [
     type: 'event',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_ve',
-        type: 'address',
-      },
-      {
-        internalType: 'address[]',
-        name: '_tokens',
-        type: 'address[]',
-      },
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'claimBribes',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'contractAddress',
     outputs: [
@@ -716,6 +699,11 @@ export const stakeMarketVoterABI = [
       },
       {
         internalType: 'uint256',
+        name: '_litigationId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
         name: '_tokenId',
         type: 'uint256',
       },
@@ -924,6 +912,25 @@ export const stakeMarketVoterABI = [
     inputs: [
       {
         internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'veToken',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '_ve',
         type: 'address',
       },
@@ -967,7 +974,7 @@ export const stakeMarketVoterABI = [
       },
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
       {

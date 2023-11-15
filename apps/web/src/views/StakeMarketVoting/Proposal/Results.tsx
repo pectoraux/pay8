@@ -23,13 +23,24 @@ import { convertTimeToSeconds } from 'utils/timeHelper'
 import { useStakeMarketVoterContract } from 'hooks/useContract'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { differenceInSeconds } from 'date-fns'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import styled from 'styled-components'
+
 import TextEllipsis from '../components/TextEllipsis'
+import Timer from './Timer'
 
 // interface ResultsProps {
 //   choices: string[]
 //   votes: Vote[]
 //   votesLoadingStatus: FetchStatus
 // }
+
+const StyledTimerText = styled(Heading)`
+  background: ${({ theme }) => theme.colors.gradientGold};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`
 
 const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttacker }) => {
   const { t } = useTranslation()
@@ -51,6 +62,13 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const stakeMarketVoterContract = useStakeMarketVoterContract()
+  const diff = Math.max(
+    differenceInSeconds(new Date(parseInt(litigation?.endTime) * 1000 ?? 0), new Date(), {
+      roundingMethod: 'ceil',
+    }),
+    0,
+  )
+  const { days, hours, minutes } = getTimePeriods(diff ?? 0)
 
   const handleApplyResults = useCallback(async () => {
     setPendingFb(true)
@@ -133,11 +151,10 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
                 {t('Apply Results')}
               </Button>
             ) : (
-              <Countdown
-                nextEventTime={convertTimeToSeconds(litigation.endTime)}
-                postCountdownText={t('left')}
-                color="#FDAB32"
-              />
+              <>
+                <Timer minutes={minutes} hours={hours} days={days} />
+                <StyledTimerText pt="18px">{t('left')}</StyledTimerText>
+              </>
             )}
           </Flex>
         </Box>

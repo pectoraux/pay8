@@ -45,7 +45,7 @@ const DataCard = ({ pool, sousId, token }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { pool: partnerPool } = usePool(sousId)
-  console.log('partnerPool===============>', partnerPool)
+  console.log('1partnerPool===============>', partnerPool, pool)
   const {
     days: daysPayable,
     hours: hoursPayable,
@@ -56,6 +56,11 @@ const DataCard = ({ pool, sousId, token }) => {
     hours: hoursReceivable,
     minutes: minutesReceivable,
   } = getTimePeriods(Number(pool?.periodReceivable ?? '0'))
+  const {
+    days: daysWaiting,
+    hours: hoursWaiting,
+    minutes: minutesWaiting,
+  } = getTimePeriods(Number(pool?.waitingPeriod ?? '0'))
   const [openPresentAccept] = useModal(
     <CreateGaugeModal variant="accept" pool={partnerPool} application={pool} currency={token} />,
   )
@@ -63,7 +68,7 @@ const DataCard = ({ pool, sousId, token }) => {
   return (
     <CardWrapper>
       <TopMoverCard>
-        {Number(pool?.sousId) ? (
+        {Number(pool?.id) ? (
           <>
             <Wrapper>
               <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -73,7 +78,7 @@ const DataCard = ({ pool, sousId, token }) => {
             </Wrapper>
             <Flex flex="1" flexDirection="column" alignSelf="flex-center">
               <Box mr="8px" height="32px">
-                <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={pool?.sousId} />
+                <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={pool?.id} />
                 <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                   {t('Stake ID')}
                 </Text>
@@ -130,6 +135,12 @@ const DataCard = ({ pool, sousId, token }) => {
               </Text>
               <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
                 {t('Period Receivable')}
+              </Text>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {daysWaiting} {t('days')} {hoursWaiting} {t('hours')} {minutesWaiting} {t('minutes')}
+              </Text>
+              <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+                {t('Waiting Period')}
               </Text>
               <Box mr="8px" height="32px">
                 <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={pool?.bountyId} />

@@ -147,8 +147,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       const args = [
         account,
         state.collateral,
-        // ve,
-        '0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41',
+        ve,
         state.claimableBy,
         state.parentBountyId,
         state.collectionId,

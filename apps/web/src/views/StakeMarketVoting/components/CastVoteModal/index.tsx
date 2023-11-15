@@ -60,7 +60,7 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
       toastSuccess(
         t('Vote Submitted'),
         <ToastDescriptionWithTx txHash={receipt?.transactionHash}>
-          {t('You have succesfully voted for %choice%', { choice: isChecked ? 'Attacker' : 'Defender' })}
+          {t('You have succesfully voted for the %choice%', { choice: isChecked ? 'Attacker' : 'Defender' })}
         </ToastDescriptionWithTx>,
       )
     }
@@ -117,7 +117,7 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
             isError={false}
             isLoading={false}
             isPending={isPending}
-            total={total}
+            total={total / 2}
             proposal={proposal}
             lockedCakeBalance={0}
             lockedEndTime={0}

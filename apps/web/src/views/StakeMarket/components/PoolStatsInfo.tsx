@@ -20,10 +20,11 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import WebPagesModal from './WebPagesModal'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import { getStakeMarketAddress, getStakeMarketHeperAddress } from 'utils/addressHelpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -79,6 +80,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </ScanLink>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <ScanLink href={getBlockExploreLink(pool?.ve, 'address', chainId)} bold={false} small>
+          {t('View Leviathan NFT contract')}
+        </ScanLink>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
           {t('View NFTs')}
         </LinkExternal>
@@ -90,7 +96,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Gas Percent')} {`->`} {parseInt(pool?.gasPercent) / 100}
+          {t('Gas Percent')} {`->`} {parseInt(pool?.gasPercent) / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

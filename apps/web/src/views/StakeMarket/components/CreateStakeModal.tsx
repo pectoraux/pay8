@@ -72,13 +72,18 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { toastSuccess, toastError } = useToast()
   const [nftFilters, setNftFilters] = useState<any>({})
   const stakingTokenContract = useERC20(currencyAddress || '')
+  const { status, needsApproval, refetch } = useGetRequiresApproval(
+    stakingTokenContract,
+    account,
+    stakeMarketContract.address,
+  )
   const { handleApprove: handlePoolApprove } = useApprovePool(
     stakingTokenContract,
     stakeMarketContract.address,
     currency?.symbol || '',
+    refetch,
   )
 
-  const { status, needsApproval } = useGetRequiresApproval(stakingTokenContract, account, stakeMarketContract.address)
   const [state, setState] = useState<any>({
     ve: '',
     source: account,
@@ -116,7 +121,15 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
         0,
       )
       const args = [
-        [ve, currencyAddress, state.source, ADDRESS_ZERO, ADDRESS_ZERO, account],
+        [
+          // ve,
+          '0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41',
+          currencyAddress,
+          state.source,
+          ADDRESS_ZERO,
+          ADDRESS_ZERO,
+          account,
+        ],
         state.tokenId ?? '0',
         collectionId ?? 0,
         [],

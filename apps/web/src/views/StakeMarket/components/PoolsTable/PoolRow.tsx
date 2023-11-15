@@ -20,13 +20,14 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const tabs = (
     <>
       <NameCell pool={pool} symbol={pool?.tokenSymbol} />
-      <TotalUsersCell labelText={t('Total Users')} amount={pool?.partnerStakeIds?.length} />
+      <TotalUsersCell labelText={t('Total Users')} amount={pool?.partnerStakeIds?.length + 1} />
       <TotalValueCell
         labelText={t('Total Liquidity')}
         amount={getBalanceNumber(pool.totalLiquidity, pool.tokenDecimals)}
         symbol={pool?.tokenSymbol ?? ''}
       />
       <DateInfoCell
+        t={t}
         sousId={sousId}
         labelText={parseFloat(currPool?.waitingDuration) ? t('Countdown to litigations') : t('Next Payable/Receivable')}
       />

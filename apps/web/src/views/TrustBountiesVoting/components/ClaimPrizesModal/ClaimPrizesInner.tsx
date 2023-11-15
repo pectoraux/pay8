@@ -23,8 +23,8 @@ interface ClaimInnerProps {
 
 const ClaimInnerContainer: React.FC<any> = ({ earned, veAddress, tokenAddress, tokenId }) => {
   const { t } = useTranslation()
-  const gasPrice = useGasPrice()
   const { toastSuccess } = useToast()
+  const [claimed, setClaimed] = useState(false)
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { data: tokenData } = useGetTokenData(tokenAddress)
   const winnings = getBalanceNumber(earned, tokenData?.decimals)
@@ -42,6 +42,7 @@ const ClaimInnerContainer: React.FC<any> = ({ earned, veAddress, tokenAddress, t
       )
     })
     if (receipt?.status) {
+      setClaimed(true)
       toastSuccess(
         t('Winnings Collected!'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
@@ -76,6 +77,7 @@ const ClaimInnerContainer: React.FC<any> = ({ earned, veAddress, tokenAddress, t
       </Flex>
       <Flex alignItems="center" justifyContent="center">
         <Button
+          disabled={claimed}
           isLoading={pendingTx}
           endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
           mt="20px"
