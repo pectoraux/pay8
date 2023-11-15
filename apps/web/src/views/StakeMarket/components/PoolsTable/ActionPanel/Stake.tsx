@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCurrency } from 'hooks/Tokens'
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
@@ -17,6 +17,7 @@ import EnableButton from 'views/Game/components/Pot/Deposit/EnableButton'
 import { noop } from 'lodash'
 import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplications }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
+  const { chainId } = useActiveChainId()
   const token = useCurrency(pool.tokenAddress) as any
   const stakemarketAddress = getStakeMarketAddress()
   const stakingTokenContract = useERC20(token?.address || DEFAULT_TFIAT)
@@ -45,6 +47,10 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal variant={variant} pool={currPool} sousId={pool?.sousId} currency={currency ?? token} />,
   )
+  useEffect(() => {
+    refetch()
+  }, [account, chainId])
+
   const { handleApprove, pendingTx } = useApprovePool(
     stakingTokenContract,
     stakemarketAddress,

@@ -100,8 +100,10 @@ export const usePoolsWithFilterSelector = () => {
 }
 
 export const useGetRequiresApproval = (c, a, s) => {
-  const { data, mutate: refetch } = useSWRImmutable(['valuepool1', 'allowance', s?.toLowerCase()], async () =>
-    requiresApproval(c, a, s),
+  const { chainId } = useActiveChainId()
+  const { data, mutate: refetch } = useSWRImmutable(
+    ['valuepool1-allowance', c?.address?.toLowerCase(), a?.toLowerCase(), s?.toLowerCase(), chainId],
+    async () => requiresApproval(c, a, s),
   )
   return {
     isRequired: data ?? true,

@@ -72,15 +72,16 @@ export default function useLockedPool(hookArgs: any): any {
             : [tokenId]
         console.log('1useLockedPool==============>', vaContract, methodName, methodArgs)
         return callWithGasPrice(vaContract, methodName, methodArgs, callOptions)
-          .then(() => {
+          .then((res) => {
             if (methodName === 'increase_amount') {
-              callWithGasPrice(
+              return callWithGasPrice(
                 vaContract,
                 'increase_unlock_time',
                 [tokenId, Math.min(lockDuration + parseInt(nft.lockEnds), MAX_TIME)],
                 callOptions,
               )
             }
+            return res
           })
           .catch((err) => console.log('useLockedPool==============>', methodName, methodArgs, err))
       })
@@ -88,7 +89,7 @@ export default function useLockedPool(hookArgs: any): any {
       if (receipt?.status) {
         toastSuccess(
           t('Lock successfully created!'),
-          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          <ToastDescriptionWithTx txHash={receipt?.transactionHash || ''}>
             {t('Your funds have been staked in the pool')}
           </ToastDescriptionWithTx>,
         )

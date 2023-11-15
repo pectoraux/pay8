@@ -55,6 +55,7 @@ import { getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
 import { FetchStatus } from 'config/constants/types'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
@@ -79,6 +80,7 @@ const CreateProposal = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
+  const { chainId } = useActiveChainId()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess, toastError } = useToast()
@@ -98,6 +100,10 @@ const CreateProposal = () => {
     account,
     getStakeMarketBribeAddress(),
   )
+  useEffect(() => {
+    refetch()
+  }, [account, chainId])
+
   const { handleApprove: handlePoolApprove } = useApprovePool(
     stakingTokenContract,
     getStakeMarketBribeAddress(),

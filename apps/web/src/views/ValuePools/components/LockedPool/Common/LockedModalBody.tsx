@@ -14,13 +14,13 @@ const LockedModalBody: React.FC<any> = ({
   pool,
   stakingToken,
   checkedState,
-  onDismiss,
   lockedAmount,
   currentBalance,
   editAmountOnly,
   prepConfirmArg,
   validator,
   customOverview,
+  onDismiss,
 }) => {
   const { t } = useTranslation()
   const [identityTokenId, setIdentityTokenId] = useState('')

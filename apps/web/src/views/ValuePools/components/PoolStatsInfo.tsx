@@ -21,11 +21,11 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/valuepools'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import WebPagesModal from './WebPagesModal'
 import WebPagesModal2 from './WebPagesModal2'
-import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -303,7 +303,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
         {pool?.tokens?.length
           ? pool.tokens
-              .filter((token) => account?.toLowerCase() === token?.owner?.toLowerCase())
+              .filter(
+                (token) =>
+                  account?.toLowerCase() === pool?.devaddr_?.toLowerCase() ||
+                  account?.toLowerCase() === token?.owner?.toLowerCase(),
+              )
               .map((balance) => (
                 <Button
                   key={balance.id}
@@ -321,7 +325,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
                 </Button>
               ))
           : null}
-        {pool?.tokens?.length ? (
+        {pool?.tokens?.filter(
+          (token) =>
+            account?.toLowerCase() === pool?.devaddr_?.toLowerCase() ||
+            account?.toLowerCase() === token?.owner?.toLowerCase(),
+        )?.length ? (
           <Button
             key="clear-all"
             variant="text"

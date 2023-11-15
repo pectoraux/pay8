@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useGetRequiresApproval, usePool } from 'state/valuepools/hooks'
@@ -16,6 +16,7 @@ import CreateGaugeModal from '../../CreateGaugeModal'
 import InitVaModal from '../../InitVaModal'
 import InitValuepoolModal from '../../InitValuepoolModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { pool } = usePool(id)
+  const { chainId } = useActiveChainId()
   const variant = pool?.devaddr_ !== account ? 'admin' : 'user'
   const vpCurrencyInput = useCurrency(pool?.tokenAddress)
   const [currency, setCurrency] = useState(vpCurrencyInput)
@@ -42,6 +44,14 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
     account,
     pool?.ve ?? '',
   )
+
+  useEffect(() => {
+    refetchVa()
+  }, [account, chainId])
+  useEffect(() => {
+    refetch()
+  }, [account, chainId])
+
   const numOfScheduledPurchases = pool?.purchaseHistory?.filter((ph) => ph.active)?.length
   console.log('pool.id=================>', pool)
   const { handleApprove: handleVAPoolApprove, pendingTx: pendingVAPoolTx } = useApprovePool(

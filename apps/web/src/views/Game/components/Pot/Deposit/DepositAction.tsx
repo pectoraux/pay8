@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   Flex,
   Box,
@@ -24,6 +24,7 @@ import { useGetRequiresApproval } from 'state/valuepools/hooks'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import EnableButton from './EnableButton'
 import DepositButton from './DepositButton'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const InputPanel = styled.div`
   display: flex;
@@ -58,6 +59,7 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
   // const remainingCakeCanStake = new BigNumber(maxTotalDepositToNumber).minus(totalValueLockedValue).toString()
 
   const { account } = useWeb3React()
+  const { chainId } = useActiveChainId()
   const { balance: userCake } = useTokenBalance(gameData?.token?.address)
   const userCakeDisplayBalance = getFullDisplayBalance(userCake, gameData?.token?.decimals, 3)
   const { userNotEnoughCake, notEnoughErrorMessage } = useUserEnoughCakeValidator(depositAmount, userCake)
@@ -82,8 +84,14 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
     () => new BigNumber(depositAmount).multipliedBy(gameData?.token?.decimals).eq(userCake),
     [depositAmount, userCake, gameData],
   )
+
   const { isRequired: needsApproval, refetch } = useGetRequiresApproval(tokenContract, account, getGameFactoryAddress())
   console.log('needsApproval================>', needsApproval, tokenContract)
+
+  useEffect(() => {
+    refetch()
+  }, [account, chainId])
+
   if (needsApproval) {
     return <EnableButton refetch={refetch} tokenContract={tokenContract} />
   }

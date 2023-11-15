@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useGetRequiresApproval } from 'state/trustbounties/hooks'
@@ -15,6 +15,7 @@ import { useApprovePool } from 'views/TrustBounties/hooks/useApprove'
 import CreateGaugeModal from '../../CreateGaugeModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import { useERC20 } from 'hooks/useContract'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
@@ -23,6 +24,7 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
+  const { chainId } = useActiveChainId()
   const token = useCurrency(pool?.tokenAddress ?? '')
   const stakingTokenContract = useERC20(pool?.tokenAddress || '')
   console.log('stakemarketAddress====================>', pool, stakingTokenContract)
@@ -31,6 +33,10 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
     account,
     getTrustBountiesHelperAddress(),
   )
+  useEffect(() => {
+    refetch()
+  }, [account, chainId])
+
   console.log('stakemarketAddress====================>', pool, stakingTokenContract, needsApproval)
   const currencyA = token
   const [currency, setCurrency] = useState(currencyA)

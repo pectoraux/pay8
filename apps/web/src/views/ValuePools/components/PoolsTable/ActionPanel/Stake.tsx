@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useGetRequiresApproval, usePool } from 'state/valuepools/hooks'
@@ -16,6 +16,7 @@ import CreateGaugeModal from '../../CreateGaugeModal'
 import InitVaModal from '../../InitVaModal'
 import InitValuepoolModal from '../../InitValuepoolModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { pool } = usePool(id)
+  const { chainId } = useActiveChainId()
   const variant = pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const vpCurrencyInput = useCurrency(pool?.tokenAddress)
   const [currency, setCurrency] = useState(vpCurrencyInput)
@@ -42,8 +44,22 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
     account,
     pool?.ve ?? '',
   )
+
+  useEffect(() => {
+    refetchVa()
+  }, [refetchVa, account, chainId])
+
+  useEffect(() => {
+    refetch()
+  }, [refetch, account, chainId])
+
   const numOfScheduledPurchases = pool?.purchaseHistory?.filter((ph) => ph.active)?.length
-  console.log('1pool.id=================>', pool?.devaddr_?.toLowerCase() === account?.toLowerCase())
+  console.log(
+    '1pool.id=================>',
+    needsApproval,
+    needsVaApproval,
+    pool?.devaddr_?.toLowerCase() === account?.toLowerCase(),
+  )
   const { handleApprove: handleVAPoolApprove, pendingTx: pendingVAPoolTx } = useApprovePool(
     stakingTokenContract,
     pool?.id,
@@ -171,6 +187,16 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
       <ActionContent>
         <Button width="100%" onClick={openPresentControlPanel} variant="secondary">
           {t('Control Panel')}
+        </Button>
+      </ActionContent>
+      <ActionContent>
+        <Button width="100%" onClick={handleVAPoolApprove} variant="secondary">
+          {t('Increase VE Allowance')}
+        </Button>
+      </ActionContent>
+      <ActionContent>
+        <Button width="100%" onClick={handleVAVAPoolApprove} variant="secondary">
+          {t('Increase VAVA Allowance')}
         </Button>
       </ActionContent>
       <ActionContent>
