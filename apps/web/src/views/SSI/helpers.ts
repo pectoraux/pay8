@@ -17,7 +17,7 @@ export const isCoreProposal = (proposal: Proposal) => {
   return true
 }
 
-export const filterProposalsByType = (entries: any, entryType: any) => {
+export const filterProposalsByType = (entries: any, profile: any, entryType: any) => {
   try {
     if (entries) {
       switch (entryType) {
@@ -37,6 +37,8 @@ export const filterProposalsByType = (entries: any, entryType: any) => {
           return entries.filter((entry) => entry.dataType === EntryType.SHARED)
         case EntryType.SEARCHABLE:
           return entries.filter((entry) => entry.searchable === true)
+        case EntryType.AUDITED:
+          return profile?.dataAudited
         default:
           return entries
       }

@@ -72,7 +72,7 @@ const ProfileHeader: React.FC<any> = ({
 
   const avatarImage = p?.profile?.collection?.avatar || '/images/nfts/no-profile-md.png'
   const profileTeamId = profile?.teamId
-  const hasProfile = !!profile
+  const hasProfile = !!p?.profile
   const toggleUsername = () => setShowUsername(!showUsername)
   const profileUsername = showUsername ? profile?.name : null
 
@@ -184,12 +184,7 @@ const ProfileHeader: React.FC<any> = ({
         )
       }
       return (
-        <Button
-          width="fit-content"
-          mt="16px"
-          disabled={(!isProfileLoading && !isValidating) || hasProfile}
-          onClick={openPresentCreateProfile}
-        >
+        <Button width="fit-content" mt="16px" disabled={hasProfile} onClick={openPresentCreateProfile}>
           {t('Create Profile')}
         </Button>
       )

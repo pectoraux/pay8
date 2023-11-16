@@ -124,13 +124,13 @@ export function PoolControls<T>({
   );
   const stakedOnlyOpenPools = useCallback(() => {
     return openPoolsWithStartBlockFilter.filter((pool: any) => {
-      const res = pool?.accounts?.filter((acc: any) => acc?.ownerAddress?.toLowerCase() === account?.toLowerCase());
+      const res = pool?.accounts?.filter((acc: any) => acc?.toLowerCase() === account?.toLowerCase());
       console.log("resres==================>", res);
       return !!res?.length;
     });
   }, [openPoolsWithStartBlockFilter]);
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0;
-  console.log("1resres================>", stakedOnly, stakedOnlyOpenPools());
+  console.log("1resres================>", openPoolsWithStartBlockFilter, stakedOnly, stakedOnlyOpenPools());
   useEffect(() => {
     if (isIntersecting) {
       setNumberOfPoolsVisible((poolsCurrentlyVisible) => {

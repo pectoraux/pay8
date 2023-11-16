@@ -39,6 +39,8 @@ const getIndexFromType = (entryType: EntryType) => {
       return 6
     case EntryType.SEARCHABLE:
       return 7
+    case EntryType.AUDITED:
+      return 8
     default:
       return 0
   }
@@ -60,6 +62,8 @@ const getTypeFromIndex = (index: number) => {
       return EntryType.OTHERS
     case 7:
       return EntryType.SEARCHABLE
+    case 8:
+      return EntryType.AUDITED
     default:
       return EntryType.SHARED
   }
@@ -119,6 +123,10 @@ const TabMenu: React.FC<React.PropsWithChildren<TabMenuProps>> = ({ proposalType
         <Tab>
           {' '}
           <Flex alignItems="center">{t('Searchable')}</Flex>
+        </Tab>
+        <Tab>
+          {' '}
+          <Flex alignItems="center">{t('Audited')}</Flex>
         </Tab>
       </UIKitTabMenu>
     </StyledTabMenu>

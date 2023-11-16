@@ -163,12 +163,12 @@ export const getSSIDatum = async (account: string) => {
 }
 
 export const fetchProfiles = async ({ chainId }) => {
-  const gauges = await getProfilesData()
+  const gauges = await getProfilesData(1000, 0, { active: true })
   const profiles = await Promise.all(
     gauges
       .map(async (gauge) => {
         const bscClient = publicClient({ chainId: chainId })
-        const [profileInfo, _badgeIds, broadcast] = await bscClient.multicall({
+        const [profileInfo, _badgeIds, accounts, broadcast] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -181,6 +181,12 @@ export const fetchProfiles = async ({ chainId }) => {
               address: getProfileAddress(),
               abi: profileABI,
               functionName: 'getAllBadgeIds',
+              args: [BigInt(gauge.id), BigInt(0)],
+            },
+            {
+              address: getProfileAddress(),
+              abi: profileABI,
+              functionName: 'getAllAccounts',
               args: [BigInt(gauge.id), BigInt(0)],
             },
             {
@@ -253,6 +259,7 @@ export const fetchProfiles = async ({ chainId }) => {
         return {
           sousId: gauge.id,
           ...gauge,
+          accounts: accounts.result,
           tokens,
           badgeIds,
           broadcast: broadcast.result,

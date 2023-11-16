@@ -4,7 +4,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import useSWR from 'swr'
 import { EntryState, EntryType } from 'state/types'
-import { getSSIData } from 'state/ssi/helpers'
+import { getProfileData, getSSIData } from 'state/ssi/helpers'
 import { FetchStatus } from 'config/constants/types'
 import { useSessionStorage } from 'hooks/useSessionStorage'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -30,7 +30,10 @@ const Proposals = () => {
 
   const { proposalType, filterState } = state
   const { status, data } = useSWR(['data9', filterState], async () => getSSIData(1000, 0, account?.toLowerCase() ?? ''))
-  console.log('getSSIData================>', data)
+  const { status: status2, data: profile } = useSWR(['data', filterState], async () =>
+    getProfileData(1000, 0, account?.toLowerCase() ?? ''),
+  )
+  console.log('getSSIData================>', data, profile)
   const handleProposalTypeChange = (newProposalType: EntryType) => {
     setState((prevState) => ({
       ...prevState,
@@ -44,7 +47,7 @@ const Proposals = () => {
       filterState: newFilterState,
     }))
   }
-  const filteredProposals = filterProposalsByState(filterProposalsByType(data, proposalType), filterState)
+  const filteredProposals = filterProposalsByState(filterProposalsByType(data, profile, proposalType), filterState)
   return (
     <Container py="40px">
       <Box mb="48px">

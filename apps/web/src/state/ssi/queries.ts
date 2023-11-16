@@ -15,6 +15,9 @@ id
 owner
 publicKey
 encyptedPrivateKey
+dataAudited {
+    ${ssiFields}
+}
 `
 export const identityTokenFields = `
 id

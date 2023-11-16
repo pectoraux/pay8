@@ -25,7 +25,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
-  const adminAccount = pool?.accounts?.find((acct) => acct?.ownerAddress?.toLowerCase() === account?.toLowerCase())
+  const adminAccount = pool?.accounts?.find((acct) => acct?.toLowerCase() === account?.toLowerCase())
   console.log('adminAccount===========>', adminAccount)
   const variant = adminAccount ? 'admin' : 'user'
   const [openPresentSettings] = useModal(

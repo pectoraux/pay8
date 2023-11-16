@@ -93,7 +93,7 @@ const CreateProposal = () => {
                   publicKey: pk,
                 })
               : ''
-            console.log('public===================>', data?.publicKey, [
+            console.log('2public===================>', data?.publicKey, [
               state.profileId,
               state.auditorProfileId,
               state.name,
@@ -116,14 +116,14 @@ const CreateProposal = () => {
               questions[index].value.toLowerCase(),
               state.searchable ? choice.value : encryptedAnswer,
               state.dataType,
-            ]).catch((err) => console.log('rerr1====================>', err))
+            ]).catch((err) => console.log('rerr1====================>', choice, err))
           })
       })
       if (receipt?.status) {
         setIsLoading(false)
         toastSuccess(
           t('Data Created'),
-          <ToastDescriptionWithTx txHash={receipt?.transactionHash}>
+          <ToastDescriptionWithTx txHash={receipt?.transactionHash || ''}>
             {t('You can now start sharing this data with different services/users')}
           </ToastDescriptionWithTx>,
         )
@@ -319,7 +319,7 @@ const CreateProposal = () => {
               </Box>
               <Box mb="24px">
                 <Flex ref={targetRef3}>
-                  <SecondaryLabel>{t('Entry Profile ID')}</SecondaryLabel>
+                  <SecondaryLabel>{t("Entry Owner's Profile ID")}</SecondaryLabel>
                   {tooltipVisible3 && tooltip3}
                   <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
                 </Flex>

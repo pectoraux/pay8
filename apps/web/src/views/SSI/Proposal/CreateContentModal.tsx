@@ -32,6 +32,7 @@ import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/component
 import { Label, SecondaryLabel } from '../CreateProposal/styles'
 import { combineDateAndTime } from '../CreateProposal/helpers'
 import { useSignMessage } from 'wagmi'
+import { useRouter } from 'next/router'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const CryptoJS = require('crypto-js')
@@ -51,6 +52,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
   const [pendingFb, setPendingFb] = useState(false)
   const { toastSuccess, toastError } = useToast()
   const [activeButtonIndex1, setActiveButtonIndex1] = useState(0)
+  const [activeButtonIndex2, setActiveButtonIndex2] = useState(0)
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
   const [recipient, setRecipient] = useState('')
   const [testimony, setTestimony] = useState<any>('')
@@ -122,7 +124,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
     return ''
   }
 
-  console.log('comparator==============>', comparator, answer, generateIdentityProof())
+  console.log('comparator==============>', entry, comparator, answer, generateIdentityProof())
 
   const handleIdentityProof = useCallback(async () => {
     setPendingFb(true)
@@ -130,22 +132,16 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
     if (identityProof) {
       // eslint-disable-next-line consistent-return
       const receipt = await fetchWithCatchTxError(async () => {
-        console.log('generateIdentityProof===================>', [
+        const args = [
           entry.owner,
           entry.ownerProfileId.id,
           entry.auditorProfileId.id,
           entry.endTime,
           entry.question,
           identityProof,
-        ])
-        return callWithGasPrice(ssiContract, 'generateIdentityProof', [
-          entry.owner,
-          entry.ownerProfileId.id,
-          entry.auditorProfileId.id,
-          entry.endTime,
-          entry.question,
-          identityProof,
-        ])
+        ]
+        console.log('generateIdentityProof===================>', args)
+        return callWithGasPrice(ssiContract, 'generateIdentityProof', args)
       }).catch((err) => console.log('rerr===================>', err))
       if (receipt?.status) {
         toastSuccess(
@@ -160,6 +156,42 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
         t('Your Identity Proof Is Wrong'),
         <ToastDescriptionWithTx txHash={null}>
           {t('Please check you have the correct comparator')}
+        </ToastDescriptionWithTx>,
+      )
+    }
+    onDismiss()
+  }, [
+    t,
+    entry,
+    onDismiss,
+    ssiContract,
+    toastError,
+    toastSuccess,
+    callWithGasPrice,
+    generateIdentityProof,
+    fetchWithCatchTxError,
+  ])
+
+  const handleIdentityProof2 = useCallback(async () => {
+    setPendingFb(true)
+    // eslint-disable-next-line consistent-return
+    const receipt = await fetchWithCatchTxError(async () => {
+      const args = [
+        entry.ownerProfileId?.owner,
+        entry.ownerProfileId?.id,
+        entry.auditorProfileId?.id,
+        entry?.endTime,
+        entry?.question,
+        `testify_eq_${testimony}`,
+      ]
+      console.log('handleIdentityProof2===================>', args)
+      return callWithGasPrice(ssiContract, 'generateIdentityProof', args)
+    }).catch((err) => console.log('rerr===================>', err))
+    if (receipt?.status) {
+      toastSuccess(
+        t('Identity Proof successfully created'),
+        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          {t('You can now show your Identity proof to prove your identity.')}
         </ToastDescriptionWithTx>,
       )
     }
@@ -288,6 +320,20 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
       {!activeButtonIndex1 ? (
         <>
           <Box mb="24px">
+            <Label htmlFor="testimony">{t('Are You The Auditor?')}</Label>
+            <StyledItemRow>
+              <ButtonMenu
+                scale="xs"
+                variant="subtle"
+                activeIndex={activeButtonIndex2}
+                onItemClick={setActiveButtonIndex2}
+              >
+                <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+                <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+              </ButtonMenu>
+            </StyledItemRow>
+          </Box>
+          <Box mb="24px">
             <SecondaryLabel>{entry.question}</SecondaryLabel>
             <Select
               options={[
@@ -394,10 +440,10 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
         {account ? (
           <Button
             mb="8px"
-            onClick={activeButtonIndex1 ? handleShare : handleIdentityProof}
+            onClick={activeButtonIndex1 ? handleShare : activeButtonIndex2 ? handleIdentityProof2 : handleIdentityProof}
             endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
             isLoading={pendingTx || pendingFb}
-            disabled={activeButtonIndex1 ? false : !generateIdentityProof()}
+            disabled={activeButtonIndex1 ? false : activeButtonIndex2 ? false : !generateIdentityProof()}
           >
             {t('%action% Data', { action: activeButtonIndex1 ? 'Share' : 'Generate Proof' })}
           </Button>

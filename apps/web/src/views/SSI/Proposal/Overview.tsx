@@ -115,7 +115,7 @@ const Overview = () => {
           </Box>
         </Box>
         <Box position="sticky" top="60px">
-          {!locked && <Details entry={proposal} answer={answer} />}
+          <Details entry={proposal} answer={answer} />
         </Box>
       </Layout>
     </Container>

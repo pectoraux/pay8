@@ -635,6 +635,7 @@ export enum EntryType {
   INBOX = 'inbox',
   SHARED = 'shared',
   SEARCHABLE = 'searchable',
+  AUDITED = 'audited',
 }
 
 export enum EntryState {

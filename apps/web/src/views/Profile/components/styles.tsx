@@ -41,6 +41,7 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_COLLECTION_ID,
   LockStage.CONFIRM_UPDATE_BOUNTY,
   LockStage.CONFIRM_UPDATE_SSID,
+  LockStage.CONFIRM_UPDATE_SSID2,
   LockStage.CONFIRM_UPDATE_BADGE_ID,
   LockStage.CONFIRM_UPDATE_BLACKLIST,
   LockStage.CONFIRM_BROADCAST,
@@ -51,6 +52,7 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_SSID,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.FOLLOW,
@@ -80,6 +82,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_UPDATE_COLLECTION_ID,
   LockStage.CONFIRM_UPDATE_BOUNTY,
   LockStage.CONFIRM_UPDATE_SSID,
+  LockStage.CONFIRM_UPDATE_SSID2,
   LockStage.CONFIRM_UPDATE_BADGE_ID,
   LockStage.CONFIRM_UPDATE_BLACKLIST,
   LockStage.CONFIRM_BROADCAST,

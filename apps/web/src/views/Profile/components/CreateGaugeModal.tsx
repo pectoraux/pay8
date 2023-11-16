@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import { useState, ChangeEvent } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useAppDispatch } from 'state'
@@ -16,8 +17,9 @@ import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/Confi
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { requiresApproval } from 'utils/requiresApproval'
-import { useGetIsNameUsed } from 'state/profile/hooks'
-import BigNumber from 'bignumber.js'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import LocationStage from 'views/Ramps/components/LocationStage'
+
 import PayProfileStage from './PayProfileStage'
 import UpdateLateDaysStage from './UpdateLateDaysStage'
 import AddAccountStage from './AddAccountStage'
@@ -31,10 +33,10 @@ import BroadCastStage from './BroadCastStage'
 import ClaimRevenueStage from './ClaimRevenueStage'
 import RemoveAccountStage from './RemoveAccountStage'
 import CreateProfileStage from './CreateProfileStage'
+import UpdateSSIDStage from './UpdateSSIDStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
-import LocationStage from 'views/Ramps/components/LocationStage'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import { getSSIContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -51,6 +53,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_BADGE_ID]: t('Attach Badge'),
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
   [LockStage.BROADCAST]: t('Broadcast'),
+  [LockStage.UPDATE_SSID]: t('Update SSID'),
   [LockStage.CLAIM_REVENUE]: t('Withdraw'),
   [LockStage.REMOVE_ACCOUNT]: t('Remove Account'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
@@ -222,9 +225,6 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       case LockStage.DELETE:
         setStage(LockStage.ADMIN_SETTINGS)
         break
-      case LockStage.CONFIRM_UPDATE_SSID:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
       case LockStage.UPDATE_BLACKLIST:
         setStage(LockStage.ADMIN_SETTINGS)
         break
@@ -251,6 +251,12 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         break
       case LockStage.CONFIRM_DELETE:
         setStage(LockStage.DELETE)
+        break
+      case LockStage.CONFIRM_UPDATE_SSID:
+        setStage(LockStage.UPDATE_SSID)
+        break
+      case LockStage.UPDATE_SSID:
+        setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_BROADCAST:
         setStage(LockStage.BROADCAST)
@@ -321,6 +327,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         break
       case LockStage.REMOVE_ACCOUNT:
         setStage(LockStage.CONFIRM_REMOVE_ACCOUNT)
+        break
+      case LockStage.UPDATE_SSID:
+        setStage(LockStage.CONFIRM_UPDATE_SSID)
         break
       case LockStage.DELETE:
         setStage(LockStage.CONFIRM_DELETE)
@@ -435,14 +444,18 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         )
       }
       if (stage === LockStage.CONFIRM_DELETE) {
+        console.log('CONFIRM_DELETE================>', [!!state.detach])
         return callWithGasPrice(profileContract, 'deleteProfile', [!!state.detach]).catch((err) =>
           console.log('CONFIRM_DELETE==================>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_SSID) {
-        return callWithGasPrice(profileContract, 'updateSSID', []).catch((err) =>
-          console.log('CONFIRM_UPDATE_SSID==================>', err),
-        )
+        console.log('CONFIRM_UPDATE_SSID=======================>', [state.profileId, state.identityTokenId])
+        return callWithGasPrice(getSSIContract(), 'updateSSID', [state.profileId, state.identityTokenId])
+          .then(() => {
+            return callWithGasPrice(profileContract, 'updateSSID', [])
+          })
+          .catch((err) => console.log('1CONFIRM_UPDATE_SSID==================>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_BADGE_ID) {
         console.log('CONFIRM_UPDATE_BADGE_ID==================>', [state.badgeId, !!state.add])
@@ -548,7 +561,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_SSID)}>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_SSID)}>
             {t('UPDATE SSID')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
@@ -576,6 +589,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
             {t('DELETE PROFILE')}
           </Button>
         </Flex>
+      )}
+      {stage === LockStage.UPDATE_SSID && (
+        <UpdateSSIDStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_LOCATION && (
         <LocationStage

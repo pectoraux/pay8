@@ -11,7 +11,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
-
+  console.log('HarvestAction==================>', pool, currAccount)
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
       <Text fontSize="12px" bold mr="2px" color="textSubtle" as="span" textTransform="uppercase">
@@ -95,11 +95,15 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Paid Payable')}
             </Text>
           </Box>
-          <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={pool?.ssid} />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('SSID')}
-            </Text>
+          <Box mr="8px" height="32px" mb="8px">
+            <Flex flexDirection="column">
+              <Text fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {pool?.ssid?.length ? pool?.ssid : 'N/A'}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('SSID')}
+              </Text>
+            </Flex>
           </Box>
           <Box mr="8px" height="32px">
             <Balance
@@ -116,8 +120,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Box>
           <Box mr="8px" height="32px">
             {pool?.accounts?.map((acct) => (
-              <ScanLink href={getBlockExploreLink(acct?.ownerAddress, 'address', chainId)} bold={false} small>
-                {truncateHash(acct?.ownerAddress)}
+              <ScanLink href={getBlockExploreLink(acct, 'address', chainId)} bold={false} small>
+                {truncateHash(acct)}
               </ScanLink>
             ))}
             <Text color="textSubtle" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
