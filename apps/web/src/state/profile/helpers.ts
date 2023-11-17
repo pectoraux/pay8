@@ -285,6 +285,22 @@ export const fetchProfiles = async ({ chainId }) => {
   return profiles
 }
 
+export const getIsUnique = async (profileId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [unique] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getProfileAddress(),
+        abi: profileABI,
+        functionName: 'isUnique',
+        args: [profileId],
+      },
+    ],
+  })
+  return unique.result
+}
+
 export const getProfile = async (address, chainId) => {
   try {
     const bscClient = publicClient({ chainId: chainId })

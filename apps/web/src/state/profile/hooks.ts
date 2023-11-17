@@ -9,7 +9,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { getProfile, getProfileId } from './helpers'
+import { getIsUnique, getProfile, getProfileId } from './helpers'
 import { Profile } from '../types'
 import { fetchProfilesAsync } from '.'
 import {
@@ -158,6 +158,15 @@ export const useGetSharedEmail = (account) => {
   return {
     status,
     sharedEmail: data ?? false,
+  }
+}
+
+export const useGetIsUnique = (profileId) => {
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWR(['useGetIsUnique', profileId, chainId], async () => getIsUnique(profileId, chainId))
+  return {
+    status,
+    isUnique: data ?? false,
   }
 }
 

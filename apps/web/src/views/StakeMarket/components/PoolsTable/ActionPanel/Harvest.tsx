@@ -29,6 +29,7 @@ const Wrapper = styled(Flex)`
 `
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPool }) => {
+  if (!currPool) currPool = pool
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const token = useCurrency(pool?.tokenAddress)

@@ -122,8 +122,8 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
       )
       const args = [
         [
-          ve,
-          // '0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41',
+          // ve,
+          '0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41',
           currencyAddress,
           state.source,
           ADDRESS_ZERO,

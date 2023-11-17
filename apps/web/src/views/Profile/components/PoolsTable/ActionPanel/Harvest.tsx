@@ -6,11 +6,13 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
+import { useGetIsUnique } from 'state/profile/hooks'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
+  const { isUnique } = useGetIsUnique(pool?.id)
   console.log('HarvestAction==================>', pool, currAccount)
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
@@ -94,6 +96,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Paid Payable')}
             </Text>
+          </Box>
+          <Box mr="8px" height="32px" mb="8px">
+            <Flex flexDirection="column">
+              <Text fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {isUnique ? t('Yes') : t('No')}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Is Unique ?')}
+              </Text>
+            </Flex>
           </Box>
           <Box mr="8px" height="32px" mb="8px">
             <Flex flexDirection="column">

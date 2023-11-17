@@ -26,6 +26,8 @@ const StyledTimerText = styled(Heading)`
 
 const DateInfoCell: React.FC<any> = ({ labelText, sousId, t }) => {
   const { pool } = usePool(sousId)
+  const statusEndTime = pool?.status?.length ? pool?.status[1] : 0
+  const stakeWinner = parseInt(pool?.status?.length ? pool?.status[2] : 0)
   const diff = Math.max(
     differenceInSeconds(new Date(parseInt(pool.waitingDuration) * 1000 ?? 0), new Date(), {
       roundingMethod: 'ceil',
@@ -33,6 +35,15 @@ const DateInfoCell: React.FC<any> = ({ labelText, sousId, t }) => {
     0,
   )
   const { days, hours, minutes } = getTimePeriods(diff ?? 0)
+
+  const diff2 = Math.max(
+    differenceInSeconds(new Date(parseInt(statusEndTime) * 1000 ?? 0), new Date(), {
+      roundingMethod: 'ceil',
+    }),
+    0,
+  )
+  const { days: days2, hours: hours2, minutes: minutes2 } = getTimePeriods(diff2 ?? 0)
+
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
@@ -40,7 +51,12 @@ const DateInfoCell: React.FC<any> = ({ labelText, sousId, t }) => {
           {labelText}
         </Text>
         <Flex>
-          {!parseFloat(pool?.waitingDuration) ? (
+          {(days2 || hours2 || minutes2) && stakeWinner ? (
+            <Flex flexDirection="row">
+              <StyledTimerText pt="1px">{days2 || hours2 || minutes2 ? t('Appeal window') : ''}</StyledTimerText>
+              <Timer minutes={minutes2} hours={hours2} days={days2} />
+            </Flex>
+          ) : !parseFloat(pool?.waitingDuration) ? (
             <Box mr="8px" height="32px">
               <Text mt="4px" fontSize="14px" color="primary" bold>
                 {parseInt(pool?.nextDueReceivable)

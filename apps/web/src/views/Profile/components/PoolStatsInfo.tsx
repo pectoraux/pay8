@@ -23,7 +23,7 @@ import { useDispatch } from 'react-redux'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
 import { setCurrPoolData } from 'state/profile'
-import { useCurrPool } from 'state/profile/hooks'
+import { useCurrPool, useGetIsUnique } from 'state/profile/hooks'
 import { useToken } from 'hooks/Tokens'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
@@ -48,6 +48,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
   const [onPresentNFT] = useModal(<WebPagesModal height="500px" pool={pool} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
+  const { isUnique } = useGetIsUnique(pool?.id)
   console.log('firstAccount============>', firstAccount, pool?.accounts[0]?.ownerAddress)
   return (
     <>
@@ -83,6 +84,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
         <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFT} bold={false} small>
           {t('View Profile NFT')}
         </LinkExternal>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Is Unique')} {`->`} {isUnique ? t('Yes') : t('No')}
+        </Text>
       </Flex>
       {account && currAccount?.tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

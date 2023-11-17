@@ -182,7 +182,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
         entry.auditorProfileId?.id,
         entry?.endTime,
         entry?.question,
-        `testify_eq_${testimony}`,
+        testimony,
       ]
       console.log('handleIdentityProof2===================>', args)
       return callWithGasPrice(ssiContract, 'generateIdentityProof', args)
