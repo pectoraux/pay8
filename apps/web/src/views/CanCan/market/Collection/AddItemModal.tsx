@@ -99,7 +99,7 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
       const isArticle = img0 !== img1
       try {
         if (isArticle) {
-          img1 = encryptArticle(encryptRsa, mp4)
+          img1 = mp4 // encryptArticle(encryptRsa, mp4)
         } else {
           img0 = thumb
             ? encryptRsa.encryptStringWithRsaPublicKey({

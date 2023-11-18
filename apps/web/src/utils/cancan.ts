@@ -25,19 +25,18 @@ export function decryptContent(nft, thumbnail, mp4, ongoingSubscription, account
     Number(nft?.behindPaywall ?? 0) &&
     (ongoingSubscription || nft?.currentSeller?.toLowerCase() === account?.toLowerCase())
   ) {
-    console.log('ongoingSubscription================>Done')
     const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
     try {
       mp4 = mp4
         ? nodeRSA.decryptStringWithRsaPrivateKey({
             text: mp4,
-            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
           })
         : ''
       thumbnail = thumbnail
         ? nodeRSA.decryptStringWithRsaPrivateKey({
             text: thumbnail,
-            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
           })
         : ''
     } catch (err) {
@@ -71,6 +70,24 @@ export const encryptArticle = (encryptRsa, str) => {
   return encryptedChks?.join(',')
 }
 
+export const decryptAllArticle = (chks) => {
+  // chks = chks?.slice(0, 10)
+  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
+  const decryptedChks = chks?.map((chk, index) => {
+    try {
+      return chk
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: chk,
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+          })
+        : ''
+    } catch (err) {
+      console.log('decryptArticle============>', err, chk?.length, index)
+    }
+  })
+  return decryptedChks?.join('')
+}
+
 export const decryptArticle = (chks) => {
   chks = chks?.slice(0, 10)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
@@ -90,7 +107,6 @@ export const decryptArticle = (chks) => {
 }
 
 export const decryptArticle2 = (chks, cursor) => {
-  console.log('not fetching===============>', cursor)
   if (cursor < 10) {
     return ''
   }

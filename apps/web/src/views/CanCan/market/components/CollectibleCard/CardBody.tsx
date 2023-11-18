@@ -1,4 +1,4 @@
-import { Box, CardBody, Flex, Heading, Text } from '@pancakeswap/uikit'
+import { Box, CardBody, Flex, Heading, NextLinkFromReactRouter, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useGetOrder } from 'state/cancan/hooks'
@@ -12,6 +12,7 @@ import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 const StyledTimerText = styled(Heading)`
   background: ${({ theme }) => theme.colors.gradientGold};
@@ -23,7 +24,7 @@ export const getTitle = (title) => {
   return title?.replaceAll('-', ' ')?.trim() ?? ''
 }
 
-const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice, isUserNft }) => {
+const CollectibleCardBody: React.FC<any> = ({ nft, link, referrer, currentAskPrice, isUserNft }) => {
   const { t } = useTranslation()
   const { tokenId: name } = nft
   const bnbBusdPrice = useBNBBusdPrice()
@@ -50,26 +51,28 @@ const CollectibleCardBody: React.FC<any> = ({ nft, nftLocation, currentAskPrice,
             {nft?.tokenId}
           </Text>
         )}
-        {nftLocation && <LocationTag nftLocation={nftLocation} />}
+        <CopyAddress account={nft?.tokenId} title="_" mb="24px" />
       </Flex>
-      <Text as="h4" fontWeight="600" mb="8px">
-        {getTitle(name)}
-      </Text>
-      <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
-        {currentAskPrice && (
-          <MetaRow title={isUserNft ? t('Your price') : t('Asking price')}>
-            <CostLabel cost={currentAskPrice} mainCurrency={mainCurrency} bnbBusdPrice={bnbBusdPrice} />
-          </MetaRow>
-        )}
-      </Box>
-      {isDrop && (days || hours || minutes) ? (
-        <>
-          <StyledTimerText pt="20px" pr="10px">
-            {t('Drops in')}
-          </StyledTimerText>
-          <Timer minutes={minutes} hours={hours} days={days} />
-        </>
-      ) : null}
+      <NextLinkFromReactRouter to={referrer ? `${link}?referrer=${referrer}` : `${link}`}>
+        <Text as="h4" fontWeight="600" mb="8px">
+          {getTitle(name)}
+        </Text>
+        <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
+          {currentAskPrice && (
+            <MetaRow title={isUserNft ? t('Your price') : t('Asking price')}>
+              <CostLabel cost={currentAskPrice} mainCurrency={mainCurrency} bnbBusdPrice={bnbBusdPrice} />
+            </MetaRow>
+          )}
+        </Box>
+        {isDrop && (days || hours || minutes) ? (
+          <>
+            <StyledTimerText pt="20px" pr="10px">
+              {t('Drops in')}
+            </StyledTimerText>
+            <Timer minutes={minutes} hours={hours} days={days} />
+          </>
+        ) : null}
+      </NextLinkFromReactRouter>
     </CardBody>
   )
 }

@@ -7,7 +7,6 @@ import useTheme from 'hooks/useTheme'
 import { Currency, MaxUint256 } from '@pancakeswap/sdk'
 import { useTranslation, TranslateFunction, ContextApi } from '@pancakeswap/localization'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
-import { NftToken } from 'state/cancan/types'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import BigNumber from 'bignumber.js'
 import { ToastDescriptionWithTx } from 'components/Toast'
@@ -34,6 +33,7 @@ import AvatarImage from '../../BannerHeader/AvatarImage'
 import PublishMediaStage from './PublishMediaStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { useGetPaywallARP } from 'state/cancan/hooks'
+import { encryptArticle } from 'utils/cancan'
 
 interface EditStageProps {
   variant: 'product' | 'paywall' | 'article'
@@ -364,7 +364,7 @@ const EditStage: React.FC<any> = ({
           currency?.address,
           getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase() ?? workspace?.value?.toLowerCase()),
         ]
-        console.log('rerr0===========================>', articleState, args1)
+        console.log('rerr0===========================>', paywallId, articleState, args1)
         return callWithGasPrice(marketOrdersContract, 'createAskOrder', args1)
           .then(() => {
             if (state.options?.length > 0) {
@@ -389,18 +389,24 @@ const EditStage: React.FC<any> = ({
             let img1
             if (!!paywallId) {
               const encryptRsa = new EncryptRsa()
-              img0 = state.thumbnail
-                ? encryptRsa.encryptStringWithRsaPublicKey({
-                    text: state.thumbnail,
-                    publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-                  })
-                : ''
-              img1 = state.original
-                ? encryptRsa.encryptStringWithRsaPublicKey({
-                    text: state.original,
-                    publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-                  })
-                : ''
+              if (state.thumbnail === state.original) {
+                img0 = state.thumbnail
+                  ? encryptRsa.encryptStringWithRsaPublicKey({
+                      text: state.thumbnail,
+                      publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+                    })
+                  : ''
+                img1 = state.original
+                  ? encryptRsa.encryptStringWithRsaPublicKey({
+                      text: state.original,
+                      publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+                    })
+                  : ''
+              } else {
+                // article
+                img0 = state.thumbnail
+                img1 = encryptArticle(encryptRsa, state.original)
+              }
               content = `${img0},${img1}`
             } else {
               content = `${state.thumbnail},${state.original}`

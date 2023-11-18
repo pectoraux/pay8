@@ -150,7 +150,7 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
           <ActivityCard nft={nft} />
         </OwnerActivityContainer>
       </TwoColumnsContainer>
-      {/* <MoreFromThisCollection collectionAddress={collectionAddress} nft={nft} /> */}
+      <MoreFromThisCollection collectionAddress={collectionAddress} nft={nft} />
     </Page>
   )
 }

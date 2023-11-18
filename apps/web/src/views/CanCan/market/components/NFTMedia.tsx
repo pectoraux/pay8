@@ -36,20 +36,7 @@ const NFTMedia: FC<any> = ({ width, height, nft, showThumbnail = true, borderRad
   const { data: _article, refetch, status } = useDecryptArticle(chks)
   const [article, setArticle] = useState(_article ?? '')
   const { data: article2, status: status2 } = useDecryptArticle2(chks, cursor)
-  console.log('_article=================>', _article, status)
-  console.log('article=================>', article)
-  console.log('article2=================>', _article, article, article2, status2)
-  // const { data: article2 } = useDecryptArticle(chks?.slice(10,20))
-  // const [article, setArticle] = useState(_article ?? '')
   const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
-  // useEffect(() => {
-  //   if (cursor < 20 && status === FetchStatus.Fetched) {
-  //     console.log("articlearticle===============>", article, _article)
-  //     setCursor(cursor + 10)
-  //     refetch()
-  //     setArticle(article + _article)
-  //   }
-  // }, [status, _article])
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',
@@ -79,11 +66,7 @@ const NFTMedia: FC<any> = ({ width, height, nft, showThumbnail = true, borderRad
       }
     }
   }, [dispatch, article, isIntersecting, setTryVideoNftMedia])
-
   let { mp4, thumbnail, isArticle } = getThumbnailNContent(nft)
-  console.log('0getThumbnailNContent================>', nft)
-  console.log('1getThumbnailNContent================>', mp4)
-  console.log('2getThumbnailNContent================>', thumbnail, isArticle)
   let _thumbnail
   let _mp4
   if (isArticle) {
@@ -95,8 +78,10 @@ const NFTMedia: FC<any> = ({ width, height, nft, showThumbnail = true, borderRad
     _mp4 = __mp4
   }
 
-  console.log('3getThumbnailNContent================>', _thumbnail, _mp4)
   if (isArticle && !showThumbnail) {
+    if (!parseInt(nft?.behindPaywall)) {
+      return <RichTextEditor value={mp4} readOnly id="rte" />
+    }
     return (
       <Flex flexDirection="column">
         {status === FetchStatus.Fetched && article?.length ? (
@@ -104,8 +89,6 @@ const NFTMedia: FC<any> = ({ width, height, nft, showThumbnail = true, borderRad
         ) : null}
         {status === FetchStatus.Fetched && article?.length && chks?.length > cursor ? (
           <Button
-            isLoading={status2 === FetchStatus.Fetching}
-            endIcon={status2 === FetchStatus.Fetching ? <AutoRenewIcon spin color="currentColor" /> : null}
             onClick={() => {
               setCursor(cursor + 10)
             }}

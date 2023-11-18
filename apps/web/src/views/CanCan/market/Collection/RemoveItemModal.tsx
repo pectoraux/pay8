@@ -10,6 +10,8 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from 'views/Auditors/components/styles'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useMarketEventsContract } from 'hooks/useContract'
+import { useDecryptAllArticle } from 'state/cancan/hooks'
+import { FetchStatus } from 'config/constants/types'
 
 interface DepositModalProps {
   max: BigNumber
@@ -51,6 +53,9 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
     [collection, state],
   )
+  const chks = item?.images?.split(',')?.slice(1)
+  const { data: article } = useDecryptAllArticle(chks)
+
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -77,21 +82,26 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
       const thumb = chunks?.length > 0 && item?.images?.split(',')[0]
       const mp4 = chunks?.length > 1 && item?.images?.split(',').slice(1).join(',')
       let [img0, img1] = [thumb, mp4]
+      const isArticle = img0 !== img1
       try {
-        img0 = thumb
-          ? nodeRSA.decryptStringWithRsaPrivateKey({
-              text: thumb,
-              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-            })
-          : ''
-        img1 = mp4
-          ? nodeRSA.decryptStringWithRsaPrivateKey({
-              text: mp4,
-              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-            })
-          : ''
+        if (isArticle) {
+          img1 = article
+        } else {
+          img0 = thumb
+            ? nodeRSA.decryptStringWithRsaPrivateKey({
+                text: thumb,
+                privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+              })
+            : ''
+          img1 = mp4
+            ? nodeRSA.decryptStringWithRsaPrivateKey({
+                text: mp4,
+                privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+              })
+            : ''
+        }
       } catch (err) {
-        console.log('err============>', err)
+        console.log('errhandleRemoveItem============>', err)
       }
       const args = [state.productId, paywall?.id, false, false, `${img0},${img1}`]
       console.log('handleRemoveItem====================>', args)
@@ -143,7 +153,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
           <Button
             mb="8px"
             variant="danger"
-            disabled={isDone}
+            disabled={isDone || chks?.toString() === article}
             onClick={handleRemoveItem}
             endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : undefined}
           >

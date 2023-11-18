@@ -4,6 +4,7 @@ import { StyledCollectibleCard } from './styles'
 import CardBody from './CardBody'
 import ProductDetailsSection from './ProductDetailsSection'
 import { cancanBaseUrl } from '../../constants'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 const CollectibleLinkCard: React.FC<any> = ({
   nft,
@@ -22,9 +23,13 @@ const CollectibleLinkCard: React.FC<any> = ({
 
   return (
     <StyledCollectibleCard {...props}>
-      <NextLinkFromReactRouter to={referrer ? `${link}?referrer=${referrer}` : `${link}`}>
-        <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice ?? nft?.currentAskPrice} />
-      </NextLinkFromReactRouter>
+      <CardBody
+        referrer={referrer}
+        link={link}
+        nft={nft}
+        nftLocation={nftLocation}
+        currentAskPrice={currentAskPrice ?? nft?.currentAskPrice}
+      />
       <ProductDetailsSection key={nft?.tokenId + nft?.collection?.id} paywall={nft} />
     </StyledCollectibleCard>
   )
