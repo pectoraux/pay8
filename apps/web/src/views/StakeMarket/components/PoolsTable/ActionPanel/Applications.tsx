@@ -1,13 +1,16 @@
 import { useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import { Text, Flex, Box, Card, Button, useModal, CopyButton, Balance, Skeleton } from '@pancakeswap/uikit'
+import { Text, Flex, Box, Card, Button, useModal, CopyButton, Balance, Skeleton, Heading } from '@pancakeswap/uikit'
 import { useCurrency } from 'hooks/Tokens'
+import { differenceInSeconds } from 'date-fns'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { usePool } from 'state/stakemarket/hooks'
+import { useGetStakeApplication, usePool } from 'state/stakemarket/hooks'
 import CreateGaugeModal from '../../CreateGaugeModal'
+import Timer from './Timer'
+import { FetchStatus } from 'config/constants/types'
 
 const CardWrapper = styled(Flex)`
   display: inline-block;
@@ -40,12 +43,18 @@ export const ScrollableRow = styled.div`
     display: none;
   }
 `
+const StyledTimerText = styled(Heading)`
+  background: ${({ theme }) => theme.colors.gradientGold};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`
 
 const DataCard = ({ pool, sousId, token }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { pool: partnerPool } = usePool(sousId)
-  console.log('1partnerPool===============>', partnerPool, pool)
+  const { data: application, status } = useGetStakeApplication(pool?.id) as any
+  console.log('1partnerPool===============>', partnerPool, pool, application)
   const {
     days: daysPayable,
     hours: hoursPayable,
@@ -64,7 +73,13 @@ const DataCard = ({ pool, sousId, token }) => {
   const [openPresentAccept] = useModal(
     <CreateGaugeModal variant="accept" pool={partnerPool} application={pool} currency={token} />,
   )
-
+  const diff = Math.max(
+    differenceInSeconds(new Date(parseInt(application?.deadline ?? '0') * 1000 ?? 0), new Date(), {
+      roundingMethod: 'ceil',
+    }),
+    0,
+  )
+  const { days, hours, minutes } = getTimePeriods(diff ?? 0)
   return (
     <CardWrapper>
       <TopMoverCard>
@@ -160,6 +175,14 @@ const DataCard = ({ pool, sousId, token }) => {
                   {t('Token ID')}
                 </Text>
               </Box>
+              {status === FetchStatus.Fetched ? (
+                <Flex flexDirection="row">
+                  <StyledTimerText pt="18px" mr="3px">
+                    {days || hours || minutes ? t('Valid for') : ''}
+                  </StyledTimerText>
+                  <Timer minutes={minutes} hours={hours} days={days} />
+                </Flex>
+              ) : null}
             </Flex>
             <Flex alignItems="center" justifyContent="center">
               <Button

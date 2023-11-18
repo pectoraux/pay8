@@ -30,6 +30,7 @@ interface RemoveStageProps {
 
 const LocationStage: React.FC<any> = ({
   state,
+  paywallId,
   thumbnail,
   nftToSell,
   collection,
@@ -179,7 +180,15 @@ const LocationStage: React.FC<any> = ({
             <ButtonMenu scale="sm" variant="subtle" activeIndex={activeButtonIndex} onItemClick={noop}>
               <ButtonMenuItem>{t('Image/Video')}</ButtonMenuItem>
               <ButtonMenuItem>
-                <LinkExternal href={variant === 'item' ? 'createArticle' : `${collectionAddress}/createArticle`}>
+                <LinkExternal
+                  href={
+                    variant === 'item'
+                      ? 'createArticle'
+                      : paywallId
+                      ? `${collectionAddress}/createArticle?paywallId=${paywallId}`
+                      : `${collectionAddress}/createArticle`
+                  }
+                >
                   {t('Article')}
                 </LinkExternal>
               </ButtonMenuItem>

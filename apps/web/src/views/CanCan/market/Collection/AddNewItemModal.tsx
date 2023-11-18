@@ -1,4 +1,3 @@
-import NodeRSA from 'encrypt-rsa'
 import EncryptRsa from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useState, useMemo, useCallback } from 'react'
@@ -24,7 +23,6 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from 'views/Auditors/components/styles'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useMarketEventsContract, usePaywallMarketOrdersContract } from 'hooks/useContract'
-import { encryptArticle } from 'utils/cancan'
 
 interface DepositModalProps {
   max: BigNumber
@@ -96,26 +94,21 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
       const thumb = chunks?.length > 0 && item?.images?.split(',')[0]
       const mp4 = chunks?.length > 1 && item?.images?.split(',').slice(1).join(',')
       let [img0, img1] = [thumb, mp4]
-      const isArticle = img0 !== img1
       try {
-        if (isArticle) {
-          img1 = encryptArticle(encryptRsa, mp4)
-        } else {
-          img0 = thumb
-            ? encryptRsa.encryptStringWithRsaPublicKey({
-                text: thumb,
-                publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
-              })
-            : ''
-          img1 = mp4
-            ? encryptRsa.encryptStringWithRsaPublicKey({
-                text: mp4,
-                publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
-              })
-            : ''
-        }
+        img0 = thumb
+          ? encryptRsa.encryptStringWithRsaPublicKey({
+              text: thumb,
+              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+            })
+          : ''
+        img1 = mp4
+          ? encryptRsa.encryptStringWithRsaPublicKey({
+              text: mp4,
+              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+            })
+          : ''
       } catch (err) {
-        console.log('1handleAddItem============>', err, process.env.NEXT_PUBLIC_PUBLIC_KEY_4096)
+        console.log('handleItem err============>', err)
       }
       const contract = partner ? paywallMarketOrdersContract : marketEventsContract
       const method = partner ? 'addReferral' : 'updatePaywall'
@@ -129,9 +122,8 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
             [state.referrerFee, state.bountyId, 2],
           ]
         : [state.productId, paywall?.id, true, false, `${img0},${img1}`]
-      console.log('handleAddItem================>', method, args)
       return callWithGasPrice(contract, method, args).catch((err) => {
-        console.log('2handleAddItem====================>', err)
+        console.log('handleAddItem====================>', err)
       })
     })
     if (receipt?.status) {

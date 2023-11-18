@@ -1,4 +1,5 @@
 import axios from 'axios'
+import EncryptRsa from 'encrypt-rsa'
 import { differenceInSeconds } from 'date-fns'
 import { useState, ChangeEvent } from 'react'
 import { Flex, Grid, Text, Button, useToast, Modal } from '@pancakeswap/uikit'
@@ -18,6 +19,7 @@ import {
   usePaywallARPFactoryContract,
   usePaywallMarketOrdersContract,
   usePaywallMarketHelperContract,
+  useMarketEventsContract,
 } from 'hooks/useContract'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
@@ -25,7 +27,6 @@ import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { SellingStage, OptionType, EnlistFormState } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
 import EnlistStage from './EnlistStage'
-import PaywallStage2 from './PaywallStage2'
 import LocationStage from './LocationStage'
 import TaskStage from './TaskStage'
 import ProgressSteps from '../../ProgressSteps'
@@ -77,6 +78,7 @@ const EditStage: React.FC<any> = ({
   articleState,
   currency,
   workspace,
+  paywallId = null,
   articleFilters = {},
   onDismiss,
 }) => {
@@ -96,6 +98,7 @@ const EditStage: React.FC<any> = ({
   const { callWithGasPrice } = useCallWithGasPrice()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const marketCollectionsContract = useMarketCollectionsContract()
+  const marketEventsContract = useMarketEventsContract()
   const marketOrdersContract = useMarketOrdersContract()
   const marketHelperContract = useMarketHelperContract()
   const paywallMarketOrdersContract = usePaywallMarketOrdersContract()
@@ -338,6 +341,7 @@ const EditStage: React.FC<any> = ({
           .catch((err) => console.log('rerr=============>', err))
       }
       if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
+        let content
         console.log('CONFIRM_CREATE_ASK_ORDER==============>')
         const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
         const dropInTimer = Math.max(
@@ -346,7 +350,7 @@ const EditStage: React.FC<any> = ({
           }),
           0,
         )
-        console.log('rerr0===========================>', [
+        const args1 = [
           state.tokenId?.split(' ')?.join('-')?.trim(),
           currentAskPrice.toString(),
           parseInt(state.bidDuration) * 60,
@@ -359,21 +363,9 @@ const EditStage: React.FC<any> = ({
           dropInTimer.toString(),
           currency?.address,
           getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase() ?? workspace?.value?.toLowerCase()),
-        ])
-        return callWithGasPrice(marketOrdersContract, 'createAskOrder', [
-          state.tokenId?.split(' ')?.join('-')?.trim(),
-          currentAskPrice.toString(),
-          parseInt(state.bidDuration) * 60,
-          parseInt(state.minBidIncrementPercentage) * 100,
-          !!state.transferrable,
-          !!state.requireUpfrontPayment,
-          !!state.usetFIAT,
-          state.rsrcTokenId,
-          state.maxSupply,
-          dropInTimer.toString(),
-          currency?.address,
-          getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase() ?? workspace?.value?.toLowerCase()),
-        ])
+        ]
+        console.log('rerr0===========================>', articleState, args1)
+        return callWithGasPrice(marketOrdersContract, 'createAskOrder', args1)
           .then(() => {
             if (state.options?.length > 0) {
               return callWithGasPrice(marketHelperContract, 'updateOptions', [
@@ -393,6 +385,26 @@ const EditStage: React.FC<any> = ({
             return null
           })
           .then(() => {
+            let img0
+            let img1
+            if (!!paywallId) {
+              const encryptRsa = new EncryptRsa()
+              img0 = state.thumbnail
+                ? encryptRsa.encryptStringWithRsaPublicKey({
+                    text: state.thumbnail,
+                    publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+                  })
+                : ''
+              img1 = state.original
+                ? encryptRsa.encryptStringWithRsaPublicKey({
+                    text: state.original,
+                    publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+                  })
+                : ''
+              content = `${img0},${img1}`
+            } else {
+              content = `${state.thumbnail},${state.original}`
+            }
             let args = [
               state.tokenId?.split(' ')?.join('-')?.trim(),
               state.description,
@@ -401,7 +413,7 @@ const EditStage: React.FC<any> = ({
               state.period,
               variant === 'product' || variant === 'article' ? '0' : '1',
               !!state.isTradable,
-              `${state.thumbnail},${state.original}`,
+              content,
               nftFilters?.country?.toString(),
               nftFilters?.city?.toString(),
               nftFilters?.product
@@ -411,6 +423,13 @@ const EditStage: React.FC<any> = ({
             console.log('11CONFIRM_ADD_LOCATION==============>', marketCollectionsContract, args)
             return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args).catch((err) =>
               console.log('CONFIRM_ADD_LOCATION================>', err),
+            )
+          })
+          .then(() => {
+            const args2 = [state.tokenId?.split(' ')?.join('-')?.trim(), paywallId, true, false, content]
+            console.log('12CONFIRM_ADD_LOCATION==============>', args2)
+            return callWithGasPrice(marketEventsContract, 'updatePaywall', args2).catch((err) =>
+              console.log('13CONFIRM_ADD_LOCATION================>', err),
             )
           })
           .catch((err) => console.log('rerr=============>', err))
@@ -519,6 +538,7 @@ const EditStage: React.FC<any> = ({
         <LocationStage
           state={state}
           variant={variant}
+          paywallId={paywallId}
           updateValue={updateValue}
           nftFilters={nftFilters}
           collection={collection}

@@ -15,7 +15,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getStakeApplication, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('stakemarket-tags', async () => getTag())
@@ -101,4 +101,14 @@ export const useGetRequiresApproval = (c, a, s) => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetStakeApplication = (stakeId: string) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['getStakeApplication', stakeId, chainId], async () => getStakeApplication(stakeId, chainId))
+  return { data, refetch, status }
 }

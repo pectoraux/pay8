@@ -49,3 +49,64 @@ export function decryptContent(nft, thumbnail, mp4, ongoingSubscription, account
     thumbnail,
   }
 }
+
+function chunkString(str, length) {
+  return str.match(new RegExp('.{1,' + length + '}', 'g'))
+}
+
+export const encryptArticle = (encryptRsa, str) => {
+  const chks = chunkString(str, 400)
+  const encryptedChks = chks?.map((chk, index) => {
+    try {
+      return chk
+        ? encryptRsa.encryptStringWithRsaPublicKey({
+            text: chk,
+            publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+          })
+        : ''
+    } catch (err) {
+      console.log('encryptArticle============>', err, chk?.length, index)
+    }
+  })
+  return encryptedChks?.join(',')
+}
+
+export const decryptArticle = (chks) => {
+  chks = chks?.slice(0, 10)
+  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
+  const decryptedChks = chks?.map((chk, index) => {
+    try {
+      return chk
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: chk,
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+          })
+        : ''
+    } catch (err) {
+      console.log('decryptArticle============>', err, chk?.length, index)
+    }
+  })
+  return decryptedChks?.join('')
+}
+
+export const decryptArticle2 = (chks, cursor) => {
+  console.log('not fetching===============>', cursor)
+  if (cursor < 10) {
+    return ''
+  }
+  chks = chks?.slice(cursor, cursor + 10)
+  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
+  const decryptedChks = chks?.map((chk, index) => {
+    try {
+      return chk
+        ? nodeRSA.decryptStringWithRsaPrivateKey({
+            text: chk,
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+          })
+        : ''
+    } catch (err) {
+      console.log('decryptArticle============>', err, chk?.length, index)
+    }
+  })
+  return decryptedChks?.join('')
+}

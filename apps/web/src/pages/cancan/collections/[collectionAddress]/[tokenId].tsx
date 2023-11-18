@@ -25,25 +25,25 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { collectionAddress, tokenId } = params
+  // const { collectionAddress, tokenId } = params
 
-  if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string') {
-    return {
-      notFound: true,
-    }
-  }
+  // if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string') {
+  //   return {
+  //     notFound: true,
+  //   }
+  // }
 
-  const collection = await getCollection(collectionAddress)
-  const nft = await getItemSg(`${collectionAddress}-${tokenId}`)
+  // const collection = await getCollection(collectionAddress)
+  // const nft = await getItemSg(`${collectionAddress}-${tokenId}`)
 
   return {
     props: {
-      fallback: {
-        [unstable_serialize(['cancan', collectionAddress, tokenId])]: nft,
-        ...(collection && {
-          [unstable_serialize(['cancan-item', 'collections', collectionAddress.toLowerCase()])]: collection,
-        }),
-      },
+      // fallback: {
+      //   [unstable_serialize(['cancan', collectionAddress, tokenId])]: nft,
+      //   ...(collection && {
+      //     [unstable_serialize(['cancan-item', 'collections', collectionAddress.toLowerCase()])]: collection,
+      //   }),
+      // },
     },
     revalidate: 60 * 60 * 6, // 6 hours
   }

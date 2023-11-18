@@ -42,6 +42,8 @@ import { CollectibleLinkCard, CollectionCard } from '../../components/Collectibl
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
 import { BNBAmountLabel } from '../../components/CollectibleCard/styles'
 import BuyModal from '../../components/BuySellModals/BuyModal'
+import ShipStage from '../../components/BuySellModals/SellModal/ShipStage'
+
 import OptionFilters from '../../components/BuySellModals/BuyModal/OptionFilters'
 import { cancanBaseUrl } from '../../constants'
 import AddReferralModal from '../AddReferralModal'
@@ -52,6 +54,9 @@ import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
 import Partners from './Partners'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useCurrency } from 'hooks/Tokens'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -339,22 +344,38 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
   const { account } = useWeb3React()
   const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any
   const [nfticketId, setNfticketId] = useState('')
+  const defaultCurrency = useCurrency(DEFAULT_TFIAT)
+  const [currency, setCurrency] = useState(defaultCurrency)
+  const handleInputSelect = useCallback((currencyInput) => {
+    setCurrency(currencyInput)
+  }, [])
   const { ongoingSubscription, status, refetch } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',
     nfticketId ?? '0',
     paywall?.tokenId ?? '',
   )
-  console.log('paywallnfticketId======================>', nfticketId, ongoingSubscription, paywallARP, paywall)
+  console.log(
+    'paywallnfticketId======================>',
+    collection,
+    nfticketId,
+    ongoingSubscription,
+    paywallARP,
+    paywall,
+  )
   const isAdmin = paywall?.currentSeller?.toLowerCase() === account?.toLowerCase()
   const [onPresentAddItem] = useModal(<AddItemModal collection={collection} paywall={paywall} />)
   const [onPresentAddItem2] = useModal(<AddItemModal partner collection={collection} paywall={paywall} />)
+  const [onPresentShip] = useModal(
+    <ShipStage variant="product" collection={collection} currency={currency} paywallId={paywall?.id} />,
+  )
   const [onPresentPartner] = useModal(
     <AddPartnerModal partner collection={collection} paywall={paywall} paywallARP={paywallARP} />,
   )
   const [onPresentRemoveItem] = useModal(<RemoveItemModal collection={collection} paywall={paywall} />)
   const [onPresentSubscribe] = useModal(<SubscribeModal collection={collection} paywall={paywall} />)
   const [onPresentBuySubscription] = useModal(<BuyModal variant="paywall" nftToBuy={paywall} />)
+
   const options = paywall?.options?.map((option, index) => {
     return {
       id: index,
@@ -413,8 +434,20 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     <Flex flexDirection="column">
       {isAdmin ? (
         <Flex flexDirection="row" justifyContent="center">
+          <Flex justifyContent="center" mr="5px" alignItems="center">
+            <CurrencyInputPanel
+              showInput={false}
+              currency={currency ?? defaultCurrency}
+              onCurrencySelect={handleInputSelect}
+              otherCurrency={currency ?? defaultCurrency}
+              id={collection?.id}
+            />
+          </Flex>
           <Button mt="5px" onClick={onPresentAddItem}>
-            {t('Add')}
+            {t('Add Existing Item')}
+          </Button>
+          <Button mt="5px" ml="5px" onClick={onPresentShip}>
+            {t('Add New Item')}
           </Button>
           <Button mt="5px" ml="5px" variant="success" onClick={onPresentPartner}>
             {t('Add Partner')}
@@ -521,10 +554,22 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
           {t('View Paywall')}
         </LinkExternal>
       </Flex>
-      <Button mb="18px" ml="5px" onClick={onPresentAddItem}>
-        {t('Add')}
+      <Flex justifyContent="center" alignItems="center">
+        <CurrencyInputPanel
+          showInput={false}
+          currency={currency ?? defaultCurrency}
+          onCurrencySelect={handleInputSelect}
+          otherCurrency={currency ?? defaultCurrency}
+          id={collection?.id}
+        />
+      </Flex>
+      <Button mt="5px" onClick={onPresentAddItem}>
+        {t('Add Existing Item')}
       </Button>
-      <Button variant="success" ml="5px" onClick={onPresentPartner}>
+      <Button mt="5px" ml="5px" onClick={onPresentShip}>
+        {t('Add New Item')}
+      </Button>
+      <Button variant="success" mt="5px" ml="5px" onClick={onPresentPartner}>
         {t('Add Partner')}
       </Button>
       <Text fontWeight={600}>{t('Paywall is empty')}</Text>

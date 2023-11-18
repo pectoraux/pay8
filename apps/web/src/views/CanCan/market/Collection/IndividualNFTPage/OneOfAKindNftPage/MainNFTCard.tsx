@@ -160,7 +160,15 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                   overflow="auto"
                   maxWidth={isMobile ? 250 : 1000}
                 >
-                  <RichTextEditor value={mp4} readOnly style={{ width: '120%' }} id="rte" />
+                  <NFTMedia
+                    key={nft.tokenId}
+                    ml={500}
+                    style={{ paddingTop: '40%' }}
+                    nft={nft}
+                    showThumbnail={false}
+                    width="120%"
+                  />
+                  {/* <RichTextEditor value={mp4} readOnly style={{ width: '120%' }} id="rte" /> */}
                 </Flex>
               ) : null}
               <Flex flexDirection="row">

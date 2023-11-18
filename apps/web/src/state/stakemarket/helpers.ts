@@ -1,4 +1,3 @@
-import { Token } from '@pancakeswap/sdk'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_STAKES } from 'config/constants/endpoints'
 import { getItemSg } from 'state/cancan/helpers'
@@ -34,6 +33,26 @@ stake {
 netPrice
 txType
 `
+
+export const getStakeApplication = async (stakeId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [application] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getStakeMarketAddress(),
+        abi: stakeMarketABI,
+        functionName: 'stakesApplication',
+        args: [stakeId],
+      },
+    ],
+  })
+  return {
+    status: application.result[0],
+    stakeId: application.result[1],
+    deadline: application.result[2],
+  }
+}
 
 export const getTag = async () => {
   try {

@@ -32,6 +32,7 @@ import {
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { decryptArticle, decryptArticle2 } from 'utils/cancan'
 
 const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'asc' | 'desc' }
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
@@ -54,6 +55,28 @@ export const useGetProfileId = (account: string) => {
   const { chainId } = useActiveChainId()
   const { data, status } = useSWR(['profileId', account, chainId], async () => getProfile(account, chainId))
   return { data, status }
+}
+
+export const useDecryptArticle = (chk) => {
+  const { data, mutate: refetch, status } = useSWR(['decryptArticle', chk?.length], async () => decryptArticle(chk))
+  return {
+    data,
+    refetch,
+    status,
+  }
+}
+
+export const useDecryptArticle2 = (chk, cursor) => {
+  const {
+    data,
+    mutate: refetch,
+    status,
+  } = useSWR(['decryptArticle2', chk?.length, cursor], async () => decryptArticle2(chk, cursor))
+  return {
+    data,
+    refetch,
+    status,
+  }
 }
 
 export const useGetOrder = (collectionId, tokenId) => {

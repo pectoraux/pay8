@@ -27,6 +27,9 @@ import { convertTimeToSeconds } from 'utils/timeHelper'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import BigNumber from 'bignumber.js'
 import { fetchStakesAsync } from 'state/stakemarket'
+import LocationStage from 'views/Ramps/components/LocationStage'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -45,9 +48,6 @@ import MintIOUStage from './MintIOUStage'
 import SwitchStakeStage from './SwitchStakeStage'
 import CancelStakeStage from './CancelStakeStage'
 import WaitingPeriodStage from './WaitingPeriodStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.SETTINGS]: t('Control Panel'),
@@ -143,7 +143,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     description: '',
     name: '',
     symbol: '',
-    source: '',
+    source: pool?.source ?? '',
     startProtocolId: '',
     endProtocolId: '',
     requestAddress: '',
@@ -163,7 +163,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     requests: adminARP.userData?.requests?.length || [],
     amounts: adminARP.userData?.amounts?.length || [],
     closeStake: false,
-    stakeId: pool?.sousId ?? '',
+    stakeId: pool?.id ?? '',
     waitingDuration: pool.waitingDuration,
     defenderStakeId: '',
     customTags: '',

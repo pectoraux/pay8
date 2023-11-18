@@ -64,6 +64,7 @@ const EasyMde = dynamic(() => import('components/EasyMde'), {
 })
 
 const CreateProposal = () => {
+  const router = useRouter()
   const [state, setState] = useState<any>(() => ({
     name: '',
     body: '',
@@ -88,12 +89,13 @@ const CreateProposal = () => {
     isTradable: 1,
     advanced: 0,
     dropinDate: '',
-    bidDuration: '',
+    bidDuration: '0',
     minBidIncrementPercentage: '0',
     rsrcTokenId: '',
     requireUpfrontPayment: 1,
     transferrable: 1,
     usetFIAT: 0,
+    paywallId: router.query.paywallId,
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
@@ -112,6 +114,7 @@ const CreateProposal = () => {
   const [onPresentShip] = useModal(
     <ShipStage
       variant="article"
+      paywallId={router.query.paywallId}
       collection={collection}
       currency={currency}
       articleState={state}

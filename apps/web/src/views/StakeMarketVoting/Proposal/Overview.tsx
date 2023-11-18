@@ -50,6 +50,11 @@ const Overview = () => {
     !!litigation?.votes?.find(
       (vote) => vote.voter?.toLowerCase() === account.toLowerCase() && vote.choice?.toLowerCase() === 'attacker',
     )
+  const hasVotedForDefender =
+    account &&
+    !!litigation?.votes?.find(
+      (vote) => vote.voter?.toLowerCase() === account.toLowerCase() && vote.choice?.toLowerCase() === 'defender',
+    )
   console.log('getLitigationsSg==============>', litigation, hasAccountVoted)
   const isPageLoading = litigationLoadingStatus === FetchStatus.Fetching
 
@@ -113,6 +118,7 @@ const Overview = () => {
             litigation={litigation}
             hasAccountVoted={hasAccountVoted}
             hasVotedForAttacker={hasVotedForAttacker}
+            hasVotedForDefender={hasVotedForDefender}
           />
         </Box>
       </Layout>

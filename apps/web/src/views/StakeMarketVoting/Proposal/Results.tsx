@@ -42,7 +42,7 @@ const StyledTimerText = styled(Heading)`
   -webkit-text-fill-color: transparent;
 `
 
-const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttacker }) => {
+const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttacker, hasVotedForDefender }) => {
   const { t } = useTranslation()
   const totalVotes = litigation?.votes?.length ? litigation.votes.reduce((ac, v) => ac + parseInt(v.votingPower), 0) : 0
   const total1Votes = litigation?.votes?.length
@@ -126,7 +126,7 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
             <TextEllipsis mb="4px" title={t('Defender')}>
               {t('Defender')}
             </TextEllipsis>
-            {hasAccountVoted && !hasVotedForAttacker && (
+            {hasAccountVoted && hasVotedForDefender && (
               <Tag variant="success" outline ml="8px">
                 <CheckmarkCircleIcon mr="4px" /> {t('Voted')}
               </Tag>
