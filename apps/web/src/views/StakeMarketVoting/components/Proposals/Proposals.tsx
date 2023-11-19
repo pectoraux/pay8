@@ -13,6 +13,7 @@ import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
 import ProposalRow from './ProposalRow'
 import LocationFilters from './LocationFilters'
+import { useCallback, useState } from 'react'
 
 interface State {
   proposalType: ProposalType
@@ -38,6 +39,7 @@ const LabelWrapper = styled.div`
 
 const Proposals = () => {
   const { t } = useTranslation()
+  const [searchQuery, setSearchQuery] = useState('')
   const [state, setState] = useSessionStorage<State>('proposals-filter', {
     proposalType: ProposalType.CORE,
     filterState: ProposalState.ACTIVE,
@@ -55,6 +57,11 @@ const Proposals = () => {
       proposalType: newProposalType,
     }))
   }
+
+  const handleChangeSearchQuery = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),
+    [],
+  )
 
   const filteredProposals = filterProposalsByType(data, proposalType)
   const { isMobile } = useMatchBreakpoints()
@@ -83,10 +90,9 @@ const Proposals = () => {
               {t('Search')}
             </Text>
             <SearchInput
-              onChange={() => {
-                return null
-              }}
-              placeholder={t('Search litigations')}
+              initialValue={searchQuery}
+              onChange={handleChangeSearchQuery}
+              placeholder={t('Search by bounty id')}
             />
           </LabelWrapper>
         </FilterContainer>
@@ -99,9 +105,11 @@ const Proposals = () => {
         {status !== FetchStatus.Fetched && <ProposalsLoading />}
         {status === FetchStatus.Fetched &&
           filteredProposals.length > 0 &&
-          filteredProposals.map((proposal) => {
-            return <ProposalRow key={proposal.id} proposal={proposal} />
-          })}
+          filteredProposals
+            .filter((p: any) => !searchQuery || p?.defenderId === searchQuery)
+            .map((proposal) => {
+              return <ProposalRow key={proposal.id} proposal={proposal} />
+            })}
         {status === FetchStatus.Fetched && filteredProposals.length === 0 && (
           <Flex alignItems="center" justifyContent="center" p="32px">
             <Heading as="h5">{t('No litigations found')}</Heading>

@@ -11,6 +11,7 @@ import {
   Button,
   useToast,
   Farm as FarmUI,
+  Balance,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { format } from 'date-fns'
@@ -20,6 +21,11 @@ import { useTranslation } from '@pancakeswap/localization'
 import { IPFS_GATEWAY } from '../config'
 import { ColorTag, ProposalStateTag } from '../components/Proposals/tags'
 import CreateContentModal from './CreateContentModal'
+import { useGetStake } from 'state/stakemarket/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import Divider from 'components/Divider'
+import { useCurrency } from 'hooks/Tokens'
+import BigNumber from 'bignumber.js'
 
 interface DetailsProps {
   proposal: Proposal
@@ -36,8 +42,12 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const { VotesTag } = FarmUI.Tags
   const startDate = new Date(proposal.creationTime * 1000)
   const endDate = new Date(proposal.endTime * 1000)
-  const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
+  const attackerStake = useGetStake(proposal.attackerId)
+  const defenderStake = useGetStake(proposal.defenderId)
+  const token = useCurrency(attackerStake?.token ?? '')
 
+  const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
+  console.log('attackerStake================>', attackerStake)
   return (
     <Card mb="16px">
       <CardHeader>
@@ -52,18 +62,79 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
             {proposal.id.slice(0, 8)}
           </LinkExternal>
         </Flex>
+        <Divider />
         <Flex alignItems="center" mb="8px">
           <Text color="textSubtle">{t('Attacker ID')}</Text>
           <LinkExternal href={getBlockExploreLink(proposal.attackerId, 'address')} ml="8px">
             {proposal.attackerId}
           </LinkExternal>
         </Flex>
+        <Flex justifyContent="column">
+          <Box height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={token?.decimals ?? 18}
+              value={getBalanceNumber(new BigNumber(attackerStake?.bank?.amountPayable?.toString()), token?.decimals)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Amount Payable')}
+            </Text>
+          </Box>
+          <Box ml="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={token?.decimals ?? 18}
+              value={getBalanceNumber(
+                new BigNumber(attackerStake?.bank?.amountReceivable?.toString()),
+                token?.decimals,
+              )}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Amount Receivable')}
+            </Text>
+          </Box>
+        </Flex>
+        <Divider />
         <Flex alignItems="center" mb="16px">
           <Text color="textSubtle">{t('Defender ID')}</Text>
           <LinkExternal href={getBlockExploreLink(proposal.defenderId, 'block')} ml="8px">
             {proposal.defenderId}
           </LinkExternal>
         </Flex>
+        <Flex justifyContent="column">
+          <Box height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={token?.decimals ?? 18}
+              value={getBalanceNumber(new BigNumber(defenderStake?.bank?.amountPayable?.toString()), token?.decimals)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Amount Payable')}
+            </Text>
+          </Box>
+          <Box ml="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={token?.decimals ?? 18}
+              value={getBalanceNumber(
+                new BigNumber(defenderStake?.bank?.amountReceivable?.toString()),
+                token?.decimals,
+              )}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Amount Receivable')}
+            </Text>
+          </Box>
+        </Flex>
+        <Divider />
         <DetailBox p="16px">
           <ProposalStateTag proposalState={proposal.active} mb="8px" style={{ marginRight: '10px' }} />
           <ColorTag votingPower={proposal.percentile} />

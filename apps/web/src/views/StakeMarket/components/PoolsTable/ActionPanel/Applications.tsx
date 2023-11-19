@@ -73,6 +73,7 @@ const DataCard = ({ pool, sousId, token }) => {
   const [openPresentAccept] = useModal(
     <CreateGaugeModal variant="accept" pool={partnerPool} application={pool} currency={token} />,
   )
+  const [openControlPanel] = useModal(<CreateGaugeModal pool={partnerPool} application={pool} currency={token} />)
   const diff = Math.max(
     differenceInSeconds(new Date(parseInt(application?.deadline ?? '0') * 1000 ?? 0), new Date(), {
       roundingMethod: 'ceil',
@@ -188,10 +189,11 @@ const DataCard = ({ pool, sousId, token }) => {
               <Button
                 scale="sm"
                 variant="secondary"
-                disabled={partnerPool.owner?.toLowerCase() !== account?.toLowerCase()}
-                onClick={openPresentAccept}
+                onClick={
+                  partnerPool.owner?.toLowerCase() !== account?.toLowerCase() ? openControlPanel : openPresentAccept
+                }
               >
-                {t('Accept')}
+                {partnerPool.owner?.toLowerCase() !== account?.toLowerCase() ? t('Control Panel') : t('Accept')}
               </Button>
             </Flex>
           </>

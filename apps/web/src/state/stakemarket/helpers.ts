@@ -105,6 +105,22 @@ export const getStakes = async (first: number, skip: number, where) => {
   return null
 }
 
+export const getStake = async (stakeId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [stake] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getStakeMarketAddress(),
+        abi: stakeMarketABI,
+        functionName: 'getStake',
+        args: [BigInt(stakeId)],
+      },
+    ],
+  })
+  return stake.result
+}
+
 export const fetchStakes = async (collectionId, chainId) => {
   const whereClause = Number(collectionId)
     ? {
