@@ -47,7 +47,9 @@ import MintNoteStage from './MintNoteStage'
 import MintIOUStage from './MintIOUStage'
 import SwitchStakeStage from './SwitchStakeStage'
 import CancelStakeStage from './CancelStakeStage'
+import CancelApplicationStage from './CancelApplicationStage'
 import WaitingPeriodStage from './WaitingPeriodStage'
+import { combineDateAndTime } from 'views/SSI/CreateProposal/helpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.SETTINGS]: t('Control Panel'),
@@ -64,6 +66,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_TAX_CONTRACT]: t('Update Tax Contract'),
   [LockStage.UPDATE_BEFORE_LITIGATIONS]: t('Update Before Litigations'),
   [LockStage.CANCEL_STAKE]: t('Cancel Stake'),
+  [LockStage.CANCEL_APPLICATION]: t('Cancel Application'),
   [LockStage.SWITCH_STAKE]: t('Switch Stake'),
   [LockStage.MINT_IOU]: t('Mint IOU'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
@@ -71,6 +74,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_MINT_IOU]: t('Back'),
   [LockStage.CONFIRM_SWITCH_STAKE]: t('Back'),
   [LockStage.CONFIRM_CANCEL_STAKE]: t('Back'),
+  [LockStage.CONFIRM_CANCEL_APPLICATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BEFORE_LITIGATIONS]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TAX_CONTRACT]: t('Back'),
   [LockStage.CONFIRM_UPDATE_OWNER]: t('Back'),
@@ -91,7 +95,13 @@ interface BuyModalProps extends InjectedModalProps {
 }
 
 const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, currency, application, onDismiss }) => {
-  const [stage, setStage] = useState(variant === 'accept' ? LockStage.ACCEPT : LockStage.SETTINGS)
+  const [stage, setStage] = useState(
+    variant === 'accept'
+      ? LockStage.ACCEPT
+      : variant === 'cancel_application'
+      ? LockStage.CANCEL_APPLICATION
+      : LockStage.SETTINGS,
+  )
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -140,6 +150,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     periodReceivable: parseInt(pool?.periodReceivable ?? '0') / 60,
     startPayable: 0,
     startReceivable: 0,
+    startTime: '',
+    startTime2: '',
     description: '',
     name: '',
     symbol: '',
@@ -164,6 +176,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     amounts: adminARP.userData?.amounts?.length || [],
     closeStake: false,
     stakeId: pool?.id ?? '',
+    applicationId: '',
     waitingDuration: pool.waitingDuration,
     defenderStakeId: '',
     customTags: '',
@@ -248,6 +261,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
       case LockStage.CONFIRM_CANCEL_STAKE:
         setStage(LockStage.CANCEL_STAKE)
         break
+      case LockStage.CANCEL_APPLICATION:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_CANCEL_APPLICATION:
+        setStage(LockStage.CANCEL_APPLICATION)
+        break
       case LockStage.SWITCH_STAKE:
         setStage(LockStage.SETTINGS)
         break
@@ -324,6 +343,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
       case LockStage.CANCEL_STAKE:
         setStage(LockStage.CONFIRM_CANCEL_STAKE)
         break
+      case LockStage.CANCEL_APPLICATION:
+        setStage(LockStage.CONFIRM_CANCEL_APPLICATION)
+        break
       case LockStage.SWITCH_STAKE:
         setStage(LockStage.CONFIRM_SWITCH_STAKE)
         break
@@ -386,14 +408,16 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
       if (stage === LockStage.CONFIRM_APPLY) {
         const amountPayable = getDecimalAmount(new BigNumber(state.amountPayable), currency.decimals)
         const amountReceivable = getDecimalAmount(new BigNumber(state.amountReceivable), currency.decimals)
+        const timePayable = combineDateAndTime(state.startPayable, state.startTime)?.toString()
         const startPayable = Math.max(
-          differenceInSeconds(new Date(state.startPayable || 0), new Date(), {
+          differenceInSeconds(new Date(timePayable ? parseInt(timePayable) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
           }),
           0,
         )
+        const timeReceivable = combineDateAndTime(state.startReceivable, state.startTime2)?.toString()
         const startReceivable = Math.max(
-          differenceInSeconds(new Date(state.startReceivable || 0), new Date(), {
+          differenceInSeconds(new Date(timeReceivable ? parseInt(timeReceivable) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
           }),
           0,
@@ -406,8 +430,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
             parseInt(state.periodPayable) * 60,
             parseInt(state.periodReceivable) * 60,
             parseInt(state.waitingPeriod) * 60,
-            startPayable,
-            startReceivable,
+            startPayable?.toString(),
+            startReceivable?.toString(),
           ],
           state.deadline,
           state.identityTokenId,
@@ -484,6 +508,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
           console.log('CONFIRM_CANCEL_STAKE===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_CANCEL_APPLICATION) {
+        const args = [state.applicationId, state.stakeId]
+        console.log('CONFIRM_CANCEL_APPLICATION===============>', args)
+        return callWithGasPrice(stakeMarketContract, 'deleteApplication', args).catch((err) =>
+          console.log('CONFIRM_CANCEL_APPLICATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_DEPOSIT) {
         const amount = getDecimalAmount(state.amountReceivable, currency?.decimals)
         const args = [pool.sousId, amount.toString()]
@@ -508,14 +539,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
         )
       }
       if (stage === LockStage.CONFIRM_ACCEPT) {
+        const timePayable = combineDateAndTime(state.startPayable, state.startTime)?.toString()
         console.log('CONFIRM_ACCEPT1===============>', application)
         const startPayable = Math.max(
-          differenceInSeconds(new Date(state.startPayable || 0), new Date(), {
+          differenceInSeconds(new Date(timePayable ? parseInt(timePayable) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
           }),
           0,
         )
-        const args = [application.sousId.toString(), pool.sousId.toString(), startPayable, !!state.closeStake]
+        const args = [application.sousId.toString(), pool.id.toString(), startPayable.toString(), !!state.closeStake]
         console.log('CONFIRM_ACCEPT===============>', args)
         return callWithGasPrice(stakeMarketContract, 'lockStake', args).catch((err) =>
           console.log('CONFIRM_ACCEPT===============>', err),
@@ -597,6 +629,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CANCEL_STAKE)}>
             {t('CANCEL STAKE')}
+          </Button>
+          <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CANCEL_APPLICATION)}>
+            {t('CANCEL APPLICATION')}
           </Button>
           <Button variant="subtle" mb="8px" onClick={() => setStage(LockStage.MINT_NOTE)}>
             {t('TRANSFER NOTE')}
@@ -733,6 +768,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
       {stage === LockStage.CANCEL_STAKE && (
         <CancelStakeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
+      {stage === LockStage.CANCEL_STAKE && (
+        <CancelApplicationStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      CANCEL_APPLICATION
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

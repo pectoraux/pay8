@@ -16,6 +16,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { GreyedOutContainer, Divider } from './styles'
+import { TimePicker } from 'views/SSI/components/DatePicker'
 
 interface SetPriceStageProps {
   state: any
@@ -76,6 +77,18 @@ const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToN
           selected={state.startPayable}
           placeholderText="YYYY/MM/DD"
           onChange={handleRawValueChange('startPayable')}
+        />
+        <DatePickerPortal />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Start Payable Time')}
+        </Text>
+        <TimePicker
+          name="startTime"
+          onChange={handleRawValueChange('startTime')}
+          selected={state.startTime}
+          placeholderText="00:00"
         />
         <DatePickerPortal />
       </GreyedOutContainer>

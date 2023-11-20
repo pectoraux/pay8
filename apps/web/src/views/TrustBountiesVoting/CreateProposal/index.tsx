@@ -368,6 +368,7 @@ const CreateProposal = () => {
               ) : needsApproval ? (
                 <Button
                   mb="8px"
+                  width="100%"
                   onClick={handlePoolApprove}
                   endIcon={
                     allowing || status === FetchStatus.Fetching ? <AutoRenewIcon spin color="currentColor" /> : null

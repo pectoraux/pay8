@@ -36,14 +36,27 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Stake ID')}
+          {t('Parent Stake ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="stakeId"
           value={state.stakeId}
-          placeholder={t('input id of stake')}
+          placeholder={t('input id of parent stake')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Parent Stake ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="stakeId"
+          value={state.applicationId}
+          placeholder={t('input id of your stake')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -53,7 +66,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will cancel/delete the specified stake.')}
+            {t('This will cancel/delete the specified application to the specified parent stake.')}
           </Text>
         </Box>
       </Grid>

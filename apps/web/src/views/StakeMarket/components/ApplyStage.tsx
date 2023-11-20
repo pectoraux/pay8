@@ -3,6 +3,7 @@ import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip }
 import { useTranslation } from '@pancakeswap/localization'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { GreyedOutContainer, Divider } from './styles'
+import { TimePicker } from 'views/SSI/components/DatePicker'
 
 interface SetPriceStageProps {
   handleChange?: (any) => void
@@ -292,6 +293,18 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
         <DatePickerPortal />
       </GreyedOutContainer>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Start Payable Time')}
+        </Text>
+        <TimePicker
+          name="startTime"
+          onChange={handleRawValueChange('startTime')}
+          selected={state.startTime}
+          placeholderText="00:00"
+        />
+        <DatePickerPortal />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef9}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Start Receivable')}
@@ -303,6 +316,18 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
           selected={state.startReceivable}
           placeholderText="YYYY/MM/DD"
           onChange={handleRawValueChange('startReceivable')}
+        />
+        <DatePickerPortal />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Start Receivable Time')}
+        </Text>
+        <TimePicker
+          name="startTime2"
+          onChange={handleRawValueChange('startTime2')}
+          selected={state.startTime2}
+          placeholderText="00:00"
         />
         <DatePickerPortal />
       </GreyedOutContainer>

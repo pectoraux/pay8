@@ -608,7 +608,7 @@ export default {
     4002: '0x36D1257A7E29E73A345D01F1e5F81d424C12a2c7',
   },
   'real estate': {
-    4002: '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
+    4002: '0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
     56: '0x',
   },
   transportation: {

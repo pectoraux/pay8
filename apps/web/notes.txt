@@ -1,3 +1,28 @@
+# TODO
+* friendly Claim
+* withdraw vote earnings
+* add Approval
+
+* withdraw vote earnings
+* periodic stake due dates
+* IOU / notes
+* withdraw note earnings
+* withdraw admin earnings
+
+* create lottery 
+* have 7 accounts buy tickets with USD
+* have 7 accounts buy tickets with another token
+* have 1 buy a ticket with discount
+* prevent 1 from buying due to age
+* end lottery and draw final numbers
+* withdraw earnings for winners
+* withdraw earnings for admin
+* restart lottery and repeat
+
+* do same for valuepool lottery
+* do same for marketplace lottery
+
+
 # Guides
 
 ## SEO:

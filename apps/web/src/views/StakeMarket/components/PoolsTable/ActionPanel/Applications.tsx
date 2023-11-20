@@ -74,6 +74,10 @@ const DataCard = ({ pool, sousId, token }) => {
     <CreateGaugeModal variant="accept" pool={partnerPool} application={pool} currency={token} />,
   )
   const [openControlPanel] = useModal(<CreateGaugeModal pool={partnerPool} application={pool} currency={token} />)
+  const [openControlPanel2] = useModal(
+    <CreateGaugeModal variant="cancel_application" pool={partnerPool} application={pool} currency={token} />,
+  )
+
   const diff = Math.max(
     differenceInSeconds(new Date(parseInt(application?.deadline ?? '0') * 1000 ?? 0), new Date(), {
       roundingMethod: 'ceil',
@@ -81,6 +85,7 @@ const DataCard = ({ pool, sousId, token }) => {
     0,
   )
   const { days, hours, minutes } = getTimePeriods(diff ?? 0)
+  const isPartner = partnerPool.owner?.toLowerCase() !== account?.toLowerCase()
   return (
     <CardWrapper>
       <TopMoverCard>
@@ -185,16 +190,15 @@ const DataCard = ({ pool, sousId, token }) => {
                 </Flex>
               ) : null}
             </Flex>
-            <Flex alignItems="center" justifyContent="center">
-              <Button
-                scale="sm"
-                variant="secondary"
-                onClick={
-                  partnerPool.owner?.toLowerCase() !== account?.toLowerCase() ? openControlPanel : openPresentAccept
-                }
-              >
-                {partnerPool.owner?.toLowerCase() !== account?.toLowerCase() ? t('Control Panel') : t('Accept')}
+            <Flex flexDirection="column" alignItems="center" justifyContent="center">
+              <Button scale="sm" variant="secondary" onClick={isPartner ? openControlPanel : openPresentAccept}>
+                {isPartner ? t('Control Panel') : t('Accept')}
               </Button>
+              {isPartner ? (
+                <Button scale="sm" variant="danger" onClick={openControlPanel2}>
+                  {t('Cancel Application')}
+                </Button>
+              ) : null}
             </Flex>
           </>
         ) : (
