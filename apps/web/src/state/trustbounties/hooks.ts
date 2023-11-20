@@ -13,7 +13,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   poolsWithFilterSelector,
 } from './selectors'
-import { getEarned, getIsLocked, getLatestClaim, getTag } from './helpers'
+import { getBalanceSource, getEarned, getIsLocked, getLatestClaim, getTag } from './helpers'
 import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
@@ -67,7 +67,7 @@ export const useFetchPublicPoolsData = () => {
   const fromContributors = router.pathname.includes('contributors')
   const fromTransfers = router.pathname.includes('transfers')
 
-  useSWR(
+  const { mutate } = useSWR(
     ['/trustbounties', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
@@ -98,6 +98,9 @@ export const useFetchPublicPoolsData = () => {
       keepPreviousData: true,
     },
   )
+  return {
+    refresh: mutate,
+  }
 }
 
 export const usePool = (sousId: number): { pool: any; userDataLoaded: boolean } => {
@@ -107,9 +110,9 @@ export const usePool = (sousId: number): { pool: any; userDataLoaded: boolean } 
 
 export const usePoolsPageFetch = () => {
   // const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
   useBountiesConfigInitialize()
-  useFetchPublicPoolsData()
+  return useFetchPublicPoolsData()
 
   // useFastRefreshEffect(() => {
   //   batch(() => {
@@ -147,6 +150,12 @@ export const useGetRequiresApproval = (c, a, s) => {
 export const useGetIsLocked = (bountyId) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWR(['useGetIsLocked', bountyId, chainId], async () => getIsLocked(bountyId, chainId))
+  return data
+}
+
+export const useGetBalanceSource = (bountyId) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['getBalanceSource', bountyId, chainId], async () => getBalanceSource(bountyId, chainId))
   return data
 }
 

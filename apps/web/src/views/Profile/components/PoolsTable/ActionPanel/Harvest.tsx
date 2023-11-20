@@ -92,7 +92,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={pool?.paidPayable} />
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={currAccount?.token?.decimals}
+              value={pool?.paidPayable}
+            />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Paid Payable')}
             </Text>

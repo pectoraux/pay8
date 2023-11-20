@@ -118,6 +118,35 @@ export const trustBountiesABI = [
         name: '',
         type: 'uint256',
       },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'balances',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
     ],
     name: 'bountyInfo',
     outputs: [
@@ -433,6 +462,42 @@ export const trustBountiesABI = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_position',
+        type: 'uint256',
+      },
+    ],
+    name: 'getFundsFromApprovals',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_position',
+        type: 'uint256',
+      },
+    ],
+    name: 'getFundsFromSource',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

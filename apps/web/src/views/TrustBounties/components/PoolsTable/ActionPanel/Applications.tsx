@@ -51,51 +51,67 @@ const DataCard = ({ bountyId, isNativeCoin, claim, decimals }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess, toastError } = useToast()
   const [pendingFb, setPendingFb] = useState(false)
+  const [pendingFb2, setPendingFb2] = useState(false)
   const trustBountiesContract = useTrustBountiesContract()
-  const dispatch = useAppDispatch()
+  const isHunter = claim.winner === null || claim.winner === ADDRESS_ZERO
 
-  const handleConcede = useCallback(async () => {
-    setPendingFb(true)
-    // eslint-disable-next-line consistent-return
-    const receipt = await fetchWithCatchTxError(async () => {
-      const method =
-        claim.winner === ADDRESS_ZERO ? 'concede' : isNativeCoin ? 'applyClaimResultsETH' : 'applyClaimResults'
-      const args =
-        claim.winner === ADDRESS_ZERO
+  console.log('claim===============>', claim, !!claim.winner)
+  const handleConcede = useCallback(
+    async (fromConcede) => {
+      if (fromConcede) {
+        setPendingFb(true)
+      } else {
+        setPendingFb2(true)
+      }
+      // eslint-disable-next-line consistent-return
+      const receipt = await fetchWithCatchTxError(async () => {
+        const method = fromConcede ? 'concede' : isNativeCoin ? 'applyClaimResultsETH' : 'applyClaimResults'
+        const args = fromConcede
           ? [bountyId]
           : isNativeCoin
-          ? [bountyId, claim.id, '', '']
-          : [bountyId, claim.id, 0, '', '']
-      console.log('concede===============>', method, args)
-      return callWithGasPrice(trustBountiesContract, method, args).catch((err) => {
-        console.log('err0=================>', err)
-        toastError(
-          t('Issue conceding'),
-          <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
-        )
+          ? [bountyId, claim.id, '', '', '']
+          : [bountyId, claim.id, 0, '', '', '']
+        console.log('concede===============>', method, args)
+        return callWithGasPrice(trustBountiesContract, method, args).catch((err) => {
+          console.log('err0=================>', err)
+          if (fromConcede) {
+            setPendingFb(false)
+          } else {
+            setPendingFb2(false)
+          }
+          toastError(
+            t('Issue conceding'),
+            <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
+          )
+        })
       })
-    })
-    if (receipt?.status) {
-      setPendingFb(false)
-      toastSuccess(
-        t('Claim successfully conceded'),
-        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('This claimed has now been settled with the attacker.')}
-        </ToastDescriptionWithTx>,
-      )
-      // dispatch(fetchBountiesAsync())
-    }
-  }, [
-    t,
-    claim,
-    bountyId,
-    isNativeCoin,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
-    fetchWithCatchTxError,
-    trustBountiesContract,
-  ])
+      if (receipt?.status) {
+        if (fromConcede) {
+          setPendingFb(false)
+        } else {
+          setPendingFb2(false)
+        }
+        toastSuccess(
+          t('Claim successfully conceded'),
+          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+            {t('This claimed has now been settled with the attacker.')}
+          </ToastDescriptionWithTx>,
+        )
+        // dispatch(fetchBountiesAsync())
+      }
+    },
+    [
+      t,
+      claim,
+      bountyId,
+      isNativeCoin,
+      toastError,
+      toastSuccess,
+      callWithGasPrice,
+      fetchWithCatchTxError,
+      trustBountiesContract,
+    ],
+  )
 
   return (
     <CardWrapper>
@@ -138,15 +154,25 @@ const DataCard = ({ bountyId, isNativeCoin, claim, decimals }) => {
             {t('Status')}
           </Text>
         </Flex>
-        <Flex alignItems="center" justifyContent="center">
+        <Flex flexDirection="column" alignItems="center" justifyContent="center">
           <Button
+            mb="8px"
             scale="sm"
             variant="secondary"
             disabled={claim.atPeace}
-            onClick={handleConcede}
-            endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
+            onClick={() => handleConcede(true)}
+            endIcon={pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
           >
-            {claim.winner !== ADDRESS_ZERO ? t('Apply Results') : t('Concede')}
+            {t('Concede')}
+          </Button>
+          <Button
+            scale="sm"
+            variant="secondary"
+            // disabled={claim.atPeace}
+            onClick={() => handleConcede(false)}
+            endIcon={pendingFb2 ? <AutoRenewIcon spin color="currentColor" /> : null}
+          >
+            {t('Apply Results')}
           </Button>
         </Flex>
       </TopMoverCard>

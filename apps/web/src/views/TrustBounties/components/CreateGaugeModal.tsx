@@ -20,6 +20,7 @@ import { differenceInSeconds } from 'date-fns'
 import { fetchBountiesAsync } from 'state/trustbounties'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -33,7 +34,8 @@ import CleanUpApprovalStage from './CleanUpApprovalStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import LocationStage from './LocationStage'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import GetFundsFromApprovalStage from './GetFundsFromApprovalStage'
+import GetFundsFromValuepoolStage from './GetFundsFromValuepoolStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -44,6 +46,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADD_APPROVAL]: t('Add Approval'),
   [LockStage.DELETE_APPROVAL]: t('Delete Approval'),
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
+  [LockStage.GET_FROM_APPROVAL]: t('Get Funds From Approval'),
+  [LockStage.GET_FROM_VALUEPOOL]: t('Get Funds From Valuepool'),
   [LockStage.ADD_RECURRING_BALANCE]: t('Add Recurring Balance'),
   [LockStage.CLEAN_UP_APPROVALS]: t('Clean Up Approvals'),
   [LockStage.CLEAN_UP_BALANCES]: t('Clean Up Balances'),
@@ -56,6 +60,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE]: t('Back'),
   [LockStage.CONFIRM_APPLY_RESULTS]: t('Back'),
   [LockStage.CONFIRM_ADD_APPROVAL]: t('Back'),
+  [LockStage.CONFIRM_GET_FROM_APPROVAL]: t('Back'),
+  [LockStage.CONFIRM_GET_FROM_VALUEPOOL]: t('Back'),
   [LockStage.CONFIRM_DELETE_APPROVAL]: t('Back'),
   [LockStage.CONFIRM_DELETE_BOUNTY]: t('Back'),
   [LockStage.CONFIRM_ADD_BALANCE]: t('Back'),
@@ -142,6 +148,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
     sourceAddress: trustBountiesContract.address,
     customTags: '',
     collateral: currency?.address ?? '',
+    position: '',
   }))
   const [nftFilters, setNftFilters] = useState<any>({
     workspace: pool?.workspaces,
@@ -182,7 +189,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         setStage(LockStage.APPLY_RESULTS)
         break
       case LockStage.ADD_BALANCE:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_ADD_BALANCE:
         setStage(LockStage.ADD_BALANCE)
@@ -210,6 +217,18 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         break
       case LockStage.CONFIRM_ADD_APPROVAL:
         setStage(LockStage.ADD_APPROVAL)
+        break
+      case LockStage.GET_FROM_APPROVAL:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_GET_FROM_APPROVAL:
+        setStage(LockStage.GET_FROM_APPROVAL)
+        break
+      case LockStage.GET_FROM_VALUEPOOL:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_GET_FROM_VALUEPOOL:
+        setStage(LockStage.GET_FROM_VALUEPOOL)
         break
       case LockStage.UPDATE:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -265,6 +284,12 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         break
       case LockStage.ADD_APPROVAL:
         setStage(LockStage.CONFIRM_ADD_APPROVAL)
+        break
+      case LockStage.GET_FROM_APPROVAL:
+        setStage(LockStage.CONFIRM_GET_FROM_APPROVAL)
+        break
+      case LockStage.GET_FROM_VALUEPOOL:
+        setStage(LockStage.CONFIRM_GET_FROM_VALUEPOOL)
         break
       case LockStage.DELETE_APPROVAL:
         setStage(LockStage.CONFIRM_DELETE_APPROVAL)
@@ -380,6 +405,18 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           console.log('CONFIRM_DELETE_BOUNTY===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_GET_FROM_APPROVAL) {
+        console.log('CONFIRM_GET_FROM_APPROVAL===============>', [state.bountyId, state.position])
+        return callWithGasPrice(trustBountiesContract, 'getFundsFromApprovals', [state.bountyId, state.position]).catch(
+          (err) => console.log('CONFIRM_GET_FROM_APPROVAL===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_GET_FROM_VALUEPOOL) {
+        console.log('CONFIRM_GET_FROM_VALUEPOOL===============>', [state.bountyId, state.position])
+        return callWithGasPrice(trustBountiesContract, 'getFundsFromSource', [state.bountyId, state.position]).catch(
+          (err) => console.log('CONFIRM_GET_FROM_VALUEPOOL===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_ADD_RECURRING_BALANCE) {
         console.log('CONFIRM_ADD_RECURRING_BALANCE===============>', [state.bountyId, state.sourceAddress])
         return callWithGasPrice(trustBountiesContract, 'addRecurringBalance', [
@@ -475,6 +512,12 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_RECURRING_BALANCE)}>
             {t('ADD RECURRING BALANCE')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.GET_FROM_APPROVAL)}>
+            {t('GET FUNDS FROM APPROVAL')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.GET_FROM_VALUEPOOL)}>
+            {t('GET FUNDS FROM VALUEPOOL')}
+          </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.CLEAN_UP_APPROVALS)}>
             {t('CLEAN UP APPROVALS')}
           </Button>
@@ -491,11 +534,20 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           <Button mb="8px" onClick={() => setStage(LockStage.ADD_APPROVAL)}>
             {t('ADD APPROVAL')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.ADD_BALANCE)}>
+            {t('ADD BALANCE')}
+          </Button>
           <Button variant="light" mb="8px" onClick={() => setStage(LockStage.APPLY_RESULTS)}>
             {t('APPLY RESULTS')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_RECURRING_BALANCE)}>
             {t('ADD RECURRING BALANCE')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.GET_FROM_APPROVAL)}>
+            {t('GET FUNDS FROM APPROVAL')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.GET_FROM_VALUEPOOL)}>
+            {t('GET FUNDS FROM VALUEPOOL')}
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_APPROVAL)}>
             {t('DELETE APPROVAL')}
@@ -536,6 +588,20 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       )}
       {stage === LockStage.UPDATE_OWNER && (
         <UpdateOwnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.GET_FROM_APPROVAL && (
+        <GetFundsFromApprovalStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.GET_FROM_VALUEPOOL && (
+        <GetFundsFromValuepoolStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.ADD_BALANCE && (
         <AddBalanceStage

@@ -162,6 +162,23 @@ export const getTokenData = async (tokenAddress, chainId) => {
   return { name: name.result, symbol: symbol.result, decimals: decimals.result }
 }
 
+export const getBalanceSource = async (bountyId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const trustBountyAddress = getTrustBountiesAddress()
+  const [balance] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: trustBountyAddress,
+        abi: trustBountiesABI,
+        functionName: 'balances',
+        args: [BigInt(bountyId), trustBountyAddress],
+      },
+    ],
+  })
+  return balance.result
+}
+
 export const fetchBounties = async (
   collectionId = 0,
   fromAccelerator = false,
@@ -265,6 +282,7 @@ export const fetchBounties = async (
 
             return {
               ...claim,
+              winner: fromBc.result[5],
               atPeace: Number(fromBc.result[6]) === 0, // status
               endTime: fromBc.result[2]?.toString(),
             }

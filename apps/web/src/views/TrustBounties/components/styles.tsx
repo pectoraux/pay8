@@ -20,6 +20,8 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_DELETE_APPROVAL,
   LockStage.CONFIRM_DELETE_BOUNTY,
   LockStage.CONFIRM_UPDATE_LOCATION,
+  LockStage.CONFIRM_GET_FROM_VALUEPOOL,
+  LockStage.CONFIRM_GET_FROM_APPROVAL,
 ]
 
 export const stagesWithBackButton = [
@@ -34,6 +36,10 @@ export const stagesWithBackButton = [
   LockStage.CLEAN_UP_BALANCES,
   LockStage.ADD_APPROVAL,
   LockStage.DELETE_APPROVAL,
+  LockStage.GET_FROM_VALUEPOOL,
+  LockStage.GET_FROM_APPROVAL,
+  LockStage.CONFIRM_GET_FROM_VALUEPOOL,
+  LockStage.CONFIRM_GET_FROM_APPROVAL,
   LockStage.CONFIRM_UPDATE,
   LockStage.CONFIRM_ADD_BALANCE,
   LockStage.CONFIRM_UPDATE_OWNER,

@@ -57,7 +57,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const { toastSuccess, toastError } = useToast()
-  const [allowing, setAllowing] = useState(false)
+  // const [allowing, setAllowing] = useState(false)
   const { chainId } = useActiveChainId()
   const [state, setState] = useState<any>({
     ve: '',
@@ -106,7 +106,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     account,
     trustBountiesContract.address,
   )
-  const { handleApprove: handlePoolApprove } = useApprovePool(
+  const { handleApprove: handlePoolApprove, pendingTx: allowing } = useApprovePool(
     stakingTokenContract,
     trustBountiesContract.address,
     currency?.symbol,
