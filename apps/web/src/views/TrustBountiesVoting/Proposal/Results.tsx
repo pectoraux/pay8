@@ -17,11 +17,10 @@ import {
 } from '@pancakeswap/uikit'
 import { Vote } from 'state/types'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import Countdown from 'views/Lottery/components/Countdown'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { convertTimeToSeconds } from 'utils/timeHelper'
-import { useTrustBountiesContract } from 'hooks/useContract'
+import { useTrustBountiesVoterContract } from 'hooks/useContract'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { differenceInSeconds } from 'date-fns'
@@ -62,7 +61,7 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
   const [pendingFb, setPendingFb] = useState(false)
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const trustBountiesContract = useTrustBountiesContract()
+  const trustBountiesVoterContract = useTrustBountiesVoterContract()
   const diff = Math.max(
     differenceInSeconds(new Date(parseInt(litigation?.endTime) * 1000 ?? 0), new Date(), {
       roundingMethod: 'ceil',
@@ -75,15 +74,10 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('trustBountiesContract====================>', [
+      console.log('trustBountiesVoterContract====================>', [litigation?.ve, litigation?.id])
+      return callWithGasPrice(trustBountiesVoterContract, 'updateStakeFromVoter', [
         litigation?.ve,
         litigation?.id,
-        litigation?.attackerId,
-      ])
-      return callWithGasPrice(trustBountiesContract, 'updateStakeFromVoter', [
-        litigation?.ve,
-        litigation?.id,
-        litigation?.attackerId,
       ]).catch((err) => {
         console.log('err====================>', err)
       })
@@ -96,11 +90,11 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
           {t('You can now start receiving votes accordingly.')}
         </ToastDescriptionWithTx>,
       )
-      router.push('/stakemarket/voting')
+      router.push('/trustbounties/voting')
     } else {
       setPendingFb(false)
     }
-  }, [t, router, litigation, trustBountiesContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
+  }, [t, router, litigation, trustBountiesVoterContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
 
   return (
     <Card>
@@ -152,6 +146,7 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
               <Button
                 variant="secondary"
                 onClick={handleApplyResults}
+                disabled={!litigation?.active}
                 scale="sm"
                 endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
                 isLoading={pendingTx || pendingFb}
@@ -161,7 +156,7 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
             ) : (
               <>
                 <Timer minutes={minutes} hours={hours} days={days} />
-                <StyledTimerText pt="18px">{t('left')}</StyledTimerText>
+                {days || hours || minutes ? <StyledTimerText pt="18px">{t('left')}</StyledTimerText> : null}
               </>
             )}
           </Flex>

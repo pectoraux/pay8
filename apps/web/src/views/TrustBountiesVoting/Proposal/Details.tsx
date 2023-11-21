@@ -134,7 +134,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
           </Flex>
         </DetailBox>
         <Flex mt="8px" mb="8px" justifyContent="center" alignItems="center">
-          <Button variant="secondary" onClick={presentUpdateTerms} scale="sm">
+          <Button variant="secondary" disabled={!proposal?.active} onClick={presentUpdateTerms} scale="sm">
             {t('Update Statement')}
           </Button>
         </Flex>

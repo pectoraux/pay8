@@ -389,11 +389,11 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         ]).catch((err) => console.log('CONFIRM_UPDATE===============>', err))
       }
       if (stage === LockStage.CONFIRM_APPLY_RESULTS) {
-        const amount = getDecimalAmount(state.amountPayable ?? 0, currency?.decimals)
+        const amount = getDecimalAmount(state.amountPayable ? state.amountPayable : '0', currency?.decimals)
         const method = state.nativeCoin ? 'applyClaimResultsETH' : 'applyClaimResults'
         const args = state.nativeCoin
-          ? [pool?.id, state.claimId, state.title, state.content]
-          : [pool?.id, state.claimId, amount.toString(), state.title, state.content]
+          ? [pool?.id, state.claimId, state.title, state.content, state.customTags]
+          : [pool?.id, state.claimId, amount.toString(), state.title, state.content, state.customTags]
         console.log('CONFIRM_APPLY_RESULTS===============>', method, args)
         return callWithGasPrice(trustBountiesContract, method, args).catch((err) =>
           console.log('CONFIRM_APPLY_RESULTS===============>', err),

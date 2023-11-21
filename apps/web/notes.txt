@@ -1,7 +1,7 @@
 # TODO
-* friendly Claim
+* approvals and withdrawals with NFTs
+* get funds from valuepool
 * withdraw vote earnings
-* add Approval
 
 * withdraw vote earnings
 * periodic stake due dates

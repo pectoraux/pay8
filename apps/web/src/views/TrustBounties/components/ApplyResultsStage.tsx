@@ -28,14 +28,14 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, continueToNextS
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Claim ID')}
+          {t("Claim's Attacker ID")}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="claimId"
           value={state.claimId}
-          placeholder={t('input claim cid')}
+          placeholder={t("input claim's attacker id")}
           onChange={handleChange}
         />
       </GreyedOutContainer>

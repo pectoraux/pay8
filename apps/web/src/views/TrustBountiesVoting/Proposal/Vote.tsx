@@ -117,7 +117,13 @@ const Vote: React.FC<any> = ({ proposal, onSuccess, ...props }) => {
           </Text>
           <LinkExternal href={getBlockExploreLink(proposal?.ve, 'address')}>{proposal?.ve}</LinkExternal>
         </Flex>
-        {account ? <Button onClick={presentCastVoteModal}>{t('Cast Vote')}</Button> : <ConnectWalletButton />}
+        {account ? (
+          <Button disabled={!proposal?.active} onClick={presentCastVoteModal}>
+            {t('Cast Vote')}
+          </Button>
+        ) : (
+          <ConnectWalletButton />
+        )}
       </CardBody>
     </Card>
   )

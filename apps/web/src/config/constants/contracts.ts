@@ -456,7 +456,7 @@ export default {
     56: '0x',
   },
   trustbountiesvoter: {
-    4002: '0xF8E7F4719A66561F613AC1145ae3Be0E0a792005',
+    4002: '0x8363970f0cca2Bb19a7717a3DE6bEC5e61f7ec17',
     56: '0x',
   },
   arpFactory: {

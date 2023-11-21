@@ -84,7 +84,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
             0,
           )
           const { days, hours, minutes } = getTimePeriods(diff ?? 0)
-          return (
+          return days || hours || minutes ? (
             <>
               <Box mr="8px" height="32px">
                 <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={index} />
@@ -114,10 +114,10 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
                 {days} {t('days')} {hours} {t('hours')} {minutes} {t('minutes')}
               </Text>
               <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-                {t('Ends In')}
+                {t('Minutes Before Expiration')}
               </Text>
             </>
-          )
+          ) : null
         })}
       </Flex>
     </ActionContainer>
