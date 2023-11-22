@@ -49,12 +49,12 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Parent Stake ID')}
+          {t('Your Stake ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="stakeId"
+          name="applicationId"
           value={state.applicationId}
           placeholder={t('input id of your stake')}
           onChange={handleChange}

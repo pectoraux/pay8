@@ -103,7 +103,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will withdraw funds from this stake. In case you are using the stake to make a purchase in the marketplace, it will send funds to the marketplace to make the purchase.',
+              'This will withdraw funds from this stake. Input 0 to withdraw the maximum you can withdraw. In case you are using the stake to make a purchase in the marketplace, it will send funds to the marketplace to make the purchase.',
             )}
           </Text>
         </Box>
@@ -111,7 +111,7 @@ const SetPriceStage: React.FC<any> = ({
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Withdraw from stake')}
+          {t('Pay Due Payable')}
         </Button>
       </Flex>
     </>

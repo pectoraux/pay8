@@ -58,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleRawValueChange, c
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will deposit funds into your account in the valuepool. Please read the documentation for more details.',
+              'This will deposit funds into your account in the stake. Input 0 to deposit the total amount you owe. Please read the documentation for more details.',
             )}
           </Text>
         </Box>
@@ -66,7 +66,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleRawValueChange, c
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Deposit into account')}
+          {t('Pay Due Receivable')}
         </Button>
       </Flex>
     </>

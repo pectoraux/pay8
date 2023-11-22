@@ -278,6 +278,21 @@ const SetPriceStage: React.FC<any> = ({
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
       </Flex>
+      <Flex justifyContent="center" alignSelf="center">
+        <GreyedOutContainer style={{ width: '100%', paddingTop: '18px' }}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Add custom tags')}
+          </Text>
+          <Input
+            type="text"
+            scale="sm"
+            name="customTags"
+            value={state.customTags}
+            placeholder={t('comma separated tags')}
+            onChange={handleChange}
+          />
+        </GreyedOutContainer>
+      </Flex>
       <Grid gridTemplateColumns="32px 1fr" p="16px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

@@ -10,13 +10,15 @@ import DateInfoCell from './Cells/DateInfoCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
+import TotalValueCell2 from './Cells/TotalValueCell2'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const [currPool, setCurrPool] = useState(pool)
-  console.log('stakepool=================>', pool)
+  const token = useCurrency(pool?.tokenAddress)
+  console.log('stakepool=================>', pool, currPool)
   const tabs = (
     <>
       <NameCell pool={pool} symbol={pool?.tokenSymbol} />
@@ -25,6 +27,11 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
         labelText={t('Total Liquidity')}
         amount={getBalanceNumber(pool.totalLiquidity, pool.tokenDecimals)}
         symbol={pool?.tokenSymbol ?? ''}
+      />
+      <TotalValueCell2
+        amountDueReceivable={getBalanceNumber(currPool?.dueReceivable, token?.decimals)}
+        amountDuePayable={getBalanceNumber(currPool?.duePayable, token?.decimals)}
+        symbol={token?.symbol ?? ''}
       />
       <DateInfoCell
         t={t}

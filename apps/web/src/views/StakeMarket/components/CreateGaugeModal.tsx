@@ -56,8 +56,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.START_WAITING_PERIOD]: t('Start Waiting Period'),
   [LockStage.UPDATE]: t('Update Requirements'),
   [LockStage.APPLY]: t('Apply for this stake'),
-  [LockStage.DEPOSIT]: t('Deposit into Account'),
-  [LockStage.WITHDRAW]: t('Withdraw from Account'),
+  [LockStage.DEPOSIT]: t('Pay Due Receivable'),
+  [LockStage.WITHDRAW]: t('Pay Due Payable'),
   [LockStage.MINT_NOTE]: t('Mint Transfer Note'),
   [LockStage.ACCEPT]: t('Accept Application'),
   [LockStage.CLAIM_NOTE]: t('Claim Revenue from Note'),
@@ -134,6 +134,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     bountyId: pool?.bountyId ?? '',
     profileId: pool?.profileId ?? '',
     tokenId: pool?.tokenId ?? '',
+    noteId: '',
     amountPayable: getBalanceNumber(pool.amountReceivable ?? 0, currency?.decimals) ?? '0',
     waitingPeriod: parseInt(pool?.waitingPeriod ?? '0') / 60,
     amountReceivable: getBalanceNumber(pool.amountPayable ?? 0, currency?.decimals) ?? '0',
@@ -180,6 +181,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     waitingDuration: pool.waitingDuration,
     defenderStakeId: '',
     customTags: '',
+    decimals: pool?.tokenDecimals,
   }))
   const [nftFilters, setNftFilters] = useState<any>({
     workspace: pool?.workspaces,
@@ -187,7 +189,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     city: pool?.cities,
     product: pool?.products,
   })
-  console.log('ppool==============>', stage, LockStage.WITHDRAW, stage === LockStage.CONFIRM_WITHDRAW, pool)
+  console.log('ppool==============>', pool)
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -495,7 +497,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
         )
       }
       if (stage === LockStage.CONFIRM_CLAIM_NOTE) {
-        const args = [state.tokenId]
+        const args = [state.noteId]
         console.log('CONFIRM_CLAIM_NOTE===============>', args)
         return callWithGasPrice(stakeMarketHelperContract, 'claimRevenueFromNote', args).catch((err) =>
           console.log('CONFIRM_CLAIM_NOTE===============>', err),
@@ -556,17 +558,17 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
       if (stage === LockStage.CONFIRM_UPDATE) {
         const stakeRequired = getDecimalAmount(state.stakeRequired, currency?.decimals)
         const args = [
-          pool.sousId.toString(),
+          pool.id.toString(),
           state.profileId,
           state.bountyId,
           !!state.profileRequired,
           !!state.bountyRequired,
           stakeRequired.toString(),
           Number(state.gasPercent) * 100,
-          state.terms,
-          nftFilters?.country?.toString(),
-          nftFilters?.city?.toString(),
-          nftFilters?.product?.toString(),
+          state.terms ?? '',
+          nftFilters?.country?.toString() ?? '',
+          nftFilters?.city?.toString() ?? '',
+          state.customTags ?? '',
         ]
         console.log('CONFIRM_UPDATE===============>', args)
         return callWithGasPrice(stakeMarketContract, 'updateRequirements', args).catch((err) =>
@@ -601,7 +603,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
             </Button>
           ) : null}
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.DEPOSIT)}>
-            {t('DEPOSIT')}
+            {t('PAY DUE RECEIVABLE')}
+          </Button>
+          <Button variant="light" mb="8px" onClick={() => setStage(LockStage.WITHDRAW)}>
+            {t('PAY DUE PAYABLE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
@@ -620,9 +625,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_BEFORE_LITIGATIONS)}>
             {t('UPDATE BEFORE LITIGATIONS')}
-          </Button>
-          <Button variant="light" mb="8px" onClick={() => setStage(LockStage.WITHDRAW)}>
-            {t('WITHDRAW FROM STAKE')}
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.SWITCH_STAKE)}>
             {t('SWITCH STAKE')}
@@ -643,7 +645,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
             {t('CLAIM TRANSFER NOTE')}
           </Button>
           <Flex mb="8px" justifyContent="center" alignItems="center">
-            {Number(adminPool.waitingDuration) === 0 ? (
+            {Number(adminPool?.waitingDuration) === 0 ? (
               <Button variant="danger" mb="8px" width="100%" onClick={() => setStage(LockStage.START_WAITING_PERIOD)}>
                 {t('START WAITING PERIOD')}
               </Button>
@@ -768,10 +770,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
       {stage === LockStage.CANCEL_STAKE && (
         <CancelStakeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
-      {stage === LockStage.CANCEL_STAKE && (
+      {stage === LockStage.CANCEL_APPLICATION && (
         <CancelApplicationStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
-      CANCEL_APPLICATION
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

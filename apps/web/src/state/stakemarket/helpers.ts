@@ -2,10 +2,11 @@ import request, { gql } from 'graphql-request'
 import { GRAPH_API_STAKES } from 'config/constants/endpoints'
 import { getItemSg } from 'state/cancan/helpers'
 import { publicClient } from 'utils/wagmi'
-import { getStakeMarketAddress, getStakeMarketNoteAddress } from 'utils/addressHelpers'
+import { getStakeMarketAddress, getStakeMarketHeperAddress, getStakeMarketNoteAddress } from 'utils/addressHelpers'
 import { stakeMarketABI } from 'config/abi/stakeMarket'
 import { stakeMarketNoteABI } from 'config/abi/stakeMarketNote'
 import { erc20ABI } from 'wagmi'
+import { stakeMarketHelperABI } from 'config/abi/stakeMarketHelper'
 
 const stakeField = `
 id,
@@ -103,6 +104,22 @@ export const getStakes = async (first: number, skip: number, where) => {
     console.log('err sg================>', err)
   }
   return null
+}
+
+export const getNote = async (tokenId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [note] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getStakeMarketAddress(),
+        abi: stakeMarketABI,
+        functionName: 'notes',
+        args: [BigInt(tokenId)],
+      },
+    ],
+  })
+  return note.result
 }
 
 export const getStake = async (stakeId, chainId) => {
@@ -249,7 +266,7 @@ export const fetchStakes = async (collectionId, chainId) => {
         }
         const duePayable = nextDuePayable.result?.length ? nextDuePayable.result[0].toString() : '0'
         const dueReceivable = nextDueReceivable.result?.length ? nextDueReceivable.result[0].toString() : '0'
-
+        console.log('nextDuePayable==================>', nextDuePayable, duePayable)
         const applicationsConverted =
           applications.result?.map((application) => {
             const appId = application.toString()
@@ -260,9 +277,36 @@ export const fetchStakes = async (collectionId, chainId) => {
           resultArray.push(partnerStakeId.toString())
           return resultArray
         }, [])
-
+        console.log('stakestake=================>', stake)
+        const payableNotes = await Promise.all(
+          stake?.tokenIds?.map(async (note) => {
+            const [owner, metadatUrl] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: getStakeMarketHeperAddress(),
+                  abi: stakeMarketHelperABI,
+                  functionName: 'ownerOf',
+                  args: [BigInt(note?.id)],
+                },
+                {
+                  address: getStakeMarketHeperAddress(),
+                  abi: stakeMarketHelperABI,
+                  functionName: 'tokenURI',
+                  args: [BigInt(note?.id)],
+                },
+              ],
+            })
+            return {
+              ...note,
+              metadataUrl: metadatUrl.result,
+              owner: owner.result,
+            }
+          }),
+        )
         return {
           ...stake,
+          payableNotes,
           sousId: stakeId,
           ve,
           status: status.result?.map((rs) => rs?.toString()),

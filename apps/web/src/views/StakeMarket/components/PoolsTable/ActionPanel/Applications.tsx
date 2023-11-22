@@ -73,9 +73,23 @@ const DataCard = ({ pool, sousId, token }) => {
   const [openPresentAccept] = useModal(
     <CreateGaugeModal variant="accept" pool={partnerPool} application={pool} currency={token} />,
   )
-  const [openControlPanel] = useModal(<CreateGaugeModal pool={partnerPool} application={pool} currency={token} />)
+  const [openControlPanel] = useModal(
+    <CreateGaugeModal
+      variant={pool.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'}
+      pool={pool}
+      sousId={pool?.sousId}
+      application={pool}
+      currency={token}
+    />,
+  )
   const [openControlPanel2] = useModal(
-    <CreateGaugeModal variant="cancel_application" pool={partnerPool} application={pool} currency={token} />,
+    <CreateGaugeModal
+      variant="cancel_application"
+      pool={pool}
+      sousId={pool?.sousId}
+      application={pool}
+      currency={token}
+    />,
   )
 
   const diff = Math.max(
@@ -195,7 +209,7 @@ const DataCard = ({ pool, sousId, token }) => {
                 {isPartner ? t('Control Panel') : t('Accept')}
               </Button>
               {isPartner ? (
-                <Button scale="sm" variant="danger" onClick={openControlPanel2}>
+                <Button scale="sm" mt="8px" variant="danger" onClick={openControlPanel2}>
                   {t('Cancel Application')}
                 </Button>
               ) : null}

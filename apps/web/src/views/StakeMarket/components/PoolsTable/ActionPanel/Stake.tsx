@@ -43,7 +43,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
-  const variant = pool.owner === account ? 'admin' : 'user'
+  const variant = pool.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal variant={variant} pool={currPool} sousId={pool?.sousId} currency={currency ?? token} />,
   )

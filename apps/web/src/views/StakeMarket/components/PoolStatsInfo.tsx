@@ -43,7 +43,9 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
     }
   }, [pool])
   const tokenAddress = earningToken?.address || ''
+  const payableNotes = pool?.payableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.tokenIds} />)
+  const [onPresentNotes2] = useModal(<WebPagesModal height="500px" nfts={payableNotes} notes />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
@@ -89,6 +91,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('View NFTs')}
         </LinkExternal>
       </Flex>
+      {payableNotes?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes2} bold={false} small>
+            {t('View Payable Notes')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
           {t('Waiting Period')} {`->`} {pool?.waitingPeriod}

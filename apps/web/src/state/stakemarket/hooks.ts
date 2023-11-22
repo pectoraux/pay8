@@ -15,7 +15,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getStake, getStakeApplication, getTag } from './helpers'
+import { getNote, getStake, getStakeApplication, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('stakemarket-tags', async () => getTag())
@@ -59,7 +59,7 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 3,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )
@@ -117,4 +117,13 @@ export const useGetStake = (stakeId: string) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWR(['getStake', stakeId, chainId], async () => getStake(stakeId, chainId))
   return data
+}
+
+export const useGetNote = (tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetNote', tokenId, chainId], async () => getNote(tokenId, chainId))
+  return {
+    data,
+    refetch: mutate,
+  }
 }

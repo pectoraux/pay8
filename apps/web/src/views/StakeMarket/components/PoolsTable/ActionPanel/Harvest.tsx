@@ -189,7 +189,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               color="textSubtle"
               fontSize="12px"
               decimals={token?.decimals ?? 18}
-              value={getBalanceNumber(currPool?.userData?.duePayable, token?.decimals)}
+              value={getBalanceNumber(currPool?.duePayable, token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Due Payable')}
@@ -201,7 +201,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               color="textSubtle"
               fontSize="12px"
               decimals={token?.decimals ?? 18}
-              value={getBalanceNumber(currPool?.userData?.dueReceivable, token?.decimals)}
+              value={getBalanceNumber(currPool?.dueReceivable, token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Due Receivable')}

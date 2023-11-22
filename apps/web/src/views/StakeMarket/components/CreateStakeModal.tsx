@@ -67,7 +67,6 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
-  const [allowing, setAllowing] = useState(false)
   const currencyAddress = currency?.address ?? DEFAULT_INPUT_CURRENCY
   const { toastSuccess, toastError } = useToast()
   const [nftFilters, setNftFilters] = useState<any>({})
@@ -77,7 +76,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
     account,
     stakeMarketContract.address,
   )
-  const { handleApprove: handlePoolApprove } = useApprovePool(
+  const { handleApprove: handlePoolApprove, pendingTx: allowing } = useApprovePool(
     stakingTokenContract,
     stakeMarketContract.address,
     currency?.symbol || '',
@@ -121,15 +120,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
         0,
       )
       const args = [
-        [
-          // ve,
-          '0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41',
-          currencyAddress,
-          state.source,
-          ADDRESS_ZERO,
-          ADDRESS_ZERO,
-          account,
-        ],
+        [ve, currencyAddress, state.source, ADDRESS_ZERO, ADDRESS_ZERO, account],
         state.tokenId ?? '0',
         collectionId ?? 0,
         [],

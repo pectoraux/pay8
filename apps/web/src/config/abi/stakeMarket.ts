@@ -1,5 +1,16 @@
 export const stakeMarketABI = [
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -171,31 +182,6 @@ export const stakeMarketABI = [
       },
     ],
     name: 'StakeCreated',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'user',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'pool',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'closedStake',
-        type: 'bool',
-      },
-    ],
-    name: 'SwitchStake',
     type: 'event',
   },
   {
@@ -893,6 +879,24 @@ export const stakeMarketABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_stakeId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_numPeriods',
+        type: 'uint256',
+      },
+    ],
+    name: 'mintNote',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: '',
         type: 'uint256',
       },
@@ -921,19 +925,6 @@ export const stakeMarketABI = [
       },
     ],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -1027,34 +1018,6 @@ export const stakeMarketABI = [
       },
     ],
     name: 'switchStake',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_stakeId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '_to',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_numPeriods',
-        type: 'uint256',
-      },
-    ],
-    name: 'transferDueToNote',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

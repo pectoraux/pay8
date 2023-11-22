@@ -67,7 +67,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   )
   const { days, hours, minutes } = getTimePeriods(diff ?? 0)
 
-  console.log('useGetPendingFromNote==============>', data)
   return (
     <>
       <GreyedOutContainer>

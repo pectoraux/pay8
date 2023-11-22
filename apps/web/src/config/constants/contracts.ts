@@ -416,19 +416,19 @@ export default {
     56: '0x',
   },
   stakemarket: {
-    4002: '0x1fdE76C7384E85Cad09265B6a698Fa9E533f8968',
+    4002: '0xfcFfFD25f0af130231CF097B464095cA58e769b4',
+    56: '0x',
+  },
+  stakemarketNote: {
+    4002: '0xBC1D4346002f3263646682473f53Ac4cDa3ce8EE',
+    56: '0x',
+  },
+  stakemarketHelper: {
+    4002: '0x5227EBF681Ec50627C69EAD18241AfC3A46400dC',
     56: '0x',
   },
   stakemarketVoter: {
     4002: '0xeAf2c655581C83D47497D9D0C68dE09b1B32Fa55',
-    56: '0x',
-  },
-  stakemarketNote: {
-    4002: '0x0210e433fFF4977591A9fB480d815c924b51C5C0',
-    56: '0x',
-  },
-  stakemarketHelper: {
-    4002: '0xE26bB05a637eD2e1DDEa4718d577c609Ead2BC4f',
     56: '0x',
   },
   stakemarketBribe: {
