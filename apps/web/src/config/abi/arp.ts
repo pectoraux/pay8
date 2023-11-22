@@ -430,6 +430,19 @@ export const arpABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'maxNumberOfProtocol',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -528,6 +541,19 @@ export const arpABI = [
     name: 'notifyRewardAmount',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'numProtocol',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -1011,6 +1037,11 @@ export const arpABI = [
       {
         internalType: 'uint256',
         name: '_period',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_maxNumberOfProtocol',
         type: 'uint256',
       },
     ],

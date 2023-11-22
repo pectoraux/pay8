@@ -60,11 +60,13 @@ import UpdateAdminStage from './UpdateAdminStage'
 import UpdateUserOwnerStage from './UpdateUserOwnerStage'
 import UpdateApplicationStage from './UpdateApplicationStage'
 import LocationStage from './LocationStage'
+import DepositStage from './DepositStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
-  [LockStage.PAY]: t('Pay'),
+  [LockStage.PAY]: t('Pay Due Payable'),
+  [LockStage.DEPOSIT]: t('Deposit'),
   [LockStage.UPDATE_PROTOCOL]: t('Create/Update Account'),
   [LockStage.UPDATE_DISCOUNT_DIVISOR]: t('Update Discount Divisor'),
   [LockStage.UPDATE_PENALTY_DIVISOR]: t('Update Penalty Divisor'),
@@ -97,7 +99,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_CATEGORY]: t('Update Category'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
-  [LockStage.AUTOCHARGE]: t('Auto Charge'),
+  [LockStage.AUTOCHARGE]: t('Pay Due Receivable'),
   [LockStage.CLAIM_NOTE]: t('Claim Note'),
   [LockStage.DELETE]: t('Delete'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
@@ -110,6 +112,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
   [LockStage.CONFIRM_CLAIM_NOTE]: t('Back'),
   [LockStage.CONFIRM_AUTOCHARGE]: t('Back'),
+  [LockStage.CONFIRM_DEPOSIT]: t('Back'),
   [LockStage.CONFIRM_PAY]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TOKEN_ID]: t('Back'),
   [LockStage.CONFIRM_MINT_EXTRA]: t('Back'),
@@ -185,17 +188,17 @@ const CreateGaugeModal: React.FC<any> = ({
     maxNotesPerProtocol: pool?.maxNotesPerProtocol,
     pricePerMinute: '',
     factor: '',
-    period: '',
+    period: pool?.period ?? '',
     cap: '',
     tokenId: '',
     startPayable: convertTimeToSeconds(currAccount?.startPayable ?? 0),
     creditFactor: '',
-    toAddress: '',
+    toAddress: account ?? '',
     amountPayable: pool?.percentages
       ? parseInt(currAccount?.amountPayable ?? '0') / 100
       : getBalanceNumber(currAccount?.amountPayable ?? 0, currency?.decimals),
     periodPayable: parseInt(currAccount?.periodPayable ?? '0') / 60,
-    bufferTime: '',
+    bufferTime: pool?.bufferTime ?? '',
     amountReceivable: pool?.percentages
       ? parseInt(currAccount?.amountReceivable ?? '0') / 100
       : getBalanceNumber(currAccount?.amountReceivable ?? 0, currency?.decimals),
@@ -216,15 +219,21 @@ const CreateGaugeModal: React.FC<any> = ({
     ve: pool?._ve,
     token: currency?.address,
     add: 0,
+    adminNote: 0,
     contentType: '',
     numPeriods: '',
+    decimals: currAccount?.token?.decimals ?? 18,
     name: pool?.name,
-    collectionId: '',
+    collectionId: pool?.collection?.id ?? '',
     maxAccounts: '0',
     percentages: pool?.percentages,
     applicationLink: pool?.applicationLink ?? '',
     arpDescription: pool?.arpDescription ?? '',
     owner: currAccount?.owner || account,
+    adminBountyRequired: getBalanceNumber(pool?.adminBountyRequired ?? 0, currency?.decimals),
+    adminCreditShare: parseInt(pool?.adminCreditShare) / 100 ?? '',
+    adminDebitShare: parseInt(pool?.adminDebitShare) / 100 ?? '',
+    profileRequired: pool?.profileRequired ? 1 : 0,
   }))
   const [nftFilters, setNftFilters] = useState<any>({
     countries: pool?.countries,
@@ -264,6 +273,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CONFIRM_UPDATE_APPLICATION:
         setStage(LockStage.UPDATE_APPLICATION)
+        break
+      case LockStage.DEPOSIT:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_DEPOSIT:
+        setStage(LockStage.DEPOSIT)
         break
       case LockStage.UPDATE_DISCOUNT_DIVISOR:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -428,7 +443,7 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.DELETE_PROTOCOL)
         break
       case LockStage.UPDATE_AUTOCHARGE:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_AUTOCHARGE:
         setStage(LockStage.UPDATE_AUTOCHARGE)
@@ -496,6 +511,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_APPLICATION:
         setStage(LockStage.CONFIRM_UPDATE_APPLICATION)
+        break
+      case LockStage.DEPOSIT:
+        setStage(LockStage.CONFIRM_DEPOSIT)
         break
       case LockStage.PAY:
         setStage(LockStage.CONFIRM_PAY)
@@ -655,7 +673,7 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_AUTOCHARGE) {
         const args = [state.accounts?.split(','), state.numPeriods]
         console.log('CONFIRM_AUTOCHARGE===============>', args)
-        return callWithGasPrice(arpContract, 'updateAutoCharge', args).catch((err) =>
+        return callWithGasPrice(arpContract, 'autoCharge', args).catch((err) =>
           console.log('CONFIRM_AUTOCHARGE===============>', err),
         )
       }
@@ -667,8 +685,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_PAY) {
-        const amountPayable = getDecimalAmount(state.amountPayable ?? 0, currency?.decimals)
-        const args = [state.protocolId, amountPayable?.toString()]
+        const args = [state.protocolId, state.numPeriods]
         console.log('CONFIRM_PAY===============>', args)
         return callWithGasPrice(arpContract, 'payInvoicePayable', args).catch((err) =>
           console.log('CONFIRM_PAY===============>', err),
@@ -723,7 +740,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_TRANSFER_TO_NOTE_RECEIVABLE) {
-        const args = [pool?.arpAddress, state.toAddress, state.protocolId, state.numPeriods]
+        const args = [pool?.id, state.toAddress, state.protocolId, state.numPeriods]
         console.log('CONFIRM_TRANSFER_TO_NOTE_RECEIVABLE===============>', args)
         return callWithGasPrice(arpNoteContract, 'transferDueToNoteReceivable', args).catch((err) =>
           console.log('CONFIRM_TRANSFER_TO_NOTE_RECEIVABLE===============>', err),
@@ -774,7 +791,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_TRANSFER_TO_NOTE_PAYABLE) {
-        const args = [pool?.arpAddress, state.toAddress, state.protocolId, state.amountPayable]
+        const args = [pool?.id, state.toAddress, state.protocolId, state.numPeriods]
         console.log('CONFIRM_TRANSFER_TO_NOTE_PAYABLE===============>', args)
         return callWithGasPrice(arpNoteContract, 'transferDueToNotePayable', args).catch((err) =>
           console.log('CONFIRM_TRANSFER_TO_NOTE_PAYABLE===============>', err),
@@ -924,7 +941,15 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [!!state.autoCharge, state.tokenId]
         console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', args)
         return callWithGasPrice(arpContract, 'updateAutoCharge', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', err),
+          console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', err, arpContract),
+        )
+      }
+      if (stage === LockStage.CONFIRM_DEPOSIT) {
+        const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
+        const args = [pool?.id, amountReceivable?.toString()]
+        console.log('CONFIRM_DEPOSIT===============>', args)
+        return callWithGasPrice(stakingTokenContract, 'transfer', args).catch((err) =>
+          console.log('CONFIRM_DEPOSIT===============>', err, arpContract),
         )
       }
       if (stage === LockStage.CONFIRM_DELETE_PROTOCOL) {
@@ -977,10 +1002,10 @@ const CreateGaugeModal: React.FC<any> = ({
             </LinkExternal>
           </Flex>
           <Button mb="8px" onClick={() => setStage(LockStage.AUTOCHARGE)}>
-            {t('AUTOCHARGE')}
+            {t('PAY DUE RECEIVABLE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
-            {t('PAY')}
+            {t('PAY DUE PAYABLE')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.VOTE)}>
             {t('VOTE')}
@@ -1034,11 +1059,14 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
             {t('CREATE/UPDATE ACCOUNT')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.DEPOSIT)}>
+            {t('DEPOSIT')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.AUTOCHARGE)}>
-            {t('AUTOCHARGE')}
+            {t('PAY DUE RECEIVABLE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
-            {t('PAY')}
+            {t('PAY DUE PAYABLE')}
           </Button>
           <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.UPDATE_CAP)}>
             {t('UPDATE CAP')}
@@ -1054,6 +1082,9 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PAID_PAYABLE)}>
             {t('UPDATE PAID PAYABLE')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_AUTOCHARGE)}>
+            {t('UPDATE AUTOCHARGE')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.UPDATE_DISCOUNT_DIVISOR)}>
             {t('UPDATE DISCOUNT DIVISOR')}
@@ -1263,7 +1294,12 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.CLAIM_NOTE && (
-        <ClaimNoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <ClaimNoteStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
       )}
       {stage === LockStage.UPDATE_TOKEN_ID && (
         <UpdateTokenIdStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
@@ -1318,6 +1354,14 @@ const CreateGaugeModal: React.FC<any> = ({
         <AdminWithdrawStage
           state={state}
           account={pool.id}
+          currency={currency}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
+      )}
+      {stage === LockStage.DEPOSIT && (
+        <DepositStage
+          state={state}
           currency={currency}
           continueToNextStage={continueToNextStage}
           handleRawValueChange={handleRawValueChange}

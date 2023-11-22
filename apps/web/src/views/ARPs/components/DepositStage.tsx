@@ -1,36 +1,43 @@
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Input, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  ErrorIcon,
+  ButtonMenu,
+  ButtonMenuItem,
+  useTooltip,
+  HelpIcon,
+} from '@pancakeswap/uikit'
+import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
+import { useWeb3React } from '@pancakeswap/wagmi'
+//
+import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import BigNumber from 'bignumber.js'
 import BribeField from './LockedPool/Common/BribeField'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
-  account?: any
   state: any
-  handleChange?: (any) => void
+  account: any
   handleRawValueChange?: any
   continueToNextStage?: () => void
 }
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({
-  state,
-  account,
-  currency,
-  handleChange,
-  handleRawValueChange,
-  continueToNextStage,
-}) => {
+const SetPriceStage: React.FC<any> = ({ state, currency, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
+  const { account } = useWeb3React()
   const [lockedAmount, setLockedAmount] = useState('')
   const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
   const stakingTokenBalance = balance
@@ -44,32 +51,31 @@ const SetPriceStage: React.FC<any> = ({
     }
   }, [inputRef])
 
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+
   return (
     <>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Protocol ID')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="protocolId"
-          value={state.protocolId}
-          placeholder={t('input protocol id')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Number Of Payment Cycles')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="numPeriods"
-          value={state.numPeriods}
-          placeholder={t('input number of payment periods')}
-          onChange={handleChange}
+        <BribeField
+          add="deposit"
+          stakingAddress={currency?.address}
+          stakingSymbol={currency?.symbol}
+          stakingDecimals={currency?.decimals}
+          lockedAmount={state.amountReceivable}
+          usedValueStaked={usdValueStaked}
+          stakingMax={stakingTokenBalance}
+          setLockedAmount={handleRawValueChange('amountReceivable')}
+          stakingTokenBalance={stakingTokenBalance}
         />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
@@ -79,7 +85,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              "This will transfer all payments due to the specified account from the ARP to the account owner's wallet address.",
+              'This will add tokens to the ARP contract. ARP contracts need liquidity to be able to facilitate payments to their accounts. Use this function to provide that liquidity.',
             )}
           </Text>
         </Box>
@@ -87,7 +93,7 @@ const SetPriceStage: React.FC<any> = ({
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Pay Due Payable')}
+          {t('Deposit')}
         </Button>
       </Flex>
     </>

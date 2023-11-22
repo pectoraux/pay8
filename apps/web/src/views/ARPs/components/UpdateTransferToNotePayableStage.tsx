@@ -103,23 +103,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Flex ref={targetRef3}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount Payable')}
-          </Text>
-          {tooltipVisible3 && tooltip3}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="amountPayable"
-          value={state.amountPayable}
-          placeholder={t('input amount payable')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Number of Payment Cycles')}

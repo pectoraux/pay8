@@ -13,7 +13,7 @@ import {
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
 import { useCurrPool } from 'state/arps/hooks'
@@ -33,7 +33,13 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, alignLinksToRight = true }) => {
+const PoolStatsInfo: React.FC<any> = ({
+  pool,
+  account,
+  currAccount,
+  hideAccounts = false,
+  alignLinksToRight = true,
+}) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const router = useRouter()
@@ -41,9 +47,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   const currState = useCurrPool()
   const earningToken = currState[pool?.id]
   const tokenAddress = earningToken?.address || ''
+  const payableNotes = pool?.payableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())
+  const receivableNotes = pool?.receivableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())
   const dispatch = useAppDispatch()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.accounts} />)
-  const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} notes />)
+  // const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} notes />)
+  const [onPresentNotes2] = useModal(<WebPagesModal height="500px" nfts={payableNotes} notes />)
+  const [onPresentNotes3] = useModal(<WebPagesModal height="500px" nfts={receivableNotes} notes />)
   const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
@@ -127,10 +137,24 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           </LinkExternal>
         </Flex>
       ) : null}
-      {pool?.notes?.length ? (
+      {/* {pool?.notes?.length ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes} bold={false} small>
             {t('View Notes')}
+          </LinkExternal>
+        </Flex>
+      ) : null} */}
+      {payableNotes?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes2} bold={false} small>
+            {t('View Payable Notes')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
+      {receivableNotes?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes3} bold={false} small>
+            {t('View Receivable Notes')}
           </LinkExternal>
         </Flex>
       ) : null}
@@ -230,7 +254,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
                 </Button>
               ))
           : null}
-        {pool?.accounts?.length && !hideAccounts ? (
+        {pool?.accounts?.length &&
+        !hideAccounts &&
+        pool?.accounts.filter(
+          (protocol) =>
+            account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
+            account?.toLowerCase() === pool?.owner?.toLowerCase(),
+        )?.length ? (
           <Button
             key="clear-all"
             variant="text"

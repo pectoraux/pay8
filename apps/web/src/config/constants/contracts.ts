@@ -261,19 +261,19 @@ export default {
   },
   ARPNote: {
     56: '0x',
-    4002: '0xB3cF79b24D751c5FD31a177fdaB449F3f8D8605e',
+    4002: '0x1A1d056E9c7eeca64db1543E5d067c322d3c41c9',
   },
   ARPHelper: {
     56: '0x',
-    4002: '0x854059066aD7BDF6d18E069bdC6b2DE477Ba8949',
+    4002: '0x9fd9D30D104599923F3F4C3b3dD28C2AB2702Ae7',
   },
   ARPMinter: {
     56: '0x',
-    4002: '0x1996caA9a6CDe7CE28D0690B2C0dC37Fd77b6447',
+    4002: '0xFAD3eD4e2Ca7C48261b946FB59e9BE532CAB4833',
   },
   ARPFactory: {
     56: '0x',
-    4002: '0xbfD75c6C25B6045e24a5C446dE04A70c99C76f70',
+    4002: '0x262929330B0138833c2C999Bf99aa6e62333ECBc',
   },
   BILLNote: {
     56: '0x',
@@ -460,7 +460,7 @@ export default {
     56: '0x',
   },
   arpFactory: {
-    4002: '0x0b1119f76589A08530058549aFD1E85445048f56',
+    4002: '0xd55A1595EA440093B4F2Ab6366eDb7aAC794cEa6',
     56: '0x',
   },
   invoiceFactory: {

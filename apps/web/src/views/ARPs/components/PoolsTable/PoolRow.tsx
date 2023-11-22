@@ -1,6 +1,6 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { usePool, useCurrPool } from 'state/arps/hooks'
+import { usePool, useCurrPool, useGetTotalLiquidity } from 'state/arps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 import NameCell from './Cells/NameCell'
@@ -11,6 +11,8 @@ import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 import TotalValueCell2 from './Cells/TotalValueCell2'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { useCurrency } from 'hooks/Tokens'
+import BigNumber from 'bignumber.js'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
@@ -18,13 +20,20 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const currState = useCurrPool()
   const { isMobile } = useMatchBreakpoints()
   const currAccount = useMemo(() => pool?.accounts?.find((n) => n.id === currState[pool?.id]), [pool, currState])
-  console.log('arppool1====>', pool, currAccount)
+  const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
+  const inputCurrency = useCurrency(currencyId)
+  const [currency, setCurrency] = useState(inputCurrency ?? currAccount?.token?.address) as any
+  const { data: totalLiquidity } = useGetTotalLiquidity(currency?.address, pool?.id)
+  console.log('arppool1====>', pool, currAccount, currency, totalLiquidity)
   const tabs = (
     <>
       <NameCell pool={pool} />
       <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.protocols?.length} />
       <TotalValueCell2
-        totalLiquidity={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
+        totalLiquidity={getBalanceNumber(
+          new BigNumber(currAccount?.totalLiquidity?.toString() ?? totalLiquidity?.toString()),
+          currency?.decimals,
+        )}
         symbol={currAccount?.token?.symbol ?? ''}
       />
       <TotalValueCell
@@ -39,7 +48,16 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
-      panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
+      panel={
+        <ActionPanel
+          account={account}
+          pool={pool}
+          currAccount={currAccount}
+          currency={currency ?? inputCurrency}
+          setCurrency={setCurrency}
+          expanded
+        />
+      }
     >
       {isMobile ? (
         <TabMenu>

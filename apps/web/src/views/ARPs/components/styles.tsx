@@ -7,9 +7,15 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
     padding: 0;
   }
 `
-export const stagesWithApproveButton = [LockStage.CONFIRM_NOTIFY_REWARDS, LockStage.CONFIRM_UPDATE_AUTOCHARGE]
+export const stagesWithApproveButton = [
+  LockStage.CONFIRM_NOTIFY_REWARDS,
+  LockStage.CONFIRM_UPDATE_AUTOCHARGE,
+  LockStage.CONFIRM_AUTOCHARGE,
+]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_PAY,
+  LockStage.CONFIRM_DEPOSIT,
   LockStage.CONFIRM_UPDATE_APPLICATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.CONFIRM_SPONSOR_TAG,
@@ -23,7 +29,6 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_PROTOCOL,
   LockStage.CONFIRM_WITHDRAW,
   LockStage.CONFIRM_UPDATE_PARAMETERS,
-  LockStage.CONFIRM_PAY,
   LockStage.CONFIRM_UPDATE_URI_GENERATOR,
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.CONFIRM_UPDATE_BOUNTY_ID,
@@ -31,7 +36,6 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_VOTE,
   LockStage.CONFIRM_MINT_EXTRA,
   LockStage.CONFIRM_UPDATE_MINT_INFO,
-  LockStage.CONFIRM_AUTOCHARGE,
   LockStage.CONFIRM_UPDATE_ADMIN,
   LockStage.CONFIRM_UPDATE_USER_PERCENTILES,
   LockStage.CONFIRM_UPDATE_PAID_PAYABLE,
@@ -51,6 +55,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.DEPOSIT,
+  LockStage.CONFIRM_DEPOSIT,
   LockStage.UPDATE_APPLICATION,
   LockStage.CONFIRM_UPDATE_APPLICATION,
   LockStage.UPDATE_LOCATION,

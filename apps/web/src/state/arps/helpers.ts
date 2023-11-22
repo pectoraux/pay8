@@ -5,7 +5,7 @@ import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { arpFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { arpABI } from 'config/abi/arp'
-import { erc20ABI } from 'wagmi'
+import { erc20ABI, erc721ABI } from 'wagmi'
 import { getARPHelperAddress, getARPNoteAddress } from 'utils/addressHelpers'
 import { arpNoteABI } from 'config/abi/arpNote'
 import { arpHelperABI } from 'config/abi/arpHelper'
@@ -130,6 +130,47 @@ export const getArps = async (first = 5, skip = 0, where) => {
   }
 }
 
+export const getPendingRevenue = async (tokenId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [pendingRevenueFromNote, note] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getARPNoteAddress(),
+        abi: arpNoteABI,
+        functionName: 'pendingRevenueFromNote',
+        args: [BigInt(tokenId)],
+      },
+      {
+        address: getARPNoteAddress(),
+        abi: arpNoteABI,
+        functionName: 'notes',
+        args: [BigInt(tokenId)],
+      },
+    ],
+  })
+  return {
+    note: note.result,
+    pendingRevenueFromNote: pendingRevenueFromNote.result,
+  }
+}
+
+export const getTotalLiquidity = async (tokenAddress, arpAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [totalLiquidity] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: tokenAddress,
+        abi: erc20ABI,
+        functionName: 'balanceOf',
+        args: [arpAddress],
+      },
+    ],
+  })
+  return totalLiquidity.result
+}
+
 export const fetchArp = async (arpAddress, chainId) => {
   const arp = await getArp(arpAddress.toLowerCase())
 
@@ -230,6 +271,7 @@ export const fetchArp = async (arpAddress, chainId) => {
       },
     ],
   })
+  let payableNotes
   const accounts = await Promise.all(
     arp?.protocols?.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
@@ -314,8 +356,36 @@ export const fetchArp = async (arpAddress, chainId) => {
             },
           ],
         })
+      payableNotes = await Promise.all(
+        protocol?.notes?.map(async (note) => {
+          const [owner, metadatUrl] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getARPNoteAddress(),
+                abi: erc721ABI,
+                functionName: 'ownerOf',
+                args: [BigInt(note?.id)],
+              },
+              {
+                address: getARPNoteAddress(),
+                abi: erc721ABI,
+                functionName: 'tokenURI',
+                args: [BigInt(note?.id)],
+              },
+            ],
+          })
+          return {
+            ...note,
+            metadataUrl: metadatUrl.result,
+            owner: owner.result,
+          }
+        }),
+      )
+
       return {
         ...protocol,
+        notes: payableNotes,
         protocolId,
         isAutoChargeable: isAutoChargeable.result,
         adminBountyId: adminBountyId.result.toString(),
@@ -349,10 +419,37 @@ export const fetchArp = async (arpAddress, chainId) => {
     }),
   )
   const collection = await getCollection(collectionId.result.toString())
-
+  const receivableNotes = await Promise.all(
+    arp?.notes?.map(async (note) => {
+      const [owner, metadatUrl] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: getARPNoteAddress(),
+            abi: erc721ABI,
+            functionName: 'ownerOf',
+            args: [BigInt(note?.id)],
+          },
+          {
+            address: getARPNoteAddress(),
+            abi: erc721ABI,
+            functionName: 'tokenURI',
+            args: [BigInt(note?.id)],
+          },
+        ],
+      })
+      return {
+        ...note,
+        metadataUrl: metadatUrl.result,
+        owner: owner.result,
+      }
+    }),
+  )
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...arp,
+    payableNotes,
+    receivableNotes,
     arpAddress,
     accounts,
     collection,

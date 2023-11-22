@@ -23,13 +23,13 @@ const TotalValueCell: React.FC<any> = ({ amountDueReceivable, amountDuePayable, 
           {t('Amount Due Receivable')}
         </Text>
         <Flex height="20px" mb="10px" alignItems="center">
-          <Balance fontSize="16px" value={amountDueReceivable} decimals={0} unit={` ${symbol}`} />
+          <Balance fontSize="16px" value={amountDueReceivable} decimals={5} unit={` ${symbol}`} />
         </Flex>
         <Text fontSize="12px" color="textSubtle" textAlign="left">
           {t('Amount Due Payable')}
         </Text>
         <Flex height="20px" alignItems="center">
-          <Balance fontSize="16px" value={amountDuePayable} decimals={0} unit={` ${symbol}`} />
+          <Balance fontSize="16px" value={amountDuePayable} decimals={5} unit={` ${symbol}`} />
         </Flex>
       </Pool.CellContent>
     </StyledCell>

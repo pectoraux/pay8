@@ -1,6 +1,12 @@
 export const arpNoteABI = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
@@ -169,6 +175,19 @@ export const arpNoteABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
+    name: 'attach',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: 'owner',
         type: 'address',
@@ -236,16 +255,16 @@ export const arpNoteABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'contractAddress',
-    outputs: [
+    inputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
       },
     ],
-    stateMutability: 'view',
+    name: 'detach',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -660,19 +679,6 @@ export const arpNoteABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'bytes4',
         name: 'interfaceId',
         type: 'bytes4',
@@ -719,7 +725,7 @@ export const arpNoteABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
     ],
@@ -727,7 +733,7 @@ export const arpNoteABI = [
     outputs: [
       {
         internalType: 'string',
-        name: '',
+        name: 'output',
         type: 'string',
       },
     ],

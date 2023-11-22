@@ -1,4 +1,4 @@
-import { Modal, Grid } from '@pancakeswap/uikit'
+import { Modal, Grid, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import * as React from 'react'
 import Iframe from 'react-iframe'

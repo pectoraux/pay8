@@ -14,7 +14,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getPendingRevenue, getTag, getTotalLiquidity } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('arps-tags', async () => getTag())
@@ -91,4 +91,26 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetPendingFromNote = (tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetPendingFromNote1', tokenId, chainId], async () =>
+    getPendingRevenue(tokenId, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
+}
+
+export const useGetTotalLiquidity = (tokenAddress, arpAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetTotalLiquidity', tokenAddress, arpAddress, chainId], async () =>
+    getTotalLiquidity(tokenAddress, arpAddress, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
 }
