@@ -28,7 +28,7 @@ const EndsInCell: React.FC<any> = ({ currAccount }) => {
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
-        <Text fontSize="12px" color="textSubtle" textAlign="left">
+        <Text fontSize="12px" mt="20px" color="textSubtle" textAlign="left">
           {t('Next Due Receivable')}
         </Text>
         <Flex>

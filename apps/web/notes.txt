@@ -1,4 +1,7 @@
 # TODO
+you cannot withdraw from stake unless agreement is good for all parties
+you have to select the parent stake before applying to a stake partnership
+
 * approvals and withdrawals with NFTs
 * get funds from valuepool
 * withdraw vote earnings

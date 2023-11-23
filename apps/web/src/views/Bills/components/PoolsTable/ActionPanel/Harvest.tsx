@@ -76,7 +76,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               color="textSubtle"
               fontSize="12px"
               decimals={currAccount?.token?.decimals}
-              value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token?.decimals)}
+              value={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Due Receivable')}
@@ -88,7 +88,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               color="textSubtle"
               fontSize="12px"
               decimals={currAccount?.token?.decimals}
-              value={getBalanceNumber(currAccount?.amountPayable, currAccount?.token?.decimals)}
+              value={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Due Payable')}
@@ -119,13 +119,27 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currAccount?.creditFactor} />
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={0}
+              value={parseInt(currAccount?.creditFactor) / 100}
+              unit="%"
+            />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Credit Factor')}(%)
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currAccount?.debitFactor} />
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={0}
+              value={parseInt(currAccount?.debitFactor) / 100}
+              unit="%"
+            />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Debit Factor')}(%)
             </Text>
@@ -225,12 +239,25 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Option ID')}
           </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {currAccount?.version ?? ''}
-          </Text>
-          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Version')}
-          </Text>
+          {parseInt(currAccount?.heir) ? (
+            <>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                #{currAccount?.heir}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Migrated To Account')}
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {parseInt(currAccount?.version) === parseInt(pool?.migrationPoint[0]) ? t('No') : t('Yes')}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Needs Migration')}
+              </Text>
+            </>
+          )}
           <Text lineHeight="1" mt="2px" fontSize="12px" color="textSubtle" as="span">
             {currAccount?.description ?? ''}
           </Text>

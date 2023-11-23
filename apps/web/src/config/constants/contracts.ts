@@ -277,19 +277,19 @@ export default {
   },
   BILLNote: {
     56: '0x',
-    4002: '0xFf3254b1e3980fDA97FD7a4A245dC43FE8B9E53f',
+    4002: '0x729124dBeC963b743dfFC8aAA29236d95F1C7a55',
   },
   BILLHelper: {
     56: '0x',
-    4002: '0x995a88e7120fC55a23E82adbdc50a14efA67A2dC',
+    4002: '0xbdb2ec1b244ACa734A5dA0ce7cd89d447319a2fA',
   },
   BILLMinter: {
     56: '0x',
-    4002: '0x39d546Ce9737f5B377b703C4fE5Dc621D162540b',
+    4002: '0x90256b159FC802c497b6C2BF7799DE75eAD936F2',
   },
   BILLFactory: {
     56: '0x',
-    4002: '0xB061A49504aa7b6DF228E556954bD58A4Cad3574',
+    4002: '0xE697b2D4135b14216DB09e379f50E93dd281fD16',
   },
   lotteryHelper: {
     56: '0x',
@@ -416,15 +416,15 @@ export default {
     56: '0x',
   },
   stakemarket: {
-    4002: '0xfcFfFD25f0af130231CF097B464095cA58e769b4',
+    4002: '0xbf877500681AF64f10F6C3E92fA9946f800804ea',
     56: '0x',
   },
   stakemarketNote: {
-    4002: '0xBC1D4346002f3263646682473f53Ac4cDa3ce8EE',
+    4002: '0x2596c9eA9473AE8B1F8EB08019CD8e9844Cea34a',
     56: '0x',
   },
   stakemarketHelper: {
-    4002: '0x5227EBF681Ec50627C69EAD18241AfC3A46400dC',
+    4002: '0xf178d8A6661aBA43bEaFe98080e47CD213c2FC34',
     56: '0x',
   },
   stakemarketVoter: {

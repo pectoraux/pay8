@@ -188,7 +188,7 @@ const CreateGaugeModal: React.FC<any> = ({
     maxNotesPerProtocol: pool?.maxNotesPerProtocol,
     pricePerMinute: '',
     factor: '',
-    period: pool?.period ?? '',
+    period: parseInt(pool.period) / 60 ?? '',
     cap: '',
     tokenId: '',
     startPayable: convertTimeToSeconds(currAccount?.startPayable ?? 0),
@@ -198,7 +198,7 @@ const CreateGaugeModal: React.FC<any> = ({
       ? parseInt(currAccount?.amountPayable ?? '0') / 100
       : getBalanceNumber(currAccount?.amountPayable ?? 0, currency?.decimals),
     periodPayable: parseInt(currAccount?.periodPayable ?? '0') / 60,
-    bufferTime: pool?.bufferTime ?? '',
+    bufferTime: parseInt(pool?.bufferTime) / 60 ?? '',
     amountReceivable: pool?.percentages
       ? parseInt(currAccount?.amountReceivable ?? '0') / 100
       : getBalanceNumber(currAccount?.amountReceivable ?? 0, currency?.decimals),
@@ -215,7 +215,7 @@ const CreateGaugeModal: React.FC<any> = ({
     uriGenerator: '',
     autoCharge: 0,
     like: 0,
-    bountyRequired: pool?.bountyRequired,
+    bountyRequired: parseInt(pool?.bountyRequired) / 100,
     ve: pool?._ve,
     token: currency?.address,
     add: 0,
@@ -230,7 +230,7 @@ const CreateGaugeModal: React.FC<any> = ({
     applicationLink: pool?.applicationLink ?? '',
     arpDescription: pool?.arpDescription ?? '',
     owner: currAccount?.owner || account,
-    adminBountyRequired: getBalanceNumber(pool?.adminBountyRequired ?? 0, currency?.decimals),
+    adminBountyRequired: parseInt(pool?.adminBountyRequired) / 100,
     adminCreditShare: parseInt(pool?.adminCreditShare) / 100 ?? '',
     adminDebitShare: parseInt(pool?.adminDebitShare) / 100 ?? '',
     profileRequired: pool?.profileRequired ? 1 : 0,
@@ -719,14 +719,14 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR) {
-        const args = [state.optionId, state.factor, state.period, state.cap]
+        const args = [state.optionId, state.factor, parseInt(state.period) * 60, state.cap]
         console.log('CONFIRM_UPDATE_DISCOUNT_DIVISOR===============>', args)
         return callWithGasPrice(arpContract, 'updateDiscountDivisor', args).catch((err) =>
           console.log('CONFIRM_UPDATE_DISCOUNT_DIVISOR===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR) {
-        const args = [state.optionId, state.factor, state.period, state.cap]
+        const args = [state.optionId, state.factor, parseInt(state.period) * 60, state.cap]
         console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', args)
         return callWithGasPrice(arpContract, 'updatePenaltyDivisor', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', err),
@@ -884,7 +884,7 @@ const CreateGaugeModal: React.FC<any> = ({
             pool?.percentages ? parseInt(state.amountPayable) * 100 : amountPayable.toString(),
             parseInt(state.periodPayable ?? '0') * 60,
             startPayable.toString(),
-            state.bountyRequired,
+            parseInt(state.bountyRequired) * 100,
           ],
           state.identityTokenId,
           state.protocolId,
@@ -900,11 +900,11 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
         const args = [
           !!state.profileRequired,
-          state.bountyRequired,
+          parseInt(state.bountyRequired) * 100,
           state.collectionId,
           parseInt(state.bufferTime) * 60,
           state.maxNotesPerProtocol,
-          state.adminBountyRequired,
+          parseInt(state.adminBountyRequired) * 100,
           parseInt(state.adminCreditShare) * 100,
           parseInt(state.adminDebitShare) * 100,
           parseInt(state.period) * 60,

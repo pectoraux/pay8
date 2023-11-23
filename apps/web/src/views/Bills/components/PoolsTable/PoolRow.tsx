@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/bills/hooks'
 import { useTranslation } from '@pancakeswap/localization'
@@ -11,6 +11,9 @@ import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 import TotalValueCell2 from './Cells/TotalValueCell2'
+import { useCurrency } from 'hooks/Tokens'
+import { useGetTotalLiquidity } from 'state/arps/hooks'
+import BigNumber from 'bignumber.js'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
@@ -18,39 +21,44 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const currState = useCurrPool()
   const { isMobile } = useMatchBreakpoints()
   const currAccount = useMemo(() => pool?.accounts?.find((n) => n.id === currState[pool?.id]), [pool, currState])
+  const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
+  const inputCurrency = useCurrency(currencyId)
+  const [currency, setCurrency] = useState(inputCurrency ?? currAccount?.token?.address) as any
+  const { data: totalLiquidity } = useGetTotalLiquidity(currency?.address, pool?.id)
   console.log('billpool1====>', pool, currAccount)
   const tabs = (
     <>
       <NameCell pool={pool} />
       <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.protocols?.length ?? 0} />
       <TotalValueCell2
-        totalLiquidity={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
+        totalLiquidity={getBalanceNumber(
+          new BigNumber(currAccount?.totalLiquidity?.toString() ?? totalLiquidity?.toString()),
+          currency?.decimals,
+        )}
+        symbol={currAccount?.token?.symbol ?? currency?.symbol ?? ''}
+      />
+      <TotalValueCell
+        amountDueReceivable={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals)}
+        amountDuePayable={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
         symbol={currAccount?.token?.symbol ?? ''}
       />
-      {Number(currAccount?.dueReceivable) ? (
-        <TotalValueCell
-          labelText={t('Amount Due')}
-          amount={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals)}
-          decimals={5}
-          symbol={currAccount?.token?.symbol ?? ''}
-        />
-      ) : null}
-      {Number(currAccount?.duePayable) ? (
-        <TotalValueCell
-          labelText={t('Amount Payable')}
-          amount={getBalanceNumber(currAccount?.duePayable, currAccount?.token?.decimals)}
-          decimals={5}
-          symbol={currAccount?.token?.symbol ?? ''}
-        />
-      ) : null}
-      <EndsInCell currAccount={currAccount} t={t} />
+      <EndsInCell currAccount={currAccount} />
       <VotesCell pool={pool} />
     </>
   )
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
-      panel={<ActionPanel account={account} pool={pool} currAccount={currAccount} expanded />}
+      panel={
+        <ActionPanel
+          account={account}
+          pool={pool}
+          currAccount={currAccount}
+          currency={currency ?? inputCurrency}
+          setCurrency={setCurrency}
+          expanded
+        />
+      }
     >
       {isMobile ? (
         <TabMenu>

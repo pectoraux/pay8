@@ -160,17 +160,17 @@ const PoolStatsInfo: React.FC<any> = ({
       ) : null}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Admin Bounty Required')} {`->`} {pool?.adminBountyRequired}
+          {t('Admin Bounty Required')} {`->`} {parseInt(pool?.adminBountyRequired ?? '0') / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Admin Credit Share')} {`->`} {pool?.adminCreditShare}
+          {t('Admin Credit Share')} {`->`} {parseInt(pool?.adminCreditShare ?? '0') / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Admin Debit Share')} {`->`} {pool?.adminDebitShare}
+          {t('Admin Debit Share')} {`->`} {parseInt(pool?.adminDebitShare ?? '0') / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -180,12 +180,12 @@ const PoolStatsInfo: React.FC<any> = ({
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('User Minimum Bounty Required')} {`->`} {pool?.bountyRequired}
+          {t('User Min Bounty Required')} {`->`} {parseInt(pool?.bountyRequired ?? '0') / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Buffer Time')} {`->`} {pool?.bufferTime}
+          {t('Buffer Time (minutes)')} {`->`} {parseInt(pool?.bufferTime ?? '0') / 60}
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -205,7 +205,7 @@ const PoolStatsInfo: React.FC<any> = ({
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Period')} {`->`} {pool?.period}
+          {t('Period (minutes)')} {`->`} {parseInt(pool?.period ?? '0') / 60}
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -235,7 +235,7 @@ const PoolStatsInfo: React.FC<any> = ({
               .filter(
                 (protocol) =>
                   account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
-                  account?.toLowerCase() === pool?.owner?.toLowerCase(),
+                  account?.toLowerCase() === pool?.devaddr_?.toLowerCase(),
               )
               .map((balance) => (
                 <Button
@@ -259,7 +259,7 @@ const PoolStatsInfo: React.FC<any> = ({
         pool?.accounts.filter(
           (protocol) =>
             account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
-            account?.toLowerCase() === pool?.owner?.toLowerCase(),
+            account?.toLowerCase() === pool?.devaddr_?.toLowerCase(),
         )?.length ? (
           <Button
             key="clear-all"

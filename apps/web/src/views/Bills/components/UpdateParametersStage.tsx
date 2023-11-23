@@ -38,7 +38,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        "This sets a lower bound on the balance of account owners' bounties. If you do not require account owners to have a bounty in place, just input 0.",
+        "This sets a lower bound on the balance of account owners' bounties. If you do not require account owners to have a bounty in place, just input 0. If for instance this value is 10%, the bounty balance of the account owner is 1000 and the time lock period is 1 month, then the account owner will only be able to withdraw 10% * 1000 = 100 tokens every month",
       )}
     </Text>
   )
@@ -59,7 +59,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'Use this to require all admins of the Bill contract to have a bounty attached. This sets a lower bound on the balance attached to that bounty.',
+        'Use this to require all admins of the Bill contract to have a bounty attached. This sets a lower bound on the balance attached to that bounty as a percentage of total withdrawal within the timelock period. If for instance this value is 10%, the bounty balance of the admin is 1000 and the time lock period is 1 month, then the admin will only be able to withdraw 10% * 1000 = 100 tokens every month',
       )}
     </Text>
   )
@@ -145,7 +145,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Bounty Required')}
+            {t('Bounty Required')}(%)
           </Text>
           {tooltipVisible && tooltip}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -196,7 +196,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Admin Bounty Required')}
+            {t('Admin Bounty Required')}(%)
           </Text>
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

@@ -40,9 +40,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   const currState = useCurrPool()
   const earningToken = pool?.accounts?.find((acct) => acct?.id === currState[pool?.id])?.token
   const tokenAddress = earningToken?.address || ''
+  const payableNotes = pool?.payableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())
+  const receivableNotes = pool?.receivableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())
   const dispatch = useAppDispatch()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.accounts} />)
-  const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} notes />)
+  const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={payableNotes} notes />)
+  const [onPresentNotes2] = useModal(<WebPagesModal height="500px" nfts={receivableNotes} notes />)
   const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
@@ -112,21 +115,35 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           </LinkExternal>
         </Flex>
       ) : null}
-      {pool?.notes?.length ? (
+      {/* {pool?.notes?.length ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes} bold={false} small>
             {t('View Notes')}
           </LinkExternal>
         </Flex>
+      ) : null} */}
+      {payableNotes?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes} bold={false} small>
+            {t('View Payable Notes')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
+      {receivableNotes?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes2} bold={false} small>
+            {t('View Receivable Notes')}
+          </LinkExternal>
+        </Flex>
       ) : null}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Admin Credit Share')} {`->`} {pool?.adminCreditShare}
+          {t('Admin Credit Share')} {`->`} {parseInt(pool?.adminCreditShare ?? '0') / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Admin Debit Share')} {`->`} {pool?.adminDebitShare}
+          {t('Admin Debit Share')} {`->`} {parseInt(pool?.adminDebitShare ?? '0') / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -136,12 +153,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Period')} {`->`} {pool?.period}
+          {t('Period (minutes)')} {`->`} {parseInt(pool?.period ?? '0') / 60}
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Admin Bounty Required')} {`->`} {pool?.adminBountyRequired}
+          {t('Admin Bounty Required')} {`->`} {parseInt(pool?.adminBountyRequired ?? '0') / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -151,12 +168,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Buffer Time')} {`->`} {pool?.bufferTime}
+          {t('Buffer Time (minutes)')} {`->`} {parseInt(pool?.bufferTime ?? '0') / 60}
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Bounty Required')} {`->`} {pool?.bountyRequired}
+          {t('User Min Bounty Required')} {`->`} {parseInt(pool?.bountyRequired ?? '0') / 100}%
         </Text>
       </Flex>
       {account && tokenAddress && (
@@ -180,7 +197,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           ? pool?.accounts
               .filter(
                 (protocol) =>
-                  account?.toLowerCase() === pool?.owner?.toLowerCase() ||
+                  account?.toLowerCase() === pool?.devaddr_?.toLowerCase() ||
                   account?.toLowerCase() === protocol?.owner?.toLowerCase(),
               )
               .map((balance) => (
@@ -202,9 +219,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           : null}
         {pool?.accounts?.length &&
         !hideAccounts &&
-        (
-          account?.toLowerCase() === pool?.owner?.toLowerCase() ||
-          pool?.accounts.filter((protocol) => account?.toLowerCase() === protocol?.owner?.toLowerCase())
+        pool?.accounts.filter(
+          (protocol) =>
+            account?.toLowerCase() === pool?.devaddr_?.toLowerCase() ||
+            account?.toLowerCase() === protocol?.owner?.toLowerCase(),
         )?.length ? (
           <Button
             key="clear-all"

@@ -75,7 +75,7 @@ const DataCard = ({ pool, sousId, token }) => {
   )
   const [openControlPanel] = useModal(
     <CreateGaugeModal
-      variant={pool.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'}
+      variant={pool?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'}
       pool={pool}
       sousId={pool?.sousId}
       application={pool}

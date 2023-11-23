@@ -14,7 +14,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getPendingRevenue, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('bills-tags', async () => getTag())
@@ -61,7 +61,7 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 3,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )
@@ -91,4 +91,15 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetPendingFromNote = (tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetPendingFromNote-bill', tokenId, chainId], async () =>
+    getPendingRevenue(tokenId, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
 }

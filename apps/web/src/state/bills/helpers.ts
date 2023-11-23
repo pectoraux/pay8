@@ -138,6 +138,31 @@ export const getBills = async (first = 5, skip = 0, where) => {
   }
 }
 
+export const getPendingRevenue = async (tokenId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [pendingRevenueFromNote, note] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getBILLNoteAddress(),
+        abi: billNoteABI,
+        functionName: 'pendingRevenueFromNote',
+        args: [BigInt(tokenId)],
+      },
+      {
+        address: getBILLNoteAddress(),
+        abi: billNoteABI,
+        functionName: 'notes',
+        args: [BigInt(tokenId)],
+      },
+    ],
+  })
+  return {
+    note: note.result,
+    pendingRevenueFromNote: pendingRevenueFromNote.result,
+  }
+}
+
 export const fetchBill = async (billAddress, chainId) => {
   const bill = await getBill(billAddress.toLowerCase())
   const bscClient = publicClient({ chainId: chainId })
@@ -153,6 +178,7 @@ export const fetchBill = async (billAddress, chainId) => {
     adminBountyRequired,
     isPayable,
     bufferTime,
+    migrationPoint,
   ] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -211,13 +237,19 @@ export const fetchBill = async (billAddress, chainId) => {
         abi: billABI,
         functionName: 'bufferTime',
       },
+      {
+        address: billAddress,
+        abi: billABI,
+        functionName: 'migrationPoint',
+      },
     ],
   })
   const collection = await getCollection(collectionId.result.toString())
+  let payableNotes
   const accounts = await Promise.all(
     bill?.protocols?.map(async (protocol) => {
       const protocolId = protocol.id.split('_')[0]
-      const [protocolInfo, optionId, isAutoChargeable] = await bscClient.multicall({
+      const [protocolInfo, optionId, isAutoChargeable, heir] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
           {
@@ -236,6 +268,12 @@ export const fetchBill = async (billAddress, chainId) => {
             address: billAddress,
             abi: billABI,
             functionName: 'isAutoChargeable',
+            args: [BigInt(protocolId)],
+          },
+          {
+            address: billAddress,
+            abi: billABI,
+            functionName: 'heir',
             args: [BigInt(protocolId)],
           },
         ],
@@ -339,9 +377,37 @@ export const fetchBill = async (billAddress, chainId) => {
           },
         ],
       })
+      payableNotes = await Promise.all(
+        protocol?.notes?.map(async (note) => {
+          const [owner, metadatUrl] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getBILLNoteAddress(),
+                abi: billNoteABI,
+                functionName: 'ownerOf',
+                args: [BigInt(note?.id)],
+              },
+              {
+                address: getBILLNoteAddress(),
+                abi: billNoteABI,
+                functionName: 'tokenURI',
+                args: [BigInt(note?.id)],
+              },
+            ],
+          })
+          return {
+            ...note,
+            metadataUrl: metadatUrl.result,
+            owner: owner.result,
+          }
+        }),
+      )
       return {
         ...protocol,
+        notes: payableNotes,
         protocolId,
+        heir: heir.result?.toString(),
         isAutoChargeable: isAutoChargeable.result,
         adminBountyId: adminBountyId.result.toString(),
         bountyId: bountyId.toString(),
@@ -378,12 +444,42 @@ export const fetchBill = async (billAddress, chainId) => {
       }
     }),
   )
+
+  const receivableNotes = await Promise.all(
+    bill?.notes?.map(async (note) => {
+      const [owner, metadatUrl] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: getBILLNoteAddress(),
+            abi: billNoteABI,
+            functionName: 'ownerOf',
+            args: [BigInt(note?.id)],
+          },
+          {
+            address: getBILLNoteAddress(),
+            abi: billNoteABI,
+            functionName: 'tokenURI',
+            args: [BigInt(note?.id)],
+          },
+        ],
+      })
+      return {
+        ...note,
+        metadataUrl: metadatUrl.result,
+        owner: owner.result,
+      }
+    }),
+  )
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...bill,
     billAddress,
+    payableNotes,
+    receivableNotes,
     accounts,
     collection,
+    migrationPoint: migrationPoint.result,
     profileRequired: profileRequired.result,
     devaddr_: devaddr_.result,
     adminCreditShare: adminCreditShare.result?.toString(),

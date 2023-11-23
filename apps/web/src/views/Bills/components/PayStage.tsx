@@ -68,7 +68,7 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <BribeField
-          add="withdraw"
+          add="pay"
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={currency?.decimals}
@@ -86,7 +86,7 @@ const SetPriceStage: React.FC<any> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              "This will transfer all payments due to the specified account from the Bill contract to the account owner's wallet address.",
+              "This will transfer all payments due to the specified account from the Bill contract to the account owner's wallet address. To transfer the totality of what's due, just input 0.",
             )}
           </Text>
         </Box>
@@ -94,7 +94,7 @@ const SetPriceStage: React.FC<any> = ({
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Pay')}
+          {t('Pay Due Payable')}
         </Button>
       </Flex>
     </>

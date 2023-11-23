@@ -34,7 +34,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
           new BigNumber(currAccount?.totalLiquidity?.toString() ?? totalLiquidity?.toString()),
           currency?.decimals,
         )}
-        symbol={currAccount?.token?.symbol ?? ''}
+        symbol={currAccount?.token?.symbol ?? currency?.symbol ?? ''}
       />
       <TotalValueCell
         amountDueReceivable={getBalanceNumber(currAccount?.amountDueReceivable, currAccount?.token?.decimals)}

@@ -226,7 +226,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currPool?.ownerAgreement} />
+            <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+              {currPool?.ownerAgreement === 0
+                ? t('Undefined')
+                : currPool?.ownerAgreement === 1
+                ? t('Pending')
+                : currPool?.ownerAgreement === 2
+                ? t('Good')
+                : currPool?.ownerAgreement === 3
+                ? t('Not Good')
+                : t('Disagreement')}
+            </Text>
+            <br />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Agreement State')}
             </Text>

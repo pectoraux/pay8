@@ -22,20 +22,17 @@ interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
 }
 
-const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
+const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currency, setCurrency }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const variant = pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
-  const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
-  const inputCurrency = useCurrency(currencyId)
-  const [currency, setCurrency] = useState(inputCurrency)
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
       variant={variant}
       location="fromStake"
       pool={pool}
       currAccount={currAccount}
-      currency={currency ?? inputCurrency}
+      currency={currency}
     />,
   )
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
@@ -64,9 +61,9 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       </ActionTitles>
       <CurrencyInputPanel
         showInput={false}
-        currency={currency ?? inputCurrency}
+        currency={currency}
         onCurrencySelect={handleInputSelect}
-        otherCurrency={currency ?? inputCurrency}
+        otherCurrency={currency}
         id={pool?.sousId}
       />
       <ActionContent>

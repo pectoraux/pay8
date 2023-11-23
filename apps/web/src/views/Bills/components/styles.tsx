@@ -13,6 +13,7 @@ export const stagesWithApproveButton = [
   LockStage.CONFIRM_SPONSOR_TAG,
   LockStage.CONFIRM_AUTOCHARGE,
   LockStage.CONFIRM_NOTIFY_CREDIT,
+  LockStage.CONFIRM_DEPOSIT,
 ]
 
 export const stagesWithConfirmButton = [
@@ -53,6 +54,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.DEPOSIT,
+  LockStage.CONFIRM_DEPOSIT,
   LockStage.UPDATE_APPLICATION,
   LockStage.CONFIRM_UPDATE_APPLICATION,
   LockStage.UPDATE_LOCATION,

@@ -1,10 +1,30 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  Input,
+  ErrorIcon,
+  Heading,
+  Balance,
+  ButtonMenu,
+  ButtonMenuItem,
+} from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import _toNumber from 'lodash/toNumber'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
+import { useGetPendingFromNote } from 'state/bills/hooks'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { differenceInSeconds } from 'date-fns'
+import { StyledItemRow } from 'views/CanCan/market/components/Filters/ListFilter/styles'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
+import Timer from 'views/StakeMarket/components/PoolsTable/Cells/Timer'
+import styled from 'styled-components'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -20,11 +40,26 @@ interface SetPriceStageProps {
   continueToNextStage?: () => void
 }
 
+const StyledTimerText = styled(Heading)`
+  background: ${({ theme }) => theme.colors.gradientGold};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`
+
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
+
+  const { data, refetch } = useGetPendingFromNote(state.tokenId)
+  const revenue =
+    data?.note?.length && state.adminNote
+      ? data?.pendingRevenueFromNote
+      : data?.note?.length
+      ? data.note[0]?.toString()
+      : '0'
+  const expirationDate = data?.note?.length ? data.note[1]?.toString() : '0'
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -32,8 +67,56 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
+  useEffect(() => {
+    refetch()
+  }, [state])
+
+  const diff = Math.max(
+    differenceInSeconds(new Date(parseInt(expirationDate) * 1000 ?? 0), new Date(), {
+      roundingMethod: 'ceil',
+    }),
+    0,
+  )
+  const { days, hours, minutes } = getTimePeriods(diff ?? 0)
+
   return (
     <>
+      <GreyedOutContainer>
+        <Balance
+          lineHeight="1"
+          color="textSubtle"
+          fontSize="12px"
+          decimals={state.decimals}
+          value={getBalanceNumber(new BigNumber(revenue?.toString()), state.decimals)}
+        />
+        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+          {t('Pending Revenue')}
+        </Text>
+        {days || hours || minutes ? (
+          <Flex flexDirection="row">
+            <Timer minutes={minutes} hours={hours} days={days} />
+            <StyledTimerText mt="20px">{days || hours || minutes ? t('before due') : ''}</StyledTimerText>
+          </Flex>
+        ) : (
+          <StyledTimerText>{parseInt(revenue?.toString()) ? t('Note Claimable After Due Date') : ''}</StyledTimerText>
+        )}
+      </GreyedOutContainer>
+      <GreyedOutContainer style={{ paddingTop: '10px' }}>
+        <StyledItemRow>
+          <Text fontSize="12px" paddingRight="50px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+            {t('Is Admin Note?')}
+          </Text>
+          <ButtonMenu
+            scale="xs"
+            variant="subtle"
+            activeIndex={state.adminNote}
+            onItemClick={handleRawValueChange('adminNote')}
+          >
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Token ID')}

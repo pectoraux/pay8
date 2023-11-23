@@ -84,14 +84,16 @@ const SetPriceStage: React.FC<any> = ({
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will transfer the specified amount to the specified account from this Bill contract.')}
+            {t(
+              "This will transfer the specified amount to the specified account from this Bill contract. To transfer the totality of what's due, just input 0.",
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Deposit')}
+          {t('Pay Due Receivable')}
         </Button>
       </Flex>
     </>
