@@ -14,6 +14,8 @@ import {
   useTooltip,
   HelpIcon,
   Flex,
+  ButtonMenu,
+  ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -25,7 +27,8 @@ import times from 'lodash/times'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useInitialBlock } from 'state/block/hooks'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { useValuepoolVoterContract } from 'hooks/useContract'
+import { useERC20, useValuepoolVoterContract } from 'hooks/useContract'
+import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 
 import { useTranslation } from '@pancakeswap/localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -41,6 +44,7 @@ import { ADMINS } from '../config'
 import { Label, SecondaryLabel } from './styles'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import NextStepButton from 'views/ChannelCreation/NextStepButton'
+import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 
 const hub = 'https://hub.snapshot.org'
 const client = new snapshot.Client712(hub)
@@ -62,6 +66,11 @@ const CreateProposal = () => {
     tokenAddress: '',
     amount: '0',
     choices: ['Up Vote', 'Down Vote'],
+    bribe: 0,
+    bribeAmount: '',
+    bribeToken: '',
+    isNFT: 0,
+    bribeDecimals: 18,
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [isDone, setIsDone] = useState('')
@@ -78,12 +87,14 @@ const CreateProposal = () => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const valuepoolVoterContract = useValuepoolVoterContract()
-
+  const stakingTokenContract = useERC20(state.bribeToken)
+  console.log('stakingTokenContract=================>', stakingTokenContract)
   const handleSubmit = useCallback(async () => {
     setIsLoading(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const amount = getDecimalAmount(state.amount ?? 0, state.decimals)
+      const bribeAmount = getDecimalAmount(state.bribeAmount ?? 0, state.bribeDecimals)
       const args = [
         state.ve,
         state.pool,
@@ -101,10 +112,24 @@ const CreateProposal = () => {
         nftFilters?.city?.toString() ?? '',
         nftFilters?.product?.toString() ?? '',
       ]
-      console.log('createGauge==================>', args, args2)
+      const args3 = [
+        state.ve,
+        state.pool,
+        state.bribeToken?.trim()?.length ? state.bribeToken : ADDRESS_ZERO,
+        bribeAmount?.toString(),
+        state.isNFT,
+      ]
+      console.log('createGauge==================>', args, args2, args3, stakingTokenContract)
       return callWithGasPrice(valuepoolVoterContract, 'createGauge', args)
         .then(() => {
           return callWithGasPrice(valuepoolVoterContract, 'updateTags', args2)
+        })
+        .then(() => {
+          if (!!state.bribe) {
+            return callWithGasPrice(stakingTokenContract, 'approve', [valuepoolVoterContract.address, MaxUint256]).then(
+              () => callWithGasPrice(valuepoolVoterContract, 'lockBribe', args3),
+            )
+          }
         })
         .catch((err) => {
           setIsLoading(false)
@@ -125,7 +150,17 @@ const CreateProposal = () => {
         </ToastDescriptionWithTx>,
       )
     }
-  }, [t, state, nftFilters, toastError, toastSuccess, callWithGasPrice, valuepoolVoterContract, fetchWithCatchTxError])
+  }, [
+    t,
+    state,
+    nftFilters,
+    toastError,
+    toastSuccess,
+    callWithGasPrice,
+    valuepoolVoterContract,
+    stakingTokenContract,
+    fetchWithCatchTxError,
+  ])
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -147,6 +182,10 @@ const CreateProposal = () => {
 
   const handleEasyMdeChange = (value: string) => {
     updateValue('body', value)
+  }
+
+  const handleRawValueChange = (key: any) => (value: number) => {
+    updateValue(key, value)
   }
 
   const options = useMemo(() => {
@@ -354,6 +393,84 @@ const CreateProposal = () => {
                   onChange={handleChange}
                 />
               </Box>
+              <Box mb="24px">
+                <StyledItemRow>
+                  <Flex mt="5px" mr="10px">
+                    <SecondaryLabel>{t('Attach Bribe?')}</SecondaryLabel>
+                  </Flex>
+                  <ButtonMenu
+                    mb="10px"
+                    scale="xs"
+                    variant="subtle"
+                    activeIndex={state.bribe}
+                    onItemClick={handleRawValueChange('bribe')}
+                  >
+                    <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+                  </ButtonMenu>
+                </StyledItemRow>
+              </Box>
+              {state.bribe ? (
+                <>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Bribe Amount')}</SecondaryLabel>
+                    <Input
+                      type="text"
+                      scale="sm"
+                      name="bribeAmount"
+                      value={state.bribeAmount}
+                      placeholder={t('input bribe amount')}
+                      onChange={handleChange}
+                    />
+                  </Box>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Bribe Token')}</SecondaryLabel>
+                    <Input
+                      type="text"
+                      scale="sm"
+                      name="bribeToken"
+                      value={state.bribeToken}
+                      placeholder={t('input bribe token')}
+                      onChange={handleChange}
+                    />
+                  </Box>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Bribe Token Decimals')}</SecondaryLabel>
+                    <Input
+                      type="text"
+                      scale="sm"
+                      name="bribeDecimals"
+                      value={state.bribeDecimals}
+                      placeholder={t('input bribe token decimals')}
+                      onChange={handleChange}
+                    />
+                  </Box>
+                  <Box mb="24px">
+                    <Flex>
+                      <Text
+                        fontSize="12px"
+                        paddingRight="15px"
+                        color="secondary"
+                        textTransform="uppercase"
+                        paddingTop="3px"
+                        bold
+                      >
+                        {t('Bribe Token Type')}
+                      </Text>
+                    </Flex>
+                    <ButtonMenu
+                      scale="xs"
+                      variant="subtle"
+                      activeIndex={state.isNFT}
+                      onItemClick={handleRawValueChange('isNFT')}
+                    >
+                      <ButtonMenuItem>{t('Fungible')}</ButtonMenuItem>
+                      <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
+                      <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
+                    </ButtonMenu>
+                  </Box>
+                </>
+              ) : null}
               <Filters showWorkspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
               {account ? (
                 <>

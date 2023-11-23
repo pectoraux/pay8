@@ -17,7 +17,7 @@ import {
   filterSelector,
   filterSelector2,
 } from './selectors'
-import { getTag, getTokenURIs } from './helpers'
+import { getBribe, getGauge, getTag, getTokenURIs } from './helpers'
 import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
@@ -126,5 +126,25 @@ export const useGetTokenURIs = (vaAddress, nfts) => {
     status,
     mutate: refetch,
   } = useSWR(['useGetTokenURIs', vaAddress, nfts?.length], async () => getTokenURIs(vaAddress, nfts, chainId))
+  return { data, refetch, status }
+}
+
+export const useGetGauge = (vaAddress, pool) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetGauge', vaAddress, pool], async () => getGauge(vaAddress, pool, chainId))
+  return { data, refetch, status }
+}
+
+export const useGetBribe = (vaAddress, pool) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetBribe', vaAddress, pool], async () => getBribe(vaAddress, pool, chainId))
   return { data, refetch, status }
 }

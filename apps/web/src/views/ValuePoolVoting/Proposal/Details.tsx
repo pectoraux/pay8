@@ -8,7 +8,7 @@ import {
   Heading,
   LinkExternal,
   Text,
-  Button,
+  Balance,
   Farm as FarmUI,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
@@ -20,6 +20,9 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useGetTokenData } from 'state/ramps/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { ProposalStateTag } from '../components/Proposals/tags'
+import { useGetBribe, useGetGauge } from 'state/valuepools/hooks'
+import BigNumber from 'bignumber.js'
+import { Divider } from 'views/ARPs/components/styles'
 
 interface DetailsProps {
   proposal: Proposal
@@ -37,14 +40,25 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const startDate = new Date(proposal?.created * 1000)
   const endDate = new Date(proposal?.endTime * 1000)
   const isPercentile = parseInt(proposal?.upVotes) < 100 && parseInt(proposal?.downVotes) < 100
-  const tokenData = useGetTokenData(proposal?.id?.split('-')[0]) as any
+  const { data: tokenData } = useGetTokenData(proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0]) as any
   const upVotes = isPercentile
     ? parseInt(proposal?.upVotes)
     : getBalanceNumber(proposal?.upVotes ?? 0, tokenData?.decimals)
   const downVotes = isPercentile
     ? parseInt(proposal?.downVotes)
     : getBalanceNumber(proposal?.downVotes ?? 0, tokenData?.decimals)
+  const { data: gauge } = useGetGauge(
+    proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0],
+    proposal?.id?.split('-')?.length && proposal?.id?.split('-')[1],
+  )
+  const { data: bribe } = useGetBribe(
+    proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0],
+    proposal?.id?.split('-')?.length && proposal?.id?.split('-')[1],
+  )
+  const { data: gaugeTokenData } = useGetTokenData(gauge?.length ? gauge[2] : '') as any
+  const { data: bribeTokenData } = useGetTokenData(bribe?.length ? bribe[1] : '') as any
 
+  console.log('bribebribe====================>', gauge, bribe, proposal)
   return (
     <Card mb="16px">
       <CardHeader>
@@ -56,9 +70,55 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
         <Flex alignItems="center" mb="8px">
           <Text color="textSubtle">{t('Author')}</Text>
           <LinkExternal href={getBlockExploreLink(proposal?.owner, 'address')} ml="8px">
-            {truncateHash(proposal?.owner)}
+            {truncateHash(proposal?.owner, 10, 10)}
           </LinkExternal>
         </Flex>
+        <Divider />
+        {gauge?.length ? (
+          <>
+            <Flex alignItems="center" mb="8px">
+              <Text color="textSubtle">{t('gauge Token')}</Text>
+              <LinkExternal href={getBlockExploreLink(gauge[2], 'address')} ml="8px">
+                {truncateHash(gauge[2], 10, 5)}
+              </LinkExternal>
+            </Flex>
+            <Flex alignItems="center" mb="8px">
+              <Text color="textSubtle" mr="4px">
+                {t('Claiming')}
+              </Text>
+              <Balance
+                lineHeight="1"
+                color="primary"
+                decimals={12}
+                value={getBalanceNumber(new BigNumber(gauge[0]?.toString() ?? '0'), gaugeTokenData?.decimals ?? 18)}
+                unit={` ${gaugeTokenData?.symbol ?? ''}`}
+              />
+            </Flex>
+          </>
+        ) : null}
+        <Divider />
+        {bribe?.length ? (
+          <>
+            <Flex alignItems="center" mb="8px">
+              <Text color="textSubtle">{t('Bribe Token')}</Text>
+              <LinkExternal href={getBlockExploreLink(bribe[1], 'address')} ml="8px">
+                {truncateHash(bribe[1], 10, 5)}
+              </LinkExternal>
+            </Flex>
+            <Flex alignItems="center" mb="8px">
+              <Text color="textSubtle" mr="4px">
+                {t('Bribe Amount')}
+              </Text>
+              <Balance
+                lineHeight="1"
+                color="primary"
+                decimals={12}
+                value={getBalanceNumber(new BigNumber(bribe[0]?.toString() ?? '0'), bribeTokenData?.decimals ?? 18)}
+                unit={` ${bribeTokenData?.symbol ?? ''}`}
+              />
+            </Flex>
+          </>
+        ) : null}
         <DetailBox p="16px">
           <ProposalStateTag proposalState={proposal?.active} mb="8px" style={{ marginRight: '10px' }} />
           <Flex justifyContent="flex" mb="8px">
