@@ -129,24 +129,26 @@ const CreateProposal = () => {
         state.isNFT,
       ]
       console.log('createGauge==================>', args, args2, args3, stakingTokenContract)
-      return callWithGasPrice(valuepoolVoterContract, 'createGauge', args)
-        .then(() => {
-          return callWithGasPrice(valuepoolVoterContract, 'updateTags', args2)
-        })
-        .then((res) => {
-          if (!!state.bribe) {
-            return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args3)
-          }
-          return res
-        })
-        .catch((err) => {
-          setIsLoading(false)
-          console.log('err==================>', err)
-          toastError(
-            t('Issue creating proposal'),
-            <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
-          )
-        })
+      return (
+        callWithGasPrice(valuepoolVoterContract, 'createGauge', args)
+          .then(() => {
+            return callWithGasPrice(valuepoolVoterContract, 'updateTags', args2)
+          })
+          // .then((res) => {
+          //   if (!!state.bribe) {
+          //     return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args3)
+          //   }
+          //   return res
+          // })
+          .catch((err) => {
+            setIsLoading(false)
+            console.log('err==================>', err)
+            toastError(
+              t('Issue creating proposal'),
+              <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
+            )
+          })
+      )
     })
     if (receipt?.status) {
       setIsLoading(false)
@@ -401,100 +403,9 @@ const CreateProposal = () => {
                   onChange={handleChange}
                 />
               </Box>
-              <Box mb="24px">
-                <StyledItemRow>
-                  <Flex mt="5px" mr="10px">
-                    <SecondaryLabel>{t('Attach Bribe?')}</SecondaryLabel>
-                  </Flex>
-                  <ButtonMenu
-                    mb="10px"
-                    scale="xs"
-                    variant="subtle"
-                    activeIndex={state.bribe}
-                    onItemClick={handleRawValueChange('bribe')}
-                  >
-                    <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-                  </ButtonMenu>
-                </StyledItemRow>
-              </Box>
-              {state.bribe ? (
-                <>
-                  <Box mb="24px">
-                    <Flex>
-                      <Text
-                        fontSize="12px"
-                        paddingRight="15px"
-                        color="secondary"
-                        textTransform="uppercase"
-                        paddingTop="3px"
-                        bold
-                      >
-                        {t('Bribe Token Type')}
-                      </Text>
-                    </Flex>
-                    <ButtonMenu
-                      scale="xs"
-                      variant="subtle"
-                      activeIndex={state.isNFT}
-                      onItemClick={handleRawValueChange('isNFT')}
-                    >
-                      <ButtonMenuItem>{t('Fungible')}</ButtonMenuItem>
-                      <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
-                      <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
-                    </ButtonMenu>
-                  </Box>
-                  <Box mb="24px">
-                    <SecondaryLabel>{t('Bribe Token')}</SecondaryLabel>
-                    <Input
-                      type="text"
-                      scale="sm"
-                      name="bribeToken"
-                      value={state.bribeToken}
-                      placeholder={t('input bribe token')}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                  <Box mb="24px">
-                    <SecondaryLabel>{t('Bribe Token Decimals')}</SecondaryLabel>
-                    <Input
-                      type="text"
-                      scale="sm"
-                      name="bribeDecimals"
-                      value={state.bribeDecimals}
-                      placeholder={t('input bribe token decimals')}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                  <Box mb="24px">
-                    <SecondaryLabel>{t('Bribe Amount or Token ID')}</SecondaryLabel>
-                    <Input
-                      type="text"
-                      scale="sm"
-                      name="bribeAmount"
-                      value={state.bribeAmount}
-                      placeholder={t('input bribe amount or token id')}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                </>
-              ) : null}
               <Filters showWorkspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
               {account ? (
                 <>
-                  <Button
-                    mb="8px"
-                    onClick={handlePoolApprove}
-                    endIcon={
-                      allowing || status === FetchStatus.Fetching ? <AutoRenewIcon spin color="currentColor" /> : null
-                    }
-                    isLoading={allowing}
-                    disabled={allowing || !needsApproval || status === FetchStatus.Fetching}
-                  >
-                    {status === FetchStatus.Fetching
-                      ? t('Increasing Bribe Token Allowance')
-                      : t('Increase Bribe Token Allowance')}
-                  </Button>
                   <Button
                     type="submit"
                     width="100%"

@@ -4,9 +4,9 @@ export const valuePoolVoterABI = [
     inputs: [
       {
         indexed: true,
-        internalType: 'address',
-        name: 've',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
       },
       {
         indexed: false,
@@ -90,6 +90,12 @@ export const valuePoolVoterABI = [
     inputs: [
       {
         indexed: false,
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
         internalType: 'address',
         name: 'user',
         type: 'address',
@@ -139,15 +145,9 @@ export const valuePoolVoterABI = [
     inputs: [
       {
         indexed: false,
-        internalType: 'address',
-        name: 've',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'pool',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
       },
       {
         indexed: false,
@@ -244,15 +244,9 @@ export const valuePoolVoterABI = [
     inputs: [
       {
         indexed: true,
-        internalType: 'address',
-        name: 've',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'pool',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
       },
       {
         indexed: false,
@@ -345,14 +339,9 @@ export const valuePoolVoterABI = [
   {
     inputs: [
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     name: 'bribe',
@@ -491,14 +480,9 @@ export const valuePoolVoterABI = [
   {
     inputs: [
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     name: 'gauges',
@@ -514,8 +498,23 @@ export const valuePoolVoterABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: 'endTime',
+        type: 'uint256',
+      },
+      {
         internalType: 'address',
         name: 'token',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 've',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'pool',
         type: 'address',
       },
     ],
@@ -536,30 +535,6 @@ export const valuePoolVoterABI = [
       },
     ],
     name: 'getBalance',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_ve',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_pool',
-        type: 'address',
-      },
-    ],
-    name: 'getTotalWeight',
     outputs: [
       {
         internalType: 'uint256',
@@ -610,9 +585,9 @@ export const valuePoolVoterABI = [
     name: 'isGauge',
     outputs: [
       {
-        internalType: 'bool',
+        internalType: 'uint256',
         name: '',
-        type: 'bool',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -641,18 +616,13 @@ export const valuePoolVoterABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_ve',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_pool',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
         name: '_token',
         type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_proposalId',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',
@@ -880,9 +850,9 @@ export const valuePoolVoterABI = [
   {
     inputs: [
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',
@@ -931,6 +901,19 @@ export const valuePoolVoterABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'proposalId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -946,14 +929,9 @@ export const valuePoolVoterABI = [
   {
     inputs: [
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     name: 'totalWeight',
@@ -969,6 +947,11 @@ export const valuePoolVoterABI = [
   },
   {
     inputs: [
+      {
+        internalType: 'uint256',
+        name: '_proposalId',
+        type: 'uint256',
+      },
       {
         internalType: 'address',
         name: '_ve',
@@ -1092,14 +1075,9 @@ export const valuePoolVoterABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_ve',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_pool',
-        type: 'address',
+        internalType: 'uint256',
+        name: '_proposalId',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',
@@ -1154,14 +1132,14 @@ export const valuePoolVoterABI = [
   {
     inputs: [
       {
-        internalType: 'string',
+        internalType: 'uint256',
         name: '',
-        type: 'string',
+        type: 'uint256',
       },
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     name: 'votes',
@@ -1178,14 +1156,9 @@ export const valuePoolVoterABI = [
   {
     inputs: [
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     name: 'weights',

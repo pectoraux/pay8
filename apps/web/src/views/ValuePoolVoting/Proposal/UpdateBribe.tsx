@@ -42,7 +42,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const UpdateBribeModal: React.FC<any> = ({ veAddress, pool, onDismiss }) => {
+const UpdateBribeModal: React.FC<any> = ({ veAddress, proposal, onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -78,9 +78,8 @@ const UpdateBribeModal: React.FC<any> = ({ veAddress, pool, onDismiss }) => {
     const receipt = await fetchWithCatchTxError(async () => {
       const bribeAmount = getDecimalAmount(state.bribeAmount ?? 0, state.bribeDecimals)
       const args = [
-        veAddress,
-        pool,
         state.bribeToken?.trim()?.length ? state.bribeToken : ADDRESS_ZERO,
+        proposal?.id,
         bribeAmount?.toString(),
         state.isNFT,
       ]
@@ -107,7 +106,7 @@ const UpdateBribeModal: React.FC<any> = ({ veAddress, pool, onDismiss }) => {
   }, [
     t,
     state,
-    pool,
+    proposal,
     veAddress,
     toastError,
     toastSuccess,

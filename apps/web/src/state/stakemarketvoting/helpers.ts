@@ -205,7 +205,7 @@ export const getVotingPower = async (veAddress, tokenId, chainId) => {
       ],
     })
     return {
-      decimals,
+      decimals: decimals.result?.toString(),
       balance: balance.result?.toString(),
       percentile: percentile.result?.toString(),
     }

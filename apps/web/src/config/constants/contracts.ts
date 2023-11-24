@@ -468,23 +468,23 @@ export default {
     56: '0x',
   },
   valuepoolVoter: {
-    4002: '0xd6570cdCbbbb035D16303F9eFa1B7E332b45ef89',
+    4002: '0xe3152A3E3fFA3F0578c3984aeFE454D3f7D6e04b',
     56: '0x',
   },
   vaFactory: {
-    4002: '0xF3F37fBB361210ecBaCB6e748c9D550dE4db1175',
+    4002: '0x2b7b92c617609eEb2C2cA78DC2AE918c5E4B798d',
     56: '0x',
   },
   valuepoolFactory: {
-    4002: '0x7ecd58472cD0AED5614238a5D4C90E599755Edd4',
+    4002: '0xD2DFBCEc6340182853BA7B454d83B7aB999E91D4',
     56: '0x',
   },
   valuepoolHelper: {
-    4002: '0x787035b034BB23ad71d50742845672d01CE26b7e',
+    4002: '0x5925eE9f895Ce02686ae0cB674421de1D035AD09',
     56: '0x',
   },
   valuepoolHelper2: {
-    4002: '0x85b1B94201c5e84c352f62c9Ee7313f721D7e282',
+    4002: '0xE5828fE6FCd22AD20915DA44CB61DDCF905a8359',
     56: '0x',
   },
   businessVoter: {
@@ -608,7 +608,7 @@ export default {
     4002: '0x36D1257A7E29E73A345D01F1e5F81d424C12a2c7',
   },
   'real estate': {
-    4002: '0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
+    4002: '0x6e0521b964Aafe1A50159C003f4876275E6C7c9a', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
     56: '0x',
   },
   transportation: {
@@ -704,4 +704,4 @@ export default {
     56: '0x',
   },
 } as const satisfies Record<string, Record<number, `0x${string}`>>
-// 0x017aBa5F9Fe7673a675c9541DF0e792D8118FB41
+// 0x6e0521b964Aafe1A50159C003f4876275E6C7c9a

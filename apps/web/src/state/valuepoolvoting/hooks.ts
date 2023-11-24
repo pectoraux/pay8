@@ -9,6 +9,6 @@ export const useGetVotingPower = (veAddress: string, tokenId: string) => {
     data,
     status,
     mutate: refetch,
-  } = useSWRImmutable(['votingpower', veAddress, tokenId], async () => getVotingPower(veAddress, tokenId, chainId))
+  } = useSWRImmutable(['votingpower1', veAddress, tokenId], async () => getVotingPower(veAddress, tokenId, chainId))
   return { data, refetch, status }
 }

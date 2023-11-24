@@ -11,6 +11,8 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
 export const stagesWithApproveButton = [LockStage.CONFIRM_DEPOSIT, LockStage.CONFIRM_MERGE]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_DISABLE_BRIBE,
+  LockStage.CONFIRM_DEPOSIT2,
   LockStage.CONFIRM_NOTIFY_PAYMENT,
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.CONFIRM_UPDATE_VP,
@@ -45,6 +47,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.DISABLE_BRIBE,
+  LockStage.CONFIRM_DISABLE_BRIBE,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.SWITCH_POOL,
@@ -92,6 +96,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.MERGE,
   LockStage.DEPOSIT,
+  LockStage.DEPOSIT2,
   LockStage.WITHDRAW,
   LockStage.UPDATE_VP,
   LockStage.ADMIN_WITHDRAW,
@@ -109,6 +114,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_ADMIN_WITHDRAW,
   LockStage.CONFIRM_DELETE_VP,
   LockStage.CONFIRM_DEPOSIT,
+  LockStage.CONFIRM_DEPOSIT2,
   LockStage.CONFIRM_WITHDRAW,
 ]
 

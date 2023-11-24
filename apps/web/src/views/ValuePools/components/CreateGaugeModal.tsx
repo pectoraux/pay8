@@ -38,6 +38,7 @@ import PresentBribeModal from './LockedPool/Modals/PresentBribeModal'
 import MergeStage from './MergeStage'
 import UpdateExcludedContentStage from './UpdateExcludedContentStage'
 import UpdateBlacklistedStage from './UpdateBlacklistedStage'
+import DisableBribeStage from './DisableBribeStage'
 import UpdateVPStage from './UpdateVPStage'
 import PickRankStage from './PickRankStage'
 import CheckRankStage from './CheckRankStage'
@@ -64,12 +65,14 @@ import UpdateVotingBlacklistStage from './UpdateVotingBlacklistStage'
 import LocationStage from './LocationStage'
 import NotifyPaymentStage from './NotifyPaymentStage'
 import SwitchPoolStage from './SwitchPoolStage'
+import DepositStage from './DepositStage'
 import { getNFTSVGContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
   [LockStage.DEPOSIT]: t('Deposit into Account'),
+  [LockStage.DEPOSIT2]: t('Donate Funds'),
   [LockStage.WITHDRAW]: t('Withdraw from Account'),
   [LockStage.REIMBURSE_BNPL]: t('Reimburse BNPL'),
   [LockStage.REIMBURSE]: t('Reimburse Loan'),
@@ -81,6 +84,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.SPONSORS]: t('SPONSORS'),
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
   [LockStage.DELETE_VP]: t('Delete Valuepool'),
+  [LockStage.DISABLE_BRIBE]: t('Disable Bribes'),
   [LockStage.UPDATE_VP]: t('Update Valuepool'),
   [LockStage.ADMIN_WITHDRAW]: t('Withdraw from treasury'),
   [LockStage.ADD_SPONSORS]: t('Add Sponsors'),
@@ -131,11 +135,13 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_OWNER]: t('Back'),
   [LockStage.CONFIRM_MERGE]: t('Back'),
   [LockStage.CONFIRM_DEPOSIT]: t('Back'),
+  [LockStage.CONFIRM_DEPOSIT2]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_UPDATE_VP]: t('Back'),
   [LockStage.CONFIRM_CREATE_LOCK]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_DELETE_VP]: t('Back'),
+  [LockStage.CONFIRM_DISABLE_BRIBE]: t('Back'),
   [LockStage.TX_CONFIRMED]: t('Transaction Confirmed'),
 })
 
@@ -177,6 +183,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
   const valuepoolHelper2Contract = useValuepoolHelper2Contract()
   const valuepoolVoterContract = useValuepoolVoterContract()
   const stakingTokenContract = useERC20(pool?.stakingToken?.address || '')
+  const stakingTokenContract2 = useERC20(currency?.address || '')
   const valuepoolContract = useValuepoolContract(pool?.id ?? '')
   const vaContract = useVaContract(pool?._va ?? '')
   const currState = useCurrPool()
@@ -493,9 +500,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
       case LockStage.CONFIRM_ADMIN_WITHDRAW:
         setStage(LockStage.ADMIN_WITHDRAW)
         break
-      case LockStage.DELETE_VP:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
       case LockStage.CONFIRM_UPDATE_VP:
         setStage(LockStage.UPDATE_VP)
         break
@@ -505,11 +509,26 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
       case LockStage.CONFIRM_CREATE_LOCK:
         setStage(LockStage.CREATE_LOCK)
         break
+      case LockStage.DELETE_VP:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.CONFIRM_DELETE_VP:
         setStage(LockStage.DELETE_VP)
         break
+      case LockStage.DISABLE_BRIBE:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_DISABLE_BRIBE:
+        setStage(LockStage.DISABLE_BRIBE)
+        break
       case LockStage.CONFIRM_WITHDRAW:
         setStage(LockStage.WITHDRAW)
+        break
+      case LockStage.DEPOSIT2:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_DEPOSIT2:
+        setStage(LockStage.DEPOSIT2)
         break
       default:
         break
@@ -614,6 +633,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
       case LockStage.DELETE_VP:
         setStage(LockStage.CONFIRM_DELETE_VP)
         break
+      case LockStage.DISABLE_BRIBE:
+        setStage(LockStage.CONFIRM_DISABLE_BRIBE)
+        break
+      case LockStage.DEPOSIT2:
+        setStage(LockStage.CONFIRM_DEPOSIT2)
+        break
       default:
         break
     }
@@ -663,12 +688,27 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           console.log('CONFIRM_DELETE_VP===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_DISABLE_BRIBE) {
+        const args = [pool?.valuepoolAddress, !!state.add]
+        console.log('CONFIRM_DISABLE_BRIBE===============>', args)
+        return callWithGasPrice(valuepoolVoterContract, 'disableBribes', args).catch((err) =>
+          console.log('CONFIRM_DISABLE_BRIBE===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_NOTIFY_LOAN) {
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
         const args = [currency?.address, state.cardAddress, amountReceivable.toString()]
         console.log('CONFIRM_NOTIFY_LOAN===============>', args)
         return callWithGasPrice(valuepoolContract, 'notifyLoan', args).catch((err) =>
           console.log('CONFIRM_NOTIFY_LOAN===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_DEPOSIT2) {
+        const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
+        const args = [pool?.id, amountReceivable?.toString()]
+        console.log('CONFIRM_DEPOSIT2===============>', args)
+        return callWithGasPrice(stakingTokenContract2, 'transfer', args).catch((err) =>
+          console.log('CONFIRM_DEPOSIT2===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
@@ -991,6 +1031,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           <Button mb="8px" variant="subtle" onClick={() => setStage(LockStage.CONFIRM_EXECUTE_NEXT_PURCHASE)}>
             {t('EXECUTE NEXT PURCHASE')}
           </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.DEPOSIT2)}>
+            {t('DONATE FUNDS')}
+          </Button>
           {userData?.nfts?.length ? (
             <Button variant="success" mb="8px" onClick={() => setStage(LockStage.DEPOSIT)}>
               {t('DEPOSIT')}
@@ -1020,6 +1063,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               </Button>
               <Button mb="8px" variant="subtle" onClick={() => setStage(LockStage.CONFIRM_EXECUTE_NEXT_PURCHASE)}>
                 {t('EXECUTE NEXT PURCHASE')}
+              </Button>
+              <Button variant="success" mb="8px" onClick={() => setStage(LockStage.DEPOSIT2)}>
+                {t('DONATE FUNDS')}
               </Button>
               <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_VP)}>
                 {t('UPDATE PARAMETERS')}
@@ -1059,6 +1105,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               </Button>
               <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.SWITCH_POOL)}>
                 {t('SWITCH POOL')}
+              </Button>
+              <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.DISABLE_BRIBE)}>
+                {t('DISABLE BRIBES')}
               </Button>
               {/* <Button variant="tertiary" mb="8px" onClick={()=> setStage(LockStage.UPDATE_COLLECTION_ID) }>
             {t('UPDATE COLLECTION ID IN VE')}
@@ -1263,7 +1312,22 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           continueToNextStage={continueToNextStage}
         />
       )}
+      {stage === LockStage.DEPOSIT2 && (
+        <DepositStage
+          state={state}
+          currency={currency}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
+      )}
       {stage === LockStage.SWITCH_POOL && <SwitchPoolStage continueToNextStage={continueToNextStage} />}
+      {stage === LockStage.DISABLE_BRIBE && (
+        <DisableBribeStage
+          state={state}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stage === LockStage.UPDATE_BLACKLISTED_MERCHANTS && (
         <UpdateBlacklistedStage
           state={state}

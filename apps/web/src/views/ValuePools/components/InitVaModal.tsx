@@ -354,15 +354,8 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex ref={targetRef8}>
-            <Text
-              fontSize="12px"
-              color="secondary"
-              textTransform="uppercase"
-              paddingTop="13px"
-              paddingRight="50px"
-              bold
-            >
+          <Flex ref={targetRef8} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" bold>
               {t('Make Withdrawable')}
             </Text>
             {tooltipVisible8 && tooltip8}

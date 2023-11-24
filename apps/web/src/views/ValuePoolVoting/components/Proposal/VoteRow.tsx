@@ -15,15 +15,18 @@ interface VoteRowProps {
 const VoteRow: React.FC<any> = ({ vote, isVoter }) => {
   const { t } = useTranslation()
   const hasVotingPower = !!vote?.votingPower
-  const tokenData = useGetTokenData(vote.ve) as any
-
-  const votingPower = hasVotingPower
-    ? getBalanceNumber(vote.votingPower ?? 0, tokenData?.decimals).toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 3,
-      })
-    : '--'
-
+  const { data: tokenData } = useGetTokenData(vote.ve) as any
+  const isPercentile = parseInt(vote?.votingPower) < 100
+  const votingPower =
+    hasVotingPower && isPercentile
+      ? vote.votingPower
+      : hasVotingPower
+      ? getBalanceNumber(vote.votingPower ?? 0, tokenData?.decimals).toLocaleString(undefined, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 3,
+        })
+      : '--'
+  console.log('VoteRow=========================>', vote, tokenData)
   return (
     <Row>
       <AddressColumn>

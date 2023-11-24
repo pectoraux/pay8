@@ -139,7 +139,7 @@ export const getTag = async () => {
   }
 }
 
-export const getGauge = async (veAddress, pool, chainId) => {
+export const getGauge = async (proposalId, chainId) => {
   const bscClient = publicClient({ chainId: chainId })
   const [gauge] = await bscClient.multicall({
     allowFailure: true,
@@ -148,14 +148,14 @@ export const getGauge = async (veAddress, pool, chainId) => {
         address: getValuepoolVoterAddress(),
         abi: valuePoolVoterABI,
         functionName: 'gauges',
-        args: [veAddress, pool],
+        args: [proposalId],
       },
     ],
   })
   return gauge.result
 }
 
-export const getBribe = async (veAddress, pool, chainId) => {
+export const getBribe = async (proposalId, chainId) => {
   const bscClient = publicClient({ chainId: chainId })
   const [bribe] = await bscClient.multicall({
     allowFailure: true,
@@ -164,7 +164,7 @@ export const getBribe = async (veAddress, pool, chainId) => {
         address: getValuepoolVoterAddress(),
         abi: valuePoolVoterABI,
         functionName: 'bribe',
-        args: [veAddress, pool],
+        args: [proposalId],
       },
     ],
   })

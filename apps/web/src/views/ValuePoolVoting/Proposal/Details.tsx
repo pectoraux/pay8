@@ -26,6 +26,7 @@ import BigNumber from 'bignumber.js'
 import { Divider } from 'views/ARPs/components/styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import UpdateBribe from './UpdateBribe'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 interface DetailsProps {
   proposal: Proposal
@@ -44,21 +45,19 @@ const Details: React.FC<any> = ({ proposal }) => {
   const startDate = new Date(proposal?.created * 1000)
   const endDate = new Date(proposal?.endTime * 1000)
   const isPercentile = parseInt(proposal?.upVotes) < 100 && parseInt(proposal?.downVotes) < 100
-  const { data: tokenData } = useGetTokenData(proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0]) as any
+  const { data: tokenData } = useGetTokenData(proposal?.id) as any
   const upVotes = isPercentile
     ? parseInt(proposal?.upVotes)
     : getBalanceNumber(proposal?.upVotes ?? 0, tokenData?.decimals)
   const downVotes = isPercentile
     ? parseInt(proposal?.downVotes)
     : getBalanceNumber(proposal?.downVotes ?? 0, tokenData?.decimals)
-  const veAddress = proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0]
-  const pool = proposal?.id?.split('-')?.length && proposal?.id?.split('-')[1]
-  const { data: gauge } = useGetGauge(veAddress, pool)
-  const { data: bribe } = useGetBribe(veAddress, pool)
-  const { data: gaugeTokenData } = useGetTokenData(gauge?.length ? gauge[2] : '') as any
+  const veAddress = proposal?.valuepool?.id
+  const { data: gauge } = useGetGauge(proposal?.id)
+  const { data: bribe } = useGetBribe(proposal?.id)
+  const { data: gaugeTokenData } = useGetTokenData(gauge?.length ? gauge[3] : '') as any
   const { data: bribeTokenData } = useGetTokenData(bribe?.length ? bribe[1] : '') as any
-  const [presentUpdateBribe] = useModal(<UpdateBribe veAddress={veAddress} pool={pool} />)
-
+  const [presentUpdateBribe] = useModal(<UpdateBribe veAddress={veAddress} proposal={proposal} />)
   return (
     <Card mb="16px">
       <CardHeader>
@@ -78,8 +77,8 @@ const Details: React.FC<any> = ({ proposal }) => {
           <>
             <Flex alignItems="center" mb="8px">
               <Text color="textSubtle">{t('gauge Token')}</Text>
-              <LinkExternal href={getBlockExploreLink(gauge[2], 'address', chainId)} ml="8px">
-                {truncateHash(gauge[2], 10, 5)}
+              <LinkExternal href={getBlockExploreLink(gauge[3], 'address', chainId)} ml="8px">
+                {truncateHash(gauge[3], 7, 5)}
               </LinkExternal>
             </Flex>
             <Flex alignItems="center" mb="8px">
@@ -97,12 +96,12 @@ const Details: React.FC<any> = ({ proposal }) => {
           </>
         ) : null}
         <Divider />
-        {bribe?.length ? (
+        {bribe?.length && bribe[1] !== ADDRESS_ZERO ? (
           <>
             <Flex alignItems="center" mb="8px">
               <Text color="textSubtle">{t('Bribe Token')}</Text>
               <LinkExternal href={getBlockExploreLink(bribe[1], 'address')} ml="8px">
-                {truncateHash(bribe[1], 10, 5)}
+                {truncateHash(bribe[1], 7, 5)}
               </LinkExternal>
             </Flex>
             <Flex alignItems="center" mb="8px">

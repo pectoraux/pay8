@@ -17,15 +17,19 @@ import {
 } from '@pancakeswap/uikit'
 import { Vote } from 'state/types'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import Countdown from 'views/Lottery/components/Countdown'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { useValuepoolVoterContract } from 'hooks/useContract'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import TextEllipsis from '../components/TextEllipsis'
 import { useGetBribe } from 'state/valuepools/hooks'
+import { differenceInSeconds } from 'date-fns'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import styled from 'styled-components'
+
+import TextEllipsis from '../components/TextEllipsis'
+import Timer from './Timer'
 
 // interface ResultsProps {
 //   choices: string[]
@@ -33,17 +37,23 @@ import { useGetBribe } from 'state/valuepools/hooks'
 //   votesLoadingStatus: FetchStatus
 // }
 
+const StyledTimerText = styled(Heading)`
+  background: ${({ theme }) => theme.colors.gradientGold};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`
+
 const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
   const { t } = useTranslation()
   const totalVotes = proposal?.votes?.length ? proposal.votes.reduce((ac, v) => ac + parseInt(v.votingPower), 0) : 0
   const total1Votes = proposal?.votes?.length
-    ? proposal.votes.filter((v) => v.choice === 'Attacker').reduce((ac, v) => ac + parseInt(v.votingPower), 0)
+    ? proposal.votes.filter((v) => v.like).reduce((ac, v) => ac + parseInt(v.votingPower), 0)
     : 0
   const total2Votes = proposal?.votes?.length
-    ? proposal.votes.filter((v) => v.choice === 'Defender').reduce((ac, v) => ac + parseInt(v.votingPower), 0)
+    ? proposal.votes.filter((v) => !v.like).reduce((ac, v) => ac + parseInt(v.votingPower), 0)
     : 0
-  const count1 = proposal?.votes?.length ? proposal.votes.filter((v) => v.choice === 'Attacker')?.length : 0
-  const count2 = proposal?.votes?.length ? proposal.votes.filter((v) => v.choice === 'Defender')?.length : 0
+  const count1 = proposal?.votes?.length ? proposal.votes.filter((v) => v.like)?.length : 0
+  const count2 = proposal?.votes?.length ? proposal.votes.filter((v) => !v.like)?.length : 0
   const progress1 = (total1Votes * 100) / Math.max(totalVotes, 1)
   const progress2 = (total2Votes * 100) / Math.max(totalVotes, 1)
   const afterOneWeek = convertTimeToSeconds(proposal?.endTime || 0) < Date.now()
@@ -53,17 +63,23 @@ const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const valuepoolVoterContract = useValuepoolVoterContract()
-  const veAddress = proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0]
-  const pool = proposal?.id?.split('-')?.length && proposal?.id?.split('-')[1]
-  const { data: bribe } = useGetBribe(veAddress, pool)
+  const veAddress = proposal?.valuepool?.id
+  const { data: bribe } = useGetBribe(proposal?.id)
+  const diff = Math.max(
+    differenceInSeconds(new Date(parseInt(proposal?.endTime) * 1000 ?? 0), new Date(), {
+      roundingMethod: 'ceil',
+    }),
+    0,
+  )
+  const { days, hours, minutes } = getTimePeriods(diff ?? 0)
 
   const handleApplyResults = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('valuepoolVoterContract====================>', [veAddress, pool])
-      return callWithGasPrice(valuepoolVoterContract, 'unlockBribe', [veAddress, pool]).catch((err) =>
-        console.log('err====================>', err),
+      console.log('valuepoolVoterContract====================>', [proposal?.id, veAddress, proposal?.pool])
+      return callWithGasPrice(valuepoolVoterContract, 'unlockBribe', [proposal?.id, veAddress, proposal?.pool]).catch(
+        (err) => console.log('err====================>', err),
       )
     })
     if (receipt?.status) {
@@ -78,17 +94,7 @@ const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
     } else {
       setPendingFb(false)
     }
-  }, [
-    t,
-    router,
-    proposal,
-    veAddress,
-    pool,
-    valuepoolVoterContract,
-    toastSuccess,
-    callWithGasPrice,
-    fetchWithCatchTxError,
-  ])
+  }, [t, router, proposal, veAddress, valuepoolVoterContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
 
   return (
     <Card>
@@ -101,7 +107,7 @@ const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
         <Box key="attacker" mt="24px">
           <Flex alignItems="center" mb="8px">
             <TextEllipsis mb="4px" title={t('Attacker')}>
-              {t('Attacker')}
+              {t('Aye')}
             </TextEllipsis>
             {hasAccountVoted && (
               <Tag variant="success" outline ml="8px">
@@ -120,7 +126,7 @@ const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
         <Box key="defender" mt="24px">
           <Flex alignItems="center" mb="8px">
             <TextEllipsis mb="4px" title={t('Defender')}>
-              {t('Defender')}
+              {t('Nay')}
             </TextEllipsis>
             {hasAccountVoted && (
               <Tag variant="success" outline ml="8px">
@@ -148,11 +154,10 @@ const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
                 {t('Unlock Bribe')}
               </Button>
             ) : (
-              <Countdown
-                nextEventTime={convertTimeToSeconds(proposal?.endTime || 0)}
-                postCountdownText={t('left')}
-                color="#FDAB32"
-              />
+              <>
+                <Timer minutes={minutes} hours={hours} days={days} />
+                <StyledTimerText pt="18px">{days || hours || minutes ? t('left') : ''}</StyledTimerText>
+              </>
             )}
           </Flex>
         </Box>

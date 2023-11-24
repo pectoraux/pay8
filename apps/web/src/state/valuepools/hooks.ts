@@ -129,22 +129,22 @@ export const useGetTokenURIs = (vaAddress, nfts) => {
   return { data, refetch, status }
 }
 
-export const useGetGauge = (vaAddress, pool) => {
+export const useGetGauge = (proposalId) => {
   const { chainId } = useActiveChainId()
   const {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetGauge', vaAddress, pool], async () => getGauge(vaAddress, pool, chainId))
+  } = useSWR(['useGetGauge', proposalId], async () => getGauge(proposalId, chainId))
   return { data, refetch, status }
 }
 
-export const useGetBribe = (vaAddress, pool) => {
+export const useGetBribe = (proposalId) => {
   const { chainId } = useActiveChainId()
   const {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetBribe', vaAddress, pool], async () => getBribe(vaAddress, pool, chainId))
+  } = useSWR(['useGetBribe', proposalId], async () => getBribe(proposalId, chainId))
   return { data, refetch, status }
 }

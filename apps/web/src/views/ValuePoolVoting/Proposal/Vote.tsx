@@ -58,7 +58,6 @@ const Vote: React.FC<any> = ({ proposal, onSuccess, ...props }) => {
     toastSuccess(t('Vote cast!'))
     onSuccess?.()
   }
-
   const [presentCastVoteModal] = useModal(
     <CastVoteModal
       onSuccess={handleSuccess}

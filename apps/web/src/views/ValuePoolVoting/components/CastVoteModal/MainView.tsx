@@ -36,11 +36,11 @@ interface MainViewProps {
 }
 
 const MainView: React.FC<any> = ({
-  vote,
+  isChecked,
   total,
+  total2,
   isPending,
   isLoading,
-  proposal,
   isError,
   onConfirm,
   onViewDetails,
@@ -55,8 +55,8 @@ const MainView: React.FC<any> = ({
         <Text color="secondary" mb="8px" textTransform="uppercase" fontSize="12px" bold>
           {t('Voting For')}
         </Text>
-        <TextEllipsis bold fontSize="20px" mb="8px" title={vote.label}>
-          {vote.label}
+        <TextEllipsis bold fontSize="20px" mb="8px" title={t('Confirm Vote')}>
+          {t('Voting %val%', { val: isChecked ? 'Aye' : 'Nay' })}
         </TextEllipsis>
         <Text color="secondary" mb="8px" textTransform="uppercase" fontSize="12px" bold>
           {t('Your Voting Power')}
@@ -71,9 +71,25 @@ const MainView: React.FC<any> = ({
           <>
             <VotingBoxBorder onClick={onViewDetails} style={{ cursor: 'pointer' }}>
               <VotingBoxCardInner>
+                <Text color="secondary" mb="8px" textTransform="uppercase" fontSize="12px" bold>
+                  {t('Percentile')}
+                </Text>
                 <Flex flexDirection="column">
                   <Text bold fontSize="20px" color={total === 0 ? 'failure' : 'text'}>
                     {formatNumber(total, 0, 3)}
+                  </Text>
+                </Flex>
+                <IconButton scale="sm" variant="text">
+                  <ChevronRightIcon width="24px" />
+                </IconButton>
+              </VotingBoxCardInner>
+              <VotingBoxCardInner>
+                <Text color="secondary" mb="8px" textTransform="uppercase" fontSize="12px" bold>
+                  {t('Balance')}
+                </Text>
+                <Flex flexDirection="column">
+                  <Text bold fontSize="20px" color={total === 0 ? 'failure' : 'text'}>
+                    {formatNumber(total2, 0, 3)}
                   </Text>
                 </Flex>
                 <IconButton scale="sm" variant="text">
@@ -100,7 +116,7 @@ const MainView: React.FC<any> = ({
       <Button
         isLoading={isPending}
         endIcon={isPending ? <AutoRenewIcon spin color="currentColor" /> : null}
-        disabled={disabled || isLoading || total === 0}
+        // disabled={disabled || isLoading || total === 0}
         width="100%"
         mb="8px"
         onClick={onConfirm}

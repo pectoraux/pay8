@@ -2,12 +2,17 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Modal, useToast, Input, Button, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useValuepoolVoterContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { ConfirmVoteView } from './types'
 import { VotingBoxBorder } from './styles'
+import { useGetVotingPower } from 'state/valuepoolvoting/hooks'
+import { FetchStatus } from 'config/constants/types'
+import MainView from './MainView'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
 
 const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismiss }) => {
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
@@ -24,6 +29,14 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
   const [identityTokenId, setIdentityTokenId] = useState('')
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)
+  const veAddress = proposal?.valuepool?.id
+  const { data, refetch, status } = useGetVotingPower(veAddress, tokenId ?? '0')
+  // const [total, setTotal] = useState<any>()
+  console.log('CastVoteModal====================>', proposal)
+  // useEffect(() => {
+  //   // const val = getBalanceNumber(data?.balance, data?.decimals)
+  //   setTotal(parseFloat((data?.percentile ?? 0).toString()) + parseFloat((proposal?.percentile ?? 0).toString()))
+  // }, [data, proposal])
 
   const title = {
     [ConfirmVoteView.MAIN]: t('Confirm Vote'),
@@ -40,12 +53,12 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const args = [
-        proposal?.id?.split('-')[0],
-        proposal?.id?.split('-')[1],
+        proposal?.id,
+        // proposal?.id?.split('-')[1],
         tokenId ?? 0,
         profileId ?? 0,
         identityTokenId ?? 0,
-        isChecked,
+        !!isChecked,
         proposal?.title,
       ]
       console.log('st2==============>', args)
@@ -96,7 +109,7 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
             type="number"
             onChange={(e) => {
               setTokenId(e.target.value)
-              // refetch()
+              refetch()
             }}
             placeholder={t('input veNFT token id')}
             value={tokenId}
@@ -118,15 +131,21 @@ const CastVoteModal: React.FC<any> = ({ onSuccess, proposal, isChecked, onDismis
             value={identityTokenId}
           />
         </VotingBoxBorder>
-        <Button
-          isLoading={isPending}
-          endIcon={isPending ? <AutoRenewIcon spin color="currentColor" /> : null}
-          width="100%"
-          mb="8px"
-          onClick={handleVote}
-        >
-          {t('Confirm Vote')}
-        </Button>
+        {status === FetchStatus.Fetched && Number(tokenId) && view === ConfirmVoteView.MAIN ? (
+          <MainView
+            isChecked={!!isChecked}
+            isError={false}
+            isLoading={false}
+            isPending={isPending}
+            total={parseFloat((data?.percentile ?? 0).toString())}
+            total2={getBalanceNumber(new BigNumber((data?.balance ?? 0).toString()), Number(data?.decimals ?? 18))}
+            proposal={proposal}
+            lockedCakeBalance={0}
+            lockedEndTime={0}
+            onConfirm={handleVote}
+            onDismiss={handleDismiss}
+          />
+        ) : null}
       </Box>
     </Modal>
   )
