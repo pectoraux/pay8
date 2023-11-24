@@ -468,7 +468,7 @@ export default {
     56: '0x',
   },
   valuepoolVoter: {
-    4002: '0x67C886dbDC36f19c6e020A4187F6D1Ff2ce92d97',
+    4002: '0xd6570cdCbbbb035D16303F9eFa1B7E332b45ef89',
     56: '0x',
   },
   vaFactory: {

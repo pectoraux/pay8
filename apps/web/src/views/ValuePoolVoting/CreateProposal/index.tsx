@@ -45,6 +45,9 @@ import { Label, SecondaryLabel } from './styles'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import NextStepButton from 'views/ChannelCreation/NextStepButton'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
+import { useGetRequiresApproval } from 'state/trustbounties/hooks'
+import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
+import { FetchStatus } from 'config/constants/types'
 
 const hub = 'https://hub.snapshot.org'
 const client = new snapshot.Client712(hub)
@@ -83,6 +86,17 @@ const CreateProposal = () => {
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const valuepoolVoterContract = useValuepoolVoterContract()
   const stakingTokenContract = useERC20(state.bribeToken)
+  const { status, needsApproval, refetch } = useGetRequiresApproval(
+    stakingTokenContract,
+    account,
+    valuepoolVoterContract.address,
+  )
+  const { handleApprove: handlePoolApprove, pendingTx: allowing } = useApprovePool(
+    stakingTokenContract,
+    valuepoolVoterContract.address,
+    'Bribe Token',
+    refetch,
+  )
 
   const handleSubmit = useCallback(async () => {
     setIsLoading(true)
@@ -109,7 +123,7 @@ const CreateProposal = () => {
       ]
       const args3 = [
         state.ve,
-        state.pool,
+        account,
         state.bribeToken?.trim()?.length ? state.bribeToken : ADDRESS_ZERO,
         bribeAmount?.toString(),
         state.isNFT,
@@ -119,12 +133,11 @@ const CreateProposal = () => {
         .then(() => {
           return callWithGasPrice(valuepoolVoterContract, 'updateTags', args2)
         })
-        .then(() => {
+        .then((res) => {
           if (!!state.bribe) {
-            return callWithGasPrice(stakingTokenContract, 'approve', [valuepoolVoterContract.address, MaxUint256]).then(
-              () => callWithGasPrice(valuepoolVoterContract, 'lockBribe', args3),
-            )
+            return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args3)
           }
+          return res
         })
         .catch((err) => {
           setIsLoading(false)
@@ -432,17 +445,6 @@ const CreateProposal = () => {
                     </ButtonMenu>
                   </Box>
                   <Box mb="24px">
-                    <SecondaryLabel>{t('Bribe Token Decimals')}</SecondaryLabel>
-                    <Input
-                      type="text"
-                      scale="sm"
-                      name="bribeDecimals"
-                      value={state.bribeDecimals}
-                      placeholder={t('input bribe token decimals')}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                  <Box mb="24px">
                     <SecondaryLabel>{t('Bribe Token')}</SecondaryLabel>
                     <Input
                       type="text"
@@ -450,6 +452,17 @@ const CreateProposal = () => {
                       name="bribeToken"
                       value={state.bribeToken}
                       placeholder={t('input bribe token')}
+                      onChange={handleChange}
+                    />
+                  </Box>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Bribe Token Decimals')}</SecondaryLabel>
+                    <Input
+                      type="text"
+                      scale="sm"
+                      name="bribeDecimals"
+                      value={state.bribeDecimals}
+                      placeholder={t('input bribe token decimals')}
                       onChange={handleChange}
                     />
                   </Box>
@@ -469,6 +482,19 @@ const CreateProposal = () => {
               <Filters showWorkspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
               {account ? (
                 <>
+                  <Button
+                    mb="8px"
+                    onClick={handlePoolApprove}
+                    endIcon={
+                      allowing || status === FetchStatus.Fetching ? <AutoRenewIcon spin color="currentColor" /> : null
+                    }
+                    isLoading={allowing}
+                    disabled={allowing || !needsApproval || status === FetchStatus.Fetching}
+                  >
+                    {status === FetchStatus.Fetching
+                      ? t('Increasing Bribe Token Allowance')
+                      : t('Increase Bribe Token Allowance')}
+                  </Button>
                   <Button
                     type="submit"
                     width="100%"
