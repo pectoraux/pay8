@@ -123,7 +123,7 @@ const CreateProposal = () => {
       ]
       const args3 = [
         state.ve,
-        account,
+        state.pool,
         state.bribeToken?.trim()?.length ? state.bribeToken : ADDRESS_ZERO,
         bribeAmount?.toString(),
         state.isNFT,
