@@ -74,21 +74,16 @@ const CreateProposal = () => {
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [isDone, setIsDone] = useState('')
-  // const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { toastSuccess, toastError } = useToast()
   const { title, body } = state
-  // const formErrors = getFormErrors(state, t)
   const [nftFilters, setNftFilters] = useState<any>({})
-
-  // const { status, data } = useSWR([`votes-${pool?.name ?? ''}`, filterState], async () => getVavaVotes(pool?._va ?? ''))
-
   const { callWithGasPrice } = useCallWithGasPrice()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const valuepoolVoterContract = useValuepoolVoterContract()
   const stakingTokenContract = useERC20(state.bribeToken)
-  console.log('stakingTokenContract=================>', stakingTokenContract)
+
   const handleSubmit = useCallback(async () => {
     setIsLoading(true)
     // eslint-disable-next-line consistent-return
@@ -413,39 +408,6 @@ const CreateProposal = () => {
               {state.bribe ? (
                 <>
                   <Box mb="24px">
-                    <SecondaryLabel>{t('Bribe Amount')}</SecondaryLabel>
-                    <Input
-                      type="text"
-                      scale="sm"
-                      name="bribeAmount"
-                      value={state.bribeAmount}
-                      placeholder={t('input bribe amount')}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                  <Box mb="24px">
-                    <SecondaryLabel>{t('Bribe Token')}</SecondaryLabel>
-                    <Input
-                      type="text"
-                      scale="sm"
-                      name="bribeToken"
-                      value={state.bribeToken}
-                      placeholder={t('input bribe token')}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                  <Box mb="24px">
-                    <SecondaryLabel>{t('Bribe Token Decimals')}</SecondaryLabel>
-                    <Input
-                      type="text"
-                      scale="sm"
-                      name="bribeDecimals"
-                      value={state.bribeDecimals}
-                      placeholder={t('input bribe token decimals')}
-                      onChange={handleChange}
-                    />
-                  </Box>
-                  <Box mb="24px">
                     <Flex>
                       <Text
                         fontSize="12px"
@@ -469,6 +431,39 @@ const CreateProposal = () => {
                       <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
                     </ButtonMenu>
                   </Box>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Bribe Token Decimals')}</SecondaryLabel>
+                    <Input
+                      type="text"
+                      scale="sm"
+                      name="bribeDecimals"
+                      value={state.bribeDecimals}
+                      placeholder={t('input bribe token decimals')}
+                      onChange={handleChange}
+                    />
+                  </Box>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Bribe Token')}</SecondaryLabel>
+                    <Input
+                      type="text"
+                      scale="sm"
+                      name="bribeToken"
+                      value={state.bribeToken}
+                      placeholder={t('input bribe token')}
+                      onChange={handleChange}
+                    />
+                  </Box>
+                  <Box mb="24px">
+                    <SecondaryLabel>{t('Bribe Amount or Token ID')}</SecondaryLabel>
+                    <Input
+                      type="text"
+                      scale="sm"
+                      name="bribeAmount"
+                      value={state.bribeAmount}
+                      placeholder={t('input bribe amount or token id')}
+                      onChange={handleChange}
+                    />
+                  </Box>
                 </>
               ) : null}
               <Filters showWorkspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
@@ -480,15 +475,10 @@ const CreateProposal = () => {
                     isLoading={isLoading}
                     endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
                     onClick={handleSubmit}
-                    // disabled={!isEmpty(formErrors)}
                     mb="16px"
                   >
                     {t('Publish')}
                   </Button>
-                  {/* <SecondaryLabel>{t('Voting Power: %vp%', { vp: balances.find((balance) => balance.id === state.tokenId)?.lockValue})}</SecondaryLabel> */}
-                  {/* <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
-                      {t('Check voting power')}
-                    </Button> */}
                   <NextStepButton onClick={() => push(`/valuepools/voting/valuepool/${state.ve}`)} disabled={!isDone}>
                     {t('Go to Proposals')}
                   </NextStepButton>

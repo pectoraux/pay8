@@ -25,6 +25,7 @@ import CreateContentModal from './CreateContentModal'
 import { useGetTokenData } from 'state/ramps/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface DetailsProps {
   proposal: Proposal
@@ -39,6 +40,7 @@ const DetailBox = styled(Box)`
 const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const { t } = useTranslation()
   const { VotesTag } = FarmUI.Tags
+  const { chainId } = useActiveChainId()
   const startDate = new Date(proposal.creationTime * 1000)
   const endDate = new Date(proposal.endTime * 1000)
   const isLocked = useGetIsLocked(proposal?.defenderId ?? '0')
@@ -48,7 +50,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
     ? getBalanceNumber(new BigNumber(latestClaim[3]?.toString()), tokenData?.decimals)
     : 0
   const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
-  console.log('latestClaim===================>', latestClaim, proposal, tokenData)
+
   return (
     <Card mb="16px">
       <CardHeader>
@@ -65,13 +67,13 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
         </Flex>
         <Flex alignItems="center" mb="8px">
           <Text color="textSubtle">{t('Attacker ID')}</Text>
-          <LinkExternal href={getBlockExploreLink(proposal.attackerId, 'address')} ml="8px">
+          <LinkExternal href={getBlockExploreLink(proposal.attackerId, 'address', chainId)} ml="8px">
             {proposal.attackerId}
           </LinkExternal>
         </Flex>
         <Flex alignItems="center" mb="16px">
           <Text color="textSubtle">{t('Defender ID')}</Text>
-          <LinkExternal href={getBlockExploreLink(proposal.defenderId, 'block')} ml="8px">
+          <LinkExternal href={getBlockExploreLink(proposal.defenderId, 'block', chainId)} ml="8px">
             {proposal.defenderId}
           </LinkExternal>
         </Flex>

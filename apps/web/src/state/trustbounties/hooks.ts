@@ -137,7 +137,7 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useGetRequiresApproval = (c, a, s) => {
   const { data, status, mutate } = useSWR(
-    ['tb-allowance', c.address?.toLowerCase(), a?.toLowerCase(), s?.toLowerCase()],
+    ['tb-allowance', c?.address?.toLowerCase(), a?.toLowerCase(), s?.toLowerCase()],
     async () => requiresApproval(c, a, s),
   )
   return {

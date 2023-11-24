@@ -21,10 +21,11 @@ import Countdown from 'views/Lottery/components/Countdown'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { convertTimeToSeconds } from 'utils/timeHelper'
-import { useStakeMarketVoterContract } from 'hooks/useContract'
+import { useValuepoolVoterContract } from 'hooks/useContract'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import TextEllipsis from '../components/TextEllipsis'
+import { useGetBribe } from 'state/valuepools/hooks'
 
 // interface ResultsProps {
 //   choices: string[]
@@ -51,34 +52,43 @@ const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
   const [pendingFb, setPendingFb] = useState(false)
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const stakeMarketVoterContract = useStakeMarketVoterContract()
+  const valuepoolVoterContract = useValuepoolVoterContract()
+  const veAddress = proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0]
+  const pool = proposal?.id?.split('-')?.length && proposal?.id?.split('-')[1]
+  const { data: bribe } = useGetBribe(veAddress, pool)
 
   const handleApplyResults = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      console.log('stakeMarketVoterContract====================>', [proposal?.ve, proposal?.id, proposal?.attackerId])
-      return callWithGasPrice(stakeMarketVoterContract, 'updateStakeFromVoter', [
-        proposal?.ve,
-        proposal?.id,
-        proposal?.attackerId,
-      ]).catch((err) => {
-        console.log('err====================>', err)
-      })
+      console.log('valuepoolVoterContract====================>', [veAddress, pool])
+      return callWithGasPrice(valuepoolVoterContract, 'unlockBribe', [veAddress, pool]).catch((err) =>
+        console.log('err====================>', err),
+      )
     })
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Results successfully applied'),
+        t('Bribe successfully unlocked'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start receiving votes accordingly.')}
+          {t('The bribe has been either sent to the valuepool or back to its creator depending on the vote results.')}
         </ToastDescriptionWithTx>,
       )
-      router.push('/stakemarket/voting')
+      router.push(`/valuepool/voting/${veAddress}`)
     } else {
       setPendingFb(false)
     }
-  }, [t, router, proposal, stakeMarketVoterContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
+  }, [
+    t,
+    router,
+    proposal,
+    veAddress,
+    pool,
+    valuepoolVoterContract,
+    toastSuccess,
+    callWithGasPrice,
+    fetchWithCatchTxError,
+  ])
 
   return (
     <Card>
@@ -130,11 +140,12 @@ const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
               <Button
                 variant="secondary"
                 onClick={handleApplyResults}
+                disabled={!(bribe?.length && parseInt(bribe[0]?.toString()))}
                 scale="sm"
                 endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
                 isLoading={pendingTx || pendingFb}
               >
-                {t('Apply Results')}
+                {t('Unlock Bribe')}
               </Button>
             ) : (
               <Countdown

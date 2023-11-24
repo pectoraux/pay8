@@ -107,7 +107,13 @@ const Vote: React.FC<any> = ({ proposal, onSuccess, ...props }) => {
             </Text>
           </ChoiceText>
         </Choice>
-        {account ? <Button onClick={presentCastVoteModal}>{t('Cast Vote')}</Button> : <ConnectWalletButton />}
+        {account ? (
+          <Button disabled={!proposal?.active} onClick={presentCastVoteModal}>
+            {t('Cast Vote')}
+          </Button>
+        ) : (
+          <ConnectWalletButton />
+        )}
       </CardBody>
     </Card>
   )

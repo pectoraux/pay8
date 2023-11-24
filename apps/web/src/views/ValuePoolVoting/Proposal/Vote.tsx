@@ -17,6 +17,7 @@ import { Proposal } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import CastVoteModal from '../components/CastVoteModal'
+import { isCoreProposal } from '../helpers'
 
 interface VoteProps extends CardProps {
   proposal: Proposal
@@ -107,7 +108,13 @@ const Vote: React.FC<any> = ({ proposal, onSuccess, ...props }) => {
             </Text>
           </ChoiceText>
         </Choice>
-        {account ? <Button onClick={presentCastVoteModal}>{t('Cast Vote')}</Button> : <ConnectWalletButton />}
+        {account ? (
+          <Button disabled={!isCoreProposal(proposal)} onClick={presentCastVoteModal}>
+            {t('Cast Vote')}
+          </Button>
+        ) : (
+          <ConnectWalletButton />
+        )}
       </CardBody>
     </Card>
   )

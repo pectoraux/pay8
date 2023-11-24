@@ -10,6 +10,7 @@ import {
   Text,
   Balance,
   Farm as FarmUI,
+  Button,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { format } from 'date-fns'
@@ -23,6 +24,8 @@ import { ProposalStateTag } from '../components/Proposals/tags'
 import { useGetBribe, useGetGauge } from 'state/valuepools/hooks'
 import BigNumber from 'bignumber.js'
 import { Divider } from 'views/ARPs/components/styles'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import UpdateBribe from './UpdateBribe'
 
 interface DetailsProps {
   proposal: Proposal
@@ -34,8 +37,9 @@ const DetailBox = styled(Box)`
   border-radius: 16px;
 `
 
-const Details: React.FC<any> = ({ proposal, onSuccess }) => {
+const Details: React.FC<any> = ({ proposal }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
   const { VotesTag } = FarmUI.Tags
   const startDate = new Date(proposal?.created * 1000)
   const endDate = new Date(proposal?.endTime * 1000)
@@ -47,18 +51,14 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const downVotes = isPercentile
     ? parseInt(proposal?.downVotes)
     : getBalanceNumber(proposal?.downVotes ?? 0, tokenData?.decimals)
-  const { data: gauge } = useGetGauge(
-    proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0],
-    proposal?.id?.split('-')?.length && proposal?.id?.split('-')[1],
-  )
-  const { data: bribe } = useGetBribe(
-    proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0],
-    proposal?.id?.split('-')?.length && proposal?.id?.split('-')[1],
-  )
+  const veAddress = proposal?.id?.split('-')?.length && proposal?.id?.split('-')[0]
+  const pool = proposal?.id?.split('-')?.length && proposal?.id?.split('-')[1]
+  const { data: gauge } = useGetGauge(veAddress, pool)
+  const { data: bribe } = useGetBribe(veAddress, pool)
   const { data: gaugeTokenData } = useGetTokenData(gauge?.length ? gauge[2] : '') as any
   const { data: bribeTokenData } = useGetTokenData(bribe?.length ? bribe[1] : '') as any
+  const [presentUpdateBribe] = useModal(<UpdateBribe veAddress={veAddress} pool={pool} />)
 
-  console.log('bribebribe====================>', gauge, bribe, proposal)
   return (
     <Card mb="16px">
       <CardHeader>
@@ -69,7 +69,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
       <CardBody>
         <Flex alignItems="center" mb="8px">
           <Text color="textSubtle">{t('Author')}</Text>
-          <LinkExternal href={getBlockExploreLink(proposal?.owner, 'address')} ml="8px">
+          <LinkExternal href={getBlockExploreLink(proposal?.owner, 'address', chainId)} ml="8px">
             {truncateHash(proposal?.owner, 10, 10)}
           </LinkExternal>
         </Flex>
@@ -78,7 +78,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
           <>
             <Flex alignItems="center" mb="8px">
               <Text color="textSubtle">{t('gauge Token')}</Text>
-              <LinkExternal href={getBlockExploreLink(gauge[2], 'address')} ml="8px">
+              <LinkExternal href={getBlockExploreLink(gauge[2], 'address', chainId)} ml="8px">
                 {truncateHash(gauge[2], 10, 5)}
               </LinkExternal>
             </Flex>
@@ -158,6 +158,11 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
             <Text ml="8px">{proposal?.products}</Text>
           </Flex>
         </DetailBox>
+        <Flex mt="8px" mb="8px" justifyContent="center" alignItems="center">
+          <Button variant="secondary" onClick={presentUpdateBribe} scale="sm">
+            {t('Update Bribe')}
+          </Button>
+        </Flex>
       </CardBody>
     </Card>
   )

@@ -16,6 +16,7 @@ import Layout from '../components/Layout'
 import Details from './Details'
 import Vote from './Vote'
 import Votes from './Votes'
+import Results from './Results'
 
 const Overview = () => {
   const { query, isFallback } = useRouter()
@@ -74,7 +75,7 @@ const Overview = () => {
         </Box>
         <Box position="sticky" top="60px">
           <Details proposal={proposal} onSuccess={refetch} />
-          {/* <Results choices={[t("Attacker"), t("Defender")]} proposal={proposal} hasAccountVoted={hasAccountVoted} /> */}
+          <Results proposal={proposal} hasAccountVoted={hasAccountVoted} />
         </Box>
       </Layout>
     </Container>

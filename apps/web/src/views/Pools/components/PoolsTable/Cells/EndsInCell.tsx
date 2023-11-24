@@ -28,7 +28,7 @@ const EarningsCell: React.FC<any> = ({ pool }) => {
         </Text>
         <Flex>
           <Box mr="8px" height="32px">
-            <Text mt="4px" fontSize="14px" color="primary" bold>
+            <Text mt="4px" fontSize="16px" color="primary" bold>
               {pool?.nextDue ? format(convertTimeToSeconds(pool?.nextDue), 'MMM do, yyyy HH:mm') : '-'}
             </Text>
           </Box>

@@ -26,6 +26,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import Divider from 'components/Divider'
 import { useCurrency } from 'hooks/Tokens'
 import BigNumber from 'bignumber.js'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface DetailsProps {
   proposal: Proposal
@@ -39,6 +40,7 @@ const DetailBox = styled(Box)`
 
 const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
   const { VotesTag } = FarmUI.Tags
   const startDate = new Date(proposal.creationTime * 1000)
   const endDate = new Date(proposal.endTime * 1000)
@@ -65,7 +67,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
         <Divider />
         <Flex alignItems="center" mb="8px">
           <Text color="textSubtle">{t('Attacker ID')}</Text>
-          <LinkExternal href={getBlockExploreLink(proposal.attackerId, 'address')} ml="8px">
+          <LinkExternal href={getBlockExploreLink(proposal.attackerId, 'address', chainId)} ml="8px">
             {proposal.attackerId}
           </LinkExternal>
         </Flex>
@@ -75,7 +77,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={token?.decimals ?? 18}
+              decimals={17}
               value={getBalanceNumber(new BigNumber(attackerStake?.bank?.amountPayable?.toString()), token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -101,7 +103,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
         <Divider />
         <Flex alignItems="center" mb="16px">
           <Text color="textSubtle">{t('Defender ID')}</Text>
-          <LinkExternal href={getBlockExploreLink(proposal.defenderId, 'block')} ml="8px">
+          <LinkExternal href={getBlockExploreLink(proposal.defenderId, 'block', chainId)} ml="8px">
             {proposal.defenderId}
           </LinkExternal>
         </Flex>
