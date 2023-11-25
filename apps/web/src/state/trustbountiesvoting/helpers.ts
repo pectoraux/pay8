@@ -47,26 +47,26 @@ export const getVavaVotes = async (vaAddress, limit = 10) => {
             },
           ],
         })
-        const [gauges] = await bscClient.multicall({
-          allowFailure: true,
-          contracts: [
-            {
-              address: getValuepoolVoterAddress(),
-              abi: valuePoolVoterABI,
-              functionName: 'gauges',
-              args: [vaAddress, votePool.result],
-            },
-          ],
-        })
-        const amount = gauges.result[0]
-        const start = gauges.result[1]
+        // const [gauges] = await bscClient.multicall({
+        //   allowFailure: true,
+        //   contracts: [
+        //     {
+        //       address: getValuepoolVoterAddress(),
+        //       abi: valuePoolVoterABI,
+        //       functionName: 'gauges',
+        //       args: [vaAddress, votePool.result],
+        //     },
+        //   ],
+        // })
+        // const amount = gauges.result[0]
+        // const start = gauges.result[1]
         return {
           votePool,
           upVotes: '0',
           downVotes: '0',
           weights: '0',
-          amount: amount.toString(),
-          start: start.toString(),
+          // amount: amount.toString(),
+          // start: start.toString(),
         }
       })
       .flat(),
