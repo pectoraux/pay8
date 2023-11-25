@@ -14,6 +14,7 @@ export const arpFields = `
   likes
   dislikes
   profileId
+  updatedAt
   applicationLink
   votes {
     ${voteFields}

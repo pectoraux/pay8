@@ -8,6 +8,8 @@ export function sortPools<T>(account: string, sortOption: string, poolsToSort: a
       return orderBy(poolsToSort, (pool: any) => Number(pool?.likes), "desc");
     case "dislikes":
       return orderBy(poolsToSort, (pool: any) => Number(pool?.dislikes), "desc");
+    case "updatedAt":
+      return orderBy(poolsToSort, (pool: any) => Number(pool?.updatedAt), "desc");
     default:
       return poolsToSort;
   }
