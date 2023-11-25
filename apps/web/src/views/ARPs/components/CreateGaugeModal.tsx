@@ -4,7 +4,14 @@ import { InjectedModalProps, useToast, Button, Flex, LinkExternal } from '@panca
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useARPContract, useARPNote, useARPHelper, useARPMinter } from 'hooks/useContract'
+import {
+  useERC20,
+  useARPContract,
+  useARPNote,
+  useARPHelper,
+  useARPMinter,
+  useErc721CollectionContract,
+} from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
@@ -218,6 +225,7 @@ const CreateGaugeModal: React.FC<any> = ({
     bountyRequired: parseInt(pool?.bountyRequired) / 100,
     ve: pool?._ve,
     token: currency?.address,
+    isNFT: 0,
     add: 0,
     adminNote: 0,
     contentType: '',
@@ -234,6 +242,7 @@ const CreateGaugeModal: React.FC<any> = ({
     adminCreditShare: parseInt(pool?.adminCreditShare) / 100 ?? '',
     adminDebitShare: parseInt(pool?.adminDebitShare) / 100 ?? '',
     profileRequired: pool?.profileRequired ? 1 : 0,
+    arp: pool?.id,
   }))
   const [nftFilters, setNftFilters] = useState<any>({
     countries: pool?.countries,
@@ -253,6 +262,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const handleRawValueChange = (key: string) => (value: string | Date) => {
     updateValue(key, value)
   }
+  const collectionContract = useErc721CollectionContract(state.token)
 
   const goBack = () => {
     switch (stage) {
@@ -762,8 +772,15 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_NOTIFY_REWARDS) {
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
-        const args = [currency?.address, amountReceivable?.toString()]
-        console.log('CONFIRM_NOTIFY_REWARDS===============>', args)
+        const args = [state.token, state.isNFT ? state.amountReceivable : amountReceivable?.toString()]
+        console.log('CONFIRM_NOTIFY_REWARDS===============>', collectionContract, args)
+        if (state.isNFT > 0) {
+          return callWithGasPrice(collectionContract, 'setApprovalForAll', [arpContract.address, true]).then(() =>
+            callWithGasPrice(arpContract, 'notifyReward', args).catch((err) =>
+              console.log('CONFIRM_NOTIFY_REWARDS===============>', err),
+            ),
+          )
+        }
         return callWithGasPrice(arpContract, 'notifyReward', args).catch((err) =>
           console.log('CONFIRM_NOTIFY_REWARDS===============>', err),
         )
@@ -840,7 +857,7 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
         const amount = getDecimalAmount(state.amountPayable ?? 0, currency?.decimals)
-        const args = [currency?.address, amount.toString()]
+        const args = [state.token, state.isNFT ? state.amountPayable : amount.toString(), state.isNFT]
         console.log('CONFIRM_WITHDRAW===============>', args)
         return callWithGasPrice(arpContract, 'withdraw', args).catch((err) =>
           console.log('CONFIRM_WITHDRAW===============>', err),
@@ -1170,7 +1187,12 @@ const CreateGaugeModal: React.FC<any> = ({
         <UpdateApplicationStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.NOTIFY_REWARDS && (
-        <UpdateNotifyRewardStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <UpdateNotifyRewardStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
       )}
       {stage === LockStage.NOTIFY_DEBT && (
         <UpdateNotifyDebtStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
@@ -1355,6 +1377,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state={state}
           account={pool.id}
           currency={currency}
+          handleChange={handleChange}
           continueToNextStage={continueToNextStage}
           handleRawValueChange={handleRawValueChange}
         />

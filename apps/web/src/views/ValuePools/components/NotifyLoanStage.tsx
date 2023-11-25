@@ -1,9 +1,24 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  Input,
+  ErrorIcon,
+  ButtonMenu,
+  ButtonMenuItem,
+  Balance,
+} from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { GreyedOutContainer, Divider } from './styles'
+import { useGetBalanceOf } from 'state/valuepools/hooks'
+import { getNFTicketHelper2 } from 'utils/contractHelpers'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -21,9 +36,10 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
+  const { data: balanceOf } = useGetBalanceOf(state.token, state.vava, state.isNFT)
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -33,6 +49,47 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
 
   return (
     <>
+      <GreyedOutContainer>
+        <Balance
+          lineHeight="1"
+          color="textSubtle"
+          fontSize="12px"
+          decimals={state.isNFT ? 0 : state.decimals}
+          value={
+            state.isNFT
+              ? parseInt(balanceOf?.toString())
+              : getBalanceNumber(new BigNumber(balanceOf?.toString()), state.decimals)
+          }
+        />
+        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+          {t('Balance')}
+        </Text>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex>
+          <Text fontSize="12px" paddingRight="15px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+            {t('Token Type')}
+          </Text>
+        </Flex>
+        <ButtonMenu scale="xs" variant="subtle" activeIndex={state.isNFT} onItemClick={handleRawValueChange('isNFT')}>
+          <ButtonMenuItem>{t('Fungible')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
+        </ButtonMenu>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="token"
+          value={state.token}
+          placeholder={t('input token address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('ARP Address')}
@@ -48,14 +105,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount Receivable')}
+          {t('Amount Receivable or Token ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="amountReceivable"
           value={state.amountReceivable}
-          placeholder={t('input loan amount')}
+          placeholder={t('input approve amount or token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

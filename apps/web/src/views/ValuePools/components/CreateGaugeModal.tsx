@@ -217,7 +217,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
     tokenId: pool?.tokenId,
-    vava: pool?.valuepoolAddress ?? '',
+    vava: pool?.id ?? '',
     tokenId2: '',
     amountPayable: '',
     amountReceivable: '',
@@ -288,6 +288,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     maxWithdrawable: pool?.maxWithdrawable,
     minimumSponsorPercentile: pool?.minimumSponsorPercentile,
     customTags: '',
+    token: currency?.address,
+    isNFT: 0,
+    decimals: currency?.decimals,
   }))
   const [nftFilters, setNftFilters] = useState<any>({
     workspace: pool?.workspaces,
@@ -697,7 +700,11 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
       }
       if (stage === LockStage.CONFIRM_NOTIFY_LOAN) {
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
-        const args = [currency?.address, state.cardAddress, amountReceivable.toString()]
+        const args = [
+          state.token,
+          state.cardAddress,
+          state.isNFT ? state.amountReceivable : amountReceivable.toString(),
+        ]
         console.log('CONFIRM_NOTIFY_LOAN===============>', args)
         return callWithGasPrice(valuepoolContract, 'notifyLoan', args).catch((err) =>
           console.log('CONFIRM_NOTIFY_LOAN===============>', err),
@@ -1233,7 +1240,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         <NotifyPaymentStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.NOTIFY_LOAN && (
-        <NotifyLoanStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <NotifyLoanStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
       )}
       {stage === LockStage.CREATE_LOCK && (
         <PresentBribeModal pool={pool} stakingToken={currency} stakingTokenBalance={stakingTokenBalance} />

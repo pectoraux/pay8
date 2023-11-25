@@ -6,7 +6,7 @@ import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { valuePoolABI } from 'config/abi/valuePool'
 import { publicClient } from 'utils/wagmi'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { erc20ABI } from 'wagmi'
+import { erc20ABI, erc721ABI } from 'wagmi'
 import { vaABI } from 'config/abi/va'
 import { getValuepoolHelperAddress, getValuepoolVoterAddress } from 'utils/addressHelpers'
 import { valuePoolHelperABI } from 'config/abi/valuePoolHelper'
@@ -137,6 +137,54 @@ export const getTag = async () => {
     console.error('Failed to fetch tags=============>', error)
     return null
   }
+}
+
+export const getERC721BalanceOf = async (tokenAddress, recipientAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [gauge] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: tokenAddress,
+        abi: erc721ABI,
+        functionName: 'balanceOf',
+        args: [recipientAddress],
+      },
+    ],
+  })
+  return gauge.result
+}
+
+export const getERC20BalanceOf = async (tokenAddress, recipientAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [gauge] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: tokenAddress,
+        abi: erc20ABI,
+        functionName: 'balanceOf',
+        args: [recipientAddress],
+      },
+    ],
+  })
+  return gauge.result
+}
+
+export const getVoteOption = async (veAddress, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [gauge] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getValuepoolVoterAddress(),
+        abi: valuePoolVoterABI,
+        functionName: 'voteOption',
+        args: [veAddress],
+      },
+    ],
+  })
+  return gauge.result
 }
 
 export const getGauge = async (proposalId, chainId) => {

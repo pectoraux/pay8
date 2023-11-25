@@ -90,7 +90,6 @@ const Results: React.FC<any> = ({ proposal, hasAccountVoted }) => {
           {t('The bribe has been either sent to the valuepool or back to its creator depending on the vote results.')}
         </ToastDescriptionWithTx>,
       )
-      router.push(`/valuepool/voting/${veAddress}`)
     } else {
       setPendingFb(false)
     }

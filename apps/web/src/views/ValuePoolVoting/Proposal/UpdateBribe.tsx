@@ -24,7 +24,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useERC20, useStakeMarketVoterContract, useValuepoolVoterContract } from 'hooks/useContract'
+import { useERC20, useErc721CollectionContract, useValuepoolVoterContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider } from 'views/ARPs/components/styles'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
@@ -60,6 +60,7 @@ const UpdateBribeModal: React.FC<any> = ({ veAddress, proposal, onDismiss }) => 
   const [isDone, setIsDone] = useState('')
   const valuepoolVoterContract = useValuepoolVoterContract()
   const stakingTokenContract = useERC20(state.bribeToken)
+  const collectionContract = useErc721CollectionContract(state.bribeToken)
   const { status, needsApproval, refetch } = useGetRequiresApproval(
     stakingTokenContract,
     account,
@@ -80,25 +81,40 @@ const UpdateBribeModal: React.FC<any> = ({ veAddress, proposal, onDismiss }) => 
       const args = [
         state.bribeToken?.trim()?.length ? state.bribeToken : ADDRESS_ZERO,
         proposal?.id,
-        bribeAmount?.toString(),
+        state.isNFT > 0 ? state.bribeAmount : bribeAmount?.toString(),
         state.isNFT,
       ]
-      console.log('createGauge==================>', args, stakingTokenContract)
-      return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args).catch((err) => {
-        setIsLoading(false)
-        console.log('err==================>', err)
-        toastError(
-          t('Issue adding bribe'),
-          <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
+      console.log('createGauge==================>', args, stakingTokenContract, collectionContract)
+      if (state.isNFT > 0) {
+        return callWithGasPrice(collectionContract, 'setApprovalForAll', [valuepoolVoterContract.address, true]).then(
+          (res) => {
+            return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args).catch((err) => {
+              setIsLoading(false)
+              console.log('err==================>', err)
+              toastError(
+                t('Issue adding bribe'),
+                <ToastDescriptionWithTx txHash={receipt?.transactionHash}>{err}</ToastDescriptionWithTx>,
+              )
+            })
+          },
         )
-      })
+      } else {
+        return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args).catch((err) => {
+          setIsLoading(false)
+          console.log('err==================>', err)
+          toastError(
+            t('Issue adding bribe'),
+            <ToastDescriptionWithTx txHash={receipt?.transactionHash}>{err}</ToastDescriptionWithTx>,
+          )
+        })
+      }
     })
     if (receipt?.status) {
       setIsLoading(false)
       setIsDone(state.ve)
       toastSuccess(
         t('Bribe successfully added'),
-        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+        <ToastDescriptionWithTx txHash={receipt?.transactionHash}>
           {t('Your bribe will be sent to the valuepool in case your proposal passes.')}
         </ToastDescriptionWithTx>,
       )
@@ -111,6 +127,7 @@ const UpdateBribeModal: React.FC<any> = ({ veAddress, proposal, onDismiss }) => 
     toastError,
     toastSuccess,
     callWithGasPrice,
+    collectionContract,
     valuepoolVoterContract,
     stakingTokenContract,
     fetchWithCatchTxError,
@@ -205,7 +222,7 @@ const UpdateBribeModal: React.FC<any> = ({ veAddress, proposal, onDismiss }) => 
       <Flex flexDirection="column" px="16px" pb="16px">
         {!account ? (
           <ConnectWalletButton />
-        ) : needsApproval ? (
+        ) : needsApproval && !state.isNFT ? (
           <Button
             mb="8px"
             onClick={handlePoolApprove}

@@ -113,14 +113,14 @@ const PoolStatsInfo: React.FC<any> = ({
       )}
       {pool?._ve !== ADDRESS_ZERO && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.id, 'address', chainId)} bold={false} small>
+          <ScanLink href={getBlockExploreLink(pool?._ve, 'address', chainId)} bold={false} small>
             {t('View Leviathan')}
           </ScanLink>
         </Flex>
       )}
       {pool?.valuepool !== ADDRESS_ZERO && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.id, 'address', chainId)} bold={false} small>
+          <ScanLink href={getBlockExploreLink(pool?.valuepool, 'address', chainId)} bold={false} small>
             {t('View Valuepool')}
           </ScanLink>
         </Flex>

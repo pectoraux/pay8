@@ -21,7 +21,7 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useGetTokenData } from 'state/ramps/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { ProposalStateTag } from '../components/Proposals/tags'
-import { useGetBribe, useGetGauge } from 'state/valuepools/hooks'
+import { useGetBribe, useGetGauge, useGetVoteOption } from 'state/valuepools/hooks'
 import BigNumber from 'bignumber.js'
 import { Divider } from 'views/ARPs/components/styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -44,7 +44,8 @@ const Details: React.FC<any> = ({ proposal }) => {
   const { VotesTag } = FarmUI.Tags
   const startDate = new Date(proposal?.created * 1000)
   const endDate = new Date(proposal?.endTime * 1000)
-  const isPercentile = parseInt(proposal?.upVotes) < 100 && parseInt(proposal?.downVotes) < 100
+  const { data: voteOption } = useGetVoteOption(proposal?.valuepool?.id)
+  const isPercentile = voteOption !== 1
   const { data: tokenData } = useGetTokenData(proposal?.id) as any
   const upVotes = isPercentile
     ? parseInt(proposal?.upVotes)
@@ -57,7 +58,9 @@ const Details: React.FC<any> = ({ proposal }) => {
   const { data: bribe } = useGetBribe(proposal?.id)
   const { data: gaugeTokenData } = useGetTokenData(gauge?.length ? gauge[3] : '') as any
   const { data: bribeTokenData } = useGetTokenData(bribe?.length ? bribe[1] : '') as any
+  const isClaimingNFT = gaugeTokenData?.decimals === undefined
   const [presentUpdateBribe] = useModal(<UpdateBribe veAddress={veAddress} proposal={proposal} />)
+  console.log('presentUpdateBribe==============>', proposal, voteOption, isPercentile)
   return (
     <Card mb="16px">
       <CardHeader>
@@ -88,9 +91,13 @@ const Details: React.FC<any> = ({ proposal }) => {
               <Balance
                 lineHeight="1"
                 color="primary"
-                decimals={12}
-                value={getBalanceNumber(new BigNumber(gauge[0]?.toString() ?? '0'), gaugeTokenData?.decimals ?? 18)}
-                unit={` ${gaugeTokenData?.symbol ?? ''}`}
+                decimals={isClaimingNFT ? 0 : 12}
+                value={getBalanceNumber(
+                  new BigNumber(gauge[0]?.toString() ?? '0'),
+                  isClaimingNFT ? 18 : gaugeTokenData?.decimals ? gaugeTokenData?.decimals : 18,
+                )}
+                unit={` ${!isClaimingNFT && gaugeTokenData?.symbol ? gaugeTokenData?.symbol : ''}`}
+                prefix={` ${isClaimingNFT && gaugeTokenData?.symbol ? gaugeTokenData?.symbol + ' #' : ''}`}
               />
             </Flex>
           </>
@@ -100,20 +107,27 @@ const Details: React.FC<any> = ({ proposal }) => {
           <>
             <Flex alignItems="center" mb="8px">
               <Text color="textSubtle">{t('Bribe Token')}</Text>
-              <LinkExternal href={getBlockExploreLink(bribe[1], 'address')} ml="8px">
+              <LinkExternal href={getBlockExploreLink(bribe[1], 'address', chainId)} ml="8px">
                 {truncateHash(bribe[1], 7, 5)}
               </LinkExternal>
             </Flex>
             <Flex alignItems="center" mb="8px">
               <Text color="textSubtle" mr="4px">
-                {t('Bribe Amount')}
+                {t('Bribe %val%', { val: parseInt(bribe[2]?.toString()) ? '' : 'Amount' })}
               </Text>
               <Balance
                 lineHeight="1"
                 color="primary"
-                decimals={12}
-                value={getBalanceNumber(new BigNumber(bribe[0]?.toString() ?? '0'), bribeTokenData?.decimals ?? 18)}
-                unit={` ${bribeTokenData?.symbol ?? ''}`}
+                decimals={parseInt(bribe[2]?.toString()) ? 0 : 12}
+                value={
+                  parseInt(bribe[2]?.toString())
+                    ? parseInt(bribe[0]?.toString())
+                    : getBalanceNumber(new BigNumber(bribe[0]?.toString() ?? '0'), bribeTokenData?.decimals ?? 18)
+                }
+                unit={` ${!parseInt(bribe[2]?.toString()) && bribeTokenData?.symbol ? bribeTokenData?.symbol : ''}`}
+                prefix={` ${
+                  parseInt(bribe[2]?.toString()) && bribeTokenData?.symbol ? bribeTokenData?.symbol + ' #' : ''
+                }`}
               />
             </Flex>
           </>

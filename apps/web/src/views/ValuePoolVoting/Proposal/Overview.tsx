@@ -49,7 +49,7 @@ const Overview = () => {
     <Container py="40px">
       <PageMeta />
       <Box mb="40px">
-        <Link href={`/valuepools/voting/valuepool/${proposal?.id?.split('-')[0]}`} passHref>
+        <Link href={`/valuepools/voting/valuepool/${proposal?.valuepool?.id}`} passHref>
           <Button as="a" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
             {t('Back to Vote Overview')}
           </Button>

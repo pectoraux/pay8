@@ -17,7 +17,15 @@ import {
   filterSelector,
   filterSelector2,
 } from './selectors'
-import { getBribe, getGauge, getTag, getTokenURIs } from './helpers'
+import {
+  getBribe,
+  getERC20BalanceOf,
+  getERC721BalanceOf,
+  getGauge,
+  getTag,
+  getTokenURIs,
+  getVoteOption,
+} from './helpers'
 import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
@@ -126,6 +134,31 @@ export const useGetTokenURIs = (vaAddress, nfts) => {
     status,
     mutate: refetch,
   } = useSWR(['useGetTokenURIs', vaAddress, nfts?.length], async () => getTokenURIs(vaAddress, nfts, chainId))
+  return { data, refetch, status }
+}
+
+export const useGetBalanceOf = (tokenAddress, recipientAddress, isNFT) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetBalanceOf1', tokenAddress, recipientAddress, isNFT], async () => {
+    if (isNFT > 0) {
+      return getERC721BalanceOf(tokenAddress, recipientAddress, chainId)
+    }
+    return getERC20BalanceOf(tokenAddress, recipientAddress, chainId)
+  })
+  return { data, refetch, status }
+}
+
+export const useGetVoteOption = (veAddress) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetVoteOption', veAddress], async () => getVoteOption(veAddress, chainId))
   return { data, refetch, status }
 }
 

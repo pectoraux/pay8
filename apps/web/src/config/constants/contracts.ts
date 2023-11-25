@@ -261,19 +261,19 @@ export default {
   },
   ARPNote: {
     56: '0x',
-    4002: '0x79Eb1063000aA15Ef5B73F182793835749188AcB',
+    4002: '0xEFD289a07972Fa58FF0F9b4d37a0A9EFd2566550',
   },
   ARPHelper: {
     56: '0x',
-    4002: '0x79F85d94A346002D55e14bbb115a607A455e6F8f',
+    4002: '0x18988deb80151Cd52aB68f203c074B1BCAaD32e9',
   },
   ARPMinter: {
     56: '0x',
-    4002: '0x2041cd77e870b997D3e035f877bE975E0f2a04ED',
+    4002: '0x700532cc53282cD577f2299ce60f15Da11308a25',
   },
   ARPFactory: {
     56: '0x',
-    4002: '0xE9c25b9821D17677081b0099c29382E5a0c3eb40',
+    4002: '0xB43FfE737042aD45191eb8d4e397c631D66a23FD',
   },
   BILLNote: {
     56: '0x',
@@ -459,32 +459,28 @@ export default {
     4002: '0x8363970f0cca2Bb19a7717a3DE6bEC5e61f7ec17',
     56: '0x',
   },
-  arpFactory: {
-    4002: '0xd55A1595EA440093B4F2Ab6366eDb7aAC794cEa6',
-    56: '0x',
-  },
   invoiceFactory: {
     4002: '0xC9F542F4A38349048FAE742d3C4136E69df23d77',
     56: '0x',
   },
   valuepoolVoter: {
-    4002: '0xe3152A3E3fFA3F0578c3984aeFE454D3f7D6e04b',
+    4002: '0x3a5231DAC8755102D17b911c0Dc99cE7DC47d0bD',
     56: '0x',
   },
   vaFactory: {
-    4002: '0x2b7b92c617609eEb2C2cA78DC2AE918c5E4B798d',
+    4002: '0x60496E81e744B5aD59b91d17Cfa62036d69fC856',
     56: '0x',
   },
   valuepoolFactory: {
-    4002: '0xD2DFBCEc6340182853BA7B454d83B7aB999E91D4',
+    4002: '0x5fdbCeEc25E02d15dE51af3450289c72Ef2d081E',
     56: '0x',
   },
   valuepoolHelper: {
-    4002: '0x5925eE9f895Ce02686ae0cB674421de1D035AD09',
+    4002: '0xC38993A66820830bfED5D92bc4c937a4bba4528D',
     56: '0x',
   },
   valuepoolHelper2: {
-    4002: '0xE5828fE6FCd22AD20915DA44CB61DDCF905a8359',
+    4002: '0x282E20b214ec4f4ae560dB9eaF03a29D0910Cb40',
     56: '0x',
   },
   businessVoter: {
@@ -608,7 +604,7 @@ export default {
     4002: '0x36D1257A7E29E73A345D01F1e5F81d424C12a2c7',
   },
   'real estate': {
-    4002: '0x6e0521b964Aafe1A50159C003f4876275E6C7c9a', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
+    4002: '0xb9858E52175Dc194686E29875570703B5C986Fe3', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
     56: '0x',
   },
   transportation: {
