@@ -61,7 +61,6 @@ const Header: React.FC<any> = ({ collection }) => {
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
-
   const [onPresentSettings] = useModal(<SettingStage collection={collection} />)
   const [onPresentPartner] = useModal(<PartnerModal collection={collection} />)
   const [onPresentRegister] = useModal(<RegisterModal collection={collection} />)

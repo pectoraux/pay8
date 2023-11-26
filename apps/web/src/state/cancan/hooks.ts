@@ -29,6 +29,8 @@ import {
   getPaywallPricePerMinute,
   getEstimateVotes,
   getAskOrder,
+  getMedia,
+  getCollectibles,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -42,6 +44,11 @@ export const useGetCollections = (where = {}) => {
   const { data, status, mutate } = useSWR(['cancan', 'collections', where], async () => getCollections(where))
   const collections = data ?? ({} as ApiCollections)
   return { data: collections, status, refetch: mutate }
+}
+
+export const useGetCollectibles = (nfticketId, where = {}) => {
+  const { data, status, mutate } = useSWR(['useGetCollectibles', nfticketId, where], async () => getCollectibles(where))
+  return { data, status, refetch: mutate }
 }
 
 export const useGetTransactions = (userAddress) => {
@@ -331,6 +338,14 @@ export const useGetNFTMarketTokenForCredit = (collectionAddress: string) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWRImmutable(['nft', 'burnTokenForCredit', chainId], async () =>
     getNFTMarketTokenForCredit(collectionAddress, chainId),
+  )
+  return data as any
+}
+
+export const useGetMedia = (minterAddress: string) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['useGetMedia', minterAddress, chainId], async () =>
+    getMedia(minterAddress, chainId),
   )
   return data as any
 }

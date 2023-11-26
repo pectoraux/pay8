@@ -18,6 +18,7 @@ import { pancakeBunniesAddress } from 'views/Nft/market/constants'
 import {
   announcementFields,
   askHistoryFields,
+  collectibleFields,
   collectionBaseFields,
   itemFields,
   nftFields,
@@ -47,6 +48,7 @@ import { marketCollectionsABI } from 'config/abi/marketCollections'
 import { nfticketHelperABI } from 'config/abi/nfticketHelper'
 import { nfticketHelper2ABI } from 'config/abi/nfticketHelper2'
 import { keccak256 } from 'viem'
+import { minterABI } from 'config/abi/minter'
 
 export const getTag = async () => {
   try {
@@ -1084,6 +1086,27 @@ export const getCollectionAnnouncements = async (first: number, skip: number, wh
   }
 }
 
+export const getCollectibles = async (where) => {
+  try {
+    const res = await request(
+      GRAPH_API_CANCAN,
+      gql`
+        query getCollectibleData($where: Collectible_filter) {
+          collectibles(where: $where) {
+              ${collectibleFields}
+            }
+          }
+        `,
+      { where },
+    )
+    console.log('1getCollectibles==================>', where, res)
+    return res.collectibles
+  } catch (error) {
+    console.error('Failed to fetch collectibles====================>', error)
+    return []
+  }
+}
+
 export const getPaymentCredits = async (collectionAddress, tokenId, address, chainId = 4002) => {
   try {
     const bscClient = publicClient({ chainId: chainId })
@@ -1101,6 +1124,27 @@ export const getPaymentCredits = async (collectionAddress, tokenId, address, cha
     return credits.result.toString()
   } catch (error) {
     console.error('===========>Failed to fetch payment credits', error)
+    return []
+  }
+}
+
+export const getMedia = async (minterAddress, chainId = 4002) => {
+  try {
+    const bscClient = publicClient({ chainId: chainId })
+    const [media] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: minterAddress,
+          abi: minterABI,
+          functionName: 'media',
+          args: [BigInt('0')],
+        },
+      ],
+    })
+    return media.result?.toString()
+  } catch (error) {
+    console.error('===========>Failed to fetch payment media', error)
     return []
   }
 }

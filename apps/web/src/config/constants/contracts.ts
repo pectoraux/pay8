@@ -332,7 +332,7 @@ export default {
     4002: '0xA732c57C3DA59aE51Eb04A842569eb4Ae15B3A0f',
   },
   minterFactory: {
-    4002: '0x5Ed7ae0A1f29389295f4F25A1A679Bc051ae6aD4',
+    4002: '0x972A806DD4C5536E50F38155d7AfFD04741429a0',
     56: '0x',
   },
   nfticket: {

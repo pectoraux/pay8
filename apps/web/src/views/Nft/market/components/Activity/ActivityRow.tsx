@@ -24,6 +24,8 @@ import ActivityPrice from './ActivityPrice'
 import ActivityEventText from './ActivityEventText'
 import { nftsBaseUrl } from '../../constants'
 import WebPageModal from './WebPageModal'
+import { useGetCollectibles } from 'state/cancan/hooks'
+import { useGetTokenURIs } from 'state/valuepools/hooks'
 
 interface ActivityRowProps {
   activity: Activity
@@ -67,7 +69,13 @@ const ActivityRow: React.FC<any> = ({
     ...currNft,
     metadataUrl: activity?.metadataUrl,
   }
+  const { data: collectibles } = useGetCollectibles(currNft?.nfTicketId, { nfticketId: currNft?.nfTicketId })
+  const { data: eCollectible } = useGetTokenURIs(collectibles?.length && collectibles[0].minterAddress, [
+    collectibles?.length && collectibles[0],
+  ])
+  const collectible = eCollectible?.length && eCollectible[0]
   const [onPresentNFTicket] = useModal(<WebPageModal nft={_nft} />)
+  const [onPresentNFTicket2] = useModal(<WebPageModal nft={collectible} />)
   const tokenId = nft ? nft.tokenId : null
   const item = activity?.nft || activity?.paywall
 
@@ -110,6 +118,11 @@ const ActivityRow: React.FC<any> = ({
                 {currNft ? (
                   <IconButton style={{ cursor: 'pointer' }} as={Link} external onClick={onPresentNFTicket}>
                     <TicketFillIcon color="primary" width="18px" />
+                  </IconButton>
+                ) : null}
+                {collectible ? (
+                  <IconButton style={{ cursor: 'pointer' }} as={Link} external onClick={onPresentNFTicket2}>
+                    <TicketFillIcon color="yellow" width="18px" />
                   </IconButton>
                 ) : null}
               </>
@@ -184,6 +197,11 @@ const ActivityRow: React.FC<any> = ({
           {currNft ? (
             <IconButton style={{ cursor: 'pointer' }} as={Link} external onClick={onPresentNFTicket}>
               <TicketFillIcon color="primary" width="18px" />
+            </IconButton>
+          ) : null}
+          {collectible ? (
+            <IconButton style={{ cursor: 'pointer' }} as={Link} external onClick={onPresentNFTicket2}>
+              <TicketFillIcon color="yellow" width="18px" />
             </IconButton>
           ) : null}
         </Td>

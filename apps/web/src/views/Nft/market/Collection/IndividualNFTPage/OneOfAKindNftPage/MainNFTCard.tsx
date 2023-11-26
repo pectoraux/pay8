@@ -32,6 +32,7 @@ import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
 import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
+import { useGetMedia } from 'state/cancan/hooks'
 
 interface MainNFTCardProps {
   nft: NftToken
@@ -67,6 +68,8 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
   const mp4 = chunks?.length > 1 && nft?.images?.split(',').slice(1).join(',')
   const original = mp4?.length > 400 ? mp4 : ''
   const { itemColor, textColor } = useColor(nft?.superLikes ?? '0', nft?.superDisLikes ?? '0')
+  const media = useGetMedia(nft?.minter)
+  console.log('media=====================>', media)
   const [onPresentBuyModal] = useModal(<BuyModal variant={isPaywall ? 'paywall' : 'item'} nftToBuy={nft} />)
   const [onPresentSellModal] = useModal(
     <SellModal variant={isPaywall ? 'paywall' : 'item'} nftToSell={nft} onSuccessSale={onSuccess} />,
@@ -180,7 +183,7 @@ const MainNFTCard: React.FC<any> = ({ nft, isOwnNft, nftIsProfilePic, onSuccess 
           </Flex>
           {!original ? (
             <Flex flex="2" justifyContent={['center', null, 'flex-end']} alignItems="center" maxWidth={440}>
-              <NFTMedia key={nft.tokenId} nft={nft} width={440} height={440} />
+              <NFTMedia key={nft.tokenId} nft={nft} media={media} width={440} height={440} />
             </Flex>
           ) : null}
         </Container>

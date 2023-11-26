@@ -26,7 +26,16 @@ export const AspectRatio = ({ ratio, children, ...props }) => (
 )
 const PADLENTH = 10
 
-const NFTMedia: FC<any> = ({ width, height, nft, showThumbnail = true, borderRadius = 'default', as, ...props }) => {
+const NFTMedia: FC<any> = ({
+  width,
+  height,
+  nft,
+  media = null,
+  showThumbnail = true,
+  borderRadius = 'default',
+  as,
+  ...props
+}) => {
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { setTryVideoNftMedia } = useNftStorage()
@@ -78,6 +87,15 @@ const NFTMedia: FC<any> = ({ width, height, nft, showThumbnail = true, borderRad
     _mp4 = __mp4
   }
 
+  if (media) {
+    return (
+      <RichTextEditor
+        readOnly
+        value={`<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${media}" height="467" width="830"></iframe>`}
+        id="rte"
+      />
+    )
+  }
   if (isArticle && !showThumbnail) {
     if (!parseInt(nft?.behindPaywall)) {
       return <RichTextEditor value={mp4} readOnly id="rte" />
@@ -99,7 +117,7 @@ const NFTMedia: FC<any> = ({ width, height, nft, showThumbnail = true, borderRad
       </Flex>
     )
   }
-  return <RoundedImage width={width} height={height} src={_thumbnail} alt={nft?.name} as={as} {...props} />
+  return <RoundedImage width={width} height={height} src={media} alt={nft?.name} as={as} {...props} />
 }
 
 export default NFTMedia

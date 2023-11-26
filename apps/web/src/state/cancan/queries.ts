@@ -276,6 +276,19 @@ collection {
 }
 `
 
+export const collectibleFields = `
+id
+createdAt
+nfticketId
+tokenId
+metadataUrl
+userAddress
+minterAddress
+collection {
+  id
+}
+`
+
 export const valuepoolFields = `
 id
 active

@@ -19,6 +19,7 @@ import {
   usePaywallMarketOrdersContract,
   usePaywallMarketHelperContract,
   useErc721CollectionContract,
+  useNftMarketHelperContract,
 } from 'hooks/useContract'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
@@ -35,6 +36,7 @@ import AvatarImage from '../../BannerHeader/AvatarImage'
 import PublishMediaStage from './PublishMediaStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { useGetPaywallARP } from 'state/cancan/hooks'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 interface EditStageProps {
   variant: 'product' | 'paywall' | 'article'
@@ -92,11 +94,13 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
   const marketCollectionsContract = useMarketCollectionsContract()
   const marketOrdersContract = useNftMarketOrdersContract()
   const marketHelper3Contract = useNftMarketHelper3Contract()
+  const marketHelperContract = useNftMarketHelperContract()
   const minterFactoryContract = useMinterFactoryContract()
   const paywallMarketOrdersContract = usePaywallMarketOrdersContract()
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
   const paywallARPFactoryContract = usePaywallARPFactoryContract()
   const [nftFilters, setNftFilters] = useState(articleFilters)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   const [state, setState] = useState<any>(() => ({
     tokenId: articleState?.tokenId?.split()?.join('-') ?? '',
     direction: 0,
@@ -322,7 +326,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
               state.prices?.split(',')?.filter((val) => !!val),
               state.start,
               state.period,
-              variant === 'product' || variant === 'article' ? '0' : '1',
+              variant === 'product' || variant === 'article' ? '2' : '1',
               !!state.isTradable,
               `${state.thumbnail},${state.original}`,
               nftFilters?.country?.toString(),
@@ -339,51 +343,99 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           .catch((err) => console.log('rerr=============>', err))
       }
       if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
-        const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
-        const dropInTimer = Math.max(
-          differenceInSeconds(new Date(state.dropinDate || 0), new Date(), {
-            roundingMethod: 'ceil',
-          }),
-          0,
-        )
-        const createArgs = [
-          state.tokenId?.split(' ')?.join('-')?.trim(),
-          currentAskPrice.toString(),
-          parseInt(state.bidDuration) * 60,
-          parseInt(state.minBidIncrementPercentage) * 100,
-          !!state.transferrable,
-          !!state.requireUpfrontPayment,
-          !!state.usetFIAT,
-          [state.rsrcTokenId, Number(state.nftTokenId) ? 1 : state.maxSupply, dropInTimer.toString(), state.nftTokenId],
-          state.minter || ADDRESS_ZERO,
-          currency?.address,
-          getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()),
-        ]
-        console.log('rerr0===========================>', marketOrdersContract, createArgs)
-        if (state.customMinter) {
-          console.log(
-            'tokenContract1=================>',
-            !!state.customMinter && !!Number(state.nftTokenId),
-            Number(state.nftTokenId),
+        if (currency?.address) {
+          const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
+          const dropInTimer = Math.max(
+            differenceInSeconds(new Date(state.dropinDate || 0), new Date(), {
+              roundingMethod: 'ceil',
+            }),
+            0,
           )
-          if (!!state.customMinter && !!Number(state.nftTokenId)) {
-            callWithGasPrice(tokenContract, 'approve', [marketHelper3Contract.address, state.nftTokenId])
+          const createArgs = [
+            state.tokenId?.split(' ')?.join('-')?.trim(),
+            currentAskPrice.toString(),
+            parseInt(state.bidDuration) * 60,
+            parseInt(state.minBidIncrementPercentage) * 100,
+            !!state.transferrable,
+            !!state.requireUpfrontPayment,
+            !!state.usetFIAT,
+            [
+              state.rsrcTokenId,
+              Number(state.nftTokenId) ? 1 : state.maxSupply,
+              dropInTimer.toString(),
+              state.nftTokenId,
+            ],
+            state.minter || ADDRESS_ZERO,
+            currency?.address,
+            getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()),
+          ]
+          const args = [state.tokenId?.split(' ')?.join('-')?.trim(), state.name, state.symbol, state.img?.split(',')]
+          const args2 = [
+            state.tokenId?.split(' ')?.join('-')?.trim(),
+            state.description,
+            state.prices?.split(',')?.filter((val) => !!val),
+            state.start,
+            state.period,
+            variant === 'product' || variant === 'article' ? '2' : '1',
+            !!state.isTradable,
+            `${state.thumbnail},${state.thumbnail}`,
+            nftFilters?.country?.toString(),
+            nftFilters?.city?.toString(),
+            nftFilters?.product
+              ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
+              : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
+          ]
+          console.log('CONFIRM_CREATE_ASK_ORDER===========================>', createArgs, args, args2)
+          if (state.customMinter) {
+            console.log(
+              'tokenContract1=================>',
+              !!state.customMinter && !!Number(state.nftTokenId),
+              Number(state.nftTokenId),
+            )
+            if (!!state.customMinter && !!Number(state.nftTokenId)) {
+              callWithGasPrice(tokenContract, 'approve', [marketHelper3Contract.address, state.nftTokenId])
+              return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
+                console.log('rerr=============>', err),
+              )
+            }
             return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
               console.log('rerr=============>', err),
             )
           }
-          return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
-            console.log('rerr=============>', err),
-          )
+          return callWithGasPrice(minterFactoryContract, 'createGauge', args)
+            .then(() => delay(5000))
+            .then(() => {
+              return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
+                console.log('rerr001=============>', err),
+              )
+            })
+            .then((res) => {
+              if (state.options?.length > 0) {
+                const args3 = [
+                  state.tokenId?.split(' ')?.join('-')?.trim(),
+                  state.options?.reduce((accum, attr) => [...accum, attr.min], []),
+                  state.options?.reduce((accum, attr) => [...accum, attr.max], []),
+                  state.options?.reduce((accum, attr) => [...accum, parseInt(attr.value) * 60], []),
+                  state.options?.reduce((accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()], []),
+                  state.options?.reduce((accum, attr) => [...accum, attr.category], []),
+                  state.options?.reduce((accum, attr) => [...accum, attr.element], []),
+                  state.options?.reduce((accum, attr) => [...accum, attr.category], []),
+                  state.options?.reduce((accum, attr) => [...accum, attr.currency], []),
+                ]
+                console.log('updateoptions==============>', args3)
+                return callWithGasPrice(marketHelperContract, 'updateOptions', args3).catch((err) =>
+                  console.log('rerr2=================>', err),
+                )
+              }
+              return res
+            })
+            .then(() => {
+              return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args2).catch((err) =>
+                console.log('CONFIRM_ADD_LOCATION================>', err),
+              )
+            })
+            .catch((err) => console.log('rerr=============>', err))
         }
-        callWithGasPrice(minterFactoryContract, 'createGauge', [
-          state.tokenId?.split(' ')?.join('-')?.trim(),
-          state.name,
-          state.symbol,
-        ])
-        return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
-          console.log('rerr001=============>', err),
-        )
       }
       if (stage === SellingStage.CONFIRM_ADD_LOCATION || stage === SellingStage.CONFIRM_ADD_LOCATION2) {
         let args

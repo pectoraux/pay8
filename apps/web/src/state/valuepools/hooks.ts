@@ -133,7 +133,7 @@ export const useGetTokenURIs = (vaAddress, nfts) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetTokenURIs', vaAddress, nfts?.length], async () => getTokenURIs(vaAddress, nfts, chainId))
+  } = useSWR(['useGetTokenURIs1', vaAddress, nfts?.length], async () => getTokenURIs(vaAddress, nfts, chainId))
   return { data, refetch, status }
 }
 

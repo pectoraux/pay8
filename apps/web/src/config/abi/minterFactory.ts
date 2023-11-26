@@ -29,6 +29,11 @@ export const minterFactoryABI = [
         name: '_symbol',
         type: 'string',
       },
+      {
+        internalType: 'string[]',
+        name: '_media',
+        type: 'string[]',
+      },
     ],
     name: 'createGauge',
     outputs: [],

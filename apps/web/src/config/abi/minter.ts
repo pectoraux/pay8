@@ -12,6 +12,11 @@ export const minterABI = [
         type: 'string',
       },
       {
+        internalType: 'string[]',
+        name: '_media',
+        type: 'string[]',
+      },
+      {
         internalType: 'address',
         name: '_devaddr',
         type: 'address',
@@ -215,19 +220,6 @@ export const minterABI = [
   },
   {
     inputs: [],
-    name: 'contractAddress',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'devaddr_',
     outputs: [
       {
@@ -383,6 +375,25 @@ export const minterABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'media',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
       },
     ],
     stateMutability: 'view',
@@ -680,19 +691,6 @@ export const minterABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'ticketID',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'uint256',
@@ -824,19 +822,6 @@ export const minterABI = [
       },
     ],
     name: 'updateMaxSupply',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'string[]',
-        name: '_media',
-        type: 'string[]',
-      },
-    ],
-    name: 'updateMedia',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
