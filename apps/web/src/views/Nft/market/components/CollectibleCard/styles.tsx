@@ -16,6 +16,7 @@ import { Currency, Price } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { multiplyPriceByAmount } from 'utils/prices'
 import styled from 'styled-components'
+import { CurrencyLogo } from 'components/Logo'
 
 export const Footer: React.FC<React.PropsWithChildren<BoxProps>> = ({ children, ...props }) => (
   <Box borderTop={[null, null, null, '1px solid']} borderColor="cardBorder" pt="8px" {...props}>
@@ -27,9 +28,13 @@ interface BNBAmountLabelProps extends FlexProps {
   amount: number
 }
 
-export const BNBAmountLabel: React.FC<React.PropsWithChildren<BNBAmountLabelProps>> = ({ amount, ...props }) => (
+export const BNBAmountLabel: React.FC<any> = ({ amount, mainCurrency, ...props }) => (
   <Flex alignItems="center" {...props}>
-    <BinanceIcon width="16px" mx="4px" />
+    {mainCurrency ? (
+      <CurrencyLogo currency={mainCurrency} size="24px" style={{ marginRight: '8px' }} />
+    ) : (
+      <BinanceIcon width="16px" mx="4px" />
+    )}
     <Text fontWeight="600">
       {amount.toLocaleString(undefined, {
         minimumFractionDigits: 0,
