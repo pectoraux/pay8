@@ -146,7 +146,7 @@ const ModifyCollectionModal: React.FC<any> = ({ state, handleChange, handleRawVa
         <GreyedOutContainer>
           <Flex ref={targetRef2}>
             <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Referrer Fee')}
+              {t('Referrer Fee')}(%)
             </Text>
             {tooltipVisible2 && tooltip2}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

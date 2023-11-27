@@ -7,43 +7,14 @@ import { NftToken, Collection } from 'state/cancan/types'
 import { useTranslation } from '@pancakeswap/localization'
 import ExpandableCard from '../shared/ExpandableCard'
 import { SmallRoundedImage, CollectibleRowContainer } from '../shared/styles'
+import { useGetTokenURIs } from 'state/valuepools/hooks'
+import { getAuditorHelperAddress } from 'utils/addressHelpers'
+import Iframe from 'react-iframe'
+import Divider from 'components/Divider'
 
 interface CollectibleRowProps {
   badgeNft: NftToken
   variant: 'Product' | 'Channel' | 'Bounty'
-}
-
-const CollectibleRow: React.FC<any> = ({ variant, badgeNft }) => {
-  const { t } = useTranslation()
-  const superDiff = Number(badgeNft.superLikes) - Number(badgeNft.superDislikes)
-  return (
-    <CollectibleRowContainer
-      gridTemplateColumns="96px 1fr"
-      px="16px"
-      pb="8px"
-      my="16px"
-      // onClick={nft.location === NftLocation.PROFILE ? onPresentProfileNftModal : onPresentModal}
-    >
-      <SmallRoundedImage src={badgeNft.image.thumbnail} width={64} height={64} mx="16px" />
-      <Grid gridTemplateColumns="1fr 1fr">
-        <Text bold>{badgeNft.name}</Text>
-        {variant !== 'Bounty' && (
-          <Text fontSize="12px" color={superDiff > 0 ? 'primary' : 'failure'} textAlign="right">
-            {t('SuperDiff')}: {superDiff}
-          </Text>
-        )}
-        {variant === 'Bounty' && (
-          <Text fontSize="12px" color="primary" textAlign="right">
-            {formatNumber(Number(badgeNft.value))}
-          </Text>
-        )}
-        <Text small color="textSubtle">
-          {variant === 'Bounty' && t('Started %date%', { date: new Date(Number(badgeNft.updatedAt)).getTime() })}
-          {variant !== 'Bounty' && badgeNft.testimony}{' '}
-        </Text>
-      </Grid>
-    </CollectibleRowContainer>
-  )
 }
 
 interface CollectibleByLocationProps {
@@ -53,31 +24,6 @@ interface CollectibleByLocationProps {
   onSuccess: () => void
 }
 
-const CollectibleByLocation: React.FC<any> = ({ variant, badgeNft, title = true, onSuccess }) => {
-  const { t } = useTranslation()
-  return (
-    <Flex flexDirection="column" justifyContent="center" alignItems="center" mb="8px" pt="8px">
-      <IconButton
-        as={Link}
-        external
-        href={variant !== 'Bounty' ? getBscScanLinkForNft(badgeNft.collectionAddress, 'address') : ''}
-        display="inline"
-      >
-        {title && (
-          <Text bold color="primary">
-            {variant !== 'Bounty' ? t('%variant% Auditor', { variant }) : t('Associated Trust Bounties')}
-          </Text>
-        )}
-        <OpenNewIcon color="primary" width="24px" height="24px" />
-      </IconButton>
-      <CollectibleRow key={badgeNft.tokenId} badgeNft={badgeNft} variant={variant} onSuccess={onSuccess} />
-      <Button height="25px" variant="danger">
-        {t('Report %variant%', { variant })}
-      </Button>
-    </Flex>
-  )
-}
-
 interface ManageNFTsCardProps {
   nft?: NftToken
   collection: Collection
@@ -85,8 +31,10 @@ interface ManageNFTsCardProps {
 }
 
 const StyledBox = styled(Box)`
+  mb: 0px;
+  pb: 0px;
   overflow: auto;
-  max-height: 100vh;
+  max-height: 50vh;
   ::-webkit-scrollbar {
     display: none;
   }
@@ -94,36 +42,48 @@ const StyledBox = styled(Box)`
 
 const AuditNFTsCard: React.FC<any> = ({ collection, nft, onSuccess }) => {
   const { t } = useTranslation()
-  // const bounties = useGetCollectionBounties(collection.address)
+  const { data: tokenURIs } = useGetTokenURIs(getAuditorHelperAddress(), [
+    {
+      tokenId: parseInt(collection.badgeId ?? '0'),
+    },
+    {
+      tokenId: parseInt(nft.rsrcTokenId ?? '0'),
+    },
+  ])
   const content = (
     <StyledBox>
-      <Flex flexDirection="column" justifyContent="center" overflowY="hidden" alignItems="center" mb="8px">
-        {!collection.badgeNft && (
+      <Flex flexDirection="column" height="1100px" justifyContent="center" overflowY="hidden" alignItems="center">
+        {!parseInt(collection.badgeId ?? '0') ? (
           <Text px="16px" pb="16px" color="failure">
             {t('This channel has not been audited.')}
           </Text>
-        )}
-        {collection.badgeNft && (
-          <CollectibleByLocation badgeNft={collection.badgeNft} variant="Channel" onSuccess={onSuccess} />
-        )}
-        {!nft.marketData?.badgeNft && (
+        ) : tokenURIs?.length ? (
+          <>
+            <Text color="primary">{t('Channel Badge')}</Text>
+            <Iframe url={tokenURIs[0]?.metadataUrl} height="500px" id="myChannelBadge" />
+            <Divider />
+          </>
+        ) : null}
+        {!parseInt(nft.rsrcTokenId ?? '0') ? (
           <Text px="16px" pb="16px" color="failure">
             {t('This product has not been audited.')}
           </Text>
-        )}
-        {nft.marketData?.badgeNft && (
-          <CollectibleByLocation badgeNft={nft.marketData.badgeNft} variant="Product" onSuccess={onSuccess} />
-        )}
-        {/* {!bounties?.length && (
-        <Text px="16px" pb="16px" color="failure">
-          {t('This channel has no trust bounties.')}
-        </Text>
-      )}
-      {bounties  && bounties.map((badgeNft, idx) => <CollectibleByLocation badgeNft={badgeNft} variant="Bounty" title={!idx} onSuccess={onSuccess} />)} */}
+        ) : tokenURIs?.length ? (
+          <>
+            <Iframe url={tokenURIs[1]?.metadataUrl} height="500px" id="myNFTBadge" />
+            <Text color="primary">{t('Product Badge')}</Text>
+          </>
+        ) : null}
       </Flex>
     </StyledBox>
   )
-  return <ExpandableCard title={t('Backings')} icon={<VerifiedIcon width="24px" height="24px" />} content={content} />
+  return (
+    <ExpandableCard
+      title={t('Backings')}
+      icon={<VerifiedIcon ml="10px" width="24px" height="24px" />}
+      content={content}
+    />
+  )
 }
 
 export default AuditNFTsCard

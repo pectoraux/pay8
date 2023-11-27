@@ -412,7 +412,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           }),
           0,
         )
-        console.log('CONFIRM_ADJUST_PRICE=================>', [
+        const args = [
           nftToSell?.currentSeller,
           nftToSell?.tokenId,
           currentAskPrice.toString(),
@@ -423,19 +423,11 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           state.rsrcTokenId,
           state.maxSupply,
           dropInTimer.toString(),
-        ])
-        return callWithGasPrice(ordersSigner, 'modifyAskOrder', [
-          nftToSell?.currentSeller,
-          nftToSell?.tokenId,
-          currentAskPrice.toString(),
-          state.bidDuration,
-          state.minBidIncrementPercentage,
-          !!state.transferrable,
-          !!state.requireUpfrontPayment,
-          state.rsrcTokenId,
-          state.maxSupply,
-          dropInTimer.toString(),
-        ]).catch((err) => console.log('CONFIRM_ADJUST_PRICE=================>', err))
+        ]
+        console.log('CONFIRM_ADJUST_PRICE=================>', args)
+        return callWithGasPrice(ordersSigner, 'modifyAskOrder', args).catch((err) =>
+          console.log('CONFIRM_ADJUST_PRICE=================>', err),
+        )
       }
       if (stage === SellingStage.CONFIRM_ADJUST_OPTIONS) {
         const contract = variant === 'paywall' ? paywallMarketHelperContract : helpersSigner
@@ -765,11 +757,13 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       )}
       {stage === SellingStage.ADD_LOCATION && (
         <LocationStage
+          show
           state={state}
           variant={variant}
           nftToSell={nftToSell}
           thumbnail={_thumbnail}
           nftFilters={nftFilters}
+          collection={nftToSell?.collection}
           collectionId={collectionId}
           updateValue={updateValue}
           setNftFilters={setNftFilters}

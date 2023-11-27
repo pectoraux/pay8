@@ -92,7 +92,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
   const tokenContract = getBep20Contract(mainCurrency?.address ?? '')
   const [state, setState] = useState<any>(() => ({
     collection: collection?.owner,
-    referrerFee: collection?.referrerFee ?? '0',
+    referrerFee: parseInt(collection?.referrerFee) / 100 ?? '0',
     name: collection?.name ?? '',
     badgeId: collection?.badgeId ?? '0',
     minBounty: collection?.minBounty ?? '0',
@@ -300,26 +300,20 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         const minBounty = getDecimalAmount(state.minBounty ?? 0)
         const userMinBounty = getDecimalAmount(state.userMinBounty ?? 0)
         // const recurringBounty = getDecimalAmount(state.recurringBounty ?? 0)
-        console.log('CONFIRM_MODIFY_COLLECTION===========>', [
+        const args = [
           state.collection || account,
           parseInt(state.referrerFee) * 100,
           state.badgeId || 0,
           minBounty.toString(),
           userMinBounty.toString(),
-          state.recurringBounty,
+          parseInt(state.recurringBounty) * 100,
           !!state.requestUserRegistration,
           !!state.requestPartnerRegistration,
-        ])
-        return callWithGasPrice(marketCollectionsContract, 'modifyCollection', [
-          state.collection || account,
-          parseInt(state.referrerFee) * 100,
-          state.badgeId || 0,
-          minBounty.toString(),
-          userMinBounty.toString(),
-          state.recurringBounty,
-          !!state.requestUserRegistration,
-          !!state.requestPartnerRegistration,
-        ]).catch((err) => console.log('CONFIRM_MODIFY_COLLECTION===========>', err))
+        ]
+        console.log('CONFIRM_MODIFY_COLLECTION===========>', args)
+        return callWithGasPrice(marketCollectionsContract, 'modifyCollection', args).catch((err) =>
+          console.log('CONFIRM_MODIFY_COLLECTION===========>', err),
+        )
       }
       if (stage === SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION) {
         console.log('CONFIRM_UPDATE_TAG_REGISTRATION===========>', [state.tag, !!state.add])

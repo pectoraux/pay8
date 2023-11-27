@@ -46,7 +46,7 @@ const ModifyCollectionModal: React.FC<any> = ({
         </GreyedOutContainer>
         <GreyedOutContainer>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Referrer Fee')}
+            {t('Referrer Fee')}(%)
           </Text>
           <Input
             type="number"
@@ -141,7 +141,7 @@ const ModifyCollectionModal: React.FC<any> = ({
             </ButtonMenu>
           </StyledItemRow>
         </GreyedOutContainer>
-        <Filters collection={collection} nftFilters={nftFilters} setNftFilters={setNftFilters} />
+        {/* <Filters collection={collection} nftFilters={nftFilters} setNftFilters={setNftFilters} /> */}
       </Box>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">

@@ -132,7 +132,7 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
           <AuditNFTsCard collection={collection} nft={nft} onSuccess={refetch} />
           <ExpandableCard
             title={isOwnNft ? t('Manage Your Product') : t('Networking Activities')}
-            icon={<CogIcon width="24px" height="24px" />}
+            icon={<CogIcon ml="10px" width="24px" height="24px" />}
             content={isOwnNft ? ownerButtons : userButtons}
           />
           <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.metadataUrl} />
