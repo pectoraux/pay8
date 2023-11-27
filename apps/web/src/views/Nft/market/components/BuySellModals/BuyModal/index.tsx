@@ -44,6 +44,7 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
 import { useGetRequiresApproval } from 'state/valuepools/hooks'
+import { noop } from 'lodash'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
