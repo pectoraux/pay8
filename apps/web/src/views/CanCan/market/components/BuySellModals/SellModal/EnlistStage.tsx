@@ -15,7 +15,7 @@ import {
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { DatePicker, DatePickerPortal } from 'views/ValuePoolVoting/components/DatePicker'
+import { DatePicker, DatePickerPortal, TimePicker } from 'views/ValuePoolVoting/components/DatePicker'
 
 import Options from './Options'
 import { Divider } from '../shared/styles'
