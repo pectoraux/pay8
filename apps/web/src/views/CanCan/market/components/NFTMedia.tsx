@@ -89,7 +89,7 @@ const NFTMedia: FC<any> = ({
     _mp4 = __mp4
   }
 
-  if (tokenURI) {
+  if (tokenURI?.metadataUrl) {
     return <Iframe url={tokenURI.metadataUrl} height="500px" id="myId" />
   }
   if (media) {

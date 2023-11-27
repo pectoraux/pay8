@@ -120,7 +120,7 @@ const ActivityRow: React.FC<any> = ({
                     <TicketFillIcon color="primary" width="18px" />
                   </IconButton>
                 ) : null}
-                {collectible ? (
+                {collectible && activity.marketEvent === 'SELL' ? (
                   <IconButton style={{ cursor: 'pointer' }} as={Link} external onClick={onPresentNFTicket2}>
                     <TicketFillIcon color="yellow" width="18px" />
                   </IconButton>
@@ -199,7 +199,7 @@ const ActivityRow: React.FC<any> = ({
               <TicketFillIcon color="primary" width="18px" />
             </IconButton>
           ) : null}
-          {collectible ? (
+          {collectible && activity.marketEvent === 'SELL' ? (
             <IconButton style={{ cursor: 'pointer' }} as={Link} external onClick={onPresentNFTicket2}>
               <TicketFillIcon color="yellow" width="18px" />
             </IconButton>
