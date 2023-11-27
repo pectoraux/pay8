@@ -6,13 +6,13 @@ import { useWorkspaceCurrency } from 'hooks/Tokens'
 import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import styled from 'styled-components'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 import Timer from './Timer'
 import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
-import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 const StyledTimerText = styled(Heading)`
   background: ${({ theme }) => theme.colors.gradientGold};

@@ -22,9 +22,13 @@ const CollectibleLinkCard: React.FC<any> = ({
 
   return (
     <StyledCollectibleCard {...props}>
-      <NextLinkFromReactRouter to={referrer ? `${link}?referrer=${referrer}` : `${link}`}>
-        <CardBody nft={nft} nftLocation={nftLocation} currentAskPrice={currentAskPrice} />
-      </NextLinkFromReactRouter>
+      <CardBody
+        nft={nft}
+        link={link}
+        referrer={referrer}
+        nftLocation={nftLocation}
+        currentAskPrice={currentAskPrice ?? nft?.currentAskPrice}
+      />
       <ProductDetailsSection key={nft?.tokenId + nft?.collection?.id} paywall={nft} />
     </StyledCollectibleCard>
   )

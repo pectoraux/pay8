@@ -15,6 +15,8 @@ import {
   useValuepoolContract,
   useValuepoolHelperContract,
   useErc721CollectionContract,
+  useNftMarketHelperContract,
+  usePaywallMarketHelperContract,
 } from 'hooks/useContract'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -41,6 +43,7 @@ import CashbackStage from './CashbackStage'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
+import { useGetRequiresApproval } from 'state/valuepools/hooks'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
@@ -61,7 +64,7 @@ interface BuyModalProps extends InjectedModalProps {
   variant: 'item' | 'paywall'
 }
 
-const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
+const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBought = noop, onDismiss }) => {
   const referrer = useRouter().query.referrer as string
   const collectionId = useRouter().query.collectionAddress as string
   const [stage, setStage] = useState(variant === 'paywall' ? BuyingStage.PAYWALL_REVIEW : BuyingStage.REVIEW)
@@ -80,7 +83,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
     nftToBuy?.ve?.toLowerCase(),
     nftToBuy?.tFIAT,
     nftToBuy?.usetFIAT,
-    nftToBuy?.currentAskPrice,
+    bidPrice ? bidPrice : nftToBuy?.currentAskPrice,
   )
   const inputCurrency = mainCurrency?.address
   const bnbContractReader = useERC20(inputCurrency ?? '')
@@ -88,13 +91,16 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
   const nftMarketContract = useNftMarketTradesContract()
   const marketHelper3Contract = useNftMarketHelper3Contract()
   const paywallMarketTradesContract = usePaywallMarketTradesContract()
+  const nftMarketHelperContract = useNftMarketHelperContract()
+  const paywallMarketHelperContract = usePaywallMarketHelperContract()
   const callContract = variant === 'paywall' ? paywallMarketTradesContract : nftMarketContract
-  const p = getDecimalAmount(nftToBuy?.currentAskPrice, 18)
+  const helperContract = variant === 'paywall' ? paywallMarketHelperContract : nftMarketHelperContract
+  const p = getDecimalAmount(bidPrice ? bidPrice : nftToBuy?.currentAskPrice, 18)
   const { toastSuccess } = useToast()
   const nftFilters = useGetNftFilters(account)
   const [recipient, setRecipient] = useState<string>('')
   const [tokenId, setTokenId] = useState<string>('')
-  const nftPrice = parseFloat(nftToBuy?.currentAskPrice)
+  const nftPrice = parseFloat(bidPrice ? bidPrice : nftToBuy?.currentAskPrice)
   const paymentCredits = useGetPaymentCredits(nftToBuy?.collection?.id, nftToBuy?.tokenId, account) as any
   const valuepoolContract = useValuepoolContract(recipient)
   const valuepoolHelperContract = useValuepoolHelperContract()
@@ -138,21 +144,39 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, onDismiss }) => {
   // BNB - returns ethers.BigNumber
   const stakeMarketContract = useStakeMarketContract()
 
+  const { isRequired: needsApproval, refetch } = useGetRequiresApproval(
+    bnbContractReader,
+    account,
+    callContract.address,
+  )
+  const { isRequired: needsApproval2, refetch: refetch2 } = useGetRequiresApproval(
+    bnbContractReader,
+    account,
+    stakeMarketContract.address,
+  )
+  const { isRequired: needsApproval3, refetch: refetch3 } = useGetRequiresApproval(
+    bnbContractReader,
+    account,
+    helperContract.address,
+  )
+
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
-      return (
-        requiresApproval(bnbContractReader, account, callContract.address) ||
-        requiresApproval(bnbContractReader, account, stakeMarketContract.address)
-      )
+      if (paymentCurrency === 2) return true
+      return needsApproval || needsApproval2 || needsApproval3
     },
     onApprove: () => {
       if (paymentCurrency === PaymentCurrency.BNB) {
+        if (bidPrice) {
+          return callWithGasPrice(bnbContractApprover, 'approve', [helperContract.address, MaxUint256]).then(() =>
+            refetch3(),
+          )
+        }
         return callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256])
       }
-      if (paymentCurrency === PaymentCurrency.WBNB) {
-        return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256])
-      }
-      return null
+      return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256]).then(() =>
+        refetch2(),
+      )
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(

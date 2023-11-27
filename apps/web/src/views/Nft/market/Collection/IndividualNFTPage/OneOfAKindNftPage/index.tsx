@@ -135,7 +135,13 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
 
   return (
     <Page>
-      <MainNFTCard nft={nft} isOwnNft={isOwnNft} nftIsProfilePic={isProfilePic} onSuccess={refetch} />
+      <MainNFTCard
+        collection={collection}
+        nft={nft}
+        isOwnNft={isOwnNft}
+        nftIsProfilePic={isProfilePic}
+        onSuccess={refetch}
+      />
       {/* <Flex style={{ position: 'relative', bottom: '20px'}}><Cart /></Flex> */}
       <TwoColumnsContainer flexDirection={['column', 'column', 'column', 'column', 'row']}>
         <Flex flexDirection="column" width="100%">

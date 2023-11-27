@@ -194,6 +194,14 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                   {nft?.isTradable ? (
                     <>
                       <Text color="textSubtle" mt={['16px', '16px', '48px']}>
+                        {t('Remaining Supply')}
+                      </Text>
+                      <Flex alignItems="center" mt="8px">
+                        <Text fontSize="24px" bold mr="4px">
+                          {Number(nft?.maxSupply)}
+                        </Text>
+                      </Flex>
+                      <Text color="textSubtle" mt={['16px', '16px', '48px']}>
                         {t('Price')}
                       </Text>
                       <Flex alignItems="center" mt="8px">

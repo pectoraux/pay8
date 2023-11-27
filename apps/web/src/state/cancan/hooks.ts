@@ -31,6 +31,7 @@ import {
   getAskOrder,
   getMedia,
   getCollectibles,
+  getNftAskOrder,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -103,6 +104,14 @@ export const useGetOrder = (collectionId, tokenId) => {
   const { chainId } = useActiveChainId()
   const { data, status } = useSWR(['getOrder', collectionId, tokenId, chainId], async () =>
     getAskOrder(collectionId, tokenId, chainId),
+  )
+  return { data, status }
+}
+
+export const useGetNftOrder = (collectionId, tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWR(['useGetNftOrder', collectionId, tokenId, chainId], async () =>
+    getNftAskOrder(collectionId, tokenId, chainId),
   )
   return { data, status }
 }

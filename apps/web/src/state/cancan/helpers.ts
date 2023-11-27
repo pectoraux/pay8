@@ -10,6 +10,7 @@ import {
   getNFTicketHelperAddress,
   getNftMarketHelper3Address,
   getNftMarketHelperAddress,
+  getNftMarketOrdersAddress,
   getPaywallMarketHelperAddress,
 } from 'utils/addressHelpers'
 import { publicClient } from 'utils/wagmi'
@@ -49,6 +50,7 @@ import { nfticketHelperABI } from 'config/abi/nfticketHelper'
 import { nfticketHelper2ABI } from 'config/abi/nfticketHelper2'
 import { keccak256 } from 'viem'
 import { minterABI } from 'config/abi/minter'
+import { nftMarketOrdersABI } from 'config/abi/nftMarketOrders'
 
 export const getTag = async () => {
   try {
@@ -1165,7 +1167,28 @@ export const getAskOrder = async (collectionAddress, tokenId, chainId = 4002) =>
     })
     return askOrder.result
   } catch (error) {
-    console.error('getAskOrder===========>Failed to fetch payment credits', error)
+    console.error('getAskOrder===========>Failed to fetch item order', error)
+    return []
+  }
+}
+
+export const getNftAskOrder = async (collectionAddress, tokenId, chainId = 4002) => {
+  try {
+    const bscClient = publicClient({ chainId: chainId })
+    const [askOrder] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getNftMarketOrdersAddress(),
+          abi: nftMarketOrdersABI,
+          functionName: 'getAskDetails',
+          args: [collectionAddress, keccak256(tokenId)],
+        },
+      ],
+    })
+    return askOrder.result
+  } catch (error) {
+    console.error('getAskOrder===========>Failed to fetch nft order', error)
     return []
   }
 }
