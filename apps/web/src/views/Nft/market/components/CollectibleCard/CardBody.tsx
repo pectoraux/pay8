@@ -25,11 +25,13 @@ export const getTitle = (title) => {
 
 const CollectibleCardBody: React.FC<any> = ({ nft, link, referrer, currentAskPrice, isUserNft }) => {
   const { t } = useTranslation()
-  const name = nft?.name
+  const name = nft?.tokenId
   const bnbBusdPrice = useBNBBusdPrice()
   const { mainCurrency } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   const isAuction = Number(nft?.bidDuration) > 0
   const askOrder = useGetNftOrder(nft?.collection?.id, nft?.tokenId)?.data as any
+  // const askOrder2 = useGetNftOrder(nft?.collection?.id, "BAYC-Drop")?.data as any
+  // console.log("askOrder2====================>", askOrder2)
   const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
   const diff = Math.max(
     differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {

@@ -151,7 +151,7 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
             icon={<CogIcon width="24px" height="24px" />}
             content={isOwnNft ? ownerButtons : userButtons}
           />
-          <DetailsCard contractAddress={collectionAddress} ipfsJson={nft?.metadataUrl} />
+          <DetailsCard nft={nft} contractAddress={collectionAddress} ipfsJson={nft?.metadataUrl} />
         </Flex>
         <OwnerActivityContainer flexDirection="column" width="100%">
           <ReviewsCard nft={nft} />

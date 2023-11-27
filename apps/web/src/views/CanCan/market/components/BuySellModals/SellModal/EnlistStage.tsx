@@ -366,6 +366,19 @@ const EnlistStage: React.FC<any> = ({
             <DatePickerPortal />
           </GreyedOutContainer>
           <GreyedOutContainer>
+            <Box>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Start Time')}
+              </Text>
+              <TimePicker
+                name="startTime"
+                onChange={handleRawValueChange('startTime')}
+                selected={state.startTime}
+                placeholderText="00:00"
+              />
+            </Box>
+          </GreyedOutContainer>
+          <GreyedOutContainer>
             <Flex ref={targetRef7}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
                 {t('Bid Duration (in minutes)')}

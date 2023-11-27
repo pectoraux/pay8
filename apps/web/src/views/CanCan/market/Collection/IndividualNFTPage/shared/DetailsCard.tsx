@@ -34,7 +34,7 @@ const DetailsCard: React.FC<React.PropsWithChildren<DetailsCardProps>> = ({
     <Box p="24px">
       <Flex justifyContent="space-between" alignItems="center" mb="16px">
         <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
-          {t('Contract address')}
+          {t('Channel ID')}
         </Text>
         <Link external href={getBlockExploreLink(contractAddress, 'address', chainId)}>
           <LongTextContainer bold>{contractAddress}</LongTextContainer>

@@ -22,6 +22,7 @@ import { EnlistFormState } from './types'
 import { Divider } from '../shared/styles'
 import { GreyedOutContainer } from './styles'
 import Filters from './Filters'
+import { TimePicker } from 'views/ValuePoolVoting/components/DatePicker'
 
 interface SetPriceStageProps {
   state: EnlistFormState
@@ -522,6 +523,19 @@ const EnlistStage: React.FC<any> = ({
               placeholderText="YYYY/MM/DD"
             />
             <DatePickerPortal />
+          </GreyedOutContainer>
+          <GreyedOutContainer>
+            <Box>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Start Time')}
+              </Text>
+              <TimePicker
+                name="startTime"
+                onChange={handleRawValueChange('startTime')}
+                selected={state.startTime}
+                placeholderText="00:00"
+              />
+            </Box>
           </GreyedOutContainer>
           <GreyedOutContainer>
             <Flex ref={targetRef7}>

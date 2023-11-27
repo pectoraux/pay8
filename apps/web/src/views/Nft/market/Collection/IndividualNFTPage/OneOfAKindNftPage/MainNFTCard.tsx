@@ -42,6 +42,7 @@ import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
 import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
+import { useGetTokenURIs } from 'state/valuepools/hooks'
 
 interface MainNFTCardProps {
   nft: NftToken
@@ -83,11 +84,14 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
   const contactChannels = collection?.contactChannels?.split(',') ?? []
   const contacts = collection?.contacts?.split(',') ?? []
   const media = useGetMedia(nft?.minter)
+  const { data: tokenURIs } = useGetTokenURIs(nft?.minter, [{ tokenId: nft?.nftokenId?.toString() }])
   // const chunks = nft?.images && nft?.images?.split(',')
   // const mp4 = chunks?.length > 1 && nft?.images?.split(',').slice(1).join(',')
   // const original = mp4?.length > 400 ? mp4 : ''
   const { itemColor, textColor } = useColor(nft?.superLikes ?? '0', nft?.superDisLikes ?? '0')
   const askOrder = useGetNftOrder(nft?.collection?.id, nft?.tokenId)?.data as any
+  // const askOrder2 = useGetNftOrder(nft?.collection?.id, "Bored-Ape-Yatch-Club-3")?.data as any
+  // console.log("askOrder2====================>", media, nft, tokenURIs)
   const bidEndTime = parseInt(askOrder?.lastBidTime?.toString() ?? 0) + parseInt(askOrder?.bidDuration?.toString() ?? 0)
   const bidPrice = !parseInt(askOrder?.lastBidTime?.toString() ?? 0)
     ? currentAskPriceAsNumber
@@ -279,7 +283,14 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
           </Flex>
           {!isArticle ? (
             <Flex flex="2" justifyContent={['center', null, 'flex-end']} alignItems="center" maxWidth={440}>
-              <NFTMedia key={nft.tokenId} nft={nft} width={440} height={440} />
+              <NFTMedia
+                key={nft.tokenId}
+                tokenURI={tokenURIs?.length && tokenURIs[0]}
+                media={media}
+                nft={nft}
+                width={440}
+                height={440}
+              />
             </Flex>
           ) : null}
         </Container>

@@ -146,17 +146,17 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const stakeMarketContract = useStakeMarketContract()
 
   const { isRequired: needsApproval, refetch } = useGetRequiresApproval(
-    bnbContractReader,
+    bnbContractApprover,
     account,
     callContract.address,
   )
   const { isRequired: needsApproval2, refetch: refetch2 } = useGetRequiresApproval(
-    bnbContractReader,
+    bnbContractApprover,
     account,
     stakeMarketContract.address,
   )
   const { isRequired: needsApproval3, refetch: refetch3 } = useGetRequiresApproval(
-    bnbContractReader,
+    bnbContractApprover,
     account,
     helperContract.address,
   )
@@ -166,14 +166,16 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
       if (paymentCurrency === 2) return true
       return needsApproval || needsApproval2 || needsApproval3
     },
-    onApprove: () => {
+    onApprove: async () => {
       if (paymentCurrency === PaymentCurrency.BNB) {
         if (bidPrice) {
           return callWithGasPrice(bnbContractApprover, 'approve', [helperContract.address, MaxUint256]).then(() =>
             refetch3(),
           )
         }
-        return callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256])
+        return callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256]).then(() =>
+          refetch(),
+        )
       }
       return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256]).then(() =>
         refetch2(),

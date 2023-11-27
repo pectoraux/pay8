@@ -37,6 +37,7 @@ import PublishMediaStage from './PublishMediaStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { useGetPaywallARP } from 'state/cancan/hooks'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { combineDateAndTime } from 'views/AcceleratorVoting/CreateProposal/helpers'
 
 interface EditStageProps {
   variant: 'product' | 'paywall' | 'article'
@@ -145,8 +146,9 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
     userTokenId: '',
     identityTokenId: '',
     emailList: '',
+    startTime: '',
   }))
-  const tokenContract = useErc721CollectionContract(state.minter || '')
+  const tokenContract = useErc721CollectionContract(state.minter)
   const updateValue = (key: any, value: string | OptionType[] | boolean | number | Date) => {
     setState((prevState) => ({
       ...prevState,
@@ -260,7 +262,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
       return false
     },
     onApprove: () => {
-      return callWithGasPrice(tokenContract, 'approve', [marketOrdersContract.address, MaxUint256])
+      return null // callWithGasPrice(tokenContract, 'setApprovalForAll', [marketHelper3Contract.address, true])
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
@@ -277,8 +279,9 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
       }
       if (stage === SellingStage.CONFIRM_CREATE_PAYWALL2) {
         const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
+        const time = combineDateAndTime(state.dropinDate, state.startTime)?.toString()
         const dropInTimer = Math.max(
-          differenceInSeconds(new Date(state.dropinDate || 0), new Date(), {
+          differenceInSeconds(new Date(time ? parseInt(time) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
           }),
           0,
@@ -345,8 +348,9 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
       if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
         if (currency?.address) {
           const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
+          const time = combineDateAndTime(state.dropinDate, state.startTime)?.toString()
           const dropInTimer = Math.max(
-            differenceInSeconds(new Date(state.dropinDate || 0), new Date(), {
+            differenceInSeconds(new Date(time ? parseInt(time) * 1000 : 0), new Date(), {
               roundingMethod: 'ceil',
             }),
             0,
@@ -379,8 +383,8 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             variant === 'product' || variant === 'article' ? '2' : '1',
             !!state.isTradable,
             `${state.thumbnail},${state.thumbnail}`,
-            nftFilters?.country?.toString(),
-            nftFilters?.city?.toString(),
+            nftFilters?.country?.toString() ?? '',
+            nftFilters?.city?.toString() ?? '',
             nftFilters?.product
               ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
               : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
@@ -391,16 +395,52 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
               'tokenContract1=================>',
               !!state.customMinter && !!Number(state.nftTokenId),
               Number(state.nftTokenId),
+              tokenContract,
             )
             if (!!state.customMinter && !!Number(state.nftTokenId)) {
-              callWithGasPrice(tokenContract, 'approve', [marketHelper3Contract.address, state.nftTokenId])
-              return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
-                console.log('rerr=============>', err),
-              )
+              return callWithGasPrice(tokenContract, 'setApprovalForAll', [marketHelper3Contract.address, true])
+                .then(() => {
+                  return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
+                    console.log('rerr=============>', err),
+                  )
+                })
+                .then(() => {
+                  return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args2).catch((err) =>
+                    console.log('CONFIRM_ADD_LOCATION================>', err),
+                  )
+                })
+                .catch((err) => console.log('rerr=============>', err))
             }
-            return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
-              console.log('rerr=============>', err),
-            )
+            return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs)
+              .then((res) => {
+                if (state.options?.length > 0) {
+                  const args3 = [
+                    state.tokenId?.split(' ')?.join('-')?.trim(),
+                    state.options?.reduce((accum, attr) => [...accum, attr.min], []),
+                    state.options?.reduce((accum, attr) => [...accum, attr.max], []),
+                    state.options?.reduce((accum, attr) => [...accum, parseInt(attr.value) * 60], []),
+                    state.options?.reduce(
+                      (accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()],
+                      [],
+                    ),
+                    state.options?.reduce((accum, attr) => [...accum, attr.category], []),
+                    state.options?.reduce((accum, attr) => [...accum, attr.element], []),
+                    state.options?.reduce((accum, attr) => [...accum, attr.category], []),
+                    state.options?.reduce((accum, attr) => [...accum, attr.currency], []),
+                  ]
+                  console.log('updateoptions==============>', args3)
+                  return callWithGasPrice(marketHelperContract, 'updateOptions', args3).catch((err) =>
+                    console.log('rerr2=================>', err),
+                  )
+                }
+                return res
+              })
+              .then(() => {
+                return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args2).catch((err) =>
+                  console.log('CONFIRM_ADD_LOCATION================>', err),
+                )
+              })
+              .catch((err) => console.log('rerr=============>', err))
           }
           return callWithGasPrice(minterFactoryContract, 'createGauge', args)
             .then(() => delay(5000))

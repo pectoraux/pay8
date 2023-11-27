@@ -34,6 +34,7 @@ import PublishMediaStage from './PublishMediaStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { useGetPaywallARP } from 'state/cancan/hooks'
 import { encryptArticle } from 'utils/cancan'
+import { combineDateAndTime } from 'views/ValuePoolVoting/CreateProposal/helpers'
 
 interface EditStageProps {
   variant: 'product' | 'paywall' | 'article'
@@ -274,8 +275,9 @@ const EditStage: React.FC<any> = ({
       }
       if (stage === SellingStage.CONFIRM_CREATE_PAYWALL2) {
         const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
+        const time = combineDateAndTime(state.dropinDate, state.startTime)?.toString()
         const dropInTimer = Math.max(
-          differenceInSeconds(new Date(state.dropinDate || 0), new Date(), {
+          differenceInSeconds(new Date(time ? parseInt(time) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
           }),
           0,
@@ -344,8 +346,9 @@ const EditStage: React.FC<any> = ({
         let content
         console.log('CONFIRM_CREATE_ASK_ORDER==============>')
         const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
+        const time = combineDateAndTime(state.dropinDate, state.startTime)?.toString()
         const dropInTimer = Math.max(
-          differenceInSeconds(new Date(state.dropinDate || 0), new Date(), {
+          differenceInSeconds(new Date(time ? parseInt(time) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
           }),
           0,

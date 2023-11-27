@@ -191,7 +191,9 @@ const LocationStage: React.FC<any> = ({
             <ButtonMenu scale="sm" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
               <ButtonMenuItem>{t('Image/Video')}</ButtonMenuItem>
               <ButtonMenuItem>
-                <LinkExternal href={variant === 'item' ? 'createArticle' : `${collectionAddress}/createArticle`}>
+                <LinkExternal
+                  href={variant === 'item' ? 'createArticle' : `/cancan/collections/${collectionAddress}/createArticle`}
+                >
                   {t('Article')}
                 </LinkExternal>
               </ButtonMenuItem>

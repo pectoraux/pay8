@@ -13,6 +13,7 @@ import { decryptArticle, decryptContent, getThumbnailNContent } from 'utils/canc
 import { RoundedImage } from '../Collection/IndividualNFTPage/shared/styles'
 import { useTranslation } from '@pancakeswap/localization'
 import { FetchStatus } from 'config/constants/types'
+import Iframe from 'react-iframe'
 
 const StyledAspectRatio = styled(Box)`
   position: absolute;
@@ -30,6 +31,7 @@ const NFTMedia: FC<any> = ({
   width,
   height,
   nft,
+  tokenURI = null,
   media = null,
   showThumbnail = true,
   borderRadius = 'default',
@@ -87,6 +89,9 @@ const NFTMedia: FC<any> = ({
     _mp4 = __mp4
   }
 
+  if (tokenURI) {
+    return <Iframe url={tokenURI.metadataUrl} height="500px" id="myId" />
+  }
   if (media) {
     return (
       <RichTextEditor
