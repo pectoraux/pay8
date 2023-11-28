@@ -34,8 +34,10 @@ import Divider from 'components/Divider'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { orderBy } from 'lodash'
 import latinise from '@pancakeswap/utils/latinise'
-import { useSelector } from 'react-redux'
 import { selectFilteredData } from 'state/cancan/selectors'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useCurrency } from 'hooks/Tokens'
 
 import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard, CollectionCard } from '../../components/CollectibleCard'
@@ -54,9 +56,6 @@ import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
 import Partners from './Partners'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import { useCurrency } from 'hooks/Tokens'
 
 interface CollectionNftsProps {
   collection: Collection

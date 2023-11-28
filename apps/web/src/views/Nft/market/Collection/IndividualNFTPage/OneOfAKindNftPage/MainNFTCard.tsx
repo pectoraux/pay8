@@ -91,7 +91,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
   const { itemColor, textColor } = useColor(nft?.superLikes ?? '0', nft?.superDisLikes ?? '0')
   const askOrder = useGetNftOrder(nft?.collection?.id, nft?.tokenId)?.data as any
   // const askOrder2 = useGetNftOrder(nft?.collection?.id, "Bored-Ape-Yatch-Club-3")?.data as any
-  console.log('askOrder2====================>', nft, isArticle)
+  console.log('askOrder2askOrder2====================>', nft, tokenURIs)
   const bidEndTime = parseInt(askOrder?.lastBidTime?.toString() ?? 0) + parseInt(askOrder?.bidDuration?.toString() ?? 0)
   const bidPrice = !parseInt(askOrder?.lastBidTime?.toString() ?? 0)
     ? currentAskPriceAsNumber
@@ -158,6 +158,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                   <NFTMedia
                     key={nft.tokenId}
                     ml={500}
+                    fromNft
                     style={{ paddingTop: '40%' }}
                     nft={nft}
                     showThumbnail={false}
@@ -264,6 +265,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                   <NFTMedia
                     key={nft.tokenId}
                     ml={500}
+                    fromNft
                     style={{ paddingTop: '40%' }}
                     nft={nft}
                     width={240}
@@ -287,6 +289,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                 key={nft.tokenId}
                 tokenURI={tokenURIs?.length && tokenURIs[0]}
                 media={media}
+                fromNft
                 nft={nft}
                 width={440}
                 height={440}

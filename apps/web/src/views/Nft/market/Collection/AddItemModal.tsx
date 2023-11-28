@@ -82,22 +82,22 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
       const thumb = chunks?.length > 0 && item?.images?.split(',')[0]
       const mp4 = chunks?.length > 1 && item?.images?.split(',').slice(1).join(',')
       let [img0, img1] = [thumb, mp4]
-      try {
-        img0 = thumb
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: thumb,
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-        img1 = mp4
-          ? encryptRsa.encryptStringWithRsaPublicKey({
-              text: mp4,
-              publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
-            })
-          : ''
-      } catch (err) {
-        console.log('handleItem err============>', err)
-      }
+      // try {
+      //   img0 = thumb
+      //     ? encryptRsa.encryptStringWithRsaPublicKey({
+      //         text: thumb,
+      //         publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+      //       })
+      //     : ''
+      //   img1 = mp4
+      //     ? encryptRsa.encryptStringWithRsaPublicKey({
+      //         text: mp4,
+      //         publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+      //       })
+      //     : ''
+      // } catch (err) {
+      //   console.log('handleItem err============>', err)
+      // }
       const contract = partner ? paywallMarketOrdersContract : marketEventsContract
       const method = partner ? 'addReferral' : 'updatePaywall'
       const args = partner

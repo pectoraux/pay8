@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   BunnyPlaceholderIcon,
   Spinner,
@@ -30,7 +30,13 @@ import CollapsibleCard from 'components/CollapsibleCard'
 import { FetchStatus } from 'config/constants/types'
 import Divider from 'components/Divider'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { selectFilteredData } from 'state/cancan/selectors'
+import { orderBy } from 'lodash'
+import latinise from '@pancakeswap/utils/latinise'
+import { useCurrency } from 'hooks/Tokens'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
+import ShipStage from '../../components/BuySellModals/SellModal/ShipStage'
 import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard, CollectionCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
@@ -45,9 +51,7 @@ import AddPartnerModal from '../AddPartnerModal'
 import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
-import { selectFilteredData } from 'state/cancan/selectors'
-import { orderBy } from 'lodash'
-import latinise from '@pancakeswap/utils/latinise'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -331,7 +335,12 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
   const { account } = useWeb3React()
   const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any
   const [nfticketId, setNfticketId] = useState('')
-  const { ongoingSubscription, status } = useGetSubscriptionStatus(
+  const defaultCurrency = useCurrency(DEFAULT_TFIAT)
+  const [currency, setCurrency] = useState(defaultCurrency)
+  const handleInputSelect = useCallback((currencyInput) => {
+    setCurrency(currencyInput)
+  }, [])
+  const { ongoingSubscription, status, refetch } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',
     nfticketId ?? '0',
@@ -340,18 +349,26 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
   const isAdmin = paywall?.currentSeller?.toLowerCase() === account?.toLowerCase()
   const [onPresentAddItem] = useModal(<AddItemModal collection={collection} paywall={paywall} />)
   const [onPresentAddItem2] = useModal(<AddItemModal partner collection={collection} paywall={paywall} />)
+  const [onPresentShip] = useModal(
+    <ShipStage variant="product" collection={collection} currency={currency} paywallId={paywall?.id} />,
+  )
   const [onPresentPartner] = useModal(
     <AddPartnerModal partner collection={collection} paywall={paywall} paywallARP={paywallARP} />,
   )
   const [onPresentRemoveItem] = useModal(<RemoveItemModal collection={collection} paywall={paywall} />)
   const [onPresentSubscribe] = useModal(<SubscribeModal collection={collection} paywall={paywall} />)
   const [onPresentBuySubscription] = useModal(<BuyModal variant="paywall" nftToBuy={paywall} />)
+
   const options = paywall?.options?.map((option, index) => {
     return {
       id: index,
       ...option,
     }
   })
+
+  useEffect(() => {
+    refetch()
+  }, [paywallARP, nfticketId, account, paywall])
 
   if (!account) {
     return (
@@ -369,24 +386,38 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     )
   }
 
-  return isAdmin && paywall?.mirrors?.length > 0 ? (
+  return (isAdmin || ongoingSubscription) && paywall?.mirrors?.length > 0 ? (
     <Flex flexDirection="column">
-      <Flex flexDirection="row" justifyContent="center">
-        <Button mt="5px" onClick={onPresentAddItem}>
-          {t('Add')}
-        </Button>
-        <Button mt="5px" ml="5px" variant="success" onClick={onPresentPartner}>
-          {t('Add Partner')}
-        </Button>
-        <Button mt="5px" ml="5px" variant="danger" onClick={onPresentRemoveItem}>
-          {t('Remove')}
-        </Button>
-        <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
-          <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
-            {t('View Paywall')}
-          </LinkExternal>
+      {isAdmin ? (
+        <Flex flexDirection="row" justifyContent="center">
+          <Flex justifyContent="center" mr="5px" alignItems="center">
+            <CurrencyInputPanel
+              showInput={false}
+              currency={currency ?? defaultCurrency}
+              onCurrencySelect={handleInputSelect}
+              otherCurrency={currency ?? defaultCurrency}
+              id={collection?.id}
+            />
+          </Flex>
+          <Button mt="5px" onClick={onPresentAddItem}>
+            {t('Add Existing Item')}
+          </Button>
+          <Button mt="5px" ml="5px" onClick={onPresentShip}>
+            {t('Add New Item')}
+          </Button>
+          <Button mt="5px" ml="5px" variant="success" onClick={onPresentPartner}>
+            {t('Add Partner')}
+          </Button>
+          <Button mt="5px" ml="5px" variant="danger" onClick={onPresentRemoveItem}>
+            {t('Remove')}
+          </Button>
+          <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
+            <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
+              {t('View Paywall')}
+            </LinkExternal>
+          </Flex>
         </Flex>
-      </Flex>
+      ) : null}
       <Grid
         style={{ padding: '20px' }}
         gridGap="16px"
@@ -415,39 +446,41 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     </Flex>
   ) : !isAdmin ? (
     <Flex alignItems="center" py="48px" flexDirection="column">
-      <Flex justifyContent="center" ml="10px" alignItems="center" flexDirection="column">
-        <NFTMedia key={paywall.tokenId} nft={paywall} width={440} height={440} />
-        <Divider />
-        <Input
-          type="text"
-          scale="sm"
-          value={nfticketId}
-          placeholder={t('input your nfticket id')}
-          onChange={(e) => setNfticketId(e.target.value)}
-        />
-        <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
-          {t('View Paywall')}
-        </LinkExternal>
-      </Flex>
       {!ongoingSubscription ? (
-        <Flex alignItems="center" flexDirection="column">
-          {paywall?.option_mins?.length ? (
-            <>
-              <Text textTransform="uppercase" textAlign="center" color="textSubtle" fontSize="12px" bold>
-                {t('Customize your order')}
-              </Text>
-              <Flex justifyContent="center" alignItems="center">
-                <OptionFilters address={account} options={options} />
-              </Flex>
-            </>
-          ) : null}
-          <Flex alignItems="center" flexDirection="row">
-            <Button mr="18px" variant="success" onClick={onPresentBuySubscription}>
-              {t('Buy Subscription')}
-            </Button>
-            <Button onClick={onPresentSubscribe}>{t('Start Subscription')}</Button>
+        <>
+          <Flex justifyContent="center" ml="10px" alignItems="center" flexDirection="column">
+            <NFTMedia key={paywall.tokenId} nft={paywall} width={440} height={440} />
+            <Divider />
+            <Input
+              type="text"
+              scale="sm"
+              value={nfticketId}
+              placeholder={t('input your nfticket id')}
+              onChange={(e) => setNfticketId(e.target.value)}
+            />
+            <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
+              {t('View Paywall')}
+            </LinkExternal>
           </Flex>
-        </Flex>
+          <Flex alignItems="center" flexDirection="column">
+            {paywall?.options?.length ? (
+              <>
+                <Text textTransform="uppercase" textAlign="center" color="textSubtle" fontSize="12px" bold>
+                  {t('Customize your order')}
+                </Text>
+                <Flex justifyContent="center" alignItems="center">
+                  <OptionFilters address={account} options={options} />
+                </Flex>
+              </>
+            ) : null}
+            <Flex alignItems="center" flexDirection="row">
+              <Button mr="18px" variant="success" onClick={onPresentBuySubscription}>
+                {t('Buy Subscription')}
+              </Button>
+              <Button onClick={onPresentSubscribe}>{t('Start Subscription')}</Button>
+            </Flex>
+          </Flex>
+        </>
       ) : null}
       {!paywall?.canPublish ? (
         <Flex alignItems="center" mt="18px" flexDirection="row">
@@ -468,8 +501,20 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
           {t('View Paywall')}
         </LinkExternal>
       </Flex>
-      <Button mb="18px" ml="5px" onClick={onPresentAddItem}>
-        {t('Add')}
+      <Flex justifyContent="center" alignItems="center">
+        <CurrencyInputPanel
+          showInput={false}
+          currency={currency ?? defaultCurrency}
+          onCurrencySelect={handleInputSelect}
+          otherCurrency={currency ?? defaultCurrency}
+          id={collection?.id}
+        />
+      </Flex>
+      <Button mt="5px" onClick={onPresentAddItem}>
+        {t('Add Existing Item')}
+      </Button>
+      <Button mt="5px" ml="5px" onClick={onPresentShip}>
+        {t('Add New Item')}
       </Button>
       <Button variant="success" ml="5px" onClick={onPresentPartner}>
         {t('Add Partner')}

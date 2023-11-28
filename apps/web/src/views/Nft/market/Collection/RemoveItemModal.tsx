@@ -74,58 +74,58 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-      let img0 = item.images[0]
-      let img1 = item.images[1]
-      let img2 = item.images[2]
-      let img3 = item.images[3]
-      let img4 = item.images[4]
-      try {
-        img0 = item.images[0]
-          ? nodeRSA.decryptStringWithRsaPrivateKey({
-              text: item.images[0],
-              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-            })
-          : ''
-        img1 = item.images[1]
-          ? nodeRSA.decryptStringWithRsaPrivateKey({
-              text: item.images[1],
-              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-            })
-          : ''
-        img2 = item.images[2]
-          ? nodeRSA.decryptStringWithRsaPrivateKey({
-              text: item.images[2],
-              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-            })
-          : ''
-        img3 = item.images[3]
-          ? nodeRSA.decryptStringWithRsaPrivateKey({
-              text: item.images[3],
-              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-            })
-          : ''
-        img4 = item.images[4]
-          ? nodeRSA.decryptStringWithRsaPrivateKey({
-              text: item.images[4],
-              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-            })
-          : ''
-        console.log('handleRemoveItem====================>', [
-          state.productId,
-          paywall?.id,
-          false,
-          true,
-          [img0, img1, img2, img3, img4],
-        ])
-      } catch (err) {
-        console.log('handleRemoveItem err============>', err)
-      }
+      // let img0 = item.images[0]
+      // let img1 = item.images[1]
+      // let img2 = item.images[2]
+      // let img3 = item.images[3]
+      // let img4 = item.images[4]
+      // try {
+      //   img0 = item.images[0]
+      //     ? nodeRSA.decryptStringWithRsaPrivateKey({
+      //         text: item.images[0],
+      //         privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+      //       })
+      //     : ''
+      //   img1 = item.images[1]
+      //     ? nodeRSA.decryptStringWithRsaPrivateKey({
+      //         text: item.images[1],
+      //         privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+      //       })
+      //     : ''
+      //   img2 = item.images[2]
+      //     ? nodeRSA.decryptStringWithRsaPrivateKey({
+      //         text: item.images[2],
+      //         privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+      //       })
+      //     : ''
+      //   img3 = item.images[3]
+      //     ? nodeRSA.decryptStringWithRsaPrivateKey({
+      //         text: item.images[3],
+      //         privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+      //       })
+      //     : ''
+      //   img4 = item.images[4]
+      //     ? nodeRSA.decryptStringWithRsaPrivateKey({
+      //         text: item.images[4],
+      //         privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+      //       })
+      //     : ''
+      //   console.log('handleRemoveItem====================>', [
+      //     state.productId,
+      //     paywall?.id,
+      //     false,
+      //     true,
+      //     [img0, img1, img2, img3, img4],
+      //   ])
+      // } catch (err) {
+      //   console.log('handleRemoveItem err============>', err)
+      // }
       return callWithGasPrice(marketEventsContract, 'updatePaywall', [
         state.productId,
         paywall?.id,
         false,
         true,
-        [img0, img1, img2, img3, img4],
+        item.images,
       ]).catch((err) => {
         console.log('handleRemoveItem====================>', err)
       })
