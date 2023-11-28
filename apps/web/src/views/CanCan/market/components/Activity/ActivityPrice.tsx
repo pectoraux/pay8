@@ -18,7 +18,7 @@ const ActivityPrice = ({ nft, bnbBusdPrice, price }) => {
               })}
             </Text>
           </Flex>
-          {priceInUsd ? (
+          {/* {priceInUsd ? (
             <Text fontSize="12px" color="textSubtle">
               {`(~$${priceInUsd.toLocaleString(undefined, {
                 minimumFractionDigits: 2,
@@ -27,7 +27,7 @@ const ActivityPrice = ({ nft, bnbBusdPrice, price }) => {
             </Text>
           ) : (
             <Skeleton height="18px" width="42px" />
-          )}
+          )} */}
         </>
       ) : (
         '-'

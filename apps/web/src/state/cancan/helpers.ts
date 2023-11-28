@@ -21,6 +21,7 @@ import {
   askHistoryFields,
   collectibleFields,
   collectionBaseFields,
+  extraNoteFields,
   itemFields,
   nftFields,
   paywallARPFields,
@@ -1105,6 +1106,27 @@ export const getCollectibles = async (where) => {
     return res.collectibles
   } catch (error) {
     console.error('Failed to fetch collectibles====================>', error)
+    return []
+  }
+}
+
+export const getExtraNote = async (where) => {
+  try {
+    const res = await request(
+      GRAPH_API_CANCAN,
+      gql`
+        query getExtraNoteData($where: ExtraNote_filter) {
+          extraNotes(where: $where) {
+              ${extraNoteFields}
+            }
+          }
+        `,
+      { where },
+    )
+    console.log('1getExtraNote==================>', where, res)
+    return res.extraNotes
+  } catch (error) {
+    console.error('Failed to fetch extraNotes====================>', error)
     return []
   }
 }

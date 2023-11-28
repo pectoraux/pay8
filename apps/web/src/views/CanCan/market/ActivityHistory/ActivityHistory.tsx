@@ -72,7 +72,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
           nftActivityFiltersParsed,
           MAX_PER_QUERY,
         )
-        const activity = sortActivity(collectionActivity)
+        const activity = sortActivity(collectionActivity)?.filter((activity) => activity?.item ?? activity?.paywall)
         setPaginationData({
           activity,
           currentPage: 1,
@@ -91,7 +91,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
   }, [dispatch, collectionId, collectionAddress, nftActivityFiltersString, lastUpdated])
 
   useEffect(() => {
-    const slice = paginationData.activity.slice(
+    const slice = paginationData.activity?.slice(
       MAX_PER_PAGE * (paginationData.currentPage - 1),
       MAX_PER_PAGE * paginationData.currentPage,
     )
@@ -238,7 +238,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
                 {!isInitialized ? (
                   <TableLoader />
                 ) : (
-                  activitiesSlice.map((activity) => {
+                  activitiesSlice?.map((activity) => {
                     const nft = activity?.item ?? activity?.paywall
                     return (
                       <ActivityRow

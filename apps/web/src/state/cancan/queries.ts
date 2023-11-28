@@ -289,6 +289,21 @@ collection {
 }
 `
 
+export const extraNoteFields = `
+id
+createdAt
+address
+message
+item
+paywall
+user {
+  id
+}
+collection {
+  id
+}
+`
+
 export const valuepoolFields = `
 id
 active

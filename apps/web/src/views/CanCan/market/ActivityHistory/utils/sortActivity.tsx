@@ -46,7 +46,7 @@ export const sortActivity = ({ askOrders = [], transactions = [] }) => {
       const price = askOrderHistory.askPrice
       const { timestamp, item, paywall, nft } = askOrderHistory
       const tx = askOrderHistory.id
-      const seller = askOrderHistory?.seller.id
+      const seller = askOrderHistory?.seller?.id
       return { marketEvent, price, timestamp, item, paywall, nft, tx, seller }
     })
 

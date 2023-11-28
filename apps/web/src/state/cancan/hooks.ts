@@ -29,6 +29,7 @@ import {
   getPaywallPricePerMinute,
   getEstimateVotes,
   getAskOrder,
+  getExtraNote,
   getMedia,
   getCollectibles,
   getNftAskOrder,
@@ -37,6 +38,7 @@ import {
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { decryptAllArticle, decryptArticle, decryptArticle2, getThumbnailNContent } from 'utils/cancan'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'asc' | 'desc' }
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
@@ -98,6 +100,30 @@ export const useDecryptArticle2 = (chk, cursor) => {
     mutate: refetch,
     status,
   } = useSWRImmutable(['decryptArticle2', chk?.length, cursor], async () => decryptArticle2(chk, cursor))
+  return {
+    data,
+    refetch,
+    status,
+  }
+}
+
+export const useGetExtraNote = (collectionId, buyer, tokenId, isItem) => {
+  const where = isItem
+    ? {
+        collection_: { id: collectionId },
+        user_: { id: buyer || ADDRESS_ZERO },
+        item: tokenId,
+      }
+    : {
+        collection_: { id: collectionId },
+        user_: { id: buyer || ADDRESS_ZERO },
+        paywall: tokenId,
+      }
+  const {
+    data,
+    mutate: refetch,
+    status,
+  } = useSWRImmutable(['useGetExtraNote3', collectionId, buyer, tokenId, isItem], async () => getExtraNote(where))
   return {
     data,
     refetch,
