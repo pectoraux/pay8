@@ -88,7 +88,10 @@ const Choice: React.FC<any> = ({
       <Box position="relative" mb="5px">
         <Input
           {...props}
-          placeholder={t('Category (%txt%)', { txt: props.addValue ? 'Subscription' : 'Meat' })}
+          placeholder={t('%val% (%txt%)', {
+            val: props.addValue ? 'Category' : 'Question',
+            txt: props.addValue ? 'Subscription' : 'Name',
+          })}
           value={props.category}
           onChange={handleChangeCategory}
           isWarning={isWarning}
@@ -97,7 +100,10 @@ const Choice: React.FC<any> = ({
       <Box position="relative" mb="5px">
         <Input
           {...props}
-          placeholder={t('Element (%txt%)', { txt: props.addValue ? 'Monthly' : '$1 Tilapia' })}
+          placeholder={t('%val% (%txt%)', {
+            val: props.addValue ? 'Element' : 'Answer',
+            txt: props.addValue ? 'Monthly' : 'PaySwap',
+          })}
           value={props.element}
           onChange={handleChangeElement}
           isWarning={isWarning}
@@ -114,15 +120,17 @@ const Choice: React.FC<any> = ({
           />
         </Box>
       ) : null}
-      <Box position="relative" mb="5px">
-        <Input
-          {...props}
-          placeholder={t('Currency (#)')}
-          value={props.currency}
-          onChange={handleChangeCurrency}
-          isWarning={isWarning}
-        />
-      </Box>
+      {props.addValue ? (
+        <Box position="relative" mb="5px">
+          <Input
+            {...props}
+            placeholder={t('Currency (#)')}
+            value={props.currency}
+            onChange={handleChangeCurrency}
+            isWarning={isWarning}
+          />
+        </Box>
+      ) : null}
       <Box position="relative" mb="5px">
         <Input
           {...props}

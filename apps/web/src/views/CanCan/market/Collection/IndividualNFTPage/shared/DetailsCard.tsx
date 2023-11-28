@@ -21,15 +21,9 @@ const LongTextContainer = styled(Text)`
   text-overflow: ellipsis;
 `
 
-const DetailsCard: React.FC<React.PropsWithChildren<DetailsCardProps>> = ({
-  contractAddress,
-  ipfsJson,
-  count,
-  rarity,
-}) => {
+const DetailsCard: React.FC<any> = ({ contractAddress }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const ipfsLink = ipfsJson ? uriToHttp(ipfsJson)[0] : null
   const content = (
     <Box p="24px">
       <Flex justifyContent="space-between" alignItems="center" mb="16px">
@@ -40,32 +34,6 @@ const DetailsCard: React.FC<React.PropsWithChildren<DetailsCardProps>> = ({
           <LongTextContainer bold>{contractAddress}</LongTextContainer>
         </Link>
       </Flex>
-      {ipfsLink && (
-        <Flex justifyContent="space-between" alignItems="center" mb="16px">
-          <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
-            IPFS JSON
-          </Text>
-          <Link external href={ipfsLink}>
-            <LongTextContainer bold>{ipfsLink}</LongTextContainer>
-          </Link>
-        </Flex>
-      )}
-      {count && (
-        <Flex justifyContent="space-between" alignItems="center" mb="16px" mr="4px">
-          <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
-            {t('Supply Count')}
-          </Text>
-          <LongTextContainer bold>{formatNumber(count, 0, 0)}</LongTextContainer>
-        </Flex>
-      )}
-      {rarity && (
-        <Flex justifyContent="space-between" alignItems="center" mr="4px">
-          <Text fontSize="12px" color="textSubtle" bold textTransform="uppercase">
-            {t('Rarity')}
-          </Text>
-          <LongTextContainer bold>{`${formatNumber(rarity, 0, 2)}%`}</LongTextContainer>
-        </Flex>
-      )}
     </Box>
   )
   return <ExpandableCard title={t('Details')} icon={<SearchIcon width="24px" height="24px" />} content={content} />

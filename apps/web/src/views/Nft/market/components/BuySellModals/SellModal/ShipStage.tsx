@@ -424,9 +424,9 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
                       [],
                     ),
                     state.options?.reduce((accum, attr) => [...accum, attr.category], []),
-                    state.options?.reduce((accum, attr) => [...accum, attr.element], []),
                     state.options?.reduce((accum, attr) => [...accum, attr.category], []),
-                    state.options?.reduce((accum, attr) => [...accum, attr.currency], []),
+                    state.options?.reduce((accum, attr) => [...accum, attr.element], []),
+                    state.options?.reduce((accum, attr) => [...accum, attr.currency ?? '#'], []),
                   ]
                   console.log('updateoptions==============>', args3)
                   return callWithGasPrice(marketHelperContract, 'updateOptions', args3).catch((err) =>

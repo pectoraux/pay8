@@ -50,9 +50,18 @@ const AuditNFTsCard: React.FC<any> = ({ collection, nft, onSuccess }) => {
       tokenId: parseInt(nft.rsrcTokenId ?? '0'),
     },
   ])
+  let numBadges
+  if (parseInt(collection.badgeId ?? '0')) numBadges += 1
+  if (parseInt(nft.rsrcTokenId ?? '0')) numBadges += 1
   const content = (
     <StyledBox>
-      <Flex flexDirection="column" height="1100px" justifyContent="center" overflowY="hidden" alignItems="center">
+      <Flex
+        flexDirection="column"
+        height={numBadges == 2 ? '1100px' : '100%'}
+        justifyContent="center"
+        overflowY="hidden"
+        alignItems="center"
+      >
         {!parseInt(collection.badgeId ?? '0') ? (
           <Text px="16px" pb="16px" color="failure">
             {t('This channel has not been audited.')}

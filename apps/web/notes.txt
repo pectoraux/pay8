@@ -1,4 +1,8 @@
 # TODO
+NFT options
+add/remove nft to/from paywall
+address & unlock address info from activities tab
+
 you cannot withdraw from stake unless agreement is good for all parties
 you have to select the parent stake before applying to a stake partnership
 

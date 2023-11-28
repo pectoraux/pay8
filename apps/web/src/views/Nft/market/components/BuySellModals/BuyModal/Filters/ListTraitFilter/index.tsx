@@ -77,9 +77,9 @@ export const ListTraitFilter: React.FC<any> = ({ title, traitType, items, collec
     if (order) {
       return orderBy(filteredItems, orderKey, orderDir)
     }
-    setResults(results.length ? results : filteredItems)
-    return results
+    return results.length ? results : filteredItems
   }
+
   const handleClearItem = () => {
     const newFilters = { ...nftFilters }
 
