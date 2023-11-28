@@ -73,7 +73,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
           MAX_PER_QUERY,
           'nft_',
         )
-        const activity = sortActivity(collectionActivity)?.filter((activity: any) => activity?.nft ?? activity?.paywall)
+        const activity = sortActivity(collectionActivity)
         setPaginationData({
           activity,
           currentPage: 1,
