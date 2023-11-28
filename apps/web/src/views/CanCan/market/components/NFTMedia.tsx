@@ -3,7 +3,13 @@ import { AutoRenewIcon, Box, Button, Flex, Link, LinkExternal } from '@pancakesw
 import { FC, useEffect, useRef, useState } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import RichTextEditor from 'components/RichText'
-import { useDecryptArticle, useDecryptArticle2, useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
+import {
+  useDecryptArticle,
+  useDecryptArticle2,
+  useGetPaywallARP,
+  useGetSubscriptionStatus,
+  useGetThumbnailNContent,
+} from 'state/cancan/hooks'
 import styled from 'styled-components'
 import { useAppDispatch } from 'state'
 import { useIntersectionObserver } from '@pancakeswap/hooks'
@@ -14,6 +20,7 @@ import { RoundedImage } from '../Collection/IndividualNFTPage/shared/styles'
 import { useTranslation } from '@pancakeswap/localization'
 import { FetchStatus } from 'config/constants/types'
 import Iframe from 'react-iframe'
+import { chainlinkOracleABI } from 'config/abi/chainlinkOracle'
 
 const StyledAspectRatio = styled(Box)`
   position: absolute;
@@ -38,15 +45,16 @@ const NFTMedia: FC<any> = ({
   as,
   ...props
 }) => {
-  const dispatch = useAppDispatch()
   const { t } = useTranslation()
-  const { setTryVideoNftMedia } = useNftStorage()
   const { account } = useWeb3React()
   const [cursor, setCursor] = useState(0)
   const chks = nft?.images?.split(',')?.slice(1)
-  const { data: _article, refetch, status } = useDecryptArticle(chks)
+  const [loaded, setLoaded] = useState(Math.max(100, Math.ceil((5 * 100) / chks?.length)))
+  // const { data: _article, refetch, status } = useDecryptArticle2(chks, 10)
+  const _article = ''
+  let { mp4, thumbnail, isArticle } = useGetThumbnailNContent(nft)
   const [article, setArticle] = useState(_article ?? '')
-  const { data: article2, status: status2 } = useDecryptArticle2(chks, cursor)
+  const { data: article2, status: status2, refetch } = useDecryptArticle2(chks, cursor)
   const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
@@ -54,8 +62,10 @@ const NFTMedia: FC<any> = ({
     '0',
     nft?.tokenId,
   )
-  // const vidRef = useRef(null)
-  // const { observerRef, isIntersecting } = useIntersectionObserver()
+
+  useEffect(() => {
+    if (!showThumbnail && isArticle && !article?.length) setArticle(_article)
+  }, [isArticle, article])
 
   useEffect(() => {
     if (!showThumbnail && article2?.length) {
@@ -63,69 +73,48 @@ const NFTMedia: FC<any> = ({
     }
   }, [article2])
 
-  useEffect(() => {
-    if (!showThumbnail) {
-      if (!article?.length) setArticle(_article)
-      // if (vidRef.current) {
-      //   if (isIntersecting) {
-      //     vidRef.current.play().catch((error) => {
-      //       if (error instanceof DOMException && error.name === 'NotAllowedError') {
-      //         setTryVideoNftMedia(false)
-      //       }
-      //     })
-      //   } else {
-      //     vidRef.current.pause()
-      //   }
-      // }
-    }
-  }, [
-    dispatch,
-    article,
-    // isIntersecting, setTryVideoNftMedia
-  ])
-  let { mp4, thumbnail, isArticle } = getThumbnailNContent(nft)
   let _thumbnail = thumbnail
   let _mp4 = article
-  if (!isArticle && !showThumbnail) {
-    const { thumbnail: __thumbnail, mp4: __mp4 } = decryptContent(nft, thumbnail, mp4, ongoingSubscription, account)
-    _thumbnail = __thumbnail
-    _mp4 = __mp4
-  }
 
-  if (tokenURI?.metadataUrl && !showThumbnail) {
-    return <Iframe url={tokenURI.metadataUrl} height="500px" id="myId" />
-  }
-  if (media && !showThumbnail) {
-    return (
-      <RichTextEditor
-        readOnly
-        value={`<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${media}" height="467" width="830"></iframe>`}
-        id="rte"
-      />
-    )
-  }
-  if (isArticle && !showThumbnail) {
-    if (!parseInt(nft?.behindPaywall)) {
-      return <RichTextEditor value={mp4} readOnly id="rte" />
+  if (!showThumbnail) {
+    if (!isArticle) {
+      const { thumbnail: __thumbnail, mp4: __mp4 } = decryptContent(nft, thumbnail, mp4, ongoingSubscription, account)
+      _thumbnail = __thumbnail
+      _mp4 = __mp4
     }
-    return (
-      <Flex flexDirection="column">
-        {status === FetchStatus.Fetched && article?.length ? (
-          <RichTextEditor value={article} readOnly id="rte" />
-        ) : null}
-        {status === FetchStatus.Fetched && article?.length && chks?.length > cursor ? (
-          <Button
-            onClick={() => {
-              setCursor(cursor + 10)
-            }}
-          >
-            {t('Fetch More (%val%% Fetched So Far)', { val: Math.ceil((cursor * 100) / chks.length) })}
-          </Button>
-        ) : null}
-      </Flex>
-    )
+
+    if (tokenURI?.metadataUrl) {
+      return <Iframe url={tokenURI.metadataUrl} height="500px" id="myId" />
+    } else if (media) {
+      return (
+        <RichTextEditor
+          readOnly
+          value={`<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${media}" height="467" width="830"></iframe>`}
+          id="rte"
+        />
+      )
+    } else if (isArticle) {
+      if (!parseInt(nft?.behindPaywall)) {
+        return <RichTextEditor value={mp4} readOnly id="rte" />
+      }
+      return (
+        <Flex flexDirection="column">
+          {article?.length ? <RichTextEditor value={article} readOnly id="rte" /> : null}
+          {loaded < 100 ? (
+            <Button
+              onClick={() => {
+                setCursor(cursor + 5)
+                setLoaded(Math.ceil(((cursor + 5) * 100) / chks.length))
+              }}
+            >
+              {t('Fetch Article (%val%% Fetched So Far)', { val: loaded })}
+            </Button>
+          ) : null}
+        </Flex>
+      )
+    }
   }
-  return <RoundedImage width={width} height={height} src={media} alt={nft?.name} as={as} {...props} />
+  return <RoundedImage width={width} height={height} src={media ?? _thumbnail} alt={nft?.tokenId} as={as} {...props} />
 }
 
 export default NFTMedia

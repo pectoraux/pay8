@@ -29,6 +29,7 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import NextStepButton from 'views/ChannelCreation/NextStepButton'
 
 const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
@@ -246,6 +247,9 @@ const Header: React.FC<any> = ({ collection }) => {
             >
               {t('Launch Tour')}
             </DesktopButton>
+            <NextStepButton external onClick={() => router.push(`/nfts/collections/${collectionAddress}`)}>
+              {t('Go to eCollectibles')}
+            </NextStepButton>
             <LinkExternal href="/lotteries/1" bold={false}>
               {t('See Lottery')}
             </LinkExternal>

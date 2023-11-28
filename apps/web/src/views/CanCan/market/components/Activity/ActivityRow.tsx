@@ -41,6 +41,7 @@ const ActivityRow: React.FC<any> = ({
   isUserActivity = false,
   isNftActivity = false,
 }) => {
+  console.log('ActivityRow================>', nft, activity)
   const { chainId } = useActiveChainId()
   const { isXs, isSm } = useMatchBreakpoints()
   const priceAsFloat = parseFloat(activity.price)
@@ -63,7 +64,6 @@ const ActivityRow: React.FC<any> = ({
     />,
   )
   const currNft = nft?.transactionHistory?.find((tx) => tx.id?.toLowerCase() === activity.tx?.toLowerCase())
-  console.log('currNftcurrNft=================>', nft, activity)
   const _nft = {
     ...currNft,
     metadataUrl: activity?.metadataUrl,
@@ -77,7 +77,6 @@ const ActivityRow: React.FC<any> = ({
         onClick: onPresentMobileModal,
       }
     : {}
-  console.log('2onClickProp==================>', activity)
   return (
     <tr {...((isXs || isSm) && onClickProp)} data-test="nft-activity-row">
       {!isNftActivity ? (

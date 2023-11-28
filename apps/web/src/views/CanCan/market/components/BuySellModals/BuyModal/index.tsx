@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import EncryptRsa from 'encrypt-rsa'
 import { useState, useMemo } from 'react'
 import { InjectedModalProps, Skeleton, useToast } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
@@ -207,46 +208,80 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
         )
       }
       if (paymentCurrency === PaymentCurrency.BNB) {
-        const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
-        const client = createPublicClient({
-          chain: fantomTestnet,
-          transport: http(),
-        })
-        const walletClient = createWalletClient({
-          chain: fantomTestnet,
-          transport: custom(window.ethereum),
-        })
-        const { request } = await client.simulateContract({
-          account: adminAccount,
-          address: getMarketEventsAddress(),
-          abi: marketEventsABI,
-          functionName: 'emitUpdateMiscellaneous',
-          args: [BigInt(10), BigInt(collectionId), address, note, BigInt(0), BigInt(0), account, ''],
-        })
-        await walletClient
-          .writeContract(request)
-          .catch((err) =>
-            console.log('BNBmisc================>', err, [
+        if (note?.trim()?.length || address?.trim()?.length) {
+          const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+          const client = createPublicClient({
+            chain: fantomTestnet,
+            transport: http(),
+          })
+          const walletClient = createWalletClient({
+            chain: fantomTestnet,
+            transport: custom(window.ethereum),
+          })
+          const encryptRsa = new EncryptRsa()
+          const encryptedNote = note
+            ? encryptRsa.encryptStringWithRsaPublicKey({
+                text: note,
+                publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+              })
+            : ''
+          const encryptedAddress = address
+            ? encryptRsa.encryptStringWithRsaPublicKey({
+                text: address,
+                publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+              })
+            : ''
+          console.log('1BNB================>', [
+            BigInt(10),
+            BigInt(collectionId),
+            encryptedAddress,
+            encryptedNote,
+            BigInt(0),
+            BigInt(0),
+            account,
+            '',
+          ])
+          const { request } = await client.simulateContract({
+            account: adminAccount,
+            address: getMarketEventsAddress(),
+            abi: marketEventsABI,
+            functionName: 'emitUpdateMiscellaneous',
+            args: [
               BigInt(10),
               BigInt(collectionId),
-              address,
-              note,
-              BigInt(0),
+              encryptedAddress,
+              encryptedNote,
+              variant === 'paywall' ? BigInt(1) : BigInt(0),
               BigInt(0),
               account,
-              '',
-            ]),
-          )
+              nftToBuy.tokenId,
+            ],
+          })
+          await walletClient
+            .writeContract(request)
+            .catch((err) =>
+              console.log('BNBmisc================>', err, [
+                BigInt(10),
+                BigInt(collectionId),
+                encryptedAddress,
+                encryptedNote,
+                variant === 'paywall' ? BigInt(1) : BigInt(0),
+                BigInt(0),
+                account,
+                nftToBuy.tokenId,
+              ]),
+            )
 
-        console.log('BNB================>', [
-          nftToBuy?.currentSeller,
-          account,
-          referrer || ADDRESS_ZERO,
-          nftToBuy.tokenId,
-          userTokenId,
-          identityTokenId,
-          userOptions,
-        ])
+          console.log('BNB================>', [
+            nftToBuy?.currentSeller,
+            account,
+            referrer || ADDRESS_ZERO,
+            nftToBuy.tokenId,
+            userTokenId,
+            identityTokenId,
+            userOptions,
+          ])
+        }
         return callWithGasPrice(callContract, 'buyWithContract', [
           nftToBuy?.currentSeller,
           account,

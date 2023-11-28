@@ -28,6 +28,7 @@ import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import { useGetEstimateVotes } from 'state/cancan/hooks'
+import NextStepButton from 'views/ChannelCreation/NextStepButton'
 
 const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
@@ -217,7 +218,7 @@ const Header: React.FC<any> = ({ collection }) => {
               disabled={launch}
               onClick={() => {
                 if (router.asPath.includes('#')) {
-                  router.push(`/cancan/collections/${collectionAddress}`)
+                  router.push(`/nfts/collections/${collectionAddress}`)
                 } else {
                   setLaunch(true)
                 }
@@ -227,6 +228,9 @@ const Header: React.FC<any> = ({ collection }) => {
             >
               {t('Launch Tour')}
             </DesktopButton>
+            <NextStepButton external onClick={() => router.push(`/cancan/collections/${collectionAddress}`)}>
+              {t('Go to CanCan')}
+            </NextStepButton>
             <LinkExternal href="/lotteries/1" bold={false}>
               {t('See Lottery')}
             </LinkExternal>

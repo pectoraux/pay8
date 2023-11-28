@@ -36,7 +36,7 @@ import {
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { decryptAllArticle, decryptArticle, decryptArticle2 } from 'utils/cancan'
+import { decryptAllArticle, decryptArticle, decryptArticle2, getThumbnailNContent } from 'utils/cancan'
 
 const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'asc' | 'desc' }
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
@@ -80,7 +80,11 @@ export const useDecryptAllArticle = (chk) => {
 }
 
 export const useDecryptArticle = (chk) => {
-  const { data, mutate: refetch, status } = useSWR(['decryptArticle', chk?.length], async () => decryptArticle(chk))
+  const {
+    data,
+    mutate: refetch,
+    status,
+  } = useSWRImmutable(['decryptArticle', chk?.length], async () => decryptArticle(chk))
   return {
     data,
     refetch,
@@ -93,7 +97,7 @@ export const useDecryptArticle2 = (chk, cursor) => {
     data,
     mutate: refetch,
     status,
-  } = useSWR(['decryptArticle2', chk?.length, cursor], async () => decryptArticle2(chk, cursor))
+  } = useSWRImmutable(['decryptArticle2', chk?.length, cursor], async () => decryptArticle2(chk, cursor))
   return {
     data,
     refetch,
@@ -397,6 +401,15 @@ export const useGetMedia = (minterAddress: string) => {
   return data as any
 }
 
+export const useGetThumbnailNContent = (nft) => {
+  const { data } = useSWRImmutable(['useGetThumbnailNContent', nft?.id], async () => getThumbnailNContent(nft))
+  return {
+    mp4: data?.mp4,
+    thumbnail: data?.thumbnail,
+    isArticle: data?.isArticle,
+  }
+}
+
 export const useGetSubscriptionStatus = (
   paywallAddress: string,
   account: string,
@@ -404,7 +417,7 @@ export const useGetSubscriptionStatus = (
   tokenId: string,
 ): any => {
   const { chainId } = useActiveChainId()
-  const { data, status, mutate } = useSWR(
+  const { data, status, mutate } = useSWRImmutable(
     ['subscription', paywallAddress, nfticketId, tokenId, account?.toLowerCase(), chainId],
     async () => getSubscriptionStatus(paywallAddress, account?.toLowerCase(), nfticketId, tokenId, chainId),
     {

@@ -89,28 +89,32 @@ export const decryptAllArticle = (chks) => {
 }
 
 export const decryptArticle = (chks) => {
-  chks = chks?.slice(0, 10)
-  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
-  const decryptedChks = chks?.map((chk, index) => {
-    try {
-      return chk
-        ? nodeRSA.decryptStringWithRsaPrivateKey({
-            text: chk,
-            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
-          })
-        : ''
-    } catch (err) {
-      console.log('decryptArticle============>', err, chk?.length, index)
-    }
-  })
-  return decryptedChks?.join('')
+  try {
+    chks = chks?.slice(0, 10)
+    const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
+    const decryptedChks = chks?.map((chk, index) => {
+      try {
+        return chk
+          ? nodeRSA.decryptStringWithRsaPrivateKey({
+              text: chk,
+              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+            })
+          : ''
+      } catch (err) {
+        console.log('decryptArticle============>', err, chk?.length, index)
+      }
+    })
+    return decryptedChks?.join('')
+  } catch (err) {
+    console.log('err decryptArticle============>', err)
+  }
 }
 
 export const decryptArticle2 = (chks, cursor) => {
-  if (cursor < 10) {
+  if (chks?.length < 1) {
     return ''
   }
-  chks = chks?.slice(cursor, cursor + 10)
+  chks = chks?.slice(cursor, cursor + 5)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
   const decryptedChks = chks?.map((chk, index) => {
     try {
@@ -121,7 +125,7 @@ export const decryptArticle2 = (chks, cursor) => {
           })
         : ''
     } catch (err) {
-      console.log('decryptArticle============>', err, chk?.length, index)
+      console.log('err decryptArticle2============>', err, chk?.length, index)
     }
   })
   return decryptedChks?.join('')
