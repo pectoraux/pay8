@@ -113,7 +113,8 @@ export const NumberCell: React.FC<any> = ({
   isInsufficient,
 }) => {
   const bnbBusdPrice = useBNBBusdPrice()
-  const mprice = getBalanceNumber(price)
+  console.log('price====================>', price, currency)
+  price = getBalanceNumber(price)
   if (isLoading) {
     return (
       <Flex flexDirection="column" justifySelf="flex-end">
@@ -122,8 +123,8 @@ export const NumberCell: React.FC<any> = ({
       </Flex>
     )
   }
-  const usdAmount =
-    currency === '#' ? parseFloat(mprice.toString()) : multiplyPriceByAmount(mainToSecondaryCurrencyFactor, bnbAmount)
+  const usdAmount = parseFloat(price.toString())
+  // currency === '#' ? parseFloat(price.toString()) : multiplyPriceByAmount(mainToSecondaryCurrencyFactor, bnbAmount)
   return (
     <Flex justifySelf="flex-end" flexDirection="column">
       <Flex justifyContent="flex-end">
@@ -133,30 +134,30 @@ export const NumberCell: React.FC<any> = ({
           <CurrencyLogo currency={currentCurrency} size="24px" style={{ marginRight: '8px' }} />
         )}{' '}
         <Text bold color={isInsufficient ? 'failure' : 'text'}>{`${
-          currency === '#' && Number.isInteger(bnbAmount)
-            ? bnbAmount
-            : bnbAmount.toLocaleString(undefined, {
+          currency === '#' && Number.isInteger(usdAmount)
+            ? usdAmount
+            : usdAmount.toLocaleString(undefined, {
                 minimumFractionDigits: 3,
                 maximumFractionDigits: 5,
               })
         }`}</Text>
       </Flex>
-      {currency === '#' && usdAmount > 0 && (
-        <Text small color="textSubtle" textAlign="right">
+      {/* {currency === '#' && usdAmount > 0 && ( */}
+      {/* <Text small color="textSubtle" textAlign="right">
           {`(${usdAmount.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
-          })} ${currentCurrency?.symbol})`}
-        </Text>
-      )}
-      {currency !== '#' && usdAmount > 0 && (
+          })} ${currentCurrency?.symbol ?? ''})`}
+        </Text> */}
+      {/* )} */}
+      {/* {currency !== '#' && usdAmount > 0 && (
         <Text small color="textSubtle" textAlign="right">
           {`(${usdAmount.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })} ${secondaryCurrency?.symbol})`}
         </Text>
-      )}
+      )} */}
     </Flex>
   )
 }

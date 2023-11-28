@@ -1251,6 +1251,43 @@ export const getDiscounted = async (
   }
 }
 
+export const getNftDiscounted = async (
+  collectionAddress,
+  account,
+  tokenId,
+  price,
+  options,
+  identityTokenId = 0,
+  isPaywall = false,
+  chainId = 4002,
+) => {
+  try {
+    const bscClient = publicClient({ chainId: chainId })
+    const [data] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: isPaywall ? getPaywallMarketHelperAddress() : getNftMarketHelperAddress(),
+          abi: isPaywall ? paywallMarketHelperABI : nftMarketHelperABI,
+          functionName: 'getRealPrice',
+          args: [collectionAddress, account, tokenId, options, BigInt(identityTokenId), price],
+        },
+      ],
+    })
+    const res = {
+      discount: data.result?.length > 0 ? data.result[0].toString() : BIG_ZERO,
+      discounted: data.result?.length > 1 ? data.result[1] : false,
+    }
+    return res
+  } catch (error) {
+    console.error('===========>Failed to fetch discounted price', error)
+    return {
+      discount: BIG_ZERO,
+      discounted: false,
+    }
+  }
+}
+
 export const getCollectionContracts = async (collectionAddress: string) => {
   return (await firestore.collection('contracts').doc(collectionAddress).get()).data()
 }

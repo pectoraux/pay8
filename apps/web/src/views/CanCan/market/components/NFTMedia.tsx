@@ -54,45 +54,48 @@ const NFTMedia: FC<any> = ({
     '0',
     nft?.tokenId,
   )
-  const vidRef = useRef(null)
-  const { observerRef, isIntersecting } = useIntersectionObserver()
+  // const vidRef = useRef(null)
+  // const { observerRef, isIntersecting } = useIntersectionObserver()
 
   useEffect(() => {
-    if (article2?.length) {
+    if (!showThumbnail && article2?.length) {
       setArticle(article + article2)
     }
   }, [article2])
 
   useEffect(() => {
-    if (!article?.length) setArticle(_article)
-    if (vidRef.current) {
-      if (isIntersecting) {
-        vidRef.current.play().catch((error) => {
-          if (error instanceof DOMException && error.name === 'NotAllowedError') {
-            setTryVideoNftMedia(false)
-          }
-        })
-      } else {
-        vidRef.current.pause()
-      }
+    if (!showThumbnail) {
+      if (!article?.length) setArticle(_article)
+      // if (vidRef.current) {
+      //   if (isIntersecting) {
+      //     vidRef.current.play().catch((error) => {
+      //       if (error instanceof DOMException && error.name === 'NotAllowedError') {
+      //         setTryVideoNftMedia(false)
+      //       }
+      //     })
+      //   } else {
+      //     vidRef.current.pause()
+      //   }
+      // }
     }
-  }, [dispatch, article, isIntersecting, setTryVideoNftMedia])
+  }, [
+    dispatch,
+    article,
+    // isIntersecting, setTryVideoNftMedia
+  ])
   let { mp4, thumbnail, isArticle } = getThumbnailNContent(nft)
-  let _thumbnail
-  let _mp4
-  if (isArticle) {
-    _thumbnail = thumbnail
-    _mp4 = article // decryptArticle(nft?.images?.split(',')?.slice(1))
-  } else {
+  let _thumbnail = thumbnail
+  let _mp4 = article
+  if (!isArticle && !showThumbnail) {
     const { thumbnail: __thumbnail, mp4: __mp4 } = decryptContent(nft, thumbnail, mp4, ongoingSubscription, account)
     _thumbnail = __thumbnail
     _mp4 = __mp4
   }
 
-  if (tokenURI?.metadataUrl) {
+  if (tokenURI?.metadataUrl && !showThumbnail) {
     return <Iframe url={tokenURI.metadataUrl} height="500px" id="myId" />
   }
-  if (media) {
+  if (media && !showThumbnail) {
     return (
       <RichTextEditor
         readOnly

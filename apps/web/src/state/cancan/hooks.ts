@@ -32,6 +32,7 @@ import {
   getMedia,
   getCollectibles,
   getNftAskOrder,
+  getNftDiscounted,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -305,6 +306,43 @@ export const useGetDiscounted = (
     ['cancan', 'getDiscounted2', account?.toLowerCase() ?? '', chainId],
     async () =>
       getDiscounted(
+        collectionAddress,
+        account?.toLowerCase(),
+        tokenId,
+        price,
+        options,
+        identityTokenId,
+        isPaywall,
+        chainId,
+      ),
+    {
+      revalidateIfStale: true,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    },
+  )
+  console.log('1useGetDiscounted==============>', data, status)
+  return {
+    discounted: data?.discounted,
+    discount: data?.discount,
+    status,
+  }
+}
+
+export const useGetNftDiscounted = (
+  collectionAddress: string,
+  account: string,
+  tokenId: string,
+  price,
+  options,
+  identityTokenId = 0,
+  isPaywall = false,
+) => {
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWR(
+    ['useGetNftDiscounted', account?.toLowerCase() ?? '', chainId],
+    async () =>
+      getNftDiscounted(
         collectionAddress,
         account?.toLowerCase(),
         tokenId,

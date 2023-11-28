@@ -30,6 +30,7 @@ import {
   useGetNftFilters,
   useGetPaywallARP,
   useGetSubscriptionStatus,
+  useGetNftDiscounted,
 } from 'state/cancan/hooks'
 import { stagesWithBackButton, stagesWithApproveButton, stagesWithConfirmButton, StyledModal } from './styles'
 import ReviewStage from './ReviewStage'
@@ -118,10 +119,11 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
         opt = [...opt, ...Array(count).fill(id)]
         return opt
       })
+      return null
     })
     return opt
   }, [variant, nftToBuy, nftFilters])
-  const { discount, discounted, status } = useGetDiscounted(
+  const { discount, discounted, status } = useGetNftDiscounted(
     nftToBuy?.currentSeller,
     account,
     nftToBuy?.tokenId,
@@ -131,7 +133,6 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     variant === 'paywall',
   )
   const totalPayment = Math.max(Number(discount ?? 0) - paymentCredits, 0)
-
   let { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
   const paywallARP = useGetPaywallARP(nftToBuy?.collection?.id ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(

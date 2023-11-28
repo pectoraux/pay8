@@ -158,7 +158,6 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                   <NFTMedia
                     key={nft.tokenId}
                     ml={500}
-                    fromNft
                     style={{ paddingTop: '40%' }}
                     nft={nft}
                     showThumbnail={false}
@@ -265,7 +264,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                   <NFTMedia
                     key={nft.tokenId}
                     ml={500}
-                    fromNft
+                    showThumbnail={false}
                     style={{ paddingTop: '40%' }}
                     nft={nft}
                     width={240}
@@ -289,7 +288,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                 key={nft.tokenId}
                 tokenURI={tokenURIs?.length && tokenURIs[0]}
                 media={media}
-                fromNft
+                showThumbnail={false}
                 nft={nft}
                 width={440}
                 height={440}
