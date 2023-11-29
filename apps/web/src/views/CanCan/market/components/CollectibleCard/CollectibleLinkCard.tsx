@@ -12,15 +12,16 @@ const CollectibleLinkCard: React.FC<any> = ({
   nftLocation,
   currentAskPrice,
   collectionId,
+  paywallId,
   isPaywall = false,
   ...props
 }) => {
   const urlId = nft?.tokenId
+  const padding = paywallId?.length ? `?paywallId=${paywallId}` : ''
   const collectionAddress = collectionId ?? (useRouter().query.collectionAddress as string)
   const link = isPaywall
     ? `${cancanBaseUrl}/collections/${collectionAddress}/paywall/${urlId}`
-    : `${cancanBaseUrl}/collections/${collectionAddress}/${urlId}`
-
+    : `${cancanBaseUrl}/collections/${collectionAddress}/${urlId}${padding}`
   return (
     <StyledCollectibleCard {...props}>
       <CardBody

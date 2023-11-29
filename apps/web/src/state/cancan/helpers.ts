@@ -11,6 +11,7 @@ import {
   getNftMarketHelper3Address,
   getNftMarketHelperAddress,
   getNftMarketOrdersAddress,
+  getPaywallARPHelperAddress,
   getPaywallMarketHelperAddress,
 } from 'utils/addressHelpers'
 import { publicClient } from 'utils/wagmi'
@@ -52,6 +53,7 @@ import { nfticketHelper2ABI } from 'config/abi/nfticketHelper2'
 import { keccak256 } from 'viem'
 import { minterABI } from 'config/abi/minter'
 import { nftMarketOrdersABI } from 'config/abi/nftMarketOrders'
+import { paywallARPHelperABI } from 'config/abi/paywallARPHelper'
 
 export const getTag = async () => {
   try {
@@ -1232,6 +1234,73 @@ export const getSubscriptionStatus = async (paywallAddress, account, nfticketId,
     return isOngoing.result
   } catch (error) {
     console.error('===========>Failed to fetch ongoing subscription', error)
+    return false
+  }
+}
+
+export const getProtocolInfo = async (paywallAddress, account, chainId = 4002) => {
+  try {
+    const bscClient = publicClient({ chainId: chainId })
+    const [protocolId] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: paywallAddress,
+          abi: paywallABI,
+          functionName: 'addressToProtocolId',
+          args: [account],
+        },
+      ],
+    })
+    const [protocolInfo, dueReceivables, profileIdRequired, paused, pricePerSecond, bufferTime] =
+      await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: paywallAddress,
+            abi: paywallABI,
+            functionName: 'protocolInfo',
+            args: [protocolId.result],
+          },
+          {
+            address: paywallAddress,
+            abi: paywallABI,
+            functionName: 'getDueReceivable',
+            args: [protocolId.result],
+          },
+          {
+            address: paywallAddress,
+            abi: paywallABI,
+            functionName: 'profileIdRequired',
+          },
+          {
+            address: paywallAddress,
+            abi: paywallABI,
+            functionName: 'paused',
+          },
+          {
+            address: paywallAddress,
+            abi: paywallABI,
+            functionName: 'pricePerSecond',
+          },
+          {
+            address: paywallAddress,
+            abi: paywallABI,
+            functionName: 'bufferTime',
+          },
+        ],
+      })
+    return {
+      protocolInfo: protocolInfo.result,
+      dueReceivables: dueReceivables.result,
+      profileIdRequired: profileIdRequired.result,
+      paused: paused.result,
+      pricePerSecond: pricePerSecond.result,
+      bufferTime: bufferTime.result,
+      protocolId: protocolId.result,
+    }
+  } catch (error) {
+    console.error('===========>Failed to fetch protocolInfo', error)
     return false
   }
 }

@@ -13,6 +13,7 @@ import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
 import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const StyledTimerText = styled(Heading)`
   background: ${({ theme }) => theme.colors.gradientGold};
@@ -53,7 +54,7 @@ const CollectibleCardBody: React.FC<any> = ({ nft, link, referrer, currentAskPri
         )}
         <CopyAddress account={nft?.tokenId} title="_" mb="24px" />
       </Flex>
-      <NextLinkFromReactRouter to={referrer ? `${link}?referrer=${referrer}` : `${link}`}>
+      <NextLinkFromReactRouter to={referrer && referrer !== ADDRESS_ZERO ? `${link}?referrer=${referrer}` : `${link}`}>
         <Text as="h4" fontWeight="600" mb="8px">
           {getTitle(name)}
         </Text>

@@ -23,6 +23,25 @@ export const paywallABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'addressToProtocolId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'uint256',
         name: '_protocolId',
         type: 'uint256',
@@ -146,6 +165,35 @@ export const paywallABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_protocolId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getDueReceivable',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'int256',
+        name: '',
+        type: 'int256',
       },
     ],
     stateMutability: 'view',
@@ -391,25 +439,6 @@ export const paywallABI = [
       {
         internalType: 'uint256',
         name: 'cap',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'pendingRevenue',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
         type: 'uint256',
       },
     ],

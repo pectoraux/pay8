@@ -700,14 +700,24 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR) {
-        const args = [state.optionId, state.factor, parseInt(state.period) * 60, state.cap]
+        const args = [
+          state.optionId,
+          parseInt(state.factor) * 100,
+          parseInt(state.period) * 60,
+          parseInt(state.cap) * 100,
+        ]
         console.log('CONFIRM_UPDATE_DISCOUNT_DIVISOR===============>', args)
         return callWithGasPrice(billContract, 'updateDiscountDivisor', args).catch((err) =>
           console.log('CONFIRM_UPDATE_DISCOUNT_DIVISOR===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR) {
-        const args = [state.optionId, state.factor, parseInt(state.period) * 60, state.cap]
+        const args = [
+          state.optionId,
+          parseInt(state.factor) * 100,
+          parseInt(state.period) * 60,
+          parseInt(state.cap) * 100,
+        ]
         console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', args)
         return callWithGasPrice(billContract, 'updatePenaltyDivisor', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', err),

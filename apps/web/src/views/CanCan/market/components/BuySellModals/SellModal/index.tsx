@@ -4,7 +4,7 @@ import { differenceInSeconds } from 'date-fns'
 import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
-import { getBalanceAmount, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceAmount, getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
@@ -119,8 +119,11 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     return {
       id: index,
       ...option,
+      unitPrice: getBalanceNumber(option?.unitPrice),
+      value: variant === 'paywall' ? parseInt(option?.value) / 60 : option?.value,
     }
   })
+  console.log('options=============>', options)
   const { account } = useWeb3React()
   let { mp4, thumbnail } = getThumbnailNContent(nftToSell)
   const paywallARP = useGetPaywallARP(nftToSell?.collection?.id ?? '')

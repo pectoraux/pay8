@@ -170,27 +170,38 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     account,
     helperContract.address,
   )
-
+  console.log('needsApproval===========>', needsApproval, needsApproval2, needsApproval3)
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
-      if (paymentCurrency === 2) return true
-      return needsApproval || needsApproval2 || needsApproval3
+      return true
+      // if (paymentCurrency === 2) return true
+      // return needsApproval || needsApproval2 || needsApproval3
     },
     // eslint-disable-next-line consistent-return
     onApprove: async () => {
       if (paymentCurrency === PaymentCurrency.BNB) {
-        if (bidPrice) {
-          return callWithGasPrice(bnbContractApprover, 'approve', [helperContract.address, MaxUint256]).then(() =>
-            refetch3(),
-          )
-        }
-        return callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256]).then(() =>
-          refetch(),
+        // if (bidPrice) {
+        return (
+          callWithGasPrice(bnbContractApprover, 'approve', [helperContract.address, MaxUint256])
+            //   .then(() =>
+            //     refetch3(),
+            //   )
+            // }
+            .then(
+              () => callWithGasPrice(bnbContractApprover, 'approve', [callContract.address, MaxUint256]),
+              //   .then(() =>
+              //     refetch(),
+              //   )
+              // }
+            )
+            .then(
+              () => callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256]),
+              // .then(() =>
+              //   refetch2(),
+              // )
+            )
         )
       }
-      return callWithGasPrice(bnbContractApprover, 'approve', [stakeMarketContract.address, MaxUint256]).then(() =>
-        refetch2(),
-      )
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(

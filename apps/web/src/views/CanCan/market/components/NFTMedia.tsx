@@ -21,6 +21,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { FetchStatus } from 'config/constants/types'
 import Iframe from 'react-iframe'
 import { chainlinkOracleABI } from 'config/abi/chainlinkOracle'
+import { useRouter } from 'next/router'
 
 const StyledAspectRatio = styled(Box)`
   position: absolute;
@@ -53,6 +54,7 @@ const NFTMedia: FC<any> = ({
   // const { data: _article, refetch, status } = useDecryptArticle2(chks, 10)
   const _article = ''
   let { mp4, thumbnail, isArticle } = useGetThumbnailNContent(nft)
+  const paywallId = useRouter().query.paywallId as any
   const [article, setArticle] = useState(_article ?? '')
   const { data: article2, status: status2, refetch } = useDecryptArticle2(chks, cursor)
   const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
@@ -60,9 +62,8 @@ const NFTMedia: FC<any> = ({
     paywallARP?.paywallAddress ?? '',
     account ?? '',
     '0',
-    nft?.tokenId,
+    paywallId,
   )
-
   useEffect(() => {
     if (!showThumbnail && isArticle && !article?.length) setArticle(_article)
   }, [isArticle, article])
@@ -97,21 +98,23 @@ const NFTMedia: FC<any> = ({
       if (!parseInt(nft?.behindPaywall)) {
         return <RichTextEditor value={mp4} readOnly id="rte" />
       }
-      return (
-        <Flex flexDirection="column">
-          {article?.length ? <RichTextEditor value={article} readOnly id="rte" /> : null}
-          {loaded < 100 ? (
-            <Button
-              onClick={() => {
-                setCursor(cursor + 5)
-                setLoaded(Math.ceil(((cursor + 5) * 100) / chks.length))
-              }}
-            >
-              {t('Fetch Article (%val%% Fetched So Far)', { val: loaded })}
-            </Button>
-          ) : null}
-        </Flex>
-      )
+      if (ongoingSubscription) {
+        return (
+          <Flex flexDirection="column">
+            {article?.length ? <RichTextEditor value={article} readOnly id="rte" /> : null}
+            {loaded < 100 ? (
+              <Button
+                onClick={() => {
+                  setCursor(cursor + 5)
+                  setLoaded(Math.ceil(((cursor + 5) * 100) / chks.length))
+                }}
+              >
+                {t('Fetch Article (%val%% Fetched So Far)', { val: loaded })}
+              </Button>
+            ) : null}
+          </Flex>
+        )
+      }
     }
   }
   return <RoundedImage width={width} height={height} src={media ?? _thumbnail} alt={nft?.tokenId} as={as} {...props} />

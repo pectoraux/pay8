@@ -34,6 +34,7 @@ import {
   getCollectibles,
   getNftAskOrder,
   getNftDiscounted,
+  getProtocolInfo,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -333,7 +334,7 @@ export const useGetDiscounted = (
 ) => {
   const { chainId } = useActiveChainId()
   const { data, status } = useSWR(
-    ['cancan', 'getDiscounted2', account?.toLowerCase() ?? '', chainId],
+    ['cancan', 'useGetDiscounted', account?.toLowerCase() ?? '', chainId],
     async () =>
       getDiscounted(
         collectionAddress,
@@ -454,6 +455,30 @@ export const useGetSubscriptionStatus = (
   )
   return {
     ongoingSubscription: data,
+    status,
+    refetch: mutate,
+  }
+}
+
+export const useGetProtocolInfo = (paywallAddress: string, account: string): any => {
+  const { chainId } = useActiveChainId()
+  const { data, status, mutate } = useSWRImmutable(
+    ['useGetProtocolInfo3', paywallAddress, account?.toLowerCase(), chainId],
+    async () => getProtocolInfo(paywallAddress, account?.toLowerCase(), chainId),
+    {
+      revalidateIfStale: true,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    },
+  )
+  return {
+    protocolInfo: (data as any)?.protocolInfo,
+    dueReceivables: (data as any)?.dueReceivables,
+    bufferTime: (data as any)?.bufferTime,
+    pricePerSecond: (data as any)?.pricePerSecond,
+    paused: (data as any)?.paused,
+    profileIdRequired: (data as any)?.profileIdRequired,
+    protocolId: (data as any)?.protocolId,
     status,
     refetch: mutate,
   }

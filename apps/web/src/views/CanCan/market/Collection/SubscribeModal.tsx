@@ -8,7 +8,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from 'views/Auditors/components/styles'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { usePaywallContract } from 'hooks/useContract'
+import { usePaywallARPFactoryContract, usePaywallContract } from 'hooks/useContract'
 import { useGetPaywallARP } from 'state/cancan/hooks'
 
 interface DepositModalProps {
@@ -47,7 +47,9 @@ const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [isDone, setIsDone] = useState(false)
   const paywallARP = useGetPaywallARP(collection?.id ?? '')
-  const paywallContract = usePaywallContract(paywallARP?.paywallAddress ?? '')
+  const paywallContract = usePaywallContract('0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F')
+  // const paywallContract = usePaywallContract(paywallARP?.paywallAddress ?? '')
+  const paywallARPFactory = usePaywallARPFactoryContract()
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const item = useMemo(
     () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
@@ -79,13 +81,18 @@ const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
         state.pickedOption ? Number(state.pickedOption) + 1 : 0,
         [account],
       ])
-      return callWithGasPrice(paywallContract, 'updateProtocol', [
-        state.nfticketId,
-        state.pickedOption ? Number(state.pickedOption) + 1 : 0,
-        [account],
-      ]).catch((err) => {
-        console.log('handleSubscribe====================>', err)
-      })
+      return (
+        callWithGasPrice(paywallContract, 'updateProtocol', [
+          state.nfticketId,
+          state.pickedOption ? Number(state.pickedOption) + 1 : 0,
+          [account],
+        ])
+          // return callWithGasPrice(paywallARPFactory, 'createGauge', [
+          // ])
+          .catch((err) => {
+            console.log('handleSubscribe====================>', err)
+          })
+      )
     })
     if (receipt?.status) {
       toastSuccess(

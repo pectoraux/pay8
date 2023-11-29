@@ -69,7 +69,6 @@ const ActivityRow: React.FC<any> = ({
     activity?.item?.id ?? activity?.paywall?.id,
     !!activity?.item?.id,
   )
-  console.log('ActivityRow================>', nft, extraNotes)
   const isSeller = nft?.currentSeller?.toLowerCase() === account?.toLowerCase()
   const localeTimestamp = new Date(timestampAsMs).toLocaleString(undefined, {
     year: 'numeric',

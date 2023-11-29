@@ -14,6 +14,9 @@ import {
   Dots,
   HelpIcon,
   useTooltip,
+  Balance,
+  Box,
+  TabMenu,
 } from '@pancakeswap/uikit'
 import { Collection } from 'state/cancan/types'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -25,6 +28,7 @@ import {
   useGetNftShowOnlyOnSale,
   useGetNftShowSearch,
   useGetNftFilters,
+  useGetProtocolInfo,
 } from 'state/cancan/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import CollapsibleCard from 'components/CollapsibleCard'
@@ -56,6 +60,13 @@ import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
 import Partners from './Partners'
+import TotalValueCell from 'views/ARPs/components/PoolsTable/Cells/TotalValueCell'
+import { convertTimeToSeconds } from 'utils/timeHelper'
+import { format } from 'date-fns'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import CreateGaugeModal from './CreateGaugeModal'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -349,11 +360,16 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     setCurrency(currencyInput)
   }, [])
   const { ongoingSubscription, status, refetch } = useGetSubscriptionStatus(
-    paywallARP?.paywallAddress ?? '',
+    '0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F', // paywallARP?.paywallAddress ?? '',
     account ?? '',
     nfticketId ?? '0',
     paywall?.tokenId ?? '',
   )
+  const { protocolInfo, dueReceivables, profileIdRequired, paused, pricePerSecond, bufferTime, protocolId } =
+    useGetProtocolInfo(
+      '0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F', // paywallARP?.paywallAddress ?? '',
+      account,
+    )
   console.log(
     'paywallnfticketId======================>',
     collection,
@@ -362,11 +378,25 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     paywallARP,
     paywall,
   )
+  console.log('protocolInfo============================>', protocolInfo)
   const isAdmin = paywall?.currentSeller?.toLowerCase() === account?.toLowerCase()
   const [onPresentAddItem] = useModal(<AddItemModal collection={collection} paywall={paywall} />)
   const [onPresentAddItem2] = useModal(<AddItemModal partner collection={collection} paywall={paywall} />)
   const [onPresentShip] = useModal(
     <ShipStage variant="product" collection={collection} currency={currency} paywallId={paywall?.id} />,
+  )
+  const [openPresentControlPanel] = useModal(
+    <CreateGaugeModal
+      isAdmin={isAdmin}
+      pool={paywall}
+      paywallARP={paywallARP}
+      currency={currency}
+      paused={paused}
+      protocolId={protocolId}
+      profileRequired={profileIdRequired}
+      pricePerSecond={pricePerSecond}
+      bufferTime={bufferTime}
+    />,
   )
   const [onPresentPartner] = useModal(
     <AddPartnerModal partner collection={collection} paywall={paywall} paywallARP={paywallARP} />,
@@ -429,6 +459,130 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     )
   }
 
+  const getDate = (nextDue) => {
+    try {
+      return Number(nextDue) ? format(convertTimeToSeconds(nextDue), 'MMM do, yyyy HH:mm') : '-'
+    } catch (err) {
+      return '-'
+    }
+  }
+
+  const tabs = (
+    <>
+      <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+        {t('Protocol ID')}
+      </Text>
+      <Text mr="10px" fontSize="14px" color="primary" bold>
+        {parseInt(protocolId?.toString())}
+      </Text>
+      {dueReceivables?.length ? (
+        <>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Amount Due Receivable')}
+          </Text>
+          <Flex height="20px" mt="10px" mr="10px" alignItems="center">
+            <Balance
+              fontSize="16px"
+              value={getBalanceNumber(dueReceivables[0])}
+              decimals={5}
+              unit={` ${currency?.symbol}`}
+            />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Next Due Receivable')}
+          </Text>
+          <Text fontSize="14px" color="primary" bold>
+            {getDate(dueReceivables[1])}
+          </Text>
+        </>
+      ) : null}
+      {protocolInfo?.length ? (
+        <>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Subscription Start')}
+          </Text>
+          <Text fontSize="14px" color="primary" bold>
+            {getDate(protocolInfo[1])}
+          </Text>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Free Trial (minutes)')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            <Balance fontSize="16px" value={parseInt(protocolInfo[5]?.toString()) / 60} decimals={0} />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Amount Receivable')}
+          </Text>
+          <Flex height="20px" mt="10px" mr="10px" alignItems="center">
+            <Balance
+              fontSize="16px"
+              value={getBalanceNumber(protocolInfo[2])}
+              decimals={5}
+              unit={` ${currency?.symbol}`}
+            />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Period Receivable (minutes)')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            <Balance fontSize="16px" value={parseInt(protocolInfo[3]?.toString()) / 60} decimals={0} />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Paid Receivable')}
+          </Text>
+          <Flex height="20px" mt="10px" mr="10px" alignItems="center">
+            <Balance
+              fontSize="16px"
+              value={getBalanceNumber(protocolInfo[4])}
+              decimals={5}
+              unit={` ${currency?.symbol}`}
+            />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('AutoCharge')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            {protocolInfo[10] ? t('Yes') : t('No')}
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Profile ID Required')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            {profileIdRequired ? t('Yes') : t('No')}
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Paused')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            {paused ? t('Yes') : t('No')}
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Price Per Second')}
+          </Text>
+          <Flex height="20px" mt="10px" mr="10px" alignItems="center">
+            <Balance
+              fontSize="16px"
+              value={getBalanceNumber(pricePerSecond)}
+              decimals={5}
+              unit={` ${currency?.symbol}`}
+            />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Buffer Time (minutes)')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            <Balance fontSize="16px" value={parseInt(bufferTime?.toString()) / 60} decimals={0} />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Owner Address')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            <CopyAddress title={truncateHash(paywall?.devaddr_)} account={paywall?.devaddr_} />
+          </Flex>
+        </>
+      ) : null}
+    </>
+  )
   return (isAdmin || ongoingSubscription) && paywall?.mirrors?.length > 0 ? (
     <Flex flexDirection="column">
       {isAdmin ? (
@@ -461,6 +615,13 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
           </Flex>
         </Flex>
       ) : null}
+      <Button mt="5px" ml="5px" onClick={openPresentControlPanel}>
+        {t('Control Panel')}
+      </Button>
+      <TabMenu>
+        {tabs}
+        <></>
+      </TabMenu>
       <Grid
         style={{ padding: '20px' }}
         gridGap="16px"
@@ -476,6 +637,7 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
               <CollectibleLinkCard
                 key={nft?.tokenId}
                 nft={nft}
+                paywallId={paywall?.tokenId}
                 referrer={
                   mirror?.partner && collection?.owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase()
                     ? collection?.owner
