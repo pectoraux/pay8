@@ -6,6 +6,11 @@ export const paywallARPHelperABI = [
         name: '',
         type: 'uint256',
       },
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
     ],
     name: 'collectionIdToPaywallARP',
     outputs: [
@@ -67,69 +72,6 @@ export const paywallARPHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_arp',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_protocolId',
-        type: 'uint256',
-      },
-    ],
-    name: 'getDueReceivable',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'int256',
-        name: '',
-        type: 'int256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tm1',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'tm2',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_period',
-        type: 'uint256',
-      },
-    ],
-    name: 'getNumPeriods',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'pure',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
         name: '_gauge',
         type: 'address',
       },
@@ -182,6 +124,11 @@ export const paywallARPHelperABI = [
         internalType: 'uint256',
         name: '_collectionId',
         type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_tokenId',
+        type: 'string',
       },
     ],
     name: 'updateGauge',

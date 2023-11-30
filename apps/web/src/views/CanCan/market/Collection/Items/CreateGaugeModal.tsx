@@ -73,6 +73,7 @@ const CreateGaugeModal: React.FC<any> = ({
   currency,
   paused,
   protocolId,
+  subscription,
   profileRequired,
   pricePerSecond,
   bufferTime,
@@ -87,8 +88,8 @@ const CreateGaugeModal: React.FC<any> = ({
   const { toastSuccess } = useToast()
   const router = useRouter()
   const stakingTokenContract = useERC20(currency?.address || currAccount?.token?.address || '')
-  const paywallArpContract = usePaywallContract('0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F')
-  // const paywallArpContract = usePaywallContract(paywallARP?.paywallAddress || '')
+  // const paywallArpContract = usePaywallContract('0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F')
+  const paywallArpContract = usePaywallContract(paywallARP?.paywallAddress || '')
   console.log('1mcurrencyy===============>', pool, paywallArpContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
 
@@ -127,6 +128,7 @@ const CreateGaugeModal: React.FC<any> = ({
     collectionId: pool?.collection?.id ?? '',
     profileRequired: profileRequired ? 1 : 0,
     pause: paused ? 1 : 0,
+    subscription: subscription ? 1 : 0,
   }))
   const [nftFilters, setNftFilters] = useState<any>({
     countries: pool?.countries,
@@ -344,6 +346,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [
           parseInt(state.bufferTime) * 60,
           amountReceivable?.toString(),
+          !!state.subscription,
           !!state.profileRequired,
           !!state.pause,
         ]

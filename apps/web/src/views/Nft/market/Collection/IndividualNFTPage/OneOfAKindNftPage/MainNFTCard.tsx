@@ -89,9 +89,9 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
   // const mp4 = chunks?.length > 1 && nft?.images?.split(',').slice(1).join(',')
   // const original = mp4?.length > 400 ? mp4 : ''
   const { itemColor, textColor } = useColor(nft?.superLikes ?? '0', nft?.superDisLikes ?? '0')
-  const askOrder = useGetNftOrder(nft?.collection?.id, nft?.tokenId)?.data as any
+  const askOrder = useGetNftOrder(nft?.collection?.id, nft?.tokenId, isPaywall)?.data as any
   // const askOrder2 = useGetNftOrder(nft?.collection?.id, "Bored-Ape-Yatch-Club-3")?.data as any
-  console.log('askOrder2askOrder2====================>', nft, tokenURIs)
+  // console.log('askOrder2askOrder2====================>', nft, tokenURIs)
   const bidEndTime = parseInt(askOrder?.lastBidTime?.toString() ?? 0) + parseInt(askOrder?.bidDuration?.toString() ?? 0)
   const bidPrice = !parseInt(askOrder?.lastBidTime?.toString() ?? 0)
     ? currentAskPriceAsNumber

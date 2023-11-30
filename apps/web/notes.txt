@@ -9,7 +9,6 @@ time estimates in maarketplace
 task
 superchats
 option for subscriptions confuses yearly & regular
-enabling contract at reviewstage
 
 you cannot withdraw from stake unless agreement is good for all parties
 you have to select the parent stake before applying to a stake partnership

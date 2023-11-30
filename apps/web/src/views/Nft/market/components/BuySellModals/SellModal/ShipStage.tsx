@@ -301,7 +301,10 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
           getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()),
         ]
         console.log('CONFIRM_CREATE_PAYWALL2===========================>', args)
-        return callWithGasPrice(paywallMarketOrdersContract, 'createAskOrder', args)
+        return callWithGasPrice(paywallARPFactoryContract, 'createGauge', [
+          state.tokenId?.split(' ')?.join('-')?.trim(),
+        ])
+          .then(() => callWithGasPrice(paywallMarketOrdersContract, 'createAskOrder', args))
           .then(() => {
             if (state.options?.length > 0) {
               const args2 = [

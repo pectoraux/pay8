@@ -47,8 +47,8 @@ const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [isDone, setIsDone] = useState(false)
   const paywallARP = useGetPaywallARP(collection?.id ?? '')
-  const paywallContract = usePaywallContract('0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F')
-  // const paywallContract = usePaywallContract(paywallARP?.paywallAddress ?? '')
+  // const paywallContract = usePaywallContract('0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F')
+  const paywallContract = usePaywallContract(paywallARP?.paywallAddress ?? '')
   const paywallARPFactory = usePaywallARPFactoryContract()
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const item = useMemo(

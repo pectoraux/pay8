@@ -17,6 +17,8 @@ import {
   useMarketCollectionsContract,
   usePaywallMarketHelperContract,
   useNFTicketHelper,
+  usePaywallMarketOrdersContract,
+  usePaywallMarketTradesContract,
 } from 'hooks/useContract'
 import BigNumber from 'bignumber.js'
 import { useGetLowestPriceFromNft } from 'views/CanCan/market/hooks/useGetLowestPrice'
@@ -202,11 +204,16 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
   const { theme } = useTheme()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
-  const ordersSigner = useMarketOrdersContract()
-  const tradesSigner = useMarketTradesContract()
-  const helpersSigner = useMarketHelperContract()
   const marketCollectionsContract = useMarketCollectionsContract()
+  const marketOrdersContract = useMarketOrdersContract()
+  const marketTradesContract = useMarketTradesContract()
+  const marketHelperContract = useMarketHelperContract()
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
+  const paywallMarketOrdersContract = usePaywallMarketOrdersContract()
+  const paywallMarketTradesContract = usePaywallMarketTradesContract()
+  const ordersSigner = variant === 'paywall' ? paywallMarketOrdersContract : marketOrdersContract
+  const tradesSigner = variant === 'paywall' ? paywallMarketTradesContract : marketTradesContract
+  const helpersSigner = variant === 'paywall' ? paywallMarketHelperContract : marketHelperContract
   const nftMarketContract = useNftMarketContract()
   const [nftFilters, setNftFilters] = useState({
     country: nftToSell?.countries,
@@ -432,7 +439,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           }),
           0,
         )
-        console.log('CONFIRM_ADJUST_PRICE=================>', [
+        console.log('CONFIRM_ADJUST_PRICE=================>', ordersSigner, [
           nftToSell?.currentSeller,
           nftToSell?.tokenId,
           currentAskPrice.toString(),

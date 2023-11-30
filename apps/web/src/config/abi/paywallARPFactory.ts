@@ -13,7 +13,13 @@ export const paywallARPFactoryABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'string',
+        name: '_tokenId',
+        type: 'string',
+      },
+    ],
     name: 'createGauge',
     outputs: [],
     stateMutability: 'nonpayable',

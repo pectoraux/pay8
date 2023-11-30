@@ -16,6 +16,11 @@ export const paywallABI = [
         name: '_collectionId',
         type: 'uint256',
       },
+      {
+        internalType: 'string',
+        name: '_tokenId',
+        type: 'string',
+      },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -26,6 +31,11 @@ export const paywallABI = [
         internalType: 'address',
         name: '',
         type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
       },
     ],
     name: 'addressToProtocolId',
@@ -559,6 +569,32 @@ export const paywallABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'subscription',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'tokenId',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -625,6 +661,11 @@ export const paywallABI = [
       },
       {
         internalType: 'bool',
+        name: '_subscription',
+        type: 'bool',
+      },
+      {
+        internalType: 'bool',
         name: '_profileIdRequired',
         type: 'bool',
       },
@@ -668,7 +709,13 @@ export const paywallABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'string',
+        name: '_tokenId',
+        type: 'string',
+      },
+    ],
     name: 'updateProfileId',
     outputs: [],
     stateMutability: 'nonpayable',

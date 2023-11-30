@@ -89,9 +89,10 @@ const EditStage: React.FC<any> = ({
     variant === 'article'
       ? SellingStage.CONFIRM_CREATE_ASK_ORDER
       : variant === 'paywall'
-      ? SellingStage.CREATE_PAYWALL
+      ? SellingStage.CREATE_PAYWALL2
       : SellingStage.CREATE_ASK_ORDER,
   )
+  console.log('currency?.address==============>', currency?.address)
   const [expand, setExpand] = useState(false)
   const paywallARP = useGetPaywallARP(collection?.id ?? '') as any
   const [step1Complete, setStep1Complete] = useState(!!paywallARP?.paywallAddress)
@@ -270,7 +271,7 @@ const EditStage: React.FC<any> = ({
     onConfirm: () => {
       if (stage === SellingStage.CONFIRM_CREATE_PAYWALL1) {
         return callWithGasPrice(paywallARPFactoryContract, 'createGauge', []).catch((err) =>
-          console.log('CONFIRM_CREATE_PAYWALL1==================>', err),
+          console.log('1CONFIRM_CREATE_PAYWALL==================>', err, paywallARPFactoryContract),
         )
       }
       if (stage === SellingStage.CONFIRM_CREATE_PAYWALL2) {
@@ -296,51 +297,56 @@ const EditStage: React.FC<any> = ({
           currency?.address,
           getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()),
         ]
-        console.log('5CONFIRM_CREATE_PAYWALL2==============>', args)
-        return callWithGasPrice(paywallMarketOrdersContract, 'createAskOrder', args)
-          .then(() => {
-            console.log('6CONFIRM_CREATE_PAYWALL2==============>')
-            if (state.options?.length > 0) {
-              const args2 = [
-                state.tokenId?.split(' ')?.join('-')?.trim(),
-                state.options?.reduce((accum, attr) => [...accum, attr.min], []),
-                state.options?.reduce((accum, attr) => [...accum, attr.max], []),
-                state.options?.reduce((accum, attr) => [...accum, parseInt(attr.value) * 60], []),
-                state.options?.reduce((accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()], []),
-                state.options?.reduce((accum, attr) => [...accum, attr.category], []),
-                state.options?.reduce((accum, attr) => [...accum, attr.element], []),
-                state.options?.reduce((accum, attr) => [...accum, attr.category], []),
-                state.options?.reduce((accum, attr) => [...accum, attr.currency], []),
-              ]
-              console.log('1CONFIRM_CREATE_PAYWALL2==============>', args2)
-              return callWithGasPrice(paywallMarketHelperContract, 'updateOptions', args2).catch((err) =>
-                console.log('rerr2=================>', err),
-              )
-            }
-            return null
-          })
-          .then(() => {
-            let args = [
-              state.tokenId?.split(' ')?.join('-')?.trim(),
-              state.description,
-              state.prices?.split(',')?.filter((val) => !!val),
-              state.start,
-              state.period,
-              variant === 'product' || variant === 'article' ? '0' : '1',
-              !!state.isTradable,
-              `${state.thumbnail},${state.original}`,
-              nftFilters?.country?.toString(),
-              nftFilters?.city?.toString(),
-              nftFilters?.product
-                ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
-                : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
-            ]
-            console.log('7CONFIRM_CREATE_PAYWALL2==============>')
-            return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args).catch((err) =>
-              console.log('CONFIRM_ADD_LOCATION================>', err),
-            )
-          })
-          .catch((err) => console.log('rerr=============>', err))
+        console.log('5CONFIRM_CREATE_PAYWALL2==============>', args, paywallARPFactoryContract, [
+          state.tokenId?.split(' ')?.join('-')?.trim(),
+        ])
+        return (
+          callWithGasPrice(paywallARPFactoryContract, 'createGauge', [state.tokenId?.split(' ')?.join('-')?.trim()])
+            // .then(() => callWithGasPrice(paywallMarketOrdersContract, 'createAskOrder', args))
+            // .then(() => {
+            //   console.log('6CONFIRM_CREATE_PAYWALL2==============>')
+            //   if (state.options?.length > 0) {
+            //     const args2 = [
+            //       state.tokenId?.split(' ')?.join('-')?.trim(),
+            //       state.options?.reduce((accum, attr) => [...accum, attr.min], []),
+            //       state.options?.reduce((accum, attr) => [...accum, attr.max], []),
+            //       state.options?.reduce((accum, attr) => [...accum, parseInt(attr.value) * 60], []),
+            //       state.options?.reduce((accum, attr) => [...accum, getDecimalAmount(attr.unitPrice)?.toString()], []),
+            //       state.options?.reduce((accum, attr) => [...accum, attr.category], []),
+            //       state.options?.reduce((accum, attr) => [...accum, attr.element], []),
+            //       state.options?.reduce((accum, attr) => [...accum, attr.category], []),
+            //       state.options?.reduce((accum, attr) => [...accum, attr.currency], []),
+            //     ]
+            //     console.log('1CONFIRM_CREATE_PAYWALL2==============>', args2)
+            //     return callWithGasPrice(paywallMarketHelperContract, 'updateOptions', args2).catch((err) =>
+            //       console.log('rerr2=================>', err),
+            //     )
+            //   }
+            //   return null
+            // })
+            // .then(() => {
+            //   let args = [
+            //     state.tokenId?.split(' ')?.join('-')?.trim(),
+            //     state.description,
+            //     state.prices?.split(',')?.filter((val) => !!val),
+            //     state.start,
+            //     state.period,
+            //     variant === 'product' || variant === 'article' ? '0' : '1',
+            //     !!state.isTradable,
+            //     `${state.thumbnail},${state.original}`,
+            //     nftFilters?.country?.toString(),
+            //     nftFilters?.city?.toString(),
+            //     nftFilters?.product
+            //       ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
+            //       : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
+            //   ]
+            //   console.log('7CONFIRM_CREATE_PAYWALL2==============>')
+            //   return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args).catch((err) =>
+            //     console.log('CONFIRM_ADD_LOCATION================>', err),
+            //   )
+            // })
+            .catch((err) => console.log('8CONFIRM_CREATE_PAYWALL2=============>', err))
+        )
       }
       if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
         let content
@@ -522,7 +528,7 @@ const EditStage: React.FC<any> = ({
           </Flex>
         </Flex>
       )} */}
-      {stage === SellingStage.CREATE_PAYWALL && (
+      {/* {stage === SellingStage.CREATE_PAYWALL && (
         <Flex flexDirection="row">
           <ProgressSteps steps={[step1Complete]} />
           <Flex flexDirection="column" width="100%" px="16px" pb="16px">
@@ -534,7 +540,7 @@ const EditStage: React.FC<any> = ({
             </Button>
           </Flex>
         </Flex>
-      )}
+      )} */}
       {stage === SellingStage.UPLOAD_MEDIA && <PublishMediaStage state={state} updateValue={updateValue} />}
       {stage === SellingStage.ADD_TASK && (
         <TaskStage

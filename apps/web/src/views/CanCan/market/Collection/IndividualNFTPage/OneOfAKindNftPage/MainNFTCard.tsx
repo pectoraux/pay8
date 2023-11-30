@@ -84,7 +84,8 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
   const contactChannels = collection?.contactChannels?.split(',') ?? []
   const contacts = collection?.contacts?.split(',') ?? []
   const { itemColor, textColor } = useColor(nft?.superLikes ?? '0', nft?.superDisLikes ?? '0')
-  const askOrder = useGetOrder(nft?.collection?.id, nft?.tokenId)?.data as any
+  const askOrder = useGetOrder(nft?.collection?.id, nft?.tokenId, isPaywall)?.data as any
+  console.log('askOrder=======================>', askOrder, nft?.collection?.id, nft?.tokenId)
   const bidEndTime = parseInt(askOrder?.lastBidTime?.toString() ?? 0) + parseInt(askOrder?.bidDuration?.toString() ?? 0)
   const bidPrice = !parseInt(askOrder?.lastBidTime?.toString() ?? 0)
     ? currentAskPriceAsNumber

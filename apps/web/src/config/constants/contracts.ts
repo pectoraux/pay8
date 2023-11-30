@@ -325,11 +325,11 @@ export default {
   },
   paywallARPHelper: {
     56: '0x',
-    4002: '0xC50b869d10c3baDcb81E7e5f0d0D944f5198F150',
+    4002: '0xDA1f5994a7568A6F7dED60E34fD29fAc5f466C23',
   },
   paywallARPFactory: {
     56: '0x',
-    4002: '0x663215F0BD3b8eEEE34549d71E28Edb918067653',
+    4002: '0xD306Bc71120c7Ca5cd5Ce19Bc57f005Bf4F6D264',
   },
   minterFactory: {
     4002: '0x972A806DD4C5536E50F38155d7AfFD04741429a0',

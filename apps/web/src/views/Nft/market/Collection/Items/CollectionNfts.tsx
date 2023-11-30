@@ -12,6 +12,10 @@ import {
   Text,
   useModal,
   Dots,
+  Balance,
+  TabMenu,
+  useTooltip,
+  HelpIcon,
 } from '@pancakeswap/uikit'
 import { Collection } from 'state/cancan/types'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -23,6 +27,7 @@ import {
   useGetNftShowOnlyOnSale,
   useGetNftFilters,
   useGetNftShowSearch,
+  useGetProtocolInfo,
 } from 'state/cancan/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
@@ -35,6 +40,11 @@ import { orderBy } from 'lodash'
 import latinise from '@pancakeswap/utils/latinise'
 import { useCurrency } from 'hooks/Tokens'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { format } from 'date-fns'
+import { convertTimeToSeconds } from 'utils/timeHelper'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import CreateGaugeModal from 'views/CanCan/market/Collection/Items/CreateGaugeModal'
 
 import ShipStage from '../../components/BuySellModals/SellModal/ShipStage'
 import GridPlaceholder from '../../components/GridPlaceholder'
@@ -51,7 +61,8 @@ import AddPartnerModal from '../AddPartnerModal'
 import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -308,7 +319,7 @@ const Content: React.FC<any> = ({ owner, referrerFee, registration }) => {
         {registration.mirrors
           ?.filter((reg) => !!reg.nft)
           ?.map((reg) => {
-            const nft = reg.item
+            const nft = reg.nft
             const currentAskPriceAsNumber = nft && parseFloat(nft?.currentAskPrice)
             return (
               <CollectibleLinkCard
@@ -346,11 +357,35 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     nfticketId ?? '0',
     paywall?.tokenId ?? '',
   )
+  const {
+    protocolInfo,
+    dueReceivables,
+    profileIdRequired,
+    paused,
+    pricePerSecond,
+    bufferTime,
+    protocolId,
+    subscription,
+  } = useGetProtocolInfo(paywallARP?.paywallAddress ?? '', account, paywall?.tokenId ?? '')
   const isAdmin = paywall?.currentSeller?.toLowerCase() === account?.toLowerCase()
   const [onPresentAddItem] = useModal(<AddItemModal collection={collection} paywall={paywall} />)
   const [onPresentAddItem2] = useModal(<AddItemModal partner collection={collection} paywall={paywall} />)
   const [onPresentShip] = useModal(
     <ShipStage variant="product" collection={collection} currency={currency} paywallId={paywall?.id} />,
+  )
+  const [openPresentControlPanel] = useModal(
+    <CreateGaugeModal
+      isAdmin={isAdmin}
+      pool={paywall}
+      paywallARP={paywallARP}
+      currency={currency}
+      paused={paused}
+      protocolId={protocolId}
+      subscription={subscription}
+      profileRequired={profileIdRequired}
+      pricePerSecond={pricePerSecond}
+      bufferTime={bufferTime}
+    />,
   )
   const [onPresentPartner] = useModal(
     <AddPartnerModal partner collection={collection} paywall={paywall} paywallARP={paywallARP} />,
@@ -386,7 +421,163 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
     )
   }
 
-  return (isAdmin || ongoingSubscription) && paywall?.mirrors?.length > 0 ? (
+  const getDate = (nextDue) => {
+    try {
+      return Number(nextDue) ? format(convertTimeToSeconds(nextDue), 'MMM do, yyyy HH:mm') : '-'
+    } catch (err) {
+      return '-'
+    }
+  }
+
+  const tabs = (
+    <>
+      <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+        {t('Protocol ID')}
+      </Text>
+      <Text mr="10px" fontSize="14px" color="primary" bold>
+        {parseInt(protocolId?.toString())}
+      </Text>
+      {dueReceivables?.length ? (
+        <>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Amount Due Receivable')}
+          </Text>
+          <Flex height="20px" mt="10px" mr="10px" alignItems="center">
+            <Balance
+              fontSize="16px"
+              value={getBalanceNumber(dueReceivables[0])}
+              decimals={5}
+              unit={` ${currency?.symbol}`}
+            />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Next Due Receivable')}
+          </Text>
+          <Text fontSize="14px" color="primary" bold>
+            {getDate(dueReceivables[1])}
+          </Text>
+        </>
+      ) : null}
+      {protocolInfo?.length ? (
+        <>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Subscription Start')}
+          </Text>
+          <Text fontSize="14px" color="primary" bold>
+            {getDate(protocolInfo[1])}
+          </Text>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Free Trial (minutes)')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            <Balance fontSize="16px" value={parseInt(protocolInfo[5]?.toString()) / 60} decimals={0} />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Amount Receivable')}
+          </Text>
+          <Flex height="20px" mt="10px" mr="10px" alignItems="center">
+            <Balance
+              fontSize="16px"
+              value={getBalanceNumber(protocolInfo[2])}
+              decimals={5}
+              unit={` ${currency?.symbol}`}
+            />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Period Receivable (minutes)')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            <Balance fontSize="16px" value={parseInt(protocolInfo[3]?.toString()) / 60} decimals={0} />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Paid Receivable')}
+          </Text>
+          <Flex height="20px" mt="10px" mr="10px" alignItems="center">
+            <Balance
+              fontSize="16px"
+              value={getBalanceNumber(protocolInfo[4])}
+              decimals={5}
+              unit={` ${currency?.symbol}`}
+            />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('AutoCharge')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            {protocolInfo[10] ? t('Yes') : t('No')}
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Profile ID Required')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            {profileIdRequired ? t('Yes') : t('No')}
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Subscription Paywall')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            {subscription ? t('Yes') : t('No')}
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Paused')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            {paused ? t('Yes') : t('No')}
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Price Per Second')}
+          </Text>
+          <Flex height="20px" mt="10px" mr="10px" alignItems="center">
+            <Balance
+              fontSize="16px"
+              value={getBalanceNumber(pricePerSecond)}
+              decimals={5}
+              unit={` ${currency?.symbol}`}
+            />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Buffer Time (minutes)')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            <Balance fontSize="16px" value={parseInt(bufferTime?.toString()) / 60} decimals={0} />
+          </Flex>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Owner Address')}
+          </Text>
+          <Flex height="20px" mr="10px" alignItems="center">
+            <CopyAddress title={truncateHash(paywall?.devaddr_)} account={paywall?.devaddr_} />
+          </Flex>
+        </>
+      ) : null}
+    </>
+  )
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'You need to input the id of the NFTicket you got after buying this subscription, so the paywall can check if you have an ongoing subscription or not. In the case you do, it will load the content behind the paywall.',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        "This is the paywall's media and it can be either an image or a video. Its purpose is to convince users to subscribe to the paywall.",
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'right-end',
+    tooltipOffset: [10, 10],
+  })
+  return (
     <Flex flexDirection="column">
       {isAdmin ? (
         <Flex flexDirection="row" justifyContent="center">
@@ -411,54 +602,52 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
           <Button mt="5px" ml="5px" variant="danger" onClick={onPresentRemoveItem}>
             {t('Remove')}
           </Button>
-          <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
-            <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
-              {t('View Paywall')}
-            </LinkExternal>
-          </Flex>
         </Flex>
       ) : null}
-      <Grid
-        style={{ padding: '20px' }}
-        gridGap="16px"
-        gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
-        alignItems="start"
-      >
-        {paywall.mirrors
-          .filter((mirror) => !!mirror.nft)
-          .map((mirror) => {
-            const { nft } = mirror
-            const currentAskPriceAsNumber = nft && parseFloat(nft?.currentAskPrice)
-            return (
-              <CollectibleLinkCard
-                key={nft?.tokenId}
-                nft={nft}
-                referrer={
-                  mirror?.partner && collection?.owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase()
-                    ? collection?.owner
-                    : ADDRESS_ZERO
-                }
-                currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
-              />
-            )
-          })}
-      </Grid>
-    </Flex>
-  ) : !isAdmin ? (
-    <Flex alignItems="center" py="48px" flexDirection="column">
-      {!ongoingSubscription ? (
-        <>
-          <Flex justifyContent="center" ml="10px" alignItems="center" flexDirection="column">
+      <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
+        <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
+          {t('View Paywall')}
+        </LinkExternal>
+      </Flex>
+      <Button mt="5px" ml="5px" onClick={openPresentControlPanel}>
+        {t('Control Panel')}
+      </Button>
+      {!paywall?.canPublish && !isAdmin ? (
+        <Flex flexDirection="row" mt="10px" justifyContent="center" alignItems="center">
+          <Button mr="18px" onClick={onPresentAddItem2}>
+            {t('Add')}
+          </Button>
+          <Button variant="success" onClick={onPresentPartner}>
+            {t('Partner')}
+          </Button>
+        </Flex>
+      ) : null}
+      <TabMenu>
+        {tabs}
+        <></>
+      </TabMenu>
+      {!ongoingSubscription && !isAdmin ? (
+        <Flex mt="10px" flexDirection="column">
+          <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column" ref={targetRef2}>
             <NFTMedia key={paywall.tokenId} nft={paywall} width={440} height={440} />
+            {tooltipVisible2 && tooltip2}
             <Divider />
-            <Input
-              type="text"
-              scale="sm"
-              value={nfticketId}
-              placeholder={t('input your nfticket id')}
-              onChange={(e) => setNfticketId(e.target.value)}
-            />
-            <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
+            <Flex ref={targetRef}>
+              <Input
+                type="text"
+                scale="sm"
+                value={nfticketId}
+                placeholder={t('input your nfticket id')}
+                onChange={(e) => setNfticketId(e.target.value)}
+              />
+              {tooltipVisible && tooltip}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
+            <LinkExternal
+              mt="8px"
+              href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`}
+              bold
+            >
               {t('View Paywall')}
             </LinkExternal>
           </Flex>
@@ -480,46 +669,36 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
               <Button onClick={onPresentSubscribe}>{t('Start Subscription')}</Button>
             </Flex>
           </Flex>
-        </>
-      ) : null}
-      {!paywall?.canPublish ? (
-        <Flex alignItems="center" mt="18px" flexDirection="row">
-          <Button mr="18px" onClick={onPresentAddItem2}>
-            {t('Add')}
-          </Button>
-          <Button variant="success" onClick={onPresentPartner}>
-            {t('Partner')}
-          </Button>
         </Flex>
       ) : null}
-    </Flex>
-  ) : (
-    <Flex alignItems="center" py="48px" flexDirection="column">
-      <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
-        <NFTMedia key={paywall.tokenId} nft={paywall} width={440} height={440} />
-        <LinkExternal href={`${nftsBaseUrl}/collections/${collection?.id}/paywall/${paywall?.tokenId}`} bold>
-          {t('View Paywall')}
-        </LinkExternal>
-      </Flex>
-      <Flex justifyContent="center" alignItems="center">
-        <CurrencyInputPanel
-          showInput={false}
-          currency={currency ?? defaultCurrency}
-          onCurrencySelect={handleInputSelect}
-          otherCurrency={currency ?? defaultCurrency}
-          id={collection?.id}
-        />
-      </Flex>
-      <Button mt="5px" onClick={onPresentAddItem}>
-        {t('Add Existing Item')}
-      </Button>
-      <Button mt="5px" ml="5px" onClick={onPresentShip}>
-        {t('Add New Item')}
-      </Button>
-      <Button variant="success" ml="5px" onClick={onPresentPartner}>
-        {t('Add Partner')}
-      </Button>
-      <Text fontWeight={600}>{t('Paywall is empty')}</Text>
+      <Grid
+        style={{ padding: '20px' }}
+        gridGap="16px"
+        gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
+        alignItems="start"
+      >
+        {(ongoingSubscription || isAdmin) && paywall?.mirrors?.length > 0
+          ? paywall.mirrors
+              .filter((mirror) => !!mirror.nft)
+              .map((mirror) => {
+                const nft = mirror.nft
+                const currentAskPriceAsNumber = nft && parseFloat(nft?.currentAskPrice)
+                return (
+                  <CollectibleLinkCard
+                    key={nft?.tokenId}
+                    nft={nft}
+                    paywallId={paywall?.tokenId}
+                    referrer={
+                      mirror?.partner && collection?.owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase()
+                        ? collection?.owner
+                        : ADDRESS_ZERO
+                    }
+                    currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
+                  />
+                )
+              })
+          : null}
+      </Grid>
     </Flex>
   )
 }

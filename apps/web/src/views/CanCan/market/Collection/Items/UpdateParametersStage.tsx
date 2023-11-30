@@ -48,7 +48,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'This sets a lower bound (in minutes) on the number of time that must separate the moment account owners make withdrawals and the expiration time of their bounties.',
+        "This sets a buffer time after which a user is considered unsubscribed. If you set your buffer time to 10 minutes for instance and a user's subscription ends at 10:30, that user will still have access to your paywall's content until 10:40.",
       )}
     </Text>
   )
@@ -74,20 +74,24 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     </Text>
   )
   const TooltipComponent7 = () => (
-    <Text>{t('This sets the percentage your ARP will be taking on all account deposits.')}</Text>
+    <Text>
+      {t(
+        'This can be used to either pause the paywall or open it up for subscriptions. Whenever a paywall is paused, users are no longer able to create subscription accounts on it;  however users that already have an account can use it to renew their subscriptions as many times as the maximum supply on your paywall allows.',
+      )}
+    </Text>
   )
   const TooltipComponent8 = () => (
-    <Text>{t('This sets the percentage your ARP will be taking on all account withdrawals.')}</Text>
+    <Text>
+      {t(
+        'This sets whether your paywall is a subscription or not. A subscription paywall does not charge users for every payment cycle. In the case of rent payments for instance, you should set this parameter to No so it keeps counting users rent every payment cycle.',
+      )}
+    </Text>
   )
   const TooltipComponent9 = () => (
     <Text>{t('This sets whether you want to require account owners to attach their profiles to their accounts.')}</Text>
   )
   const TooltipComponent10 = () => (
-    <Text>
-      {t(
-        'This sets an upper bound on the number of accounts that can ever be create by this ARP contract. Once this parameter is set, it can no longer be changed. You can leave it at 0 to be able to create an infinite amount of accounts.',
-      )}
-    </Text>
+    <Text>{t('This sets a price per second for paywalls willing to partner with yours.')}</Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -186,9 +190,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Partnership Price Per Second')}
-        </Text>
+        <Flex ref={targetRef10}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Partnership Price Per Second')}
+          </Text>
+          {tooltipVisible10 && tooltip10}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
         <Input
           type="text"
           scale="sm"
@@ -197,6 +205,26 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           placeholder={t('input price per second of partnership')}
           onChange={handleChange}
         />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <StyledItemRow>
+          <Flex ref={targetRef8} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+              {t('Is Subscription?')}
+            </Text>
+            {tooltipVisible8 && tooltip8}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
+          <ButtonMenu
+            scale="xs"
+            variant="subtle"
+            activeIndex={state.subscription ? 1 : 0}
+            onItemClick={handleRawValueChange('subscription')}
+          >
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
@@ -220,10 +248,12 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Flex paddingRight="50px">
+          <Flex ref={targetRef7} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
               {t('Pause Paywall')}
             </Text>
+            {tooltipVisible7 && tooltip7}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
           </Flex>
           <ButtonMenu
             scale="xs"

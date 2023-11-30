@@ -13,6 +13,7 @@ import {
   getNftMarketOrdersAddress,
   getPaywallARPHelperAddress,
   getPaywallMarketHelperAddress,
+  getPaywallMarketOrdersAddress,
 } from 'utils/addressHelpers'
 import { publicClient } from 'utils/wagmi'
 import { Token } from '@pancakeswap/sdk'
@@ -54,6 +55,7 @@ import { keccak256 } from 'viem'
 import { minterABI } from 'config/abi/minter'
 import { nftMarketOrdersABI } from 'config/abi/nftMarketOrders'
 import { paywallARPHelperABI } from 'config/abi/paywallARPHelper'
+import { paywallMarketOrdersABI } from 'config/abi/paywallMarketOrders'
 
 export const getTag = async () => {
   try {
@@ -1196,6 +1198,27 @@ export const getAskOrder = async (collectionAddress, tokenId, chainId = 4002) =>
   }
 }
 
+export const getPaywallAskOrder = async (collectionAddress, tokenId, chainId = 4002) => {
+  try {
+    const bscClient = publicClient({ chainId: chainId })
+    const [askOrder] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getPaywallMarketOrdersAddress(),
+          abi: paywallMarketOrdersABI,
+          functionName: 'getAskDetails',
+          args: [collectionAddress, keccak256(tokenId)],
+        },
+      ],
+    })
+    return askOrder.result
+  } catch (error) {
+    console.error('getAskOrder===========>Failed to fetch nft order', error)
+    return []
+  }
+}
+
 export const getNftAskOrder = async (collectionAddress, tokenId, chainId = 4002) => {
   try {
     const bscClient = publicClient({ chainId: chainId })
@@ -1238,17 +1261,22 @@ export const getSubscriptionStatus = async (paywallAddress, account, nfticketId,
   }
 }
 
-export const getProtocolInfo = async (paywallAddress, account, chainId = 4002) => {
+export const getProtocolInfo = async (paywallAddress, account, tokenId, chainId = 4002) => {
   try {
     const bscClient = publicClient({ chainId: chainId })
-    const [protocolId] = await bscClient.multicall({
+    const [protocolId, subscription] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
         {
           address: paywallAddress,
           abi: paywallABI,
           functionName: 'addressToProtocolId',
-          args: [account],
+          args: [account, tokenId],
+        },
+        {
+          address: paywallAddress,
+          abi: paywallABI,
+          functionName: 'subscription',
         },
       ],
     })
@@ -1298,6 +1326,7 @@ export const getProtocolInfo = async (paywallAddress, account, chainId = 4002) =
       pricePerSecond: pricePerSecond.result,
       bufferTime: bufferTime.result,
       protocolId: protocolId.result,
+      subscription: subscription.result,
     }
   } catch (error) {
     console.error('===========>Failed to fetch protocolInfo', error)

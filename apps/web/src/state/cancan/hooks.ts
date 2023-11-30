@@ -35,6 +35,7 @@ import {
   getNftAskOrder,
   getNftDiscounted,
   getProtocolInfo,
+  getPaywallAskOrder,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -132,19 +133,25 @@ export const useGetExtraNote = (collectionId, buyer, tokenId, isItem) => {
   }
 }
 
-export const useGetOrder = (collectionId, tokenId) => {
+export const useGetOrder = (collectionId, tokenId, isPaywall = false) => {
   const { chainId } = useActiveChainId()
-  const { data, status } = useSWR(['getOrder', collectionId, tokenId, chainId], async () =>
-    getAskOrder(collectionId, tokenId, chainId),
-  )
+  const { data, status } = useSWR(['getOrder', collectionId, tokenId, isPaywall, chainId], async () => {
+    if (isPaywall) {
+      return getPaywallAskOrder(collectionId, tokenId, chainId)
+    }
+    return getAskOrder(collectionId, tokenId, chainId)
+  })
   return { data, status }
 }
 
-export const useGetNftOrder = (collectionId, tokenId) => {
+export const useGetNftOrder = (collectionId, tokenId, isPaywall = false) => {
   const { chainId } = useActiveChainId()
-  const { data, status } = useSWR(['useGetNftOrder', collectionId, tokenId, chainId], async () =>
-    getNftAskOrder(collectionId, tokenId, chainId),
-  )
+  const { data, status } = useSWR(['useGetNftOrder', collectionId, tokenId, chainId], async () => {
+    if (isPaywall) {
+      return getPaywallAskOrder(collectionId, tokenId, chainId)
+    }
+    return getNftAskOrder(collectionId, tokenId, chainId)
+  })
   return { data, status }
 }
 
@@ -460,11 +467,11 @@ export const useGetSubscriptionStatus = (
   }
 }
 
-export const useGetProtocolInfo = (paywallAddress: string, account: string): any => {
+export const useGetProtocolInfo = (paywallAddress: string, account: string, tokenId): any => {
   const { chainId } = useActiveChainId()
-  const { data, status, mutate } = useSWRImmutable(
-    ['useGetProtocolInfo3', paywallAddress, account?.toLowerCase(), chainId],
-    async () => getProtocolInfo(paywallAddress, account?.toLowerCase(), chainId),
+  const { data, status, mutate } = useSWR(
+    ['useGetProtocolInfo4', paywallAddress, account?.toLowerCase(), tokenId, chainId],
+    async () => getProtocolInfo(paywallAddress, account?.toLowerCase(), tokenId, chainId),
     {
       revalidateIfStale: true,
       revalidateOnFocus: true,
@@ -479,6 +486,7 @@ export const useGetProtocolInfo = (paywallAddress: string, account: string): any
     paused: (data as any)?.paused,
     profileIdRequired: (data as any)?.profileIdRequired,
     protocolId: (data as any)?.protocolId,
+    subscription: (data as any)?.subscription,
     status,
     refetch: mutate,
   }

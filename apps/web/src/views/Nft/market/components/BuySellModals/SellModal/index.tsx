@@ -17,6 +17,8 @@ import {
   useNftMarketHelperContract,
   useMarketCollectionsContract,
   usePaywallMarketHelperContract,
+  usePaywallMarketOrdersContract,
+  usePaywallMarketTradesContract,
 } from 'hooks/useContract'
 import { NftToken } from 'state/cancan/types'
 import { useGetLowestPriceFromNft } from 'views/CanCan/market/hooks/useGetLowestPrice'
@@ -191,11 +193,16 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
   const { theme } = useTheme()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
-  const ordersSigner = useNftMarketOrdersContract()
-  const tradesSigner = useNftMarketTradesContract()
-  const helpersSigner = useNftMarketHelperContract()
-  const marketCollectionsContract = useMarketCollectionsContract()
+  const marketOrdersContract = useNftMarketOrdersContract()
+  const marketTradesContract = useNftMarketTradesContract()
+  const marketHelperContract = useNftMarketHelperContract()
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
+  const paywallMarketOrdersContract = usePaywallMarketOrdersContract()
+  const paywallMarketTradesContract = usePaywallMarketTradesContract()
+  const ordersSigner = variant === 'paywall' ? paywallMarketOrdersContract : marketOrdersContract
+  const tradesSigner = variant === 'paywall' ? paywallMarketTradesContract : marketTradesContract
+  const helpersSigner = variant === 'paywall' ? paywallMarketHelperContract : marketHelperContract
+  const marketCollectionsContract = useMarketCollectionsContract()
   const nftMarketContract = useNftMarketContract()
   const [nftFilters, setNftFilters] = useState({
     country: nftToSell?.countries,
@@ -430,7 +437,6 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
         )
       }
       if (stage === SellingStage.CONFIRM_ADJUST_OPTIONS) {
-        const contract = variant === 'paywall' ? paywallMarketHelperContract : helpersSigner
         const args =
           variant === 'paywall'
             ? [
@@ -459,7 +465,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
                 state.options?.reduce((accum, attr) => [...accum, attr.currency], []) || [],
               ]
         console.log('CONFIRM_ADJUST_OPTIONS===================>', args)
-        return callWithGasPrice(contract, 'updateOptions', args).catch((err) =>
+        return callWithGasPrice(helpersSigner, 'updateOptions', args).catch((err) =>
           console.log('CONFIRM_ADJUST_OPTIONS=================>', err),
         )
       }
