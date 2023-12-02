@@ -101,6 +101,57 @@ export const stakeMarketBribeABI = [
     inputs: [
       {
         internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: '_safeTransfer',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: '_safeTransferFrom',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '_token',
         type: 'address',
       },
@@ -158,6 +209,19 @@ export const stakeMarketBribeABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'deposit',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -201,7 +265,7 @@ export const stakeMarketBribeABI = [
     ],
     name: 'getRewardForOwner',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -262,7 +326,7 @@ export const stakeMarketBribeABI = [
     ],
     name: 'notifyRewardAmount',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -368,6 +432,29 @@ export const stakeMarketBribeABI = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: 'safeTransfer',
+    outputs: [],
+    stateMutability: 'payable',
     type: 'function',
   },
   {

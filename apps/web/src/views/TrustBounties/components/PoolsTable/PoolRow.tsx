@@ -15,7 +15,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
-  const token = useCurrency(pool?.tokenAddress)
+  const token = useCurrency(pool?.isNativeCoin ? pool?.token?.symbol : pool?.tokenAddress)
   console.log('bountiespool=================>', pool)
   const tabs = (
     <>

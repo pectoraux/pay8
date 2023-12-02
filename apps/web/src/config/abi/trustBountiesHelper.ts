@@ -246,12 +246,6 @@ export const trustBountiesHelperABI = [
       },
       {
         indexed: false,
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-      {
-        indexed: false,
         internalType: 'string',
         name: 'avatar',
         type: 'string',
@@ -378,19 +372,6 @@ export const trustBountiesHelperABI = [
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'WETH',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'uint256',
@@ -446,6 +427,11 @@ export const trustBountiesHelperABI = [
       {
         internalType: 'string',
         name: '_content',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '_tag',
         type: 'string',
       },
     ],
@@ -567,6 +553,19 @@ export const trustBountiesHelperABI = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'deposit',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -784,11 +783,6 @@ export const trustBountiesHelperABI = [
         internalType: 'uint256',
         name: 'collectionId',
         type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
       },
       {
         internalType: 'string',
@@ -1172,7 +1166,7 @@ export const trustBountiesHelperABI = [
     ],
     name: 'safeTransfer',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -1212,19 +1206,6 @@ export const trustBountiesHelperABI = [
       },
     ],
     name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_WETH',
-        type: 'address',
-      },
-    ],
-    name: 'setWETH',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

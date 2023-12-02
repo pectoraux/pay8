@@ -21,7 +21,6 @@ import {
 } from '@pancakeswap/uikit'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import snapshot from '@snapshot-labs/snapshot.js'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
@@ -46,6 +45,9 @@ import BigNumber from 'bignumber.js'
 import { useGetRequiresApproval } from 'state/trustbounties/hooks'
 import { getStakeMarketBribeAddress } from 'utils/addressHelpers'
 import { useApprovePool } from 'views/TrustBounties/hooks/useApprove'
+import { FetchStatus } from 'config/constants/types'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import Layout from '../components/Layout'
 import VoteDetailsModal from '../components/VoteDetailsModal'
@@ -53,9 +55,6 @@ import { ADMINS } from '../config'
 import { makeChoice, MINIMUM_CHOICES } from './Choices'
 import { getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
-import { FetchStatus } from 'config/constants/types'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
@@ -94,7 +93,7 @@ const CreateProposal = () => {
   const { bountyId, decimals, tokenAddress } = useRouter().query
   const [nftFilters, setNftFilters] = useState<any>({})
   const stakingTokenContract = useERC20(tokenAddress || DEFAULT_TFIAT)
-  console.log('stakingTokenContract===============>', stakingTokenContract, tokenAddress)
+  console.log('stakingTokenContract===============>', stakingTokenContract, tokenAddress, trustBountiesContract)
   const { status, needsApproval, refetch } = useGetRequiresApproval(
     stakingTokenContract,
     account,
@@ -128,7 +127,7 @@ const CreateProposal = () => {
             state.body,
             nftFilters.product?.toString() ?? '',
           ]
-      console.log('!createClaim===============>', method, args, nftFilters)
+      console.log('!createClaim===============>', trustBountiesContract, method, args, nftFilters)
       return callWithGasPrice(trustBountiesContract, method, args).catch((err) => {
         setPendingFb(false)
         console.log('err0=================>', err)

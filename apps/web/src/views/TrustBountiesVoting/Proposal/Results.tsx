@@ -151,7 +151,7 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
                 endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
                 isLoading={pendingTx || pendingFb}
               >
-                {t('Apply Results')}
+                {t('Notify TrustBounty')}
               </Button>
             ) : (
               <>

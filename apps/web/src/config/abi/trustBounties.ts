@@ -292,6 +292,19 @@ export const trustBountiesABI = [
         type: 'uint256',
       },
     ],
+    name: 'cleanUpClaims',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
     name: 'concede',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -508,6 +521,25 @@ export const trustBountiesABI = [
         type: 'uint256',
       },
     ],
+    name: 'getLatestClaimId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
     name: 'getOwner',
     outputs: [
       {
@@ -687,11 +719,6 @@ export const trustBountiesABI = [
         internalType: 'uint256',
         name: '_collectionId',
         type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '_newOwner',
-        type: 'address',
       },
       {
         internalType: 'string',

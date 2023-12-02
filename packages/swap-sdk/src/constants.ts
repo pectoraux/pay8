@@ -215,7 +215,7 @@ export const NATIVE = {
   },
   [ChainId.FANTOM_TESTNET]: {
     name: 'Fantom Chain Native Token',
-    symbol: 'tBNB',
+    symbol: 'tFTM',
     decimals: 18,
   },
   [ChainId.ARBITRUM_ONE]: ETHER,

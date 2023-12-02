@@ -1,10 +1,10 @@
-import { Token } from '@pancakeswap/sdk'
+import { Native, Token } from '@pancakeswap/sdk'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_TRUSTBOUNTIES } from 'config/constants/endpoints'
 import { publicClient } from 'utils/wagmi'
 import { bountyField, approvalField } from './queries'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
+import { DEFAULT_INPUT_CURRENCY, DEFAULT_NATIVE_CURRENCY } from 'config/constants/exchange'
 import { trustBountiesABI } from 'config/abi/trustBounties'
 import { getCollection } from 'state/cancan/helpers'
 import {
@@ -85,6 +85,22 @@ export const getIsLocked = async (bountyId, chainId) => {
   return isLocked.result
 }
 
+export const getBounty = async (bountyId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [bounty] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getTrustBountiesAddress(),
+        abi: trustBountiesABI,
+        functionName: 'bountyInfo',
+        args: [BigInt(bountyId)],
+      },
+    ],
+  })
+  return bounty.result
+}
+
 export const getLatestClaim = async (bountyId, attackerId, chainId) => {
   const bscClient = publicClient({ chainId: chainId })
 
@@ -103,6 +119,39 @@ export const getLatestClaim = async (bountyId, attackerId, chainId) => {
     return latestClaim.result
   }
   return null
+}
+
+export const getLatestClaim2 = async (bountyId, chainId) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [latestClaimId] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getTrustBountiesAddress(),
+        abi: trustBountiesABI,
+        functionName: 'getLatestClaimId',
+        args: [BigInt(bountyId)],
+      },
+    ],
+  })
+  let latestClaim
+  if (parseInt(latestClaimId.result?.toString()) > 0) {
+    const [_latestClaim] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getTrustBountiesAddress(),
+          abi: trustBountiesABI,
+          functionName: 'claims',
+          args: [BigInt(bountyId), BigInt(parseInt(latestClaimId.result?.toString()) - 1)],
+        },
+      ],
+    })
+    latestClaim = _latestClaim.result
+    console.log('1useGetLatestClaim2===============>', latestClaimId, _latestClaim)
+  }
+  console.log('2useGetLatestClaim2===============>', latestClaimId, bountyId)
+  return latestClaim
 }
 
 export const getEarned = async (veAddress, tokenId, chainId) => {
@@ -139,6 +188,13 @@ export const getEarned = async (veAddress, tokenId, chainId) => {
 
 export const getTokenData = async (tokenAddress, chainId) => {
   const bscClient = publicClient({ chainId: chainId })
+  if (tokenAddress?.isNative) {
+    return {
+      name: tokenAddress.name,
+      symbol: tokenAddress.symbol,
+      decimals: tokenAddress.decimals,
+    }
+  }
   const [name, symbol, decimals] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -257,7 +313,10 @@ export const fetchBounties = async (
           ],
         })
         const owner = bountyInfo.result[0]
-        const token = bountyInfo.result[1]
+        const token =
+          bountyInfo.result[1]?.toLowerCase() === getTrustBountiesHelperAddress()?.toLowerCase()
+            ? Native.onChain(chainId)
+            : bountyInfo.result[1]
         const ve = bountyInfo.result[2]
         const claimableBy = bountyInfo.result[3]
         const minToClaim = bountyInfo.result[4]
@@ -296,15 +355,17 @@ export const fetchBounties = async (
           sousId: bountyId,
           ve,
           tokenAddress: token,
-          isNativeCoin: token.toLowerCase() === DEFAULT_INPUT_CURRENCY,
-          token: new Token(
-            chainId,
-            token,
-            decimals ?? 18,
-            symbol,
-            name,
-            `https://tokens.payswap.org/images/${token}.png`,
-          ),
+          isNativeCoin: !!(token as any)?.isNative,
+          token: (token as any)?.isNative
+            ? token
+            : new Token(
+                chainId,
+                token as any,
+                decimals ?? 18,
+                symbol,
+                name,
+                `https://tokens.payswap.org/images/${token}.png`,
+              ),
           owner,
           claims,
           friendlyClaims,

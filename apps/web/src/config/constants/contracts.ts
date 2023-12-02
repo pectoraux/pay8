@@ -432,7 +432,7 @@ export default {
     56: '0x',
   },
   stakemarketBribe: {
-    4002: '0xE12F90F08916Dd587bb399ea09488ffA36CF17Ab',
+    4002: '0x1b947A45Ad79438d5F47f45C920B9f1Dbe26f802',
     56: '0x',
   },
   bettingHelper: {
@@ -448,15 +448,15 @@ export default {
     56: '0x',
   },
   trustbounties: {
-    4002: '0x12feADd609596cf4f441920AF561ad80bD9c1be7',
+    4002: '0x855413AC9576A43f16C811777133FedFC971697C',
     56: '0x',
   },
   trustbountiesHelper: {
-    4002: '0xD4c16ADB9E07ADF9Aef50376888BFbD8690e06A5',
+    4002: '0xf824a961659D39629Df27272569Ee66A061EB76e',
     56: '0x',
   },
   trustbountiesvoter: {
-    4002: '0x8363970f0cca2Bb19a7717a3DE6bEC5e61f7ec17',
+    4002: '0x2CD8f718BD6784873454d6288119d51DfcAe6FA4',
     56: '0x',
   },
   invoiceFactory: {

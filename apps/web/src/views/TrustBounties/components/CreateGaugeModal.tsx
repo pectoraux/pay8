@@ -20,7 +20,7 @@ import { differenceInSeconds } from 'date-fns'
 import { fetchBountiesAsync } from 'state/trustbounties'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { DEFAULT_NATIVE_CURRENCY, DEFAULT_TFIAT } from 'config/constants/exchange'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -86,7 +86,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
   const { chainId } = useActiveChainId()
   const trustBountiesContract = useTrustBountiesContract()
   const trustBountiesHelperContract = useTrustBountiesHelperContract()
-  const stakingTokenContract = useERC20(pool?.tokenAddress || '')
+  const stakingTokenContract = useERC20((pool?.isNativeCoin ? DEFAULT_NATIVE_CURRENCY : pool?.tokenAddress) ?? '')
   const defaultTokenContract = useERC20(DEFAULT_TFIAT || '')
   const router = useRouter()
   const fromAccelerator = router.pathname.includes('accelerator')
@@ -97,14 +97,14 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
   const fromRamps = router.pathname.includes('ramps')
   const fromTransfers = router.pathname.includes('transfers')
 
-  console.log('ppool==============>', pool, adminARP)
+  console.log('ppool==============>', pool, adminARP, stakingTokenContract)
 
   const [state, setState] = useState<any>(() => ({
     owner: pool?.owner,
     bountyId: pool?.id,
     profileId: pool?.profileId ?? '',
     tokenId: '',
-    nativeCoin: 0,
+    nativeCoin: pool?.isNativeCoin,
     amountPayable: '',
     waitingPeriod: '',
     amountReceivable: '',
@@ -298,10 +298,10 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         break
     }
   }
-
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
       try {
+        if (pool?.isNativeCoin) return false
         return (
           requiresApproval(stakingTokenContract, account, trustBountiesContract.address) &&
           requiresApproval(defaultTokenContract, account, trustBountiesContract.address) &&
@@ -352,6 +352,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       }
       if (stage === LockStage.CONFIRM_ADD_BALANCE) {
         const amount = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
+        const contract = state.nativeCoin ? trustBountiesHelperContract : trustBountiesContract
         const method = state.nativeCoin ? 'addBalanceETH' : 'addBalance'
         const args = state.nativeCoin
           ? [pool?.id, state.sourceAddress, state.tokenId]
@@ -361,8 +362,13 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
               state.tokenId,
               parseInt(pool?.isNFT) ? state.amountReceivable : amount.toString(),
             ]
-        console.log('CONFIRM_ADD_BALANCE===============>', method, args)
-        return callWithGasPrice(trustBountiesContract, method, args).catch((err) =>
+        console.log('CONFIRM_ADD_BALANCE===============>', contract, method, args, amount.toString())
+        if (state.nativeCoin) {
+          return callWithGasPrice(contract, method, args, {
+            value: amount.toString(),
+          }).catch((err) => console.log('1CONFIRM_ADD_BALANCE===============>', err))
+        }
+        return callWithGasPrice(contract, method, args).catch((err) =>
           console.log('CONFIRM_ADD_BALANCE===============>', err),
         )
       }
@@ -390,12 +396,9 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       }
       if (stage === LockStage.CONFIRM_APPLY_RESULTS) {
         const amount = getDecimalAmount(state.amountPayable ? state.amountPayable : '0', currency?.decimals)
-        const method = state.nativeCoin ? 'applyClaimResultsETH' : 'applyClaimResults'
-        const args = state.nativeCoin
-          ? [pool?.id, state.claimId, state.title, state.content, state.customTags]
-          : [pool?.id, state.claimId, amount.toString(), state.title, state.content, state.customTags]
-        console.log('CONFIRM_APPLY_RESULTS===============>', method, args)
-        return callWithGasPrice(trustBountiesContract, method, args).catch((err) =>
+        const args = [pool?.id, state.claimId, amount.toString(), state.title, state.content, state.customTags]
+        console.log('CONFIRM_APPLY_RESULTS===============>', args)
+        return callWithGasPrice(trustBountiesContract, 'applyClaimResults', args).catch((err) =>
           console.log('CONFIRM_APPLY_RESULTS===============>', err),
         )
       }
@@ -561,7 +564,9 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           <Flex mb="8px" justifyContent="center" alignSelf="center">
             <LinkExternal
               color="failure"
-              href={`/trustbounties/voting/create?bountyId=${pool?.id}&tokenAddress=${pool?.token?.address}&decimals=${pool?.token?.decimals}`}
+              href={`/trustbounties/voting/create?bountyId=${pool?.id}&tokenAddress=${
+                pool?.isNativeCoin ? DEFAULT_TFIAT : pool?.token?.address
+              }&decimals=${pool?.isNativeCoin ? 18 : pool?.token?.decimals}`}
               bold
             >
               {t('START LITIGATIONS')}

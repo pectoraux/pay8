@@ -13,7 +13,16 @@ import {
   makePoolWithUserDataLoadingSelector,
   poolsWithFilterSelector,
 } from './selectors'
-import { getBalanceSource, getEarned, getIsLocked, getLatestClaim, getTag } from './helpers'
+import {
+  getBalanceSource,
+  getBounty,
+  getEarned,
+  getIsLocked,
+  getLatestClaim,
+  getLatestClaim2,
+  getTag,
+  getTokenData,
+} from './helpers'
 import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
@@ -67,11 +76,12 @@ export const useFetchPublicPoolsData = () => {
   const fromContributors = router.pathname.includes('contributors')
   const fromTransfers = router.pathname.includes('transfers')
 
-  const { mutate } = useSWR(
+  const { mutate, status } = useSWR(
     ['/trustbounties', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
+          console.log('1exkuting============>')
           dispatch(
             fetchBountiesAsync({
               fromAccelerator,
@@ -86,20 +96,20 @@ export const useFetchPublicPoolsData = () => {
           )
         })
       }
-
       fetchPoolsDataWithFarms()
     },
     {
       revalidateOnFocus: false,
       revalidateIfStale: true,
-      revalidateOnReconnect: false,
+      revalidateOnReconnect: true,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 3,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )
   return {
     refresh: mutate,
+    status,
   }
 }
 
@@ -153,6 +163,22 @@ export const useGetIsLocked = (bountyId) => {
   return data
 }
 
+export const useGetTokenData = (tokenAddress) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetTokenData1', tokenAddress, chainId], async () => getTokenData(tokenAddress, chainId))
+  return { data, refetch, status }
+}
+
+export const useGetBounty = (bountyId) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['useGetBounty', bountyId, chainId], async () => getBounty(bountyId, chainId))
+  return data
+}
+
 export const useGetBalanceSource = (bountyId) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWR(['getBalanceSource', bountyId, chainId], async () => getBalanceSource(bountyId, chainId))
@@ -177,6 +203,12 @@ export const useGetLatestClaim = (bountyId, attackerId) => {
   const { data } = useSWR(['useGetLatestClaim1', bountyId, attackerId, chainId], async () =>
     getLatestClaim(bountyId, attackerId, chainId),
   )
+  return data
+}
+
+export const useGetLatestClaim2 = (bountyId) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['useGetLatestClaim3', bountyId, chainId], async () => getLatestClaim2(bountyId, chainId))
   return data
 }
 

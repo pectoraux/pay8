@@ -392,7 +392,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      {!needsApproval || state.isNFT ? (
+      {!needsApproval || state.isNFT || state.collateral === ADDRESS_ZERO ? (
         <>
           <Flex alignSelf="center" mt={20}>
             <Flex ref={targetRef}>
@@ -589,7 +589,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {needsApproval && !state.isNFT
+            {needsApproval && !state.isNFT && state.collateral !== ADDRESS_ZERO
               ? t('This will enable the trust bounty to withdraw from your wallet')
               : t(
                   'This will create a new bounty for you. Bounties/TrustBounties are a collateralization mechanism through which businesses or individuals lock a certain amount of collateral (in the form of fungible/non-fungible tokens) for a certain amount of time. Bounties can be attacked by the party defined in the << Claimable By >> field in case that party has proof of bounty terms violation by the bounty owner. Each bounty states certain terms which they should be claimed for violating.',
@@ -601,7 +601,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       <Flex flexDirection="column" px="16px" pb="16px">
         {!account ? (
           <ConnectWalletButton />
-        ) : needsApproval && !state.isNFT ? (
+        ) : needsApproval && !state.isNFT && state.collateral !== ADDRESS_ZERO ? (
           <Button
             mb="8px"
             onClick={handlePoolApprove}

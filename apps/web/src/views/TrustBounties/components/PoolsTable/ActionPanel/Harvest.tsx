@@ -6,7 +6,7 @@ import RichTextEditor from 'components/RichText'
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { useGetBalanceSource } from 'state/trustbounties/hooks'
+import { useGetBalanceSource, useGetLatestClaim2 } from 'state/trustbounties/hooks'
 import { differenceInSeconds } from 'date-fns'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
@@ -22,7 +22,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const balance = useGetBalanceSource(pool?.id)
-  console.log('useGetBalanceSource===============>', balance)
+  const claim = useGetLatestClaim2(pool?.id)
   const actionTitle = (
     <Flex flexDirection="row" justifyContent="space-around">
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -70,6 +70,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
           {t('Bounty Balance')}
         </Text>
       </Box>
+      {claim ? (
+        <>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {parseInt(claim[6]) === 0 ? t('At Peace') : t('At War')}
+          </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Latest Claim Status')}
+          </Text>
+        </>
+      ) : null}
       <Flex flex="1" flexDirection="column" alignSelf="flex-center">
         {pool?.receivedApprovals?.length ? (
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">

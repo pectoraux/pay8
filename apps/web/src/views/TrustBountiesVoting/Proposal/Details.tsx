@@ -17,15 +17,17 @@ import { format } from 'date-fns'
 import { Proposal } from 'state/types'
 import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
-import { useGetIsLocked, useGetLatestClaim } from 'state/trustbounties/hooks'
+import { useGetBounty, useGetIsLocked, useGetLatestClaim, useGetTokenData } from 'state/trustbounties/hooks'
+import { useCurrency } from 'hooks/Tokens'
 
 import { IPFS_GATEWAY } from '../config'
 import { ColorTag, ProposalStateTag } from '../components/Proposals/tags'
 import CreateContentModal from './CreateContentModal'
-import { useGetTokenData } from 'state/ramps/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { getTrustBountiesHelperAddress } from 'utils/addressHelpers'
+import { Native } from '@pancakeswap/sdk'
 
 interface DetailsProps {
   proposal: Proposal
@@ -45,7 +47,12 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const endDate = new Date(proposal.endTime * 1000)
   const isLocked = useGetIsLocked(proposal?.defenderId ?? '0')
   const latestClaim = useGetLatestClaim(proposal?.defenderId ?? '0', proposal?.attackerId ?? '0')
-  const { data: tokenData } = useGetTokenData(proposal?.token ?? '')
+  const bountyInfo = useGetBounty(proposal.defenderId)
+  const tokenAddress = bountyInfo?.length && bountyInfo[1]
+  const isNativeCoin = tokenAddress?.toLowerCase() === getTrustBountiesHelperAddress()?.toLowerCase()
+  const token = isNativeCoin ? Native.onChain(chainId) : tokenAddress
+  const { data: tokenData } = useGetTokenData(token ?? '')
+
   const amountClaimed = latestClaim?.length
     ? getBalanceNumber(new BigNumber(latestClaim[3]?.toString()), tokenData?.decimals)
     : 0

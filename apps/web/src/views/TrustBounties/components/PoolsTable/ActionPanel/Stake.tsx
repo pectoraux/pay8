@@ -25,9 +25,8 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { chainId } = useActiveChainId()
-  const token = useCurrency(pool?.tokenAddress ?? '')
+  const token = useCurrency(pool?.isNativeCoin ? pool?.token?.symbol : pool?.tokenAddress)
   const stakingTokenContract = useERC20(pool?.tokenAddress || '')
-  console.log('stakemarketAddress====================>', pool, stakingTokenContract)
   const { needsApproval, refetch } = useGetRequiresApproval(
     stakingTokenContract,
     account,
@@ -70,7 +69,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
     )
   }
 
-  if (needsApproval && !parseInt(pool?.isNFT)) {
+  if (!pool?.isNativeCoin && needsApproval && !parseInt(pool?.isNFT)) {
     return (
       <ActionContainer>
         <ActionTitles>
