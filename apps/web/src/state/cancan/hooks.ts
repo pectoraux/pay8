@@ -36,6 +36,9 @@ import {
   getNftDiscounted,
   getProtocolInfo,
   getPaywallAskOrder,
+  getPendingRevenue,
+  getSponsorRevenue,
+  getSuperchatRevenue,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -196,6 +199,30 @@ export const useGetCollection = (collectionAddress: string) => {
 export const useGetVeToken = (veAddress) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWRImmutable(['veToken', chainId], async () => getVeToken(veAddress, chainId))
+  return data
+}
+
+export const useGetPendingRevenue = (tokenAddress, collectionAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['useGetPendingRevenue', chainId], async () =>
+    getPendingRevenue(tokenAddress, collectionAddress, chainId),
+  )
+  return data
+}
+
+export const useGetSponsorRevenue = (collectionAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['useGetSponsorRevenue', chainId], async () =>
+    getSponsorRevenue(collectionAddress, chainId),
+  )
+  return data
+}
+
+export const useGetSuperchatRevenue = (collectionAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['useGetSuperchatRevenue', chainId], async () =>
+    getSuperchatRevenue(collectionAddress, chainId),
+  )
   return data
 }
 

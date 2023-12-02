@@ -38,10 +38,10 @@ export const sortActivity = ({
   const transformAskOrders = (askOrdersHistory: any) => {
     const transformedAskOrders = askOrdersHistory.map((askOrderHistory) => {
       const marketEvent = getAskOrderEvent(askOrderHistory.orderType)
-      const price = askOrderHistory.askPrice
+      const price = askOrderHistory?.askPrice
       const { timestamp, nft, paywall, item } = askOrderHistory
       const tx = askOrderHistory.id
-      const seller = askOrderHistory?.seller.id
+      const seller = askOrderHistory?.seller?.id
       return { marketEvent, price, timestamp, nft, paywall, item, tx, seller }
     })
 

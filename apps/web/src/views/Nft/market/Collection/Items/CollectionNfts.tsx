@@ -551,32 +551,6 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
       ) : null}
     </>
   )
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'You need to input the id of the NFTicket you got after buying this subscription, so the paywall can check if you have an ongoing subscription or not. In the case you do, it will load the content behind the paywall.',
-      )}
-    </Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        "This is the paywall's media and it can be either an image or a video. Its purpose is to convince users to subscribe to the paywall.",
-      )}
-    </Text>
-  )
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
-    targetRef: targetRef2,
-    tooltip: tooltip2,
-    tooltipVisible: tooltipVisible2,
-  } = useTooltip(<TooltipComponent2 />, {
-    placement: 'right-end',
-    tooltipOffset: [10, 10],
-  })
   return (
     <Flex flexDirection="column">
       {isAdmin ? (
@@ -628,11 +602,10 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
       </TabMenu>
       {!ongoingSubscription && !isAdmin ? (
         <Flex mt="10px" flexDirection="column">
-          <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column" ref={targetRef2}>
+          <Flex justifyContent="center" alignItems="center" ml="10px" flexDirection="column">
             <NFTMedia key={paywall.tokenId} nft={paywall} width={440} height={440} />
-            {tooltipVisible2 && tooltip2}
             <Divider />
-            <Flex ref={targetRef}>
+            <Flex>
               <Input
                 type="text"
                 scale="sm"
@@ -640,8 +613,6 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
                 placeholder={t('input your nfticket id')}
                 onChange={(e) => setNfticketId(e.target.value)}
               />
-              {tooltipVisible && tooltip}
-              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
             </Flex>
             <LinkExternal
               mt="8px"

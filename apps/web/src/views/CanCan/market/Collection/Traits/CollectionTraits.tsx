@@ -1,133 +1,207 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import times from 'lodash/times'
 import capitalize from 'lodash/capitalize'
 import sum from 'lodash/sum'
 import orderBy from 'lodash/orderBy'
-import { ArrowDownIcon, ArrowUpIcon, Text, Skeleton, Table, Td, Th, Flex } from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  Text,
+  Skeleton,
+  Table,
+  Td,
+  Th,
+  Flex,
+  Box,
+  Balance,
+  Button,
+  useModal,
+} from '@pancakeswap/uikit'
+import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import CollapsibleCard from 'components/CollapsibleCard'
 import { useTranslation } from '@pancakeswap/localization'
 import { SortType } from '../../types'
 import { StyledSortButton, TableWrapper } from './styles'
 import useGetCollectionDistribution from '../../hooks/useGetCollectionDistribution'
+import { ActionContainer, ActionContent, ActionTitles } from '../styles'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useCurrency } from 'hooks/Tokens'
+import CreateGaugeModal from './CreateGaugeModal'
+import {
+  useGetCollection,
+  useGetPendingRevenue,
+  useGetSponsorRevenue,
+  useGetSuperchatRevenue,
+} from 'state/cancan/hooks'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import BigNumber from 'bignumber.js'
 
 interface CollectionTraitsProps {
   collectionAddress: string
 }
 
 const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>> = ({ collectionAddress }) => {
-  const { data, isFetching } = useGetCollectionDistribution(collectionAddress)
-  const [raritySort, setRaritySort] = useState<Record<string, SortType>>({})
   const { t } = useTranslation()
+  const { account } = useWeb3React()
+  const { collection, refresh } = useGetCollection(collectionAddress)
+  const [currency, setCurrency] = useState(DEFAULT_TFIAT)
+  const cacanCurrencyInput = useCurrency(DEFAULT_TFIAT)
+  const isAdmin = collection?.owner?.toLowerCase() === account?.toLowerCase()
+  const data = useGetPendingRevenue(currency, collectionAddress)
+  const marketPendingRevenue = data?.marketPendingRevenue ?? '0'
+  const nftMarketPendingRevenue = data?.nftMarketPendingRevenue ?? '0'
+  const paywallMarketPendingRevenue = data?.paywallMarketPendingRevenue ?? '0'
+  const sponsorRevenue = useGetSponsorRevenue(collectionAddress)
+  const superChatRevenue = useGetSuperchatRevenue(collectionAddress)
 
-  if (isFetching) {
-    return (
-      <CollapsibleCard title={t('Loading...')}>
-        <Table>
-          <thead>
-            <tr>
-              <Th textAlign="left">{t('Name')}</Th>
-              <Th width="100px">{t('Count')}</Th>
-              <Th width="160px">{t('Rarity')}</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {times(19).map((bunnyCnt) => (
-              <tr key={bunnyCnt}>
-                <Td>
-                  <Skeleton width="100px" />
-                </Td>
-                <Td>
-                  <Skeleton />
-                </Td>
-                <Td>
-                  <Skeleton />
-                </Td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </CollapsibleCard>
-    )
-  }
+  const handleInputSelect = useCallback((currencyInput) => {
+    setCurrency(currencyInput)
+  }, [])
+  const [openPresentControlPanel] = useModal(
+    <CreateGaugeModal pool={collection} currency={cacanCurrencyInput} isAdmin={isAdmin} />,
+  )
+  const [openPresentControlPanel2] = useModal(
+    <CreateGaugeModal variant="withdraw" pool={collection} currency={cacanCurrencyInput} isAdmin={isAdmin} />,
+  )
+  const [openPresentControlPanel3] = useModal(
+    <CreateGaugeModal variant="superchat" pool={collection} currency={cacanCurrencyInput} isAdmin={isAdmin} />,
+  )
+
+  const actionTitle = (
+    <>
+      <Text fontSize="12px" mr="3px" bold color="textSubtle" as="span" textTransform="uppercase">
+        {cacanCurrencyInput?.symbol ?? ''}
+      </Text>
+      <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+        {t('Revenue')}
+      </Text>
+    </>
+  )
+
+  const actionTitle2 = (
+    <>
+      <Text fontSize="12px" mr="3px" bold color="textSubtle" as="span" textTransform="uppercase">
+        {'USD'}
+      </Text>
+      <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+        {t('Revenue')}
+      </Text>
+    </>
+  )
 
   return (
-    <Flex justifyContent="center" alignItems="center">
-      <Text>
-        {t(
-          'This page is under construction and when done will be showing real time business statistics on the current channel.',
-        )}
-      </Text>
-      {/* {data &&
-        Object.keys(data).map((traitType, index) => {
-          const total = sum(Object.values(data[traitType]))
-
-          // Parse the distribution values into an array to make it easier to sort
-          const traitValues: { value: string; count: number; rarity: number }[] = Object.keys(data[traitType]).map(
-            (traitValue) => {
-              const count = data[traitType][traitValue]
-              const rarity = (count / total) * 100
-
-              return { value: traitValue, count, rarity }
-            },
-          )
-          const sortType = raritySort[traitType] || 'desc'
-
-          const toggleRaritySort = () => {
-            setRaritySort((prevRaritySort) => {
-              if (!prevRaritySort[traitType]) {
-                return {
-                  ...prevRaritySort,
-                  [traitType]: 'asc',
-                }
-              }
-
-              return {
-                ...prevRaritySort,
-                [traitType]: prevRaritySort[traitType] === 'asc' ? 'desc' : 'asc',
-              }
-            })
-          }
-
-          return (
-            <CollapsibleCard key={traitType} title={capitalize(traitType)} initialOpenState={index <= 1} mb="32px">
-              <TableWrapper>
-                <Table>
-                  <thead>
-                    <tr>
-                      <Th textAlign="left">{t('Name')}</Th>
-                      <Th width="100px">{t('Count')}</Th>
-                      <Th width="160px">
-                        <StyledSortButton type="button" onClick={toggleRaritySort}>
-                          <Flex alignItems="center">
-                            {t('Rarity')}
-                            {raritySort[traitType] === 'asc' ? (
-                              <ArrowUpIcon color="secondary" />
-                            ) : (
-                              <ArrowDownIcon color="secondary" />
-                            )}
-                          </Flex>
-                        </StyledSortButton>
-                      </Th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {orderBy(traitValues, 'rarity', sortType).map(({ value, count, rarity }) => {
-                      return (
-                        <tr key={value}>
-                          <Td>{capitalize(value)}</Td>
-                          <Td textAlign="center">{formatNumber(count, 0, 0)}</Td>
-                          <Td textAlign="center">{`${formatNumber(rarity, 0, 2)}%`}</Td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </Table>
-              </TableWrapper>
-            </CollapsibleCard>
-          )
-        })} */}
-    </Flex>
+    <>
+      <CollapsibleCard key="revenue" title={capitalize('Revenue From MarketPlaces')} initialOpenState mb="32px">
+        <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
+          <ActionTitles>{actionTitle}</ActionTitles>
+          <CurrencyInputPanel
+            showInput={false}
+            currency={cacanCurrencyInput}
+            onCurrencySelect={handleInputSelect}
+            otherCurrency={cacanCurrencyInput}
+          />
+          <ActionContent>
+            <Button width="100%" mb="25px" onClick={openPresentControlPanel} variant="secondary">
+              {t('Control Panel')}
+            </Button>
+            {/* <Flex mb="40px"><NotificationDot show={userData?.requests?.length} /></Flex> */}
+          </ActionContent>
+        </Flex>
+        <ActionContent>
+          <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
+            <Box mb="25px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={18}
+                value={getBalanceNumber(new BigNumber(marketPendingRevenue?.toString()))}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Pending Revenue From Item Sales')}
+              </Text>
+            </Box>
+            <Box ml="28px" mb="25px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={18}
+                value={getBalanceNumber(new BigNumber(paywallMarketPendingRevenue?.toString()))}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Pending Revenue From Paywall Sales')}
+              </Text>
+            </Box>
+            <Box mb="25px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={18}
+                value={getBalanceNumber(new BigNumber(nftMarketPendingRevenue?.toString()))}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Pending Revenue From NFT Sales')}
+              </Text>
+            </Box>
+          </Flex>
+        </ActionContent>
+      </CollapsibleCard>
+      <CollapsibleCard key="sponsorrevenue" title={capitalize('Revenue From Sponsors')} initialOpenState mb="32px">
+        <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
+          <ActionTitles>{actionTitle2}</ActionTitles>
+          <ActionContent>
+            <Button width="100%" mb="25px" onClick={openPresentControlPanel2} variant="secondary">
+              {t('Withdraw Revenue')}
+            </Button>
+          </ActionContent>
+        </Flex>
+        <ActionContent>
+          <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
+            <Box mb="25px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={18}
+                value={getBalanceNumber(new BigNumber(sponsorRevenue?.toString()))}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Pending Revenue From Sponsors')}
+              </Text>
+            </Box>
+          </Flex>
+        </ActionContent>
+      </CollapsibleCard>
+      <CollapsibleCard key="superchatrevenue" title={capitalize('Revenue From SuperChats')} initialOpenState mb="32px">
+        <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
+          <ActionTitles>{actionTitle2}</ActionTitles>
+          <ActionContent>
+            <Button width="100%" mb="25px" onClick={openPresentControlPanel3} variant="secondary">
+              {t('Control Panel')}
+            </Button>
+          </ActionContent>
+        </Flex>
+        <ActionContent>
+          <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
+            <Box mb="25px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={18}
+                value={getBalanceNumber(new BigNumber(superChatRevenue?.toString()))}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Pending Revenue From SuperChat')}
+              </Text>
+            </Box>
+          </Flex>
+        </ActionContent>
+      </CollapsibleCard>
+    </>
   )
 }
 

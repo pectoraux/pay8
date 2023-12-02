@@ -6,14 +6,18 @@ import {
   getMarketCollectionsAddress,
   getMarketHelperAddress,
   getMarketOrdersAddress,
+  getMarketTradesAddress,
+  getNFTicketAddress,
   getNFTicketHelper2Address,
   getNFTicketHelperAddress,
   getNftMarketHelper3Address,
   getNftMarketHelperAddress,
   getNftMarketOrdersAddress,
+  getNftMarketTradesAddress,
   getPaywallARPHelperAddress,
   getPaywallMarketHelperAddress,
   getPaywallMarketOrdersAddress,
+  getPaywallMarketTradesAddress,
 } from 'utils/addressHelpers'
 import { publicClient } from 'utils/wagmi'
 import { Token } from '@pancakeswap/sdk'
@@ -56,6 +60,10 @@ import { minterABI } from 'config/abi/minter'
 import { nftMarketOrdersABI } from 'config/abi/nftMarketOrders'
 import { paywallARPHelperABI } from 'config/abi/paywallARPHelper'
 import { paywallMarketOrdersABI } from 'config/abi/paywallMarketOrders'
+import { marketTradesABI } from 'config/abi/marketTrades'
+import { paywallMarketTradesABI } from 'config/abi/paywallMarketTrades'
+import { nftMarketTradesABI } from 'config/abi/nftMarketTrades'
+import { nfticketABI } from 'config/abi/nfticket'
 
 export const getTag = async () => {
   try {
@@ -1427,6 +1435,46 @@ export const getVeToken = async (veAddress, chainId = 4002) => {
   return tokenAddress
 }
 
+export const getPendingRevenue = async (tokenAddress, collectionAddress, chainId = 4002) => {
+  try {
+    const bscClient = publicClient({ chainId: chainId })
+    const [marketPendingRevenue, paywallMarketPendingRevenue, nftMarketPendingRevenue] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getMarketTradesAddress(),
+          abi: marketTradesABI,
+          functionName: 'pendingRevenue',
+          args: [tokenAddress, collectionAddress],
+        },
+        {
+          address: getPaywallMarketTradesAddress(),
+          abi: paywallMarketTradesABI,
+          functionName: 'pendingRevenue',
+          args: [tokenAddress, collectionAddress],
+        },
+        {
+          address: getNftMarketTradesAddress(),
+          abi: nftMarketTradesABI,
+          functionName: 'pendingRevenue',
+          args: [tokenAddress, collectionAddress],
+        },
+      ],
+    })
+    return {
+      marketPendingRevenue: marketPendingRevenue.result,
+      paywallMarketPendingRevenue: paywallMarketPendingRevenue.result,
+      nftMarketPendingRevenue: nftMarketPendingRevenue.result,
+    }
+  } catch {
+    return {
+      marketPendingRevenue: '0',
+      paywallMarketPendingRevenue: '0',
+      nftMarketPendingRevenue: '0',
+    }
+  }
+}
+
 export const getCollectionId = async (address, chainId = 4002) => {
   const bscClient = publicClient({ chainId: chainId })
   const [collectionId] = await bscClient.multicall({
@@ -1441,6 +1489,38 @@ export const getCollectionId = async (address, chainId = 4002) => {
     ],
   })
   return collectionId.result
+}
+
+export const getSponsorRevenue = async (collectionId, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [revenue] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getNFTicketHelperAddress(),
+        abi: nfticketHelperABI,
+        functionName: 'pendingRevenue',
+        args: [collectionId],
+      },
+    ],
+  })
+  return revenue.result
+}
+
+export const getSuperchatRevenue = async (collectionId, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  const [revenue] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getNFTicketAddress(),
+        abi: nfticketABI,
+        functionName: 'pendingRevenue',
+        args: [collectionId],
+      },
+    ],
+  })
+  return revenue.result
 }
 
 export const getPricePerMinute = async (merchantId, chainId = 4002) => {

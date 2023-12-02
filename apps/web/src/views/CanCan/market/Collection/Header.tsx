@@ -81,7 +81,9 @@ const Header: React.FC<any> = ({ collection }) => {
           <ReactMarkdown>
             {t("The **Legal & Info**'s tab displays the channel's terms of service and essential announcements.")}
           </ReactMarkdown>
-          <ReactMarkdown>{t("The **Stats**' tab displays all stats relevant to the channel")}</ReactMarkdown>
+          <ReactMarkdown>
+            {t("The **Revenue & SuperChats**' tab displays all options to withdraw revenue or send superchats")}
+          </ReactMarkdown>
         </>
       ),
       disableBeacon: true,
@@ -125,7 +127,7 @@ const Header: React.FC<any> = ({ collection }) => {
       href: `${cancanBaseUrl}/collections/${collectionAddress}#legal`,
     },
     {
-      label: t('Stats'),
+      label: t('Revenue & SuperChats'),
       href: `${cancanBaseUrl}/collections/${collectionAddress}#traits`,
     },
   ]
