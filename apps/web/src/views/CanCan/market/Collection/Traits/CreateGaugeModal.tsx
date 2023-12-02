@@ -47,7 +47,6 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_CLAIM_SP_REVENUE]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_FUND_REVENUE]: t('Back'),
-  [LockStage.CONFIRM_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_SUPERCHAT]: t('Back'),
   [LockStage.CONFIRM_SUPERCHAT_ALL]: t('Back'),
   [LockStage.CONFIRM_CLAIM_REVENUE_FROM_NOTE]: t('Back'),
