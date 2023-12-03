@@ -16,26 +16,26 @@ import {
   Balance,
   Button,
   useModal,
+  LinkExternal,
 } from '@pancakeswap/uikit'
-import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import CollapsibleCard from 'components/CollapsibleCard'
-import { useTranslation } from '@pancakeswap/localization'
-import { SortType } from '../../types'
-import { StyledSortButton, TableWrapper } from './styles'
-import useGetCollectionDistribution from '../../hooks/useGetCollectionDistribution'
-import { ActionContainer, ActionContent, ActionTitles } from '../styles'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import { useCurrency } from 'hooks/Tokens'
-import CreateGaugeModal from './CreateGaugeModal'
 import {
   useGetCollection,
   useGetPendingRevenue,
   useGetSponsorRevenue,
   useGetSuperchatRevenue,
+  useGetTokenURIs,
 } from 'state/cancan/hooks'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
+import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import CollapsibleCard from 'components/CollapsibleCard'
+import { useTranslation } from '@pancakeswap/localization'
+import { ActionContainer, ActionContent, ActionTitles } from '../styles'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useCurrency } from 'hooks/Tokens'
+import CreateGaugeModal from './CreateGaugeModal'
+import WebPagesModal from './WebPagesModal'
 
 interface CollectionTraitsProps {
   collectionAddress: string
@@ -48,24 +48,43 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
   const [currency, setCurrency] = useState(DEFAULT_TFIAT)
   const cacanCurrencyInput = useCurrency(DEFAULT_TFIAT)
   const isAdmin = collection?.owner?.toLowerCase() === account?.toLowerCase()
-  const data = useGetPendingRevenue(currency, collectionAddress)
-  const marketPendingRevenue = data?.marketPendingRevenue ?? '0'
-  const nftMarketPendingRevenue = data?.nftMarketPendingRevenue ?? '0'
-  const paywallMarketPendingRevenue = data?.paywallMarketPendingRevenue ?? '0'
+  const { data, refetch } = useGetPendingRevenue(currency, collectionAddress)
   const sponsorRevenue = useGetSponsorRevenue(collectionAddress)
   const superChatRevenue = useGetSuperchatRevenue(collectionAddress)
-
+  const { data: tokenURIs } = useGetTokenURIs(collection?.owner)
+  console.log('tokenURIs======================>', tokenURIs)
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
   const [openPresentControlPanel] = useModal(
-    <CreateGaugeModal pool={collection} currency={cacanCurrencyInput} isAdmin={isAdmin} />,
+    <CreateGaugeModal pool={collection} currency={cacanCurrencyInput} isAdmin={isAdmin} refetch={refetch} />,
   )
   const [openPresentControlPanel2] = useModal(
-    <CreateGaugeModal variant="withdraw" pool={collection} currency={cacanCurrencyInput} isAdmin={isAdmin} />,
+    <CreateGaugeModal
+      variant="withdraw"
+      pool={collection}
+      currency={cacanCurrencyInput}
+      isAdmin={isAdmin}
+      refetch={refetch}
+    />,
   )
   const [openPresentControlPanel3] = useModal(
-    <CreateGaugeModal variant="superchat" pool={collection} currency={cacanCurrencyInput} isAdmin={isAdmin} />,
+    <CreateGaugeModal
+      variant="superchat"
+      pool={collection}
+      currency={cacanCurrencyInput}
+      isAdmin={isAdmin}
+      refetch={refetch}
+    />,
+  )
+  const [onPresentNote] = useModal(
+    <WebPagesModal height="500px" nft={tokenURIs?.marketNote} metadataUrl={tokenURIs?.marketNoteURI} />,
+  )
+  const [onPresentNote2] = useModal(
+    <WebPagesModal height="500px" nft={tokenURIs?.paywallNote} metadataUrl={tokenURIs?.paywallNoteURI} />,
+  )
+  const [onPresentNote3] = useModal(
+    <WebPagesModal height="500px" nft={tokenURIs?.nftNote} metadataUrl={tokenURIs?.nftNoteURI} />,
   )
 
   const actionTitle = (
@@ -116,36 +135,93 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
                 color="textSubtle"
                 fontSize="12px"
                 decimals={18}
-                value={getBalanceNumber(new BigNumber(marketPendingRevenue?.toString()))}
+                value={getBalanceNumber(new BigNumber(data?.marketPendingRevenue?.toString()))}
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                 {t('Pending Revenue From Item Sales')}
               </Text>
             </Box>
+            <Box mb="25px" ml="18px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={18}
+                value={getBalanceNumber(new BigNumber(data?.marketCashbackFund?.toString()))}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t("Item MarketPlace's Cashback Fund")}
+              </Text>
+            </Box>
+            {tokenURIs?.marketNoteURI ? (
+              <Flex mb="25px" justifyContent="flex-end">
+                <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNote} bold={false} small>
+                  {t('View Permissionary Note')}
+                </LinkExternal>
+              </Flex>
+            ) : null}
             <Box ml="28px" mb="25px" height="32px">
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={18}
-                value={getBalanceNumber(new BigNumber(paywallMarketPendingRevenue?.toString()))}
+                value={getBalanceNumber(new BigNumber(data?.paywallMarketPendingRevenue?.toString()))}
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                 {t('Pending Revenue From Paywall Sales')}
               </Text>
             </Box>
+            <Box ml="38px" mb="25px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={18}
+                value={getBalanceNumber(new BigNumber(data?.paywallMarketCashbackFund?.toString()))}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t("Paywall MarketPlace's Cashback Fund")}
+              </Text>
+            </Box>
+            {tokenURIs?.paywallNoteURI ? (
+              <Flex mb="25px" justifyContent="flex-end">
+                <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNote2} bold={false} small>
+                  {t('View Permissionary Note')}
+                </LinkExternal>
+              </Flex>
+            ) : null}
             <Box mb="25px" height="32px">
               <Balance
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
                 decimals={18}
-                value={getBalanceNumber(new BigNumber(nftMarketPendingRevenue?.toString()))}
+                value={getBalanceNumber(new BigNumber(data?.nftMarketPendingRevenue?.toString()))}
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                 {t('Pending Revenue From NFT Sales')}
               </Text>
             </Box>
+            <Box mb="25px" ml="18px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={18}
+                value={getBalanceNumber(new BigNumber(data?.nftMarketCashbackFund?.toString()))}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t("NFT MarketPlace's Cashback Fund")}
+              </Text>
+            </Box>
+            {tokenURIs?.nftNoteURI ? (
+              <Flex mb="25px" justifyContent="flex-end">
+                <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNote3} bold={false} small>
+                  {t('View Permissionary Note')}
+                </LinkExternal>
+              </Flex>
+            ) : null}
           </Flex>
         </ActionContent>
       </CollapsibleCard>

@@ -39,6 +39,9 @@ import {
   getPendingRevenue,
   getSponsorRevenue,
   getSuperchatRevenue,
+  getPendingRevenueFromNote,
+  getTokenURIs,
+  getTimeEstimate,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -204,10 +207,34 @@ export const useGetVeToken = (veAddress) => {
 
 export const useGetPendingRevenue = (tokenAddress, collectionAddress) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['useGetPendingRevenue', chainId], async () =>
+  const { data, mutate } = useSWRImmutable(['useGetPendingRevenue', chainId], async () =>
     getPendingRevenue(tokenAddress, collectionAddress, chainId),
   )
-  return data
+  return {
+    data,
+    refetch: mutate,
+  }
+}
+
+export const useGetPendingFromNote = (tokenAddress, tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['cancan-useGetPendingFromNote', tokenAddress, tokenId, chainId], async () =>
+    getPendingRevenueFromNote(tokenAddress, tokenId, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
+}
+
+export const useGetTokenURIs = (collectionOwner) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['cancan-useGetTokenURIs1', collectionOwner], async () => getTokenURIs(collectionOwner, chainId))
+  return { data, refetch, status }
 }
 
 export const useGetSponsorRevenue = (collectionAddress) => {
@@ -386,7 +413,6 @@ export const useGetDiscounted = (
       revalidateOnReconnect: true,
     },
   )
-  console.log('1useGetDiscounted==============>', data, status)
   return {
     discounted: data?.discounted,
     discount: data?.discount,
@@ -423,7 +449,6 @@ export const useGetNftDiscounted = (
       revalidateOnReconnect: true,
     },
   )
-  console.log('1useGetDiscounted==============>', data, status)
   return {
     discounted: data?.discounted,
     discount: data?.discount,
@@ -458,6 +483,23 @@ export const useGetMedia = (minterAddress: string) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWRImmutable(['useGetMedia', minterAddress, chainId], async () =>
     getMedia(minterAddress, chainId),
+  )
+  return data as any
+}
+
+export const useGetTimeEstimates = (collectionId, item, marketPlaceHelper, options) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(
+    [
+      'useGetTimeEstimates',
+      collectionId,
+      item,
+      marketPlaceHelper,
+      options?.length,
+      options?.length && options[0],
+      chainId,
+    ],
+    async () => getTimeEstimate(collectionId, item, marketPlaceHelper, options, chainId),
   )
   return data as any
 }

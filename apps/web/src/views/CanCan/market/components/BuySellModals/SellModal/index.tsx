@@ -26,6 +26,8 @@ import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shar
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
 import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
+import { getSSIContract } from 'utils/contractHelpers'
+import { getMarketHelperAddress, getPaywallMarketHelperAddress } from 'utils/addressHelpers'
 
 import EditStage from './EditStage'
 import SetPriceStage from './SetPriceStage'
@@ -41,15 +43,15 @@ import DiscountsNCashbacks from './DiscountsNCashbacks'
 import ResetIdentityLimits from './ResetIdentityLimits'
 import ResetDiscountLimits from './ResetDiscountLimits'
 import ResetCashbackLimits from './ResetCashbackLimits'
+import TimeEstimationStage from './TimeEstimationStage'
 import LocationStage from './LocationStage'
-import UserMerchantProofType from './UserMerchantProofType'
-import { getSSIContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
   [SellingStage.ADJUST_PRICE]: t('Adjust Price'),
   [SellingStage.ADJUST_OPTIONS]: t('Adjust Options'),
   [SellingStage.ADD_LOCATION]: t('Adjust Location Data'),
+  [SellingStage.TIME_ESTIMATION]: t('Time Estimation'),
   [SellingStage.UPDATE_IDENTITY_REQUIREMENTS]: t('Update Identity Requirements'),
   [SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS]: t('Update Tokens To Burn For Credit'),
   [SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS]: t('Update Discounts and Cashbacks'),
@@ -65,6 +67,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.CONFIRM_ADJUST_PRICE]: t('Back'),
   [SellingStage.CONFIRM_ADJUST_OPTIONS]: t('Back'),
   [SellingStage.CONFIRM_ADD_LOCATION]: t('Back'),
+  [SellingStage.CONFIRM_TIME_ESTIMATION]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_MERCHANT_PROOF_TYPE]: t('Back'),
   [SellingStage.CONFIRM_REMOVE_FROM_MARKET]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_PRICE_PER_MINUTE]: t('Back'),
@@ -191,6 +194,9 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     add: 0,
     profileId: '',
     proofType: 0,
+    itemTimeEstimate: '',
+    options2: '',
+    optionsTimeEstimates: '',
   }))
   const [stage, setStage] = useState(SellingStage.EDIT)
   const [price, setPrice] = useState(nftToSell?.currentAskPrice)
@@ -208,6 +214,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
   const marketOrdersContract = useMarketOrdersContract()
   const marketTradesContract = useMarketTradesContract()
   const marketHelperContract = useMarketHelperContract()
+  const nfticketHelperContract = useNFTicketHelper()
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
   const paywallMarketOrdersContract = usePaywallMarketOrdersContract()
   const paywallMarketTradesContract = usePaywallMarketTradesContract()
@@ -259,6 +266,12 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
         break
       case SellingStage.CONFIRM_ADD_LOCATION:
         setStage(SellingStage.ADD_LOCATION)
+        break
+      case SellingStage.TIME_ESTIMATION:
+        setStage(SellingStage.EDIT)
+        break
+      case SellingStage.CONFIRM_TIME_ESTIMATION:
+        setStage(SellingStage.TIME_ESTIMATION)
         break
       case SellingStage.UPDATE_IDENTITY_REQUIREMENTS:
         setStage(SellingStage.EDIT)
@@ -333,6 +346,9 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
       case SellingStage.ADD_LOCATION:
         setStage(SellingStage.CONFIRM_ADD_LOCATION)
         break
+      case SellingStage.TIME_ESTIMATION:
+        setStage(SellingStage.CONFIRM_TIME_ESTIMATION)
+        break
       case SellingStage.UPDATE_IDENTITY_REQUIREMENTS:
         setStage(SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS)
         break
@@ -371,6 +387,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
 
   const continueToAdjustOptions = () => setStage(SellingStage.ADJUST_OPTIONS)
   const continueToLocationStage = () => setStage(SellingStage.ADD_LOCATION)
+  const continueToTimeEstimateStage = () => setStage(SellingStage.TIME_ESTIMATION)
 
   const continueToUpdateBurnForCreditStage = () => {
     setStage(SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS)
@@ -521,6 +538,19 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
         }
         return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args).catch((err) =>
           console.log('CONFIRM_ADD_LOCATION================>', err),
+        )
+      }
+      if (stage === SellingStage.CONFIRM_TIME_ESTIMATION) {
+        const args = [
+          nftToSell.tokenId,
+          variant === 'paywall' ? getPaywallMarketHelperAddress() : getMarketHelperAddress(),
+          parseInt(state.itemTimeEstimate) * 60,
+          state.options2?.split(','),
+          state.optionsTimeEstimates?.split(',')?.map((te) => parseInt(te) * 60),
+        ]
+        console.log('CONFIRM_TIME_ESTIMATION=================>', args)
+        return callWithGasPrice(nfticketHelperContract, 'addTimeEstimates', args).catch((err) =>
+          console.log('1CONFIRM_TIME_ESTIMATION===========>', err),
         )
       }
       if (stage === SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS) {
@@ -690,6 +720,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           continueToAdjustPriceStage={continueToNextStage}
           continueToAdjustOptions={continueToAdjustOptions}
           continueToLocationStage={continueToLocationStage}
+          continueToTimeEstimateStage={continueToTimeEstimateStage}
           continueToUpdateIdentityStage={continueToUpdateIdentityStage}
           continueToUpdateBurnForCreditStage={continueToUpdateBurnForCreditStage}
           // continueToUpdateMerchantProofTypeStage={continueToUpdateMerchantProofTypeStage}
@@ -779,18 +810,14 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           continueToNextStage={continueToNextStage}
         />
       )}
-      {/* {stage === SellingStage.UPDATE_MERCHANT_PROOF_TYPE && (
-        <UserMerchantProofType
+      {stage === SellingStage.TIME_ESTIMATION && (
+        <TimeEstimationStage
           state={state}
-          thumbnail={_thumbnail}
-          nftToSell={nftToSell}
-          collectionId={collectionId}
-          lowestPrice={lowestPrice}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
-      )} */}
+      )}
       {stage === SellingStage.ADD_LOCATION && (
         <LocationStage
           show
@@ -820,6 +847,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
       {[
         SellingStage.CONFIRM_ADJUST_PRICE,
         SellingStage.CONFIRM_ADJUST_OPTIONS,
+        SellingStage.CONFIRM_TIME_ESTIMATION,
         SellingStage.CONFIRM_ADD_LOCATION,
         SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS,
         SellingStage.CONFIRM_UPDATE_BURN_FOR_CREDIT_TOKENS,

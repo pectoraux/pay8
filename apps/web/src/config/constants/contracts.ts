@@ -336,83 +336,83 @@ export default {
     56: '0x',
   },
   nfticket: {
-    4002: '0x88db9D87e4D8ecC1f05eA72db52D933E25f88d2A',
+    4002: '0xC3eDB2ad683C646bf8AF6b69d47EDF2A12fd13fE',
     56: '0x',
   },
   nfticketHelper: {
-    4002: '0x4888CEc598B9115bfC965d714E68e791c2cC1d80',
+    4002: '0xAcea8b800bB6c7d1A81Ed06f337868a0FAebAf74',
     56: '0x',
   },
   nfticketHelper2: {
-    4002: '0x517a113a03B7842C1B731b482E89FB4920363aD5',
+    4002: '0x9064b491B8de73f508B970c3Eb043b4E1E9c48Dc',
     56: '0x',
   },
   marketEvents: {
-    4002: '0xAD38AFac104D620C079a9FFf7bc0E9B59eB00e6d',
+    4002: '0xAbB4C6d06F0Da85dE589555AdDeea76c28Bfb2B8',
     56: '0x',
   },
   marketCollections: {
-    4002: '0x0970926487E31cF5451b2Ed5Ba7C44cC9f8eA604',
+    4002: '0x1B2Ed57c19492231aBE85773D288A93Bc5f7f603',
     56: '0x0000000000000000000000000000000000000000',
   },
   marketOrders: {
-    4002: '0xdc72352eA34141Bf8F72aEFca07b30AcEc155dcf',
+    4002: '0x64caED7CcC8138Be20299CDC37EC1E81900147b4',
     56: '0x',
   },
   marketTrades: {
-    4002: '0xf2904F2325ea229adD6EbCb04951fF1D28C3b891',
+    4002: '0x1f311bf83c4150f36fB6C088d4abBf54744E6Bbf',
     56: '0x',
   },
   marketHelper: {
-    4002: '0x0B252359e6F81694c11b5Ba4782a9151e3E82579',
+    4002: '0xE57BAF27e8AA82A66D459f674c6c31ffb0a42886',
     56: '0x',
   },
   marketHelper2: {
-    4002: '0x78C10070AC5e9Aad679CCdF2d3bE9A2F77EE5F11',
+    4002: '0xa229768ab302fC0881AB0B3738e47b4E577E2D3c',
     56: '0x',
   },
   marketHelper3: {
-    4002: '0x2affD239CAB6c7ca5643e1e821fa4ddF6072f7cC',
+    4002: '0x85Ae2a0749aec95a0B6Cc0f7b0Ae1f6BD9692Fc4',
     56: '0x',
   },
   nftMarketOrders: {
-    4002: '0x9cFE0aEB5f89E5f3A58C36498c42aCDd278ACbfc',
+    4002: '0x198bB79eCBeBd04394a96e0F959594A3F81b6050',
     56: '0x',
   },
   nftMarketTrades: {
-    4002: '0xb43A592FF03b10D243E3cFc64Ee32ba6912Ed61c',
+    4002: '0x641c49103fe2511a8DD095bE595C253b47c91BE0',
     56: '0x',
   },
   nftMarketHelper: {
-    4002: '0x352ae66Dca43ad2C23D57393D6D5b5adF6B2446C',
+    4002: '0x5b5a9278EaB3C7Fb3F3D7d3C5aBE0397FBF45e4d',
     56: '0x',
   },
   nftMarketHelper2: {
-    4002: '0xcA00299bEfd8A4ff57Ac83aEfdb3F1701e7d5C2b',
+    4002: '0xCb2732536345Ff3D91E03E7BCC2E660564C243bE',
     56: '0x',
   },
   nftMarketHelper3: {
-    4002: '0xe83a58792EACa44345129141313E16Cae2076d15',
+    4002: '0xe7Dc0fe9F604048B54ec95eb498FF0798d49B905',
     56: '0x',
   },
   paywallMarketOrders: {
-    4002: '0x8E253b889A5c03d35bfc2A9e433Dde4144236fBa',
+    4002: '0x58060F1714E2BA8fC8d94E33BA647a723D4B0347',
     56: '0x',
   },
   paywallMarketTrades: {
-    4002: '0x8C4575C706515E2725C64F6c27A60EC2dCd104c2',
+    4002: '0x987795cE3a5002C4718f24D7eEC8d3c6c26291b5',
     56: '0x',
   },
   paywallMarketHelper: {
-    4002: '0x5e54677A9C2803481016E041A8cFeB3fD03770c6',
+    4002: '0x19310C91b43B67c32b875F479eAb1517589aeE7f',
     56: '0x',
   },
   paywallMarketHelper2: {
-    4002: '0x86973bEbE9233792426Bbb39d7e1356eb1211594',
+    4002: '0x4CCe9D3a7895d62a6336017fE7354e17d346F627',
     56: '0x',
   },
   paywallMarketHelper3: {
-    4002: '0xf82726AbB3b7d854ba07AB8db7f1Afd1f3834d50',
+    4002: '0x2AD4eC434d6022FAfC47F148b7c8101f2cD29d66',
     56: '0x',
   },
   stakemarket: {

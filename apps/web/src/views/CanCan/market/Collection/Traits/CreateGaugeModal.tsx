@@ -59,7 +59,7 @@ interface BuyModalProps extends InjectedModalProps {
   nftToBuy: NftToken
 }
 
-const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, onDismiss }) => {
+const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, refetch, onDismiss }) => {
   const [stage, setStage] = useState(
     variant === 'withdraw' ? LockStage.CONFIRM_WITHDRAW : !isAdmin ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS,
   )
@@ -188,13 +188,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, onD
         break
     }
   }
-  console.log(
-    '1===============>',
-    stakingTokenContract,
-    marketTradesContract,
-    nftMarketTradesContract,
-    paywallMarketTradesContract,
-  )
+
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
       try {
@@ -332,6 +326,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, onD
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)
+      refetch()
     },
   })
 

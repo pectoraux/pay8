@@ -48,7 +48,7 @@ export const TraitItemRow: React.FC<any> = ({ item, order, itemCount, setOrder, 
   return (
     <StyledItemRow alignItems="center" px="16px" py="8px">
       {item.image && <ItemImage src={item.image} height={48} width={48} mr="16px" />}
-      <Text style={{ flex: 1 }}>{item.attr?.element}</Text>
+      <Text style={{ flex: 1 }}>{`(${item.attr.id})${item.attr?.element}`}</Text>
       {itemCount !== undefined && item.attr.max > 0 && (
         <>
           <IconButton scale="sm" disabled={newItem.attr.max === 0} onClick={handleMinus}>

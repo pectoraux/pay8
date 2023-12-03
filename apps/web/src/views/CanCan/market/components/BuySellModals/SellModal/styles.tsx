@@ -6,6 +6,8 @@ import { SellingStage } from './types'
 import { CurrencyLogo } from 'components/Logo'
 
 export const stagesWithBackButton = [
+  SellingStage.TIME_ESTIMATION,
+  SellingStage.CONFIRM_TIME_ESTIMATION,
   SellingStage.UPDATE_VALUEPOOL,
   SellingStage.CONFIRM_UPDATE_VALUEPOOL,
   SellingStage.CONFIRM_ADD_LOCATION,
@@ -80,6 +82,7 @@ export const stagesWithBackButton = [
 export const stagesWithApproveButton = [SellingStage.CONFIRM_FUND_PENDING_REVENUE]
 
 export const stagesWithConfirmButton = [
+  SellingStage.CONFIRM_TIME_ESTIMATION,
   SellingStage.CONFIRM_UPDATE_VALUEPOOL,
   SellingStage.CONFIRM_UPDATE_TAG,
   SellingStage.CONFIRM_UPDATE_TAG_REGISTRATION,

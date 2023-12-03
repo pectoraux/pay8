@@ -32,6 +32,7 @@ const EditStage: React.FC<any> = ({
   continueToAdjustOptions,
   continueToAdjustPriceStage,
   continueToLocationStage,
+  continueToTimeEstimateStage,
   continueToUpdateIdentityStage,
   continueToRemoveFromMarketStage,
   continueToUpdateBurnForCreditStage,
@@ -96,6 +97,9 @@ const EditStage: React.FC<any> = ({
         </Button>
         <Button variant="secondary" mb="8px" onClick={continueToLocationStage}>
           {t('Adjust Location Data')}
+        </Button>
+        <Button variant="secondary" mb="8px" onClick={continueToTimeEstimateStage}>
+          {t('Add Time Estimates')}
         </Button>
         <Button variant="secondary" mb="8px" onClick={continueToUpdateIdentityStage}>
           {t('Update Identity Requirements')}

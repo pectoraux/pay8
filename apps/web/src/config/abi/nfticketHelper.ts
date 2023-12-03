@@ -51,9 +51,9 @@ export const nfticketHelperABI = [
         type: 'string',
       },
       {
-        internalType: 'bool',
-        name: '_isPaywall',
-        type: 'bool',
+        internalType: 'address',
+        name: '_marketPlaceHelper',
+        type: 'address',
       },
       {
         internalType: 'uint256',
@@ -268,9 +268,19 @@ export const nfticketHelperABI = [
   {
     inputs: [
       {
-        internalType: 'bytes32',
-        name: '_tokenId',
-        type: 'bytes32',
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_item',
+        type: 'string',
+      },
+      {
+        internalType: 'address',
+        name: '_marketPlaceHelper',
+        type: 'address',
       },
       {
         internalType: 'uint256[]',

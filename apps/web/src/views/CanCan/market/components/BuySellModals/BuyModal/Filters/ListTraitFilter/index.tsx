@@ -207,7 +207,7 @@ export const ListTraitFilter: React.FC<any> = ({ title, traitType, items, collec
                       ? traitFilter[filteredItem.attr.value].count
                       : filteredItem.attr.min
                     : filteredItem.attr.min
-
+                  console.log('traitFilter============>', traitFilter, filteredItem)
                   return (
                     <TraitItemRow
                       key={filteredItem.label}

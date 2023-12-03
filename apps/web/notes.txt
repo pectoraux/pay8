@@ -1,11 +1,10 @@
 # TODO
-paywall receivables
 marketplace notes
 marketplace interaction with ARP
 recurring Revenue
 addBalanceEth in trustbounties
 marketplace discounts/cashback
-time estimates in maarketplace
+time estimates in marketplace
 task
 superchats
 option for subscriptions confuses yearly & regular

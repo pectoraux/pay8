@@ -3,6 +3,9 @@ import uniqueId from 'lodash/uniqueId'
 import { useTranslation } from '@pancakeswap/localization'
 import { OptionType } from './types'
 import Choice from './Choice'
+import { useRouter } from 'next/router'
+import { useGetTimeEstimates } from 'state/cancan/hooks'
+import { getMarketHelperAddress } from 'utils/addressHelpers'
 
 interface ChoicesProps {
   choices: OptionType[]
@@ -21,13 +24,11 @@ export const makeChoice = (): any => ({
   max: null,
 })
 
-const Choices: React.FC<any> = ({ choices, addValue = false, onChange }) => {
+const Choices: React.FC<any> = ({ choices, nftToSell, addValue = false, onChange }) => {
   const { t } = useTranslation()
-
   const addChoice = () => {
     onChange([...choices, makeChoice()])
   }
-
   return (
     <>
       {choices.map(({ id, category, element, unitPrice, value, currency, min, max }, index) => {
@@ -102,6 +103,9 @@ const Choices: React.FC<any> = ({ choices, addValue = false, onChange }) => {
           <Choice
             key={id}
             scale="sm"
+            id={id}
+            index={index}
+            nftToSell={nftToSell}
             handleCategoryInput={handleCategoryInput}
             handleElementInput={handleElementInput}
             handleElementCurrency={handleElementCurrency}

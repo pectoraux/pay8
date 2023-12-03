@@ -1,6 +1,9 @@
 import { ChangeEvent, InputHTMLAttributes, useState } from 'react'
 import { Box, CloseIcon, IconButton, Input, InputProps } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { useRouter } from 'next/router'
+import { useGetTimeEstimates } from 'state/cancan/hooks'
+import { getMarketHelperAddress, getPaywallMarketHelperAddress } from 'utils/addressHelpers'
 
 interface ChoiceProps extends InputProps, InputHTMLAttributes<HTMLInputElement> {
   handleCategoryInput: (value: string) => void
@@ -13,7 +16,12 @@ interface ChoiceProps extends InputProps, InputHTMLAttributes<HTMLInputElement> 
 }
 
 const Choice: React.FC<any> = ({
+  id,
+  item,
+  index,
+  addValue,
   onRemove,
+  nftToSell,
   handleCategoryInput,
   handleElementInput,
   handleElementCurrency,
@@ -26,6 +34,14 @@ const Choice: React.FC<any> = ({
   const { t } = useTranslation()
   const [isWarning, setIsWarning] = useState(false)
   const [isDirty, setIsDirty] = useState(false)
+  const collectionAddress = useRouter().query.collectionAddress as string
+  const timeEstimates = useGetTimeEstimates(
+    collectionAddress,
+    nftToSell?.tokenId,
+    addValue ? getPaywallMarketHelperAddress() : getMarketHelperAddress(),
+    [id],
+  )
+  const timeEstimate = parseInt(timeEstimates?.itemPriceWithOptions) - parseInt(timeEstimates?.itemPrice)
 
   const handleChangeCategory = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.currentTarget
@@ -85,6 +101,12 @@ const Choice: React.FC<any> = ({
 
   return (
     <Box position="relative" mb="26px">
+      {index === id ? (
+        <Box position="relative" mb="5px">
+          <Input disabled value={`Option Index: ${id}`} />
+          <Input disabled value={`Time Estimate: ${timeEstimate} seconds`} />
+        </Box>
+      ) : null}
       <Box position="relative" mb="5px">
         <Input
           {...props}

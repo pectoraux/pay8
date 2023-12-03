@@ -1,11 +1,25 @@
-import { useState } from 'react'
-import { Flex, Box, Text, Button, ButtonMenu, ButtonMenuItem, Input, ErrorIcon, Grid } from '@pancakeswap/uikit'
+import { useEffect, useState } from 'react'
+import {
+  Flex,
+  Box,
+  Text,
+  Button,
+  ButtonMenu,
+  ButtonMenuItem,
+  Input,
+  ErrorIcon,
+  Grid,
+  Balance,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { Divider, GreyedOutContainer } from './styles2'
+import { useGetPendingFromNote } from 'state/cancan/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
 
 interface RemoveStageProps {
   state: any
@@ -16,7 +30,11 @@ interface RemoveStageProps {
 
 const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
-  const [lockedAmount, setLockedAmount] = useState('')
+  const { data, refetch } = useGetPendingFromNote(state.token, state.tokenId)
+
+  useEffect(() => {
+    refetch()
+  }, [state])
 
   return (
     <>
@@ -37,6 +55,46 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleRawValu
           </ButtonMenu>
         </StyledItemRow>
       </GreyedOutContainer>
+      {!state.marketplace ? (
+        <GreyedOutContainer>
+          <Balance
+            lineHeight="1"
+            color="textSubtle"
+            fontSize="12px"
+            decimals={state.decimals}
+            value={getBalanceNumber(new BigNumber(data?.marketNoteRevenue?.toString()), state.decimals)}
+          />
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Pending Revenue From Item Sales')}
+          </Text>
+        </GreyedOutContainer>
+      ) : state.marketplace === 1 ? (
+        <GreyedOutContainer>
+          <Balance
+            lineHeight="1"
+            color="textSubtle"
+            fontSize="12px"
+            decimals={state.decimals}
+            value={getBalanceNumber(new BigNumber(data?.nftNoteRevenue?.toString()), state.decimals)}
+          />
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Pending Revenue From NFT Sales')}
+          </Text>
+        </GreyedOutContainer>
+      ) : (
+        <GreyedOutContainer>
+          <Balance
+            lineHeight="1"
+            color="textSubtle"
+            fontSize="12px"
+            decimals={state.decimals}
+            value={getBalanceNumber(new BigNumber(data?.paywallNoteRevenue?.toString()), state.decimals)}
+          />
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Pending Revenue From Paywall Sales')}
+          </Text>
+        </GreyedOutContainer>
+      )}
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Token ID')}
