@@ -336,15 +336,15 @@ export default {
     56: '0x',
   },
   nfticket: {
-    4002: '0xC3eDB2ad683C646bf8AF6b69d47EDF2A12fd13fE',
+    4002: '0xC3021F9C1aDa842fAf88bB0124e7BC7354A83f42',
     56: '0x',
   },
   nfticketHelper: {
-    4002: '0xAcea8b800bB6c7d1A81Ed06f337868a0FAebAf74',
+    4002: '0x8370b525aA5898386E8Bb41c763215F8609F4934',
     56: '0x',
   },
   nfticketHelper2: {
-    4002: '0x9064b491B8de73f508B970c3Eb043b4E1E9c48Dc',
+    4002: '0x584D3e622dC6Bda0A649578b7b12bdac9c508922',
     56: '0x',
   },
   marketEvents: {

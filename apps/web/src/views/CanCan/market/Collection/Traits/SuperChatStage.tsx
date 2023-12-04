@@ -73,7 +73,7 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, continueToNex
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Confirm')}
+          {t('Send')}
         </Button>
       </Flex>
     </>
