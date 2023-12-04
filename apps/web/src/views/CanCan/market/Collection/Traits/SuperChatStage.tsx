@@ -14,7 +14,7 @@ interface RemoveStageProps {
   continueToNextStage: () => void
 }
 
-const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleSuperChatChange, continueToNextStage }) => {
   const { t } = useTranslation()
   return (
     <>
@@ -55,7 +55,7 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, continueToNex
           name="message"
           value={state.message}
           placeholder={t('input superchat message')}
-          onChange={handleChange}
+          onChange={handleSuperChatChange}
         />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">

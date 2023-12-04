@@ -112,6 +112,12 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
     updateValue(key, value)
   }
 
+  const handleSuperChatChange = (key: string) => (value: string) => {
+    if (value?.length < 50) {
+      updateValue(key, value)
+    }
+  }
+
   const goBack = () => {
     switch (stage) {
       case LockStage.TRANSFER_DUE_RECEIVABLE:
@@ -430,10 +436,20 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
         />
       )}
       {stage === LockStage.SUPERCHAT && (
-        <SuperChatStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <SuperChatStage
+          state={state}
+          handleChange={handleChange}
+          handleSuperChatChange={handleSuperChatChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.SUPERCHAT_ALL && (
-        <SuperChatAllStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <SuperChatAllStage
+          state={state}
+          handleChange={handleChange}
+          handleSuperChatChange={handleSuperChatChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
