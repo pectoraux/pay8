@@ -5,7 +5,7 @@ import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
 import { Currency } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import BigNumber from 'bignumber.js'
-import { getBalanceAmount, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceAmount, getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
@@ -137,25 +137,46 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
     productId: nftToSell?.tokenId ?? '',
     tokenId: nftToSell?.tokenId ?? '',
     price: nftToSell?.currentAskPrice,
-    bidDuration: nftToSell?.bidDuration || 0,
-    minBidIncrementPercentage: nftToSell?.minBidIncrementPercentage || 0,
+    bidDuration: parseInt(nftToSell?.bidDuration || 0) / 60,
+    minBidIncrementPercentage: parseInt(nftToSell?.minBidIncrementPercentage || 0) / 100,
     transferrable: Number(nftToSell?.transferrable),
     requireUpfrontPayment: Number(nftToSell?.requireUpfrontPayment),
     rsrcTokenId: nftToSell?.rsrcTokenId || 0,
     options,
     maxSupply: nftToSell?.maxSupply || 0,
-    dropInTimer: Number(nftToSell?.dropinTimer) || 0,
+    dropInTimer: Number(nftToSell?.dropinTimer || 0) / 60,
     // discount & cashback variables
     discountStatus: Number(nftToSell.priceReductor?.discountStatus) || 0,
-    discountStart: Number(nftToSell.priceReductor?.discountStart) || 0,
+    discountStart: Number(nftToSell.priceReductor?.discountStart) * 1000 || 0,
     cashbackStatus: Number(nftToSell.priceReductor?.cashbackStatus) || 0,
-    cashbackStart: Number(nftToSell.priceReductor?.cashbackStart) || 0,
+    cashbackStart: Number(nftToSell.priceReductor?.cashbackStart) * 1000 || 0,
     cashNotCredit: Number(nftToSell.priceReductor?.cashNotCredit) || 0,
     checkIdentityCode: Number(nftToSell.priceReductor?.checkIdentityCode) || 0,
-    discountNumbers: Object.values(nftToSell.priceReductor?.discountNumbers ?? {})?.toString(),
-    discountCost: Object.values(nftToSell.priceReductor?.discountCost ?? {})?.toString(),
-    cashbackNumbers: Object.values(nftToSell.priceReductor?.cashbackNumbers ?? {})?.toString(),
-    cashbackCost: Object.values(nftToSell.priceReductor?.cashbackCost ?? {})?.toString(),
+    discountNumbers: Object.values(nftToSell.priceReductor?.discountNumbers ?? {})
+      ?.map((v: any, i) => {
+        if (i === 2) return parseInt(v) / 100
+        return v
+      })
+      ?.toString(),
+    discountCost: Object.values(nftToSell.priceReductor?.discountCost ?? {})
+      ?.map((v: any, i) => {
+        if (i === 2) return parseInt(v) / 100
+        if (i === 3 || i === 4) return getBalanceNumber(v)
+        return v
+      })
+      ?.toString(),
+    cashbackNumbers: Object.values(nftToSell.priceReductor?.cashbackNumbers ?? {})
+      ?.map((v: any, i) => {
+        if (i === 2) return parseInt(v) / 100
+        return v
+      })
+      ?.toString(),
+    cashbackCost: Object.values(nftToSell.priceReductor?.cashbackCost ?? {})
+      ?.map((v: any, i) => {
+        if (i === 2) return parseInt(v) / 100
+        return v
+      })
+      ?.toString(),
     addPaywall: '',
     removePaywall: '',
     token: nftToSell.usetFIAT ? nftToSell?.tFIAT : nftToSell?.ve,
@@ -559,19 +580,21 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
             }),
             0,
           )
-          const cursor = state.cashbackNumbers?.length ? state.cashbackNumbers[0] : 0
-          const size = state.cashbackNumbers?.length ? state.cashbackNumbers[1] : 0
-          const perct = state.cashbackNumbers?.length ? state.cashbackNumbers[2] : 0
-          const lowerThreshold = state.cashbackNumbers?.length ? getDecimalAmount(state.cashbackNumbers[3] ?? 0) : 0
-          const upperThreshold = state.cashbackNumbers?.length ? getDecimalAmount(state.cashbackNumbers[4] ?? 0) : 0
-          const limit = state.cashbackNumbers?.length ? state.cashbackNumbers[5] : 0
+          const cashbackNumbers = state.cashbackNumbers?.split(',')
+          const cursor = cashbackNumbers?.length ? cashbackNumbers[0] : 0
+          const size = cashbackNumbers?.length ? cashbackNumbers[1] : 0
+          const perct = cashbackNumbers?.length ? cashbackNumbers[2] : 0
+          const lowerThreshold = cashbackNumbers?.length ? cashbackNumbers[3] : 0
+          const upperThreshold = cashbackNumbers?.length ? cashbackNumbers[4] : 0
+          const limit = cashbackNumbers?.length ? cashbackNumbers[5] : 0
 
-          const cursor2 = state.cashbackCost?.length ? state.cashbackCost[0] : 0
-          const size2 = state.cashbackCost?.length ? state.cashbackCost[1] : 0
-          const perct2 = state.cashbackCost?.length ? state.cashbackCost[2] : 0
-          const lowerThreshold2 = state.cashbackCost?.length ? getDecimalAmount(state.cashbackCost[3] ?? 0) : 0
-          const upperThreshold2 = state.cashbackCost?.length ? getDecimalAmount(state.cashbackCost[4] ?? 0) : 0
-          const limit2 = state.cashbackCost?.length ? state.cashbackCost[5] : 0
+          const cashbackCost = state.cashbackCost?.split(',')
+          const cursor2 = cashbackCost?.length ? cashbackCost[0] : 0
+          const size2 = cashbackCost?.length ? cashbackCost[1] : 0
+          const perct2 = cashbackCost?.length ? cashbackCost[2] : 0
+          const lowerThreshold2 = cashbackCost?.length ? getDecimalAmount(cashbackCost[3] ?? 0) : 0
+          const upperThreshold2 = cashbackCost?.length ? getDecimalAmount(cashbackCost[4] ?? 0) : 0
+          const limit2 = cashbackCost?.length ? cashbackCost[5] : 0
           console.log('CONFIRM_UPDATE_DISCOUNTS_AND_CASHBACKS1===============>', [
             nftToSell.tokenId,
             state.cashbackStatus,
@@ -595,19 +618,21 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           }),
           0,
         )
-        const cursor = state.discountNumbers?.length ? state.discountNumbers[0] : 0
-        const size = state.discountNumbers?.length ? state.discountNumbers[1] : 0
-        const perct = state.discountNumbers?.length ? state.discountNumbers[2] : 0
-        const lowerThreshold = state.discountNumbers?.length ? getDecimalAmount(state.discountNumbers[3] ?? 0) : 0
-        const upperThreshold = state.discountNumbers?.length ? getDecimalAmount(state.discountNumbers[4] ?? 0) : 0
-        const limit = state.discountNumbers?.length ? state.discountNumbers[5] : 0
+        const discountNumbers = state.discountNumbers?.split(',')
+        const cursor = discountNumbers?.length ? discountNumbers[0] : 0
+        const size = discountNumbers?.length ? discountNumbers[1] : 0
+        const perct = discountNumbers?.length ? discountNumbers[2] : 0
+        const lowerThreshold = discountNumbers?.length ? discountNumbers[3] : 0
+        const upperThreshold = discountNumbers?.length ? discountNumbers[4] : 0
+        const limit = discountNumbers?.length ? discountNumbers[5] : 0
 
-        const cursor2 = state.discountCost?.length ? state.discountCost[0] : 0
-        const size2 = state.discountCost?.length ? state.discountCost[1] : 0
-        const perct2 = state.discountCost?.length ? state.discountCost[2] : 0
-        const lowerThreshold2 = state.discountCost?.length ? getDecimalAmount(state.discountCost[3] ?? 0) : 0
-        const upperThreshold2 = state.discountCost?.length ? getDecimalAmount(state.discountCost[4] ?? 0) : 0
-        const limit2 = state.discountCost?.length ? state.discountCost[5] : 0
+        const discountCost = state.discountCost?.split(',')
+        const cursor2 = discountCost?.length ? discountCost[0] : 0
+        const size2 = discountCost?.length ? discountCost[1] : 0
+        const perct2 = discountCost?.length ? discountCost[2] : 0
+        const lowerThreshold2 = discountCost?.length ? getDecimalAmount(discountCost[3] ?? 0) : 0
+        const upperThreshold2 = discountCost?.length ? getDecimalAmount(discountCost[4] ?? 0) : 0
+        const limit2 = discountCost?.length ? discountCost[5] : 0
         console.log('CONFIRM_UPDATE_DISCOUNTS_AND_CASHBACKS===============>', [
           nftToSell.tokenId,
           state.discountStatus,

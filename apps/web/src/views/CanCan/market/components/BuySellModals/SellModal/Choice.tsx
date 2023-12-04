@@ -104,7 +104,7 @@ const Choice: React.FC<any> = ({
       {index === id ? (
         <Box position="relative" mb="5px">
           <Input disabled value={`Option Index: ${id}`} />
-          <Input disabled value={`Time Estimate: ${timeEstimate} seconds`} />
+          <Input disabled value={`Time Estimate: ${timeEstimate ?? '0'} seconds`} />
         </Box>
       ) : null}
       <Box position="relative" mb="5px">

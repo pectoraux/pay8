@@ -112,10 +112,9 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
     updateValue(key, value)
   }
 
-  const handleSuperChatChange = (key: string) => (value: string) => {
-    if (value?.length < 50) {
-      updateValue(key, value)
-    }
+  const handleSuperChatChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    const { value } = evt.currentTarget
+    if (value?.length < 50) updateValue('message', value)
   }
 
   const goBack = () => {
@@ -198,7 +197,10 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
       try {
-        if (variant === 'superchat') return requiresApproval(stakingTokenContract, account, nfticketContract.address)
+        if (variant === 'superchat') {
+          if (isAdmin) return false
+          return requiresApproval(stakingTokenContract, account, nfticketContract.address)
+        }
         const needsApproval1 = requiresApproval(stakingTokenContract, account, marketTradesContract.address)
         const needsApproval2 = requiresApproval(stakingTokenContract, account, nftMarketTradesContract.address)
         const needsApproval3 = requiresApproval(stakingTokenContract, account, paywallMarketTradesContract.address)
@@ -371,10 +373,10 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
               <Button mb="8px" onClick={() => setStage(LockStage.SUPERCHAT)}>
                 {t('SUPERCHAT')}
               </Button>
-              <Button mb="8px" onClick={() => setStage(LockStage.SUPERCHAT_ALL)}>
+              <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.SUPERCHAT_ALL)}>
                 {t('SUPERCHAT ALL TICKETS')}
               </Button>
-              <Button mb="8px" onClick={() => setStage(LockStage.CLAIM_SP_REVENUE)}>
+              <Button mb="8px" variant="success" onClick={() => setStage(LockStage.CLAIM_SP_REVENUE)}>
                 {t('CLAIM SUPERCHAT REVENUE')}
               </Button>
             </>

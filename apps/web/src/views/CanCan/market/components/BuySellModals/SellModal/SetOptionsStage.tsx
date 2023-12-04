@@ -69,7 +69,7 @@ const SetPriceStage: React.FC<any> = ({
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Item Time Estimate')}
         </Text>
-        <Input type="text" scale="sm" value={`${timeEstimate?.itemPrice} seconds`} disabled />
+        <Input type="text" scale="sm" value={`${timeEstimate?.itemPrice ?? '0'} seconds`} disabled />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

@@ -1,11 +1,24 @@
 import { useState } from 'react'
-import { Flex, Box, Text, Button, ButtonMenu, ButtonMenuItem, Input, ErrorIcon, Grid } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Box,
+  Text,
+  Button,
+  ButtonMenu,
+  ButtonMenuItem,
+  Input,
+  ErrorIcon,
+  Grid,
+  Balance,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { Divider, GreyedOutContainer } from './styles2'
+import BigNumber from 'bignumber.js'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 interface RemoveStageProps {
   state: any
@@ -18,6 +31,18 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleSuperCh
   const { t } = useTranslation()
   return (
     <>
+      <GreyedOutContainer>
+        <Balance
+          lineHeight="1"
+          color="textSubtle"
+          fontSize="12px"
+          decimals={18}
+          value={getBalanceNumber(new BigNumber('100000000000000000'), 18)}
+        />
+        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+          {t('Minimum Superchat Amount (Not Applicable for merchants)')}
+        </Text>
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Token IDs To Superchat To')}

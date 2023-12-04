@@ -87,6 +87,7 @@ const ReviewStage: React.FC<any> = ({
   paymentCredits,
   totalPayment,
   discounted,
+  discountAmount,
   userTokenId,
   identityTokenId,
   recipient,
@@ -115,7 +116,7 @@ const ReviewStage: React.FC<any> = ({
   const { account } = useWeb3React()
   const [discountIndex, setDiscountIndex] = useState(0)
   const { isMobile } = useMatchBreakpoints()
-  const showCredits = paymentCredits
+  const showCredits = paymentCredits > 0
   const showSecondMenu = discounted && showCredits
   const nftFilters = useGetNftFilters(account)
   const { balance: bnbBalance, fetchStatus: bnbFetchStatus } = useTokenBalance(mainCurrency?.address ?? '')
@@ -369,7 +370,7 @@ const ReviewStage: React.FC<any> = ({
                         {t('Payment credits')}
                       </Text>
                       <BnbAmountCell
-                        bnbAmount={nftPrice}
+                        bnbAmount={paymentCredits}
                         currency={currencies[paymentCurrency]}
                         secondaryCurrency={getSecondaryCurrency(currencies[paymentCurrency])}
                       />
@@ -379,10 +380,10 @@ const ReviewStage: React.FC<any> = ({
               ) : discounted ? (
                 <>
                   <Text small color="textSubtle">
-                    {t('Discounts')}
+                    {t('Discount Amount')}
                   </Text>
                   <BnbAmountCell
-                    bnbAmount={nftPrice}
+                    bnbAmount={discountAmount}
                     currency={currencies[paymentCurrency]}
                     secondaryCurrency={getSecondaryCurrency(currencies[paymentCurrency])}
                   />

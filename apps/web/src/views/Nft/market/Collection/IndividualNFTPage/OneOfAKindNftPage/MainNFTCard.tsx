@@ -204,14 +204,14 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                         <Text fontSize="24px" bold mr="4px">
                           {formatNumber(currentAskPriceAsNumber, 0, 18)}
                         </Text>
-                        {mainToSecondaryCurrencyFactor && secondaryCurrency ? (
+                        {/* {mainToSecondaryCurrencyFactor && secondaryCurrency ? (
                           <Text color="textSubtle">{`(~${priceInSecondaryCurrency.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           })} ${secondaryCurrency?.symbol})`}</Text>
                         ) : (
                           <Skeleton width="64px" />
-                        )}
+                        )} */}
                       </Flex>
                     </>
                   ) : null}

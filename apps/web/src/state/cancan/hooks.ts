@@ -353,10 +353,13 @@ export const useGetCollectionContracts = (collectionAddress: string) => {
 
 export const useGetPaymentCredits = (collectionAddress: string, tokenId: string, address: string) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['cancan', 'paymentCredits', chainId], async () =>
+  const { data, mutate } = useSWRImmutable(['cancan', 'paymentCredits', chainId], async () =>
     getPaymentCredits(collectionAddress, tokenId, address, chainId),
   )
-  return data?.length === 0 ? 0 : data
+  return {
+    refetch: mutate,
+    data: data?.length === 0 ? 0 : data,
+  }
 }
 
 export const useGetItem = (collectionAddress: string, tokenId: string) => {
@@ -400,7 +403,7 @@ export const useGetDiscounted = (
   isPaywall = false,
 ) => {
   const { chainId } = useActiveChainId()
-  const { data, status } = useSWR(
+  const { data, status, mutate } = useSWR(
     ['cancan', 'useGetDiscounted', account?.toLowerCase() ?? '', chainId],
     async () =>
       getDiscounted(
@@ -422,6 +425,7 @@ export const useGetDiscounted = (
   return {
     discounted: data?.discounted,
     discount: data?.discount,
+    refetch: mutate,
     status,
   }
 }
@@ -436,7 +440,7 @@ export const useGetNftDiscounted = (
   isPaywall = false,
 ) => {
   const { chainId } = useActiveChainId()
-  const { data, status } = useSWR(
+  const { data, status, mutate } = useSWR(
     ['useGetNftDiscounted', account?.toLowerCase() ?? '', chainId],
     async () =>
       getNftDiscounted(
@@ -458,6 +462,7 @@ export const useGetNftDiscounted = (
   return {
     discounted: data?.discounted,
     discount: data?.discount,
+    refetch: mutate,
     status,
   }
 }

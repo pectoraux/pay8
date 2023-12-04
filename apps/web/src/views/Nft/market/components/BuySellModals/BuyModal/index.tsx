@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/router'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { useTranslation, TranslateFunction } from '@pancakeswap/localization'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import {
   useERC20,
   useNftMarketTradesContract,
@@ -103,7 +103,11 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const [recipient, setRecipient] = useState<string>('')
   const [tokenId, setTokenId] = useState<string>('')
   const nftPrice = parseFloat(bidPrice ? bidPrice : nftToBuy?.currentAskPrice)
-  const paymentCredits = useGetPaymentCredits(nftToBuy?.collection?.id, nftToBuy?.tokenId, account) as any
+  const { data: paymentCredits, refetch: refetchPayment } = useGetPaymentCredits(
+    nftToBuy?.collection?.id,
+    nftToBuy?.tokenId,
+    account,
+  ) as any
   const valuepoolContract = useValuepoolContract(recipient)
   const valuepoolHelperContract = useValuepoolHelperContract()
   const tokenContract = useErc721CollectionContract(nftToBuy?.minter || '')
@@ -123,7 +127,36 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     })
     return opt
   }, [variant, nftToBuy, nftFilters])
-  const { discount, discounted, status } = useGetNftDiscounted(
+
+  useEffect(() => {
+    refetchPayment()
+  }, [account])
+
+  const userOptionsPrices = useMemo(() => {
+    let opt = []
+    Object.values(nftFilters)?.map((vals) => {
+      Object.keys(vals).map((elt) => {
+        const id =
+          variant === 'paywall'
+            ? nftToBuy.options?.findIndex((cat) => parseFloat(cat.value) === parseFloat(elt))
+            : nftToBuy.options?.findIndex((cat) => cat.element?.toLowerCase() === elt.toLowerCase())
+        const count = vals[elt]?.count
+        opt = [...opt, vals[elt].price]
+        return opt
+      })
+      return null
+    })
+    return opt
+  }, [variant, nftToBuy, nftFilters])
+
+  let userOptionsPrice = userOptionsPrices?.reduce((a, b) => a + b, 0)
+
+  const {
+    discount,
+    discounted,
+    status,
+    refetch: refetchDiscount,
+  } = useGetNftDiscounted(
     nftToBuy?.currentSeller,
     account,
     nftToBuy?.tokenId,
@@ -132,7 +165,16 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     0,
     variant === 'paywall',
   )
+
+  useEffect(() => {
+    refetchDiscount()
+  }, [variant, nftToBuy, nftFilters])
+
   const totalPayment = Math.max(Number(discount ?? 0) - paymentCredits, 0)
+  const discountAmount = getBalanceNumber(
+    new BigNumber(parseInt(p.toFixed()) + parseFloat(userOptionsPrice) - parseFloat(discount?.toString() ?? '0')),
+  )
+
   let { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
   const paywallARP = useGetPaywallARP(nftToBuy?.collection?.id ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(
@@ -335,8 +377,9 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           setRequireUpfrontPayment={setRequireUpfrontPayment}
           paymentCurrency={paymentCurrency}
           setPaymentCurrency={setPaymentCurrency}
-          paymentCredits={paymentCredits}
+          paymentCredits={getBalanceNumber(paymentCredits ?? 0)}
           discounted={discounted}
+          discountAmount={discountAmount}
           totalPayment={totalPayment}
           nftPrice={nftPrice}
           recipient={recipient}

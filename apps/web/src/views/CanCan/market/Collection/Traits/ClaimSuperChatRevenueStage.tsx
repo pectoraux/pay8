@@ -37,14 +37,16 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, continueToNex
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will transfer all the revenue generated from superchats to your wallet.')}
+            {t(
+              'This will transfer all the revenue generated from superchats to your wallet. Input 0 to withdraw the totality of the balance.',
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Confirm')}
+          {t('Claim')}
         </Button>
       </Flex>
     </>

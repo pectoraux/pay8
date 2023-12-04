@@ -85,9 +85,9 @@ const OwnerCard: React.FC<any> = ({ nft, isOwnNft, isPaywall, onSuccess }) => {
                     <Text fontSize="12px" color="textSubtle">
                       {`(~${formatNumber(priceInUsd, 2, 2)} USD)`}
                     </Text>
-                  ) : (
-                    <Skeleton width="86px" height="12px" mt="4px" />
-                  )}
+                  ) : null
+                  // <Skeleton width="86px" height="12px" mt="4px" />
+                  }
                 </>
               ) : (
                 <Flex alignItems="center" height="100%">
