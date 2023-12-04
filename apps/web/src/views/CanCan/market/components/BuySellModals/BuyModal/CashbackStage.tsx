@@ -14,6 +14,8 @@ import { NftToken } from 'state/cancan/types'
 import { format } from 'date-fns'
 import { Divider, RoundedImage } from '../shared/styles'
 import { GreyedOutContainer } from '../SellModal/styles'
+import { useGetOrder } from 'state/cancan/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 interface TransferStageProps {
   nftToBuy: NftToken
@@ -23,6 +25,7 @@ interface TransferStageProps {
 const CashbackStage: React.FC<any> = ({
   thumbnail,
   nftToBuy,
+  isPaywall,
   collectionId,
   tokenId,
   credit,
@@ -31,14 +34,19 @@ const CashbackStage: React.FC<any> = ({
   continueToNextStage,
 }) => {
   const { t } = useTranslation()
-  const numbersElligibilityCriteria = nftToBuy?.marketData.priceReductor?.cashbackNumbers
-  const costElligibilityCriteria = nftToBuy?.marketData.priceReductor?.cashbackCost
-  const cashNotCredit = nftToBuy?.marketData.priceReductor?.cashNotCredit
+  const askOrder = nftToBuy // useGetOrder(nftToBuy?.collection?.id, nftToBuy?.tokenId, isPaywall)?.data as any
+  const numbersElligibilityCriteria = nftToBuy?.priceReductor?.cashbackNumbers
+  const costElligibilityCriteria = nftToBuy?.priceReductor?.cashbackCost
+  const cashNotCredit = nftToBuy?.priceReductor?.cashNotCredit
   const numbersCashbackAvailable =
-    Number(nftToBuy?.marketData.priceReductor?.discountStatus) === 1 && numbersElligibilityCriteria?.cursor
+    Number(nftToBuy?.priceReductor?.cashbackStatus) === 1 &&
+    numbersElligibilityCriteria?.length &&
+    parseInt(numbersElligibilityCriteria[0]) > 0
   const costCashbackAvailable =
-    Number(nftToBuy?.marketData.priceReductor?.cashbackStatus) === 1 && costElligibilityCriteria?.cursor
-
+    Number(nftToBuy?.priceReductor?.cashbackStatus) === 1 &&
+    costElligibilityCriteria?.length &&
+    parseInt(costElligibilityCriteria[0]) > 0
+  console.log('nftToBuy====================>', nftToBuy)
   return (
     <>
       <Text fontSize="24px" bold px="16px" pt="16px">
@@ -94,44 +102,56 @@ const CashbackStage: React.FC<any> = ({
           {(numbersCashbackAvailable || costCashbackAvailable) && t('Find eligibility criteria below:')}
         </Text>
       </Grid>
-      {numbersCashbackAvailable && (
+      {numbersCashbackAvailable ? (
         <Flex flexDirection="column" alignItems="center" justifyContent="space-between" mb="15px">
           <Text small bold color="secondary">
-            From numbers criteria
+            {t('From numbers criteria')}
           </Text>
-          <Text small bold color="textSubtle">{`Period start: ${format(
-            Number(numbersElligibilityCriteria?.cursor),
-            'MMM dd, yyyy HH:mm',
-          )}`}</Text>
-          <Text small bold color="textSubtle">{`Period end: ${format(
-            Number(numbersElligibilityCriteria?.size),
-            'MMM dd, yyyy HH:mm',
-          )}`}</Text>
-          <Text small bold color="textSubtle">{`Lower threshold: ${numbersElligibilityCriteria?.lowerThreshold}`}</Text>
-          <Text small bold color="textSubtle">{`Upper threshold: ${numbersElligibilityCriteria?.upperThreshold}`}</Text>
-          <Text small bold color="textSubtle">{`Cashback percentage: ${numbersElligibilityCriteria?.perct}`}</Text>
-          <Text small bold color="textSubtle">{`Limit: ${numbersElligibilityCriteria?.limit}`}</Text>
+          <Text small bold color="textSubtle">
+            {t(`Period start: ${format(Number(numbersElligibilityCriteria[0]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Period end: ${format(Number(numbersElligibilityCriteria[1]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Lower threshold: ${numbersElligibilityCriteria[3]}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Upper threshold: ${numbersElligibilityCriteria[4]}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Cashback percentage: ${parseInt(numbersElligibilityCriteria[2]) / 100}%`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Limit: ${numbersElligibilityCriteria[5]}`)}
+          </Text>
         </Flex>
-      )}
-      {costCashbackAvailable && (
+      ) : null}
+      {costCashbackAvailable ? (
         <Flex flexDirection="column" alignItems="center" justifyContent="space-between" mb="15px">
           <Text small bold color="secondary">
-            From cost criteria
+            {t('From cost criteria')}
           </Text>
-          <Text small bold color="textSubtle">{`Period start: ${format(
-            Number(costElligibilityCriteria?.cursor),
-            'MMM dd, yyyy HH:mm',
-          )}`}</Text>
-          <Text small bold color="textSubtle">{`Period end: ${format(
-            Number(costElligibilityCriteria?.size),
-            'MMM dd, yyyy HH:mm',
-          )}`}</Text>
-          <Text small bold color="textSubtle">{`Lower threshold: ${costElligibilityCriteria?.lowerThreshold}`}</Text>
-          <Text small bold color="textSubtle">{`Upper threshold: ${costElligibilityCriteria?.upperThreshold}`}</Text>
-          <Text small bold color="textSubtle">{`Cashback percentage: ${costElligibilityCriteria?.perct}`}</Text>
-          <Text small bold color="textSubtle">{`Limit: ${costElligibilityCriteria?.limit}`}</Text>
+          <Text small bold color="textSubtle">
+            {t(`Period start: ${format(Number(costElligibilityCriteria[0]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Period end: ${format(Number(costElligibilityCriteria[1]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Lower threshold: ${costElligibilityCriteria[3]}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Upper threshold: ${costElligibilityCriteria[4]}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Cashback percentage: ${parseInt(costElligibilityCriteria[2]) / 100}`)}%
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Limit: ${costElligibilityCriteria[5]}`)}
+          </Text>
         </Flex>
-      )}
+      ) : null}
       <Flex flexDirection="column" alignItems="center" justifyContent="space-between" height="150px">
         <LinkExternal href="">{t('Learn more about cashbacks')}</LinkExternal>
       </Flex>

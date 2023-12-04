@@ -491,6 +491,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
       {stage === BuyingStage.CASHBACK && (
         <CashbackStage
           thumbnail={_thumbnail}
+          isPaywall={variant === 'paywall'}
           nftToBuy={nftToBuy}
           collectionId={collectionId}
           credit={credit}
