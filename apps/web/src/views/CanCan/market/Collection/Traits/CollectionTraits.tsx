@@ -49,8 +49,8 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
   const cacanCurrencyInput = useCurrency(DEFAULT_TFIAT)
   const isAdmin = collection?.owner?.toLowerCase() === account?.toLowerCase()
   const { data, refetch } = useGetPendingRevenue(currency, collectionAddress)
-  const sponsorRevenue = useGetSponsorRevenue(collectionAddress)
-  const superChatRevenue = useGetSuperchatRevenue(collectionAddress)
+  const { data: sponsorRevenue, refetch: refetch2 } = useGetSponsorRevenue(collectionAddress)
+  const { data: superChatRevenue, refetch: refetch3 } = useGetSuperchatRevenue(collectionAddress)
   const { data: tokenURIs } = useGetTokenURIs(collection?.owner)
   console.log('tokenURIs======================>', tokenURIs)
   const handleInputSelect = useCallback((currencyInput) => {
@@ -65,7 +65,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
       pool={collection}
       currency={cacanCurrencyInput}
       isAdmin={isAdmin}
-      refetch={refetch}
+      refetch={refetch2}
     />,
   )
   const [openPresentControlPanel3] = useModal(
@@ -74,7 +74,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
       pool={collection}
       currency={cacanCurrencyInput}
       isAdmin={isAdmin}
-      refetch={refetch}
+      refetch={refetch3}
     />,
   )
   const [onPresentNote] = useModal(

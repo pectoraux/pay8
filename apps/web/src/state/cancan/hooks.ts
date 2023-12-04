@@ -239,18 +239,24 @@ export const useGetTokenURIs = (collectionOwner) => {
 
 export const useGetSponsorRevenue = (collectionAddress) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['useGetSponsorRevenue', chainId], async () =>
+  const { data, mutate } = useSWRImmutable(['useGetSponsorRevenue', chainId], async () =>
     getSponsorRevenue(collectionAddress, chainId),
   )
-  return data
+  return {
+    data,
+    refetch: mutate,
+  }
 }
 
 export const useGetSuperchatRevenue = (collectionAddress) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['useGetSuperchatRevenue', chainId], async () =>
+  const { data, mutate } = useSWRImmutable(['useGetSuperchatRevenue', chainId], async () =>
     getSuperchatRevenue(collectionAddress, chainId),
   )
-  return data
+  return {
+    data,
+    refetch: mutate,
+  }
 }
 
 export const useGetShuffledCollections = (searchQuery) => {
