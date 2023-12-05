@@ -336,15 +336,15 @@ export default {
     56: '0x',
   },
   nfticket: {
-    4002: '0xE09376FeAB25EDb748b4F35DdcdC848BD55a5f8C',
+    4002: '0xa5fb743792f26827f63c864E48c13cAa97ba35d3',
     56: '0x',
   },
   nfticketHelper: {
-    4002: '0x213D6Ab2d22641252d5fbc1B36615909318C70c5',
+    4002: '0x247ad9598bC67EfCe568d36f8f5e4cb966EE5a5E',
     56: '0x',
   },
   nfticketHelper2: {
-    4002: '0x9894d9dd7D3A721a8C5A41Fcf9BFE2420577E7d7',
+    4002: '0xAB45391c5Ee3270880565E2e9b6BA1d01A4A2cCF',
     56: '0x',
   },
   marketEvents: {
@@ -601,7 +601,7 @@ export default {
   },
   nftSVG: {
     56: '0x',
-    4002: '0x36D1257A7E29E73A345D01F1e5F81d424C12a2c7',
+    4002: '0xabd6aB0c520848770B16f2b7d1d3cD58F83f82D8',
   },
   'real estate': {
     4002: '0xb9858E52175Dc194686E29875570703B5C986Fe3', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',

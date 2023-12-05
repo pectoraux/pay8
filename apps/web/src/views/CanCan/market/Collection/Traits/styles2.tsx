@@ -16,9 +16,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_CLAIM_SP_REVENUE,
   LockStage.CONFIRM_TRANSFER_DUE_RECEIVABLE,
   LockStage.CONFIRM_CLAIM_REVENUE_FROM_NOTE,
+  LockStage.CONFIRM_UPDATE_TASK,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_TASK,
+  LockStage.CONFIRM_UPDATE_TASK,
   LockStage.SUPERCHAT,
   LockStage.CONFIRM_SUPERCHAT,
   LockStage.SUPERCHAT_ALL,

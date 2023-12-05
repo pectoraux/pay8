@@ -7,6 +7,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import {
   useERC20,
   useMarketTradesContract,
+  useNFTSVGContract,
   useNFTicket,
   useNFTicketHelper,
   useNftMarketTradesContract,
@@ -33,6 +34,7 @@ import ClaimRevenueFromNoteStage from './ClaimRevenueFromNoteStage'
 import ClaimSuperChatRevenueStage from './ClaimSuperChatRevenueStage'
 import SuperChatStage from './SuperChatStage'
 import SuperChatAllStage from './SuperChatAllStage'
+import UpdateTaskStage from './UpdateTaskStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -42,6 +44,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CLAIM_REVENUE]: t('Claim Revenue'),
   [LockStage.FUND_REVENUE]: t('Fund Revenue'),
   [LockStage.SUPERCHAT]: t('Superchat'),
+  [LockStage.UPDATE_TASK]: t('Update Task'),
   [LockStage.SUPERCHAT_ALL]: t('Superchat Every Ticket'),
   [LockStage.CLAIM_SP_REVENUE]: t('Claim SuperChat Revenue'),
   [LockStage.CONFIRM_CLAIM_SP_REVENUE]: t('Back'),
@@ -49,6 +52,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_FUND_REVENUE]: t('Back'),
   [LockStage.CONFIRM_SUPERCHAT]: t('Back'),
   [LockStage.CONFIRM_SUPERCHAT_ALL]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_TASK]: t('Back'),
   [LockStage.CONFIRM_CLAIM_REVENUE_FROM_NOTE]: t('Back'),
   [LockStage.CONFIRM_CLAIM_REVENUE]: t('Back'),
   [LockStage.CONFIRM_TRANSFER_DUE_RECEIVABLE]: t('Back'),
@@ -72,6 +76,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
   const router = useRouter()
   const stakingTokenContract = useERC20(currency?.address || '')
   const nfticketContract = useNFTicket()
+  const nftSvgContract = useNFTSVGContract()
   const nfticketHelperContract = useNFTicketHelper()
   const marketTradesContract = useMarketTradesContract()
   const paywallMarketTradesContract = usePaywallMarketTradesContract()
@@ -161,6 +166,12 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
       case LockStage.CONFIRM_SUPERCHAT_ALL:
         setStage(LockStage.SUPERCHAT_ALL)
         break
+      case LockStage.UPDATE_TASK:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_TASK:
+        setStage(LockStage.UPDATE_TASK)
+        break
       default:
         break
     }
@@ -188,6 +199,9 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
         break
       case LockStage.SUPERCHAT_ALL:
         setStage(LockStage.CONFIRM_SUPERCHAT_ALL)
+        break
+      case LockStage.UPDATE_TASK:
+        setStage(LockStage.CONFIRM_UPDATE_TASK)
         break
       default:
         break
@@ -329,6 +343,13 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
           console.log('CONFIRM_SUPERCHAT_ALL===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_UPDATE_TASK) {
+        const args = [state.message]
+        console.log('CONFIRM_UPDATE_TASK===============>', args)
+        return callWithGasPrice(nftSvgContract, 'updateSVGTask', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_TASK===============>', err),
+        )
+      }
     },
     onSuccess: async ({ receipt }) => {
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
@@ -382,6 +403,9 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
             </>
           ) : (
             <>
+              <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_TASK)}>
+                {t('UPDATE TASK LINK')}
+              </Button>
               <Button mb="8px" onClick={() => setStage(LockStage.TRANSFER_DUE_RECEIVABLE)}>
                 {t('TRANSFER DUE RECEIVABLE')}
               </Button>
@@ -452,6 +476,9 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
           handleSuperChatChange={handleSuperChatChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.UPDATE_TASK && (
+        <UpdateTaskStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage

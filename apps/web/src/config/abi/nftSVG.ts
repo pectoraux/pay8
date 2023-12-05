@@ -20,11 +20,6 @@ export const nftSVGABI = [
         type: 'uint256',
       },
       {
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
-      },
-      {
         internalType: 'address',
         name: 'token1',
         type: 'address',
@@ -41,7 +36,7 @@ export const nftSVGABI = [
       },
       {
         internalType: 'address',
-        name: 'taxContract',
+        name: 'channelOwner',
         type: 'address',
       },
       {
@@ -137,7 +132,7 @@ export const nftSVGABI = [
       },
       {
         internalType: 'address',
-        name: 'taxContract',
+        name: 'channelOwner',
         type: 'address',
       },
       {
@@ -167,6 +162,25 @@ export const nftSVGABI = [
         internalType: 'string',
         name: 'svg',
         type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_channelOwner',
+        type: 'address',
+      },
+    ],
+    name: 'hasTask',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
     stateMutability: 'view',
@@ -207,6 +221,25 @@ export const nftSVGABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'task',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '_contract',
         type: 'address',
@@ -218,6 +251,19 @@ export const nftSVGABI = [
       },
     ],
     name: 'updateDescription',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '_str',
+        type: 'string',
+      },
+    ],
+    name: 'updateSVGTask',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

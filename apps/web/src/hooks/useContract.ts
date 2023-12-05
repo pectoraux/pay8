@@ -140,6 +140,7 @@ import {
   getLotteryContract,
   getLotteryRandomNumberGeneratorContract,
   getLotteryHelperContract,
+  getNFTSVGContract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
@@ -1022,6 +1023,12 @@ export const usePaywallContract = (paywallAddress: Address) => {
     () => paywallAddress && getPaywallContract(paywallAddress, signer, chainId),
     [paywallAddress, signer, chainId],
   )
+}
+
+export const useNFTSVGContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getNFTSVGContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }
 
 export const useNFTicket = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {

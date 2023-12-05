@@ -5,6 +5,8 @@ addBalanceEth in trustbounties
 marketplace discounts/cashback
 task
 option for subscriptions confuses yearly & regular
+tags
+burn for credit
 
 you cannot withdraw from stake unless agreement is good for all parties
 you have to select the parent stake before applying to a stake partnership
