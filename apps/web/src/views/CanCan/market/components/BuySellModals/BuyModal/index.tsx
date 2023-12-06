@@ -82,9 +82,13 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const [stage, setStage] = useState(variant === 'paywall' ? BuyingStage.PAYWALL_REVIEW : BuyingStage.REVIEW)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const [tokenId, setTokenId] = useState<any>(0)
+  const [position, setPosition] = useState<any>(0)
   const [credit, setCredit] = useState<any>(0)
   const [userTokenId, setUserTokenId] = useState(0)
   const [address, setAddress] = useState('')
+  const [amount, setAmount] = useState('')
+  const [decimals, setDecimals] = useState('')
+  const [applyToTokenId, setApplyToTokenId] = useState('')
   const [note, setNote] = useState('')
   const [identityTokenId, setIdentityTokenId] = useState(0)
   const [merchantIdentityTokenId, setMerchantIdentityTokenId] = useState(0)
@@ -256,6 +260,15 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
         console.log('CONFIRM_ADDRESS_LIMIT================>', args)
         return callWithGasPrice(callContract, 'updateVersion', args).catch((err) =>
           console.log('CONFIRM_ADDRESS_LIMIT================>', err),
+        )
+      }
+      if (stage === BuyingStage.CONFIRM_PAYMENT_CREDIT) {
+        const _amount =
+          parseInt(decimals) === 0 ? amount : getDecimalAmount(new BigNumber(amount?.toString()), parseInt(decimals))
+        const args = [nftToBuy?.collection?.id, position, _amount?.toString(), applyToTokenId]
+        console.log('CONFIRM_PAYMENT_CREDIT================>', args)
+        return callWithGasPrice(callContract, 'burnForCredit', args).catch((err) =>
+          console.log('CONFIRM_PAYMENT_CREDIT================>', err),
         )
       }
       if (paymentCurrency === PaymentCurrency.BNB) {
@@ -523,6 +536,14 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
         <PaymentCreditStage
           thumbnail={_thumbnail}
           nftToBuy={nftToBuy}
+          amount={amount}
+          setAmount={setAmount}
+          position={position}
+          applyToTokenId={applyToTokenId}
+          setPosition={setPosition}
+          setApplyToTokenId={setApplyToTokenId}
+          decimals={decimals}
+          setDecimals={setDecimals}
           isPaywall={variant === 'paywall'}
           collectionId={collectionId}
           continueToNextStage={continueToNextStage}

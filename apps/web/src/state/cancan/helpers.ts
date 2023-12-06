@@ -573,19 +573,19 @@ export const getTokenForCredit = async (collectionAddress, isPaywall, chainId = 
           ],
         })
         let decimals = 18
-        if (checker !== ADDRESS_ZERO) {
-          const [_decimals] = await bscClient.multicall({
-            allowFailure: true,
-            contracts: [
-              {
-                address: _token,
-                abi: erc20ABI,
-                functionName: 'decimals',
-              },
-            ],
-          })
-          decimals = _decimals.result
-        }
+        // if (checker !== ADDRESS_ZERO) {
+        //   const [_decimals] = await bscClient.multicall({
+        //     allowFailure: true,
+        //     contracts: [
+        //       {
+        //         address: _token,
+        //         abi: erc20ABI,
+        //         functionName: 'decimals',
+        //       },
+        //     ],
+        //   })
+        //   decimals = _decimals.result
+        // }
         return {
           checker,
           destination,
@@ -596,8 +596,8 @@ export const getTokenForCredit = async (collectionAddress, isPaywall, chainId = 
             chainId,
             _token,
             decimals,
-            symbol?.toString()?.toUpperCase(),
-            name?.toString(),
+            symbol.result?.toString()?.toUpperCase(),
+            name.result?.toString(),
             `https://tokens.payswap.org/images/${_token}.png`,
           ),
         }

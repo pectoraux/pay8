@@ -82,6 +82,10 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const [credit, setCredit] = useState<any>(0)
   const [tokenId2, setTokenId2] = useState<string>('')
   const [checkRank, setCheckRank] = useState(false)
+  const [position, setPosition] = useState<any>(0)
+  const [amount, setAmount] = useState('')
+  const [decimals, setDecimals] = useState('')
+  const [applyToTokenId, setApplyToTokenId] = useState('')
   const [paymentCurrency, setPaymentCurrency] = useState<PaymentCurrency>(PaymentCurrency.BNB)
   const { theme } = useTheme()
   const { t } = useTranslation()
@@ -251,6 +255,15 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
         console.log('CONFIRM_ADDRESS_LIMIT================>', args)
         return callWithGasPrice(callContract, 'updateVersion', args).catch((err) =>
           console.log('CONFIRM_ADDRESS_LIMIT================>', err),
+        )
+      }
+      if (stage === BuyingStage.CONFIRM_PAYMENT_CREDIT) {
+        const _amount =
+          parseInt(decimals) === 0 ? amount : getDecimalAmount(new BigNumber(amount?.toString()), parseInt(decimals))
+        const args = [nftToBuy?.collection?.id, position, _amount?.toString(), applyToTokenId]
+        console.log('CONFIRM_PAYMENT_CREDIT================>', args)
+        return callWithGasPrice(callContract, 'burnForCredit', args).catch((err) =>
+          console.log('CONFIRM_PAYMENT_CREDIT================>', err),
         )
       }
       let args
@@ -447,6 +460,15 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
         <PaymentCreditStage
           thumbnail={_thumbnail}
           nftToBuy={nftToBuy}
+          amount={amount}
+          setAmount={setAmount}
+          position={position}
+          applyToTokenId={applyToTokenId}
+          setPosition={setPosition}
+          setApplyToTokenId={setApplyToTokenId}
+          decimals={decimals}
+          setDecimals={setDecimals}
+          isPaywall={variant === 'paywall'}
           collectionId={collectionId}
           continueToNextStage={continueToNextStage}
         />

@@ -1,5 +1,7 @@
+import styled from 'styled-components'
 import { useState } from 'react'
 import {
+  Box,
   Flex,
   Grid,
   Text,
@@ -10,9 +12,12 @@ import {
   LinkExternal,
   ButtonMenu,
   ButtonMenuItem,
+  HelpIcon,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/cancan/types'
+import { useGetNftTokenForCredit, useGetTokenForCredit } from 'state/cancan/hooks'
 import { isAddress } from 'utils'
 import { Divider, RoundedImage } from '../shared/styles'
 import { GreyedOutContainer } from '../SellModal/styles'
@@ -22,26 +27,65 @@ interface TransferStageProps {
   continueToNextStage: () => void
 }
 
-const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, continueToNextStage }) => {
-  const { t } = useTranslation()
-  const [amount, setAmount] = useState<any>(0)
-  const [burnForCreditToken, setBurnForCreditToken] = useState<any>('')
-  const [tokenId, setTokenId] = useState<any>(null)
-  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const isInvalidField = (burnForCreditToken && !isAddress(burnForCreditToken)) || !burnForCreditToken
-  const getErrorText = () => {
-    if (isInvalidField) {
-      return t('This address is invalid')
-    }
-    return null
-  }
-  const discountTokens = [
-    '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
-    '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
-    '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
-    '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
-  ]
+const Wrapper = styled(Flex)`
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.dropdown};
+  border-radius: 16px;
+  position: relative;
+`
+const Address = styled.div`
+  flex: 1;
+  position: relative;
+  padding-left: 16px;
 
+  & > input {
+    background: transparent;
+    border: 0;
+    color: ${({ theme }) => theme.colors.text};
+    display: block;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 0;
+    width: 100%;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  &:after {
+    background: linear-gradient(
+      to right,
+      ${({ theme }) => theme.colors.background}00,
+      ${({ theme }) => theme.colors.background}E6
+    );
+    content: '';
+    height: 100%;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+  }
+`
+const PaymentCreditStage: React.FC<any> = ({
+  thumbnail,
+  nftToBuy,
+  isPaywall,
+  collectionId,
+  amount,
+  setAmount,
+  position,
+  setPosition,
+  applyToTokenId,
+  decimals,
+  setDecimals,
+  setApplyToTokenId,
+  continueToNextStage,
+}) => {
+  const { t } = useTranslation()
+  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
+  const discountTokens = useGetNftTokenForCredit(collectionId, isPaywall)
   return (
     <>
       <Text fontSize="24px" bold px="16px" pt="16px">
@@ -64,19 +108,14 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, 
       {activeButtonIndex !== 2 && (
         <GreyedOutContainer>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Address of token to burn')}
+            {t('Position of token to burn')}
           </Text>
           <Input
             scale="sm"
-            placeholder={t('paste your token address')}
-            value={burnForCreditToken}
-            onChange={(e) => setBurnForCreditToken(e.target.value)}
+            placeholder={t("paste your token's position")}
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
           />
-          {isInvalidField && (
-            <Text fontSize="12px" color="failure" mt="4px">
-              {getErrorText()}
-            </Text>
-          )}
         </GreyedOutContainer>
       )}
       {!activeButtonIndex ? (
@@ -104,15 +143,71 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, 
           <Input
             type="number"
             scale="sm"
-            value={tokenId}
+            value={amount}
             placeholder={t('ID of token to burn')}
             onChange={(e) => {
-              setTokenId(e.target.value)
+              setAmount(e.target.value)
             }}
           />
         </GreyedOutContainer>
       )}
-
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Decimals')}
+        </Text>
+        <Input
+          type="number"
+          scale="sm"
+          value={decimals}
+          placeholder={t('input 0 in case of an nft')}
+          onChange={(e) => {
+            setDecimals(e.target.value)
+          }}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Item To Apply Credit Towards')}
+        </Text>
+        <Input
+          type="number"
+          scale="sm"
+          value={applyToTokenId}
+          placeholder={t('input id of item to apply credit towards')}
+          onChange={(e) => {
+            setApplyToTokenId(e.target.value)
+          }}
+        />
+      </GreyedOutContainer>
+      {discountTokens?.map((data) => (
+        <Flex flexDirection="column" justifyContent="center" alignItems="center">
+          <Text small bold color="textSubtle">
+            {t(`Token Name: ${data.token?.name}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Token Symbol: ${data.token?.symbol}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Discount: ${parseInt(data.discount ?? '0') / 100}%`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Collection ID: ${data.collectionId}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Checker: `)}
+          </Text>
+          <CopyAddress account={data.checker} mb="2px" tooltipMessage={t('Copied Checker Address')} />
+          <Text small bold color="textSubtle">
+            {t(`Token Address: `)}
+          </Text>
+          <CopyAddress account={data.token?.address} mb="2px" tooltipMessage={t('Copied Token Address')} />
+          <Text small bold color="textSubtle">
+            {t(`Destination Address: `)}
+          </Text>
+          <CopyAddress account={data.destination} mb="2px" tooltipMessage={t('Copied Destination Address')} />
+          <Divider />
+        </Flex>
+      ))}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -121,12 +216,6 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, 
           {t('This action will create discounts on this product. Eligible tokens are listed below:')}
         </Text>
       </Grid>
-      <Flex flexDirection="column" alignItems="center" justifyContent="space-between" mb="15px">
-        {discountTokens.map((discountToken) => {
-          return <CopyAddress account={discountToken} mb="24px" tooltipMessage="" />
-        })}
-      </Flex>
-
       <Flex flexDirection="column" alignItems="center" justifyContent="space-between" height="150px">
         <LinkExternal href="">{t('Learn more about burns for credit')}</LinkExternal>
       </Flex>
@@ -135,11 +224,11 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, 
         <Button
           mb="8px"
           onClick={continueToNextStage}
-          disabled={
-            isInvalidField || (!activeButtonIndex && amount <= 0) || (activeButtonIndex && (!tokenId || tokenId < 0))
-          }
+          // disabled={
+          //   isInvalidField || (!activeButtonIndex && amount <= 0) || (activeButtonIndex && (!tokenId || tokenId < 0))
+          // }
         >
-          {t('Confirm')}
+          {t('Process')}
         </Button>
       </Flex>
     </>

@@ -481,7 +481,7 @@ export const useGetPaywallARP = (collectionAddress: string) => {
 
 export const useGetTokenForCredit = (collectionAddress: string, isPaywall: boolean) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['cancan', 'burnTokenForCredit5', isPaywall, chainId], async () =>
+  const { data } = useSWRImmutable(['cancan', 'burnTokenForCredit7', isPaywall, chainId], async () =>
     getTokenForCredit(collectionAddress, isPaywall, chainId),
   )
   return data as any

@@ -68,52 +68,24 @@ const Address = styled.div`
     width: 40px;
   }
 `
-
-const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, isPaywall, collectionId, continueToNextStage }) => {
+const PaymentCreditStage: React.FC<any> = ({
+  thumbnail,
+  nftToBuy,
+  isPaywall,
+  collectionId,
+  amount,
+  setAmount,
+  position,
+  setPosition,
+  applyToTokenId,
+  decimals,
+  setDecimals,
+  setApplyToTokenId,
+  continueToNextStage,
+}) => {
   const { t } = useTranslation()
-  const [amount, setAmount] = useState<any>(0)
-  const [burnForCreditToken, setBurnForCreditToken] = useState<any>('')
-  const [tokenId, setTokenId] = useState<any>(null)
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const isInvalidField = (burnForCreditToken && !isAddress(burnForCreditToken)) || !burnForCreditToken
   const discountTokens = useGetTokenForCredit(collectionId, isPaywall)
-  console.log('discountTokens=================>', discountTokens, collectionId, isPaywall)
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    <Flex overflow="auto" maxHeight="400px" mb="240px">
-      <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-        {discountTokens?.map((data) => {
-          return (
-            <Flex flexDirection="column" justifyContent="center" alignItems="center">
-              <Address title={t('Token Name')}>{data.token?.name}</Address>
-              <Address title={t('Token Symbol')}>{data.token?.symbol}</Address>
-              <Address title={t('Discount')}>{Number(data.discount) / 100}%</Address>
-              <Address title={t('Collection ID')}>{data.collectionId}</Address>
-              <Address title={t('Item')}>{data.item}</Address>
-              <CopyAddress account={data.checker} mb="2px" tooltipMessage={t('Copied Checker Address')} />
-              <CopyAddress account={data.token?.address} mb="2px" tooltipMessage={t('Copied Token Address')} />
-              <CopyAddress account={data.destination} mb="2px" tooltipMessage={t('Copied Destination Address')} />
-              <Divider />
-            </Flex>
-          )
-        })}
-      </Text>
-    </Flex>,
-    {
-      placement: 'bottom',
-    },
-  )
-  const getErrorText = () => {
-    if (isInvalidField) {
-      return t('This address is invalid')
-    }
-    return null
-  }
-  // const discountTokens = [
-  //   '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
-  //   '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
-  //   '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
-  //   '0x0bDabC785a5e1C71078d6242FB52e70181C1F316',
-  // ]
   return (
     <>
       <Text fontSize="24px" bold px="16px" pt="16px">
@@ -136,19 +108,14 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, isPaywall, col
       {activeButtonIndex !== 2 && (
         <GreyedOutContainer>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Address of token to burn')}
+            {t('Position of token to burn')}
           </Text>
           <Input
             scale="sm"
-            placeholder={t('paste your token address')}
-            value={burnForCreditToken}
-            onChange={(e) => setBurnForCreditToken(e.target.value)}
+            placeholder={t("paste your token's position")}
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
           />
-          {isInvalidField && (
-            <Text fontSize="12px" color="failure" mt="4px">
-              {getErrorText()}
-            </Text>
-          )}
         </GreyedOutContainer>
       )}
       {!activeButtonIndex ? (
@@ -176,15 +143,71 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, isPaywall, col
           <Input
             type="number"
             scale="sm"
-            value={tokenId}
+            value={amount}
             placeholder={t('ID of token to burn')}
             onChange={(e) => {
-              setTokenId(e.target.value)
+              setAmount(e.target.value)
             }}
           />
         </GreyedOutContainer>
       )}
-
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Decimals')}
+        </Text>
+        <Input
+          type="number"
+          scale="sm"
+          value={decimals}
+          placeholder={t('input 0 in case of an nft')}
+          onChange={(e) => {
+            setDecimals(e.target.value)
+          }}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Item To Apply Credit Towards')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          value={applyToTokenId}
+          placeholder={t('input id of item to apply credit towards')}
+          onChange={(e) => {
+            setApplyToTokenId(e.target.value)
+          }}
+        />
+      </GreyedOutContainer>
+      {discountTokens?.map((data) => (
+        <Flex flexDirection="column" justifyContent="center" alignItems="center">
+          <Text small bold color="textSubtle">
+            {t(`Token Name: ${data.token?.name}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Token Symbol: ${data.token?.symbol}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Discount: ${parseInt(data.discount ?? '0') / 100}%`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Collection ID: ${data.collectionId}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Checker: `)}
+          </Text>
+          <CopyAddress account={data.checker} mb="2px" tooltipMessage={t('Copied Checker Address')} />
+          <Text small bold color="textSubtle">
+            {t(`Token Address: `)}
+          </Text>
+          <CopyAddress account={data.token?.address} mb="2px" tooltipMessage={t('Copied Token Address')} />
+          <Text small bold color="textSubtle">
+            {t(`Destination Address: `)}
+          </Text>
+          <CopyAddress account={data.destination} mb="2px" tooltipMessage={t('Copied Destination Address')} />
+          <Divider />
+        </Flex>
+      ))}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -193,23 +216,6 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, isPaywall, col
           {t('This action will create discounts on this product. Eligible tokens are listed below:')}
         </Text>
       </Grid>
-      {discountTokens?.length ? (
-        <Flex justifyContent="center" alignItems="center" mb="10px">
-          <Text fontSize="12px" color="textSubtle">
-            {t('View Burn For Credit Options')}
-          </Text>
-          <Flex ref={targetRef}>
-            {tooltipVisible && tooltip}
-            <HelpIcon ml="4px" width="20px" height="20px" color="textSubtle" />
-          </Flex>
-        </Flex>
-      ) : null}
-      <Flex flexDirection="column" alignItems="center" justifyContent="space-between" mb="15px">
-        {discountTokens?.map((discountToken: any) => {
-          return <CopyAddress account={discountToken.token?.address} mb="24px" tooltipMessage={t('Copied')} />
-        })}
-      </Flex>
-
       <Flex flexDirection="column" alignItems="center" justifyContent="space-between" height="150px">
         <LinkExternal href="">{t('Learn more about burns for credit')}</LinkExternal>
       </Flex>
@@ -218,11 +224,11 @@ const PaymentCreditStage: React.FC<any> = ({ thumbnail, nftToBuy, isPaywall, col
         <Button
           mb="8px"
           onClick={continueToNextStage}
-          disabled={
-            isInvalidField || (!activeButtonIndex && amount <= 0) || (activeButtonIndex && (!tokenId || tokenId < 0))
-          }
+          // disabled={
+          //   isInvalidField || (!activeButtonIndex && amount <= 0) || (activeButtonIndex && (!tokenId || tokenId < 0))
+          // }
         >
-          {t('Confirm')}
+          {t('Process')}
         </Button>
       </Flex>
     </>
