@@ -34,19 +34,19 @@ const CashbackStage: React.FC<any> = ({
   continueToNextStage,
 }) => {
   const { t } = useTranslation()
-  const askOrder = nftToBuy // useGetOrder(nftToBuy?.collection?.id, nftToBuy?.tokenId, isPaywall)?.data as any
-  const numbersElligibilityCriteria = nftToBuy?.priceReductor?.cashbackNumbers
-  const costElligibilityCriteria = nftToBuy?.priceReductor?.cashbackCost
-  const cashNotCredit = nftToBuy?.priceReductor?.cashNotCredit
+  const askOrder = useGetOrder(nftToBuy?.collection?.id, nftToBuy?.tokenId, isPaywall)?.data as any
+  const numbersElligibilityCriteria = askOrder?.priceReductor?.cashbackNumbers
+  const costElligibilityCriteria = askOrder?.priceReductor?.cashbackCost
+  const cashNotCredit = askOrder?.priceReductor?.cashNotCredit
   const numbersCashbackAvailable =
-    Number(nftToBuy?.priceReductor?.cashbackStatus) === 1 &&
+    Number(askOrder?.priceReductor?.cashbackStatus) === 1 &&
     numbersElligibilityCriteria?.length &&
     parseInt(numbersElligibilityCriteria[0]) > 0
   const costCashbackAvailable =
-    Number(nftToBuy?.priceReductor?.cashbackStatus) === 1 &&
+    Number(askOrder?.priceReductor?.cashbackStatus) === 1 &&
     costElligibilityCriteria?.length &&
     parseInt(costElligibilityCriteria[0]) > 0
-  console.log('nftToBuy====================>', nftToBuy)
+  console.log('nftToBuy====================>', askOrder)
   return (
     <>
       <Text fontSize="24px" bold px="16px" pt="16px">
@@ -55,7 +55,7 @@ const CashbackStage: React.FC<any> = ({
       <Flex p="16px">
         <RoundedImage src={thumbnail} height={68} width={68} mr="8px" />
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
-          <Text bold>{nftToBuy.tokenId}</Text>
+          <Text bold>{askOrder.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
             {`Collection #${collectionId}`}
           </Text>

@@ -166,7 +166,7 @@ const Header: React.FC<any> = ({ collection }) => {
               stat={numberTokensListed ? formatNumber(Number(numberPartnerTokensListed), 0, 0) : '0'}
             />
             <LowestPriceStatBoxItem collectionAddress={collection?.id} />
-            <StatBoxItem title={t('Vol.')} stat={(volume ?? 0)?.toString()} />
+            <StatBoxItem title={t('Vol.')} stat={parseInt((volume ?? 0)?.toString())} />
             <StatBoxItem title={t('Likes')} stat={votes?.likes} />
             <StatBoxItem title={t('Dislikes')} stat={votes?.dislikes} />
           </StatBox>
