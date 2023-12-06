@@ -35,6 +35,7 @@ const EditStage: React.FC<any> = ({
   continueToUpdateIdentityStage,
   continueToRemoveFromMarketStage,
   continueToUpdateBurnForCreditStage,
+  continueToReclaimCashbackStage,
   continueToAddUsersPaymentCreditStage,
   continueToUpdateDiscountsAndCashbackStage,
   continueToReinitializeIdentityLimitsStage,
@@ -108,6 +109,9 @@ const EditStage: React.FC<any> = ({
         </Button>
         <Button variant="success" mb="8px" onClick={continueToAddUsersPaymentCreditStage}>
           {t('Add Payment Credits to Users')}
+        </Button>
+        <Button variant="success" mb="8px" onClick={continueToReclaimCashbackStage}>
+          {t('Reclaim Cashback Fund')}
         </Button>
         <Button variant="light" mb="8px" onClick={continueToReinitializeIdentityLimitsStage}>
           {t('Reset Identity Limits')}

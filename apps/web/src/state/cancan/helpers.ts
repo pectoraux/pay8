@@ -4,6 +4,7 @@ import { isAddress } from 'utils'
 import { erc20ABI } from 'wagmi'
 import {
   getMarketCollectionsAddress,
+  getMarketHelper2Address,
   getMarketHelper3Address,
   getMarketHelperAddress,
   getMarketOrdersAddress,
@@ -11,11 +12,13 @@ import {
   getNFTicketAddress,
   getNFTicketHelper2Address,
   getNFTicketHelperAddress,
+  getNftMarketHelper2Address,
   getNftMarketHelper3Address,
   getNftMarketHelperAddress,
   getNftMarketOrdersAddress,
   getNftMarketTradesAddress,
   getPaywallARPHelperAddress,
+  getPaywallMarketHelper2Address,
   getPaywallMarketHelper3Address,
   getPaywallMarketHelperAddress,
   getPaywallMarketOrdersAddress,
@@ -68,6 +71,10 @@ import { nftMarketTradesABI } from 'config/abi/nftMarketTrades'
 import { nfticketABI } from 'config/abi/nfticket'
 import { marketHelper3ABI } from 'config/abi/marketHelper3'
 import { paywallMarketHelper3ABI } from 'config/abi/paywallMarketHelper3'
+import { paywallMarketHelper2ABI } from 'config/abi/paywallMarketHelper2'
+import { marketHelper2ABI } from 'config/abi/marketHelper2'
+import { nftMarketHelper2ABI } from 'config/abi/nftMarketHelper2'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 export const getTag = async () => {
   try {
@@ -426,7 +433,186 @@ export const getNftsFromCollectionSg = async (
   }
 }
 
+export const getCashback = async (collectionAddress, tokenId, isPaywall, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  try {
+    const [cashback] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: isPaywall ? getPaywallMarketTradesAddress() : getMarketTradesAddress(),
+          abi: isPaywall ? paywallMarketTradesABI : marketTradesABI,
+          functionName: 'computeCashBack',
+          args: [collectionAddress, tokenId],
+        },
+      ],
+    })
+    return cashback.result?.length && cashback.result[1]
+  } catch (error) {
+    console.error('===========>Failed to fetch cashback', error)
+    return '0'
+  }
+}
+
+export const getNftCashback = async (collectionAddress, tokenId, isPaywall, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  try {
+    const [cashback] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: isPaywall ? getPaywallMarketTradesAddress() : getNftMarketTradesAddress(),
+          abi: isPaywall ? paywallMarketTradesABI : nftMarketTradesABI,
+          functionName: 'computeCashBack',
+          args: [collectionAddress, tokenId],
+        },
+      ],
+    })
+    return cashback.result?.length && cashback.result[1]
+  } catch (error) {
+    console.error('===========>Failed to fetch cashback', error)
+    return '0'
+  }
+}
+
+export const getCashbackRevenue = async (collectionAddress, tokenId, isPaywall, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  try {
+    const [cashback] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: isPaywall ? getPaywallMarketHelper2Address() : getMarketHelper2Address(),
+          abi: isPaywall ? paywallMarketHelper2ABI : marketHelper2ABI,
+          functionName: 'cashbackRevenue',
+          args: [collectionAddress, keccak256(tokenId)],
+        },
+      ],
+    })
+    return cashback.result
+  } catch (error) {
+    console.error('===========>Failed to fetch cashback revenue', error)
+    return null
+  }
+}
+
+export const getNftCashbackRevenue = async (collectionAddress, tokenId, isPaywall, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  try {
+    const [cashback] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: isPaywall ? getPaywallMarketHelper2Address() : getNftMarketHelper2Address(),
+          abi: isPaywall ? paywallMarketHelper2ABI : nftMarketHelper2ABI,
+          functionName: 'cashbackRevenue',
+          args: [collectionAddress, keccak256(tokenId)],
+        },
+      ],
+    })
+    return cashback.result
+  } catch (error) {
+    console.error('===========>Failed to fetch cashback revenue', error)
+    return null
+  }
+}
+
 export const getTokenForCredit = async (collectionAddress, isPaywall, chainId = 4002) => {
+  const bscClient = publicClient({ chainId: chainId })
+  try {
+    const [arrLength] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: isPaywall ? getPaywallMarketHelperAddress() : getMarketHelperAddress(),
+          abi: isPaywall ? paywallMarketHelperABI : marketHelperABI,
+          functionName: 'burnTokenForCreditLength',
+          args: [collectionAddress],
+        },
+      ],
+    })
+    const arr = Array.from({ length: Number(arrLength.result) }, (v, i) => i)
+    const credits = await Promise.all(
+      arr?.map(async (idx) => {
+        const [burnTokenForCredit] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: isPaywall ? getPaywallMarketHelperAddress() : getMarketHelperAddress(),
+              abi: marketHelperABI,
+              functionName: 'burnTokenForCredit',
+              args: [collectionAddress, BigInt(idx)],
+            },
+          ],
+        })
+        const _token = burnTokenForCredit.result[0]
+        const checker = burnTokenForCredit.result[1]
+        const destination = burnTokenForCredit.result[2]
+        const discount = burnTokenForCredit.result[3]
+        const collectionId = burnTokenForCredit.result[4]
+        const item = burnTokenForCredit.result[5]
+
+        const [name, symbol] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            // {
+            //   address: _token,
+            //   abi: erc20ABI,
+            //   functionName: 'decimals',
+            // },
+          ],
+        })
+        let decimals = 18
+        if (checker !== ADDRESS_ZERO) {
+          const [_decimals] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'decimals',
+              },
+            ],
+          })
+          decimals = _decimals.result
+        }
+        return {
+          checker,
+          destination,
+          discount: discount.toString(),
+          collectionId: collectionId.toString(),
+          item,
+          token: new Token(
+            chainId,
+            _token,
+            decimals,
+            symbol?.toString()?.toUpperCase(),
+            name?.toString(),
+            `https://tokens.payswap.org/images/${_token}.png`,
+          ),
+        }
+      }),
+    )
+    console.log('arrLength=============>', arrLength, arr, credits)
+
+    return credits
+  } catch (error) {
+    console.error('===========>Failed to fetch credits tokens', error)
+    return []
+  }
+}
+
+export const getNftTokenForCredit = async (collectionAddress, isPaywall, chainId = 4002) => {
   const bscClient = publicClient({ chainId: chainId })
   try {
     const [arrLength] = await bscClient.multicall({
@@ -440,7 +626,7 @@ export const getTokenForCredit = async (collectionAddress, isPaywall, chainId = 
         },
       ],
     })
-    const arr = Array.from({ length: Number(arrLength) }, (v, i) => i)
+    const arr = Array.from({ length: Number(arrLength.result) }, (v, i) => i)
     const credits = await Promise.all(
       arr?.map(async (idx) => {
         const [burnTokenForCredit] = await bscClient.multicall({

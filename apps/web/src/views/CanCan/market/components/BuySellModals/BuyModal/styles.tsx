@@ -35,6 +35,8 @@ export const stagesWithBackButton = [
   BuyingStage.CONFIRM_CASHBACK,
   BuyingStage.STAKE,
   BuyingStage.CONFIRM_STAKE,
+  BuyingStage.CONFIRM_ADDRESS_LIMIT,
+  BuyingStage.CONFIRM_IDENTITY_LIMIT,
 ]
 
 export const stagesWithApproveButton = [
@@ -44,7 +46,11 @@ export const stagesWithApproveButton = [
   BuyingStage.CONFIRM_PAYMENT_CREDIT,
 ]
 
-export const stagesWithConfirmButton = [BuyingStage.CONFIRM_CASHBACK]
+export const stagesWithConfirmButton = [
+  BuyingStage.CONFIRM_CASHBACK,
+  BuyingStage.CONFIRM_IDENTITY_LIMIT,
+  BuyingStage.CONFIRM_ADDRESS_LIMIT,
+]
 
 export const BorderedBox = styled(Grid)`
   margin: 16px 0;

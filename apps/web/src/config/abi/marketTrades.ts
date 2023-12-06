@@ -3,6 +3,17 @@ export const marketTradesABI = [
     inputs: [
       {
         internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '_collection',
         type: 'address',
       },
@@ -139,13 +150,29 @@ export const marketTradesABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'contractAddress',
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_tokenId',
+        type: 'string',
+      },
+    ],
+    name: 'computeCashBack',
     outputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        internalType: 'bytes32',
+        name: '_identityCode',
+        type: 'bytes32',
+      },
+      {
+        internalType: 'uint256',
+        name: 'totalCashback',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -289,9 +316,9 @@ export const marketTradesABI = [
   {
     inputs: [
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     name: 'notes',
@@ -308,7 +335,7 @@ export const marketTradesABI = [
       },
       {
         internalType: 'uint256',
-        name: 'lender',
+        name: 'merchantId',
         type: 'uint256',
       },
     ],
@@ -353,19 +380,6 @@ export const marketTradesABI = [
       },
     ],
     name: 'pendingRevenueFromNote',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'permissionaryNoteTokenId',
     outputs: [
       {
         internalType: 'uint256',
@@ -465,43 +479,6 @@ export const marketTradesABI = [
     name: 'reinitializeIdentityLimits',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'taxContracts',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {

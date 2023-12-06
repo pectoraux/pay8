@@ -6,6 +6,8 @@ import { multiplyPriceByAmount } from 'utils/prices'
 import { SellingStage } from './types'
 
 export const stagesWithBackButton = [
+  SellingStage.RECLAIM_CASHBACK_FUND,
+  SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND,
   SellingStage.CONFIRM_ADD_LOCATION,
   SellingStage.CONFIRM_ADD_LOCATION1,
   SellingStage.CONFIRM_CREATE_ASK_ORDER,
@@ -63,6 +65,7 @@ export const stagesWithBackButton = [
 export const stagesWithApproveButton = [SellingStage.CONFIRM_FUND_PENDING_REVENUE]
 
 export const stagesWithConfirmButton = [
+  SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND,
   SellingStage.CONFIRM_CLAIM_PENDING_REVENUE,
   SellingStage.CONFIRM_TRANSFER_DUE_TO_NOTE,
   SellingStage.CONFIRM_MODIFY_COLLECTION,

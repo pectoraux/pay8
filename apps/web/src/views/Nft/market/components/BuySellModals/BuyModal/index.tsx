@@ -53,7 +53,11 @@ const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.STAKE]: t('StakeMarket'),
   [BuyingStage.CASHBACK]: t('Cashback'),
   [BuyingStage.PAYMENT_CREDIT]: t('Payment Credit'),
+  [BuyingStage.IDENTITY_LIMIT]: t('Identity Limit'),
+  [BuyingStage.ADDRESS_LIMIT]: t('Address Limit'),
   [BuyingStage.CONFIRM_REVIEW]: t('Back'),
+  [BuyingStage.CONFIRM_IDENTITY_LIMIT]: t('Back'),
+  [BuyingStage.CONFIRM_ADDRESS_LIMIT]: t('Back'),
   [BuyingStage.CONFIRM_PAYWALL_REVIEW]: t('Back'),
   [BuyingStage.CONFIRM_STAKE]: t('Back'),
   [BuyingStage.CONFIRM_CASHBACK]: t('Back'),
@@ -75,6 +79,8 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const [identityTokenId, setIdentityTokenId] = useState(0)
   const [merchantIdentityTokenId, setMerchantIdentityTokenId] = useState(0)
   const [requireUpfrontPayment, setRequireUpfrontPayment] = useState(0)
+  const [credit, setCredit] = useState<any>(0)
+  const [tokenId2, setTokenId2] = useState<string>('')
   const [checkRank, setCheckRank] = useState(false)
   const [paymentCurrency, setPaymentCurrency] = useState<PaymentCurrency>(PaymentCurrency.BNB)
   const { theme } = useTheme()
@@ -226,6 +232,27 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === BuyingStage.CONFIRM_CASHBACK) {
+        const args = [nftToBuy?.currentSeller, nftToBuy.tokenId, !!credit, tokenId2]
+        console.log('CONFIRM_CASHBACK================>', args)
+        return callWithGasPrice(callContract, 'processCashBack', args).catch((err) =>
+          console.log('CONFIRM_CASHBACK================>', err),
+        )
+      }
+      if (stage === BuyingStage.CONFIRM_IDENTITY_LIMIT) {
+        const args = [nftToBuy?.collection?.id, account, nftToBuy.tokenId]
+        console.log('CONFIRM_IDENTITY_LIMIT================>', args)
+        return callWithGasPrice(callContract, 'updateIdVersion', args).catch((err) =>
+          console.log('CONFIRM_IDENTITY_LIMIT================>', err),
+        )
+      }
+      if (stage === BuyingStage.CONFIRM_ADDRESS_LIMIT) {
+        const args = [nftToBuy?.collection?.id, account, nftToBuy.tokenId]
+        console.log('CONFIRM_ADDRESS_LIMIT================>', args)
+        return callWithGasPrice(callContract, 'updateVersion', args).catch((err) =>
+          console.log('CONFIRM_ADDRESS_LIMIT================>', err),
+        )
+      }
       let args
       if (paymentCurrency === PaymentCurrency.BNB) {
         args = [
@@ -314,6 +341,12 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
       case BuyingStage.CASHBACK:
         setStage(BuyingStage.CONFIRM_CASHBACK)
         break
+      case BuyingStage.ADDRESS_LIMIT:
+        setStage(BuyingStage.CONFIRM_ADDRESS_LIMIT)
+        break
+      case BuyingStage.IDENTITY_LIMIT:
+        setStage(BuyingStage.CONFIRM_IDENTITY_LIMIT)
+        break
       default:
         break
     }
@@ -327,12 +360,26 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     setStage(BuyingStage.CASHBACK)
   }
 
+  const continueToAddressLimitStage = () => {
+    setStage(BuyingStage.CONFIRM_ADDRESS_LIMIT)
+  }
+
+  const continueToIdentityLimitStage = () => {
+    setStage(BuyingStage.CONFIRM_IDENTITY_LIMIT)
+  }
+
   const goBack = () => {
     switch (stage) {
       case BuyingStage.CONFIRM_STAKE:
         setStage(BuyingStage.STAKE)
         break
       case BuyingStage.CONFIRM_REVIEW:
+        setStage(BuyingStage.REVIEW)
+        break
+      case BuyingStage.CONFIRM_IDENTITY_LIMIT:
+        setStage(BuyingStage.REVIEW)
+        break
+      case BuyingStage.CONFIRM_ADDRESS_LIMIT:
         setStage(BuyingStage.REVIEW)
         break
       case BuyingStage.CONFIRM_PAYWALL_REVIEW:
@@ -351,7 +398,6 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   }
 
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
-
   return (
     <StyledModal
       title={modalTitles(t)[stage]}
@@ -391,6 +437,8 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           secondaryCurrency={secondaryCurrency}
           mainToSecondaryCurrencyFactor={mainToSecondaryCurrencyFactor}
           continueToNextStage={continueToNextStage}
+          continueToAddressLimitStage={continueToAddressLimitStage}
+          continueToIdentityLimitStage={continueToIdentityLimitStage}
           continueToCashbackStage={continueToCashbackStage}
           continueToPaymentCreditStage={continueToPaymentCreditStage}
         />
@@ -405,9 +453,14 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
       )}
       {stage === BuyingStage.CASHBACK && (
         <CashbackStage
-          nftToBuy={nftToBuy}
           thumbnail={_thumbnail}
+          isPaywall={variant === 'paywall'}
+          nftToBuy={nftToBuy}
           collectionId={collectionId}
+          credit={credit}
+          tokenId={tokenId2}
+          setCredit={setCredit}
+          setTokenId={setTokenId2}
           continueToNextStage={continueToNextStage}
         />
       )}

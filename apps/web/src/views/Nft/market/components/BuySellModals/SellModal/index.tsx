@@ -19,6 +19,8 @@ import {
   usePaywallMarketHelperContract,
   usePaywallMarketOrdersContract,
   usePaywallMarketTradesContract,
+  usePaywallMarketHelper2Contract,
+  useNftMarketHelper2Contract,
 } from 'hooks/useContract'
 import { NftToken } from 'state/cancan/types'
 import { useGetLowestPriceFromNft } from 'views/CanCan/market/hooks/useGetLowestPrice'
@@ -47,6 +49,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
   [SellingStage.ADJUST_PRICE]: t('Adjust Price'),
   [SellingStage.ADJUST_OPTIONS]: t('Adjust Options'),
+  [SellingStage.RECLAIM_CASHBACK_FUND]: t('Reclaim Cashback Fund'),
   [SellingStage.ADD_LOCATION]: t('Adjust Location Data'),
   [SellingStage.UPDATE_IDENTITY_REQUIREMENTS]: t('Update Identity Requirements'),
   [SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS]: t('Update Tokens To Burn For Credit'),
@@ -60,6 +63,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.CONFIRM_ADJUST_OPTIONS]: t('Back'),
   [SellingStage.CONFIRM_ADD_LOCATION]: t('Back'),
   [SellingStage.CONFIRM_REMOVE_FROM_MARKET]: t('Back'),
+  [SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_BURN_FOR_CREDIT_TOKENS]: t('Back'),
   [SellingStage.CONFIRM_UPDATE_DISCOUNTS_AND_CASHBACKS]: t('Back'),
@@ -217,12 +221,15 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
   const marketOrdersContract = useNftMarketOrdersContract()
   const marketTradesContract = useNftMarketTradesContract()
   const marketHelperContract = useNftMarketHelperContract()
+  const marketHelper2Contract = useNftMarketHelper2Contract()
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
+  const paywallMarketHelper2Contract = usePaywallMarketHelper2Contract()
   const paywallMarketOrdersContract = usePaywallMarketOrdersContract()
   const paywallMarketTradesContract = usePaywallMarketTradesContract()
   const ordersSigner = variant === 'paywall' ? paywallMarketOrdersContract : marketOrdersContract
   const tradesSigner = variant === 'paywall' ? paywallMarketTradesContract : marketTradesContract
   const helpersSigner = variant === 'paywall' ? paywallMarketHelperContract : marketHelperContract
+  const helpers2Signer = variant === 'paywall' ? paywallMarketHelper2Contract : marketHelper2Contract
   const marketCollectionsContract = useMarketCollectionsContract()
   const nftMarketContract = useNftMarketContract()
   const [nftFilters, setNftFilters] = useState({
@@ -263,6 +270,12 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
         break
       case SellingStage.CONFIRM_ADJUST_OPTIONS:
         setStage(SellingStage.ADJUST_OPTIONS)
+        break
+      case SellingStage.RECLAIM_CASHBACK_FUND:
+        setStage(SellingStage.EDIT)
+        break
+      case SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND:
+        setStage(SellingStage.RECLAIM_CASHBACK_FUND)
         break
       case SellingStage.ADD_LOCATION:
         setStage(SellingStage.EDIT)
@@ -361,6 +374,9 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
       case SellingStage.REINITIALIZE_CASHBACK_LIMITS:
         setStage(SellingStage.CONFIRM_REINITIALIZE_CASHBACK_LIMITS)
         break
+      case SellingStage.RECLAIM_CASHBACK_FUND:
+        setStage(SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND)
+        break
       default:
         break
     }
@@ -368,6 +384,10 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
 
   const continueToUpdateIdentityStage = () => {
     setStage(SellingStage.UPDATE_IDENTITY_REQUIREMENTS)
+  }
+
+  const continueToReclaimCashbackStage = () => {
+    setStage(SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND)
   }
 
   const continueToAdjustOptions = () => setStage(SellingStage.ADJUST_OPTIONS)
@@ -430,6 +450,12 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
         console.log('CONFIRM_REMOVE_FROM_MARKET=================>', [nftToSell?.tokenId])
         return callWithGasPrice(ordersSigner, 'cancelAskOrder', [nftToSell?.tokenId]).catch((err) =>
           console.log('CONFIRM_REMOVE_FROM_MARKET=================>', err),
+        )
+      }
+      if (stage === SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND) {
+        console.log('CONFIRM_RECLAIM_CASHBACK_FUND=================>', [nftToSell?.tokenId])
+        return callWithGasPrice(helpers2Signer, 'addCashBackToRevenue', [nftToSell?.tokenId]).catch((err) =>
+          console.log('CONFIRM_RECLAIM_CASHBACK_FUND=================>', err),
         )
       }
       if (stage === SellingStage.CONFIRM_ADJUST_PRICE) {
@@ -701,6 +727,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           continueToAdjustOptions={continueToAdjustOptions}
           continueToLocationStage={continueToLocationStage}
           continueToUpdateIdentityStage={continueToUpdateIdentityStage}
+          continueToReclaimCashbackStage={continueToReclaimCashbackStage}
           continueToUpdateBurnForCreditStage={continueToUpdateBurnForCreditStage}
           continueToUpdateMerchantProofTypeStage={continueToUpdateMerchantProofTypeStage}
           continueToAddUsersPaymentCreditStage={continueToAddUsersPaymentCreditStage}
@@ -803,6 +830,13 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           continueToNextStage={continueToNextStage}
         />
       )}
+      {stage === SellingStage.RECLAIM_CASHBACK_FUND && (
+        <ReclaimCashbackStage
+          nftToSell={nftToSell}
+          isPaywall={variant === 'paywall'}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stage === SellingStage.REINITIALIZE_IDENTITY_LIMITS && (
         <ResetIdentityLimits continueToNextStage={continueToNextStage} />
       )}
@@ -820,6 +854,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
         SellingStage.CONFIRM_UPDATE_BURN_FOR_CREDIT_TOKENS,
         SellingStage.CONFIRM_UPDATE_DISCOUNTS_AND_CASHBACKS,
         SellingStage.CONFIRM_ADD_USERS_PAYMENT_CREDIT,
+        SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND,
         SellingStage.CONFIRM_REINITIALIZE_IDENTITY_LIMITS,
         SellingStage.CONFIRM_REINITIALIZE_DISCOUNTS_LIMITS,
         SellingStage.CONFIRM_REINITIALIZE_CASHBACK_LIMITS,

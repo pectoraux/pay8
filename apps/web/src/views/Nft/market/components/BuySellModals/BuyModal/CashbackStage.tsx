@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   Flex,
   Grid,
@@ -9,10 +8,16 @@ import {
   LinkExternal,
   ButtonMenu,
   ButtonMenuItem,
+  Balance,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/cancan/types'
 import { format } from 'date-fns'
+import { useComputeCashBack, useComputeNftCashBack, useGetNftOrder, useGetOrder } from 'state/cancan/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useEffect } from 'react'
+import BigNumber from 'bignumber.js'
+
 import { Divider, RoundedImage } from '../shared/styles'
 import { GreyedOutContainer } from '../SellModal/styles'
 
@@ -21,17 +26,36 @@ interface TransferStageProps {
   continueToNextStage: () => void
 }
 
-const CashbackStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, continueToNextStage }) => {
+const CashbackStage: React.FC<any> = ({
+  thumbnail,
+  nftToBuy,
+  isPaywall,
+  collectionId,
+  tokenId,
+  credit,
+  setCredit,
+  setTokenId,
+  continueToNextStage,
+}) => {
   const { t } = useTranslation()
-  const [tokenId, setTokenId] = useState<any>(null)
-  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const numbersElligibilityCriteria = nftToBuy?.marketData?.priceReductor?.cashbackNumbers
-  const costElligibilityCriteria = nftToBuy?.marketData?.priceReductor?.cashbackCost
-  const cashNotCredit = nftToBuy?.marketData?.priceReductor?.cashNotCredit
+  const { data: cashback, refetch } = useComputeNftCashBack(nftToBuy?.collection?.id, tokenId, isPaywall)
+  const askOrder = useGetNftOrder(nftToBuy?.collection?.id, nftToBuy?.tokenId, isPaywall)?.data as any
+  const numbersElligibilityCriteria = Object.values(askOrder?.priceReductor?.cashbackNumbers) as any
+  const costElligibilityCriteria = Object.values(askOrder?.priceReductor?.cashbackCost) as any
+  const cashNotCredit = askOrder?.priceReductor?.cashNotCredit
   const numbersCashbackAvailable =
-    Number(nftToBuy?.marketData?.priceReductor?.discountStatus) === 1 && numbersElligibilityCriteria?.cursor
+    Number(askOrder?.priceReductor?.cashbackStatus) === 1 &&
+    numbersElligibilityCriteria?.length &&
+    parseInt(numbersElligibilityCriteria[0]) > 0
   const costCashbackAvailable =
-    Number(nftToBuy?.marketData?.priceReductor?.cashbackStatus) === 1 && costElligibilityCriteria?.cursor
+    Number(askOrder?.priceReductor?.cashbackStatus) === 1 &&
+    costElligibilityCriteria?.length &&
+    parseInt(costElligibilityCriteria[0]) > 0
+  console.log('nftToBuy====================>', askOrder)
+
+  useEffect(() => {
+    refetch()
+  }, [tokenId])
 
   return (
     <>
@@ -41,17 +65,17 @@ const CashbackStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, conti
       <Flex p="16px">
         <RoundedImage src={thumbnail} height={68} width={68} mr="8px" />
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
-          <Text bold>{nftToBuy.tokenId}</Text>
+          <Text bold>{askOrder.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
             {`Collection #${collectionId}`}
           </Text>
         </Grid>
       </Flex>
-      <ButtonMenu scale="sm" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
+      <ButtonMenu scale="sm" activeIndex={credit} onItemClick={setCredit}>
         <ButtonMenuItem>{t('Credit')}</ButtonMenuItem>
         <ButtonMenuItem>{t('Cash')}</ButtonMenuItem>
       </ButtonMenu>
-      {activeButtonIndex ? (
+      {credit ? (
         <>
           {!cashNotCredit && (
             <GreyedOutContainer>
@@ -67,7 +91,6 @@ const CashbackStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, conti
             {t('Product to apply credits towards')}
           </Text>
           <Input
-            type="number"
             scale="sm"
             value={tokenId}
             placeholder={t('ID of the product')}
@@ -77,7 +100,18 @@ const CashbackStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, conti
           />
         </GreyedOutContainer>
       )}
-
+      <GreyedOutContainer>
+        <Balance
+          lineHeight="1"
+          color="textSubtle"
+          fontSize="12px"
+          decimals={18}
+          value={getBalanceNumber(new BigNumber(cashback?.toString()))}
+        />
+        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+          {t('Cashback Due')}
+        </Text>
+      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -89,44 +123,61 @@ const CashbackStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, conti
           {(numbersCashbackAvailable || costCashbackAvailable) && t('Find eligibility criteria below:')}
         </Text>
       </Grid>
-      {numbersCashbackAvailable && (
+      <Flex alignItems="center" justifyContent="center" mb="15px">
+        <Text small bold color="secondary">
+          {t(`Cashback start: ${format(Number(askOrder?.priceReductor?.cashbackStart) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+        </Text>
+      </Flex>
+      {numbersCashbackAvailable ? (
         <Flex flexDirection="column" alignItems="center" justifyContent="space-between" mb="15px">
           <Text small bold color="secondary">
-            From numbers criteria
+            {t('From numbers criteria')}
           </Text>
-          <Text small bold color="textSubtle">{`Period start: ${format(
-            Number(numbersElligibilityCriteria?.cursor),
-            'MMM dd, yyyy HH:mm',
-          )}`}</Text>
-          <Text small bold color="textSubtle">{`Period end: ${format(
-            Number(numbersElligibilityCriteria?.size),
-            'MMM dd, yyyy HH:mm',
-          )}`}</Text>
-          <Text small bold color="textSubtle">{`Lower threshold: ${numbersElligibilityCriteria?.lowerThreshold}`}</Text>
-          <Text small bold color="textSubtle">{`Upper threshold: ${numbersElligibilityCriteria?.upperThreshold}`}</Text>
-          <Text small bold color="textSubtle">{`Cashback percentage: ${numbersElligibilityCriteria?.perct}`}</Text>
-          <Text small bold color="textSubtle">{`Limit: ${numbersElligibilityCriteria?.limit}`}</Text>
+          <Text small bold color="textSubtle">
+            {t(`Period start: ${format(Number(numbersElligibilityCriteria[0]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Period end: ${format(Number(numbersElligibilityCriteria[1]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Lower threshold: ${numbersElligibilityCriteria[3]}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Upper threshold: ${numbersElligibilityCriteria[4]}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Cashback percentage: ${parseInt(numbersElligibilityCriteria[2]) / 100}%`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Limit: 1`)}
+          </Text>
         </Flex>
-      )}
-      {costCashbackAvailable && (
+      ) : null}
+      {costCashbackAvailable ? (
         <Flex flexDirection="column" alignItems="center" justifyContent="space-between" mb="15px">
           <Text small bold color="secondary">
-            From cost criteria
+            {t('From cost criteria')}
           </Text>
-          <Text small bold color="textSubtle">{`Period start: ${format(
-            Number(costElligibilityCriteria?.cursor),
-            'MMM dd, yyyy HH:mm',
-          )}`}</Text>
-          <Text small bold color="textSubtle">{`Period end: ${format(
-            Number(costElligibilityCriteria?.size),
-            'MMM dd, yyyy HH:mm',
-          )}`}</Text>
-          <Text small bold color="textSubtle">{`Lower threshold: ${costElligibilityCriteria?.lowerThreshold}`}</Text>
-          <Text small bold color="textSubtle">{`Upper threshold: ${costElligibilityCriteria?.upperThreshold}`}</Text>
-          <Text small bold color="textSubtle">{`Cashback percentage: ${costElligibilityCriteria?.perct}`}</Text>
-          <Text small bold color="textSubtle">{`Limit: ${costElligibilityCriteria?.limit}`}</Text>
+          <Text small bold color="textSubtle">
+            {t(`Period start: ${format(Number(costElligibilityCriteria[0]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Period end: ${format(Number(costElligibilityCriteria[1]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Lower threshold: ${getBalanceNumber(costElligibilityCriteria[3])}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Upper threshold: ${getBalanceNumber(costElligibilityCriteria[4])}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Cashback percentage: ${parseInt(costElligibilityCriteria[2]) / 100}`)}%
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Limit: 1`)}
+          </Text>
         </Flex>
-      )}
+      ) : null}
       <Flex flexDirection="column" alignItems="center" justifyContent="space-between" height="150px">
         <LinkExternal href="">{t('Learn more about cashbacks')}</LinkExternal>
       </Flex>
@@ -135,9 +186,9 @@ const CashbackStage: React.FC<any> = ({ thumbnail, nftToBuy, collectionId, conti
         <Button
           mb="8px"
           onClick={continueToNextStage}
-          disabled={(!activeButtonIndex && (!tokenId || tokenId < 0)) || (activeButtonIndex && !cashNotCredit)}
+          disabled={(!credit && (!tokenId || tokenId < 0)) || (credit && !cashNotCredit)}
         >
-          {t('Confirm')}
+          {t('Process')}
         </Button>
       </Flex>
     </>

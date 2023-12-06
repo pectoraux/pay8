@@ -56,10 +56,14 @@ const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.PAYWALL_REVIEW]: t('Subscription Review'),
   [BuyingStage.STAKE]: t('StakeMarket'),
   [BuyingStage.CASHBACK]: t('Cashback'),
+  [BuyingStage.IDENTITY_LIMIT]: t('Identity Limit'),
+  [BuyingStage.ADDRESS_LIMIT]: t('Address Limit'),
   [BuyingStage.PAYMENT_CREDIT]: t('Payment Credit'),
   [BuyingStage.CONFIRM_REVIEW]: t('Back'),
   [BuyingStage.CONFIRM_PAYWALL_REVIEW]: t('Back'),
   [BuyingStage.CONFIRM_STAKE]: t('Back'),
+  [BuyingStage.CONFIRM_IDENTITY_LIMIT]: t('Back'),
+  [BuyingStage.CONFIRM_ADDRESS_LIMIT]: t('Back'),
   [BuyingStage.CONFIRM_CASHBACK]: t('Back'),
   [BuyingStage.CONFIRM_PAYMENT_CREDIT]: t('Back'),
   [BuyingStage.TX_CONFIRMED]: t('Transaction Confirmed'),
@@ -234,10 +238,24 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     // eslint-disable-next-line consistent-return
     onConfirm: async () => {
       if (stage === BuyingStage.CONFIRM_CASHBACK) {
-        const args = [nftToBuy?.currentSeller, nftToBuy.tokenId, !!credit, tokenId2]
+        const args = [nftToBuy?.currentSeller, nftToBuy.tokenId, !credit, tokenId2]
         console.log('CONFIRM_CASHBACK================>', args)
         return callWithGasPrice(callContract, 'processCashBack', args).catch((err) =>
           console.log('CONFIRM_CASHBACK================>', err),
+        )
+      }
+      if (stage === BuyingStage.CONFIRM_IDENTITY_LIMIT) {
+        const args = [nftToBuy?.collection?.id, account, nftToBuy.tokenId]
+        console.log('CONFIRM_IDENTITY_LIMIT================>', args)
+        return callWithGasPrice(callContract, 'updateIdVersion', args).catch((err) =>
+          console.log('CONFIRM_IDENTITY_LIMIT================>', err),
+        )
+      }
+      if (stage === BuyingStage.CONFIRM_ADDRESS_LIMIT) {
+        const args = [nftToBuy?.collection?.id, account, nftToBuy.tokenId]
+        console.log('CONFIRM_ADDRESS_LIMIT================>', args)
+        return callWithGasPrice(callContract, 'updateVersion', args).catch((err) =>
+          console.log('CONFIRM_ADDRESS_LIMIT================>', err),
         )
       }
       if (paymentCurrency === PaymentCurrency.BNB) {
@@ -388,6 +406,12 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
       case BuyingStage.PAYWALL_REVIEW:
         setStage(BuyingStage.CONFIRM_PAYWALL_REVIEW)
         break
+      case BuyingStage.ADDRESS_LIMIT:
+        setStage(BuyingStage.CONFIRM_ADDRESS_LIMIT)
+        break
+      case BuyingStage.IDENTITY_LIMIT:
+        setStage(BuyingStage.CONFIRM_IDENTITY_LIMIT)
+        break
       case BuyingStage.PAYMENT_CREDIT:
         setStage(BuyingStage.CONFIRM_PAYMENT_CREDIT)
         break
@@ -407,12 +431,26 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     setStage(BuyingStage.CASHBACK)
   }
 
+  const continueToAddressLimitStage = () => {
+    setStage(BuyingStage.CONFIRM_ADDRESS_LIMIT)
+  }
+
+  const continueToIdentityLimitStage = () => {
+    setStage(BuyingStage.CONFIRM_IDENTITY_LIMIT)
+  }
+
   const goBack = () => {
     switch (stage) {
       case BuyingStage.CONFIRM_STAKE:
         setStage(BuyingStage.STAKE)
         break
       case BuyingStage.CONFIRM_REVIEW:
+        setStage(BuyingStage.REVIEW)
+        break
+      case BuyingStage.CONFIRM_IDENTITY_LIMIT:
+        setStage(BuyingStage.REVIEW)
+        break
+      case BuyingStage.CONFIRM_ADDRESS_LIMIT:
         setStage(BuyingStage.REVIEW)
         break
       case BuyingStage.CONFIRM_PAYWALL_REVIEW:
@@ -473,6 +511,8 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           mainCurrency={mainCurrency}
           setCheckRank={setCheckRank}
           secondaryCurrency={secondaryCurrency}
+          continueToAddressLimitStage={continueToAddressLimitStage}
+          continueToIdentityLimitStage={continueToIdentityLimitStage}
           mainToSecondaryCurrencyFactor={mainToSecondaryCurrencyFactor}
           continueToNextStage={continueToNextStage}
           continueToCashbackStage={continueToCashbackStage}

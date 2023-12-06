@@ -105,6 +105,8 @@ const ReviewStage: React.FC<any> = ({
   setIdentityTokenId,
   continueToNextStage,
   continueToCashbackStage,
+  continueToAddressLimitStage,
+  continueToIdentityLimitStage,
   continueToPaymentCreditStage,
 }) => {
   const { t } = useTranslation()
@@ -499,6 +501,12 @@ const ReviewStage: React.FC<any> = ({
         </Button>
         <Button onClick={continueToCashbackStage} external style={{ width: '100%' }} variant="secondary" mb="8px">
           {t('Explore Cashback Options')}
+        </Button>
+        <Button onClick={continueToIdentityLimitStage} external style={{ width: '100%' }} variant="secondary" mb="8px">
+          {t('Reinitialize Identity Limits')}
+        </Button>
+        <Button onClick={continueToAddressLimitStage} external style={{ width: '100%' }} variant="secondary" mb="8px">
+          {t('Reinitialize Address Limits')}
         </Button>
       </Flex>
     </>

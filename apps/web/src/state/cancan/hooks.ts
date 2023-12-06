@@ -42,6 +42,11 @@ import {
   getPendingRevenueFromNote,
   getTokenURIs,
   getTimeEstimate,
+  getCashback,
+  getNftCashback,
+  getCashbackRevenue,
+  getNftCashbackRevenue,
+  getNftTokenForCredit,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -476,8 +481,54 @@ export const useGetPaywallARP = (collectionAddress: string) => {
 
 export const useGetTokenForCredit = (collectionAddress: string, isPaywall: boolean) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['cancan', 'burnTokenForCredit', chainId], async () =>
+  const { data } = useSWRImmutable(['cancan', 'burnTokenForCredit5', isPaywall, chainId], async () =>
     getTokenForCredit(collectionAddress, isPaywall, chainId),
+  )
+  return data as any
+}
+
+export const useGetNftTokenForCredit = (collectionAddress: string, isPaywall: boolean) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['nft', 'burnTokenForCredit', isPaywall, chainId], async () =>
+    getNftTokenForCredit(collectionAddress, isPaywall, chainId),
+  )
+  return data as any
+}
+
+export const useComputeCashBack = (collectionAddress: string, tokenId: string, isPaywall: boolean) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWRImmutable(['cancan', 'useComputeCashBack', tokenId, isPaywall, chainId], async () =>
+    getCashback(collectionAddress, tokenId, isPaywall, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
+}
+
+export const useComputeNftCashBack = (collectionAddress: string, tokenId: string, isPaywall: boolean) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWRImmutable(['nft', 'useComputeCashBack', tokenId, isPaywall, chainId], async () =>
+    getNftCashback(collectionAddress, tokenId, isPaywall, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
+}
+
+export const useGetCashbackRevenue = (collectionAddress: string, tokenId: string, isPaywall: boolean) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWRImmutable(['cancan', 'useGetCashbackRevenue', tokenId, isPaywall, chainId], async () =>
+    getCashbackRevenue(collectionAddress, tokenId, isPaywall, chainId),
+  )
+  return data as any
+}
+
+export const useGetNftCashbackRevenue = (collectionAddress: string, tokenId: string, isPaywall: boolean) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWRImmutable(['nft', 'useGetCashbackRevenue', tokenId, isPaywall, chainId], async () =>
+    getNftCashbackRevenue(collectionAddress, tokenId, isPaywall, chainId),
   )
   return data as any
 }

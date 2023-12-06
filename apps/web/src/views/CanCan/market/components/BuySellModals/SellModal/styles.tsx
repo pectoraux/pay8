@@ -6,6 +6,8 @@ import { SellingStage } from './types'
 import { CurrencyLogo } from 'components/Logo'
 
 export const stagesWithBackButton = [
+  SellingStage.RECLAIM_CASHBACK_FUND,
+  SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND,
   SellingStage.TIME_ESTIMATION,
   SellingStage.CONFIRM_TIME_ESTIMATION,
   SellingStage.UPDATE_VALUEPOOL,
@@ -82,6 +84,7 @@ export const stagesWithBackButton = [
 export const stagesWithApproveButton = [SellingStage.CONFIRM_FUND_PENDING_REVENUE]
 
 export const stagesWithConfirmButton = [
+  SellingStage.CONFIRM_RECLAIM_CASHBACK_FUND,
   SellingStage.CONFIRM_TIME_ESTIMATION,
   SellingStage.CONFIRM_UPDATE_VALUEPOOL,
   SellingStage.CONFIRM_UPDATE_TAG,
