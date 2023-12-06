@@ -179,8 +179,11 @@ const PaymentCreditStage: React.FC<any> = ({
           }}
         />
       </GreyedOutContainer>
-      {discountTokens?.map((data) => (
+      {discountTokens?.map((data, index) => (
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
+          <Text small bold color="textSubtle">
+            {t(`Token Position: ${index}`)}
+          </Text>
           <Text small bold color="textSubtle">
             {t(`Token Name: ${data.token?.name}`)}
           </Text>

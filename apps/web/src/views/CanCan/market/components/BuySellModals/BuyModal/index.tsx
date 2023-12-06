@@ -267,7 +267,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           parseInt(decimals) === 0 ? amount : getDecimalAmount(new BigNumber(amount?.toString()), parseInt(decimals))
         const args = [nftToBuy?.collection?.id, position, _amount?.toString(), applyToTokenId]
         console.log('CONFIRM_PAYMENT_CREDIT================>', args)
-        return callWithGasPrice(callContract, 'burnForCredit', args).catch((err) =>
+        return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
           console.log('CONFIRM_PAYMENT_CREDIT================>', err),
         )
       }
