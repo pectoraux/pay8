@@ -25,6 +25,11 @@ import {
 import { NftToken } from 'state/cancan/types'
 import { useGetLowestPriceFromNft } from 'views/CanCan/market/hooks/useGetLowestPrice'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { decryptContent, getThumbnailNContent } from 'utils/cancan'
+import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
+import { getSSIContract } from 'utils/contractHelpers'
+
 import SetPriceStage from './SetPriceStage'
 import SetOptionsStage from './SetOptionsStage'
 import EditStage from './EditStage'
@@ -40,10 +45,7 @@ import ResetIdentityLimits from './ResetIdentityLimits'
 import ResetDiscountLimits from './ResetDiscountLimits'
 import ResetCashbackLimits from './ResetCashbackLimits'
 import LocationStage from './LocationStage'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import { decryptContent, getThumbnailNContent } from 'utils/cancan'
-import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
-import { getSSIContract } from 'utils/contractHelpers'
+import ReclaimCashbackStage from './ReclaimCashbackStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
