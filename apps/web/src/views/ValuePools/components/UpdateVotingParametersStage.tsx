@@ -249,7 +249,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef7}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Minimum Bounty Required')}
+            {t('Minimum Bounty Required')}(%)
           </Text>
           {tooltipVisible7 && tooltip7}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

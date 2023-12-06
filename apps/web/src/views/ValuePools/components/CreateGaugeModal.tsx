@@ -260,18 +260,19 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     cbcAddress: '',
     BNPL: pool?.BNPL ?? 0,
     onlyTrustWorthyAuditors: pool?.onlyTrustWorthyAuditors,
-    queueDuration: pool?.queueDuration,
+    queueDuration: parseInt(pool?.queueDuration ?? '0') / 60,
     linkFeeInBase: pool?.linkFeeInBase,
     maxDueReceivable: pool?.maxDueReceivable,
     addAdmin: true,
     admins: false,
     taxAddress: '',
-    minDifference: '',
+    minDifference: parseInt(pool.minDifference ?? '0') / 100,
+    minPeriod: '',
     adminAddress: '',
-    minReceivable: '',
+    minReceivable: getBalanceNumber(pool.minReceivable ?? '0', currency?.decimals),
     maxTreasuryShare: '',
     uniqueAccounts: 0,
-    votingPower: 0,
+    votingPower: parseInt(pool?.voteOption ?? '0'),
     cardId: '',
     geoTag: '',
     cardAddress: '',
@@ -282,11 +283,11 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     add: 0,
     value: '',
     onlyDataKeepers: 0,
-    minimumLockValue: '',
+    minimumLockValue: getBalanceNumber(pool.minimumLockValue, currency?.decimals),
     onlyTrustWorthyMerchants: 0,
     treasuryShare: parseInt(pool?.treasuryShare ?? '0') / 100,
     maxWithdrawable: pool?.maxWithdrawable,
-    minimumSponsorPercentile: pool?.minimumSponsorPercentile,
+    minimumSponsorPercentile: parseInt(pool?.minimumSponsorPercentile ?? '0') / 100,
     customTags: '',
     token: currency?.address,
     isNFT: 0,
@@ -748,11 +749,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_VP) {
+        const minReceivable = getDecimalAmount(state.minReceivable ?? 0, currency?.decimals)
         const args = [
           !!state.BNPL,
           state.maxUse,
-          state.queueDuration,
-          parseInt(state.minReceivable) * 100,
+          parseInt(state.queueDuration) * 60,
+          minReceivable?.toString(),
           state.maxDueReceivable,
           parseInt(state.treasuryShare) * 100,
           parseInt(state.maxTreasuryShare) * 100,
@@ -897,14 +899,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_VOTING_PARAMETERS) {
+        const minimumLockValue = getDecimalAmount(state.minimumLockValue, currency?.decimals)
         const args = [
           state.vava,
           parseInt(state.period) * 60,
           parseInt(state.minPeriod) * 60,
           parseInt(state.minDifference) * 100,
           state.userTokenId,
-          state.minBountyRequired,
-          state.minimumLockValue,
+          parseInt(state.minBountyRequired) * 100,
+          minimumLockValue?.toString(),
           state.votingPower,
         ]
         console.log('CONFIRM_UPDATE_VOTING_PARAMETERS===============>', args)

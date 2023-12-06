@@ -122,24 +122,24 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             {t('BNPL')} {`->`} {pool.bnpl ? t('Yes') : t('No')}
           </Text>
         </Flex>
-        {pool?.lenderFactor ? (
+        {parseInt(pool?.lenderFactor ?? '0') ? (
           <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
             <Text color="primary" fontSize="14px">
-              {t('Lender Factor')} {`->`} {pool.lenderFactor}
+              {t('Lender Factor')} {`->`} {parseInt(pool.lenderFactor ?? '0') / 100}%
             </Text>
           </Flex>
         ) : null}
-        {pool?.maxDueReceivable ? (
+        {parseInt(pool?.maxDueReceivable ?? '0') ? (
           <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
             <Text color="primary" fontSize="14px">
-              {t('Max Due Receivable')} {`->`} {pool.maxDueReceivable}
+              {t('Max Due Receivable')} {`->`} {getBalanceNumber(pool.maxDueReceivable, parseInt(pool.vaDecimals))}
             </Text>
           </Flex>
         ) : null}
-        {pool?.maxWithdrawable ? (
+        {parseInt(pool?.maxWithdrawable ?? '0') ? (
           <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
             <Text color="primary" fontSize="14px">
-              {t('Max Withdrawable')} {`->`} {pool.maxWithdrawable}
+              {t('Max Withdrawable')} {`->`} {getBalanceNumber(pool.maxWithdrawable, parseInt(pool.vaDecimals))}
             </Text>
           </Flex>
         ) : null}
@@ -164,125 +164,96 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             </Text>
           </Flex>
         ) : null}
-        {pool?.queueDuration ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Queue Duration')} {`->`} {pool.queueDuration}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.minTicketPrice ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Min Ticket Price')} {`->`} {pool.minTicketPrice}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.minToSwitch ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Min To Switch')} {`->`} {pool.minToSwitch}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.vaName ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('NFT Name')} {`->`} {pool.vaName}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.vaSymbol ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('NFT Symbol')} {`->`} {pool.vaSymbol}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.vaDecimals ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('NFT Decimals')} {`->`} {pool.vaDecimals}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.maxSupply ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Max Supply')} {`->`} {getBalanceNumber(pool.maxSupply, parseInt(pool.vaDecimals))}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.supply ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Current Supply')} {`->`} {getBalanceNumber(pool.supply, parseInt(pool.vaDecimals))}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.minBountyRequired ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Min Bounty Required')} {`->`} {pool.minBountyRequired}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.minDifference ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Min Difference')} {`->`} {pool.minDifference}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.minPeriod ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Min Period')} {`->`} {pool.minPeriod}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.minReceivable ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Min Receivable')} {`->`} {pool.minReceivable}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.minimumLockValue ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Min Lock Value')} {`->`} {pool.minimumLockValue}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.minimumSponsorPercentile ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Min Sponsor Percentile')} {`->`} {pool.minimumSponsorPercentile}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.period ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Period')} {`->`} {pool.period}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.voteOption ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Vote Option')} {`->`} {pool.voteOption}
-            </Text>
-          </Flex>
-        ) : null}
-        {pool?.riskpool ? (
-          <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-            <Text color="primary" fontSize="14px">
-              {t('Is Riskpool?')} {`->`} {pool.riskpool ? t('Yes') : t('No')}
-            </Text>
-          </Flex>
-        ) : null}
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Queue Duration')} {`->`} {parseInt(pool.queueDuration ?? '0') / 60} {t('minutes')}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Min Ticket Price')} {`->`} {getBalanceNumber(pool.minTicketPrice, parseInt(pool.vaDecimals))}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Min To Switch')} {`->`} {getBalanceNumber(pool.minToSwitch, parseInt(pool.vaDecimals))}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('NFT Name')} {`->`} {pool.vaName}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('NFT Symbol')} {`->`} {pool.vaSymbol}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('NFT Decimals')} {`->`} {parseInt(pool.vaDecimals ?? '0')}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Max Supply')} {`->`} {getBalanceNumber(pool.maxSupply, parseInt(pool.vaDecimals))}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Current Supply')} {`->`} {getBalanceNumber(pool.supply, parseInt(pool.vaDecimals))}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Min Bounty Required')} {`->`} {parseInt(pool.minBountyRequired ?? '0') / 100}%
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Min Difference')} {`->`} {parseInt(pool.minDifference ?? '0') / 100}%
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Min Period')} {`->`} {parseInt(pool.minPeriod ?? '0') / 60} {t('minutes')}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Min Receivable')} {`->`} {getBalanceNumber(pool.minReceivable ?? '0', parseInt(pool.vaDecimals))}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Min Lock Value')} {`->`} {getBalanceNumber(pool.minimumLockValue, parseInt(pool.vaDecimals))}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Min Sponsor Percentile')} {`->`} {parseInt(pool.minimumSponsorPercentile ?? '0') / 100}%
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Period')} {`->`} {parseInt(pool.period ?? '0') / 60} {t('minutes')}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Vote Option')} {`->`}{' '}
+            {!parseInt(pool.voteOption ?? '0')
+              ? 'Percentile Based'
+              : parseInt(pool.voteOption ?? '0') === 1
+              ? 'Weight Based'
+              : 'SSID Based'}
+          </Text>
+        </Flex>
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Is Riskpool?')} {`->`} {pool.riskpool ? t('Yes') : t('No')}
+          </Text>
+        </Flex>
       </Flex>
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
