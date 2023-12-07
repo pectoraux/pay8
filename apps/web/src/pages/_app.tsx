@@ -24,6 +24,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, useStore } from 'state'
 import { usePollBlockNumber } from 'state/block/hooks'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { Analytics } from '@vercel/analytics/react'
 
 import { Blocklist, Updaters } from '..'
 import { SEO } from '../../next-seo.config'
@@ -97,6 +98,7 @@ function MyApp(props: AppProps<{ initialReduxState: any }>) {
             <Updaters />
             <App {...props} />
             <SpeedInsights />
+            <Analytics />
           </PersistGate>
         </Blocklist>
       </Providers>
