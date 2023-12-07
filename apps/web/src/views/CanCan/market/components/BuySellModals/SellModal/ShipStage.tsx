@@ -429,8 +429,8 @@ const EditStage: React.FC<any> = ({
               variant === 'product' || variant === 'article' ? '0' : '1',
               !!state.isTradable,
               content,
-              nftFilters?.country?.toString(),
-              nftFilters?.city?.toString(),
+              nftFilters?.country?.toString() ?? '',
+              nftFilters?.city?.toString() ?? '',
               nftFilters?.product
                 ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
                 : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
