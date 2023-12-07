@@ -373,7 +373,7 @@ const EditStage: React.FC<any> = ({
           currency?.address,
           getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase() ?? workspace?.value?.toLowerCase()),
         ]
-        console.log('rerr0===========================>', paywallId, articleState, args1)
+        console.log('rerr0===========================>', marketOrdersContract, paywallId, articleState, args1)
         return callWithGasPrice(marketOrdersContract, 'createAskOrder', args1)
           .then(() => {
             if (state.options?.length > 0) {
