@@ -544,6 +544,44 @@ export const nfticketHelper2ABI = [
     inputs: [
       {
         internalType: 'address',
+        name: 'attachTo',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'period',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'id',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: 'data',
+        type: 'bytes',
+      },
+    ],
+    name: 'safeTransferNAttach',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: 'operator',
         type: 'address',
       },

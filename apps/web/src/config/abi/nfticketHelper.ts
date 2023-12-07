@@ -33,27 +33,14 @@ export const nfticketHelperABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_taskContract',
-        type: 'address',
-      },
-    ],
-    name: 'addTask',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'string',
         name: '_item',
         type: 'string',
       },
       {
-        internalType: 'bool',
-        name: '_isPaywall',
-        type: 'bool',
+        internalType: 'address',
+        name: '_marketPlaceHelper',
+        type: 'address',
       },
       {
         internalType: 'uint256',
@@ -79,6 +66,19 @@ export const nfticketHelperABI = [
   {
     inputs: [],
     name: 'adminFee',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'adminFeeOnMarketWideAds',
     outputs: [
       {
         internalType: 'uint256',
@@ -125,35 +125,6 @@ export const nfticketHelperABI = [
     name: 'cancanVote',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    name: 'channels',
-    outputs: [
-      {
-        internalType: 'string',
-        name: 'message',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'active_period',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -284,9 +255,19 @@ export const nfticketHelperABI = [
   {
     inputs: [
       {
-        internalType: 'bytes32',
-        name: '_tokenId',
-        type: 'bytes32',
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_item',
+        type: 'string',
+      },
+      {
+        internalType: 'address',
+        name: '_marketPlaceHelper',
+        type: 'address',
       },
       {
         internalType: 'uint256[]',
@@ -422,6 +403,11 @@ export const nfticketHelperABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: 'expires',
+        type: 'uint256',
+      },
+      {
         internalType: 'string',
         name: 'message',
         type: 'string',
@@ -453,6 +439,11 @@ export const nfticketHelperABI = [
       {
         internalType: 'uint256',
         name: '_merchantId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_referrerId',
         type: 'uint256',
       },
       {
@@ -501,25 +492,6 @@ export const nfticketHelperABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'taskContracts',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'treasury',
     outputs: [
@@ -542,6 +514,11 @@ export const nfticketHelperABI = [
       {
         internalType: 'uint256',
         name: '_adminFee',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_adminFeeOnMarketWideAds',
         type: 'uint256',
       },
       {
@@ -615,7 +592,13 @@ export const nfticketHelperABI = [
       },
     ],
     name: 'updateSponsorMedia',
-    outputs: [],
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'function',
   },
