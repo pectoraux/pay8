@@ -23,6 +23,8 @@ import { PageMeta } from 'components/Layout/Page'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, useStore } from 'state'
 import { usePollBlockNumber } from 'state/block/hooks'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+
 import { Blocklist, Updaters } from '..'
 import { SEO } from '../../next-seo.config'
 import { SentryErrorBoundary } from '../components/ErrorBoundary'
@@ -94,6 +96,7 @@ function MyApp(props: AppProps<{ initialReduxState: any }>) {
           <PersistGate loading={null} persistor={persistor}>
             <Updaters />
             <App {...props} />
+            <SpeedInsights />
           </PersistGate>
         </Blocklist>
       </Providers>
