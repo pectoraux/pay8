@@ -80,6 +80,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const [merchantIdentityTokenId, setMerchantIdentityTokenId] = useState(0)
   const [requireUpfrontPayment, setRequireUpfrontPayment] = useState(0)
   const [credit, setCredit] = useState<any>(0)
+  const [currToken, setCurrToken] = useState<any>('')
   const [tokenId2, setTokenId2] = useState<string>('')
   const [checkRank, setCheckRank] = useState(false)
   const [position, setPosition] = useState<any>(0)
@@ -97,6 +98,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     nftToBuy?.usetFIAT,
     bidPrice ? bidPrice : nftToBuy?.currentAskPrice,
   )
+  const stakingTokenContract = useErc721CollectionContract(currToken || '')
   const inputCurrency = mainCurrency?.address
   const bnbContractReader = useERC20(inputCurrency ?? '')
   const bnbContractApprover = useERC20(inputCurrency ?? '')
@@ -118,6 +120,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     nftToBuy?.tokenId,
     account,
   ) as any
+  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
   const valuepoolContract = useValuepoolContract(recipient)
   const valuepoolHelperContract = useValuepoolHelperContract()
   const tokenContract = useErc721CollectionContract(nftToBuy?.minter || '')
@@ -214,8 +217,11 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
     helperContract.address,
   )
 
+  const checkStage = () => stage === BuyingStage.CONFIRM_PAYMENT_CREDIT && !!activeButtonIndex
+
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
+      // if (checkStage) return false
       if (paymentCurrency === 2) return true
       return needsApproval || needsApproval2 || needsApproval3
     },
@@ -260,8 +266,17 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
       if (stage === BuyingStage.CONFIRM_PAYMENT_CREDIT) {
         const _amount =
           parseInt(decimals) === 0 ? amount : getDecimalAmount(new BigNumber(amount?.toString()), parseInt(decimals))
-        const args = [nftToBuy?.collection?.owner, position, _amount?.toString(), applyToTokenId]
+        const args = [nftToBuy?.currentSeller, position, _amount?.toString(), applyToTokenId]
         console.log('CONFIRM_PAYMENT_CREDIT================>', args)
+        if (!!activeButtonIndex) {
+          return callWithGasPrice(stakingTokenContract, 'setApprovalForAll', [helperContract.address, true]).then(
+            () => {
+              return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
+                console.log('1CONFIRM_PAYMENT_CREDIT================>', err),
+              )
+            },
+          )
+        }
         return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
           console.log('CONFIRM_PAYMENT_CREDIT================>', err),
         )
@@ -462,6 +477,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           nftToBuy={nftToBuy}
           amount={amount}
           setAmount={setAmount}
+          currency={mainCurrency}
           position={position}
           applyToTokenId={applyToTokenId}
           setPosition={setPosition}
@@ -470,6 +486,9 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           setDecimals={setDecimals}
           isPaywall={variant === 'paywall'}
           collectionId={collectionId}
+          setCurrToken={setCurrToken}
+          activeButtonIndex={activeButtonIndex}
+          setActiveButtonIndex={setActiveButtonIndex}
           continueToNextStage={continueToNextStage}
         />
       )}

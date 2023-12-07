@@ -527,7 +527,7 @@ const EnlistStage: React.FC<any> = ({
           <GreyedOutContainer>
             <Box>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Start Time')}
+                {t('Drop-in Time')}
               </Text>
               <TimePicker
                 name="startTime"

@@ -8,11 +8,13 @@ export function getThumbnailNContent(nft) {
     // process article
     thumbnail = chunks[0]
     mp4 = chunks.slice(1).join(',')
-    if (!mp4) {
+    if (!mp4?.trim()?.length) {
       // process regular product
       mp4 = thumbnail
     }
-  } catch (err) {}
+  } catch (err) {
+    console.log('1getThumbnailNContent===============>', err)
+  }
   return {
     mp4,
     thumbnail,

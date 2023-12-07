@@ -98,7 +98,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     0,
   )
   const { days, hours, minutes } = getTimePeriods(diff ?? 0)
-
+  console.log('bidPrice===================>', bidPrice, askOrder)
   const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
   const diff2 = Math.max(
     differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {
@@ -114,6 +114,15 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
       setBought={setBought}
       bidPrice={isAuction ? bidPrice : 0}
       variant={isPaywall ? 'paywall' : 'item'}
+      nftToBuy={nft}
+    />,
+  )
+  const [onPresentProcessAuction] = useModal(
+    <BuyModal
+      setBought={setBought}
+      bidPrice={isAuction ? bidPrice : 0}
+      variant={isPaywall ? 'paywall' : 'item'}
+      processAuction
       nftToBuy={nft}
     />,
   )
@@ -243,10 +252,26 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                       </Button>
                       {isAuction && parseInt(askOrder?.lastBidTime?.toString() ?? 0) && diff ? (
                         <>
-                          <Timer minutes={minutes} hours={hours} days={days} />{' '}
+                          {days || hours || minutes ? (
+                            <Timer minutes={minutes} hours={hours} days={days} />
+                          ) : (
+                            <StyledTimerText pt="30px" mr="3px">
+                              {t('seconds')}
+                            </StyledTimerText>
+                          )}{' '}
                           <StyledTimerText pt="30px">{t('until last bidder wins')}</StyledTimerText>
                         </>
-                      ) : null}
+                      ) : (
+                        <Button
+                          minWidth="168px"
+                          disabled={!dropInDatePassed || !account}
+                          mr="16px"
+                          width={['100%', null, 'max-content']}
+                          onClick={onPresentProcessAuction}
+                        >
+                          {t('Process Auction')}
+                        </Button>
+                      )}
                       {isDrop && (days2 || hours2 || minutes2) ? (
                         <>
                           <StyledTimerText pt="20px" pr="10px">

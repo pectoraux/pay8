@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Box,
   Flex,
@@ -14,6 +14,7 @@ import {
   ButtonMenuItem,
   HelpIcon,
   useTooltip,
+  Skeleton,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/cancan/types'
@@ -21,6 +22,12 @@ import { useGetNftTokenForCredit, useGetTokenForCredit } from 'state/cancan/hook
 import { isAddress } from 'utils'
 import { Divider, RoundedImage } from '../shared/styles'
 import { GreyedOutContainer } from '../SellModal/styles'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { useERC20, useErc721CollectionContract } from 'hooks/useContract'
+import { FetchStatus } from 'config/constants/types'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
 
 interface TransferStageProps {
   nftToBuy: NftToken
@@ -72,20 +79,30 @@ const PaymentCreditStage: React.FC<any> = ({
   thumbnail,
   nftToBuy,
   isPaywall,
+  currency,
   collectionId,
+  helperContract,
   amount,
   setAmount,
   position,
   setPosition,
   applyToTokenId,
   decimals,
+  setCurrToken,
+  activeButtonIndex,
+  setActiveButtonIndex,
   setDecimals,
   setApplyToTokenId,
   continueToNextStage,
 }) => {
   const { t } = useTranslation()
-  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const discountTokens = useGetNftTokenForCredit(collectionId, isPaywall)
+  const { callWithGasPrice } = useCallWithGasPrice()
+  const { data: discountTokens, status } = useGetNftTokenForCredit(collectionId, isPaywall)
+  const currToken = useMemo(
+    () => setCurrToken(discountTokens?.length && discountTokens[position]?.token?.address),
+    [position],
+  ) as any
+  console.log('stakingTokenContract=================>', discountTokens, helperContract, currToken)
   return (
     <>
       <Text fontSize="24px" bold px="16px" pt="16px">
@@ -103,7 +120,7 @@ const PaymentCreditStage: React.FC<any> = ({
       <ButtonMenu scale="sm" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
         <ButtonMenuItem>{t('Fungibles')}</ButtonMenuItem>
         <ButtonMenuItem>{t('Non Fungibles')}</ButtonMenuItem>
-        <ButtonMenuItem>NFTickets</ButtonMenuItem>
+        {/* <ButtonMenuItem>NFTickets</ButtonMenuItem> */}
       </ButtonMenu>
       {activeButtonIndex !== 2 && (
         <GreyedOutContainer>
@@ -170,7 +187,7 @@ const PaymentCreditStage: React.FC<any> = ({
           {t('Item To Apply Credit Towards')}
         </Text>
         <Input
-          type="number"
+          type="text"
           scale="sm"
           value={applyToTokenId}
           placeholder={t('input id of item to apply credit towards')}
@@ -179,6 +196,11 @@ const PaymentCreditStage: React.FC<any> = ({
           }}
         />
       </GreyedOutContainer>
+      {status === FetchStatus.Fetching ? (
+        <Flex flexDirection="column" justifyContent="center" alignItems="center">
+          <Skeleton width="300px" height="400px" />
+        </Flex>
+      ) : null}
       {discountTokens?.map((data, index) => (
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <Text small bold color="textSubtle">
@@ -191,7 +213,14 @@ const PaymentCreditStage: React.FC<any> = ({
             {t(`Token Symbol: ${data.token?.symbol}`)}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Discount: ${parseInt(data.discount ?? '0') / 100}%`)}
+            {t(
+              `Discount: ${
+                data.checker !== ADDRESS_ZERO
+                  ? getBalanceNumber(new BigNumber(data.discount))
+                  : parseInt(data.discount ?? '0') / 100
+              }`,
+            )}{' '}
+            {data.checker !== ADDRESS_ZERO ? currency?.symbol : '%'}
           </Text>
           <Text small bold color="textSubtle">
             {t(`Collection ID: ${data.collectionId}`)}
@@ -227,7 +256,7 @@ const PaymentCreditStage: React.FC<any> = ({
         <Button
           mb="8px"
           onClick={continueToNextStage}
-          // disabled={
+          disabled={status === FetchStatus.Fetching}
           //   isInvalidField || (!activeButtonIndex && amount <= 0) || (activeButtonIndex && (!tokenId || tokenId < 0))
           // }
         >

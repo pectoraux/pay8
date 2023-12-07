@@ -364,7 +364,7 @@ export default {
     56: '0x',
   },
   marketHelper: {
-    4002: '0xE57BAF27e8AA82A66D459f674c6c31ffb0a42886',
+    4002: '0xA7190A93D225Bc64d4FB2FFa3c76d8be504DEa39',
     56: '0x',
   },
   marketHelper2: {

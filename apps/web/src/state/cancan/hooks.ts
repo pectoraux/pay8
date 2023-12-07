@@ -481,18 +481,24 @@ export const useGetPaywallARP = (collectionAddress: string) => {
 
 export const useGetTokenForCredit = (collectionAddress: string, isPaywall: boolean) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['cancan', 'burnTokenForCredit7', isPaywall, chainId], async () =>
+  const { data, status } = useSWRImmutable(['cancan', 'burnTokenForCredit7', isPaywall, chainId], async () =>
     getTokenForCredit(collectionAddress, isPaywall, chainId),
   )
-  return data as any
+  return {
+    data,
+    status,
+  }
 }
 
 export const useGetNftTokenForCredit = (collectionAddress: string, isPaywall: boolean) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['nft', 'burnTokenForCredit', isPaywall, chainId], async () =>
+  const { data, status } = useSWRImmutable(['nft', 'burnTokenForCredit', isPaywall, chainId], async () =>
     getNftTokenForCredit(collectionAddress, isPaywall, chainId),
   )
-  return data as any
+  return {
+    data,
+    status,
+  }
 }
 
 export const useComputeCashBack = (collectionAddress: string, tokenId: string, isPaywall: boolean) => {

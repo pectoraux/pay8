@@ -48,6 +48,7 @@ import ResetCashbackLimits from './ResetCashbackLimits'
 import TimeEstimationStage from './TimeEstimationStage'
 import ReclaimCashbackStage from './ReclaimCashbackStage'
 import LocationStage from './LocationStage'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
@@ -205,6 +206,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     description: nftToSell?.description ?? '',
     mp4: _mp4 ?? '',
     isArticle: 0,
+    decreasing: nftToSell?.minBidIncrementPercentage > 0,
     gif: '',
     checker: '',
     discountNumber: '',
@@ -618,11 +620,12 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
         )
       }
       if (stage === SellingStage.CONFIRM_UPDATE_BURN_FOR_CREDIT_TOKENS) {
+        const discountAmount = getDecimalAmount(new BigNumber(state.discountNumber ?? 0))
         const args = [
           state.token,
-          state.checker,
+          state.checker ?? ADDRESS_ZERO,
           state.destination,
-          parseInt(state.discountNumber) * 100,
+          state.checker ? discountAmount?.toString() : parseInt(state.discountNumber) * 100,
           state.collectionId,
           !!state.clear,
           state.productId,

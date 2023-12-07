@@ -41,18 +41,24 @@ const BurnTokenForCreditStage: React.FC<any> = ({
       {t('This is the address of the token you want users to burn in exchange for a certain amount of credit.')}
     </Text>
   )
-  const TooltipComponent2 = () => <Text>{t('This specifies the value of the discount in percentages.')}</Text>
+  const TooltipComponent2 = () => (
+    <Text>
+      {t(
+        'This specifies the value of the discount in percentages for fungible tokens or in the value of the token your product is sold in, for non fungible tokens.',
+      )}
+    </Text>
+  )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        "This specifies the address of the contract that checks whether a user's token is elligible or not for a discount.",
+        "This specifies the address of the contract that checks whether a user's token is elligible or not for a discount. In case of fungible tokens, leave this field empty.",
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This is the address where 'burnt' tokens go, it can be the zero address (0x0000000000000000000000000000000000000000) in case you want users tokens burnt, the marketplace trades contract in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.  For subscription products, you should instead input the paywall market trades contracts and for eCollectibles, you should input the NFT market trades address if your want the tokens to be sent back to their owners.",
+        "This is the address where 'burnt' tokens go, it can be the zero address (0x000000...) in case you want users tokens burnt, the marketplace trades contract in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.  For subscription products, you should instead input the paywall market trades contracts and for eCollectibles, you should input the NFT market trades address if your want the tokens to be sent back to their owners.",
       )}
     </Text>
   )
@@ -164,7 +170,7 @@ const BurnTokenForCreditStage: React.FC<any> = ({
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Discount number')}(%)
+            {t('Discount number')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -279,7 +285,7 @@ const BurnTokenForCreditStage: React.FC<any> = ({
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Confirm')}
+          {t('Process')}
         </Button>
       </Flex>
     </>
