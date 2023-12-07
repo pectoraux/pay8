@@ -99,7 +99,12 @@ export const paywallMarketTradesABI = [
       },
       {
         internalType: 'address',
-        name: '_user',
+        name: '_collection',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_to',
         type: 'address',
       },
       {
@@ -554,14 +559,14 @@ export const paywallMarketTradesABI = [
         type: 'uint256',
       },
       {
+        internalType: 'address',
+        name: '_user',
+        type: 'address',
+      },
+      {
         internalType: 'string',
         name: '_tokenId',
         type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: '_identityTokenId',
-        type: 'uint256',
       },
     ],
     name: 'updateIdVersion',
@@ -682,14 +687,14 @@ export const paywallMarketTradesABI = [
         type: 'uint256',
       },
       {
-        internalType: 'string',
-        name: '_tokenId',
-        type: 'string',
-      },
-      {
         internalType: 'address',
         name: '_user',
         type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: '_tokenId',
+        type: 'string',
       },
     ],
     name: 'updateVersion',
@@ -700,9 +705,9 @@ export const paywallMarketTradesABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
+        internalType: 'address',
         name: '',
-        type: 'uint256',
+        type: 'address',
       },
       {
         internalType: 'bytes32',

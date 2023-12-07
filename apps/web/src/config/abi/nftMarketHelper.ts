@@ -192,7 +192,7 @@ export const nftMarketHelperABI = [
           },
         ],
         internalType: 'struct Option[]',
-        name: '',
+        name: 'opt',
         type: 'tuple[]',
       },
     ],

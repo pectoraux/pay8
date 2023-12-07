@@ -41,19 +41,6 @@ export const marketOrdersABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'contractAddress',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'string',
@@ -71,9 +58,9 @@ export const marketOrdersABI = [
         type: 'uint256',
       },
       {
-        internalType: 'int256',
+        internalType: 'uint256',
         name: '_minBidIncrementPercentage',
-        type: 'int256',
+        type: 'uint256',
       },
       {
         internalType: 'bool',
@@ -210,9 +197,339 @@ export const marketOrdersABI = [
             type: 'uint256',
           },
           {
-            internalType: 'int256',
+            internalType: 'uint256',
             name: 'minBidIncrementPercentage',
-            type: 'int256',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'rsrcTokenId',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'transferrable',
+            type: 'bool',
+          },
+          {
+            components: [
+              {
+                internalType: 'enum Status',
+                name: 'discountStatus',
+                type: 'uint8',
+              },
+              {
+                internalType: 'uint256',
+                name: 'discountStart',
+                type: 'uint256',
+              },
+              {
+                internalType: 'enum Status',
+                name: 'cashbackStatus',
+                type: 'uint8',
+              },
+              {
+                internalType: 'uint256',
+                name: 'cashbackStart',
+                type: 'uint256',
+              },
+              {
+                internalType: 'bool',
+                name: 'cashNotCredit',
+                type: 'bool',
+              },
+              {
+                internalType: 'bool',
+                name: 'checkItemOnly',
+                type: 'bool',
+              },
+              {
+                internalType: 'bool',
+                name: 'checkIdentityCode',
+                type: 'bool',
+              },
+              {
+                components: [
+                  {
+                    internalType: 'uint256',
+                    name: 'cursor',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'size',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'perct',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'lowerThreshold',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'upperThreshold',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'limit',
+                    type: 'uint256',
+                  },
+                ],
+                internalType: 'struct Discount',
+                name: 'discountNumbers',
+                type: 'tuple',
+              },
+              {
+                components: [
+                  {
+                    internalType: 'uint256',
+                    name: 'cursor',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'size',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'perct',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'lowerThreshold',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'upperThreshold',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'limit',
+                    type: 'uint256',
+                  },
+                ],
+                internalType: 'struct Discount',
+                name: 'discountCost',
+                type: 'tuple',
+              },
+              {
+                components: [
+                  {
+                    internalType: 'uint256',
+                    name: 'cursor',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'size',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'perct',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'lowerThreshold',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'upperThreshold',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'limit',
+                    type: 'uint256',
+                  },
+                ],
+                internalType: 'struct Discount',
+                name: 'cashbackNumbers',
+                type: 'tuple',
+              },
+              {
+                components: [
+                  {
+                    internalType: 'uint256',
+                    name: 'cursor',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'size',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'perct',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'lowerThreshold',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'upperThreshold',
+                    type: 'uint256',
+                  },
+                  {
+                    internalType: 'uint256',
+                    name: 'limit',
+                    type: 'uint256',
+                  },
+                ],
+                internalType: 'struct Discount',
+                name: 'cashbackCost',
+                type: 'tuple',
+              },
+            ],
+            internalType: 'struct PriceReductor',
+            name: 'priceReductor',
+            type: 'tuple',
+          },
+          {
+            components: [
+              {
+                internalType: 'string',
+                name: 'requiredIndentity',
+                type: 'string',
+              },
+              {
+                internalType: 'enum COLOR',
+                name: 'minIDBadgeColor',
+                type: 'uint8',
+              },
+              {
+                internalType: 'string',
+                name: 'valueName',
+                type: 'string',
+              },
+              {
+                internalType: 'uint256',
+                name: 'maxUse',
+                type: 'uint256',
+              },
+              {
+                internalType: 'bool',
+                name: 'dataKeeperOnly',
+                type: 'bool',
+              },
+              {
+                internalType: 'bool',
+                name: 'onlyTrustWorthyAuditors',
+                type: 'bool',
+              },
+            ],
+            internalType: 'struct IdentityProof',
+            name: 'identityProof',
+            type: 'tuple',
+          },
+          {
+            internalType: 'uint256',
+            name: 'maxSupply',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'dropinTimer',
+            type: 'uint256',
+          },
+          {
+            components: [
+              {
+                internalType: 'address',
+                name: 'tFIAT',
+                type: 'address',
+              },
+              {
+                internalType: 'address',
+                name: 've',
+                type: 'address',
+              },
+              {
+                internalType: 'bool',
+                name: 'usetFIAT',
+                type: 'bool',
+              },
+              {
+                internalType: 'bool',
+                name: 'requireUpfrontPayment',
+                type: 'bool',
+              },
+            ],
+            internalType: 'struct TokenInfo',
+            name: 'tokenInfo',
+            type: 'tuple',
+          },
+        ],
+        internalType: 'struct Ask',
+        name: '',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_tokenId',
+        type: 'string',
+      },
+    ],
+    name: 'getAskOrder',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'seller',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'price',
+            type: 'uint256',
+          },
+          {
+            internalType: 'address',
+            name: 'lastBidder',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'bidDuration',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'lastBidTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'minBidIncrementPercentage',
+            type: 'uint256',
           },
           {
             internalType: 'uint256',
@@ -577,9 +894,9 @@ export const marketOrdersABI = [
         type: 'uint256',
       },
       {
-        internalType: 'int256',
+        internalType: 'uint256',
         name: '_minBidIncrementPercentage',
-        type: 'int256',
+        type: 'uint256',
       },
       {
         internalType: 'bool',

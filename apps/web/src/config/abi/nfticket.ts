@@ -141,11 +141,6 @@ export const nfticketABI = [
         type: 'uint256[]',
       },
       {
-        internalType: 'uint256',
-        name: '_amount',
-        type: 'uint256',
-      },
-      {
         internalType: 'string',
         name: '_message',
         type: 'string',

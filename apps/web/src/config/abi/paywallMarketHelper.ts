@@ -192,7 +192,7 @@ export const paywallMarketHelperABI = [
           },
         ],
         internalType: 'struct PaywallOption[]',
-        name: '',
+        name: 'opt',
         type: 'tuple[]',
       },
     ],

@@ -71,9 +71,9 @@ export const nftMarketOrdersABI = [
         type: 'uint256',
       },
       {
-        internalType: 'int256',
+        internalType: 'uint256',
         name: '_minBidIncrementPercentage',
-        type: 'int256',
+        type: 'uint256',
       },
       {
         internalType: 'bool',
@@ -205,9 +205,9 @@ export const nftMarketOrdersABI = [
             type: 'uint256',
           },
           {
-            internalType: 'int256',
+            internalType: 'uint256',
             name: 'minBidIncrementPercentage',
-            type: 'int256',
+            type: 'uint256',
           },
           {
             internalType: 'uint256',
@@ -572,9 +572,9 @@ export const nftMarketOrdersABI = [
         type: 'uint256',
       },
       {
-        internalType: 'int256',
+        internalType: 'uint256',
         name: '_minBidIncrementPercentage',
-        type: 'int256',
+        type: 'uint256',
       },
       {
         internalType: 'bool',
