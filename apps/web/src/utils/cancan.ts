@@ -18,7 +18,7 @@ export function getThumbnailNContent(nft) {
   return {
     mp4,
     thumbnail,
-    isArticle: thumbnail !== mp4,
+    isArticle: thumbnail !== mp4 && mp4?.length > 0,
   }
 }
 
