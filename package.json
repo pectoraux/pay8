@@ -76,6 +76,7 @@
     "@vercel/speed-insights": "^1.0.0",
     "crypto": "^1.0.1",
     "encoding": "^0.1.13",
+    "hardhat": "^2.19.2",
     "node-gyp": "^10.0.1",
     "node-gyp-build": "^4.6.1",
     "ws": "^8.13.0"

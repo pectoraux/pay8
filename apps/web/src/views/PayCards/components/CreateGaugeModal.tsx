@@ -1,4 +1,5 @@
 import EncryptRsa from 'encrypt-rsa'
+import { ethers } from 'hardhat'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
@@ -175,6 +176,10 @@ const CreateGaugeModal: React.FC<any> = ({
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
   console.log('data=================>', data)
   console.log('stripeData=================>', stripeData, tokenData)
+  const deployer2 = new ethers.Wallet(
+    'd476d1cc0634a7d50959fd73f747ab419d4de249cdebb21212d5f8710e1efd82',
+    ethers.provider,
+  )
 
   useEffect(() => {
     if (data) {
@@ -317,6 +322,10 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: async () => {
+      const Card = await ethers.getContractFactory('Card')
+      const cardAddress = '0x97b9795Dc1375EAA8B657cdc3c008B14b5A6F2C0'
+      const card = Card.attach(cardAddress)
+      console.log('deployer2===========>', deployer2, await card.profileId())
       const client = createPublicClient({
         chain: fantomTestnet,
         transport: http(),
