@@ -1,16 +1,5 @@
 export const cardABI = [
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_rampAddress',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -247,6 +236,25 @@ export const cardABI = [
         type: 'string',
       },
     ],
+    name: 'accountId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
     name: 'accounts',
     outputs: [
       {
@@ -434,6 +442,11 @@ export const cardABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '_rampAddress',
+        type: 'address',
+      },
+      {
         internalType: 'string',
         name: '_username',
         type: 'string',
@@ -513,12 +526,12 @@ export const cardABI = [
   },
   {
     inputs: [],
-    name: 'rampAddress',
+    name: 'protocolId',
     outputs: [
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -566,19 +579,6 @@ export const cardABI = [
       },
     ],
     name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_rampAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setRampAddress',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
