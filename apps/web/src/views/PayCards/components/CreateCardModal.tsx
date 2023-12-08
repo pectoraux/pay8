@@ -19,13 +19,16 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { fetchCardsAsync } from 'state/cards'
-import { useWeb3React } from '@pancakeswap/wagmi'
+import { cardABI } from 'config/abi/card'
+import { getCardAddress } from 'utils/addressHelpers'
 import { useCardContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { fantomTestnet } from 'viem/chains'
+import { privateKeyToAccount } from 'viem/accounts'
 
 import { Divider, GreyedOutContainer } from './styles'
-import CreateGaugeModal from './CreateGaugeModal'
 
 interface SetPriceStageProps {
   currency?: any
@@ -36,17 +39,22 @@ interface SetPriceStageProps {
 const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
-  const cardContract = useCardContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
-  const [stage, setStage] = useState('ATTACH')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const { toastSuccess, toastError } = useToast()
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
+  const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -63,8 +71,15 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
       })
       const args = [_username, _password]
       console.log('CreateCardModal===================>', args)
-      return callWithGasPrice(cardContract, 'createAccount', args).catch((err) => {
-        console.log('err================>', err)
+      const { request } = await client.simulateContract({
+        account: acct,
+        address: getCardAddress(),
+        abi: cardABI,
+        functionName: 'createAccount',
+        args: [_username, _password],
+      })
+      return walletClient.writeContract(request).catch((err) => {
+        console.log('1createGauge=================>', err)
         setPendingFb(false)
         toastError(
           t('Issue creating PayCard'),
@@ -84,18 +99,17 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
     }
     onDismiss()
   }, [
-    t,
-    account,
-    username,
-    currency,
-    password,
-    dispatch,
-    onDismiss,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
     fetchWithCatchTxError,
-    cardContract,
+    onDismiss,
+    username,
+    password,
+    client,
+    acct,
+    walletClient,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
     chainId,
   ])
 
@@ -145,18 +159,14 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        {account ? (
-          <Button
-            mb="8px"
-            onClick={handleCreateGauge}
-            endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
-            isLoading={pendingTx || pendingFb}
-          >
-            {t('Create PayCard')}
-          </Button>
-        ) : (
-          <ConnectWalletButton />
-        )}
+        <Button
+          mb="8px"
+          onClick={handleCreateGauge}
+          endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
+          isLoading={pendingTx || pendingFb}
+        >
+          {t('Create PayCard')}
+        </Button>
       </Flex>
     </Modal>
   )

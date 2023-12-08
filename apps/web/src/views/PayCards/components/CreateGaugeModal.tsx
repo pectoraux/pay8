@@ -1,3 +1,4 @@
+import NodeRSA from 'encrypt-rsa'
 import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
@@ -9,14 +10,13 @@ import { useERC20, useCardContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import NodeRSA from 'encrypt-rsa'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
@@ -24,12 +24,13 @@ import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
 import { cardABI } from 'config/abi/card'
 import { getCardAddress } from 'utils/addressHelpers'
+import { usePool } from 'state/cards/hooks'
 import { useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import ExecutePurchaseStage from './ExecutePurchaseStage'
-import AddBalanceStage from './AddBalanceStage'
+import MintWithoutWalletStage from './MintWithoutWalletStage'
 import TransferBalanceStage from './TransferBalanceStage'
 import RemoveBalanceStage from './RemoveBalanceStage'
 import UpdatePasswordStage from './UpdatePasswordStage'
@@ -87,9 +88,10 @@ const CreateGaugeModal: React.FC<any> = ({
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { account } = useWeb3React()
+  const router = useRouter()
+  const { pool: ogPool } = usePool(parseInt(router?.query?.username?.toString()))
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
-  const router = useRouter()
   const stakingTokenContract = useERC20(currency?.address || currAccount?.token?.address || '')
   const cardContract = useCardContract()
   const [checked, setChecked] = useState<boolean>()
@@ -129,7 +131,7 @@ const CreateGaugeModal: React.FC<any> = ({
     contractAddress: '',
     card: pool?.cardAddress ?? '',
     legend: currAccount?.ratingLegend,
-    amountReceivable: amountReceivable,
+    amountReceivable: getBalanceNumber(amountReceivable?.toString()),
     periodReceivable: currAccount?.periodReceivable,
     startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
     description: currAccount?.description ?? '',
@@ -463,13 +465,14 @@ const CreateGaugeModal: React.FC<any> = ({
           BigInt(amount.toString()),
           state.identityTokenId,
         ])
+        const accountId = parseInt(ogPool?.soudId) === parseInt(router.query?.username?.toString()) ? ogPool?.id : ''
         const { request } = await client.simulateContract({
           account: adminAccount,
           address: getCardAddress(),
           abi: cardABI,
           functionName: 'notifyAddBalance',
           args: [
-            router?.query?.username?.toString(),
+            accountId,
             state.sessionId?.toString(),
             data?.tokenAddress,
             BigInt(amount.toString()),
@@ -547,7 +550,7 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
         </Flex>
       )}
-      {stage === LockStage.ADD_BALANCE && (
+      {stage === LockStage.ADD_BALANCE2 && (
         <MintStage
           state={state}
           pool={pool}
@@ -557,12 +560,13 @@ const CreateGaugeModal: React.FC<any> = ({
           continueToNextStage={continueToNextStage}
         />
       )}
-      {stage === LockStage.ADD_BALANCE2 && (
-        <AddBalanceStage
+      {stage === LockStage.ADD_BALANCE && (
+        <MintWithoutWalletStage
           state={state}
-          account={account}
+          pool={pool}
           currency={currency}
-          handleRawValueChange={handleRawValueChange}
+          handleChange={handleChange}
+          callWithGasPrice={callWithGasPrice}
           continueToNextStage={continueToNextStage}
         />
       )}
