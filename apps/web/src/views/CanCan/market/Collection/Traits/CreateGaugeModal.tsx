@@ -92,6 +92,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
     endReceivable: '',
     tokenId: '0',
     identityTokenId: '0',
+    toAddress: '',
     message: '',
     token: currency?.address,
     marketplace: 0,
@@ -242,7 +243,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
       if (stage === LockStage.CONFIRM_CLAIM_REVENUE) {
-        const args = [currency?.address, account, state.identityTokenId]
+        const args = [currency?.address, account, state.toAddress, state.identityTokenId]
         const contract = !state.marketplace
           ? marketTradesContract
           : state.marketplace == 1

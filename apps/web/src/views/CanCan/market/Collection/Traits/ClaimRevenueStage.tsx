@@ -16,7 +16,6 @@ interface RemoveStageProps {
 
 const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
-  const [lockedAmount, setLockedAmount] = useState('')
 
   return (
     <>
@@ -36,6 +35,19 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleRawValu
             <ButtonMenuItem>{t('Paywall Sales')}</ButtonMenuItem>
           </ButtonMenu>
         </StyledItemRow>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('To Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="toAddress"
+          value={state.toAddress}
+          placeholder={t('input recipient address')}
+          onChange={handleChange}
+        />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
