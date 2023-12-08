@@ -14,7 +14,7 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useMarketCollectionsContract, useMarketTradesContract } from 'hooks/useContract'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import AvatarImage from '../../BannerHeader/AvatarImage'
 import { SellingStage, MarketPlace } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
@@ -68,9 +68,9 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     referrerFee: parseInt(collection?.referrerFee) / 100 ?? '0',
     name: collection?.name ?? '',
     badgeId: collection?.badgeId ?? '0',
-    minBounty: collection?.minBounty ?? '0',
-    userMinBounty: collection?.userMinBounty ?? '0',
-    recurringBounty: collection?.recurringBounty ?? '0',
+    minBounty: getBalanceNumber(collection?.minBounty ?? '0'),
+    userMinBounty: getBalanceNumber(collection?.userMinBounty ?? '0'),
+    recurringBounty: parseInt(collection?.recurringBounty ?? '0') / 100,
     requestUserRegistration: Number(collection?.requestUserRegistration) ?? 0,
     requestPartnerRegistration: Number(collection?.requestPartnerRegistration) ?? 0,
     auditors: [],

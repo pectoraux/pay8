@@ -99,11 +99,6 @@ export const paywallMarketTradesABI = [
       },
       {
         internalType: 'address',
-        name: '_collection',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
         name: '_to',
         type: 'address',
       },

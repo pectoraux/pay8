@@ -1,5 +1,4 @@
 # TODO
-marketplace interaction with ARP
 recurring Revenue
 addBalanceEth in trustbounties
 marketplace discounts/cashback
