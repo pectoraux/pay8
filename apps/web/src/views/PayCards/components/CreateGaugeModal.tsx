@@ -1,5 +1,4 @@
 import EncryptRsa from 'encrypt-rsa'
-import { ethers } from 'hardhat'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
@@ -26,7 +25,6 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { cardABI } from 'config/abi/card'
 import { getCardAddress } from 'utils/addressHelpers'
 import { useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
-
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import ExecutePurchaseStage from './ExecutePurchaseStage'
@@ -37,7 +35,11 @@ import UpdatePasswordStage from './UpdatePasswordStage'
 import UpdatePassword2Stage from './UpdatePassword2Stage'
 import UpdateProfileStage from './UpdateProfileStage'
 import MintStage from './MintStage'
+import MintWithNoWalletStage from './MintWithNoWalletStage'
+import { getCard } from 'state/cards/helpers'
+import { usePool } from 'state/cards/hooks'
 
+const ethers = require('ethers')
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
@@ -94,6 +96,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(currency?.address || currAccount?.token?.address || '')
   const cardContract = useCardContract()
   const [checked, setChecked] = useState<boolean>()
+  console.log('ethers===============>', ethers)
   console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
@@ -170,20 +173,21 @@ const CreateGaugeModal: React.FC<any> = ({
     accounts: [],
     sessionId: sessionId ?? '',
   }))
-
+  const { pool: ogPool } = usePool(router.query?.username)
+  console.log('ogpool================>', router.query?.username, ogPool)
   const { data } = useGetSessionInfoSg(sessionId, state.rampAddress.toLowerCase())
   const { data: stripeData } = useGetSessionInfo2(sessionId, process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
   console.log('data=================>', data)
   console.log('stripeData=================>', stripeData, tokenData)
-  const deployer2 = new ethers.Wallet(
-    'd476d1cc0634a7d50959fd73f747ab419d4de249cdebb21212d5f8710e1efd82',
-    ethers.provider,
-  )
 
   useEffect(() => {
     if (data) {
-      if (data?.user?.toLowerCase() !== account?.toLowerCase() || !data?.active) {
+      if (
+        (data?.user?.toLowerCase() !== account?.toLowerCase() &&
+          data?.user?.toLowerCase() !== getCardAddress()?.toLowerCase()) ||
+        !data?.active
+      ) {
         onDismiss()
         if (router.query?.username) router.push('/cards')
       } else {
@@ -322,14 +326,11 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: async () => {
-      const Card = await ethers.getContractFactory('Card')
-      const cardAddress = '0x97b9795Dc1375EAA8B657cdc3c008B14b5A6F2C0'
-      const card = Card.attach(cardAddress)
-      console.log('deployer2===========>', deployer2, await card.profileId())
       const client = createPublicClient({
         chain: fantomTestnet,
         transport: http(),
       })
+
       const walletClient = createWalletClient({
         chain: fantomTestnet,
         transport: custom(window.ethereum),
@@ -465,8 +466,9 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_ADD_BALANCE) {
         const amount = getDecimalAmount(stripeData?.amount, 18)
-        console.log('CONFIRM_ADD_BALANCE===============>', [
-          router?.query?.username?.toString(),
+        const username = parseInt(ogPool?.sousId) === parseInt(router.query?.username?.toString()) ? ogPool?.id : ''
+        console.log('CONFIRM_ADD_BALANCE===============>', ogPool, [
+          username,
           state.sessionId,
           data?.tokenAddress,
           BigInt(amount.toString()),
@@ -478,7 +480,7 @@ const CreateGaugeModal: React.FC<any> = ({
           abi: cardABI,
           functionName: 'notifyAddBalance',
           args: [
-            router?.query?.username?.toString(),
+            username,
             state.sessionId?.toString(),
             data?.tokenAddress,
             BigInt(amount.toString()),
@@ -556,8 +558,18 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
         </Flex>
       )}
-      {stage === LockStage.ADD_BALANCE && (
+      {/* {stage === LockStage.ADD_BALANCE && (
         <MintStage
+          state={state}
+          pool={pool}
+          currency={currency}
+          handleChange={handleChange}
+          callWithGasPrice={callWithGasPrice}
+          continueToNextStage={continueToNextStage}
+        />
+      )} */}
+      {stage === LockStage.ADD_BALANCE && (
+        <MintWithNoWalletStage
           state={state}
           pool={pool}
           currency={currency}

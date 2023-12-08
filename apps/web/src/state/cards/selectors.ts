@@ -6,7 +6,8 @@ import { State, VaultKey } from '../types'
 import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
 const selectPoolsData = (state: State) => state.cards?.data
-const selectPoolData = (sousId) => (state: State) => state.cards?.data.find((p) => p.sousId === sousId)
+const selectPoolData = (sousId) => (state: State) =>
+  state.cards?.data.find((p) => parseInt(p.sousId) === parseInt(sousId))
 const selectPoolData2 = (address) => (state: State) =>
   state.cards.data.find((p) => p.rampAddress?.toLowerCase() === address?.toLowerCase())
 const selectUserDataLoaded = (state: State) => state.cards?.userDataLoaded
