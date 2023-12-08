@@ -66,6 +66,7 @@ const Header: React.FC<any> = ({ collection }) => {
   const [onPresentPartner] = useModal(<PartnerModal collection={collection} />)
   const [onPresentRegister] = useModal(<RegisterModal collection={collection} />)
   const [onPresentShip] = useModal(<ShipStage variant="product" collection={collection} currency={currency} />)
+  const [onPresentVote] = useModal(<SettingStage variant="vote" collection={collection} />)
   const [onPresentPaywall] = useModal(<ShipStage variant="paywall" collection={collection} currency={currency} />)
 
   const steps = [
@@ -173,20 +174,18 @@ const Header: React.FC<any> = ({ collection }) => {
             />
           </Flex>
           <Row>
-            {isOwner && (
-              <ActionContainer>
-                <ActionTitles>
-                  <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-                    {t('Channel Settings')}
-                  </Text>
-                </ActionTitles>
-                <ActionContent>
-                  <Button width="100%" onClick={onPresentSettings} variant="secondary">
-                    {t('Settings')}
-                  </Button>
-                </ActionContent>
-              </ActionContainer>
-            )}
+            <ActionContainer>
+              <ActionTitles>
+                <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+                  {isOwner ? t('Channel Settings') : t('Like/Dislike')}
+                </Text>
+              </ActionTitles>
+              <ActionContent>
+                <Button width="100%" onClick={isOwner ? onPresentSettings : onPresentVote} variant="secondary">
+                  {isOwner ? t('Settings') : t('Vote')}
+                </Button>
+              </ActionContent>
+            </ActionContainer>
             <ActionContainer>
               <ActionTitles>
                 <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
