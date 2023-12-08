@@ -123,6 +123,15 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
       nftToBuy={nft}
     />,
   )
+  const [onPresentProcessAuction] = useModal(
+    <BuyModal
+      setBought={setBought}
+      bidPrice={isAuction ? bidPrice : 0}
+      variant={isPaywall ? 'paywall' : 'item'}
+      processAuction
+      nftToBuy={nft}
+    />,
+  )
   const [onPresentSellModal] = useModal(
     <SellModal variant={isPaywall ? 'paywall' : 'item'} nftToSell={nft} onSuccessSale={onSuccess} />,
   )
@@ -240,6 +249,16 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                           <Timer minutes={minutes} hours={hours} days={days} />{' '}
                           <StyledTimerText pt="30px">{t('until last bidder wins')}</StyledTimerText>
                         </>
+                      ) : isAuction ? (
+                        <Button
+                          minWidth="168px"
+                          disabled={!dropInDatePassed || !account}
+                          mr="16px"
+                          width={['100%', null, 'max-content']}
+                          onClick={onPresentProcessAuction}
+                        >
+                          {t('Process Auction')}
+                        </Button>
                       ) : null}
                       {isDrop && (days2 || hours2 || minutes2) ? (
                         <>

@@ -261,7 +261,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                           )}{' '}
                           <StyledTimerText pt="30px">{t('until last bidder wins')}</StyledTimerText>
                         </>
-                      ) : (
+                      ) : isAuction ? (
                         <Button
                           minWidth="168px"
                           disabled={!dropInDatePassed || !account}
@@ -271,7 +271,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                         >
                           {t('Process Auction')}
                         </Button>
-                      )}
+                      ) : null}
                       {isDrop && (days2 || hours2 || minutes2) ? (
                         <>
                           <StyledTimerText pt="20px" pr="10px">

@@ -1631,10 +1631,19 @@ export const getPendingRevenue = async (tokenAddress, collectionAddress, chainId
     const [
       marketPendingRevenue,
       marketCashbackFund,
+      marketRecurringRevenue,
+      marketLotteryRevenue,
+      marketTreasuryRevenue,
       paywallMarketPendingRevenue,
       paywallMarketCashbackFund,
+      paywallMarketRecurringRevenue,
+      paywallMarketLotteryRevenue,
+      paywallMarketTreasuryRevenue,
       nftMarketPendingRevenue,
       nftMarketCashbackFund,
+      nftMarketRecurringRevenue,
+      nftMarketLotteryRevenue,
+      nftMarketTreasuryRevenue,
     ] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -1651,6 +1660,24 @@ export const getPendingRevenue = async (tokenAddress, collectionAddress, chainId
           args: [tokenAddress, collectionAddress],
         },
         {
+          address: getMarketTradesAddress(),
+          abi: marketTradesABI,
+          functionName: 'recurringBountyBalance',
+          args: [collectionAddress, tokenAddress],
+        },
+        {
+          address: getMarketTradesAddress(),
+          abi: marketTradesABI,
+          functionName: 'lotteryRevenue',
+          args: [tokenAddress],
+        },
+        {
+          address: getMarketTradesAddress(),
+          abi: marketTradesABI,
+          functionName: 'treasuryRevenue',
+          args: [tokenAddress],
+        },
+        {
           address: getPaywallMarketTradesAddress(),
           abi: paywallMarketTradesABI,
           functionName: 'pendingRevenue',
@@ -1663,6 +1690,24 @@ export const getPendingRevenue = async (tokenAddress, collectionAddress, chainId
           args: [tokenAddress, collectionAddress],
         },
         {
+          address: getPaywallMarketTradesAddress(),
+          abi: paywallMarketTradesABI,
+          functionName: 'recurringBountyBalance',
+          args: [collectionAddress, tokenAddress],
+        },
+        {
+          address: getPaywallMarketTradesAddress(),
+          abi: paywallMarketTradesABI,
+          functionName: 'lotteryRevenue',
+          args: [tokenAddress],
+        },
+        {
+          address: getPaywallMarketTradesAddress(),
+          abi: paywallMarketTradesABI,
+          functionName: 'treasuryRevenue',
+          args: [tokenAddress],
+        },
+        {
           address: getNftMarketTradesAddress(),
           abi: nftMarketTradesABI,
           functionName: 'pendingRevenue',
@@ -1673,16 +1718,43 @@ export const getPendingRevenue = async (tokenAddress, collectionAddress, chainId
           abi: nftMarketTradesABI,
           functionName: 'cashbackFund',
           args: [tokenAddress, collectionAddress],
+        },
+        {
+          address: getNftMarketTradesAddress(),
+          abi: nftMarketTradesABI,
+          functionName: 'recurringBountyBalance',
+          args: [collectionAddress, tokenAddress],
+        },
+        {
+          address: getNftMarketTradesAddress(),
+          abi: nftMarketTradesABI,
+          functionName: 'lotteryRevenue',
+          args: [tokenAddress],
+        },
+        {
+          address: getNftMarketTradesAddress(),
+          abi: nftMarketTradesABI,
+          functionName: 'treasuryRevenue',
+          args: [tokenAddress],
         },
       ],
     })
     return {
       marketPendingRevenue: marketPendingRevenue.result,
       marketCashbackFund: marketCashbackFund.result,
+      marketRecurringRevenue: marketRecurringRevenue.result,
+      marketLotteryRevenue: marketLotteryRevenue.result,
+      marketTreasuryRevenue: marketTreasuryRevenue.result,
       paywallMarketPendingRevenue: paywallMarketPendingRevenue.result,
       paywallMarketCashbackFund: paywallMarketCashbackFund.result,
+      paywallMarketRecurringRevenue: paywallMarketRecurringRevenue.result,
+      paywallMarketLotteryRevenue: paywallMarketLotteryRevenue.result,
+      paywallMarketTreasuryRevenue: paywallMarketTreasuryRevenue.result,
       nftMarketPendingRevenue: nftMarketPendingRevenue.result,
       nftMarketCashbackFund: nftMarketCashbackFund.result,
+      nftMarketRecurringRevenue: nftMarketRecurringRevenue.result,
+      nftMarketLotteryRevenue: nftMarketLotteryRevenue.result,
+      nftMarketTreasuryRevenue: nftMarketTreasuryRevenue.result,
     }
   } catch {
     return null

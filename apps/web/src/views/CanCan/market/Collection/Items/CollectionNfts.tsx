@@ -332,7 +332,7 @@ const Content: React.FC<any> = ({ owner, referrerFee, registration }) => {
               key={nft?.tokenId}
               nft={nft}
               isPaywall={!!reg.paywall}
-              referrer={owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase() && nft?.currentSeller}
+              referrer={owner}
               currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
             />
           )

@@ -70,7 +70,7 @@ interface BuyModalProps extends InjectedModalProps {
   variant: 'item' | 'paywall'
 }
 
-const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBought = noop, onDismiss }) => {
+const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, processAuction = false, onDismiss }) => {
   const referrer = useRouter().query.referrer as string
   const collectionId = useRouter().query.collectionAddress as string
   const [stage, setStage] = useState(variant === 'paywall' ? BuyingStage.PAYWALL_REVIEW : BuyingStage.REVIEW)
@@ -222,6 +222,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
       // if (checkStage) return false
+      if (processAuction) return false
       if (paymentCurrency === 2) return true
       return needsApproval || needsApproval2 || needsApproval3
     },
@@ -281,17 +282,23 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, setBoug
           console.log('CONFIRM_PAYMENT_CREDIT================>', err),
         )
       }
-      let args
       if (paymentCurrency === PaymentCurrency.BNB) {
-        args = [
-          nftToBuy?.currentSeller,
-          account,
-          referrer || ADDRESS_ZERO,
-          nftToBuy.tokenId,
-          userTokenId,
-          identityTokenId,
-          userOptions,
-        ]
+        const args = processAuction
+          ? [nftToBuy?.currentSeller, referrer || ADDRESS_ZERO, account, nftToBuy.tokenId, userTokenId, userOptions]
+          : [
+              nftToBuy?.currentSeller,
+              account,
+              referrer || ADDRESS_ZERO,
+              nftToBuy.tokenId,
+              userTokenId,
+              identityTokenId,
+              userOptions,
+            ]
+        if (processAuction) {
+          return callWithGasPrice(helperContract, 'processAuction', args).catch((err) =>
+            console.log('0err BNB===================>', err),
+          )
+        }
         if (Number(new BigNumber(nftToBuy.nftokenId._hex).toJSON())) {
           return callWithGasPrice(tokenContract, 'approve', [marketHelper3Contract.address, nftToBuy.nftokenId])
             .then(() => callWithGasPrice(callContract, 'buyWithContract', args))
