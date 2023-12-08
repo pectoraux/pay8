@@ -57,6 +57,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Bounty Owner')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="bountyOwner"
+          value={state.bountyOwner}
+          placeholder={t('input bounty owner address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Source Address')}
@@ -86,21 +99,21 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Item Market Trades Contract Address')}
           </Text>
-          <CopyAddress
-            title={truncateHash(getPaywallMarketTradesAddress(), 15, 15)}
-            account={getPaywallMarketTradesAddress()}
-          />
+          <CopyAddress title={truncateHash(getMarketTradesAddress(), 15, 15)} account={getMarketTradesAddress()} />
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t('Paywall Market Trades Contract Address')}
+            {t('NFT Market Trades Contract Address')}
           </Text>
           <CopyAddress
             title={truncateHash(getNftMarketTradesAddress(), 15, 15)}
             account={getNftMarketTradesAddress()}
           />
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t('NFT Market Trades Contract Address')}
+            {t('Paywall Market Trades Contract Address')}
           </Text>
-          <CopyAddress title={truncateHash(getMarketTradesAddress(), 15, 15)} account={getMarketTradesAddress()} />
+          <CopyAddress
+            title={truncateHash(getPaywallMarketTradesAddress(), 15, 15)}
+            account={getPaywallMarketTradesAddress()}
+          />
         </Box>
       </Grid>
       <Divider />

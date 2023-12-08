@@ -448,11 +448,11 @@ export default {
     56: '0x',
   },
   trustbounties: {
-    4002: '0x855413AC9576A43f16C811777133FedFC971697C',
+    4002: '0x99fAc8AB3f51C89AC45372d0dfDB63d979f0d5EB',
     56: '0x',
   },
   trustbountiesHelper: {
-    4002: '0xf824a961659D39629Df27272569Ee66A061EB76e',
+    4002: '0xcB2863E4aEd438AF8973cf28480315ba0EF3BFf2',
     56: '0x',
   },
   trustbountiesvoter: {

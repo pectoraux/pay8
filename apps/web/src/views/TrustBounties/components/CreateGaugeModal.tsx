@@ -118,6 +118,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
     numPeriods: '',
     name: '',
     symbol: '',
+    bountyOwner: pool?.owner ?? '',
     startProtocolId: '',
     endProtocolId: '',
     requestAddress: '',
@@ -424,6 +425,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         console.log('CONFIRM_ADD_RECURRING_BALANCE===============>', [state.bountyId, state.sourceAddress])
         return callWithGasPrice(trustBountiesContract, 'addRecurringBalance', [
           state.bountyId,
+          state.bountyOwner,
           state.sourceAddress,
         ]).catch((err) => console.log('CONFIRM_ADD_RECURRING_BALANCE===============>', err))
       }

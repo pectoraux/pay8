@@ -157,7 +157,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
           <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
             {!marketPlace ? (
               <>
-                <Box mb="25px" height="32px">
+                <Box mb="25px" mr="18px" height="32px">
                   <Balance
                     lineHeight="1"
                     color="textSubtle"
@@ -193,7 +193,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
                     {t('Recurring Bounty Balance')}
                   </Text>
                 </Box>
-                <Box mb="25px" ml="18px" height="32px">
+                <Box mb="25px" height="32px">
                   <Balance
                     lineHeight="1"
                     color="textSubtle"
@@ -205,7 +205,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
                     {t('PaySwap Lottery Fund')}
                   </Text>
                 </Box>
-                <Box mb="25px" ml="18px" height="32px">
+                <Box mb="25px" height="32px">
                   <Balance
                     lineHeight="1"
                     color="textSubtle"
@@ -263,7 +263,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
                     {t('Recurring Bounty Balance')}
                   </Text>
                 </Box>
-                <Box mb="25px" ml="18px" height="32px">
+                <Box mb="25px" height="32px">
                   <Balance
                     lineHeight="1"
                     color="textSubtle"
@@ -275,7 +275,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
                     {t('PaySwap Lottery Fund')}
                   </Text>
                 </Box>
-                <Box mb="25px" ml="18px" height="32px">
+                <Box mb="25px" height="32px">
                   <Balance
                     lineHeight="1"
                     color="textSubtle"
@@ -333,7 +333,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
                     {t('Recurring Bounty Balance')}
                   </Text>
                 </Box>
-                <Box mb="25px" ml="18px" height="32px">
+                <Box mb="25px" height="32px">
                   <Balance
                     lineHeight="1"
                     color="textSubtle"
@@ -345,7 +345,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
                     {t('PaySwap Lottery Fund')}
                   </Text>
                 </Box>
-                <Box mb="25px" ml="18px" height="32px">
+                <Box mb="25px" height="32px">
                   <Balance
                     lineHeight="1"
                     color="textSubtle"

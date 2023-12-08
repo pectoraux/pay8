@@ -64,6 +64,11 @@ export const trustBountiesABI = [
       },
       {
         internalType: 'address',
+        name: '_owner',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
         name: '_source',
         type: 'address',
       },
