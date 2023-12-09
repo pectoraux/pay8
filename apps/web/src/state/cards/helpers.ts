@@ -91,21 +91,9 @@ export const fetchCard = async (ownerAddress, chainId) => {
       }
     }),
   )
-  const [accountId] = await bscClient.multicall({
-    allowFailure: true,
-    contracts: [
-      {
-        address: getCardAddress(),
-        abi: cardABI,
-        functionName: 'accountId',
-        args: [card?.id],
-      },
-    ],
-  })
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...card,
-    sousId: accountId.result.toString(),
     balances,
   }
 }
@@ -147,19 +135,8 @@ export const fetchCards = async ({ fromCard, chainId }) => {
               }
             }),
           )
-          const [accountId] = await bscClient.multicall({
-            allowFailure: true,
-            contracts: [
-              {
-                address: getCardAddress(),
-                abi: cardABI,
-                functionName: 'accountId',
-                args: [card?.id],
-              },
-            ],
-          })
           return {
-            sousId: accountId.result.toString(),
+            sousId: card?.id,
             ...card,
             balances,
           }
