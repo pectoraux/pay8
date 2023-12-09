@@ -95,11 +95,14 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(currency?.address || currAccount?.token?.address || '')
   const cardContract = useCardContract()
   const [checked, setChecked] = useState<boolean>()
-  console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
   const accountId = useMemo(
-    () => (parseInt(ogPool?.sousId) === parseInt(router.query?.username?.toString()) ? ogPool?.id : pool?.id),
-    [ogPool?.id, ogPool?.sousId, pool?.id, router.query?.username],
+    () =>
+      parseInt(ogPool?.sousId) === parseInt(router.query?.username?.toString())
+        ? ogPool?.id
+        : router.query?.username?.toString(),
+    [ogPool?.id, ogPool?.sousId, router.query?.username],
   )
+  console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
 
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
