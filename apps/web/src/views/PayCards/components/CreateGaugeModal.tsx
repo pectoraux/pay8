@@ -1,3 +1,4 @@
+import NodeRSA from 'encrypt-rsa'
 import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
@@ -101,19 +102,19 @@ const CreateGaugeModal: React.FC<any> = ({
   )
 
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
-  // const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-  // let username
-  // let password
-  // if (pool?.password && pool?.username) {
-  //   username = nodeRSA?.decryptStringWithRsaPrivateKey({
-  //     text: pool?.username,
-  //     privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-  //   })
-  //   password = nodeRSA?.decryptStringWithRsaPrivateKey({
-  //     text: pool?.password,
-  //     privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-  //   })
-  // }
+  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
+  let username
+  let password
+  if (pool?.password && pool?.username) {
+    username = nodeRSA?.decryptStringWithRsaPrivateKey({
+      text: pool?.username,
+      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+    })
+    password = nodeRSA?.decryptStringWithRsaPrivateKey({
+      text: pool?.password,
+      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+    })
+  }
   const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
 
   const [state, setState] = useState<any>(() => ({
@@ -476,23 +477,27 @@ const CreateGaugeModal: React.FC<any> = ({
           BigInt(amount.toString()),
           state.identityTokenId,
         ])
-        const { request } = await client.simulateContract({
-          account: adminAccount,
-          address: getCardAddress(),
-          abi: cardABI,
-          functionName: 'notifyAddBalance',
-          args: [
-            state.rampAddress,
-            accountId,
-            state.sessionId?.toString(),
-            data?.tokenAddress,
-            BigInt(amount.toString()),
-            BigInt(state.identityTokenId),
-          ],
-        })
-        return walletClient
-          .writeContract(request)
-          .catch((err) => console.log('CONFIRM_ADD_BALANCE===============>', err))
+        try {
+          const { request } = await client.simulateContract({
+            account: adminAccount,
+            address: getCardAddress(),
+            abi: cardABI,
+            functionName: 'notifyAddBalance',
+            args: [
+              state.rampAddress,
+              accountId,
+              state.sessionId?.toString(),
+              data?.tokenAddress,
+              BigInt(amount.toString()),
+              BigInt(state.identityTokenId),
+            ],
+          })
+          return walletClient
+            .writeContract(request)
+            .catch((err) => console.log('1CONFIRM_ADD_BALANCE===============>', err))
+        } catch (err) {
+          console.log('2CONFIRM_ADD_BALANCE===============>', err)
+        }
       }
     },
     onSuccess: async ({ receipt }) => {

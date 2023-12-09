@@ -23,6 +23,8 @@ import { fetchRampsAsync } from 'state/ramps'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
+import { rampABI } from 'config/abi/ramp'
+
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import MintStage from './MintStage'
@@ -52,9 +54,7 @@ import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
-import { rampABI } from 'config/abi/ramp'
 import LocationStage from './LocationStage'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -604,8 +604,9 @@ const CreateGaugeModal: React.FC<any> = ({
         ]).catch((err) => console.log('CONFIRM_UPDATE_BLACKLIST===============>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_ADMIN) {
+        console.log('CONFIRM_UPDATE_ADMIN===============>', [state.owner, !!state.add])
         return callWithGasPrice(rampContract, 'updateAdmin', [state.owner, !!state.add]).catch((err) =>
-          console.log('CONFIRM_UPDATE_ADMIN===============>', err),
+          console.log('1CONFIRM_UPDATE_ADMIN===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_DEV) {

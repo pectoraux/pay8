@@ -123,6 +123,7 @@ export const fetchCards = async ({ fromCard, chainId }) => {
                 },
               ],
             })
+            console.log('tk========>', tk)
             return {
               ...tk,
               name: name?.result?.toString(),
