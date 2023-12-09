@@ -1,4 +1,3 @@
-import NodeRSA from 'encrypt-rsa'
 import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
@@ -98,7 +97,7 @@ const CreateGaugeModal: React.FC<any> = ({
   console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
   const accountId = useMemo(
     () => (parseInt(ogPool?.sousId) === parseInt(router.query?.username?.toString()) ? ogPool?.id : pool?.id),
-    [ogPool?.id, ogPool?.soudId, pool?.id, router.query?.username],
+    [ogPool?.id, ogPool?.sousId, pool?.id, router.query?.username],
   )
 
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
