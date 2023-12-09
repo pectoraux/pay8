@@ -261,35 +261,35 @@ export default {
   },
   ARPNote: {
     56: '0x',
-    4002: '0xEFD289a07972Fa58FF0F9b4d37a0A9EFd2566550',
+    4002: '0xB3cF79b24D751c5FD31a177fdaB449F3f8D8605e',
   },
   ARPHelper: {
     56: '0x',
-    4002: '0x18988deb80151Cd52aB68f203c074B1BCAaD32e9',
+    4002: '0x854059066aD7BDF6d18E069bdC6b2DE477Ba8949',
   },
   ARPMinter: {
     56: '0x',
-    4002: '0x700532cc53282cD577f2299ce60f15Da11308a25',
+    4002: '0x1996caA9a6CDe7CE28D0690B2C0dC37Fd77b6447',
   },
   ARPFactory: {
     56: '0x',
-    4002: '0xB43FfE737042aD45191eb8d4e397c631D66a23FD',
+    4002: '0xbfD75c6C25B6045e24a5C446dE04A70c99C76f70',
   },
   BILLNote: {
     56: '0x',
-    4002: '0x729124dBeC963b743dfFC8aAA29236d95F1C7a55',
+    4002: '0xFf3254b1e3980fDA97FD7a4A245dC43FE8B9E53f',
   },
   BILLHelper: {
     56: '0x',
-    4002: '0xbdb2ec1b244ACa734A5dA0ce7cd89d447319a2fA',
+    4002: '0x995a88e7120fC55a23E82adbdc50a14efA67A2dC',
   },
   BILLMinter: {
     56: '0x',
-    4002: '0x90256b159FC802c497b6C2BF7799DE75eAD936F2',
+    4002: '0x39d546Ce9737f5B377b703C4fE5Dc621D162540b',
   },
   BILLFactory: {
     56: '0x',
-    4002: '0xE697b2D4135b14216DB09e379f50E93dd281fD16',
+    4002: '0xB061A49504aa7b6DF228E556954bD58A4Cad3574',
   },
   lotteryHelper: {
     56: '0x',
@@ -325,114 +325,115 @@ export default {
   },
   paywallARPHelper: {
     56: '0x',
-    4002: '0xDA1f5994a7568A6F7dED60E34fD29fAc5f466C23',
+    4002: '0x5877de59AAf11794396e9bB5950CE58E06557cC3',
   },
   paywallARPFactory: {
     56: '0x',
-    4002: '0xD306Bc71120c7Ca5cd5Ce19Bc57f005Bf4F6D264',
+    4002: '0xA732c57C3DA59aE51Eb04A842569eb4Ae15B3A0f',
   },
   minterFactory: {
-    4002: '0x972A806DD4C5536E50F38155d7AfFD04741429a0',
+    4002: '0x5Ed7ae0A1f29389295f4F25A1A679Bc051ae6aD4',
     56: '0x',
   },
   nfticket: {
-    4002: '0xC4bdaB8341803547Bc8d468ef7Ee7e7B35953c89',
+    4002: '0x88db9D87e4D8ecC1f05eA72db52D933E25f88d2A',
     56: '0x',
   },
   nfticketHelper: {
-    4002: '0x8e29bd8dd5c1D62594d6826C0660312E4191593B',
+    4002: '0x4888CEc598B9115bfC965d714E68e791c2cC1d80',
     56: '0x',
   },
   nfticketHelper2: {
-    4002: '0xEE4a5abf0fC0978b2DCf7c2bc8d57FDc43DadB55',
+    4002: '0x517a113a03B7842C1B731b482E89FB4920363aD5',
     56: '0x',
   },
   marketEvents: {
-    4002: '0xB891F70205643D7DC4e6c6891013E92183E43AB1',
+    4002: '0xAD38AFac104D620C079a9FFf7bc0E9B59eB00e6d',
     56: '0x',
   },
   marketCollections: {
-    4002: '0x2265a1377833F7BCCDbC5729Ba832552B48A7c92',
+    4002: '0x0970926487E31cF5451b2Ed5Ba7C44cC9f8eA604',
     56: '0x0000000000000000000000000000000000000000',
   },
   marketOrders: {
-    4002: '0x3DFB090975C08535462b7BB49cd2c5c3e7Eeb49E',
+    4002: '0xdc72352eA34141Bf8F72aEFca07b30AcEc155dcf',
     56: '0x',
   },
   marketTrades: {
-    4002: '0xA19fb0df53D03D88d9786B8091070D0cCbD17ADC',
+    4002: '0xf2904F2325ea229adD6EbCb04951fF1D28C3b891',
     56: '0x',
   },
   marketHelper: {
-    4002: '0x99dbF90228302E17B0CcFaa541DCE676775A8EBA',
+    4002: '0x0B252359e6F81694c11b5Ba4782a9151e3E82579',
     56: '0x',
   },
   marketHelper2: {
-    4002: '0xeDA992166cd47e84Af047d6d355ACD841307c91f',
+    4002: '0x78C10070AC5e9Aad679CCdF2d3bE9A2F77EE5F11',
     56: '0x',
   },
   marketHelper3: {
-    4002: '0x8a61AB91ec0e1aD414c5F90D072ea8276496B167',
+    4002: '0x2affD239CAB6c7ca5643e1e821fa4ddF6072f7cC',
     56: '0x',
   },
   nftMarketOrders: {
-    4002: '0x8F0dE71645c5fc6dE40A0b5066d0e53BeCC3bCf5',
+    4002: '0x9cFE0aEB5f89E5f3A58C36498c42aCDd278ACbfc',
     56: '0x',
   },
   nftMarketTrades: {
-    4002: '0x4C15181252952064399D593a3B868521A2Fd0425',
+    4002: '0xb43A592FF03b10D243E3cFc64Ee32ba6912Ed61c',
     56: '0x',
   },
   nftMarketHelper: {
-    4002: '0x9BbA15a01A3bc11A6aD200B3de333fB26930737F',
+    4002: '0x352ae66Dca43ad2C23D57393D6D5b5adF6B2446C',
     56: '0x',
   },
   nftMarketHelper2: {
-    4002: '0xD5C57208CD6b89c540010727D7ac1647255Ed0e3',
+    4002: '0xcA00299bEfd8A4ff57Ac83aEfdb3F1701e7d5C2b',
     56: '0x',
   },
   nftMarketHelper3: {
-    4002: '0x63166f4fC06260416031A583f14E3d28BA8d76f9',
+    4002: '0xe83a58792EACa44345129141313E16Cae2076d15',
     56: '0x',
   },
   paywallMarketOrders: {
-    4002: '0x8127516Ff3c8fE6fdb9CE22145C6BFDb83aB54c6',
+    4002: '0x8E253b889A5c03d35bfc2A9e433Dde4144236fBa',
     56: '0x',
   },
   paywallMarketTrades: {
-    4002: '0x72925EE40442597c02bfAa3295113E7BD1479c45',
+    4002: '0x8C4575C706515E2725C64F6c27A60EC2dCd104c2',
     56: '0x',
   },
   paywallMarketHelper: {
-    4002: '0x2f01f949F9cDE9822dF361A85bBe5A0BDCb659d3',
+    4002: '0x5e54677A9C2803481016E041A8cFeB3fD03770c6',
     56: '0x',
   },
   paywallMarketHelper2: {
-    4002: '0x6444FeDeD64cb196253E31527647fb5075b3F722',
+    4002: '0x86973bEbE9233792426Bbb39d7e1356eb1211594',
     56: '0x',
   },
   paywallMarketHelper3: {
-    4002: '0x442e00e70e71325d400F21B58eaA7b98496A237e',
+    4002: '0xf82726AbB3b7d854ba07AB8db7f1Afd1f3834d50',
     56: '0x',
   },
   stakemarket: {
-    4002: '0xbf877500681AF64f10F6C3E92fA9946f800804ea',
-    56: '0x',
-  },
-  stakemarketNote: {
-    4002: '0x2596c9eA9473AE8B1F8EB08019CD8e9844Cea34a',
-    56: '0x',
-  },
-  stakemarketHelper: {
-    4002: '0xf178d8A6661aBA43bEaFe98080e47CD213c2FC34',
+    4002: '0xe11515741E0048914Fccb80a2C700d41b757F60A',
     56: '0x',
   },
   stakemarketVoter: {
-    4002: '0xeAf2c655581C83D47497D9D0C68dE09b1B32Fa55',
+    4002: '0x9E41eB6e4082643E6Aa50bD3126D38798644e261',
+    56: '0x',
+  },
+
+  stakemarketNote: {
+    4002: '0x1697d2E8c40c3f7c437934fce8FcC37f18B88cdd',
+    56: '0x',
+  },
+  stakemarketHelper: {
+    4002: '0x4aFde7B1E5Eb048fdd7dA0253F1461fB59Fb2D1C',
     56: '0x',
   },
   stakemarketBribe: {
-    4002: '0x1b947A45Ad79438d5F47f45C920B9f1Dbe26f802',
+    4002: '0xa4Cd94FA5d590f8B8cA844C6B7FFD347c5443Ce4',
     56: '0x',
   },
   bettingHelper: {
@@ -448,15 +449,19 @@ export default {
     56: '0x',
   },
   trustbounties: {
-    4002: '0x99fAc8AB3f51C89AC45372d0dfDB63d979f0d5EB',
+    4002: '0xb93E4F7ea004A644a5521E5877B5d5ba851Bb45f',
     56: '0x',
   },
   trustbountiesHelper: {
-    4002: '0xcB2863E4aEd438AF8973cf28480315ba0EF3BFf2',
+    4002: '0x1AA7C08cfA80Ef06Ac5bB3F4b6Ea6D6bCC8Ce8b5',
     56: '0x',
   },
   trustbountiesvoter: {
-    4002: '0x2CD8f718BD6784873454d6288119d51DfcAe6FA4',
+    4002: '0xf94e32A706470af60a752C2167444D5218B1cF77',
+    56: '0x',
+  },
+  arpFactory: {
+    4002: '0x0b1119f76589A08530058549aFD1E85445048f56',
     56: '0x',
   },
   invoiceFactory: {
@@ -464,23 +469,23 @@ export default {
     56: '0x',
   },
   valuepoolVoter: {
-    4002: '0x3a5231DAC8755102D17b911c0Dc99cE7DC47d0bD',
+    4002: '0x312B3E91e01D87F46B45A23368B0fDE988aFdddD',
     56: '0x',
   },
   vaFactory: {
-    4002: '0x60496E81e744B5aD59b91d17Cfa62036d69fC856',
+    4002: '0xd01A8bb066Ee9cb795366b91a632eFD492B200Bc',
     56: '0x',
   },
   valuepoolFactory: {
-    4002: '0x5fdbCeEc25E02d15dE51af3450289c72Ef2d081E',
+    4002: '0x183D70a3cf5e467049A82e79f7C50B488A46D477',
     56: '0x',
   },
   valuepoolHelper: {
-    4002: '0xC38993A66820830bfED5D92bc4c937a4bba4528D',
+    4002: '0x350499C782d15Df1839E74A3E8999FbC86A49c33',
     56: '0x',
   },
   valuepoolHelper2: {
-    4002: '0x282E20b214ec4f4ae560dB9eaF03a29D0910Cb40',
+    4002: '0x55B4098BF974fec1387aBE50329027142Bf1f7c9',
     56: '0x',
   },
   businessVoter: {
@@ -599,12 +604,8 @@ export default {
     56: '0x',
     4002: '0xf2Ca8333888cf3C673E81225228a000F9b7b4338',
   },
-  nftSVG: {
-    56: '0x',
-    4002: '0xabd6aB0c520848770B16f2b7d1d3cD58F83f82D8',
-  },
   'real estate': {
-    4002: '0xb9858E52175Dc194686E29875570703B5C986Fe3', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
+    4002: '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
     56: '0x',
   },
   transportation: {
@@ -700,4 +701,3 @@ export default {
     56: '0x',
   },
 } as const satisfies Record<string, Record<number, `0x${string}`>>
-// 0x6e0521b964Aafe1A50159C003f4876275E6C7c9a
