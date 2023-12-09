@@ -75,7 +75,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     priceInSecondaryCurrency,
   } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   const { isMobile } = useMatchBreakpoints()
-  let { mp4, isArticle } = getThumbnailNContent(nft)
+  const { isArticle } = getThumbnailNContent(nft)
   const [bought, setBought] = useState(false)
   const contactChannels = collection?.contactChannels?.split(',') ?? []
   const contacts = collection?.contacts?.split(',') ?? []
@@ -233,7 +233,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
                     <Flex flexDirection="row" mt="24px">
                       <Button
                         minWidth="168px"
-                        disabled={!dropInDatePassed || !account}
+                        disabled={!dropInDatePassed}
                         mr="16px"
                         width={['100%', null, 'max-content']}
                         onClick={onPresentBuyModal}

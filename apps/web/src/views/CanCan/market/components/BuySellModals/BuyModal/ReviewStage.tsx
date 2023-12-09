@@ -103,6 +103,12 @@ const ReviewStage: React.FC<any> = ({
   merchantIdentityTokenId,
   note,
   address,
+  username,
+  setUserName,
+  password,
+  setPassword,
+  accountId,
+  setAccountId,
   setMerchantIdentityTokenId,
   setNote,
   setAddress,
@@ -201,6 +207,13 @@ const ReviewStage: React.FC<any> = ({
       )}
     </Text>
   )
+  const TooltipComponent10 = () => (
+    <Text>
+      {t(
+        'PaySwap enables you to pay with your Paycard and not have to connect a cryptocurrency wallet. Create your PayCard on the PayCard page (Earn > PayCard), charge it with your credit card. You will have to pick a username and password for the card during its creation; enter your username here and your password in the next field',
+      )}
+    </Text>
+  )
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -270,6 +283,14 @@ const ReviewStage: React.FC<any> = ({
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
+  const {
+    targetRef: targetRef10,
+    tooltip: tooltip10,
+    tooltipVisible: tooltipVisible10,
+  } = useTooltip(<TooltipComponent10 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   return (
     <>
       <Flex px="24px" pt="24px" flexDirection="column">
@@ -307,11 +328,17 @@ const ReviewStage: React.FC<any> = ({
             scale="sm"
             variant="subtle"
           >
-            <ButtonMenuItem>{mainCurrency?.symbol}</ButtonMenuItem>
-            <ButtonMenuItem>{t('Stake Market')}</ButtonMenuItem>
-            <ButtonMenuItem>
-              {isMobile || paymentCurrency === 2 ? slicedContract : t('Contract').slice(0, 8)}
-            </ButtonMenuItem>
+            <ButtonMenuItem>{account ? mainCurrency?.symbol : t('PayCard')}</ButtonMenuItem>
+            {account ? (
+              <>
+                <ButtonMenuItem>{t('Stake Market')}</ButtonMenuItem>
+                <ButtonMenuItem>
+                  {isMobile || paymentCurrency === 2 ? slicedContract : t('Contract').slice(0, 8)}
+                </ButtonMenuItem>
+              </>
+            ) : (
+              <></>
+            )}
           </ButtonMenu>
         </StyledBorderedBox>
         <StyledBorderedBox>
@@ -478,99 +505,144 @@ const ReviewStage: React.FC<any> = ({
           )
         )}
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
-          <StyledBorderedBox>
-            {paymentCurrency === 2 ? (
-              <GreyedOutContainer>
-                <Flex ref={targetRef}>
-                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                    {t('Valuepool Token ID')}
-                  </Text>
-                  {tooltipVisible && tooltip}
-                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-                </Flex>
-                <Input
-                  type="number"
-                  scale="sm"
-                  value={tokenId}
-                  placeholder={t('input Valuepool token id')}
-                  onChange={(e) => setTokenId(e.target.value)}
-                />
-              </GreyedOutContainer>
-            ) : (
-              <GreyedOutContainer>
-                <Flex ref={targetRef2}>
-                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                    {t('Product Leviathan Token ID')}
-                  </Text>
-                  {tooltipVisible2 && tooltip2}
-                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-                </Flex>
-                <Input
-                  type="number"
-                  scale="sm"
-                  value={userTokenId}
-                  placeholder={t('input product Leviathan token id')}
-                  onChange={(e) => setUserTokenId(e.target.value)}
-                />
-              </GreyedOutContainer>
-            )}
-            <GreyedOutContainer>
-              <Flex ref={targetRef3}>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Identity Token ID')}
-                </Text>
-                {tooltipVisible3 && tooltip3}
-                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-              </Flex>
-              <Input
-                type="number"
-                scale="sm"
-                value={identityTokenId}
-                placeholder={t('input identity token id')}
-                onChange={(e) => setIdentityTokenId(e.target.value)}
-              />
-            </GreyedOutContainer>
-            {paymentCurrency === 1 ? (
-              <GreyedOutContainer style={{ paddingTop: '50px' }}>
-                <StyledItemRow>
-                  <Flex ref={targetRef4} paddingRight="50px">
-                    <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-                      {t('Require Upfront Payment')}
+          {account ? (
+            <StyledBorderedBox>
+              {paymentCurrency === 2 ? (
+                <GreyedOutContainer>
+                  <Flex ref={targetRef}>
+                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                      {t('Valuepool Token ID')}
                     </Text>
-                    {tooltipVisible4 && tooltip4}
+                    {tooltipVisible && tooltip}
                     <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
                   </Flex>
-                  <ButtonMenu
-                    scale="xs"
-                    variant="subtle"
-                    activeIndex={requireUpfrontPayment}
-                    onItemClick={setRequireUpfrontPayment}
-                  >
-                    <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-                  </ButtonMenu>
-                </StyledItemRow>
-              </GreyedOutContainer>
-            ) : null}
-            {paymentCurrency === 2 ? (
+                  <Input
+                    type="number"
+                    scale="sm"
+                    value={tokenId}
+                    placeholder={t('input Valuepool token id')}
+                    onChange={(e) => setTokenId(e.target.value)}
+                  />
+                </GreyedOutContainer>
+              ) : (
+                <GreyedOutContainer>
+                  <Flex ref={targetRef2}>
+                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                      {t('Product Leviathan Token ID')}
+                    </Text>
+                    {tooltipVisible2 && tooltip2}
+                    <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                  </Flex>
+                  <Input
+                    type="number"
+                    scale="sm"
+                    value={userTokenId}
+                    placeholder={t('input product Leviathan token id')}
+                    onChange={(e) => setUserTokenId(e.target.value)}
+                  />
+                </GreyedOutContainer>
+              )}
               <GreyedOutContainer>
-                <Flex ref={targetRef5}>
+                <Flex ref={targetRef3}>
                   <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                    {t('Merchant Identity ID (For Check Rank)')}
+                    {t('Identity Token ID')}
                   </Text>
-                  {tooltipVisible5 && tooltip5}
+                  {tooltipVisible3 && tooltip3}
                   <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
                 </Flex>
                 <Input
                   type="number"
                   scale="sm"
-                  value={merchantIdentityTokenId}
-                  placeholder={t('input merchant identity id')}
-                  onChange={(e) => setMerchantIdentityTokenId(e.target.value)}
+                  value={identityTokenId}
+                  placeholder={t('input identity token id')}
+                  onChange={(e) => setIdentityTokenId(e.target.value)}
                 />
               </GreyedOutContainer>
-            ) : null}
-          </StyledBorderedBox>
+              {paymentCurrency === 1 ? (
+                <GreyedOutContainer style={{ paddingTop: '50px' }}>
+                  <StyledItemRow>
+                    <Flex ref={targetRef4} paddingRight="50px">
+                      <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+                        {t('Require Upfront Payment')}
+                      </Text>
+                      {tooltipVisible4 && tooltip4}
+                      <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                    </Flex>
+                    <ButtonMenu
+                      scale="xs"
+                      variant="subtle"
+                      activeIndex={requireUpfrontPayment}
+                      onItemClick={setRequireUpfrontPayment}
+                    >
+                      <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+                      <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+                    </ButtonMenu>
+                  </StyledItemRow>
+                </GreyedOutContainer>
+              ) : null}
+              {paymentCurrency === 2 ? (
+                <GreyedOutContainer>
+                  <Flex ref={targetRef5}>
+                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                      {t('Merchant Identity ID (For Check Rank)')}
+                    </Text>
+                    {tooltipVisible5 && tooltip5}
+                    <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                  </Flex>
+                  <Input
+                    type="number"
+                    scale="sm"
+                    value={merchantIdentityTokenId}
+                    placeholder={t('input merchant identity id')}
+                    onChange={(e) => setMerchantIdentityTokenId(e.target.value)}
+                  />
+                </GreyedOutContainer>
+              ) : null}
+            </StyledBorderedBox>
+          ) : (
+            <StyledBorderedBox>
+              <GreyedOutContainer>
+                <Flex ref={targetRef10}>
+                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                    {t('Username')}
+                  </Text>
+                  {tooltipVisible10 && tooltip10}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
+                <Input
+                  type="password"
+                  scale="lg"
+                  value={username}
+                  placeholder={t('input your paycard username')}
+                  onChange={(e) => setUserName(e.target.value)}
+                />
+              </GreyedOutContainer>
+              <GreyedOutContainer>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Password')}
+                </Text>
+                <Input
+                  type="password"
+                  scale="lg"
+                  value={password}
+                  placeholder={t('input your paycard password')}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </GreyedOutContainer>
+              <GreyedOutContainer>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Account ID')}
+                </Text>
+                <Input
+                  type="text"
+                  scale="lg"
+                  value={accountId}
+                  placeholder={t('input your paycard account id')}
+                  onChange={(e) => setAccountId(e.target.value)}
+                />
+              </GreyedOutContainer>
+            </StyledBorderedBox>
+          )}
           <StyledBorderedBox>
             <GreyedOutContainer>
               <Flex ref={targetRef8}>
@@ -651,15 +723,16 @@ const ReviewStage: React.FC<any> = ({
         <Button
           onClick={continueToNextStage}
           disabled={
-            bnbFetchStatus !== FetchStatus.Fetched ||
-            notEnoughBnbForPurchase ||
-            (!isAddress(recipient) && paymentCurrency === 2)
+            account &&
+            (bnbFetchStatus !== FetchStatus.Fetched ||
+              notEnoughBnbForPurchase ||
+              (!isAddress(recipient) && paymentCurrency === 2))
           }
           mb="8px"
         >
           {paymentCurrency === PaymentCurrency.WBNB
             ? t('Stake')
-            : paymentCurrency === 0
+            : paymentCurrency === PaymentCurrency.BNB
             ? t('Checkout')
             : t('Pick Rank')}
         </Button>

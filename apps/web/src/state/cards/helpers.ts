@@ -3,16 +3,19 @@ import { publicClient } from 'utils/wagmi'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_CARDS } from 'config/constants/endpoints'
 
+import { getCardAddress } from 'utils/addressHelpers'
+import { cardABI } from 'config/abi/card'
+
 import { cardFields, tokenBalanceFields } from './queries'
 
-export const getCard = async (ownerAddress) => {
+export const getCard = async (cardId) => {
   try {
     const res = await request(
       GRAPH_API_CARDS,
       gql`
-        query getCard($cardAddress: String) 
+        query getCard($cardId: String) 
         {
-          card(id: $cardAddress) {
+          card(id: $cardId) {
             ${cardFields}
             balances {
               ${tokenBalanceFields}
@@ -20,12 +23,12 @@ export const getCard = async (ownerAddress) => {
           }
         }
       `,
-      { ownerAddress },
+      { cardId },
     )
-    console.log('getCard=================>', ownerAddress, res)
+    console.log('getCard=================>', cardId, res)
     return res.card
   } catch (error) {
-    console.error('Failed to fetch card=============>', error, ownerAddress)
+    console.error('Failed to fetch card=============>', error, cardId)
     return null
   }
 }
@@ -88,9 +91,21 @@ export const fetchCard = async (ownerAddress, chainId) => {
       }
     }),
   )
+  const [accountId] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getCardAddress(),
+        abi: cardABI,
+        functionName: 'accountId',
+        args: [card?.id],
+      },
+    ],
+  })
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...card,
+    sousId: accountId.result.toString(),
     balances,
   }
 }
@@ -132,8 +147,19 @@ export const fetchCards = async ({ fromCard, chainId }) => {
               }
             }),
           )
+          const [accountId] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getCardAddress(),
+                abi: cardABI,
+                functionName: 'accountId',
+                args: [card?.id],
+              },
+            ],
+          })
           return {
-            sousId: index,
+            sousId: accountId.result.toString(),
             ...card,
             balances,
           }

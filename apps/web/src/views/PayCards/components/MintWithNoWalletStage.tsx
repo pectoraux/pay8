@@ -55,7 +55,6 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
   })
   const processCharge = async () => {
     setIsLoading(true)
-    console.log('pool?.id==============>', pool?.id)
     const { data } = await axios.post('/api/charge2', {
       price: state.amountPayable,
       currency,

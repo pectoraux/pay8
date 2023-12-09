@@ -98,9 +98,9 @@ const CreateGaugeModal: React.FC<any> = ({
   const accountId = useMemo(
     () =>
       parseInt(ogPool?.sousId) === parseInt(router.query?.username?.toString())
-        ? ogPool?.id
+        ? ogPool?.username
         : router.query?.username?.toString(),
-    [ogPool?.id, ogPool?.sousId, router.query?.username],
+    [ogPool?.username, ogPool?.sousId, router.query?.username],
   )
   console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
 
@@ -139,7 +139,7 @@ const CreateGaugeModal: React.FC<any> = ({
     contractAddress: '',
     card: pool?.cardAddress ?? '',
     legend: currAccount?.ratingLegend,
-    amountReceivable: getBalanceNumber(amountReceivable?.toString()),
+    amountReceivable: getBalanceNumber(amountReceivable?.toString() ?? '0'),
     periodReceivable: currAccount?.periodReceivable,
     startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
     description: currAccount?.description ?? '',
@@ -346,7 +346,7 @@ const CreateGaugeModal: React.FC<any> = ({
     onConfirm: async () => {
       if (stage === LockStage.CONFIRM_ADD_BALANCE2) {
         const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
-        const args = [pool?.id, currency?.address, amount?.toString()]
+        const args = [pool?.username, currency?.address, amount?.toString()]
         console.log('CONFIRM_ADD_BALANCE2===============>', args)
         return callWithGasPrice(cardContract, 'addBalance', args).catch((err) =>
           console.log('CONFIRM_ADD_BALANCE2===============>', err),

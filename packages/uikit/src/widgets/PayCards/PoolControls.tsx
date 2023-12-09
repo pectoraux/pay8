@@ -176,14 +176,14 @@ export function PoolControls<T>({
     }
     return sortedPools;
   }, [
-    account,
     sortOption,
     chosenPools,
-    favoritesOnly,
     numberOfPoolsVisible,
     searchQuery,
     searchQuery2,
+    favoritesOnly,
     watchlistTokens,
+    nodeRSA,
   ]);
 
   chosenPoolsLength.current = chosenPools.length;

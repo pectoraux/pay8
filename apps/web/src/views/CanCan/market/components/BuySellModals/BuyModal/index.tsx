@@ -49,8 +49,11 @@ import { noop } from 'lodash'
 import { useGetRequiresApproval } from 'state/valuepools/hooks'
 import { getMarketEventsContract } from 'utils/contractHelpers'
 import { marketEventsABI } from 'config/abi/marketEvents'
-import { getMarketEventsAddress } from 'utils/addressHelpers'
+import { getCardAddress, getMarketEventsAddress } from 'utils/addressHelpers'
 import BigNumber from 'bignumber.js'
+import { cardABI } from 'config/abi/card'
+import { getCard } from 'state/cards/helpers'
+import NodeRSA from 'encrypt-rsa'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
@@ -66,6 +69,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.CONFIRM_IDENTITY_LIMIT]: t('Back'),
   [BuyingStage.CONFIRM_ADDRESS_LIMIT]: t('Back'),
   [BuyingStage.CONFIRM_CASHBACK]: t('Back'),
+  [BuyingStage.CONFIRM_PAY_WITH_PAYCARD]: t('Back'),
   [BuyingStage.CONFIRM_PAYMENT_CREDIT]: t('Back'),
   [BuyingStage.TX_CONFIRMED]: t('Transaction Confirmed'),
 })
@@ -73,9 +77,6 @@ const modalTitles = (t: TranslateFunction) => ({
 interface BuyModalProps extends InjectedModalProps {
   nftToBuy: NftToken
 }
-
-// NFT WBNB in testnet contract is different
-const TESTNET_WBNB_NFT_ADDRESS = '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
 const BuyModal: React.FC<any> = ({
   variant = 'item',
@@ -95,6 +96,9 @@ const BuyModal: React.FC<any> = ({
   const [userTokenId, setUserTokenId] = useState(0)
   const [address, setAddress] = useState('')
   const [amount, setAmount] = useState('')
+  const [password, setPassword] = useState('')
+  const [username, setUserName] = useState('')
+  const [accountId, setAccountId] = useState('')
   const [currToken, setCurrToken] = useState<any>('')
   const [decimals, setDecimals] = useState('')
   const [applyToTokenId, setApplyToTokenId] = useState('')
@@ -112,7 +116,7 @@ const BuyModal: React.FC<any> = ({
     nftToBuy?.ve?.toLowerCase(),
     nftToBuy?.tFIAT,
     nftToBuy?.usetFIAT,
-    bidPrice ? bidPrice : nftToBuy?.currentAskPrice,
+    bidPrice || nftToBuy?.currentAskPrice,
   )
   const inputCurrency = mainCurrency?.address
   const bnbContractReader = useERC20(inputCurrency ?? '')
@@ -123,12 +127,12 @@ const BuyModal: React.FC<any> = ({
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
   const callContract = variant === 'paywall' ? paywallMarketTradesContract : marketContract
   const helperContract = variant === 'paywall' ? paywallMarketHelperContract : marketHelperContract
-  const p = getDecimalAmount(bidPrice ? bidPrice : nftToBuy?.currentAskPrice, 18)
+  const p = getDecimalAmount(bidPrice || nftToBuy?.currentAskPrice, 18)
   const { toastSuccess } = useToast()
   const nftFilters = useGetNftFilters(account)
   const [recipient, setRecipient] = useState<string>('')
   const [tokenId2, setTokenId2] = useState<string>('')
-  const nftPrice = parseFloat(bidPrice ? bidPrice : nftToBuy?.currentAskPrice)
+  const nftPrice = parseFloat(bidPrice || nftToBuy?.currentAskPrice)
   const { data: paymentCredits, refetch: refetchPayment } = useGetPaymentCredits(
     nftToBuy?.collection?.id,
     nftToBuy?.tokenId,
@@ -172,9 +176,9 @@ const BuyModal: React.FC<any> = ({
 
   useEffect(() => {
     refetchPayment()
-  }, [account])
+  }, [account, refetchPayment])
 
-  let userOptionsPrice = userOptionsPrices?.reduce((a, b) => a + b, 0)
+  const userOptionsPrice = userOptionsPrices?.reduce((a, b) => a + b, 0)
   console.log('userOptions====================>', userOptions, paymentCredits)
   const {
     discount,
@@ -192,15 +196,15 @@ const BuyModal: React.FC<any> = ({
   )
   useEffect(() => {
     refetchDiscount()
-  }, [variant, nftToBuy, nftFilters])
+  }, [variant, nftToBuy, nftFilters, refetchDiscount])
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
 
-  const totalPayment = Math.max(Number(discount ?? 0) - paymentCredits, 0)
+  const totalPayment = !account ? p.toFixed() : Math.max(Number(discount ?? 0) - paymentCredits, 0)
   const discountAmount = getBalanceNumber(
     new BigNumber(parseInt(p.toFixed()) + parseFloat(userOptionsPrice) - parseFloat(discount?.toString() ?? '0')),
   )
-
-  let { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
+  console.log('totalPayment====================>', totalPayment)
+  const { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
   const paywallARP = useGetPaywallARP(nftToBuy?.collection?.id ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
@@ -280,12 +284,12 @@ const BuyModal: React.FC<any> = ({
         )
       }
       if (stage === BuyingStage.CONFIRM_PAYMENT_CREDIT) {
-        const _amount = !!activeButtonIndex
+        const _amount = activeButtonIndex
           ? amount
           : getDecimalAmount(new BigNumber(amount?.toString()), parseInt(decimals))
         const args = [nftToBuy?.currentSeller, position, _amount?.toString(), applyToTokenId]
         console.log('CONFIRM_PAYMENT_CREDIT================>', stakingTokenContract, nftToBuy, args)
-        if (!!activeButtonIndex) {
+        if (activeButtonIndex) {
           return callWithGasPrice(stakingTokenContract, 'setApprovalForAll', [helperContract.address, true]).then(
             () => {
               return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
@@ -297,6 +301,68 @@ const BuyModal: React.FC<any> = ({
         return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
           console.log('CONFIRM_PAYMENT_CREDIT================>', err),
         )
+      }
+      if (stage === BuyingStage.CONFIRM_PAY_WITH_PAYCARD) {
+        try {
+          const client = createPublicClient({
+            chain: fantomTestnet,
+            transport: http(),
+          })
+          const walletClient = createWalletClient({
+            chain: fantomTestnet,
+            transport: custom(window.ethereum),
+          })
+          const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+
+          const card = await getCard(accountId)
+          const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
+          const _username = nodeRSA.decryptStringWithRsaPrivateKey({
+            text: card?.username,
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+          const _password = nodeRSA.decryptStringWithRsaPrivateKey({
+            text: card?.password,
+            privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+          })
+          console.log('3confirm_executePurchase=====================>', card, _username, _password)
+          if (username === _username && password === _password) {
+            console.log('confirm_executePurchase=======================>', [
+              nftToBuy?.currentSeller,
+              (referrer || ADDRESS_ZERO) as any,
+              mainCurrency?.address,
+              card?.username,
+              nftToBuy.tokenId,
+              variant === 'paywall' ? BigInt(2) : BigInt(0),
+              BigInt(parseInt(totalPayment?.toString()) + parseInt(userOptionsPrice)),
+              BigInt(0),
+              BigInt(0),
+              userOptions,
+            ])
+            const { request } = await client.simulateContract({
+              account: acct,
+              address: getCardAddress(),
+              abi: cardABI,
+              functionName: 'executePurchase',
+              args: [
+                nftToBuy?.currentSeller,
+                (referrer || ADDRESS_ZERO) as any,
+                mainCurrency?.address,
+                card?.username,
+                nftToBuy.tokenId,
+                variant === 'paywall' ? BigInt(2) : BigInt(0),
+                BigInt(parseInt(totalPayment?.toString()) + parseInt(userOptionsPrice)),
+                BigInt(0),
+                BigInt(0),
+                userOptions,
+              ],
+            })
+            return walletClient.writeContract(request).catch((err) => {
+              console.log('1confirm_executePurchase=================>', err)
+            })
+          }
+        } catch (err) {
+          console.log('2confirm_executePurchase=================>', err)
+        }
       }
       if (paymentCurrency === PaymentCurrency.BNB) {
         console.log('BNB================>')
@@ -453,7 +519,7 @@ const BuyModal: React.FC<any> = ({
         setStage(BuyingStage.CONFIRM_STAKE)
         break
       case BuyingStage.REVIEW:
-        setStage(BuyingStage.CONFIRM_REVIEW)
+        setStage(!account ? BuyingStage.CONFIRM_PAY_WITH_PAYCARD : BuyingStage.CONFIRM_REVIEW)
         break
       case BuyingStage.PAYWALL_REVIEW:
         setStage(BuyingStage.CONFIRM_PAYWALL_REVIEW)
@@ -497,6 +563,9 @@ const BuyModal: React.FC<any> = ({
         setStage(BuyingStage.STAKE)
         break
       case BuyingStage.CONFIRM_REVIEW:
+        setStage(BuyingStage.REVIEW)
+        break
+      case BuyingStage.CONFIRM_PAY_WITH_PAYCARD:
         setStage(BuyingStage.REVIEW)
         break
       case BuyingStage.CONFIRM_IDENTITY_LIMIT:
@@ -562,6 +631,12 @@ const BuyModal: React.FC<any> = ({
           setTokenId={setTokenId}
           mainCurrency={mainCurrency}
           setCheckRank={setCheckRank}
+          password={password}
+          setPassword={setPassword}
+          username={username}
+          setUserName={setUserName}
+          accountId={accountId}
+          setAccountId={setAccountId}
           secondaryCurrency={secondaryCurrency}
           continueToAddressLimitStage={continueToAddressLimitStage}
           continueToIdentityLimitStage={continueToIdentityLimitStage}

@@ -4,9 +4,9 @@ import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { CurrencyLogo } from 'components/Logo'
 import NumbersIcon from '@mui/icons-material/Numbers'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import { BuyingStage } from './types'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 export const StyledModal = styled(Modal)<{ stage: BuyingStage }>`
   & > div:last-child {
@@ -37,6 +37,7 @@ export const stagesWithBackButton = [
   BuyingStage.CONFIRM_STAKE,
   BuyingStage.CONFIRM_ADDRESS_LIMIT,
   BuyingStage.CONFIRM_IDENTITY_LIMIT,
+  BuyingStage.CONFIRM_PAY_WITH_PAYCARD,
 ]
 
 export const stagesWithApproveButton = [
@@ -50,6 +51,7 @@ export const stagesWithConfirmButton = [
   BuyingStage.CONFIRM_CASHBACK,
   BuyingStage.CONFIRM_IDENTITY_LIMIT,
   BuyingStage.CONFIRM_ADDRESS_LIMIT,
+  BuyingStage.CONFIRM_PAY_WITH_PAYCARD,
 ]
 
 export const BorderedBox = styled(Grid)`
