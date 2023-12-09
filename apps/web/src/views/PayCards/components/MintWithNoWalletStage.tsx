@@ -165,7 +165,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Identity Token ID')}
@@ -181,7 +181,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
           placeholder={t('input your identity token id')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="460px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
