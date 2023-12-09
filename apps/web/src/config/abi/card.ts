@@ -435,6 +435,11 @@ export const cardABI = [
     inputs: [
       {
         internalType: 'string',
+        name: '_rampAddress',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
         name: '_username',
         type: 'string',
       },

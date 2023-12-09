@@ -40,10 +40,9 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
   const client = createPublicClient({

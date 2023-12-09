@@ -8,7 +8,7 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useERC20, useCardContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
@@ -96,20 +96,25 @@ const CreateGaugeModal: React.FC<any> = ({
   const cardContract = useCardContract()
   const [checked, setChecked] = useState<boolean>()
   console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
+  const accountId = useMemo(
+    () => (parseInt(ogPool?.sousId) === parseInt(router.query?.username?.toString()) ? ogPool?.id : pool?.id),
+    [ogPool?.id, ogPool?.soudId, pool?.id, router.query?.username],
+  )
+
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
-  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-  let username
-  let password
-  if (pool?.password && pool?.username) {
-    username = nodeRSA?.decryptStringWithRsaPrivateKey({
-      text: pool?.username,
-      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-    })
-    password = nodeRSA?.decryptStringWithRsaPrivateKey({
-      text: pool?.password,
-      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-    })
-  }
+  // const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
+  // let username
+  // let password
+  // if (pool?.password && pool?.username) {
+  //   username = nodeRSA?.decryptStringWithRsaPrivateKey({
+  //     text: pool?.username,
+  //     privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+  //   })
+  //   password = nodeRSA?.decryptStringWithRsaPrivateKey({
+  //     text: pool?.password,
+  //     privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+  //   })
+  // }
   const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
 
   const [state, setState] = useState<any>(() => ({
@@ -176,11 +181,25 @@ const CreateGaugeModal: React.FC<any> = ({
   const { data: stripeData } = useGetSessionInfo2(sessionId, process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
   console.log('data=================>', data)
+  console.log('ogPool=================>', ogPool, accountId)
   console.log('stripeData=================>', stripeData, tokenData)
+
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
 
   useEffect(() => {
     if (data) {
-      if (data?.user?.toLowerCase() !== account?.toLowerCase() || !data?.active) {
+      if (
+        (data?.user?.toLowerCase() !== account?.toLowerCase() &&
+          data?.user?.toLowerCase() !== getCardAddress()?.toLowerCase()) ||
+        !data?.active
+      ) {
         onDismiss()
         if (router.query?.username) router.push('/cards')
       } else {
@@ -319,14 +338,6 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: async () => {
-      const client = createPublicClient({
-        chain: fantomTestnet,
-        transport: http(),
-      })
-      const walletClient = createWalletClient({
-        chain: fantomTestnet,
-        transport: custom(window.ethereum),
-      })
       // if (stage === LockStage.CONFIRM_ADD_BALANCE2) {
       //   const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
       //   const args = [account, currency?.address, amount?.toString()]
@@ -459,19 +470,20 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_ADD_BALANCE) {
         const amount = getDecimalAmount(stripeData?.amount, 18)
         console.log('CONFIRM_ADD_BALANCE===============>', [
-          router?.query?.username?.toString(),
+          state.rampAddress,
+          accountId,
           state.sessionId,
           data?.tokenAddress,
           BigInt(amount.toString()),
           state.identityTokenId,
         ])
-        const accountId = parseInt(ogPool?.soudId) === parseInt(router.query?.username?.toString()) ? ogPool?.id : ''
         const { request } = await client.simulateContract({
           account: adminAccount,
           address: getCardAddress(),
           abi: cardABI,
           functionName: 'notifyAddBalance',
           args: [
+            state.rampAddress,
             accountId,
             state.sessionId?.toString(),
             data?.tokenAddress,
