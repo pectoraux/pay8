@@ -97,10 +97,10 @@ const CreateGaugeModal: React.FC<any> = ({
   const [checked, setChecked] = useState<boolean>()
   const accountId = useMemo(
     () =>
-      parseInt(ogPool?.sousId) === parseInt(router.query?.username?.toString())
+      parseInt(ogPool?.id) === parseInt(router.query?.username?.toString())
         ? ogPool?.username
         : router.query?.username?.toString(),
-    [ogPool?.username, ogPool?.sousId, router.query?.username],
+    [ogPool?.username, ogPool?.id, router.query?.username],
   )
   console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
 
@@ -121,7 +121,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
 
   const [state, setState] = useState<any>(() => ({
-    rampAddress: '0x384582a8d93e91dbf6a399cd8241d374da2d7095',
+    rampAddress: '0xD97557B53A8221Dd8a7A032852b5E5F6662e76C4',
     owner: pool?.owner,
     avatar: pool?.collection?.avatar,
     bountyId: pool?.bountyId,

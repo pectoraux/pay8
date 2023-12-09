@@ -268,22 +268,20 @@ const BuyModal: React.FC<any> = ({
         return callWithGasPrice(callContract, 'processCashBack', args).catch((err) =>
           console.log('CONFIRM_CASHBACK================>', err),
         )
-      }
-      if (stage === BuyingStage.CONFIRM_IDENTITY_LIMIT) {
+        // eslint-disable-next-line no-else-return
+      } else if (stage === BuyingStage.CONFIRM_IDENTITY_LIMIT) {
         const args = [nftToBuy?.collection?.id, account, nftToBuy.tokenId]
         console.log('CONFIRM_IDENTITY_LIMIT================>', args)
         return callWithGasPrice(callContract, 'updateIdVersion', args).catch((err) =>
           console.log('CONFIRM_IDENTITY_LIMIT================>', err),
         )
-      }
-      if (stage === BuyingStage.CONFIRM_ADDRESS_LIMIT) {
+      } else if (stage === BuyingStage.CONFIRM_ADDRESS_LIMIT) {
         const args = [nftToBuy?.collection?.id, account, nftToBuy.tokenId]
         console.log('CONFIRM_ADDRESS_LIMIT================>', args)
         return callWithGasPrice(callContract, 'updateVersion', args).catch((err) =>
           console.log('CONFIRM_ADDRESS_LIMIT================>', err),
         )
-      }
-      if (stage === BuyingStage.CONFIRM_PAYMENT_CREDIT) {
+      } else if (stage === BuyingStage.CONFIRM_PAYMENT_CREDIT) {
         const _amount = activeButtonIndex
           ? amount
           : getDecimalAmount(new BigNumber(amount?.toString()), parseInt(decimals))
@@ -301,8 +299,7 @@ const BuyModal: React.FC<any> = ({
         return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
           console.log('CONFIRM_PAYMENT_CREDIT================>', err),
         )
-      }
-      if (stage === BuyingStage.CONFIRM_PAY_WITH_PAYCARD) {
+      } else if (stage === BuyingStage.CONFIRM_PAY_WITH_PAYCARD) {
         try {
           const client = createPublicClient({
             chain: fantomTestnet,
@@ -363,8 +360,7 @@ const BuyModal: React.FC<any> = ({
         } catch (err) {
           console.log('2confirm_executePurchase=================>', err)
         }
-      }
-      if (paymentCurrency === PaymentCurrency.BNB) {
+      } else if (paymentCurrency === PaymentCurrency.BNB) {
         console.log('BNB================>')
         if (note?.trim()?.length || address?.trim()?.length) {
           const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
@@ -460,8 +456,7 @@ const BuyModal: React.FC<any> = ({
         return callWithGasPrice(callContract, 'buyWithContract', args).catch((err) =>
           console.log('err BNB===================>', err),
         )
-      }
-      if (paymentCurrency === PaymentCurrency.WBNB) {
+      } else if (paymentCurrency === PaymentCurrency.WBNB) {
         // [amountPayable,amountReceivable,periodPayable,periodReceivable,waitingPeriod,startPayable,startReceivable]
         const args = [
           [
@@ -484,8 +479,7 @@ const BuyModal: React.FC<any> = ({
         return callWithGasPrice(stakeMarketContract, 'createStake', args).catch((err) =>
           console.log('WBNB=================>', err),
         )
-      }
-      if (paymentCurrency === 2) {
+      } else if (paymentCurrency === 2) {
         const contract = !checkRank ? valuepoolContract : valuepoolHelperContract
         const method = !checkRank ? 'pickRank' : 'checkRank'
         const args = !checkRank

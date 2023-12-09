@@ -233,19 +233,19 @@ export default {
   },
   rampHelper: {
     56: '0x',
-    4002: '0x9BEC19D775a197fDc8A0249c612c95B06b449945',
+    4002: '0x23Be44620Fa12769260E02C7060193e1Df86D260',
   },
   rampHelper2: {
     56: '0x',
-    4002: '0xB845Bd32afF5d57Bf7CD6F4b672704f27929Bf8B',
+    4002: '0xfDcF4202C251600Ce957080b0986Fe2e5311c4AF',
   },
   rampFactory: {
     56: '0x',
-    4002: '0xdC6fAb469dcF7D94fdf525e4DED83FC5C717B059',
+    4002: '0x5F578d98eA02e6F637123780436Bd2A4D185F868',
   },
   rampAds: {
     56: '0x',
-    4002: '0xB69C2F1ceB9e8eCa8B40cD0935E3160ecb065EC5',
+    4002: '0xdBae46e2b19A39300139dBC6437678A2a3e12347',
   },
   extraTokenFactory: {
     56: '0x',

@@ -3,9 +3,10 @@ import { useAccount } from 'wagmi'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+
+import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { t } = useTranslation()

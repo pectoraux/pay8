@@ -54,38 +54,50 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
     transport: custom(window.ethereum),
   })
   const processCharge = async () => {
-    setIsLoading(true)
-    const { data } = await axios.post('/api/charge2', {
-      price: state.amountPayable,
-      currency,
-      username: pool?.sousId,
-      sk: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
-    })
-    if (data.error) {
-      console.log('data.error=====================>', data.error)
-    }
-    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-    const { request } = await client.simulateContract({
-      account: acct,
-      address: getRampHelperAddress(),
-      abi: rampHelperABI,
-      functionName: 'preMint',
-      args: [
+    try {
+      setIsLoading(true)
+      const { data } = await axios.post('/api/charge2', {
+        price: state.amountPayable,
+        currency,
+        username: pool?.sousId,
+        sk: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
+      })
+      if (data.error) {
+        console.log('data.error=====================>', data.error)
+      }
+      console.log('createGauge=================>', [
         state.rampAddress,
         getCardAddress(),
         currency?.address,
         state.amountPayable,
         state.identityTokenId,
         data.id,
-      ],
-    })
-    await walletClient
-      .writeContract(request)
-      .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
-      .catch((err) => {
-        console.log('createGauge=================>', err)
-        setIsLoading(false)
+      ])
+      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+      const { request } = await client.simulateContract({
+        account: acct,
+        address: getRampHelperAddress(),
+        abi: rampHelperABI,
+        functionName: 'preMint',
+        args: [
+          state.rampAddress,
+          getCardAddress(),
+          currency?.address,
+          state.amountPayable,
+          state.identityTokenId,
+          data.id,
+        ],
       })
+      await walletClient
+        .writeContract(request)
+        .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
+        .catch((err) => {
+          console.log('createGauge=================>', err)
+          setIsLoading(false)
+        })
+    } catch (err) {
+      console.log('1createGauge=================>', err)
+    }
   }
 
   useEffect(() => {
@@ -123,6 +135,19 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
 
   return (
     <>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Ramp Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="rampAddress"
+          value={state.rampAddress}
+          placeholder={t('input your ramp address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
