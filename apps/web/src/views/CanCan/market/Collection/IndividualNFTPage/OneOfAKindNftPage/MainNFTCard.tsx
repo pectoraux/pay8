@@ -5,10 +5,8 @@ import {
   Card,
   CardBody,
   Flex,
-  Skeleton,
   Text,
   useModal,
-  TabMenu,
   ChevronLeftIcon,
   NextLinkFromReactRouter,
   LinkExternal,
@@ -24,10 +22,9 @@ import { CurrencyLogo } from 'components/Logo'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
 import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import Countdown from 'views/Lottery/components/Countdown'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
-import RichTextEditor from 'components/RichText'
+import { getThumbnailNContent } from 'utils/cancan'
 import { useState } from 'react'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import { useGetOrder } from 'state/cancan/hooks'
@@ -41,7 +38,6 @@ import SellModal from '../../../components/BuySellModals/SellModal'
 import { cancanBaseUrl } from '../../../constants'
 import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
-import { getThumbnailNContent } from 'utils/cancan'
 import Timer from './Timer'
 
 interface MainNFTCardProps {
