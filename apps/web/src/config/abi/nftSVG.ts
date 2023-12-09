@@ -171,25 +171,6 @@ export const nftSVGABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_channelOwner',
-        type: 'address',
-      },
-    ],
-    name: 'hasTask',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
         name: '_contractAddress',
         type: 'address',
       },
