@@ -240,6 +240,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_ADD_BALANCE2:
         setStage(LockStage.ADD_BALANCE2)
         break
+      case LockStage.ADD_BALANCE2:
+        setStage(LockStage.SETTINGS)
+        break
       case LockStage.REMOVE_BALANCE:
         setStage(LockStage.SETTINGS)
         break
@@ -341,14 +344,14 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: async () => {
-      // if (stage === LockStage.CONFIRM_ADD_BALANCE2) {
-      //   const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
-      //   const args = [account, currency?.address, amount?.toString()]
-      //   console.log('CONFIRM_ADD_BALANCE===============>', args)
-      //   return callWithGasPrice(cardContract, 'addBalance', args).catch((err) =>
-      //     console.log('CONFIRM_ADD_BALANCE===============>', err),
-      //   )
-      // }
+      if (stage === LockStage.CONFIRM_ADD_BALANCE2) {
+        const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
+        const args = [pool?.id, currency?.address, amount?.toString()]
+        console.log('CONFIRM_ADD_BALANCE2===============>', args)
+        return callWithGasPrice(cardContract, 'addBalance', args).catch((err) =>
+          console.log('CONFIRM_ADD_BALANCE2===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_TRANSFER_BALANCE) {
         if (username && password && username === state.username && password === state.password) {
           const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
@@ -570,14 +573,7 @@ const CreateGaugeModal: React.FC<any> = ({
         </Flex>
       )}
       {stage === LockStage.ADD_BALANCE2 && (
-        <MintStage
-          state={state}
-          pool={pool}
-          currency={currency}
-          handleChange={handleChange}
-          callWithGasPrice={callWithGasPrice}
-          continueToNextStage={continueToNextStage}
-        />
+        <MintStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.ADD_BALANCE && (
         <MintWithNoWalletStage

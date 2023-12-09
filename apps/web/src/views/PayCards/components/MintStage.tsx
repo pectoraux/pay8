@@ -43,44 +43,6 @@ interface SetPriceStageProps {
 const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const { account } = useWeb3React()
-  const [isLoading, setIsLoading] = useState(false)
-  const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
-  const client = createPublicClient({
-    chain: fantomTestnet,
-    transport: http(),
-  })
-  const walletClient = createWalletClient({
-    chain: fantomTestnet,
-    transport: custom(window.ethereum),
-  })
-  const processCharge = async () => {
-    setIsLoading(true)
-    const { data } = await axios.post('/api/charge2', {
-      price: state.amountPayable,
-      currency,
-      username: pool?.id,
-      sk: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
-    })
-    if (data.error) {
-      console.log('data.error=====================>', data.error)
-    }
-    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-    const { request } = await client.simulateContract({
-      account: acct,
-      address: getRampHelperAddress(),
-      abi: rampHelperABI,
-      functionName: 'preMint',
-      args: [state.rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id],
-    })
-    await walletClient
-      .writeContract(request)
-      .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
-      .catch((err) => {
-        console.log('createGauge=================>', err)
-        setIsLoading(false)
-      })
-  }
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -128,26 +90,9 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange, con
         <Input
           type="text"
           scale="sm"
-          name="amountPayable"
-          value={state.amountPayable}
+          name="amountReceivable"
+          value={state.amountReceivable}
           placeholder={t('input an amount to mint')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Flex ref={targetRef}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Identity Token ID')}
-          </Text>
-          {tooltipVisible && tooltip}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="identityTokenId"
-          value={state.identityTokenId}
-          placeholder={t('input your identity token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -157,19 +102,13 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange, con
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              "This will mint the specified amount of the selected token to your paycard balance. The minted tokens are the equivalent of the FIAT currency being minted on the blockchain. To mint a token on an automatic ramp, the platform uses a payment processor like Stripe to retreive payments from the minter's debit card then notifies the ramp contract which mints the requested amount of tokens on the blockchain and sends it to the minter's wallet minus the ramp's minting fee. To mint tokens on a manual ramp, the minter would have to send a request for mint through PayChat to the admin of the ramp who will then manually run the mint function through this form after having received the necessary payment from the minter. Manual ramps will list all payment methods they accept and will have guidelines in their descriptions (available at the top left of their ramp's panel) about how to proceed. With manual ramps, you should be able to find a ramp that accepts your payment method no matter what it is: cash, mobile money, etc.",
-            )}
+            {t('This will transfer the selected currency from your wallet to your paycard')}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button
-          mb="8px"
-          onClick={processCharge}
-          endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-        >
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Add Balance')}
         </Button>
       </Flex>
