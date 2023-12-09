@@ -30,8 +30,8 @@ import { useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import ExecutePurchaseStage from './ExecutePurchaseStage'
-import MintWithoutWalletStage from './MintWithoutWalletStage'
 import TransferBalanceStage from './TransferBalanceStage'
+import MintWithNoWalletStage from './MintWithNoWalletStage'
 import RemoveBalanceStage from './RemoveBalanceStage'
 import UpdatePasswordStage from './UpdatePasswordStage'
 import UpdatePassword2Stage from './UpdatePassword2Stage'
@@ -577,7 +577,7 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.ADD_BALANCE && (
-        <MintWithoutWalletStage
+        <MintWithNoWalletStage
           state={state}
           pool={pool}
           currency={currency}
