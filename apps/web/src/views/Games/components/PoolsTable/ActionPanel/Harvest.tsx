@@ -4,20 +4,21 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { useGetGame } from 'state/games/hooks'
 
-import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { format } from 'date-fns'
 
+import { ActionContainer, ActionTitles, ActionContent } from './styles'
+
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
-  const { days, hours, minutes } = getTimePeriods(Number(currAccount?.deadline ?? '0'))
-  const {
-    days: daysReceivable,
-    hours: hoursReceivable,
-    minutes: minutesReceivable,
-  } = getTimePeriods(Number(currAccount?.gameMinutes ?? '0'))
+  // const { days, hours, minutes } = getTimePeriods(Number(currAccount?.deadline ?? '0'))
+  // const {
+  //   days: daysReceivable,
+  //   hours: hoursReceivable,
+  //   minutes: minutesReceivable,
+  // } = getTimePeriods(Number(currAccount?.gameMinutes ?? '0'))
   const gameData = useGetGame(pool?.collection?.name?.toLowerCase(), currAccount?.id ?? '0')
   console.log('gamepool1====>', gameData, currAccount)
 

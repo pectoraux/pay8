@@ -301,6 +301,70 @@ const BuyModal: React.FC<any> = ({
         )
       } else if (stage === BuyingStage.CONFIRM_PAY_WITH_PAYCARD) {
         try {
+          if (note?.trim()?.length || address?.trim()?.length) {
+            const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+            const client = createPublicClient({
+              chain: fantomTestnet,
+              transport: http(),
+            })
+            const walletClient = createWalletClient({
+              chain: fantomTestnet,
+              transport: custom(window.ethereum),
+            })
+            const encryptRsa = new EncryptRsa()
+            const encryptedNote = note
+              ? encryptRsa.encryptStringWithRsaPublicKey({
+                  text: note,
+                  publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+                })
+              : ''
+            const encryptedAddress = address
+              ? encryptRsa.encryptStringWithRsaPublicKey({
+                  text: address,
+                  publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+                })
+              : ''
+            console.log('!1BNB================>', [
+              BigInt(10),
+              BigInt(collectionId),
+              encryptedAddress,
+              encryptedNote,
+              BigInt(0),
+              BigInt(0),
+              getCardAddress(),
+              '',
+            ])
+            const { request } = await client.simulateContract({
+              account: adminAccount,
+              address: getMarketEventsAddress(),
+              abi: marketEventsABI,
+              functionName: 'emitUpdateMiscellaneous',
+              args: [
+                BigInt(10),
+                BigInt(collectionId),
+                encryptedAddress,
+                encryptedNote,
+                variant === 'paywall' ? BigInt(1) : BigInt(0),
+                BigInt(0),
+                getCardAddress(),
+                nftToBuy.tokenId,
+              ],
+            })
+            await walletClient
+              .writeContract(request)
+              .catch((err) =>
+                console.log('!BNBmisc================>', err, [
+                  BigInt(10),
+                  BigInt(collectionId),
+                  encryptedAddress,
+                  encryptedNote,
+                  variant === 'paywall' ? BigInt(1) : BigInt(0),
+                  BigInt(0),
+                  getCardAddress(),
+                  nftToBuy.tokenId,
+                ]),
+              )
+          }
           const client = createPublicClient({
             chain: fantomTestnet,
             transport: http(),

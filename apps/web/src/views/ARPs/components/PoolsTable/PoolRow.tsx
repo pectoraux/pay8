@@ -2,6 +2,9 @@ import { memo, useMemo, useState } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool, useGetTotalLiquidity } from 'state/arps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useCurrency } from 'hooks/Tokens'
+import BigNumber from 'bignumber.js'
 
 import NameCell from './Cells/NameCell'
 import VotesCell from './Cells/VotesCell'
@@ -10,9 +13,6 @@ import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 import TotalValueCell2 from './Cells/TotalValueCell2'
-import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
-import { useCurrency } from 'hooks/Tokens'
-import BigNumber from 'bignumber.js'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)

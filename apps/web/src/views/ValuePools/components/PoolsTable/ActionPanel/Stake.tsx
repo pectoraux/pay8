@@ -29,7 +29,7 @@ interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
 }
 
-const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleScheduledPurchases }) => {
+const Staked: React.FunctionComponent<any> = ({ id, toggleLoans, toggleSponsors, toggleScheduledPurchases }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { pool } = usePool(id)
@@ -206,6 +206,11 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleSponsors, toggleSchedu
         {pool?.sponsors?.length > 0 ? (
           <Button mr="3px" width="100%" onClick={toggleSponsors} variant="secondary">
             {t('Toggle Sponsors (#%pos%)', { pos: pool?.sponsors?.length })}
+          </Button>
+        ) : null}
+        {pool?.loans?.length > 0 ? (
+          <Button mr="3px" width="100%" onClick={toggleLoans} variant="secondary">
+            {t('Toggle Loans (#%pos%)', { pos: pool?.loans?.length })}
           </Button>
         ) : null}
         {numOfScheduledPurchases ? (

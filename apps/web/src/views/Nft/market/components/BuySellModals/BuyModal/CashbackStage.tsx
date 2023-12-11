@@ -13,7 +13,7 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/cancan/types'
 import { format } from 'date-fns'
-import { useComputeCashBack, useComputeNftCashBack, useGetNftOrder, useGetOrder } from 'state/cancan/hooks'
+import { useComputeNftCashBack, useGetNftOrder } from 'state/cancan/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useEffect } from 'react'
 import BigNumber from 'bignumber.js'

@@ -11,7 +11,7 @@ import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 
-const PoolRow: React.FC<any> = ({ id, account, initialActivity, expanded, setExpanded }) => {
+const PoolRow: React.FC<any> = ({ id, account, initialActivity }) => {
   const { pool } = usePool(id)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()

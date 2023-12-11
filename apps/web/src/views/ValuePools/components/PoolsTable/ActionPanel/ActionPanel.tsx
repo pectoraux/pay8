@@ -7,6 +7,7 @@ import Stake from './Stake'
 import PoolStatsInfo from '../../PoolStatsInfo'
 import Purchases from './Purchases'
 import Sponsors from './Sponsors'
+import Loans from './Loans'
 
 const expandAnimation = keyframes`
   from {
@@ -90,6 +91,9 @@ const ActionPanel: React.FC<any> = ({ account, pool, expanded }) => {
   const [showSponsors, setShowSponsors] = useState(false)
   const toggleSponsors = () => setShowSponsors(!showSponsors)
 
+  const [showLoans, setShowLoans] = useState(false)
+  const toggleLoans = () => setShowLoans(!showLoans)
+
   const [showScheduledPurchases, setShowScheduledPurchases] = useState(false)
   const toggleScheduledPurchases = () => setShowScheduledPurchases(!showScheduledPurchases)
   console.log('ActionPanel===========>', pool)
@@ -108,6 +112,7 @@ const ActionPanel: React.FC<any> = ({ account, pool, expanded }) => {
               <Stake
                 sousId={pool?.sousId}
                 id={pool?.id}
+                toggleLoans={toggleLoans}
                 toggleSponsors={toggleSponsors}
                 toggleScheduledPurchases={toggleScheduledPurchases}
               />
@@ -116,6 +121,7 @@ const ActionPanel: React.FC<any> = ({ account, pool, expanded }) => {
         </ActionContainer>
       </StyledActionPanel>
       {showSponsors && <Sponsors pool={pool} sponsors={pool?.sponsors ?? []} />}
+      {showLoans && <Loans pool={pool} laons={pool?.loans ?? []} />}
       {showScheduledPurchases && (
         <Purchases queue={pool?.purchaseHistory?.filter((ph) => ph.active)} valuepoolAddress={pool?.id} />
       )}

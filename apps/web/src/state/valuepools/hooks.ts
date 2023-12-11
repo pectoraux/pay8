@@ -5,7 +5,7 @@ import useSWRImmutable from 'swr/immutable'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import { FAST_INTERVAL } from 'config/constants'
 import { requiresApproval } from 'utils/requiresApproval'
 import { fetchValuepoolsAsync, fetchValuepoolSgAsync } from '.'
 import {
@@ -25,8 +25,8 @@ import {
   getTag,
   getTokenURIs,
   getVoteOption,
+  getWithdrawable,
 } from './helpers'
-import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
   const { data } = useSWR('valuepools-tags6', async () => getTag())
@@ -179,5 +179,15 @@ export const useGetBribe = (proposalId) => {
     status,
     mutate: refetch,
   } = useSWR(['useGetBribe', proposalId], async () => getBribe(proposalId, chainId))
+  return { data, refetch, status }
+}
+
+export const useGetWithdrawable = (veAddress, tokenId) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetWithdrawable', veAddress, tokenId], async () => getWithdrawable(veAddress, tokenId, chainId))
   return { data, refetch, status }
 }

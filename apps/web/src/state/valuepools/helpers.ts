@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js'
 import request, { gql } from 'graphql-request'
 import { LEVIATHANS } from 'config/constants/exchange'
 import { GRAPH_API_VALUEPOOLS } from 'config/constants/endpoints'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { valuePoolABI } from 'config/abi/valuePool'
 import { publicClient } from 'utils/wagmi'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
@@ -12,9 +11,11 @@ import { getValuepoolHelperAddress, getValuepoolVoterAddress } from 'utils/addre
 import { valuePoolHelperABI } from 'config/abi/valuePoolHelper'
 import { isAddress } from 'utils'
 import { fetchSponsor, getSponsors } from 'state/sponsors/helpers'
-import { getValuepoolContract } from '../../utils/contractHelpers'
 import { valuePoolVoterABI } from 'config/abi/valuePoolVoter'
 import { getCollection } from 'state/cancan/helpers'
+import { veABI } from 'config/abi/ve'
+
+import { getValuepoolContract } from '../../utils/contractHelpers'
 
 const valuepoolField = `
 id
@@ -140,7 +141,7 @@ export const getTag = async () => {
 }
 
 export const getERC721BalanceOf = async (tokenAddress, recipientAddress, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [gauge] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -156,7 +157,7 @@ export const getERC721BalanceOf = async (tokenAddress, recipientAddress, chainId
 }
 
 export const getERC20BalanceOf = async (tokenAddress, recipientAddress, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [gauge] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -172,7 +173,7 @@ export const getERC20BalanceOf = async (tokenAddress, recipientAddress, chainId)
 }
 
 export const getVoteOption = async (veAddress, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [gauge] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -188,7 +189,7 @@ export const getVoteOption = async (veAddress, chainId) => {
 }
 
 export const getGauge = async (proposalId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [gauge] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -204,7 +205,7 @@ export const getGauge = async (proposalId, chainId) => {
 }
 
 export const getBribe = async (proposalId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [bribe] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -219,11 +220,35 @@ export const getBribe = async (proposalId, chainId) => {
   return bribe.result
 }
 
+export const getWithdrawable = async (veAddress, tokenId, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [withdrawable, amountWithdrawable] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: veAddress,
+        abi: veABI,
+        functionName: 'withdrawable',
+      },
+      {
+        address: veAddress,
+        abi: veABI,
+        functionName: 'getWithdrawable',
+        args: [tokenId],
+      },
+    ],
+  })
+  return {
+    withdrawable: withdrawable.result,
+    amountWithdrawable: amountWithdrawable.result,
+  }
+}
+
 export const fetchValuepool = async (valuepoolContract, chainId) => {
   try {
     const valuepoolAddress = valuepoolContract.address
     console.log('valuepoolsFromSg26=============>', valuepoolAddress)
-    const bscClient = publicClient({ chainId: chainId })
+    const bscClient = publicClient({ chainId })
     const [
       tokenAddress,
       getParams,
@@ -235,7 +260,7 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
       totalpaidBySponsors,
       treasuryShare,
       _sponsorAddresses,
-      epoch,
+      // epoch,
     ] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -345,16 +370,16 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
           },
         ],
       })
-    const maxUse = getParams.result[0]
+    // const maxUse = getParams.result[0]
     const queueDuration = getParams.result[1]
-    const minReceivable = getParams.result[2]
+    // const minReceivable = getParams.result[2]
     const maxDueReceivable = getParams.result[3]
-    const maxTreasuryShare = getParams.result[4]
-    const lenderFactor = getParams.result[5]
-    const minimumSponsorPercentile = getParams.result[6]
-    const minIDBadgeColor = getParams.result[7]
-    const dataKeeperOnly = getParams.result[8]
-    const uniqueAccounts = getParams.result[9]
+    // const maxTreasuryShare = getParams.result[4]
+    // const lenderFactor = getParams.result[5]
+    // const minimumSponsorPercentile = getParams.result[6]
+    // const minIDBadgeColor = getParams.result[7]
+    // const dataKeeperOnly = getParams.result[8]
+    // const uniqueAccounts = getParams.result[9]
     const requiredIndentity = getParams.result[10]
     const valueName = getParams.result[11]
 
@@ -511,7 +536,7 @@ export const getValuepoolsSg = async (first: number, skip: number, where) => {
 }
 
 export const getTokenURIs = async (_vaAddress, nfts, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const nftsFromBc = await Promise.all(
     nfts.map(async (nft) => {
       const [metadataUrl] = await bscClient.multicall({
@@ -553,7 +578,7 @@ export const fetchValuepools = async ({ fromVesting, fromValuepool, chainId }) =
   const valuepoolsFromSg = await getValuepoolsSg(0, 0, whereClause)
   console.log('valuepoolsFromSg===================>', valuepoolsFromSg)
   try {
-    const bscClient = publicClient({ chainId: chainId })
+    const bscClient = publicClient({ chainId })
     const valuepools = await Promise.all(
       valuepoolsFromSg
         .map(async ({ id, ...rest }, index) => {
