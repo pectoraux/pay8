@@ -44,7 +44,7 @@ const LabelWrapper = styled.div`
 const DataCard: React.FC<any> = ({ pool, loan, t }) => {
   const { chainId } = useActiveChainId()
   return (
-    <CardWrapper style={{ whiteSpace: 'break-spaces' }}>
+    <CardWrapper style={{ whiteSpace: 'break-spaces', backgroundColor: 'ButtonShadow' }}>
       <Flex flexDirection="column" justifyContent="center" alignSelf="center">
         <ScanLink href={getBlockExploreLink(loan?.borrower, 'address', chainId)} bold={false} small>
           {t('Borrower')}
@@ -74,7 +74,10 @@ const DataCard: React.FC<any> = ({ pool, loan, t }) => {
           </Text>
         </Box>
         <Text small bold color="textSubtle">
-          {t(`Loan start: ${format(Number(loan?.createdAt) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          {t(`Loan started: ${format(Number(loan?.createAt ?? 0) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+        </Text>
+        <Text small bold color="textSubtle">
+          {t(`Loan Updated: ${format(Number(loan?.updatedAt ?? 0) * 1000, 'MMM dd, yyyy HH:mm')}`)}
         </Text>
       </Flex>
     </CardWrapper>
@@ -84,10 +87,9 @@ const DataCard: React.FC<any> = ({ pool, loan, t }) => {
 const Cart: React.FC<any> = ({ pool, loans }) => {
   const { t } = useTranslation()
 
-  const nftFilters = useFilters()
   const increaseRef = useRef<HTMLDivElement>(null)
   const moveLeftRef = useRef<boolean>(true)
-  console.log('DataCard==============+>', nftFilters, loans)
+  console.log('DataCard==============+>', loans)
 
   useEffect(() => {
     const scrollInterval = setInterval(() => {
@@ -109,7 +111,6 @@ const Cart: React.FC<any> = ({ pool, loans }) => {
     }
   }, [])
 
-  console.log('useFilters=================>', nftFilters)
   return (
     <Card my="6px" style={{ width: '100%' }}>
       <Text ml="16px" mt="8px" color="primary">

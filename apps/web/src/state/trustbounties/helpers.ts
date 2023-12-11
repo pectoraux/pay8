@@ -2,9 +2,7 @@ import { Native, Token } from '@pancakeswap/sdk'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_TRUSTBOUNTIES } from 'config/constants/endpoints'
 import { publicClient } from 'utils/wagmi'
-import { bountyField, approvalField } from './queries'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { DEFAULT_INPUT_CURRENCY, DEFAULT_NATIVE_CURRENCY } from 'config/constants/exchange'
 import { trustBountiesABI } from 'config/abi/trustBounties'
 import { getCollection } from 'state/cancan/helpers'
 import {
@@ -14,9 +12,10 @@ import {
   getTrustBountiesVoterAddress,
 } from 'utils/addressHelpers'
 import { Address, erc20ABI } from 'wagmi'
-import { trustBountiesHelperABI } from 'config/abi/trustBountiesHelper'
 import { stakeMarketBribeABI } from 'config/abi/stakeMarketBribe'
 import { trustBountiesVoterABI } from 'config/abi/trustBountiesVoter'
+
+import { bountyField, approvalField } from './queries'
 
 export const getTag = async () => {
   try {
@@ -70,7 +69,7 @@ export const getBounties = async (first: number, skip: number, where) => {
 }
 
 export const getIsLocked = async (bountyId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [isLocked] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -86,7 +85,7 @@ export const getIsLocked = async (bountyId, chainId) => {
 }
 
 export const getBounty = async (bountyId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [bounty] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -102,7 +101,7 @@ export const getBounty = async (bountyId, chainId) => {
 }
 
 export const getLatestClaim = async (bountyId, attackerId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
 
   if (parseInt(attackerId ?? 0) > 0) {
     const [latestClaim] = await bscClient.multicall({
@@ -122,7 +121,7 @@ export const getLatestClaim = async (bountyId, attackerId, chainId) => {
 }
 
 export const getLatestClaim2 = async (bountyId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [latestClaimId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -155,7 +154,7 @@ export const getLatestClaim2 = async (bountyId, chainId) => {
 }
 
 export const getEarned = async (veAddress, tokenId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [_tokenAddress] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -187,7 +186,7 @@ export const getEarned = async (veAddress, tokenId, chainId) => {
 }
 
 export const getTokenData = async (tokenAddress, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   if (tokenAddress?.isNative) {
     return {
       name: tokenAddress.name,
@@ -219,7 +218,7 @@ export const getTokenData = async (tokenAddress, chainId) => {
 }
 
 export const getBalanceSource = async (bountyId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const trustBountyAddress = getTrustBountiesAddress()
   const [balance] = await bscClient.multicall({
     allowFailure: true,
@@ -290,7 +289,7 @@ export const fetchBounties = async (
         active: true,
       }
   const bountiesFromSg = await getBounties(1000, 0, whereClause)
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const bounties = await Promise.all(
     bountiesFromSg
       .map(async (bounty) => {

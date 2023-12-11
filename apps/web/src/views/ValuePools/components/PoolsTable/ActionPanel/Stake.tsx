@@ -1,4 +1,4 @@
-import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
+import { Button, Text, useModal, Pool, Flex } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { useERC20 } from 'hooks/useContract'
@@ -11,12 +11,12 @@ import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useGetRequiresApproval, usePool } from 'state/valuepools/hooks'
 import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
 import InitVaModal from '../../InitVaModal'
 import InitValuepoolModal from '../../InitValuepoolModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -200,28 +200,34 @@ const Staked: React.FunctionComponent<any> = ({ id, toggleLoans, toggleSponsors,
         </Button>
       </ActionContent>
       <ActionContent>
-        <Button mr="3px" width="100%" onClick={openPresentSponsors} variant="secondary">
+        <Button width="100%" onClick={openPresentSponsors} variant="secondary">
           {t('Sponsor')}
         </Button>
-        {pool?.sponsors?.length > 0 ? (
-          <Button mr="3px" width="100%" onClick={toggleSponsors} variant="secondary">
+      </ActionContent>
+      {pool?.sponsors?.length > 0 ? (
+        <ActionContent>
+          <Button width="100%" onClick={toggleSponsors} variant="secondary">
             {t('Toggle Sponsors (#%pos%)', { pos: pool?.sponsors?.length })}
           </Button>
-        ) : null}
-        {pool?.loans?.length > 0 ? (
-          <Button mr="3px" width="100%" onClick={toggleLoans} variant="secondary">
+        </ActionContent>
+      ) : null}
+      {pool?.loans?.length > 0 ? (
+        <ActionContent>
+          <Button width="100%" onClick={toggleLoans} variant="secondary">
             {t('Toggle Loans (#%pos%)', { pos: pool?.loans?.length })}
           </Button>
-        ) : null}
-        {numOfScheduledPurchases ? (
+        </ActionContent>
+      ) : null}
+      {numOfScheduledPurchases ? (
+        <ActionContent>
           <>
             <Button width="100%" onClick={toggleScheduledPurchases} variant="secondary">
               {t('Toggle Purchases (#%pos%)', { pos: numOfScheduledPurchases })}
             </Button>
             {/* <Flex mb="40px"><NotificationDot show /></Flex> */}
           </>
-        ) : null}
-      </ActionContent>
+        </ActionContent>
+      ) : null}
     </ActionContainer>
   )
 }
