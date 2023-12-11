@@ -7,7 +7,12 @@ import { useGetBalanceSource, useGetLatestClaim2 } from 'state/trustbounties/hoo
 import { differenceInSeconds } from 'date-fns'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
-import { getMarketTradesAddress, getTrustBountiesAddress } from 'utils/addressHelpers'
+import {
+  getMarketTradesAddress,
+  getNftMarketTradesAddress,
+  getPaywallMarketTradesAddress,
+  getTrustBountiesAddress,
+} from 'utils/addressHelpers'
 import { getBlockExploreLink } from 'utils'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
@@ -74,7 +79,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
         </Text>
       </Box>
       {pool?.bountyBalances
-        ?.filter((bb) => bb.source?.toLowerCase() !== getTrustBountiesAddress()?.toLowerCase())
+        ?.filter(
+          (bb) =>
+            bb.source?.toLowerCase() !== getTrustBountiesAddress()?.toLowerCase() &&
+            bb.source?.toLowerCase() !== getMarketTradesAddress()?.toLowerCase() &&
+            bb.source?.toLowerCase() !== getNftMarketTradesAddress()?.toLowerCase() &&
+            bb.source?.toLowerCase() !== getPaywallMarketTradesAddress()?.toLowerCase(),
+        )
         ?.map((bb) => (
           <>
             <Box mr="8px" height="32px">
