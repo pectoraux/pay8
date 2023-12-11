@@ -1,3 +1,11 @@
+export const bountyBalanceField = `
+id
+source
+amount
+createdAt
+updatedAt
+`
+
 export const bountyField = `
 id,
 active,
@@ -17,6 +25,9 @@ claims {
   atPeace,
   endTime,
   amount,
+}
+bountyBalances {
+  ${bountyBalanceField}
 }
 `
 

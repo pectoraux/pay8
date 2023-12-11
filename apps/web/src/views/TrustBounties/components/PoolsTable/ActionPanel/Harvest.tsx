@@ -2,14 +2,16 @@ import styled from 'styled-components'
 import { Text, Flex, Box, CopyButton, useMatchBreakpoints, ScanLink, Balance } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import RichTextEditor from 'components/RichText'
-
-import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import truncateHash from '@pancakeswap/utils/truncateHash'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { useGetBalanceSource, useGetLatestClaim2 } from 'state/trustbounties/hooks'
 import { differenceInSeconds } from 'date-fns'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
+import { getMarketTradesAddress, getTrustBountiesAddress } from 'utils/addressHelpers'
+import { getBlockExploreLink } from 'utils'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+
+import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const Wrapper = styled(Flex)`
   align-items: center;
@@ -20,6 +22,7 @@ const Wrapper = styled(Flex)`
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
   const { isMobile } = useMatchBreakpoints()
   const balance = useGetBalanceSource(pool?.id)
   const claim = useGetLatestClaim2(pool?.id)
@@ -58,7 +61,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
           </Text>
         </ActionContent>
       ) : null}
-      <Box mr="8px" height="32px">
+      <Box mr="8px" mb="8px" height="32px">
         <Balance
           lineHeight="1"
           color="textSubtle"
@@ -70,6 +73,29 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
           {t('Bounty Balance')}
         </Text>
       </Box>
+      {pool?.bountyBalances
+        ?.filter((bb) => bb.source?.toLowerCase() !== getTrustBountiesAddress()?.toLowerCase())
+        ?.map((bb) => (
+          <>
+            <Box mr="8px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={pool?.token?.decimals}
+                value={getBalanceNumber(new BigNumber(bb?.amount), pool?.token?.decimals)}
+              />
+              <Text color="textSubtle" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Bounty Balance')}
+              </Text>
+            </Box>
+            <Box>
+              <ScanLink mb="8px" href={getBlockExploreLink(bb?.source, 'address', chainId)} bold={false} small>
+                {t('View Source Info')}
+              </ScanLink>
+            </Box>
+          </>
+        ))}
       {claim ? (
         <>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
