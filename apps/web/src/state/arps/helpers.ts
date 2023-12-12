@@ -2,7 +2,6 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_ARPS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { arpFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { arpABI } from 'config/abi/arp'
 import { erc20ABI, erc721ABI } from 'wagmi'
@@ -10,6 +9,8 @@ import { getARPHelperAddress, getARPNoteAddress } from 'utils/addressHelpers'
 import { arpNoteABI } from 'config/abi/arpNote'
 import { arpHelperABI } from 'config/abi/arpHelper'
 import { getCollection } from 'state/cancan/helpers'
+
+import { arpFields, protocolFields } from './queries'
 
 export const getTag = async () => {
   try {
@@ -131,7 +132,7 @@ export const getArps = async (first = 5, skip = 0, where) => {
 }
 
 export const getPendingRevenue = async (tokenId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [pendingRevenueFromNote, note] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -156,7 +157,7 @@ export const getPendingRevenue = async (tokenId, chainId) => {
 }
 
 export const getTotalLiquidity = async (tokenAddress, arpAddress, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [totalLiquidity] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -174,7 +175,7 @@ export const getTotalLiquidity = async (tokenAddress, arpAddress, chainId) => {
 export const fetchArp = async (arpAddress, chainId) => {
   const arp = await getArp(arpAddress.toLowerCase())
 
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [
     devaddr_,
     bountyRequired,
@@ -387,21 +388,21 @@ export const fetchArp = async (arpAddress, chainId) => {
         ...protocol,
         notes: payableNotes,
         protocolId,
-        isAutoChargeable: isAutoChargeable.result,
-        adminBountyId: adminBountyId.result.toString(),
-        bountyId: bountyId.toString(),
-        profileId: profileId.toString(),
-        tokenId: tokenId.toString(),
-        optionId: optionId.result.toString(),
-        amountReceivable: amountReceivable.toString(),
-        amountPayable: amountPayable.toString(),
-        paidReceivable: paidReceivable.toString(),
-        paidPayable: paidPayable.toString(),
-        periodReceivable: periodReceivable.toString(),
-        periodPayable: periodPayable.toString(),
-        startPayable: startPayable.toString(),
-        startReceivable: startReceivable.toString(),
-        totalLiquidity: totalLiquidity.result.toString(),
+        isAutoChargeable: isAutoChargeable?.result,
+        adminBountyId: adminBountyId.result?.toString(),
+        bountyId: bountyId?.toString(),
+        profileId: profileId?.toString(),
+        tokenId: tokenId?.toString(),
+        optionId: optionId.result?.toString(),
+        amountReceivable: amountReceivable?.toString(),
+        amountPayable: amountPayable?.toString(),
+        paidReceivable: paidReceivable?.toString(),
+        paidPayable: paidPayable?.toString(),
+        periodReceivable: periodReceivable?.toString(),
+        periodPayable: periodPayable?.toString(),
+        startPayable: startPayable?.toString(),
+        startReceivable: startReceivable?.toString(),
+        totalLiquidity: totalLiquidity.result?.toString(),
         amountDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[0].toString() : BIG_ZERO,
         amountDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[0].toString() : BIG_ZERO,
         nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
@@ -472,7 +473,7 @@ export const fetchArp = async (arpAddress, chainId) => {
 }
 
 export const fetchArps = async ({ fromArp, chainId }) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [arpAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

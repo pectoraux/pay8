@@ -2,11 +2,9 @@
 marketplace discounts/cashback
 option for subscriptions confuses yearly & regular
 tags
-* Setup a Bounty with funds locked in a Valuepool
 * Reimburse Loan
 profile bids & crushes
 credit reports on profiles
-trustbounty with valuepool
 
 stakes enable you to pay in instalments considering you've described your payment plan in your stake's terms and the seller still applied to your stake 
 
