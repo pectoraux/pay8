@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { usePool } from 'state/profile/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+
 import AchievementCard from './AchievementCard'
 
 const Grid = styled.div`
@@ -23,28 +25,28 @@ const AchievementsList: React.FC<React.PropsWithChildren> = () => {
         <AchievementCard
           key="gold-report"
           lateSeconds={pool?.goldLateSeconds}
-          lateValue={pool?.goldLateValue}
+          lateValue={getBalanceNumber(pool?.goldLateValue)}
           badge="baller.svg"
           title="Gold Report"
         />
         <AchievementCard
           key="silver-report"
           lateSeconds={pool?.silverLateSeconds}
-          lateValue={pool?.silverLateValue}
+          lateValue={getBalanceNumber(pool?.silverLateValue)}
           badge="clairvoyant.svg"
           title="Silver Report"
         />
         <AchievementCard
           key="brown-report"
           lateSeconds={pool?.brownLateSeconds}
-          lateValue={pool?.brownLateValue}
+          lateValue={getBalanceNumber(pool?.brownLateValue)}
           badge="1-year.svg"
           title="Brown Report"
         />
         <AchievementCard
           key="black-report"
           lateSeconds={pool?.blackLateSeconds}
-          lateValue={pool?.blackLateValue}
+          lateValue={getBalanceNumber(pool?.blackLateValue)}
           badge="2-year.svg"
           title="Black Report"
         />
