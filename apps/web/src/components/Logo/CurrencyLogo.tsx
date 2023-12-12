@@ -3,10 +3,11 @@ import { BinanceIcon, TokenLogo } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import styled from 'styled-components'
+import { getImageUrlFromToken } from 'components/TokenImage'
+
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useHttpLocations } from '@pancakeswap/hooks'
 import getTokenLogoURL from '../../utils/getTokenLogoURL'
-import { getImageUrlFromToken } from 'components/TokenImage'
 
 const StyledLogo = styled(TokenLogo)<{ size: string }>`
   width: ${({ size }) => size};
