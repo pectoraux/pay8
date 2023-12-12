@@ -2,12 +2,12 @@ import { memo, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/ramps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
@@ -22,7 +22,10 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const tabs = (
     <>
       <NameCell pool={pool} rampAccount={rampAccount} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
+      <TotalUsersCell
+        labelText={t('Total Accounts')}
+        amount={pool?.accounts?.filter((protocol) => protocol?.active)?.length}
+      />
       <TotalValueCell
         labelText={t('Minted Liquidity')}
         amount={getBalanceNumber(rampAccount?.minted, rampAccount?.token?.decimals)}

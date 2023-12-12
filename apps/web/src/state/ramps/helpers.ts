@@ -170,7 +170,7 @@ export const getAccountSg = async (address: string, channel: string) => {
 }
 
 export const getTokenData = async (tokenAddress, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [name, symbol, decimals] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -200,7 +200,7 @@ export const fetchRamp = async (address, chainId) => {
   const gauge = await getRampSg(rampAddress)
   try {
     // const serializedTokens = serializeTokens()
-    const bscClient = publicClient({ chainId: chainId })
+    const bscClient = publicClient({ chainId })
     const [devaddr_, tokens, params] = await bscClient.multicall({
       allowFailure: true,
       contracts: [

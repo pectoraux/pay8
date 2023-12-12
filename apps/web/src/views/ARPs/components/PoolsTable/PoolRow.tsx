@@ -28,7 +28,10 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const tabs = (
     <>
       <NameCell pool={pool} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.protocols?.length} />
+      <TotalUsersCell
+        labelText={t('Total Accounts')}
+        amount={pool?.protocols?.filter((protocol) => protocol?.active)?.length}
+      />
       <TotalValueCell2
         totalLiquidity={getBalanceNumber(
           new BigNumber(currAccount?.totalLiquidity?.toString() ?? totalLiquidity?.toString()),

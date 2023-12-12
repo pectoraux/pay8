@@ -81,7 +81,7 @@ export const getLotteries = async (first = 5, skip = 0, where) => {
 
 export const fetchLottery = async (lotteryId, chainId) => {
   try {
-    const bscClient = publicClient({ chainId: chainId })
+    const bscClient = publicClient({ chainId })
     const [_viewLottery, tokens] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
@@ -100,7 +100,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
       ],
     })
     const viewLottery = _viewLottery.result as any
-    const status = viewLottery.status
+    const { status } = viewLottery
     const startTime = viewLottery.startTime
     const endTime = viewLottery.endTime
     const endAmount = viewLottery.endAmount
@@ -244,7 +244,7 @@ export const fetchLotteries = async ({ fromLottery, chainId }) => {
 }
 
 export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, idx, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [count] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -260,7 +260,7 @@ export const getRewardsForTicketId = async (tokenAddress, lotteryId, ticketId, i
 }
 
 export const getTicket = async (ticketId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [count] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

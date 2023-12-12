@@ -21,7 +21,10 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const tabs = (
     <>
       <NameCell pool={pool} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.protocols?.length ?? 0} />
+      <TotalUsersCell
+        labelText={t('Total Accounts')}
+        amount={pool?.protocols?.filter((protocol) => protocol?.active)?.length}
+      />
       <VotesCell pool={pool} />
       <TotalValueCell
         labelText={t('Amount Due')}

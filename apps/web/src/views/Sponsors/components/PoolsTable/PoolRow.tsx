@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { Flex, Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/sponsors/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
@@ -21,7 +21,11 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const tabs = (
     <>
       <NameCell mr="100px" pool={pool} />
-      <TotalUsersCell pr="200px" labelText={t('Total Accounts')} amount={pool?.accounts?.length} />
+      <TotalUsersCell
+        pr="200px"
+        labelText={t('Total Accounts')}
+        amount={pool?.accounts?.filter((protocol) => protocol?.active)?.length}
+      />
       <TotalValueCell
         pr="200px"
         labelText={t('Amount Due')}

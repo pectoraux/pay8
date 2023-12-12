@@ -3,6 +3,9 @@ import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/bills/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useCurrency } from 'hooks/Tokens'
+import { useGetTotalLiquidity } from 'state/arps/hooks'
+import BigNumber from 'bignumber.js'
 
 import NameCell from './Cells/NameCell'
 import VotesCell from './Cells/VotesCell'
@@ -11,9 +14,6 @@ import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 import TotalValueCell2 from './Cells/TotalValueCell2'
-import { useCurrency } from 'hooks/Tokens'
-import { useGetTotalLiquidity } from 'state/arps/hooks'
-import BigNumber from 'bignumber.js'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
@@ -29,7 +29,10 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const tabs = (
     <>
       <NameCell pool={pool} />
-      <TotalUsersCell labelText={t('Total Accounts')} amount={pool?.protocols?.length ?? 0} />
+      <TotalUsersCell
+        labelText={t('Total Accounts')}
+        amount={pool?.protocols?.filter((protocol) => protocol?.active)?.length ?? 0}
+      />
       <TotalValueCell2
         totalLiquidity={getBalanceNumber(
           new BigNumber(currAccount?.totalLiquidity?.toString() ?? totalLiquidity?.toString()),
