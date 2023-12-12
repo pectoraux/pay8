@@ -1,6 +1,12 @@
 export const profileHelperABI = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
@@ -408,6 +414,74 @@ export const profileHelperABI = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'bool',
+        name: '_isPaywall',
+        type: 'bool',
+      },
+      {
+        internalType: 'address',
+        name: '_note',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_arp',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_protocolId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_profileId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getDueNLateSeconds',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'due',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'lateSeconds',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getOptions',
+    outputs: [
+      {
+        internalType: 'string[]',
+        name: 'optionNames',
+        type: 'string[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'optionValues',
+        type: 'string[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'getParams',
     outputs: [
@@ -426,50 +500,6 @@ export const profileHelperABI = [
         name: '',
         type: 'uint256',
       },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_user',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_ve',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_length',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'getPercentile',
-    outputs: [
       {
         internalType: 'uint256',
         name: '',
@@ -692,19 +722,6 @@ export const profileHelperABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'bytes4',
         name: 'interfaceId',
         type: 'bytes4',
@@ -920,19 +937,6 @@ export const profileHelperABI = [
       },
     ],
     name: 'updateParams',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '__taskContract',
-        type: 'address',
-      },
-    ],
-    name: 'updateTaxContract',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

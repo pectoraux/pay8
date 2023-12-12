@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useState, ChangeEvent } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useAppDispatch } from 'state'
-import { InjectedModalProps, Button, Flex, useToast, Pool } from '@pancakeswap/uikit'
+import { InjectedModalProps, Button, Flex, useToast } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { fetchProfilesAsync } from 'state/profile'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
@@ -19,6 +19,7 @@ import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shar
 import { requiresApproval } from 'utils/requiresApproval'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import LocationStage from 'views/Ramps/components/LocationStage'
+import { getSSIContract } from 'utils/contractHelpers'
 
 import PayProfileStage from './PayProfileStage'
 import UpdateLateDaysStage from './UpdateLateDaysStage'
@@ -36,7 +37,6 @@ import CreateProfileStage from './CreateProfileStage'
 import UpdateSSIDStage from './UpdateSSIDStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
-import { getSSIContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -129,6 +129,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
 
   const [state, setState] = useState(() => ({
     profileId: pool?.id ?? '',
+    isPaywall: 0,
     protocolId: '',
     tokenId: '',
     identityTokenId: '0',
@@ -397,7 +398,16 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       }
       if (stage === LockStage.CONFIRM_UPDATE_LATE_DAYS) {
         const ve = getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase())
-        const args = [getARPNoteAddress(), state.arp, state.owner, ve, state.tokenId, state.protocolId, state.profileId]
+        const args = [
+          getARPNoteAddress(),
+          state.arp,
+          state.owner,
+          ve,
+          state.tokenId,
+          state.protocolId,
+          state.profileId,
+          state.isPaywall,
+        ]
         console.log('CONFIRM_UPDATE_LATE_DAYS==================>', args)
         return callWithGasPrice(profileContract, 'updateLateDays', args).catch((err) =>
           console.log('CONFIRM_UPDATE_LATE_DAYS==================>', err),
@@ -616,6 +626,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
           nftFilters={nftFilters}
           setNftFilters={setNftFilters}
           handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
       )}

@@ -322,12 +322,25 @@ export const profileABI = [
       },
       {
         indexed: false,
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'UpdateMiscellaneous',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'profileId',
+        type: 'uint256',
+      },
+    ],
+    name: 'UpdateSSID',
     type: 'event',
   },
   {
@@ -344,6 +357,24 @@ export const profileABI = [
       },
     ],
     name: 'addAccount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_profileId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'addAccountFromSSID',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -543,6 +574,24 @@ export const profileABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_profileId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_user',
+        type: 'address',
+      },
+    ],
+    name: 'emitAddAccount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: '_idx',
         type: 'uint256',
       },
@@ -577,9 +626,9 @@ export const profileABI = [
         type: 'address',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'emitUpdateMiscellaneous',
@@ -718,6 +767,40 @@ export const profileABI = [
     inputs: [
       {
         internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getPercentile',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -757,6 +840,25 @@ export const profileABI = [
       },
     ],
     name: 'isBlacklisted',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'isHelper',
     outputs: [
       {
         internalType: 'bool',
@@ -1252,7 +1354,7 @@ export const profileABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '__helper',
+        name: '_note',
         type: 'address',
       },
       {
@@ -1284,6 +1386,11 @@ export const profileABI = [
         internalType: 'uint256',
         name: '_profileId',
         type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: '_isPaywall',
+        type: 'bool',
       },
     ],
     name: 'updateLateDays',
