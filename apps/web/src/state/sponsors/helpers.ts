@@ -2,13 +2,14 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_SPONSORS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { sponsorFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { sponsorABI } from 'config/abi/sponsor'
 import { erc20ABI } from 'wagmi'
 import { sponsorNoteABI } from 'config/abi/sponsorNote'
 import { getSponsorHelperAddress } from 'utils/addressHelpers'
 import { getCollection } from 'state/cancan/helpers'
+
+import { sponsorFields, protocolFields } from './queries'
 
 export const getTag = async () => {
   try {
@@ -131,7 +132,7 @@ export const getSponsors = async (first = 5, skip = 0, where) => {
 
 export const fetchSponsor = async (sponsorAddress, chainId) => {
   const sponsor = await getSponsor(sponsorAddress.toLowerCase())
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [devaddr_, _ve, collectionId, maxNotesPerProtocol] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -159,92 +160,94 @@ export const fetchSponsor = async (sponsorAddress, chainId) => {
   })
   const collection = await getCollection(collectionId.result.toString())
   const accounts = await Promise.all(
-    sponsor?.protocols?.map(async (protocol) => {
-      const protocolId = protocol.id.split('_')[0]
-      const [protocolInfo] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: sponsorAddress,
-            abi: sponsorABI,
-            functionName: 'protocolInfo',
-            args: [BigInt(protocolId)],
-          },
-        ],
-      })
-      const owner = protocolInfo.result[0]
-      const _token = protocolInfo.result[1]
-      const bountyId = protocolInfo.result[2]
-      const tokenId = protocolInfo.result[3]
-      const amountPayable = protocolInfo.result[4]
-      const paidPayable = protocolInfo.result[5]
-      const periodPayable = protocolInfo.result[6]
-      const startPayable = protocolInfo.result[7]
+    sponsor?.protocols
+      ?.filter((protocol) => protocol.active)
+      ?.map(async (protocol) => {
+        const protocolId = protocol.id.split('_')[0]
+        const [protocolInfo] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: sponsorAddress,
+              abi: sponsorABI,
+              functionName: 'protocolInfo',
+              args: [BigInt(protocolId)],
+            },
+          ],
+        })
+        const owner = protocolInfo.result[0]
+        const _token = protocolInfo.result[1]
+        const bountyId = protocolInfo.result[2]
+        const tokenId = protocolInfo.result[3]
+        const amountPayable = protocolInfo.result[4]
+        const paidPayable = protocolInfo.result[5]
+        const periodPayable = protocolInfo.result[6]
+        const startPayable = protocolInfo.result[7]
 
-      if (_token === ADDRESS_ZERO) return null
-      const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDuePayable] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: sponsorAddress,
-            abi: sponsorABI,
-            functionName: 'adminBountyIds',
-            args: [_token],
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'name',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'symbol',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'decimals',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'balanceOf',
-            args: [sponsorAddress],
-          },
-          {
-            address: getSponsorHelperAddress(),
-            abi: sponsorNoteABI,
-            functionName: 'getDuePayable',
-            args: [sponsorAddress, owner, BigInt(0)],
-          },
-        ],
-      })
-      return {
-        ...protocol,
-        owner,
-        protocolId,
-        adminBountyId: adminBountyId.result.toString(),
-        tokenId: tokenId.toString(),
-        bountyId: bountyId.toString(),
-        amountPayable: amountPayable.toString(),
-        totalLiquidity: totalLiquidity.result.toString(),
-        paidPayable: paidPayable.toString(),
-        periodPayable: periodPayable.toString(),
-        startPayable: startPayable.toString(),
-        duePayable: nextDuePayable.result[0].toString(),
-        nextDuePayable: nextDuePayable.result[1].toString(),
-        token: new Token(
-          chainId,
-          _token,
-          decimals.result,
-          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
-          name.result?.toString() ?? 'name',
-          `https://tokens.payswap.org/images/${_token}.png`,
-        ),
-        // allTokens.find((tk) => tk.address === token),
-      }
-    }),
+        if (_token === ADDRESS_ZERO) return null
+        const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDuePayable] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: sponsorAddress,
+              abi: sponsorABI,
+              functionName: 'adminBountyIds',
+              args: [_token],
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'decimals',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'balanceOf',
+              args: [sponsorAddress],
+            },
+            {
+              address: getSponsorHelperAddress(),
+              abi: sponsorNoteABI,
+              functionName: 'getDuePayable',
+              args: [sponsorAddress, owner, BigInt(0)],
+            },
+          ],
+        })
+        return {
+          ...protocol,
+          owner,
+          protocolId,
+          adminBountyId: adminBountyId.result.toString(),
+          tokenId: tokenId.toString(),
+          bountyId: bountyId.toString(),
+          amountPayable: amountPayable.toString(),
+          totalLiquidity: totalLiquidity.result.toString(),
+          paidPayable: paidPayable.toString(),
+          periodPayable: periodPayable.toString(),
+          startPayable: startPayable.toString(),
+          duePayable: nextDuePayable.result[0].toString(),
+          nextDuePayable: nextDuePayable.result[1].toString(),
+          token: new Token(
+            chainId,
+            _token,
+            decimals.result,
+            symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+            name.result?.toString() ?? 'name',
+            `https://tokens.payswap.org/images/${_token}.png`,
+          ),
+          // allTokens.find((tk) => tk.address === token),
+        }
+      }),
   )
 
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
@@ -261,7 +264,7 @@ export const fetchSponsor = async (sponsorAddress, chainId) => {
 }
 
 export const fetchSponsors = async ({ fromSponsor, chainId }) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [sponsorAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

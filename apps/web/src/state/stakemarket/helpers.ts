@@ -36,7 +36,7 @@ txType
 `
 
 export const getStakeApplication = async (stakeId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [application] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -107,7 +107,7 @@ export const getStakes = async (first: number, skip: number, where) => {
 }
 
 export const getNote = async (tokenId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [note] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -123,7 +123,7 @@ export const getNote = async (tokenId, chainId) => {
 }
 
 export const getStake = async (stakeId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [stake] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -148,7 +148,7 @@ export const fetchStakes = async (collectionId, chainId) => {
         active: true,
       }
   const stakesFromSg = await getStakes(1000, 0, whereClause)
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const stakes = await Promise.all(
     stakesFromSg
       .map(async (stake) => {
@@ -195,34 +195,34 @@ export const fetchStakes = async (collectionId, chainId) => {
               },
             ],
           })
-        const getStake = _getStake as any
-        const ve = getStake.result.ve
-        const token = getStake.result.token
-        const tokenId = getStake.result.tokenId
-        const owner = getStake.result.owner
-        const startPayable = getStake.result.bank.startPayable
-        const startReceivable = getStake.result.bank.startReceivable
-        const amountPayable = getStake.result.bank.amountPayable
-        const amountReceivable = getStake.result.bank.amountReceivable
-        const periodPayable = getStake.result.bank.periodPayable
-        const periodReceivable = getStake.result.bank.periodReceivable
-        const paidPayable = getStake.result.bank.paidPayable
-        const paidReceivable = getStake.result.bank.paidReceivable
-        const gasPercent = getStake.result.bank.gasPercent
-        const waitingPeriod = getStake.result.bank.waitingPeriod
-        const stakeRequired = getStake.result.bank.stakeRequired
-        const profileId = getStake.result.profileId
-        const bountyId = getStake.result.bountyId
-        const parentStakeId = getStake.result.parentStakeId
-        const profileRequired = getStake.result.profileRequired
-        const bountyRequired = getStake.result.bountyRequired
-        const source = getStake.result.metadata.source
-        const collection = getStake.result.metadata.collection
-        const referrer = getStake.result.metadata.referrer
-        const userTokenId = getStake.result.metadata.userTokenId
-        const identityTokenId = getStake.result.metadata.identityTokenId
-        const options = getStake.result.metadata.options
-        const ownerAgreement = getStake.result.ownerAgreement
+        const __getStake = _getStake as any
+        const ve = __getStake.result.ve
+        const token = __getStake.result.token
+        const tokenId = __getStake.result.tokenId
+        const owner = __getStake.result.owner
+        const startPayable = __getStake.result.bank.startPayable
+        const startReceivable = __getStake.result.bank.startReceivable
+        const amountPayable = __getStake.result.bank.amountPayable
+        const amountReceivable = __getStake.result.bank.amountReceivable
+        const periodPayable = __getStake.result.bank.periodPayable
+        const periodReceivable = __getStake.result.bank.periodReceivable
+        const paidPayable = __getStake.result.bank.paidPayable
+        const paidReceivable = __getStake.result.bank.paidReceivable
+        const gasPercent = __getStake.result.bank.gasPercent
+        const waitingPeriod = __getStake.result.bank.waitingPeriod
+        const stakeRequired = __getStake.result.bank.stakeRequired
+        const profileId = __getStake.result.profileId
+        const bountyId = __getStake.result.bountyId
+        const parentStakeId = __getStake.result.parentStakeId
+        const profileRequired = __getStake.result.profileRequired
+        const bountyRequired = __getStake.result.bountyRequired
+        const source = __getStake.result.metadata.source
+        const collection = __getStake.result.metadata.collection
+        const referrer = __getStake.result.metadata.referrer
+        const userTokenId = __getStake.result.metadata.userTokenId
+        const identityTokenId = __getStake.result.metadata.identityTokenId
+        const options = __getStake.result.metadata.options
+        const ownerAgreement = __getStake.result.ownerAgreement
         const [status, totalLiquidity, name, symbol, decimals] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -280,7 +280,7 @@ export const fetchStakes = async (collectionId, chainId) => {
         console.log('stakestake=================>', stake)
         const payableNotes = await Promise.all(
           stake?.tokenIds?.map(async (note) => {
-            const [owner, metadatUrl] = await bscClient.multicall({
+            const [_owner, metadatUrl] = await bscClient.multicall({
               allowFailure: true,
               contracts: [
                 {
@@ -300,7 +300,7 @@ export const fetchStakes = async (collectionId, chainId) => {
             return {
               ...note,
               metadataUrl: metadatUrl.result,
-              owner: owner.result,
+              owner: _owner.result,
             }
           }),
         )

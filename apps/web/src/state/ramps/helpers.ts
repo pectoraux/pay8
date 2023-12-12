@@ -5,12 +5,13 @@ import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_RAMPS } from 'config/constants/endpoints'
 import { publicClient } from 'utils/wagmi'
-import { rampFields, accountFields, sessionFields } from './queries'
 import { rampABI } from 'config/abi/ramp'
 import { erc20ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
 import { getRampAdsAddress } from 'utils/addressHelpers'
 import { getCollection } from 'state/cancan/helpers'
+
+import { rampFields, accountFields, sessionFields } from './queries'
 
 export const fetchRampData = async (rampAddress) => {
   return (await firestore.collection('ramps').doc(rampAddress).get()).data()

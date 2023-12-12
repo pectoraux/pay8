@@ -234,76 +234,78 @@ export const fetchGame = async (gameId, chainId) => {
     }),
   )
   const accounts = await Promise.all(
-    gameFromSg?.protocols?.map(async (protocol) => {
-      const [gameInfo_, receiver, objectNames, userDeadLine, metadataUrl] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: getGameMinterAddress(),
-            abi: gameMinterABI,
-            functionName: 'gameInfo_',
-            args: [BigInt(protocol?.id)],
-          },
-          {
-            address: getGameMinterAddress(),
-            abi: gameMinterABI,
-            functionName: 'getReceiver',
-            args: [BigInt(protocol?.id)],
-          },
-          {
-            address: getGameHelperAddress(),
-            abi: gameHelperABI,
-            functionName: 'getAllObjects',
-            args: [BigInt(protocol?.id), BigInt(0)],
-          },
-          {
-            address: getGameFactoryAddress(),
-            abi: gameFactoryABI,
-            functionName: 'userDeadLines_',
-            args: [BigInt(protocol?.id), BigInt(gameId)],
-          },
-          {
-            address: getGameHelperAddress(),
-            abi: gameHelperABI,
-            functionName: 'tokenURI',
-            args: [BigInt(protocol?.id)],
-          },
-        ],
-      })
-      const tokenOwner = gameInfo_.result[0]
-      const lender = gameInfo_.result[1]
-      const game = gameInfo_.result[2]
-      const timer = gameInfo_.result[3]
-      const score = gameInfo_.result[4]
-      const deadline = gameInfo_.result[5]
-      const pricePercentile = gameInfo_.result[6]
-      const price = gameInfo_.result[7]
-      const won = gameInfo_.result[8]
-      const gameCount = gameInfo_.result[9]
-      const scorePercentile = gameInfo_.result[10]
-      const gameMinutes = gameInfo_.result[11]
+    gameFromSg?.protocols
+      ?.filter((protocol) => protocol.active)
+      ?.map(async (protocol) => {
+        const [gameInfo_, receiver, objectNames, userDeadLine, metadataUrl] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: getGameMinterAddress(),
+              abi: gameMinterABI,
+              functionName: 'gameInfo_',
+              args: [BigInt(protocol?.id)],
+            },
+            {
+              address: getGameMinterAddress(),
+              abi: gameMinterABI,
+              functionName: 'getReceiver',
+              args: [BigInt(protocol?.id)],
+            },
+            {
+              address: getGameHelperAddress(),
+              abi: gameHelperABI,
+              functionName: 'getAllObjects',
+              args: [BigInt(protocol?.id), BigInt(0)],
+            },
+            {
+              address: getGameFactoryAddress(),
+              abi: gameFactoryABI,
+              functionName: 'userDeadLines_',
+              args: [BigInt(protocol?.id), BigInt(gameId)],
+            },
+            {
+              address: getGameHelperAddress(),
+              abi: gameHelperABI,
+              functionName: 'tokenURI',
+              args: [BigInt(protocol?.id)],
+            },
+          ],
+        })
+        const tokenOwner = gameInfo_.result[0]
+        const lender = gameInfo_.result[1]
+        const game = gameInfo_.result[2]
+        const timer = gameInfo_.result[3]
+        const score = gameInfo_.result[4]
+        const deadline = gameInfo_.result[5]
+        const pricePercentile = gameInfo_.result[6]
+        const price = gameInfo_.result[7]
+        const won = gameInfo_.result[8]
+        const gameCount = gameInfo_.result[9]
+        const scorePercentile = gameInfo_.result[10]
+        const gameMinutes = gameInfo_.result[11]
 
-      return {
-        ...protocol,
-        tokenOwner,
-        lender,
-        game,
-        metadataUrl: metadataUrl.result,
-        receiver: receiver.result,
-        objectNames: objectNames.result,
-        timer: timer?.toString(),
-        score: score.toString(),
-        deadline: deadline.toString(),
-        pricePercentile: pricePercentile.toString(),
-        price: price.toString(),
-        won: won.toString(),
-        gameCount: gameCount.toString(),
-        scorePercentile: scorePercentile.toString(),
-        gameMinutes: gameMinutes.toString(),
-        userDeadLine: userDeadLine.result.toString(),
-        // userPercentile: userPercentile.toString(),
-      }
-    }),
+        return {
+          ...protocol,
+          tokenOwner,
+          lender,
+          game,
+          metadataUrl: metadataUrl.result,
+          receiver: receiver.result,
+          objectNames: objectNames.result,
+          timer: timer?.toString(),
+          score: score.toString(),
+          deadline: deadline.toString(),
+          pricePercentile: pricePercentile.toString(),
+          price: price.toString(),
+          won: won.toString(),
+          gameCount: gameCount.toString(),
+          scorePercentile: scorePercentile.toString(),
+          gameMinutes: gameMinutes.toString(),
+          userDeadLine: userDeadLine.result.toString(),
+          // userPercentile: userPercentile.toString(),
+        }
+      }),
   )
 
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.

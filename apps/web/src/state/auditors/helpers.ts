@@ -2,7 +2,6 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_AUDITORS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { auditorFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { auditorABI } from 'config/abi/auditor'
 import { erc20ABI } from 'wagmi'
@@ -11,6 +10,8 @@ import { auditorHelper2ABI } from 'config/abi/auditorHelper2'
 import { auditorNoteABI } from 'config/abi/auditorNote'
 import { getCollection } from 'state/cancan/helpers'
 import { auditorHelperABI } from 'config/abi/auditorHelper'
+
+import { auditorFields, protocolFields } from './queries'
 
 export const getTag = async () => {
   try {
@@ -157,7 +158,7 @@ export const getAuditors = async (first = 5, skip = 0, where) => {
 export const fetchAuditor = async (auditorAddress, chainId) => {
   const auditor = await getAuditor(auditorAddress.toLowerCase())
 
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [devaddr_, bountyRequired, collectionId, category, percentiles] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -192,97 +193,99 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
   })
   const collection = await getCollection(collectionId.result.toString())
   const accounts = await Promise.all(
-    auditor?.protocols?.map(async (protocol) => {
-      const protocolId = protocol.id.split('_')[0]
-      const [protocolInfo, isAutoChargeable] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: auditorAddress,
-            abi: auditorABI,
-            functionName: 'protocolInfo',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: auditorAddress,
-            abi: auditorABI,
-            functionName: 'isAutoChargeable',
-            args: [BigInt(protocolId)],
-          },
-        ],
-      })
-      const _token = protocolInfo.result[0]
-      const bountyId = protocolInfo.result[1]
-      const amountReceivable = protocolInfo.result[2]
-      const paidReceivable = protocolInfo.result[3]
-      const periodReceivable = protocolInfo.result[4]
-      const startReceivable = protocolInfo.result[5]
-      const esgRating = protocolInfo.result[6]
-      const optionId = protocolInfo.result[7]
+    auditor?.protocols
+      ?.filter((protocol) => protocol.active)
+      ?.map(async (protocol) => {
+        const protocolId = protocol.id.split('_')[0]
+        const [protocolInfo, isAutoChargeable] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: auditorAddress,
+              abi: auditorABI,
+              functionName: 'protocolInfo',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: auditorAddress,
+              abi: auditorABI,
+              functionName: 'isAutoChargeable',
+              args: [BigInt(protocolId)],
+            },
+          ],
+        })
+        const _token = protocolInfo.result[0]
+        const bountyId = protocolInfo.result[1]
+        const amountReceivable = protocolInfo.result[2]
+        const paidReceivable = protocolInfo.result[3]
+        const periodReceivable = protocolInfo.result[4]
+        const startReceivable = protocolInfo.result[5]
+        const esgRating = protocolInfo.result[6]
+        const optionId = protocolInfo.result[7]
 
-      const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: auditorAddress,
-            abi: auditorABI,
-            functionName: 'adminBountyIds',
-            args: [_token],
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'name',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'symbol',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'decimals',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'balanceOf',
-            args: [auditorAddress],
-          },
-          {
-            address: getAuditorHelper2Address(),
-            abi: auditorHelper2ABI,
-            functionName: 'getDueReceivable',
-            args: [auditorAddress, BigInt(protocolId), BigInt(0)],
-          },
-        ],
-      })
-      return {
-        ...protocol,
-        protocolId,
-        isAutoChargeable: isAutoChargeable.result,
-        adminBountyId: adminBountyId.result.toString(),
-        esgRating: esgRating.toString(),
-        bountyId: bountyId.toString(),
-        optionId: optionId.toString(),
-        amountReceivable: amountReceivable.toString(),
-        paidReceivable: paidReceivable.toString(),
-        periodReceivable: periodReceivable.toString(),
-        startReceivable: startReceivable.toString(),
-        totalLiquidity: totalLiquidity.result.toString(),
-        nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
-        token: new Token(
-          chainId,
-          _token,
-          decimals.result,
-          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
-          name.result?.toString() ?? 'name',
-          `https://tokens.payswap.org/images/${_token}.png`,
-        ),
-        // allTokens.find((tk) => tk.address === token),
-      }
-    }),
+        const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: auditorAddress,
+              abi: auditorABI,
+              functionName: 'adminBountyIds',
+              args: [_token],
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'decimals',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'balanceOf',
+              args: [auditorAddress],
+            },
+            {
+              address: getAuditorHelper2Address(),
+              abi: auditorHelper2ABI,
+              functionName: 'getDueReceivable',
+              args: [auditorAddress, BigInt(protocolId), BigInt(0)],
+            },
+          ],
+        })
+        return {
+          ...protocol,
+          protocolId,
+          isAutoChargeable: isAutoChargeable.result,
+          adminBountyId: adminBountyId.result.toString(),
+          esgRating: esgRating.toString(),
+          bountyId: bountyId.toString(),
+          optionId: optionId.toString(),
+          amountReceivable: amountReceivable.toString(),
+          paidReceivable: paidReceivable.toString(),
+          periodReceivable: periodReceivable.toString(),
+          startReceivable: startReceivable.toString(),
+          totalLiquidity: totalLiquidity.result.toString(),
+          nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
+          token: new Token(
+            chainId,
+            _token,
+            decimals.result,
+            symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+            name.result?.toString() ?? 'name',
+            `https://tokens.payswap.org/images/${_token}.png`,
+          ),
+          // allTokens.find((tk) => tk.address === token),
+        }
+      }),
   )
   const percentile = parseInt(percentiles.result?.toString())
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
@@ -301,7 +304,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
 }
 
 export const fetchAuditors = async ({ fromAuditor, chainId }) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [auditorAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

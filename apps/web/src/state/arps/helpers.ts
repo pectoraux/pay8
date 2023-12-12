@@ -274,150 +274,152 @@ export const fetchArp = async (arpAddress, chainId) => {
   })
   let payableNotes
   const accounts = await Promise.all(
-    arp?.protocols?.map(async (protocol) => {
-      const protocolId = protocol.id.split('_')[0]
-      const [protocolInfo, optionId, isAutoChargeable] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: arpAddress,
-            abi: arpABI,
-            functionName: 'protocolInfo',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: arpAddress,
-            abi: arpABI,
-            functionName: 'optionId',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: arpAddress,
-            abi: arpABI,
-            functionName: 'isAutoChargeable',
-            args: [BigInt(protocolId)],
-          },
-        ],
-      })
-      const _token = protocolInfo.result[0]
-      const bountyId = protocolInfo.result[1]
-      const profileId = protocolInfo.result[2]
-      const tokenId = protocolInfo.result[3]
-      const amountPayable = protocolInfo.result[4]
-      const amountReceivable = protocolInfo.result[5]
-      const paidPayable = protocolInfo.result[6]
-      const paidReceivable = protocolInfo.result[7]
-      const periodPayable = protocolInfo.result[8]
-      const periodReceivable = protocolInfo.result[9]
-      const startPayable = protocolInfo.result[10]
-      const startReceivable = protocolInfo.result[11]
-
-      const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable, nextDuePayable] =
-        await bscClient.multicall({
+    arp?.protocols
+      ?.filter((protocol) => protocol.active)
+      ?.map(async (protocol) => {
+        const protocolId = protocol.id.split('_')[0]
+        const [protocolInfo, optionId, isAutoChargeable] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
               address: arpAddress,
               abi: arpABI,
-              functionName: 'adminBountyId',
-              args: [_token],
+              functionName: 'protocolInfo',
+              args: [BigInt(protocolId)],
             },
             {
-              address: _token,
-              abi: erc20ABI,
-              functionName: 'name',
+              address: arpAddress,
+              abi: arpABI,
+              functionName: 'optionId',
+              args: [BigInt(protocolId)],
             },
             {
-              address: _token,
-              abi: erc20ABI,
-              functionName: 'symbol',
-            },
-            {
-              address: _token,
-              abi: erc20ABI,
-              functionName: 'decimals',
-            },
-            {
-              address: _token,
-              abi: erc20ABI,
-              functionName: 'balanceOf',
-              args: [arpAddress],
-            },
-            {
-              address: getARPNoteAddress(),
-              abi: arpNoteABI,
-              functionName: 'getDueReceivable',
-              args: [arpAddress, BigInt(protocolId), BigInt(0)],
-            },
-            {
-              address: getARPNoteAddress(),
-              abi: arpNoteABI,
-              functionName: 'getDuePayable',
-              args: [arpAddress, BigInt(protocolId), BigInt(0)],
+              address: arpAddress,
+              abi: arpABI,
+              functionName: 'isAutoChargeable',
+              args: [BigInt(protocolId)],
             },
           ],
         })
-      payableNotes = await Promise.all(
-        protocol?.notes?.map(async (note) => {
-          const [owner, metadatUrl] = await bscClient.multicall({
+        const _token = protocolInfo.result[0]
+        const bountyId = protocolInfo.result[1]
+        const profileId = protocolInfo.result[2]
+        const tokenId = protocolInfo.result[3]
+        const amountPayable = protocolInfo.result[4]
+        const amountReceivable = protocolInfo.result[5]
+        const paidPayable = protocolInfo.result[6]
+        const paidReceivable = protocolInfo.result[7]
+        const periodPayable = protocolInfo.result[8]
+        const periodReceivable = protocolInfo.result[9]
+        const startPayable = protocolInfo.result[10]
+        const startReceivable = protocolInfo.result[11]
+
+        const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable, nextDuePayable] =
+          await bscClient.multicall({
             allowFailure: true,
             contracts: [
               {
-                address: getARPNoteAddress(),
-                abi: erc721ABI,
-                functionName: 'ownerOf',
-                args: [BigInt(note?.id)],
+                address: arpAddress,
+                abi: arpABI,
+                functionName: 'adminBountyId',
+                args: [_token],
+              },
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'name',
+              },
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'symbol',
+              },
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'decimals',
+              },
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'balanceOf',
+                args: [arpAddress],
               },
               {
                 address: getARPNoteAddress(),
-                abi: erc721ABI,
-                functionName: 'tokenURI',
-                args: [BigInt(note?.id)],
+                abi: arpNoteABI,
+                functionName: 'getDueReceivable',
+                args: [arpAddress, BigInt(protocolId), BigInt(0)],
+              },
+              {
+                address: getARPNoteAddress(),
+                abi: arpNoteABI,
+                functionName: 'getDuePayable',
+                args: [arpAddress, BigInt(protocolId), BigInt(0)],
               },
             ],
           })
-          return {
-            ...note,
-            metadataUrl: metadatUrl.result,
-            owner: owner.result,
-          }
-        }),
-      )
+        payableNotes = await Promise.all(
+          protocol?.notes?.map(async (note) => {
+            const [owner, metadatUrl] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: getARPNoteAddress(),
+                  abi: erc721ABI,
+                  functionName: 'ownerOf',
+                  args: [BigInt(note?.id)],
+                },
+                {
+                  address: getARPNoteAddress(),
+                  abi: erc721ABI,
+                  functionName: 'tokenURI',
+                  args: [BigInt(note?.id)],
+                },
+              ],
+            })
+            return {
+              ...note,
+              metadataUrl: metadatUrl.result,
+              owner: owner.result,
+            }
+          }),
+        )
 
-      return {
-        ...protocol,
-        notes: payableNotes,
-        protocolId,
-        isAutoChargeable: isAutoChargeable?.result,
-        adminBountyId: adminBountyId.result?.toString(),
-        bountyId: bountyId?.toString(),
-        profileId: profileId?.toString(),
-        tokenId: tokenId?.toString(),
-        optionId: optionId.result?.toString(),
-        amountReceivable: amountReceivable?.toString(),
-        amountPayable: amountPayable?.toString(),
-        paidReceivable: paidReceivable?.toString(),
-        paidPayable: paidPayable?.toString(),
-        periodReceivable: periodReceivable?.toString(),
-        periodPayable: periodPayable?.toString(),
-        startPayable: startPayable?.toString(),
-        startReceivable: startReceivable?.toString(),
-        totalLiquidity: totalLiquidity.result?.toString(),
-        amountDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[0].toString() : BIG_ZERO,
-        amountDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[0].toString() : BIG_ZERO,
-        nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
-        nextDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[1].toString() : BIG_ZERO,
-        token: new Token(
-          chainId,
-          _token,
-          decimals.result,
-          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
-          name.result?.toString(),
-          `https://tokens.payswap.org/images/${_token}.png`,
-        ),
-        // allTokens.find((tk) => tk.address === token),
-      }
-    }),
+        return {
+          ...protocol,
+          notes: payableNotes,
+          protocolId,
+          isAutoChargeable: isAutoChargeable?.result,
+          adminBountyId: adminBountyId.result?.toString(),
+          bountyId: bountyId?.toString(),
+          profileId: profileId?.toString(),
+          tokenId: tokenId?.toString(),
+          optionId: optionId.result?.toString(),
+          amountReceivable: amountReceivable?.toString(),
+          amountPayable: amountPayable?.toString(),
+          paidReceivable: paidReceivable?.toString(),
+          paidPayable: paidPayable?.toString(),
+          periodReceivable: periodReceivable?.toString(),
+          periodPayable: periodPayable?.toString(),
+          startPayable: startPayable?.toString(),
+          startReceivable: startReceivable?.toString(),
+          totalLiquidity: totalLiquidity.result?.toString(),
+          amountDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[0].toString() : BIG_ZERO,
+          amountDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[0].toString() : BIG_ZERO,
+          nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
+          nextDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[1].toString() : BIG_ZERO,
+          token: new Token(
+            chainId,
+            _token,
+            decimals.result,
+            symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+            name.result?.toString(),
+            `https://tokens.payswap.org/images/${_token}.png`,
+          ),
+          // allTokens.find((tk) => tk.address === token),
+        }
+      }),
   )
   const collection = await getCollection(collectionId.result.toString())
   const receivableNotes = await Promise.all(

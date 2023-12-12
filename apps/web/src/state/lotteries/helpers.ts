@@ -2,15 +2,15 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_LOTTERIES } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { getCollection } from 'state/cancan/helpers'
-import { lotteryFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { getLotteryAddress, getLotteryHelperAddress } from 'utils/addressHelpers'
 import { lotteryABI } from 'config/abi/lottery'
 import { erc20ABI } from 'wagmi'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
 import { lotteryHelperABI } from 'config/abi/lotteryHelper'
+
+import { lotteryFields } from './queries'
 
 export const getTag = async () => {
   try {

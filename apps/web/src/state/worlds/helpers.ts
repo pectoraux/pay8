@@ -2,7 +2,6 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_WORLDS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { getCollection } from 'state/cancan/helpers'
-import { worldFields, protocolFields } from './queries'
 import { getWorldHelper2Address, getWorldHelper3Address, getWorldNoteAddress } from 'utils/addressHelpers'
 import { worldHelper2ABI } from 'config/abi/worldHelper2'
 import { publicClient } from 'utils/wagmi'
@@ -10,6 +9,8 @@ import { worldABI } from 'config/abi/world'
 import { worldNoteABI } from 'config/abi/worldNote'
 import { worldHelper3ABI } from 'config/abi/worldHelper3'
 import { erc20ABI } from 'wagmi'
+
+import { worldFields, protocolFields } from './queries'
 
 export const getTag = async () => {
   try {
@@ -104,7 +105,7 @@ export const getWorld = async (worldAddress) => {
 export const fetchWorld = async (worldAddress, chainId) => {
   const protocols = await getProtocol(worldAddress.toLowerCase())
   const world = (await getWorld(worldAddress.toLowerCase())) || []
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const worldNFTs = await Promise.all(
     world?.worldNFTs?.map(async (nft) => {
       const [owner] = await bscClient.multicall({
@@ -188,87 +189,89 @@ export const fetchWorld = async (worldAddress, chainId) => {
   })
   const collection = await getCollection(collectionId.result?.toString())
   const accounts = await Promise.all(
-    protocols.map(async (protocol) => {
-      const protocolId = protocol.id.split('_')[0]
-      const [protocolInfo, isAutoChargeable, nextDueReceivable] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: worldAddress,
-            abi: worldABI,
-            functionName: 'protocolInfo',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: worldAddress,
-            abi: worldABI,
-            functionName: 'isAutoChargeable',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: getWorldNoteAddress(),
-            abi: worldNoteABI,
-            functionName: 'getDueReceivable',
-            args: [worldAddress, BigInt(protocolId), BigInt(0)],
-          },
-        ],
-      })
-      const owner = protocolInfo.result[0]
-      const _token = protocolInfo.result[1]
-      const _bountyId = protocolInfo.result[2]
-      const amountReceivable = protocolInfo.result[3]
-      const paidReceivable = protocolInfo.result[4]
-      const periodReceivable = protocolInfo.result[5]
-      const startReceivable = protocolInfo.result[6]
-      const rating = protocolInfo.result[7]
-      const optionId = protocolInfo.result[8]
+    protocols
+      ?.filter((protocol) => protocol.active)
+      ?.map(async (protocol) => {
+        const protocolId = protocol.id.split('_')[0]
+        const [protocolInfo, isAutoChargeable, nextDueReceivable] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: worldAddress,
+              abi: worldABI,
+              functionName: 'protocolInfo',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: worldAddress,
+              abi: worldABI,
+              functionName: 'isAutoChargeable',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: getWorldNoteAddress(),
+              abi: worldNoteABI,
+              functionName: 'getDueReceivable',
+              args: [worldAddress, BigInt(protocolId), BigInt(0)],
+            },
+          ],
+        })
+        const owner = protocolInfo.result[0]
+        const _token = protocolInfo.result[1]
+        const _bountyId = protocolInfo.result[2]
+        const amountReceivable = protocolInfo.result[3]
+        const paidReceivable = protocolInfo.result[4]
+        const periodReceivable = protocolInfo.result[5]
+        const startReceivable = protocolInfo.result[6]
+        const rating = protocolInfo.result[7]
+        const optionId = protocolInfo.result[8]
 
-      const fromSg = protocols.find((data) => data.owner.toLowerCase() === owner.toLowerCase())
-      const [name, symbol, decimals] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'name',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'symbol',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'decimals',
-          },
-        ],
-      })
-      return {
-        ...fromSg,
-        owner,
-        protocolId,
-        isAutoChargeable: isAutoChargeable.result,
-        optionId: optionId.toString(),
-        bountyId: _bountyId.toString(),
-        amountReceivable: amountReceivable.toString(),
-        paidReceivable: paidReceivable.toString(),
-        periodReceivable: periodReceivable.toString(),
-        startReceivable: startReceivable.toString(),
-        dueReceivable: nextDueReceivable.result[0].toString(),
-        nextDueReceivable: nextDueReceivable.result[1].toString(),
-        rating: rating.toString(),
-        token: new Token(
-          chainId,
-          _token,
-          decimals.result ?? 18,
-          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
-          name.result?.toString(),
-          `https://tokens.payswap.org/images${symbol.result?.toString()?.toLowerCase()}`,
-        ),
-        // allTokens.find((tk) => tk.address === token),
-      }
-    }),
+        const fromSg = protocols.find((data) => data.owner.toLowerCase() === owner.toLowerCase())
+        const [name, symbol, decimals] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'decimals',
+            },
+          ],
+        })
+        return {
+          ...fromSg,
+          owner,
+          protocolId,
+          isAutoChargeable: isAutoChargeable.result,
+          optionId: optionId.toString(),
+          bountyId: _bountyId.toString(),
+          amountReceivable: amountReceivable.toString(),
+          paidReceivable: paidReceivable.toString(),
+          periodReceivable: periodReceivable.toString(),
+          startReceivable: startReceivable.toString(),
+          dueReceivable: nextDueReceivable.result[0].toString(),
+          nextDueReceivable: nextDueReceivable.result[1].toString(),
+          rating: rating.toString(),
+          token: new Token(
+            chainId,
+            _token,
+            decimals.result ?? 18,
+            symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+            name.result?.toString(),
+            `https://tokens.payswap.org/images${symbol.result?.toString()?.toLowerCase()}`,
+          ),
+          // allTokens.find((tk) => tk.address === token),
+        }
+      }),
   )
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
@@ -297,7 +300,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
 }
 
 export const fetchWorlds = async ({ chainId }) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [worldAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

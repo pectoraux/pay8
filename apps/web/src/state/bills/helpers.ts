@@ -247,202 +247,204 @@ export const fetchBill = async (billAddress, chainId) => {
   const collection = await getCollection(collectionId.result.toString())
   let payableNotes
   const accounts = await Promise.all(
-    bill?.protocols?.map(async (protocol) => {
-      const protocolId = protocol.id.split('_')[0]
-      const [protocolInfo, optionId, isAutoChargeable, heir] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'protocolInfo',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'optionId',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'isAutoChargeable',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'heir',
-            args: [BigInt(protocolId)],
-          },
-        ],
-      })
-      const _token = protocolInfo.result[0]
-      const version = protocolInfo.result[1]
-      const bountyId = protocolInfo.result[2]
-      const profileId = protocolInfo.result[3]
-      const credit = protocolInfo.result[4]
-      const debit = protocolInfo.result[5]
-      const startPayable = protocolInfo.result[6]
-      const startReceivable = protocolInfo.result[7]
-      const periodPayable = protocolInfo.result[8]
-      const periodReceivable = protocolInfo.result[9]
-      const creditFactor = protocolInfo.result[10]
-      const debitFactor = protocolInfo.result[11]
+    bill?.protocols
+      ?.filter((protocol) => protocol.active)
+      ?.map(async (protocol) => {
+        const protocolId = protocol.id.split('_')[0]
+        const [protocolInfo, optionId, isAutoChargeable, heir] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'protocolInfo',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'optionId',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'isAutoChargeable',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'heir',
+              args: [BigInt(protocolId)],
+            },
+          ],
+        })
+        const _token = protocolInfo.result[0]
+        const version = protocolInfo.result[1]
+        const bountyId = protocolInfo.result[2]
+        const profileId = protocolInfo.result[3]
+        const credit = protocolInfo.result[4]
+        const debit = protocolInfo.result[5]
+        const startPayable = protocolInfo.result[6]
+        const startReceivable = protocolInfo.result[7]
+        const periodPayable = protocolInfo.result[8]
+        const periodReceivable = protocolInfo.result[9]
+        const creditFactor = protocolInfo.result[10]
+        const debitFactor = protocolInfo.result[11]
 
-      const [
-        adminBountyId,
-        name,
-        symbol,
-        decimals,
-        totalLiquidity,
-        receivables,
-        payables,
-        media,
-        description,
-        userBountyRequired,
-        taxContract,
-      ] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'adminBountyId',
-            args: [_token],
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'name',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'symbol',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'decimals',
-          },
-          {
-            address: _token,
-            abi: erc20ABI,
-            functionName: 'balanceOf',
-            args: [billAddress],
-          },
-          {
-            address: getBILLNoteAddress(),
-            abi: billNoteABI,
-            functionName: 'getDueReceivable',
-            args: [billAddress, BigInt(protocolId)],
-          },
-          {
-            address: getBILLNoteAddress(),
-            abi: billNoteABI,
-            functionName: 'getDuePayable',
-            args: [billAddress, BigInt(protocolId)],
-          },
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'adminBountyId',
-            args: [_token],
-          },
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'media',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'description',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'userBountyRequired',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: billAddress,
-            abi: billABI,
-            functionName: 'taxContract',
-            args: [BigInt(protocolId)],
-          },
-        ],
-      })
-      payableNotes = await Promise.all(
-        protocol?.notes?.map(async (note) => {
-          const [owner, metadatUrl] = await bscClient.multicall({
-            allowFailure: true,
-            contracts: [
-              {
-                address: getBILLNoteAddress(),
-                abi: billNoteABI,
-                functionName: 'ownerOf',
-                args: [BigInt(note?.id)],
-              },
-              {
-                address: getBILLNoteAddress(),
-                abi: billNoteABI,
-                functionName: 'tokenURI',
-                args: [BigInt(note?.id)],
-              },
-            ],
-          })
-          return {
-            ...note,
-            metadataUrl: metadatUrl.result,
-            owner: owner.result,
-          }
-        }),
-      )
-      return {
-        ...protocol,
-        notes: payableNotes,
-        protocolId,
-        heir: heir.result?.toString(),
-        isAutoChargeable: isAutoChargeable.result,
-        adminBountyId: adminBountyId.result.toString(),
-        bountyId: bountyId.toString(),
-        profileId: profileId.toString(),
-        version: version.toString(),
-        optionId: optionId.result.toString(),
-        credit: credit.toString(),
-        debit: debit.toString(),
-        creditFactor: creditFactor.toString(),
-        debitFactor: debitFactor.toString(),
-        periodReceivable: periodReceivable.toString(),
-        periodPayable: periodPayable.toString(),
-        startPayable: startPayable.toString(),
-        startReceivable: startReceivable.toString(),
-        totalLiquidity: totalLiquidity.result.toString(),
-        dueReceivable: receivables.result[0].toString(),
-        nextDueReceivable: receivables.result[1].toString(),
-        duePayable: payables.result[0].toString(),
-        nextDuePayable: payables.result[1].toString(),
-        bountyRequired: bountyRequired.result?.toString(),
-        media: media.result?.toString(),
-        description: description.result?.toString(),
-        userBountyRequired: userBountyRequired.result?.toString(),
-        taxContract: taxContract.result?.toString(),
-        token: new Token(
-          chainId,
-          _token,
-          decimals.result,
-          symbol.result?.toString()?.toUpperCase() ?? 'symbol',
-          name.result?.toString() ?? 'name',
-          'https://www.payswap.org/',
-        ),
-        // allTokens.find((tk) => tk.address === token),
-      }
-    }),
+        const [
+          adminBountyId,
+          name,
+          symbol,
+          decimals,
+          totalLiquidity,
+          receivables,
+          payables,
+          media,
+          description,
+          userBountyRequired,
+          taxContract,
+        ] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'adminBountyId',
+              args: [_token],
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'decimals',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'balanceOf',
+              args: [billAddress],
+            },
+            {
+              address: getBILLNoteAddress(),
+              abi: billNoteABI,
+              functionName: 'getDueReceivable',
+              args: [billAddress, BigInt(protocolId)],
+            },
+            {
+              address: getBILLNoteAddress(),
+              abi: billNoteABI,
+              functionName: 'getDuePayable',
+              args: [billAddress, BigInt(protocolId)],
+            },
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'adminBountyId',
+              args: [_token],
+            },
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'media',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'description',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'userBountyRequired',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: billAddress,
+              abi: billABI,
+              functionName: 'taxContract',
+              args: [BigInt(protocolId)],
+            },
+          ],
+        })
+        payableNotes = await Promise.all(
+          protocol?.notes?.map(async (note) => {
+            const [owner, metadatUrl] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: getBILLNoteAddress(),
+                  abi: billNoteABI,
+                  functionName: 'ownerOf',
+                  args: [BigInt(note?.id)],
+                },
+                {
+                  address: getBILLNoteAddress(),
+                  abi: billNoteABI,
+                  functionName: 'tokenURI',
+                  args: [BigInt(note?.id)],
+                },
+              ],
+            })
+            return {
+              ...note,
+              metadataUrl: metadatUrl.result,
+              owner: owner.result,
+            }
+          }),
+        )
+        return {
+          ...protocol,
+          notes: payableNotes,
+          protocolId,
+          heir: heir.result?.toString(),
+          isAutoChargeable: isAutoChargeable.result,
+          adminBountyId: adminBountyId.result.toString(),
+          bountyId: bountyId.toString(),
+          profileId: profileId.toString(),
+          version: version.toString(),
+          optionId: optionId.result.toString(),
+          credit: credit.toString(),
+          debit: debit.toString(),
+          creditFactor: creditFactor.toString(),
+          debitFactor: debitFactor.toString(),
+          periodReceivable: periodReceivable.toString(),
+          periodPayable: periodPayable.toString(),
+          startPayable: startPayable.toString(),
+          startReceivable: startReceivable.toString(),
+          totalLiquidity: totalLiquidity.result.toString(),
+          dueReceivable: receivables.result[0].toString(),
+          nextDueReceivable: receivables.result[1].toString(),
+          duePayable: payables.result[0].toString(),
+          nextDuePayable: payables.result[1].toString(),
+          bountyRequired: bountyRequired.result?.toString(),
+          media: media.result?.toString(),
+          description: description.result?.toString(),
+          userBountyRequired: userBountyRequired.result?.toString(),
+          taxContract: taxContract.result?.toString(),
+          token: new Token(
+            chainId,
+            _token,
+            decimals.result,
+            symbol.result?.toString()?.toUpperCase() ?? 'symbol',
+            name.result?.toString() ?? 'name',
+            'https://www.payswap.org/',
+          ),
+          // allTokens.find((tk) => tk.address === token),
+        }
+      }),
   )
 
   const receivableNotes = await Promise.all(

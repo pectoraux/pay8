@@ -2,13 +2,14 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_WILLS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { getCollection } from 'state/cancan/helpers'
-import { willFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { erc20ABI } from 'wagmi'
 import { willABI } from 'config/abi/will'
 import { getWillNoteAddress } from 'utils/addressHelpers'
 import { willNoteABI } from 'config/abi/willNote'
 import BigNumber from 'bignumber.js'
+
+import { willFields, protocolFields } from './queries'
 
 export const getTag = async () => {
   try {
@@ -125,7 +126,7 @@ export const getWills = async (first = 5, skip = 0, where) => {
 
 export const fetchWill = async (willAddress, chainId) => {
   const will = await getWill(willAddress.toLowerCase())
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const tokens = await Promise.all(
     will?.tokens?.map(async (token) => {
       const [name, symbol, decimals, totalLiquidity] = await bscClient.multicall({
@@ -197,156 +198,158 @@ export const fetchWill = async (willAddress, chainId) => {
 
   const collection = await getCollection(collectionId.result.toString())
   const accounts = await Promise.all(
-    will?.protocols?.map(async (protocol) => {
-      const protocolId = protocol.id.split('_')[0]
-      const [protocolInfo, locked] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: willAddress,
-            abi: willABI,
-            functionName: 'protocolInfo',
-            args: [BigInt(protocolId)],
-          },
-          {
-            address: willAddress,
-            abi: willABI,
-            functionName: 'locked',
-            args: [BigInt(protocolId)],
-          },
-        ],
-      })
-      const createdAt = protocolInfo.result[0]
-      const updatedAt = protocolInfo.result[1]
-      const media = protocolInfo.result[2]
-      const description = protocolInfo.result[3]
+    will?.protocols
+      ?.filter((protocol) => protocol.active)
+      ?.map(async (protocol) => {
+        const protocolId = protocol.id.split('_')[0]
+        const [protocolInfo, locked] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: willAddress,
+              abi: willABI,
+              functionName: 'protocolInfo',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: willAddress,
+              abi: willABI,
+              functionName: 'locked',
+              args: [BigInt(protocolId)],
+            },
+          ],
+        })
+        const createdAt = protocolInfo.result[0]
+        const updatedAt = protocolInfo.result[1]
+        const media = protocolInfo.result[2]
+        const description = protocolInfo.result[3]
 
-      const _tokens = await Promise.all(
-        protocol?.percentages?.map(async (perct, idx) => {
-          const [tk] = await bscClient.multicall({
-            allowFailure: true,
-            contracts: [
-              {
-                address: willAddress,
-                abi: willABI,
-                functionName: 'tokens',
-                args: [BigInt(protocolId), idx],
-              },
-            ],
-          })
-          return tk.result
-        }),
-      )
-      const percentages = protocol?.percentages?.map((percentage) => parseInt(percentage) / 100)
-      const tokenData = await Promise.all(
-        _tokens?.map(async (token) => {
-          const [
-            totalLiquidity,
-            tokenName,
-            decimals,
-            symbol,
-            willActivePeriod,
-            balanceOf,
-            totalRemoved,
-            tokenType,
-            _adminBountyId,
-            totalProcessed,
-          ] = await bscClient.multicall({
-            allowFailure: true,
-            contracts: [
-              {
-                address: token,
-                abi: erc20ABI,
-                functionName: 'balanceOf',
-                args: [willAddress],
-              },
-              {
-                address: token,
-                abi: erc20ABI,
-                functionName: 'name',
-              },
-              {
-                address: token,
-                abi: erc20ABI,
-                functionName: 'decimals',
-              },
-              {
-                address: token,
-                abi: erc20ABI,
-                functionName: 'symbol',
-              },
-              {
-                address: willAddress,
-                abi: willABI,
-                functionName: 'willActivePeriod',
-                args: [token],
-              },
-              {
-                address: willAddress,
-                abi: willABI,
-                functionName: 'balanceOf',
-                args: [token],
-              },
-              {
-                address: willAddress,
-                abi: willABI,
-                functionName: 'totalRemoved',
-                args: [token],
-              },
-              {
-                address: willAddress,
-                abi: willABI,
-                functionName: 'tokenType',
-                args: [token],
-              },
-              {
-                address: willAddress,
-                abi: willABI,
-                functionName: 'adminBountyId',
-                args: [token],
-              },
-              {
-                address: willAddress,
-                abi: willABI,
-                functionName: 'totalProcessed',
-                args: [token],
-              },
-            ],
-          })
-          return {
-            willActivePeriod: willActivePeriod.result.toString(),
-            balanceOf: balanceOf.result.toString(),
-            totalRemoved: totalRemoved.result.toString(),
-            adminBountyId: _adminBountyId.result.toString(),
-            totalProcessed: totalProcessed.result.toString(),
-            totalLiquidity: totalLiquidity.result.toString(),
-            tokenType: tokenType.result,
-            token: new Token(
-              chainId,
-              token,
-              decimals.result,
-              symbol.result?.toString(),
-              tokenName.result?.toString(),
-              `https://tokens.payswap.org/images/${token}.png`,
-            ),
-          }
-        }),
-      )
+        const _tokens = await Promise.all(
+          protocol?.percentages?.map(async (perct, idx) => {
+            const [tk] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: willAddress,
+                  abi: willABI,
+                  functionName: 'tokens',
+                  args: [BigInt(protocolId), idx],
+                },
+              ],
+            })
+            return tk.result
+          }),
+        )
+        const percentages = protocol?.percentages?.map((percentage) => parseInt(percentage) / 100)
+        const tokenData = await Promise.all(
+          _tokens?.map(async (token) => {
+            const [
+              totalLiquidity,
+              tokenName,
+              decimals,
+              symbol,
+              willActivePeriod,
+              balanceOf,
+              totalRemoved,
+              tokenType,
+              _adminBountyId,
+              totalProcessed,
+            ] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: token,
+                  abi: erc20ABI,
+                  functionName: 'balanceOf',
+                  args: [willAddress],
+                },
+                {
+                  address: token,
+                  abi: erc20ABI,
+                  functionName: 'name',
+                },
+                {
+                  address: token,
+                  abi: erc20ABI,
+                  functionName: 'decimals',
+                },
+                {
+                  address: token,
+                  abi: erc20ABI,
+                  functionName: 'symbol',
+                },
+                {
+                  address: willAddress,
+                  abi: willABI,
+                  functionName: 'willActivePeriod',
+                  args: [token],
+                },
+                {
+                  address: willAddress,
+                  abi: willABI,
+                  functionName: 'balanceOf',
+                  args: [token],
+                },
+                {
+                  address: willAddress,
+                  abi: willABI,
+                  functionName: 'totalRemoved',
+                  args: [token],
+                },
+                {
+                  address: willAddress,
+                  abi: willABI,
+                  functionName: 'tokenType',
+                  args: [token],
+                },
+                {
+                  address: willAddress,
+                  abi: willABI,
+                  functionName: 'adminBountyId',
+                  args: [token],
+                },
+                {
+                  address: willAddress,
+                  abi: willABI,
+                  functionName: 'totalProcessed',
+                  args: [token],
+                },
+              ],
+            })
+            return {
+              willActivePeriod: willActivePeriod.result.toString(),
+              balanceOf: balanceOf.result.toString(),
+              totalRemoved: totalRemoved.result.toString(),
+              adminBountyId: _adminBountyId.result.toString(),
+              totalProcessed: totalProcessed.result.toString(),
+              totalLiquidity: totalLiquidity.result.toString(),
+              tokenType: tokenType.result,
+              token: new Token(
+                chainId,
+                token,
+                decimals.result,
+                symbol.result?.toString(),
+                tokenName.result?.toString(),
+                `https://tokens.payswap.org/images/${token}.png`,
+              ),
+            }
+          }),
+        )
 
-      return {
-        ...protocol,
-        protocolId,
-        tokenData,
-        percentages,
-        media,
-        description,
-        locked: locked.result,
-        collectionId: collectionId.result.toString(),
-        createdAt: createdAt.toString(),
-        updatedAt: updatedAt.toString(),
-        // allTokens.find((tk) => tk.address === token),
-      }
-    }),
+        return {
+          ...protocol,
+          protocolId,
+          tokenData,
+          percentages,
+          media,
+          description,
+          locked: locked.result,
+          collectionId: collectionId.result.toString(),
+          createdAt: createdAt.toString(),
+          updatedAt: updatedAt.toString(),
+          // allTokens.find((tk) => tk.address === token),
+        }
+      }),
   )
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
@@ -367,7 +370,7 @@ export const fetchWill = async (willAddress, chainId) => {
 }
 
 export const fetchWills = async ({ fromWill, chainId }) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [willAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
