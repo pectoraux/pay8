@@ -165,7 +165,7 @@ const SetPriceStage: React.FC<any> = ({
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer style={{ paddingTop: '50px' }}>
+      <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
             {t('Is Paywall?')}

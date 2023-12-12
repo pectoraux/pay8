@@ -4,9 +4,10 @@ import { useTranslation } from '@pancakeswap/localization'
 import { getBlockExploreLink } from 'utils'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useGetIsUnique } from 'state/profile/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import { useGetIsUnique } from 'state/profile/hooks'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -42,51 +43,76 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       <ActionContent>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={pool?.blackLateSeconds} />
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              value={parseInt(pool?.blackLateSeconds ?? '0') / 60}
+            />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Black late Seconds')}
+              {t('Black late minutes')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={pool?.blackLateValue} />
+            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={getBalanceNumber(pool?.blackLateValue)} />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Black late Value')}
+              {t('Black late value')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={pool?.brownLateValue} />
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              value={parseInt(pool?.brownLateSeconds ?? '0') / 60}
+            />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Brown late Value')}
+              {t('Brown late minutes')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={pool?.brownLateValue} />
+            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={getBalanceNumber(pool?.brownLateValue)} />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Brown late Value')}
+              {t('Brown late value')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={pool?.silverLateValue} />
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              value={parseInt(pool?.silverLateSeconds ?? '0') / 60}
+            />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Silver late Value')}
+              {t('Silver late minutes')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={pool?.silverLateValue} />
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              value={getBalanceNumber(pool?.silverLateValue)}
+            />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Silver late Value')}
+              {t('Silver late value')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={pool?.goldLateValue} />
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              value={parseInt(pool?.goldLateSeconds ?? '0') / 60}
+            />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Gold late Value')}
+              {t('Gold late minutes')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={pool?.goldLateValue} />
+            <Balance lineHeight="1" color="textSubtle" fontSize="12px" value={getBalanceNumber(pool?.goldLateValue)} />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Gold late Value')}
+              {t('Gold late value')}
             </Text>
           </Box>
         </Flex>
