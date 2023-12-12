@@ -168,7 +168,7 @@ const SetPriceStage: React.FC<any> = ({
       <GreyedOutContainer style={{ paddingTop: '50px' }}>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Status')}
+            {t('Is Paywall?')}
           </Text>
           <ButtonMenu
             scale="xs"
