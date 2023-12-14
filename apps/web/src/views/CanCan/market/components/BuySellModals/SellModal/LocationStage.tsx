@@ -109,6 +109,13 @@ const LocationStage: React.FC<any> = ({
       )}
     </Text>
   )
+  const TooltipComponent9 = () => (
+    <Text>
+      {t(
+        "PaySwap enables you to list forms for your clients to fill as well. You can create a form for a quiz or other things using google form. Once you're done, copy the embed code of your newly created form and paste it here",
+      )}
+    </Text>
+  )
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
@@ -167,6 +174,14 @@ const LocationStage: React.FC<any> = ({
     tooltip: tooltip8,
     tooltipVisible: tooltipVisible8,
   } = useTooltip(<TooltipComponent8 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef9,
+    tooltip: tooltip9,
+    tooltipVisible: tooltipVisible9,
+  } = useTooltip(<TooltipComponent9 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
@@ -282,11 +297,11 @@ const LocationStage: React.FC<any> = ({
             ) : (
               <>
                 <GreyedOutContainer>
-                  <Flex ref={targetRef5}>
+                  <Flex ref={targetRef9}>
                     <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
                       {t('Form code')}
                     </Text>
-                    {tooltipVisible5 && tooltip5}
+                    {tooltipVisible9 && tooltip9}
                     <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
                   </Flex>
                   <Input

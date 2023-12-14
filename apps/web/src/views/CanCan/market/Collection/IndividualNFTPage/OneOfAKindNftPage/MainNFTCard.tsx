@@ -145,28 +145,6 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     }
   })
 
-  if (contentType === 'form') {
-    return (
-      <Card mb="40px">
-        <CardBody>
-          <Container flexDirection={['column-reverse', null, 'row']}>
-            <Flex flex="2">
-              <Box>
-                <BackLink to={`${cancanBaseUrl}/collections/${collectionId}`}>
-                  <ChevronLeftIcon color="primary" width="24px" />
-                  {t('All Items')}
-                </BackLink>
-                <Text fontSize="40px" bold mt="12px">
-                  {isMobile ? '' : nft.tokenId}
-                </Text>
-              </Box>
-            </Flex>
-          </Container>
-        </CardBody>
-        <RichText readOnly value={mp4} id="rte" />
-      </Card>
-    )
-  }
   return (
     <Card mb="40px">
       <CardBody>
@@ -368,6 +346,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
           </StatBox>
         </MarketPageTitle>
       </CardBody>
+      {contentType === 'form' ? <RichText readOnly value={mp4} id="rte" /> : null}
     </Card>
   )
 }
