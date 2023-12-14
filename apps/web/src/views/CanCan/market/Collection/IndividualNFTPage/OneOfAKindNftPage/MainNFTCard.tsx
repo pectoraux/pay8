@@ -13,7 +13,7 @@ import {
   Heading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useColor } from 'hooks/useColor'
@@ -24,12 +24,11 @@ import { useWorkspaceCurrency } from 'hooks/Tokens'
 import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
-import { getThumbnailNContent } from 'utils/cancan'
-import { useState } from 'react'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
-import { useGetOrder } from 'state/cancan/hooks'
+import { useGetOrder, useGetThumbnailNContent } from 'state/cancan/hooks'
 import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import RichText from 'components/RichText'
 
 import MarketPageTitle from '../../../components/MarketPageTitle'
 import StatBox, { StatBoxItem } from '../../../components/StatBox'
@@ -75,7 +74,8 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     priceInSecondaryCurrency,
   } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   const { isMobile } = useMatchBreakpoints()
-  const { isArticle } = getThumbnailNContent(nft)
+  const { mp4, isArticle, contentType } = useGetThumbnailNContent(nft)
+  // const { isArticle } = getThumbnailNContent(nft)
   const [bought, setBought] = useState(false)
   const contactChannels = collection?.contactChannels?.split(',') ?? []
   const contacts = collection?.contacts?.split(',') ?? []
@@ -94,7 +94,6 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     0,
   )
   const { days, hours, minutes } = getTimePeriods(diff ?? 0)
-  console.log('bidPrice===================>', bidPrice, askOrder)
   const isDrop = parseInt(askOrder?.dropinTimer ?? '0')
   const diff2 = Math.max(
     differenceInSeconds(new Date(isDrop * 1000 ?? 0), new Date(), {
@@ -145,6 +144,29 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
       ...option,
     }
   })
+
+  if (contentType === 'form') {
+    return (
+      <Card mb="40px">
+        <CardBody>
+          <Container flexDirection={['column-reverse', null, 'row']}>
+            <Flex flex="2">
+              <Box>
+                <BackLink to={`${cancanBaseUrl}/collections/${collectionId}`}>
+                  <ChevronLeftIcon color="primary" width="24px" />
+                  {t('All Items')}
+                </BackLink>
+                <Text fontSize="40px" bold mt="12px">
+                  {isMobile ? '' : nft.tokenId}
+                </Text>
+              </Box>
+            </Flex>
+          </Container>
+        </CardBody>
+        <RichText readOnly value={mp4} id="rte" />
+      </Card>
+    )
+  }
   return (
     <Card mb="40px">
       <CardBody>

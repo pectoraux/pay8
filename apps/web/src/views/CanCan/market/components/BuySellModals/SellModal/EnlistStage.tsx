@@ -21,7 +21,6 @@ import Options from './Options'
 import { Divider } from '../shared/styles'
 import { GreyedOutContainer } from './styles'
 import Filters from './Filters'
-import { socials } from '@pancakeswap/uikit/src/components/Footer/config'
 
 // interface SetPriceStageProps {
 //   state: EnlistFormState

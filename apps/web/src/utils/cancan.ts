@@ -1,10 +1,34 @@
 import NodeRSA from 'encrypt-rsa'
 
 export function getThumbnailNContent(nft) {
-  let chunks = nft?.images && nft?.images?.split(',')
+  const chunks = nft?.images && nft?.images?.split(',')
   let thumbnail
   let mp4
   try {
+    if (chunks?.length && chunks[0] === 'img') {
+      return {
+        mp4: chunks[1],
+        thumbnail: chunks[1],
+        isArticle: false,
+        contentType: chunks[0],
+      }
+    }
+    if (chunks?.length && chunks[0] === 'video') {
+      return {
+        mp4: chunks[2],
+        thumbnail: chunks[1],
+        isArticle: false,
+        contentType: chunks[0],
+      }
+    }
+    if (chunks?.length && chunks[0] === 'form') {
+      return {
+        mp4: chunks[2],
+        thumbnail: chunks[1],
+        isArticle: false,
+        contentType: chunks[0],
+      }
+    }
     // process article
     thumbnail = chunks[0]
     mp4 = chunks.slice(1).join(',')

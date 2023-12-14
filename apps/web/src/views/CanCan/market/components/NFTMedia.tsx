@@ -53,7 +53,7 @@ const NFTMedia: FC<any> = ({
   const [loaded, setLoaded] = useState(Math.max(100, Math.ceil((5 * 100) / chks?.length)))
   // const { data: _article, refetch, status } = useDecryptArticle2(chks, 10)
   const _article = ''
-  let { mp4, thumbnail, isArticle } = useGetThumbnailNContent(nft)
+  const { mp4, thumbnail, isArticle } = useGetThumbnailNContent(nft)
   const paywallId = useRouter().query.paywallId as any
   const [article, setArticle] = useState(_article ?? '')
   const { data: article2, status: status2, refetch } = useDecryptArticle2(chks, cursor)
@@ -66,13 +66,13 @@ const NFTMedia: FC<any> = ({
   )
   useEffect(() => {
     if (!showThumbnail && isArticle && !article?.length) setArticle(_article)
-  }, [isArticle, article])
+  }, [isArticle, article, showThumbnail])
 
   useEffect(() => {
     if (!showThumbnail && article2?.length) {
       setArticle(article + article2)
     }
-  }, [article2])
+  }, [article, article2, showThumbnail])
 
   let _thumbnail = thumbnail
   let _mp4 = article
@@ -85,6 +85,7 @@ const NFTMedia: FC<any> = ({
     }
     if (tokenURI?.metadataUrl) {
       return <Iframe url={tokenURI.metadataUrl} height="500px" id="myId" />
+      // eslint-disable-next-line no-else-return
     } else if (media) {
       return (
         <RichTextEditor

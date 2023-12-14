@@ -2,12 +2,13 @@
 marketplace discounts/cashback
 option for subscriptions confuses yearly & regular
 tags
-* Reimburse Loan
 profile bids & crushes
 credit reports on profiles
+games with valuepool
+forms & video 
 
 stakes enable you to pay in instalments considering you've described your payment plan in your stake's terms and the seller still applied to your stake 
-
+users can track their purchases on the marketplaces from the NFTickets' section of their profile page
 you cannot withdraw from stake unless agreement is good for all parties
 you have to select the parent stake before applying to a stake partnership
 

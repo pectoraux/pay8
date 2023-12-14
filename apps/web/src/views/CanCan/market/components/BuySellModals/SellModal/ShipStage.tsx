@@ -23,18 +23,18 @@ import {
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { SellingStage, OptionType, EnlistFormState } from './types'
+import { useGetPaywallARP } from 'state/cancan/hooks'
+import { encryptArticle } from 'utils/cancan'
+import { combineDateAndTime } from 'views/ValuePoolVoting/CreateProposal/helpers'
+
+import { SellingStage, OptionType } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
 import EnlistStage from './EnlistStage'
 import LocationStage from './LocationStage'
 import TaskStage from './TaskStage'
-import ProgressSteps from '../../ProgressSteps'
 import AvatarImage from '../../BannerHeader/AvatarImage'
 import PublishMediaStage from './PublishMediaStage'
-import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
-import { useGetPaywallARP } from 'state/cancan/hooks'
-import { encryptArticle } from 'utils/cancan'
-import { combineDateAndTime } from 'views/ValuePoolVoting/CreateProposal/helpers'
+import { stagesWithBackButton, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 
 interface EditStageProps {
   variant: 'product' | 'paywall' | 'article'
@@ -115,6 +115,7 @@ const EditStage: React.FC<any> = ({
     ABTesting: 0,
     ABMin: 0,
     ABMax: 0,
+    mediaType: articleState?.tokenId?.trim()?.length() ? 4 : 0,
     bidDuration: articleState?.bidDuration ?? '0',
     minBidIncrementPercentage: articleState?.minBidIncrementPercentage ?? '0',
     rsrcTokenId: articleState?.rsrcTokenId ?? '0',
@@ -326,7 +327,7 @@ const EditStage: React.FC<any> = ({
             return res
           })
           .then(() => {
-            let args = [
+            const args2 = [
               state.tokenId?.split(' ')?.join('-')?.trim(),
               state.description,
               state.prices?.split(',')?.filter((val) => !!val),
@@ -342,7 +343,7 @@ const EditStage: React.FC<any> = ({
                 : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
             ]
             console.log('7CONFIRM_CREATE_PAYWALL2==============>')
-            return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args).catch((err) =>
+            return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args2).catch((err) =>
               console.log('CONFIRM_ADD_LOCATION================>', err),
             )
           })
@@ -350,6 +351,13 @@ const EditStage: React.FC<any> = ({
       }
       if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
         let content
+        const contentType = !state.mediaType
+          ? 'img'
+          : state.mediaType === 1
+          ? 'video'
+          : state.mediaType === 2
+          ? 'form'
+          : 'article'
         console.log('CONFIRM_CREATE_ASK_ORDER==============>')
         const currentAskPrice = getDecimalAmount(new BigNumber(state.currentAskPrice))
         const time = combineDateAndTime(state.dropinDate, state.startTime)?.toString()
@@ -416,11 +424,11 @@ const EditStage: React.FC<any> = ({
                 img0 = state.thumbnail
                 img1 = encryptArticle(encryptRsa, state.original)
               }
-              content = `${img0},${img1}`
+              content = `${contentType},${img0},${img1}`
             } else {
-              content = `${state.thumbnail},${state.original}`
+              content = `${contentType},${state.thumbnail},${state.original}`
             }
-            let args = [
+            const args = [
               state.tokenId?.split(' ')?.join('-')?.trim(),
               state.description,
               state.prices?.split(',')?.filter((val) => !!val),

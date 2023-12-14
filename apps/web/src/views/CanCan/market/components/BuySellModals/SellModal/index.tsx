@@ -2,9 +2,8 @@ import { useRouter } from 'next/router'
 import { useState, ChangeEvent } from 'react'
 import { differenceInSeconds } from 'date-fns'
 import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
-import { getBalanceAmount, getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
@@ -30,12 +29,13 @@ import { decryptContent, getThumbnailNContent } from 'utils/cancan'
 import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
 import { getSSIContract } from 'utils/contractHelpers'
 import { getMarketHelperAddress, getPaywallMarketHelperAddress } from 'utils/addressHelpers'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import EditStage from './EditStage'
 import SetPriceStage from './SetPriceStage'
 import SetOptionsStage from './SetOptionsStage'
 import { StyledModal, stagesWithBackButton } from './styles'
-import { SellingStage, OptionType, FormState, ARRAY_KEYS } from './types'
+import { SellingStage, OptionType } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
 import RemoveStage from './RemoveStage'
 import IdentityRequirementStage from './IdentityRequirementStage'
@@ -48,7 +48,6 @@ import ResetCashbackLimits from './ResetCashbackLimits'
 import TimeEstimationStage from './TimeEstimationStage'
 import ReclaimCashbackStage from './ReclaimCashbackStage'
 import LocationStage from './LocationStage'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const modalTitles = (t: TranslateFunction) => ({
   [SellingStage.EDIT]: t('Price Settings'),
@@ -136,7 +135,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
   })
   console.log('options=============>', options)
   const { account } = useWeb3React()
-  let { mp4, thumbnail } = getThumbnailNContent(nftToSell)
+  const { mp4, thumbnail } = getThumbnailNContent(nftToSell)
   const paywallARP = useGetPaywallARP(nftToSell?.collection?.id ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
@@ -222,6 +221,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     add: 0,
     profileId: '',
     proofType: 0,
+    mediaType: 0,
     itemTimeEstimate: '',
     options2: '',
     optionsTimeEstimates: '',
@@ -229,10 +229,8 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
   console.log('state================>', nftToSell)
   const [stage, setStage] = useState(SellingStage.EDIT)
   const [price, setPrice] = useState(nftToSell?.currentAskPrice)
-  const [burnForCreditToken, setBurnForCreditToken] = useState('')
   const [paymentCredits, setPaymentCredits] = useState('')
   const [creditUsers, setCreditUsers] = useState('')
-  const [discountNumber, setDiscountNumber] = useState(0)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
   const { t } = useTranslation()

@@ -8,20 +8,21 @@ import {
   AutoRenewIcon,
   ButtonMenu,
   ButtonMenuItem,
-  Grid,
   useTooltip,
   HelpIcon,
 } from '@pancakeswap/uikit'
+// eslint-disable-next-line lodash/import-scope
+import { noop } from 'lodash'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
 import capitalize from 'lodash/capitalize'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import RichTextEditor from 'components/RichText'
+
 import Filters from './Filters'
 import { GreyedOutContainer } from './styles'
-import { Divider, RoundedImage } from '../shared/styles'
-import { noop } from 'lodash'
+import { Divider } from '../shared/styles'
 
 interface RemoveStageProps {
   variant: 'product' | 'paywall'
@@ -31,16 +32,14 @@ interface RemoveStageProps {
 const LocationStage: React.FC<any> = ({
   state,
   paywallId,
-  thumbnail,
-  nftToSell,
   collection,
-  collectionId,
   variant,
   updateValue,
   nftFilters,
   setNftFilters,
   handleChange,
   continueToNextStage,
+  handleRawValueChange,
   show = false,
 }) => {
   const { t } = useTranslation()
@@ -67,7 +66,7 @@ const LocationStage: React.FC<any> = ({
           })
           .catch(() => reject(new Error('Upload failed')))
       }),
-    [],
+    [updateValue],
   )
 
   const TooltipComponent = () => (
@@ -219,44 +218,106 @@ const LocationStage: React.FC<any> = ({
               />
             </GreyedOutContainer>
             <GreyedOutContainer>
-              <Flex ref={targetRef2}>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Link to Video')}
-                </Text>
-                {tooltipVisible2 && tooltip2}
-                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-              </Flex>
-              <RichTextEditor
-                id="original"
-                value={value}
-                onChange={(e) => {
-                  updateValue('original', e)
-                  onChange(e)
-                }}
-                controls={[['video']]}
-              />
+              <Text
+                fontSize="12px"
+                color="secondary"
+                textTransform="uppercase"
+                paddingTop="3px"
+                paddingRight="50px"
+                bold
+              >
+                {t('Media Type')}
+              </Text>
+              <ButtonMenu
+                scale="xs"
+                variant="subtle"
+                activeIndex={state.mediaType}
+                onItemClick={handleRawValueChange('mediaType')}
+              >
+                <ButtonMenuItem>{t('Image')}</ButtonMenuItem>
+                <ButtonMenuItem>{t('Video')}</ButtonMenuItem>
+                <ButtonMenuItem>{t('Form')}</ButtonMenuItem>
+              </ButtonMenu>
             </GreyedOutContainer>
-            <GreyedOutContainer>
-              <Flex ref={targetRef3}>
-                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Image')}
-                </Text>
-                {tooltipVisible3 && tooltip3}
-                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-              </Flex>
-              <StyledItemRow>
-                <ButtonMenu
-                  scale="xs"
-                  variant="subtle"
-                  activeIndex={activeButtonIndex3}
-                  onItemClick={setActiveButtonIndex3}
-                >
-                  <ButtonMenuItem>{t('Upload')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Link')}</ButtonMenuItem>
-                </ButtonMenu>
-              </StyledItemRow>
-            </GreyedOutContainer>
-            {activeButtonIndex3 ? (
+            {state.mediaType === 1 ? (
+              <GreyedOutContainer>
+                <Flex ref={targetRef2}>
+                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                    {t('Link to Video')}
+                  </Text>
+                  {tooltipVisible2 && tooltip2}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
+                <RichTextEditor
+                  id="original"
+                  value={value}
+                  onChange={(e) => {
+                    updateValue('original', e)
+                    onChange(e)
+                  }}
+                  controls={[['video']]}
+                />
+              </GreyedOutContainer>
+            ) : !state.mediaType ? (
+              <GreyedOutContainer>
+                <Flex ref={targetRef3}>
+                  <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                    {t('Image')}
+                  </Text>
+                  {tooltipVisible3 && tooltip3}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
+                <StyledItemRow>
+                  <ButtonMenu
+                    scale="xs"
+                    variant="subtle"
+                    activeIndex={activeButtonIndex3}
+                    onItemClick={setActiveButtonIndex3}
+                  >
+                    <ButtonMenuItem>{t('Upload')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('Link')}</ButtonMenuItem>
+                  </ButtonMenu>
+                </StyledItemRow>
+              </GreyedOutContainer>
+            ) : (
+              <>
+                <GreyedOutContainer>
+                  <Flex ref={targetRef5}>
+                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                      {t('Form code')}
+                    </Text>
+                    {tooltipVisible5 && tooltip5}
+                    <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                  </Flex>
+                  <Input
+                    type="text"
+                    scale="sm"
+                    name="original"
+                    value={state.original}
+                    placeholder={t('input form embed code')}
+                    onChange={handleChange}
+                  />
+                </GreyedOutContainer>
+                <GreyedOutContainer>
+                  <Flex ref={targetRef4}>
+                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                      {t('Link to Image/Gif')}
+                    </Text>
+                    {tooltipVisible4 && tooltip4}
+                    <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                  </Flex>
+                  <Input
+                    type="text"
+                    scale="sm"
+                    name="thumbnail"
+                    value={state.thumbnail}
+                    placeholder={t('input link to img/gif')}
+                    onChange={handleChange}
+                  />
+                </GreyedOutContainer>
+              </>
+            )}
+            {!state.mediaType && activeButtonIndex3 ? (
               <GreyedOutContainer>
                 <Flex ref={targetRef4}>
                   <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -274,7 +335,7 @@ const LocationStage: React.FC<any> = ({
                   onChange={handleChange}
                 />
               </GreyedOutContainer>
-            ) : (
+            ) : !state.mediaType ? (
               <GreyedOutContainer>
                 <Flex ref={targetRef5}>
                   <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -291,7 +352,7 @@ const LocationStage: React.FC<any> = ({
                   onImageUpload={handleThumbnailUpload}
                 />
               </GreyedOutContainer>
-            )}
+            ) : null}
             <GreyedOutContainer>
               <Flex ref={targetRef6}>
                 <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

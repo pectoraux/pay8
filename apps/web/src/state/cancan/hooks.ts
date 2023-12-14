@@ -573,11 +573,12 @@ export const useGetTimeEstimates = (collectionId, item, marketPlaceHelper, optio
 }
 
 export const useGetThumbnailNContent = (nft) => {
-  const { data } = useSWRImmutable(['useGetThumbnailNContent', nft?.id], async () => getThumbnailNContent(nft))
+  const { data } = useSWRImmutable(['useGetThumbnailNContent1', nft?.id], async () => getThumbnailNContent(nft))
   return {
     mp4: data?.mp4,
     thumbnail: data?.thumbnail,
     isArticle: data?.isArticle,
+    contentType: data?.contentType,
   }
 }
 
