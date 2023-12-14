@@ -9,6 +9,10 @@ import shuffle from 'lodash/shuffle'
 
 import fromPairs from 'lodash/fromPairs'
 import { getProfile } from 'state/profile/helpers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { decryptAllArticle, decryptArticle, decryptArticle2, getThumbnailNContent } from 'utils/cancan'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+
 import { ApiCollections, NftToken, NftAttribute, MarketEvent } from './types'
 import {
   getCollection,
@@ -49,9 +53,6 @@ import {
   getNftTokenForCredit,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { decryptAllArticle, decryptArticle, decryptArticle2, getThumbnailNContent } from 'utils/cancan'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const DEFAULT_NFT_ORDERING = { field: 'currentAskPrice', direction: 'asc' as 'asc' | 'desc' }
 const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
@@ -381,21 +382,17 @@ export const useGetItem = (collectionAddress: string, tokenId: string) => {
 }
 
 export const useGetCollectionId = (collectionAddress) => {
-  try {
-    const { chainId } = useActiveChainId()
-    const { data } = useSWR(
-      ['cancan-getCollectionId', collectionAddress, chainId],
-      async () => getCollectionId(collectionAddress, chainId),
-      {
-        revalidateIfStale: true,
-        revalidateOnFocus: true,
-        revalidateOnReconnect: false,
-      },
-    )
-    return data
-  } catch (err) {
-    console.log('useGetCollectionId err=============+>', err)
-  }
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(
+    ['cancan-getCollectionId', collectionAddress, chainId],
+    async () => getCollectionId(collectionAddress, chainId),
+    {
+      revalidateIfStale: true,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: false,
+    },
+  )
+  return data
 }
 
 export const useGetDiscounted = (

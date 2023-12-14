@@ -53,12 +53,14 @@ export function decryptContent(nft, thumbnail, mp4, ongoingSubscription, account
   ) {
     const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
     try {
+      // eslint-disable-next-line no-param-reassign
       mp4 = mp4
         ? nodeRSA.decryptStringWithRsaPrivateKey({
             text: mp4,
             privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
           })
         : ''
+      // eslint-disable-next-line no-param-reassign
       thumbnail = thumbnail
         ? nodeRSA.decryptStringWithRsaPrivateKey({
             text: thumbnail,
@@ -76,11 +78,12 @@ export function decryptContent(nft, thumbnail, mp4, ongoingSubscription, account
 }
 
 function chunkString(str, length) {
-  return str.match(new RegExp('.{1,' + length + '}', 'g'))
+  return str.match(new RegExp(`.{1,${length}}`, 'g'))
 }
 
 export const encryptArticle = (encryptRsa, str) => {
   const chks = chunkString(str, 400)
+  // eslint-disable-next-line array-callback-return
   const encryptedChks = chks?.map((chk, index) => {
     try {
       return chk
@@ -99,6 +102,7 @@ export const encryptArticle = (encryptRsa, str) => {
 export const decryptAllArticle = (chks) => {
   // chks = chks?.slice(0, 10)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
+  // eslint-disable-next-line array-callback-return
   const decryptedChks = chks?.map((chk, index) => {
     try {
       return chk
@@ -116,6 +120,7 @@ export const decryptAllArticle = (chks) => {
 
 export const decryptArticle = (chks) => {
   try {
+    // eslint-disable-next-line no-param-reassign
     chks = chks?.slice(0, 10)
     const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY_4096, process.env.NEXT_PUBLIC_PRIVATE_KEY_4096)
     const decryptedChks = chks?.map((chk, index) => {

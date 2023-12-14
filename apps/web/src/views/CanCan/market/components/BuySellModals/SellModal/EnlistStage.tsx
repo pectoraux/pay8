@@ -573,6 +573,7 @@ const EnlistStage: React.FC<any> = ({
           onClick={continueToNextStage}
           disabled={
             !state.usetFIAT ||
+            !state.tokenId?.split(' ')?.join('-')?.trim()?.length ||
             (variant === 'paywall' &&
               (!state.options.length ||
                 (state.options.length &&

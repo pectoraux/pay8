@@ -273,66 +273,46 @@ const LocationStage: React.FC<any> = ({
                   controls={[['video']]}
                 />
               </GreyedOutContainer>
-            ) : !state.mediaType ? (
+            ) : state.mediaType === 2 ? (
               <GreyedOutContainer>
-                <Flex ref={targetRef3}>
+                <Flex ref={targetRef9}>
                   <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                    {t('Image')}
+                    {t('Form code')}
                   </Text>
-                  {tooltipVisible3 && tooltip3}
+                  {tooltipVisible9 && tooltip9}
                   <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
                 </Flex>
-                <StyledItemRow>
-                  <ButtonMenu
-                    scale="xs"
-                    variant="subtle"
-                    activeIndex={activeButtonIndex3}
-                    onItemClick={setActiveButtonIndex3}
-                  >
-                    <ButtonMenuItem>{t('Upload')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('Link')}</ButtonMenuItem>
-                  </ButtonMenu>
-                </StyledItemRow>
+                <Input
+                  type="text"
+                  scale="sm"
+                  name="original"
+                  value={state.original}
+                  placeholder={t('input form embed code')}
+                  onChange={handleChange}
+                />
               </GreyedOutContainer>
-            ) : (
-              <>
-                <GreyedOutContainer>
-                  <Flex ref={targetRef9}>
-                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                      {t('Form code')}
-                    </Text>
-                    {tooltipVisible9 && tooltip9}
-                    <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-                  </Flex>
-                  <Input
-                    type="text"
-                    scale="sm"
-                    name="original"
-                    value={state.original}
-                    placeholder={t('input form embed code')}
-                    onChange={handleChange}
-                  />
-                </GreyedOutContainer>
-                <GreyedOutContainer>
-                  <Flex ref={targetRef4}>
-                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                      {t('Link to Image/Gif')}
-                    </Text>
-                    {tooltipVisible4 && tooltip4}
-                    <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-                  </Flex>
-                  <Input
-                    type="text"
-                    scale="sm"
-                    name="thumbnail"
-                    value={state.thumbnail}
-                    placeholder={t('input link to img/gif')}
-                    onChange={handleChange}
-                  />
-                </GreyedOutContainer>
-              </>
-            )}
-            {!state.mediaType && activeButtonIndex3 ? (
+            ) : null}
+            <GreyedOutContainer>
+              <Flex ref={targetRef3}>
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                  {t('Thumbnail Image')}
+                </Text>
+                {tooltipVisible3 && tooltip3}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
+              <StyledItemRow>
+                <ButtonMenu
+                  scale="xs"
+                  variant="subtle"
+                  activeIndex={activeButtonIndex3}
+                  onItemClick={setActiveButtonIndex3}
+                >
+                  <ButtonMenuItem>{t('Upload')}</ButtonMenuItem>
+                  <ButtonMenuItem>{t('Link')}</ButtonMenuItem>
+                </ButtonMenu>
+              </StyledItemRow>
+            </GreyedOutContainer>
+            {activeButtonIndex3 ? (
               <GreyedOutContainer>
                 <Flex ref={targetRef4}>
                   <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -350,7 +330,7 @@ const LocationStage: React.FC<any> = ({
                   onChange={handleChange}
                 />
               </GreyedOutContainer>
-            ) : !state.mediaType ? (
+            ) : (
               <GreyedOutContainer>
                 <Flex ref={targetRef5}>
                   <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -367,7 +347,7 @@ const LocationStage: React.FC<any> = ({
                   onImageUpload={handleThumbnailUpload}
                 />
               </GreyedOutContainer>
-            ) : null}
+            )}
             <GreyedOutContainer>
               <Flex ref={targetRef6}>
                 <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

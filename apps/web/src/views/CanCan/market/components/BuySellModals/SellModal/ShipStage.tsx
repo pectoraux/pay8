@@ -404,7 +404,7 @@ const EditStage: React.FC<any> = ({
           .then(() => {
             let img0
             let img1
-            if (!!paywallId) {
+            if (paywallId?.length > 0) {
               const encryptRsa = new EncryptRsa()
               if (state.thumbnail === state.original) {
                 img0 = state.thumbnail

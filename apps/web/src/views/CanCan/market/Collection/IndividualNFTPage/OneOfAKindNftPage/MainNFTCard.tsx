@@ -347,6 +347,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
         </MarketPageTitle>
       </CardBody>
       {contentType === 'form' ? <RichText readOnly value={mp4} id="rte" /> : null}
+      {contentType === 'video' ? <RichText readOnly value={mp4} id="rte" /> : null}
     </Card>
   )
 }

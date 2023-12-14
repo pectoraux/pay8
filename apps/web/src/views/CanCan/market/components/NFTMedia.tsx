@@ -1,27 +1,20 @@
-import NodeRSA from 'encrypt-rsa'
-import { AutoRenewIcon, Box, Button, Flex, Link, LinkExternal } from '@pancakeswap/uikit'
-import { FC, useEffect, useRef, useState } from 'react'
+import { Box, Button, Flex } from '@pancakeswap/uikit'
+import { FC, useEffect, useState } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import RichTextEditor from 'components/RichText'
 import {
-  useDecryptArticle,
   useDecryptArticle2,
   useGetPaywallARP,
   useGetSubscriptionStatus,
   useGetThumbnailNContent,
 } from 'state/cancan/hooks'
 import styled from 'styled-components'
-import { useAppDispatch } from 'state'
-import { useIntersectionObserver } from '@pancakeswap/hooks'
-import { useNftStorage } from 'state/nftMarket/storage'
-import { decryptArticle, decryptContent, getThumbnailNContent } from 'utils/cancan'
+import { decryptContent } from 'utils/cancan'
+import { useTranslation } from '@pancakeswap/localization'
+import Iframe from 'react-iframe'
+import { useRouter } from 'next/router'
 
 import { RoundedImage } from '../Collection/IndividualNFTPage/shared/styles'
-import { useTranslation } from '@pancakeswap/localization'
-import { FetchStatus } from 'config/constants/types'
-import Iframe from 'react-iframe'
-import { chainlinkOracleABI } from 'config/abi/chainlinkOracle'
-import { useRouter } from 'next/router'
 
 const StyledAspectRatio = styled(Box)`
   position: absolute;
@@ -53,7 +46,7 @@ const NFTMedia: FC<any> = ({
   const [loaded, setLoaded] = useState(Math.max(100, Math.ceil((5 * 100) / chks?.length)))
   // const { data: _article, refetch, status } = useDecryptArticle2(chks, 10)
   const _article = ''
-  const { mp4, thumbnail, isArticle } = useGetThumbnailNContent(nft)
+  const { mp4, thumbnail, isArticle, contentType } = useGetThumbnailNContent(nft)
   const paywallId = useRouter().query.paywallId as any
   const [article, setArticle] = useState(_article ?? '')
   const { data: article2, status: status2, refetch } = useDecryptArticle2(chks, cursor)
@@ -90,10 +83,14 @@ const NFTMedia: FC<any> = ({
       return (
         <RichTextEditor
           readOnly
-          value={`<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${media}" height="467" width="830"></iframe>`}
+          value={`<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${
+            media ?? mp4
+          }" height="467" width="830"></iframe>`}
           id="rte"
         />
       )
+    } else if (contentType === 'video') {
+      return <RichTextEditor readOnly value={mp4} id="rte" />
     } else if (isArticle) {
       if (!parseInt(nft?.behindPaywall)) {
         return <RichTextEditor value={mp4} readOnly id="rte" />
