@@ -12,7 +12,7 @@ import {
   useLotteryRandomNumberGenerator,
 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useMemo, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
@@ -39,6 +39,7 @@ import DrawFinalNumberStage from './DrawFinalNumberStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import CloseLotteryStage from './CloseLotteryStage'
 import BuyTicketStage from './BuyTicketStage'
+import { useGetTokenForCredit } from 'state/lottery/hooks'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -141,7 +142,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   const handleRawValueChange = (key: string) => (value: string | Date) => {
     updateValue(key, value)
   }
-  const tokenContract = useErc721CollectionContract(state.minter)
+  const burnForCreditTokens = useGetTokenForCredit(pool?.collectionId) as any
+  const burnForCreditToken = useMemo(
+    () => burnForCreditTokens?.length > state.position && burnForCreditTokens[state.position],
+    [burnForCreditTokens, state.position],
+  )
+  const tokenContract = useErc721CollectionContract(burnForCreditToken?.token?.address || '')
 
   const goBack = () => {
     switch (stage) {

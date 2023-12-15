@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import EncryptRsa from 'encrypt-rsa'
+import NodeRSA from 'encrypt-rsa'
 import { useState, useMemo, useEffect } from 'react'
 import { InjectedModalProps, Skeleton, useToast } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
@@ -20,7 +21,6 @@ import {
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { requiresApproval } from 'utils/requiresApproval'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { NftToken } from 'state/cancan/types'
 import {
@@ -30,15 +30,6 @@ import {
   useGetPaywallARP,
   useGetSubscriptionStatus,
 } from 'state/cancan/hooks'
-import { stagesWithBackButton, stagesWithApproveButton, stagesWithConfirmButton, StyledModal } from './styles'
-import ReviewStage from './ReviewStage'
-import PaywallReviewStage from './PaywallReviewStage'
-import ConfirmStage from '../shared/ConfirmStage'
-import ApproveAndConfirmStage from '../shared/ApproveAndConfirmStage'
-import { PaymentCurrency, BuyingStage } from './types'
-import TransactionConfirmed from '../shared/TransactionConfirmed'
-import PaymentCreditStage from './PaymentCreditStage'
-import CashbackStage from './CashbackStage'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
@@ -47,13 +38,20 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
 import { noop } from 'lodash'
 import { useGetRequiresApproval } from 'state/valuepools/hooks'
-import { getMarketEventsContract } from 'utils/contractHelpers'
 import { marketEventsABI } from 'config/abi/marketEvents'
 import { getCardAddress, getMarketEventsAddress } from 'utils/addressHelpers'
 import BigNumber from 'bignumber.js'
 import { cardABI } from 'config/abi/card'
 import { getCard } from 'state/cards/helpers'
-import NodeRSA from 'encrypt-rsa'
+
+import { stagesWithBackButton, stagesWithApproveButton, stagesWithConfirmButton, StyledModal } from './styles'
+import ReviewStage from './ReviewStage'
+import ConfirmStage from '../shared/ConfirmStage'
+import ApproveAndConfirmStage from '../shared/ApproveAndConfirmStage'
+import { PaymentCurrency, BuyingStage } from './types'
+import TransactionConfirmed from '../shared/TransactionConfirmed'
+import PaymentCreditStage from './PaymentCreditStage'
+import CashbackStage from './CashbackStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),

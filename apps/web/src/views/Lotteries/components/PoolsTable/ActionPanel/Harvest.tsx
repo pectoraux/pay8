@@ -1,9 +1,13 @@
-import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
+import BigNumber from 'bignumber.js'
+import { Text, Flex, Box, Balance, CopyAddress } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { useGetTokenForCredit } from 'state/lottery/hooks'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { Divider } from '../../styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUser }) => {
   const { t } = useTranslation()
@@ -12,6 +16,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
     hours: hoursReceivable,
     minutes: minutesReceivable,
   } = getTimePeriods(Number(pool?.lockDuration ?? '0'))
+  const burnForCreditTokens = useGetTokenForCredit(pool?.collectionId) as any
 
   const actionTitle = (
     <>
@@ -190,6 +195,45 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Winners Per Bracket')}
           </Text>
+          {burnForCreditTokens?.map((data, index) => (
+            <Flex flexDirection="column" justifyContent="center" alignItems="center">
+              <Text small bold color="textSubtle">
+                {t(`Token Position: ${index}`)}
+              </Text>
+              <Text small bold color="textSubtle">
+                {t(`Token Name: ${data.token?.name}`)}
+              </Text>
+              <Text small bold color="textSubtle">
+                {t(`Token Symbol: ${data.token?.symbol}`)}
+              </Text>
+              <Text small bold color="textSubtle">
+                {t(
+                  `Discount: ${
+                    data.checker !== ADDRESS_ZERO
+                      ? getBalanceNumber(new BigNumber(data.discount))
+                      : parseInt(data.discount ?? '0') / 100
+                  }`,
+                )}{' '}
+                {data.checker !== ADDRESS_ZERO ? 'USD' : '%'}
+              </Text>
+              <Text small bold color="textSubtle">
+                {t(`Collection ID: ${data.collectionId}`)}
+              </Text>
+              <Text small bold color="textSubtle">
+                {t(`Checker: `)}
+              </Text>
+              <CopyAddress account={data.checker} mb="2px" tooltipMessage={t('Copied Checker Address')} />
+              <Text small bold color="textSubtle">
+                {t(`Token Address: `)}
+              </Text>
+              <CopyAddress account={data.token?.address} mb="2px" tooltipMessage={t('Copied Token Address')} />
+              <Text small bold color="textSubtle">
+                {t(`Destination Address: `)}
+              </Text>
+              <CopyAddress account={data.destination} mb="2px" tooltipMessage={t('Copied Destination Address')} />
+              <Divider />
+            </Flex>
+          ))}
         </Flex>
       </ActionContent>
     </ActionContainer>

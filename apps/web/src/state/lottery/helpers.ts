@@ -1,14 +1,16 @@
 import { LotteryStatus, LotteryTicket } from 'config/constants/types'
 import { lotteryV2ABI } from 'config/abi/lotteryV2'
-import { getLotteryAddress, getLotteryV2Address } from 'utils/addressHelpers'
+import { getLotteryAddress, getLotteryHelperAddress, getLotteryV2Address } from 'utils/addressHelpers'
 import { LotteryResponse } from 'state/types'
 import { getLotteryV2Contract } from 'utils/contractHelpers'
 import { bigIntToSerializedBigNumber } from '@pancakeswap/utils/bigNumber'
 import { NUM_ROUNDS_TO_FETCH_FROM_NODES } from 'config/constants/lottery'
 import { publicClient } from 'utils/wagmi'
-import { ChainId } from '@pancakeswap/sdk'
+import { ChainId, Token } from '@pancakeswap/sdk'
 import { ContractFunctionResult } from 'viem'
 import { lotteryABI } from 'config/abi/lottery'
+import { lotteryHelperABI } from 'config/abi/lotteryHelper'
+import { erc20ABI } from 'wagmi'
 
 const lotteryContract = getLotteryV2Contract()
 
@@ -159,7 +161,7 @@ export const hasRoundBeenClaimed = (tickets: LotteryTicket[]): boolean => {
 }
 
 export const getPendingReward = async (lotteryId, userAddress, tokenAddress, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [pendingReward] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -172,4 +174,99 @@ export const getPendingReward = async (lotteryId, userAddress, tokenAddress, cha
     ],
   })
   return pendingReward.toString()
+}
+
+export const getTokenForCredit = async (collectionAddress, chainId = 4002) => {
+  const bscClient = publicClient({ chainId })
+  try {
+    const [arrLength] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getLotteryHelperAddress(),
+          abi: lotteryHelperABI,
+          functionName: 'burnTokenForCreditLength',
+          args: [collectionAddress],
+        },
+      ],
+    })
+    const arr = Array.from({ length: Number(arrLength.result) }, (v, i) => i)
+    const credits = await Promise.all(
+      arr?.map(async (idx) => {
+        const [burnTokenForCredit] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: getLotteryHelperAddress(),
+              abi: lotteryHelperABI,
+              functionName: 'burnTokenForCredit',
+              args: [collectionAddress, BigInt(idx)],
+            },
+          ],
+        })
+        const _token = burnTokenForCredit.result[0]
+        const checker = burnTokenForCredit.result[1]
+        const destination = burnTokenForCredit.result[2]
+        const discount = burnTokenForCredit.result[3]
+        const collectionId = burnTokenForCredit.result[4]
+        const item = burnTokenForCredit.result[5]
+
+        const [name, symbol] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            // {
+            //   address: _token,
+            //   abi: erc20ABI,
+            //   functionName: 'decimals',
+            // },
+          ],
+        })
+        const decimals = 18
+        // if (checker !== ADDRESS_ZERO) {
+        //   const [_decimals] = await bscClient.multicall({
+        //     allowFailure: true,
+        //     contracts: [
+        //       {
+        //         address: _token,
+        //         abi: erc20ABI,
+        //         functionName: 'decimals',
+        //       },
+        //     ],
+        //   })
+        //   decimals = _decimals.result
+        // }
+        return {
+          checker,
+          destination,
+          discount: discount.toString(),
+          collectionId: collectionId.toString(),
+          item,
+          token: new Token(
+            chainId,
+            _token,
+            decimals,
+            symbol.result?.toString()?.toUpperCase(),
+            name.result?.toString(),
+            `https://tokens.payswap.org/images/${_token}.png`,
+          ),
+        }
+      }),
+    )
+    console.log('arrLength=============>', arrLength, arr, credits)
+
+    return credits
+  } catch (error) {
+    console.error('===========>Failed to fetch credits tokens', error)
+    return []
+  }
 }

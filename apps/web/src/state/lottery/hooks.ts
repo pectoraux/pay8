@@ -1,21 +1,30 @@
-import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo } from 'react'
-import { useAccount } from 'wagmi'
+import { useMemo } from 'react'
 import { useSelector, batch } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import useSWRImmutable from 'swr/immutable'
-import { State } from '../types'
-import { getLotteryContract } from '../../utils/contractHelpers'
-import { fetchLotteryAsync, fetchUserTicketsAndLotteries } from '.'
-import { makeLotteryGraphDataByIdSelector, lotterySelector } from './selectors'
-import { getPendingReward } from './helpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+
+import { State } from '../types'
+import { fetchLotteryAsync } from '.'
+import { makeLotteryGraphDataByIdSelector, lotterySelector } from './selectors'
+import { getPendingReward, getTokenForCredit } from './helpers'
 
 // Lottery
 export const useGetCurrentLotteryId = () => {
   return useSelector((state: State) => state.lottery.currentLotteryId)
+}
+
+export const useGetTokenForCredit = (collectionAddress: string) => {
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWRImmutable(['lottery', 'burnTokenForCredit', chainId], async () =>
+    getTokenForCredit(collectionAddress, chainId),
+  )
+  return {
+    data,
+    status,
+  }
 }
 
 export const useGetUserLotteriesGraphData = () => {

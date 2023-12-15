@@ -75,6 +75,25 @@ export const lotteryHelperABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+    ],
+    name: 'burnTokenForCreditLength',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: '_lotteryId',
         type: 'uint256',
       },
