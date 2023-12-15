@@ -183,36 +183,38 @@ const PoolAllocations = () => {
             {t('Prize pool allocation')}
           </Text>
         </Flex>
-        <AllocationGrid>
-          <AllocationMatch color="#FFE362" text={t('Matches first %digits%', { digits: 1 })} />
-          <Text textAlign="right" bold>
-            {rewardsBreakdown[0]}%
-          </Text>
-          <AllocationMatch color="#85C54E" text={t('Matches first %digits%', { digits: 2 })} />
-          <Text textAlign="right" bold>
-            {rewardsBreakdown[1]}%
-          </Text>
-          <AllocationMatch color="#028E75" text={t('Matches first %digits%', { digits: 3 })} />
-          <Text textAlign="right" bold>
-            {rewardsBreakdown[2]}%
-          </Text>
-          <AllocationMatch color="#36E8F5" text={t('Matches first %digits%', { digits: 4 })} />
-          <Text textAlign="right" bold>
-            {rewardsBreakdown[3]}%
-          </Text>
-          <AllocationMatch color="#A881FC" text={t('Matches first %digits%', { digits: 5 })} />
-          <Text textAlign="right" bold>
-            {rewardsBreakdown[4]}%
-          </Text>
-          <AllocationMatch color="#D750B2" text={t('Matches all 6')} />
-          <Text textAlign="right" bold>
-            {rewardsBreakdown[5]}%
-          </Text>
-          {/* <AllocationMatch color="#BDC2C4" text={t('Burn Pool')} /> */}
-          {/* <Text textAlign="right" bold>
+        {rewardsBreakdown?.length ? (
+          <AllocationGrid>
+            <AllocationMatch color="#FFE362" text={t('Matches first %digits%', { digits: 1 })} />
+            <Text textAlign="right" bold>
+              {rewardsBreakdown[0]}%
+            </Text>
+            <AllocationMatch color="#85C54E" text={t('Matches first %digits%', { digits: 2 })} />
+            <Text textAlign="right" bold>
+              {rewardsBreakdown[1]}%
+            </Text>
+            <AllocationMatch color="#028E75" text={t('Matches first %digits%', { digits: 3 })} />
+            <Text textAlign="right" bold>
+              {rewardsBreakdown[2]}%
+            </Text>
+            <AllocationMatch color="#36E8F5" text={t('Matches first %digits%', { digits: 4 })} />
+            <Text textAlign="right" bold>
+              {rewardsBreakdown[3]}%
+            </Text>
+            <AllocationMatch color="#A881FC" text={t('Matches first %digits%', { digits: 5 })} />
+            <Text textAlign="right" bold>
+              {rewardsBreakdown[4]}%
+            </Text>
+            <AllocationMatch color="#D750B2" text={t('Matches all 6')} />
+            <Text textAlign="right" bold>
+              {rewardsBreakdown[5]}%
+            </Text>
+            {/* <AllocationMatch color="#BDC2C4" text={t('Burn Pool')} /> */}
+            {/* <Text textAlign="right" bold>
             20%
           </Text> */}
-        </AllocationGrid>
+          </AllocationGrid>
+        ) : null}
       </StepCardInner>
     </StyledStepCard>
   )

@@ -35,7 +35,7 @@ const TicketNumber: React.FC<any> = ({ localId, id, number, rewardBracket }) => 
   const reversedNumber = parseRetrievedNumber(number)
   const numberAsArray = reversedNumber.split('')
   const numberMatches = rewardBracket + 1
-
+  console.log('number=================>', number)
   return (
     <Flex flexDirection="column" mb="12px">
       <Flex justifyContent="space-between">

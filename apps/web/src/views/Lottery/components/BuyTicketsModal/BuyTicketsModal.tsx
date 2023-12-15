@@ -13,16 +13,17 @@ import {
   useTooltip,
   Input,
 } from '@pancakeswap/uikit'
-import { MaxUint256, Token } from '@pancakeswap/sdk'
+import { MaxUint256 } from '@pancakeswap/sdk'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import ApproveConfirmButtons, { ButtonArrangement } from 'components/ApproveConfirmButtons'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { FetchStatus } from 'config/constants/types'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useCake, useTokenContract, useLotteryContract, useERC20 } from 'hooks/useContract'
+import { useTokenContract, useLotteryContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useCallback, useEffect, useMemo, useState, ChangeEvent } from 'react'
@@ -31,14 +32,11 @@ import { fetchUserTicketsAndLotteries } from 'state/lottery'
 import { useLottery } from 'state/lottery/hooks'
 import styled from 'styled-components'
 import { BIG_ONE, BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getBalanceAmount, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
 import EditNumbersModal from './EditNumbersModal'
 import NumTicketsToBuyButton from './NumTicketsToBuyButton'
 import { useTicketsReducer } from './useTicketsReducer'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { useGetRequiresApproval } from 'state/valuepools/hooks'
-import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 
 const StyledModal = styled(Modal)`
   ${({ theme }) => theme.mediaQueries.md} {
@@ -355,7 +353,9 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
         onUserInput={handleInputChange}
         currencyValue={
           cakePriceBusd.gt(0) &&
-          `~${ticketsToBuy ? getFullDisplayBalance(priceTicketInCake.times(new BigNumber(ticketsToBuy))) : '0.00'} CAKE`
+          `~${ticketsToBuy ? getFullDisplayBalance(priceTicketInCake.times(new BigNumber(ticketsToBuy))) : '0.00'} ${
+            currToken?.token?.symbol
+          }`
         }
       />
       <Input

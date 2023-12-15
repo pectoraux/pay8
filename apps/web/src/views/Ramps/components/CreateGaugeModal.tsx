@@ -23,6 +23,7 @@ import { fetchRampsAsync } from 'state/ramps'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
+import { rampABI } from 'config/abi/ramp'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import MintStage from './MintStage'
@@ -52,9 +53,7 @@ import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
-import { rampABI } from 'config/abi/ramp'
 import LocationStage from './LocationStage'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),

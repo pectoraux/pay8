@@ -19,7 +19,7 @@ const NextDrawWrapper = styled(Flex)`
 const PreviousRoundCardFooter: React.FC<any> = ({ lotteryNodeData, currentTokenId }) => {
   const { t } = useTranslation()
   const currTokenData = useMemo(
-    () => (lotteryNodeData.tokenData?.length ? lotteryNodeData.tokenData[parseInt(currentTokenId)] : {}),
+    () => (lotteryNodeData?.tokenData?.length ? lotteryNodeData.tokenData[parseInt(currentTokenId)] : {}),
     [lotteryNodeData, currentTokenId],
   )
   let prizeInBusd = new BigNumber(NaN)
@@ -27,7 +27,7 @@ const PreviousRoundCardFooter: React.FC<any> = ({ lotteryNodeData, currentTokenI
     const { priceTicket } = lotteryNodeData
     prizeInBusd = new BigNumber(priceTicket)
   }
-  console.log('PreviousRoundCardFooter==============>', currTokenData)
+
   const getPrizeBalances = () => {
     return (
       <>

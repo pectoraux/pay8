@@ -4,6 +4,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import { LotteryStatus } from 'config/constants/types'
 import { useLottery } from 'state/lottery/hooks'
 import useTheme from 'hooks/useTheme'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+
 import TicketNumber from '../TicketNumber'
 import BuyTicketsButton from '../BuyTicketsButton'
 
@@ -22,7 +24,7 @@ const CurrentRoundTicketsInner = () => {
   const {
     lotteryData: { status, users: userTickets },
   } = useLottery()
-
+  const { account } = useAccountActiveChain()
   const ticketBuyIsDisabled = status !== LotteryStatus.OPEN
 
   return (
@@ -32,9 +34,11 @@ const CurrentRoundTicketsInner = () => {
           {t('Your Tickets')}
         </Text>
         <ScrollBox>
-          {userTickets?.map((ticket, index) => {
-            return <TicketNumber key={ticket.id} localId={index + 1} id={ticket.id} number={ticket.ticketNumber} />
-          })}
+          {userTickets
+            ?.filter((user) => user?.account?.toLowerCase() === account?.toLowerCase())
+            ?.map((ticket, index) => {
+              return <TicketNumber key={ticket.id} localId={index + 1} id={ticket.id} number={ticket.ticketNumber} />
+            })}
         </ScrollBox>
       </Flex>
       <Flex borderTop={`1px solid ${theme.colors.cardBorder}`} alignItems="center" justifyContent="center">

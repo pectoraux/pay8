@@ -71,12 +71,13 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
     () => (tokenData?.length ? tokenData[parseInt(currentTokenId)] : {}),
     [tokenData, currentTokenId],
   )
-  console.log('3currentTokenId===============>', lotteryData, currentTokenId, currTokenData)
+  console.log('4currentTokenId===============>', userTickets)
   // const prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
   const endTimeMs = parseInt(endTime, 10) * 1000
   const endDate = new Date(endTimeMs)
   const isLotteryOpen = status === LotteryStatus.OPEN
-  const userTicketCount = userTickets?.length || 0
+  const userTicketCount =
+    userTickets?.filter((user) => user?.account?.toLowerCase() === account?.toLowerCase())?.length || 0
   const latestRoundId = tokenData?.length
 
   const getPrizeBalances = () => {

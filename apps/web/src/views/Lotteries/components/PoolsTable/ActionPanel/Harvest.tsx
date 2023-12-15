@@ -1,10 +1,13 @@
 import BigNumber from 'bignumber.js'
-import { Text, Flex, Box, Balance, CopyAddress } from '@pancakeswap/uikit'
+import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { useGetTokenForCredit } from 'state/lottery/hooks'
+import { useGetPaymentCredits, useGetTokenForCredit } from 'state/lottery/hooks'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useWeb3React } from '@pancakeswap/wagmi'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import { Divider } from '../../styles'
@@ -16,7 +19,9 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
     hours: hoursReceivable,
     minutes: minutesReceivable,
   } = getTimePeriods(Number(pool?.lockDuration ?? '0'))
-  const burnForCreditTokens = useGetTokenForCredit(pool?.collectionId) as any
+  const { account } = useWeb3React()
+  const { data: burnForCreditTokens } = useGetTokenForCredit(pool?.collectionId) as any
+  const { data: paymentCredits } = useGetPaymentCredits(pool?.id, account)
 
   const actionTitle = (
     <>
@@ -110,8 +115,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Use NFTickets')}
           </Text>
-        </Flex>
-        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">
             <Balance
               lineHeight="1"
@@ -152,6 +155,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
               {t('Number of Tokens')}
             </Text>
           </Box>
+        </Flex>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           {parseInt(pool?.lockDuration) ? (
             <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
               {daysReceivable} {t('days')} {hoursReceivable} {t('hours')} {minutesReceivable} {t('minutes')}
@@ -195,45 +200,65 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Winners Per Bracket')}
           </Text>
-          {burnForCreditTokens?.map((data, index) => (
-            <Flex flexDirection="column" justifyContent="center" alignItems="center">
-              <Text small bold color="textSubtle">
-                {t(`Token Position: ${index}`)}
-              </Text>
-              <Text small bold color="textSubtle">
-                {t(`Token Name: ${data.token?.name}`)}
-              </Text>
-              <Text small bold color="textSubtle">
-                {t(`Token Symbol: ${data.token?.symbol}`)}
-              </Text>
-              <Text small bold color="textSubtle">
-                {t(
-                  `Discount: ${
-                    data.checker !== ADDRESS_ZERO
-                      ? getBalanceNumber(new BigNumber(data.discount))
-                      : parseInt(data.discount ?? '0') / 100
-                  }`,
-                )}{' '}
-                {data.checker !== ADDRESS_ZERO ? 'USD' : '%'}
-              </Text>
-              <Text small bold color="textSubtle">
-                {t(`Collection ID: ${data.collectionId}`)}
-              </Text>
-              <Text small bold color="textSubtle">
-                {t(`Checker: `)}
-              </Text>
-              <CopyAddress account={data.checker} mb="2px" tooltipMessage={t('Copied Checker Address')} />
-              <Text small bold color="textSubtle">
-                {t(`Token Address: `)}
-              </Text>
-              <CopyAddress account={data.token?.address} mb="2px" tooltipMessage={t('Copied Token Address')} />
-              <Text small bold color="textSubtle">
-                {t(`Destination Address: `)}
-              </Text>
-              <CopyAddress account={data.destination} mb="2px" tooltipMessage={t('Copied Destination Address')} />
-              <Divider />
-            </Flex>
-          ))}
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={18}
+              value={getBalanceNumber(new BigNumber(paymentCredits?.toString()))}
+              unit=" USD"
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Payment Credits')}
+            </Text>
+          </Box>
+          {burnForCreditTokens?.length > 0 &&
+            burnForCreditTokens?.map((data, index) => (
+              <>
+                <Divider />
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(`Token Position: ${index}`)}
+                </Text>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(`Token Name: ${data.token?.name}`)}
+                </Text>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(`Token Symbol: ${data.token?.symbol}`)}
+                </Text>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(
+                    `Discount: ${
+                      data.checker !== ADDRESS_ZERO
+                        ? getBalanceNumber(new BigNumber(data.discount))
+                        : parseInt(data.discount ?? '0') / 100
+                    }`,
+                  )}{' '}
+                  {data.checker !== ADDRESS_ZERO ? 'USD' : '%'}
+                </Text>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(`Collection ID: ${data.collectionId}`)}
+                </Text>
+                <Flex flexDirection="row">
+                  <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
+                    {t(`Checker: `)}
+                  </Text>
+                  <CopyAddress title={truncateHash(data.checker)} account={data.checker} />
+                </Flex>
+                <Flex flexDirection="row">
+                  <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
+                    {t(`Token Address: `)}
+                  </Text>
+                  <CopyAddress title={truncateHash(data.token?.address)} account={data.token?.address} />
+                </Flex>
+                <Flex flexDirection="row">
+                  <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
+                    {t(`Destination Address: `)}
+                  </Text>
+                  <CopyAddress title={truncateHash(data.destination)} account={data.destination} />
+                </Flex>
+              </>
+            ))}
         </Flex>
       </ActionContent>
     </ActionContainer>

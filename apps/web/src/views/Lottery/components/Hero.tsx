@@ -227,7 +227,7 @@ const Hero = ({ lottery, currentTokenId }) => {
             unit={` ${tokenData?.token?.symbol ?? ''}`}
             value={prizeTotal}
             mb="8px"
-            decimals={0}
+            decimals={3}
           />
           <Heading mb="32px" scale="lg" color="#ffffff">
             {t('in prizes!')}

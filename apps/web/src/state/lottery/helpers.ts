@@ -270,3 +270,24 @@ export const getTokenForCredit = async (collectionAddress, chainId = 4002) => {
     return []
   }
 }
+
+export const getPaymentCredits = async (lotteryId, userAddress, chainId = 4002) => {
+  try {
+    const bscClient = publicClient({ chainId })
+    const [credits] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getLotteryHelperAddress(),
+          abi: lotteryHelperABI,
+          functionName: 'paymentCredits',
+          args: [userAddress, lotteryId],
+        },
+      ],
+    })
+    return credits.result.toString()
+  } catch (error) {
+    console.error('===========>Failed to fetch payment credits', error)
+    return []
+  }
+}

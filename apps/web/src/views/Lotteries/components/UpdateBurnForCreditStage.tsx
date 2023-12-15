@@ -117,6 +117,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   return (
     <>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="token"
+          value={state.token}
+          placeholder={t('input token address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Collection ID')}
@@ -228,7 +241,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Lottery Contract')}
           </Text>
-          <CopyAddress title={truncateHash(getLotteryAddress())} account={getLotteryAddress()} />
+          <CopyAddress title={truncateHash(getLotteryAddress(), 10, 10)} account={getLotteryAddress()} />
         </Box>
       </Grid>
       <Divider />

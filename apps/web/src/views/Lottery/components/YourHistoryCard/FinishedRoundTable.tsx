@@ -56,7 +56,11 @@ const FinishedRoundTable: React.FC<any> = ({
                 key={finishedRound.id}
                 roundId={finishedRound.id}
                 hasWon={finishedRound.lottery?.users?.every((user) => !!user?.claimed)}
-                numberTickets={finishedRound.lottery?.users?.length}
+                numberTickets={
+                  finishedRound.lottery?.users?.filter(
+                    (user) => user?.account?.toLowerCase() === account?.toLowerCase(),
+                  ).length
+                }
                 endTime={finishedRound?.updatedAt}
                 onClick={handleHistoryRowClick}
               />

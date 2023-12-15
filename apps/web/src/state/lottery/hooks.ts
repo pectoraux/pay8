@@ -9,7 +9,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { State } from '../types'
 import { fetchLotteryAsync } from '.'
 import { makeLotteryGraphDataByIdSelector, lotterySelector } from './selectors'
-import { getPendingReward, getTokenForCredit } from './helpers'
+import { getPaymentCredits, getPendingReward, getTokenForCredit } from './helpers'
 
 // Lottery
 export const useGetCurrentLotteryId = () => {
@@ -20,6 +20,17 @@ export const useGetTokenForCredit = (collectionAddress: string) => {
   const { chainId } = useActiveChainId()
   const { data, status } = useSWRImmutable(['lottery', 'burnTokenForCredit', chainId], async () =>
     getTokenForCredit(collectionAddress, chainId),
+  )
+  return {
+    data,
+    status,
+  }
+}
+
+export const useGetPaymentCredits = (lotteryId, user) => {
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWRImmutable(['lottery2', 'paymentcredits', lotteryId, user, chainId], async () =>
+    getPaymentCredits(lotteryId, user, chainId),
   )
   return {
     data,

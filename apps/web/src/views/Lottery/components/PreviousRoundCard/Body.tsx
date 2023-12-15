@@ -13,6 +13,8 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+
 import WinningNumbers from '../WinningNumbers'
 import ViewTicketsModal from '../ViewTicketsModal'
 
@@ -48,14 +50,16 @@ const PreviousRoundCardBody: React.FC<any> = ({ lotteryNodeData, lotteryId, late
   const { t } = useTranslation()
   const { isLg, isXl, isXxl } = useMatchBreakpoints()
   const isLargerScreen = isLg || isXl || isXxl
+  const { account } = useAccountActiveChain()
 
   const isLatestRound = Number(latestId ?? '') === Number(lotteryId ?? '')
 
   const [onPresentViewTicketsModal] = useModal(
     <ViewTicketsModal roundId={lotteryId} roundStatus={lotteryNodeData?.status} />,
   )
-
-  const totalTicketNumber = lotteryNodeData?.users?.length ?? 0
+  console.log('3lotteryNodeData==============>', lotteryNodeData)
+  const totalTicketNumber =
+    lotteryNodeData?.users?.filter((user) => user?.account?.toLowerCase() === account?.toLowerCase())?.length ?? 0
   const ticketRoundText =
     totalTicketNumber > 1
       ? t('You had %amount% tickets this round', { amount: totalTicketNumber })

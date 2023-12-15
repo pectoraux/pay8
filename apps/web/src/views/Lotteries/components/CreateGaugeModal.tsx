@@ -24,6 +24,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { combineDateAndTime } from 'views/Voting/CreateProposal/helpers'
 import { differenceInSeconds } from 'date-fns'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useGetTokenForCredit } from 'state/lottery/hooks'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -39,7 +40,6 @@ import DrawFinalNumberStage from './DrawFinalNumberStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import CloseLotteryStage from './CloseLotteryStage'
 import BuyTicketStage from './BuyTicketStage'
-import { useGetTokenForCredit } from 'state/lottery/hooks'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -142,13 +142,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   const handleRawValueChange = (key: string) => (value: string | Date) => {
     updateValue(key, value)
   }
-  const burnForCreditTokens = useGetTokenForCredit(pool?.collectionId) as any
+  const { data: burnForCreditTokens } = useGetTokenForCredit(pool?.collectionId) as any
   const burnForCreditToken = useMemo(
     () => burnForCreditTokens?.length > state.position && burnForCreditTokens[state.position],
     [burnForCreditTokens, state.position],
   )
   const tokenContract = useErc721CollectionContract(burnForCreditToken?.token?.address || '')
-
+  console.log('tokenContract==================>', tokenContract, burnForCreditToken, burnForCreditTokens)
   const goBack = () => {
     switch (stage) {
       case LockStage.CONFIRM_WITHDRAW:
@@ -339,10 +339,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       }
       if (stage === LockStage.CONFIRM_UPDATE_BURN_TOKEN_FOR_CREDIT) {
         const args = [
-          currency?.address,
-          state.checker,
+          state.token,
+          state.checker ?? ADDRESS_ZERO,
           state.destination,
-          parseInt(state.discount ?? '0') * 100,
+          !state.checker || state.checker === ADDRESS_ZERO
+            ? parseInt(state.discount ?? '0') * 100
+            : getDecimalAmount(state.discount)?.toString(),
           state.collectionId,
           !!state.clear,
           state.item,
@@ -381,9 +383,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       if (stage === LockStage.CONFIRM_BURN_TOKEN_FOR_CREDIT) {
         const amount = !state.fungible
           ? state.amountReceivable
-          : getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)?.toString()
+          : getDecimalAmount(state.amountReceivable ?? 0)?.toString()
         const args = [state.owner, state.position, amount]
-        console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', args)
+        console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', args, tokenContract)
         return callWithGasPrice(tokenContract, 'setApprovalForAll', [lotteryHelperContract.address, true]).then(() =>
           callWithGasPrice(lotteryHelperContract, 'burnForCredit', args).catch((err) =>
             console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', err),
