@@ -6,6 +6,7 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import {
   useERC20,
+  useErc721CollectionContract,
   useLotteryContract,
   useLotteryHelperContract,
   useLotteryRandomNumberGenerator,
@@ -140,6 +141,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   const handleRawValueChange = (key: string) => (value: string | Date) => {
     updateValue(key, value)
   }
+  const tokenContract = useErc721CollectionContract(state.minter)
 
   const goBack = () => {
     switch (stage) {
@@ -376,8 +378,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           : getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)?.toString()
         const args = [state.owner, state.position, amount]
         console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', args)
-        return callWithGasPrice(lotteryHelperContract, 'burnForCredit', args).catch((err) =>
-          console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', err),
+        return callWithGasPrice(tokenContract, 'setApprovalForAll', [lotteryHelperContract.address, true]).then(() =>
+          callWithGasPrice(lotteryHelperContract, 'burnForCredit', args).catch((err) =>
+            console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', err),
+          ),
         )
       }
       if (stage === LockStage.CONFIRM_DRAW_FINAL_NUMBER) {
