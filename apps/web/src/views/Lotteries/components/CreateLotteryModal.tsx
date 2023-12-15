@@ -10,8 +10,6 @@ import {
   AutoRenewIcon,
   ErrorIcon,
   useToast,
-  ButtonMenu,
-  ButtonMenuItem,
   HelpIcon,
   useTooltip,
 } from '@pancakeswap/uikit'
@@ -27,7 +25,6 @@ import { fetchLotteriesAsync } from 'state/lotteries'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useLotteryHelperContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { TimePicker } from 'views/AcceleratorVoting/components/DatePicker'
 import { combineDateAndTime } from 'views/AcceleratorVoting/CreateProposal/helpers'

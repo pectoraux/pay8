@@ -14,10 +14,11 @@ import {
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { GreyedOutContainer, Divider } from './styles'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { getLotteryAddress } from 'utils/addressHelpers'
+
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   state: any
@@ -49,7 +50,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        "This is the address where 'burnt' tokens go, it can be the zero address (0x0000000000000000000000000000000000000000) in case you want users' tokens burnt, the lottery contract address (available below) in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.",
+        "This is the address where 'burnt' tokens go, it can be the zero address (0x000000...) in case you want users' tokens burnt, the lottery contract address (available below) in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.",
       )}
     </Text>
   )
