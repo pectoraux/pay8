@@ -173,6 +173,7 @@ export const getPendingReward = async (lotteryId, userAddress, tokenAddress, ref
       },
     ],
   })
+  console.log('getPendingReward=================>', lotteryId, userAddress, tokenAddress, referrer, pendingReward)
   return pendingReward.result.toString()
 }
 
