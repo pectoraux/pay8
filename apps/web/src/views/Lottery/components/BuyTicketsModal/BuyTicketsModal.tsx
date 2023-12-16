@@ -359,7 +359,7 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
         onUserInput={handleInputChange}
         currencyValue={
           cakePriceBusd.gt(0) &&
-          `~${ticketsToBuy ? getFullDisplayBalance(priceTicketInCake.times(new BigNumber(ticketsToBuy))) : '0.00'} ${
+          `~${ticketsToBuy ? getFullDisplayBalance(priceTicketInCake.times(new BigNumber(ticketsToBuy)), 3) : '0.00'} ${
             currToken?.token?.symbol
           }`
         }
@@ -456,7 +456,7 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
             {t('Cost')} ({currToken?.token?.symbol ?? ''})
           </Text>
           <Text color="textSubtle" fontSize="14px">
-            {priceTicketInCake && getFullDisplayBalance(priceTicketInCake.times(ticketsToBuy || 0))}{' '}
+            {priceTicketInCake && getFullDisplayBalance(priceTicketInCake.times(ticketsToBuy || 0), 3)}{' '}
             {currToken?.token?.symbol ?? ''}
           </Text>
         </Flex>

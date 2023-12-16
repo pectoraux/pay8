@@ -442,7 +442,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
-        const amount = getDecimalAmount(state.amountPayable ?? 0, currency?.decimals)
         const args = [state.lotteryId, currency?.address]
         console.log('CONFIRM_ADMIN_WITHDRAW===============>', args)
         return callWithGasPrice(lotteryContract, 'withdrawTreasury', args).catch((err) =>
