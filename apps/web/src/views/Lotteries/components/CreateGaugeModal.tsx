@@ -384,7 +384,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       }
       if (stage === LockStage.CONFIRM_ADD_TOKEN) {
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
-        const args = [currency?.address, state.lotteryId, amountReceivable.toString()]
+        const args = [state.token, state.lotteryId, amountReceivable.toString()]
         console.log('CONFIRM_ADD_TOKEN===============>', args)
         return callWithGasPrice(lotteryContract, 'updatePricePerTicket', args).catch((err) =>
           console.log('CONFIRM_ADD_TOKEN===============>', err),

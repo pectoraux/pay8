@@ -79,9 +79,9 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
   // const { id: currentLotteryId, discountDivisor,
   //   // tokenData
   // } = betting
-  const discountDivisor = new BigNumber(betting?.discountDivisor)
+  const discountDivisor = BigNumber(betting?.discountDivisor)
   const decimals = betting?.token?.decimals ?? 18
-  const priceTicketInCake = new BigNumber(betting?.pricePerTicket)
+  const priceTicketInCake = BigNumber(betting?.pricePerTicket)
   console.log('priceTicketInCake============>', priceTicketInCake)
   const { callWithGasPrice } = useCallWithGasPrice()
   const [ticketsToBuy, setTicketsToBuy] = useState('')
@@ -346,7 +346,9 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
         value={ticketsToBuy}
         onUserInput={handleInputChange}
         currencyValue={`~${
-          ticketsToBuy ? getFullDisplayBalance(priceTicketInCake.times(new BigNumber(ticketsToBuy)), 3) : '0.00'
+          ticketsToBuy
+            ? getFullDisplayBalance(priceTicketInCake.times(new BigNumber(ticketsToBuy)), betting?.token?.decimals, 3)
+            : '0.00'
         } ${betting?.token?.symbol}`}
       />
       <Input
@@ -423,7 +425,8 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
             {t('Cost')} ({betting?.token?.symbol ?? ''})
           </Text>
           <Text color="textSubtle" fontSize="14px">
-            {priceTicketInCake && getFullDisplayBalance(priceTicketInCake.times(ticketsToBuy || 0), 3)}{' '}
+            {priceTicketInCake &&
+              getFullDisplayBalance(priceTicketInCake.times(ticketsToBuy || 0), betting?.token?.decimals, 3)}{' '}
             {betting?.token?.symbol ?? ''}
           </Text>
         </Flex>
