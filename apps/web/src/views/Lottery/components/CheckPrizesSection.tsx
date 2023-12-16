@@ -35,7 +35,7 @@ const CheckPrizesSection = ({ currentTokenId }) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const { fetchAllRewards, unclaimedRewards, fetchStatus } = useGetUnclaimedRewards({ currentTokenId, activeIndex })
   const [onPresentClaimModal] = useModal(
-    <ClaimPrizesModal currentTokenId={currentTokenId} roundsToClaim={unclaimedRewards} />,
+    <ClaimPrizesModal currentTokenId={currentTokenId} roundsToClaim={[unclaimedRewards]} />,
     false,
   )
   const isFetchingRewards = fetchStatus === FetchStatus.Fetching
@@ -46,13 +46,13 @@ const CheckPrizesSection = ({ currentTokenId }) => {
     if (fetchStatus === FetchStatus.Fetched) {
       // Manage showing unclaimed rewards modal once per page load / once per lottery state change
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {
-        setHasRewardsToClaim(parseInt(unclaimedRewards[0]) > 0)
+        setHasRewardsToClaim(parseInt(unclaimedRewards) > 0)
         setHasCheckedForRewards(true)
-        if (parseInt(unclaimedRewards[0]) > 0) onPresentClaimModal()
+        if (parseInt(unclaimedRewards) > 0) onPresentClaimModal()
       }
 
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {
-        setHasRewardsToClaim(parseInt(unclaimedRewards[0]) > 0)
+        setHasRewardsToClaim(parseInt(unclaimedRewards) > 0)
         setHasCheckedForRewards(true)
       }
     }

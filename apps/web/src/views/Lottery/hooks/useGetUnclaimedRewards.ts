@@ -32,6 +32,7 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
     currentLotteryId,
     tokenData,
     currTokenData,
+    data,
   )
 
   // useEffect(() => {
@@ -56,7 +57,7 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
   //   }
   // }
 
-  return { fetchAllRewards, unclaimedRewards: [data], fetchStatus }
+  return { fetchAllRewards, unclaimedRewards: data, fetchStatus }
 }
 
 export default useGetUnclaimedRewards
