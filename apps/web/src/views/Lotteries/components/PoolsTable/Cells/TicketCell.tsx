@@ -4,7 +4,6 @@ import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { useGetCalculateRewardsForTicketId } from 'state/bettings/hooks'
 import { useGetRewardsForTicketId } from 'state/lotteries/hooks'
 
 interface TotalStakedCellProps {
@@ -21,7 +20,7 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currUser, decimals = 18 
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const rewards = useGetRewardsForTicketId(currAccount?.token?.address, pool?.id, currUser?.id)
-  console.log('rewardsrewards==================>', rewards)
+  console.log('rewardsrewards==================>', rewards, currAccount?.token?.address, pool?.id, currUser?.id)
   return (
     <StyledCell role="cell">
       <Pool.CellContent>

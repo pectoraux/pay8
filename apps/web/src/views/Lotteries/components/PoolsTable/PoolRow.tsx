@@ -20,7 +20,10 @@ const PoolRow: React.FC<any> = ({ pool, account, initialActivity }) => {
     () => pool?.tokenData?.find((n) => n.token.address === currState[pool?.id]),
     [pool, currState],
   )
-  const currUser = useMemo(() => pool?.users?.find((n) => n.id === currState2[pool?.id]), [currAccount, currState2])
+  const currUser = useMemo(
+    () => pool?.users?.find((n) => n.id === currState2[pool?.id]),
+    [currState2, pool?.id, pool?.users],
+  )
   console.log('lotterypool1====>', pool, currAccount)
   const tabs = (
     <>
