@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoRenewIcon, Button, Flex, PresentWonIcon, Text, useToast, Balance, Input } from '@pancakeswap/uikit'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { LotteryTicketClaimData } from 'config/constants/types'
@@ -88,7 +89,7 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
           <Balance
             textAlign={['center', null, 'left']}
             lineHeight="1.1"
-            value={pendingBatchClaims}
+            value={getBalanceNumber(pendingBatchClaims, currTokenData?.token?.decimals)}
             fontSize="44px"
             bold
             color="secondary"

@@ -22,7 +22,7 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
   const {
     data,
     status: fetchStatus,
-    refetch: fetchAllRewards,
+    refetch,
   } = useGetPendingReward(account, currentLotteryId, currTokenData?.token?.address, !!activeIndex)
 
   console.log(
@@ -40,7 +40,9 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
   //   setFetchStatus(FetchStatus.Idle)
   // }, [account])
 
-  // const fetchAllRewards = async () => {
+  const fetchAllRewards = async () => {
+    refetch()
+  }
   //   try {
   //     setFetchStatus(FetchStatus.Fetching)
   //     const pendingRevenue = (await fetchPendingRevenue(
