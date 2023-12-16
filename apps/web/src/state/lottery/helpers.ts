@@ -160,7 +160,7 @@ export const hasRoundBeenClaimed = (tickets: LotteryTicket[]): boolean => {
   return claimedTickets.length > 0
 }
 
-export const getPendingReward = async (lotteryId, userAddress, tokenAddress, chainId) => {
+export const getPendingReward = async (lotteryId, userAddress, tokenAddress, referrer, chainId) => {
   const bscClient = publicClient({ chainId })
   const [pendingReward] = await bscClient.multicall({
     allowFailure: true,
@@ -169,7 +169,7 @@ export const getPendingReward = async (lotteryId, userAddress, tokenAddress, cha
         address: getLotteryAddress(),
         abi: lotteryABI,
         functionName: 'getPendingReward',
-        args: [lotteryId, userAddress, tokenAddress, false],
+        args: [lotteryId, userAddress, tokenAddress, referrer],
       },
     ],
   })

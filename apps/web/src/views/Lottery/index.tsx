@@ -5,6 +5,7 @@ import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { useFetchLottery, useLottery } from 'state/lottery/hooks'
+import { useRouter } from 'next/router'
 import {
   TITLE_BG,
   GET_TICKETS_BG,
@@ -24,7 +25,6 @@ import CheckPrizesSection from './components/CheckPrizesSection'
 import HowToPlay from './components/HowToPlay'
 import useShowMoreUserHistory from './hooks/useShowMoreUserRounds'
 import { PageMeta } from '../../components/Layout/Page'
-import { useRouter } from 'next/router'
 
 const LotteryPage = styled.div`
   min-height: calc(100vh - 64px);

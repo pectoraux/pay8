@@ -46,13 +46,13 @@ const CheckPrizesSection = ({ currentTokenId }) => {
     if (fetchStatus === FetchStatus.Fetched) {
       // Manage showing unclaimed rewards modal once per page load / once per lottery state change
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {
-        setHasRewardsToClaim(unclaimedRewards[0] > 0)
+        setHasRewardsToClaim(parseInt(unclaimedRewards[0]) > 0)
         setHasCheckedForRewards(true)
-        if (unclaimedRewards[0] > 0) onPresentClaimModal()
+        if (parseInt(unclaimedRewards[0]) > 0) onPresentClaimModal()
       }
 
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {
-        setHasRewardsToClaim(unclaimedRewards[0] > 0)
+        setHasRewardsToClaim(parseInt(unclaimedRewards[0]) > 0)
         setHasCheckedForRewards(true)
       }
     }
@@ -140,7 +140,7 @@ const CheckPrizesSection = ({ currentTokenId }) => {
           </Flex>
           <Button
             disabled={isCheckNowDisabled}
-            onClick={fetchAllRewards}
+            onClick={() => fetchAllRewards()}
             isLoading={isFetchingRewards}
             endIcon={isFetchingRewards ? <AutoRenewIcon color="currentColor" spin /> : null}
           >

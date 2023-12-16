@@ -71,7 +71,7 @@ export const useFetchLottery = (fetchPublicDataOnly = false) => {
         dispatch(fetchLotteryAsync(currentLotteryId, chainId))
       })
     }
-  }, [dispatch, currentLotteryId])
+  }, [dispatch, currentLotteryId, chainId])
 
   // useEffect(() => {
   // get user tickets for current lottery, and user lottery subgraph data
@@ -85,10 +85,15 @@ export const useLottery = () => {
   return useSelector(lotterySelector)
 }
 
-export const useGetPendingReward = (userAddress, lotteryId, tokenAddress) => {
+export const useGetPendingReward = (userAddress, lotteryId, tokenAddress, referrer) => {
   const { chainId } = useActiveChainId()
-  const { data: pendingReward } = useSWRImmutable(['reward', userAddress, lotteryId, tokenAddress], async () =>
-    getPendingReward(lotteryId, userAddress, tokenAddress, chainId),
+  const { data, status, mutate } = useSWRImmutable(
+    ['reward', userAddress, lotteryId, tokenAddress, referrer],
+    async () => getPendingReward(lotteryId, userAddress, tokenAddress, referrer, chainId),
   )
-  return pendingReward
+  return {
+    data,
+    status,
+    refetch: mutate,
+  }
 }
