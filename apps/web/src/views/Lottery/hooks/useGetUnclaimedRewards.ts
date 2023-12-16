@@ -5,12 +5,14 @@ import fetchPendingRevenue from 'state/lottery/fetchPendingRevenue'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { FetchStatus } from 'config/constants/types'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
   const { account } = useWeb3React()
   const {
     lotteryData: { id: currentLotteryId, tokenData },
   } = useLottery()
+  const { chainId } = useActiveChainId()
   const [unclaimedRewards, setUnclaimedRewards] = useState([])
   const [fetchStatus, setFetchStatus] = useState<any>(FetchStatus.Idle)
   const currTokenData = useMemo(
@@ -24,6 +26,7 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
     currentLotteryId,
     tokenData,
     currTokenData,
+    unclaimedRewards,
   )
 
   useEffect(() => {
@@ -39,6 +42,7 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
         account,
         currTokenData?.token?.address,
         !!activeIndex,
+        chainId,
       )) as any
       setUnclaimedRewards([getBalanceNumber(new BigNumber(pendingRevenue), currTokenData?.token?.decimals)])
       setFetchStatus(FetchStatus.Fetched)

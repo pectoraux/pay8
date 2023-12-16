@@ -41,7 +41,7 @@ const CheckPrizesSection = ({ currentTokenId }) => {
   const isFetchingRewards = fetchStatus === FetchStatus.Fetching
   const lotteryIsNotClaimable = status === LotteryStatus.CLOSE
   const isCheckNowDisabled = lotteryIsNotClaimable
-
+  console.log('unclaimedRewards================+>', unclaimedRewards, fetchStatus)
   useEffect(() => {
     if (fetchStatus === FetchStatus.Fetched) {
       // Manage showing unclaimed rewards modal once per page load / once per lottery state change
