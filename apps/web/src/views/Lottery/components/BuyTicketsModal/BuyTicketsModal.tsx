@@ -69,7 +69,7 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
   const { lotteryData } = useLottery()
   const { id: currentLotteryId, discountDivisor, tokenData } = lotteryData
   const [state, setState] = useState<any>(() => ({
-    nfticketId: '',
+    nfticketId: '0',
     identityTokenId: '',
     numbers: '',
   }))
@@ -379,7 +379,7 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
         name="nfticketId"
         style={{ marginTop: '10px' }}
         value={state.nfticketId}
-        placeholder={t('input your nfticket id or token position')}
+        placeholder={t('nfticket id or token position')}
         onChange={handleChange}
       />
       <Flex alignItems="center" justifyContent="flex-end" mt="4px" mb="12px">
