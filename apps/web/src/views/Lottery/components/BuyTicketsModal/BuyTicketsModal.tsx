@@ -70,7 +70,7 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
   const { id: currentLotteryId, discountDivisor, tokenData } = lotteryData
   const currToken = tokenData[0]
   const decimals = currToken?.token?.decimals ?? 18
-  const priceTicketInCake = new BigNumber(currToken?.amountCollected ?? 0)
+  const priceTicketInCake = new BigNumber(currToken?.priceTicket ?? 0)
   const { callWithGasPrice } = useCallWithGasPrice()
   const [ticketsToBuy, setTicketsToBuy] = useState('')
   const [discountValue, setDiscountValue] = useState('')

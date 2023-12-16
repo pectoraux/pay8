@@ -63,7 +63,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={currAccount?.token?.decimals ?? 18}
               value={getBalanceNumber(pool?.priceTicket || 0, currAccount?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
