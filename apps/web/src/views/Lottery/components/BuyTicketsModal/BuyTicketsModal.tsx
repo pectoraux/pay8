@@ -434,6 +434,22 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
           )}
         </ShortcutButtonsWrapper>
       )}
+      <Flex flexWrap="wrap" justifyContent="flex-center" alignItems="center">
+        {tokenData?.length
+          ? tokenData.map((balance, index) => (
+              <Button
+                key={balance.token.address}
+                onClick={() => updateValue('nfticketId', index)}
+                mt="4px"
+                mr={['2px', '2px', '4px', '4px']}
+                scale="sm"
+                variant={currToken?.token?.address === balance.token.address ? 'subtle' : 'tertiary'}
+              >
+                {balance.token?.symbol?.toUpperCase()}
+              </Button>
+            ))
+          : null}
+      </Flex>
       <Flex flexDirection="column">
         <Flex mb="8px" justifyContent="space-between">
           <Text color="textSubtle" fontSize="14px">

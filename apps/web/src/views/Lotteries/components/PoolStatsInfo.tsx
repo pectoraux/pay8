@@ -1,20 +1,4 @@
-import {
-  Flex,
-  LinkExternal,
-  AutoRenewIcon,
-  ArrowForwardIcon,
-  Pool,
-  ScanLink,
-  Button,
-  Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
-} from '@pancakeswap/uikit'
+import { Flex, LinkExternal, AutoRenewIcon, ArrowForwardIcon, Pool, ScanLink, Button, Link } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
