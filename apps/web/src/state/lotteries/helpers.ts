@@ -112,7 +112,6 @@ export const fetchLottery = async (lotteryId, chainId) => {
     const finalNumber = viewLottery.finalNumber
     const valuepool = viewLottery.valuepool
     const owner = viewLottery.owner
-    const priceTicket = viewLottery.treasury.priceTicket
     const fee = viewLottery.treasury.fee
     const useNFTicket = viewLottery.treasury.useNFTicket
     const referrerFee = viewLottery.treasury.referrerFee
@@ -121,7 +120,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
     const lottery = _lottery?.length && _lottery[0]
     const tokenData = await Promise.all(
       tokens.result?.map(async (token) => {
-        const [name, decimals, symbol, amountCollected] = await bscClient.multicall({
+        const [name, decimals, symbol, amountCollected, priceTicket] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -145,10 +144,17 @@ export const fetchLottery = async (lotteryId, chainId) => {
               functionName: 'amountCollected',
               args: [BigInt(lotteryId), token],
             },
+            {
+              address: getLotteryAddress(),
+              abi: lotteryABI,
+              functionName: 'priceTicket',
+              args: [BigInt(lotteryId), token],
+            },
           ],
         })
         return {
           amountCollected: amountCollected.result?.toString(),
+          priceTicket: priceTicket.result.toString(),
           token: new Token(
             chainId,
             token,
@@ -161,7 +167,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
       }),
     )
     if (tokenData?.length === 0) {
-      const [name, symbol, amountCollected] = await bscClient.multicall({
+      const [name, symbol, amountCollected, priceTicket] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
           {
@@ -180,10 +186,17 @@ export const fetchLottery = async (lotteryId, chainId) => {
             functionName: 'amountCollected',
             args: [BigInt(lotteryId), DEFAULT_TFIAT],
           },
+          {
+            address: getLotteryAddress(),
+            abi: lotteryABI,
+            functionName: 'priceTicket',
+            args: [BigInt(lotteryId), DEFAULT_TFIAT],
+          },
         ],
       })
       tokenData.push({
         amountCollected: amountCollected.result.toString(),
+        priceTicket: priceTicket.result.toString(),
         token: new Token(
           chainId,
           DEFAULT_TFIAT,
@@ -211,7 +224,6 @@ export const fetchLottery = async (lotteryId, chainId) => {
       firstTicketId: firstTicketId.toString(),
       treasuryFee: fee.toString(),
       referrerFee: referrerFee.toString(),
-      priceTicket: priceTicket.toString(),
       finalNumber: finalNumber.toString(),
       lockDuration: lockDuration.toString(),
       useNFTicket,

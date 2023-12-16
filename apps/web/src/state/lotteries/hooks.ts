@@ -4,7 +4,6 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { fetchLotteriesAsync, fetchLotteriesSgAsync } from '.'
 import useSWRImmutable from 'swr/immutable'
 import { FAST_INTERVAL } from 'config/constants'
 import {
@@ -14,6 +13,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
+import { fetchLotteriesAsync, fetchLotteriesSgAsync } from '.'
 import { getRewardsForTicketId, getTag, getTicket } from './helpers'
 
 export const useLotteriesConfigInitialize = () => {
@@ -30,7 +30,7 @@ export const useLotteriesConfigInitialize = () => {
         dispatch(fetchLotteriesAsync({ fromLottery, chainId, init }))
       })
     }
-  }, [dispatch, chainId])
+  }, [dispatch, chainId, fromLottery])
 }
 
 export const useFetchPublicPoolsData = () => {
