@@ -291,21 +291,21 @@ export default {
     56: '0x',
     4002: '0xE697b2D4135b14216DB09e379f50E93dd281fD16',
   },
-  lotteryHelper: {
-    56: '0x',
-    4002: '0x4469E3FE227BE118FCA0fac6F3C406CeC47bd836',
-  },
   lottery: {
     56: '0x',
-    4002: '0xcc2f469b12d6aD946746873480d320015065DB22',
+    4002: '0x0B0559992F21856c87a18811B6D5Ee3521014cBF',
+  },
+  lotteryHelper: {
+    56: '0x',
+    4002: '0xE59811A47C623d71Db0aFd188899c7772503AD8d',
+  },
+  lotteryRandomNumberGenerator: {
+    56: '0x',
+    4002: '0x2E10f2Bfb3F49b27248Da38951B7b0ab3F25F0B8',
   },
   randomNumberGenerator: {
     56: '0x',
     4002: '0x131637F4d7B58d7061Ec00ceFAA4DBF66B968921',
-  },
-  lotteryRandomNumberGenerator: {
-    56: '0x',
-    4002: '0x6D7ECA930F0661C3a210BA898ECC365b5B59F206',
   },
   gameHelper: {
     56: '0x',
