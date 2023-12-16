@@ -64,13 +64,24 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const maxNumberTicketsPerBuyOrClaim = new BigNumber('50')
+  const maxNumberTicketsPerBuyOrClaim = BigNumber(50)
   const [userCurrentTickets, setUserCurrentTickets] = useState([])
   const { lotteryData } = useLottery()
   const { id: currentLotteryId, discountDivisor, tokenData } = lotteryData
-  const currToken = tokenData[0]
+  const [state, setState] = useState<any>(() => ({
+    nfticketId: '',
+    identityTokenId: '',
+    numbers: '',
+  }))
+  const currToken = useMemo(
+    () => tokenData?.length && tokenData[parseInt(state.nfticketId ?? '0')],
+    [state.nfticketId, tokenData],
+  )
   const decimals = currToken?.token?.decimals ?? 18
-  const priceTicketInCake = new BigNumber(currToken?.priceTicket?.toString() ?? '0')
+  const priceTicketInCake = useMemo(
+    () => new BigNumber(currToken?.priceTicket?.toString() ?? '0'),
+    [currToken?.priceTicket],
+  )
   const { callWithGasPrice } = useCallWithGasPrice()
   const [ticketsToBuy, setTicketsToBuy] = useState('')
   const [discountValue, setDiscountValue] = useState('')
@@ -92,11 +103,6 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
   const dispatch = useAppDispatch()
   const hasFetchedBalance = fetchStatus === FetchStatus.Fetched
   const userCakeDisplayBalance = getFullDisplayBalance(userCake, decimals, 3)
-  const [state, setState] = useState<any>(() => ({
-    nfticketId: '',
-    identityTokenId: '',
-    numbers: '',
-  }))
 
   const TooltipComponent = () => (
     <>
@@ -373,7 +379,7 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
         name="nfticketId"
         style={{ marginTop: '10px' }}
         value={state.nfticketId}
-        placeholder={t('input your nfticket id')}
+        placeholder={t('input your nfticket id or token position')}
         onChange={handleChange}
       />
       <Flex alignItems="center" justifyContent="flex-end" mt="4px" mb="12px">
