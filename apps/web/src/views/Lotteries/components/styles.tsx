@@ -24,9 +24,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_CLOSE_LOTTERY,
   LockStage.CONFIRM_CLAIM_TICKETS,
   LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES,
+  LockStage.CONFIRM_ADD_TOKEN,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.ADD_TOKEN,
+  LockStage.CONFIRM_ADD_TOKEN,
   LockStage.CLAIM_TICKETS,
   LockStage.CONFIRM_CLAIM_TICKETS,
   LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES,

@@ -30,6 +30,7 @@ import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithA
 import { LockStage } from './types'
 import ClaimTicketStage from './ClaimTicketStage'
 import StartLotteryStage from './StartLotteryStage'
+import AddTokenStage from './AddTokenStage'
 import RandomNumberFeesStage from './RandomNumberFeesStage'
 import UpdateBurnForCreditStage from './UpdateBurnForCreditStage'
 import ClaimLotteryStage from './ClaimLotteryStage'
@@ -49,6 +50,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT]: t('Update Burn Token For Credit'),
   [LockStage.CLAIM_LOTTERY_REVENUE]: t('Claim Lottery Revenue'),
   [LockStage.INJECT_FUNDS]: t('Inject Funds'),
+  [LockStage.ADD_TOKEN]: t('Add Token'),
   [LockStage.BURN_TOKEN_FOR_CREDIT]: t('Burn Token For Credit'),
   [LockStage.WITHDRAW]: t('Withdraw'),
   [LockStage.DRAW_FINAL_NUMBER]: t('Draw Final Number'),
@@ -59,6 +61,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_START_LOTTERY]: t('Back'),
+  [LockStage.CONFIRM_ADD_TOKEN]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BURN_TOKEN_FOR_CREDIT]: t('Back'),
   [LockStage.CONFIRM_CLAIM_LOTTERY_REVENUE]: t('Back'),
   [LockStage.CONFIRM_CLAIM_TICKETS]: t('Back'),
@@ -199,6 +202,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       case LockStage.ADMIN_WITHDRAW:
         setStage(LockStage.ADMIN_SETTINGS)
         break
+      case LockStage.CONFIRM_ADD_TOKEN:
+        setStage(LockStage.ADD_TOKEN)
+        break
+      case LockStage.ADD_TOKEN:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.CONFIRM_CLOSE_LOTTERY:
         setStage(LockStage.CLOSE_LOTTERY)
         break
@@ -232,6 +241,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     switch (stage) {
       case LockStage.INJECT_FUNDS:
         setStage(LockStage.CONFIRM_INJECT_FUNDS)
+        break
+      case LockStage.ADD_TOKEN:
+        setStage(LockStage.CONFIRM_ADD_TOKEN)
         break
       case LockStage.BURN_TOKEN_FOR_CREDIT:
         setStage(LockStage.CONFIRM_BURN_TOKEN_FOR_CREDIT)
@@ -370,6 +382,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           console.log('CONFIRM_INJECT_FUNDS===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_ADD_TOKEN) {
+        const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
+        const args = [currency?.address, state.lotteryId, amountReceivable.toString()]
+        console.log('CONFIRM_ADD_TOKEN===============>', args)
+        return callWithGasPrice(lotteryContract, 'updatePricePerTicket', args).catch((err) =>
+          console.log('CONFIRM_ADD_TOKEN===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
         const args = !state.referrer
           ? [currency.address, state.lotteryId, state.identityTokenId]
@@ -493,6 +513,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       )}
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_TOKEN)}>
+            {t('ADD NEW TOKEN')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.INJECT_FUNDS)}>
             {t('INJECT FUNDS')}
           </Button>
@@ -535,6 +558,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       )}
       {stage === LockStage.START_LOTTERY && (
         <StartLotteryStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.ADD_TOKEN && (
+        <AddTokenStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}

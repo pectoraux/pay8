@@ -144,6 +144,31 @@ export const lotteryABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'lotteryId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'pricePerTicket',
+        type: 'uint256',
+      },
+    ],
+    name: 'PricePerTicketUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: 'address',
         name: 'claimer',
@@ -621,6 +646,30 @@ export const lotteryABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'priceTicket',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '_contractAddress',
         type: 'address',
@@ -778,6 +827,29 @@ export const lotteryABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_lotteryId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_pricePerTicket',
+        type: 'uint256',
+      },
+    ],
+    name: 'updatePricePerTicket',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'uint256',
         name: '_braket',
         type: 'uint256',
@@ -868,11 +940,6 @@ export const lotteryABI = [
           },
           {
             components: [
-              {
-                internalType: 'uint256',
-                name: 'priceTicket',
-                type: 'uint256',
-              },
               {
                 internalType: 'uint256',
                 name: 'fee',
