@@ -347,7 +347,7 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
         onUserInput={handleInputChange}
         currencyValue={`~${
           ticketsToBuy ? getFullDisplayBalance(priceTicketInCake.times(new BigNumber(ticketsToBuy)), 3) : '0.00'
-        } ${cakeContract?.symbol}`}
+        } ${betting?.token?.symbol}`}
       />
       <Input
         type="number"
