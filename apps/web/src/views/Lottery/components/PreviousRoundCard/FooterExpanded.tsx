@@ -24,7 +24,7 @@ const PreviousRoundCardFooter: React.FC<any> = ({ lotteryNodeData, currentTokenI
   )
   let prizeInBusd = new BigNumber(NaN)
   if (lotteryNodeData) {
-    const { priceTicket } = lotteryNodeData
+    const { priceTicket } = currTokenData
     prizeInBusd = new BigNumber(priceTicket)
   }
 
