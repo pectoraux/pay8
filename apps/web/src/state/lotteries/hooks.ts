@@ -14,7 +14,7 @@ import {
   filterSelector,
 } from './selectors'
 import { fetchLotteriesAsync, fetchLotteriesSgAsync } from '.'
-import { getRewardsForTicketId, getTag, getTicket } from './helpers'
+import { getRewardsForTicketId, getTag, getTicket, getToReinject } from './helpers'
 
 export const useLotteriesConfigInitialize = () => {
   const { chainId } = useActiveChainId()
@@ -96,6 +96,14 @@ export const useGetTicket = (ticketId) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWR(['lotteries-tickets', ticketId, chainId], async () => getTicket(ticketId, chainId))
   return data ?? ''
+}
+
+export const useGetToReinject = (userAddress, tokenAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['useGetToReinject', userAddress, tokenAddress, chainId], async () =>
+    getToReinject(userAddress, tokenAddress, chainId),
+  )
+  return data
 }
 
 export const useGetRewardsForTicketId = (tokenAddress, lotteryId, ticketId) => {

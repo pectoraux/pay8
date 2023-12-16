@@ -8,6 +8,7 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useWeb3React } from '@pancakeswap/wagmi'
+import { useGetToReinject } from 'state/lotteries/hooks'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import { Divider } from '../../styles'
@@ -22,6 +23,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
   const { account } = useWeb3React()
   const { data: burnForCreditTokens } = useGetTokenForCredit(pool?.collectionId) as any
   const { data: paymentCredits } = useGetPaymentCredits(pool?.id, account)
+  const toReinject = useGetToReinject(account, currAccount?.token?.address)
 
   const actionTitle = (
     <>
@@ -140,6 +142,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Amount Collected')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={currAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(new BigNumber(toReinject), currAccount?.token?.decimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Amount Left To Reinject')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">

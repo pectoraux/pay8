@@ -286,3 +286,19 @@ export const getTicket = async (ticketId, chainId) => {
   })
   return count.result
 }
+
+export const getToReinject = async (userAddress, tokenAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [amount] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getLotteryAddress(),
+        abi: lotteryABI,
+        functionName: 'toReinject',
+        args: [userAddress, tokenAddress],
+      },
+    ],
+  })
+  return amount.result?.toString()
+}
