@@ -173,7 +173,7 @@ export const getPendingReward = async (lotteryId, userAddress, tokenAddress, ref
       },
     ],
   })
-  return pendingReward.toString()
+  return pendingReward.result.toString()
 }
 
 export const getTokenForCredit = async (collectionAddress, chainId = 4002) => {
