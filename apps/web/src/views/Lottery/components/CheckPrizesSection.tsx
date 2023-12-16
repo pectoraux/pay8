@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Heading, Text, Flex, useModal, AutoRenewIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import { Button, Heading, Flex, useModal, AutoRenewIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { FetchStatus, LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
@@ -35,24 +35,24 @@ const CheckPrizesSection = ({ currentTokenId }) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const { fetchAllRewards, unclaimedRewards, fetchStatus } = useGetUnclaimedRewards({ currentTokenId, activeIndex })
   const [onPresentClaimModal] = useModal(
-    <ClaimPrizesModal currentTokenId={currentTokenId} roundsToClaim={[unclaimedRewards]} />,
+    <ClaimPrizesModal currentTokenId={currentTokenId} roundsToClaim={unclaimedRewards} />,
     false,
   )
   const isFetchingRewards = fetchStatus === FetchStatus.Fetching
   const lotteryIsNotClaimable = status === LotteryStatus.CLOSE
   const isCheckNowDisabled = lotteryIsNotClaimable
-  console.log('unclaimedRewards================+>', unclaimedRewards, fetchStatus)
+
   useEffect(() => {
     if (fetchStatus === FetchStatus.Fetched) {
       // Manage showing unclaimed rewards modal once per page load / once per lottery state change
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {
-        setHasRewardsToClaim(parseInt(unclaimedRewards) > 0)
+        setHasRewardsToClaim(unclaimedRewards[0] > 0)
         setHasCheckedForRewards(true)
-        if (parseInt(unclaimedRewards) > 0) onPresentClaimModal()
+        if (unclaimedRewards[0] > 0) onPresentClaimModal()
       }
 
       if (unclaimedRewards.length > 0 && !hasCheckedForRewards) {
-        setHasRewardsToClaim(parseInt(unclaimedRewards) > 0)
+        setHasRewardsToClaim(unclaimedRewards[0] > 0)
         setHasCheckedForRewards(true)
       }
     }
@@ -140,7 +140,7 @@ const CheckPrizesSection = ({ currentTokenId }) => {
           </Flex>
           <Button
             disabled={isCheckNowDisabled}
-            onClick={() => fetchAllRewards()}
+            onClick={fetchAllRewards}
             isLoading={isFetchingRewards}
             endIcon={isFetchingRewards ? <AutoRenewIcon color="currentColor" spin /> : null}
           >
