@@ -210,7 +210,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
     }
     const collection = await getCollection(lottery.collectionId)
     let tokenURI
-    if (parseInt(isNFT)) {
+    if (parseInt(isNFT) && parseInt(lottery.tokenId)) {
       const [_tokenURI] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
