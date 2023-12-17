@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components'
-import { Box, Flex, Heading, Skeleton, Balance } from '@pancakeswap/uikit'
+import { Box, Flex, Heading, Balance } from '@pancakeswap/uikit'
+import Iframe from 'react-iframe'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
@@ -218,7 +219,14 @@ const Hero = ({ lottery, currentTokenId }) => {
   console.log('Hero=====================>', lottery, currentTokenId)
   const getHeroHeading = () => {
     if (lottery?.status === LotteryStatus.OPEN) {
-      return (
+      return lottery.isNFT ? (
+        <>
+          <Iframe url={lottery?.tokenURI} height="550px" styles={{ marginBottom: '10px' }} id="myId2" />
+          <Heading mb="32px" scale="lg" color="#ffffff">
+            {t('Your prize!')}
+          </Heading>
+        </>
+      ) : (
         <>
           <PrizeTotalBalance
             fontSize="64px"

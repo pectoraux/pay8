@@ -1,4 +1,14 @@
-import { Flex, LinkExternal, AutoRenewIcon, ArrowForwardIcon, Pool, ScanLink, Button, Link } from '@pancakeswap/uikit'
+import {
+  Flex,
+  LinkExternal,
+  AutoRenewIcon,
+  ArrowForwardIcon,
+  Pool,
+  ScanLink,
+  Button,
+  Link,
+  useModal,
+} from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -10,6 +20,8 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrBribeData, setCurrPoolData } from 'state/lotteries'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+
+import WebPagesModal2 from './WebPagesModal2'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -30,6 +42,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const currState2 = useCurrBribe()
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
+  const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />)
   console.log('PoolStatsInfo==========>', pool)
   return (
     <>
@@ -88,11 +101,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
-          {t('View NFTs')}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFT} bold={false} small>
+          {t('View NFT Prize')}
         </LinkExternal>
-      </Flex> */}
+      </Flex>
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton

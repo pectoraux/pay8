@@ -5,7 +5,7 @@ import { getCollection } from 'state/cancan/helpers'
 import { publicClient } from 'utils/wagmi'
 import { getLotteryAddress, getLotteryHelperAddress } from 'utils/addressHelpers'
 import { lotteryABI } from 'config/abi/lottery'
-import { erc20ABI } from 'wagmi'
+import { erc20ABI, erc721ABI } from 'wagmi'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import BigNumber from 'bignumber.js'
 import { lotteryHelperABI } from 'config/abi/lotteryHelper'
@@ -209,7 +209,21 @@ export const fetchLottery = async (lotteryId, chainId) => {
       })
     }
     const collection = await getCollection(lottery.collectionId)
-
+    let tokenURI
+    if (parseInt(isNFT)) {
+      const [_tokenURI] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: lottery.prizeAddress,
+            abi: erc721ABI,
+            functionName: 'tokenURI',
+            args: [BigInt(lottery.tokenId)],
+          },
+        ],
+      })
+      tokenURI = _tokenURI.result
+    }
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
       id: lotteryId,
@@ -230,6 +244,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
       useNFTicket,
       isNFT,
       owner,
+      tokenURI,
       valuepool,
       tokenData,
       collection,

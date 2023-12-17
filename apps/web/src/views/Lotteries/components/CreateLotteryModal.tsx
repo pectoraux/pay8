@@ -12,6 +12,8 @@ import {
   useToast,
   HelpIcon,
   useTooltip,
+  ButtonMenu,
+  ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import { differenceInSeconds } from 'date-fns'
 import { useAppDispatch } from 'state'
@@ -29,6 +31,7 @@ import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { TimePicker } from 'views/AcceleratorVoting/components/DatePicker'
 import { combineDateAndTime } from 'views/AcceleratorVoting/CreateProposal/helpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { StyledItemRow } from 'views/CanCan/market/components/Filters/ListFilter/styles'
 
 import { Divider, GreyedOutContainer } from './styles'
 
@@ -57,6 +60,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
     endTime: '',
     endAmount: '',
     useNFTicket: 0,
+    isNFT: 0,
     riskpool: 0,
     treasuryFee: '',
     referrerFee: '',
@@ -107,6 +111,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         endAmount.toString(),
         parseInt(state.lockDuration) * 60,
         !!state.useNFTicket,
+        state.isNFT,
         [
           parseInt(state.treasuryFee) * 100,
           parseInt(state.referrerFee) * 100,
@@ -216,7 +221,13 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
       )}
     </Text>
   )
-  const TooltipComponent11 = () => <Text>{t('')}</Text>
+  const TooltipComponent11 = () => (
+    <Text>
+      {t(
+        'This sets whether this is an NFT lottery or not. PaySwap enables users to participate in lotteries where the winner gets an NFT prize.',
+      )}
+    </Text>
+  )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -486,26 +497,22 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      {/* <GreyedOutContainer>
+      <GreyedOutContainer>
         <StyledItemRow>
           <Flex ref={targetRef11} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Use NFTicket?')}
+              {t('NFT Prize?')}
             </Text>
             {tooltipVisible11 && tooltip11}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
           </Flex>
-          <ButtonMenu
-            scale="xs"
-            variant="subtle"
-            activeIndex={state.useNFTicket ? 1 : 0}
-            onItemClick={handleRawValueChange('useNFTicket')}
-          >
+          <ButtonMenu scale="xs" variant="subtle" activeIndex={state.isNFT} onItemClick={handleRawValueChange('isNFT')}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
           </ButtonMenu>
         </StyledItemRow>
-      </GreyedOutContainer> */}
+      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

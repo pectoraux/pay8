@@ -42,6 +42,8 @@ export const lotteryFields = `
   startTime
   endTime
   collectionId
+  prizeAddress
+  tokenId
   users {
     ${userFields}
   }

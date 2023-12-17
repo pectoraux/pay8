@@ -7,7 +7,6 @@ import {
   Flex,
   Heading,
   Text,
-  Skeleton,
   Button,
   useModal,
   Box,
@@ -15,7 +14,6 @@ import {
   ExpandableLabel,
   Balance,
 } from '@pancakeswap/uikit'
-import { Token } from '@pancakeswap/sdk'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'

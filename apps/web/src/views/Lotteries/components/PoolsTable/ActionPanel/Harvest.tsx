@@ -214,6 +214,17 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Winners Per Bracket')}
           </Text>
+          <Text
+            lineHeight="1"
+            color={!pool?.isNFT ? 'textDisabled' : 'textSubtle'}
+            fontSize="12px"
+            textTransform="uppercase"
+          >
+            {!pool?.isNFT ? 'None' : parseInt(pool?.isNFT) === 1 ? 'ERC721' : 'ERC1155'}
+          </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('NFT Prize')}
+          </Text>
           <Box mr="8px" height="32px">
             <Balance
               lineHeight="1"

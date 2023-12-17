@@ -13,7 +13,7 @@ import {
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
 import { useCurrPool } from 'state/arps/hooks'
@@ -21,10 +21,10 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/arps'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import WebPagesModal from './WebPagesModal'
 import WebPagesModal2 from './WebPagesModal2'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>

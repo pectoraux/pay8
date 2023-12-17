@@ -38,7 +38,7 @@ import InjectFundsStage from './InjectFundsStage'
 import WithdrawStage from './WithdrawStage'
 import BurnForCreditStage from './BurnForCreditStage'
 import DrawFinalNumberStage from './DrawFinalNumberStage'
-import AdminWithdrawStage from './AdminWithdrawStage'
+import WithdrawStage2 from './WithdrawStage2'
 import CloseLotteryStage from './CloseLotteryStage'
 import BuyTicketStage from './BuyTicketStage'
 import UpdateNftPrizesStage from './UpdateNftPrizesStage'
@@ -59,7 +59,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CLOSE_LOTTERY]: t('Close Lottery'),
   [LockStage.CLAIM_TICKETS]: t('Claim Tickets'),
   [LockStage.UPDATE_NFT_PRIZES]: t('Add NFT Prize'),
-  [LockStage.ADMIN_WITHDRAW]: t('Withdraw From Treasury'),
+  [LockStage.ADMIN_WITHDRAW]: t('Withdraw NFT Prize'),
   [LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_START_LOTTERY]: t('Back'),
@@ -154,6 +154,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     [burnForCreditTokens, state.position],
   )
   const tokenContract = useErc721CollectionContract(burnForCreditToken?.token?.address || '')
+  const tokenContract2 = useErc721CollectionContract(state.token || '')
   console.log('tokenContract==================>', tokenContract, burnForCreditToken, burnForCreditTokens)
   const goBack = () => {
     switch (stage) {
@@ -200,7 +201,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_ADMIN_WITHDRAW:
-        setStage(LockStage.ADMIN_WITHDRAW)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.ADMIN_WITHDRAW:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -411,14 +412,18 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         const method =
           parseInt(pool?.isNFT) && variant !== 'user'
             ? 'withdrawNFTPendingReward'
-            : parseInt(pool?.isNFT)
-            ? 'withdrawNFTPrize'
             : !state.referrer
             ? 'withdrawPendingReward'
             : 'withrawReferrerFee'
-        const contract = parseInt(pool?.isNFT) && variant === 'user' ? lotteryHelperContract : lotteryContract
         console.log('CONFIRM_WITHDRAW===============>', args)
-        return callWithGasPrice(contract, method, args).catch((err) =>
+        return callWithGasPrice(lotteryContract, method, args).catch((err) =>
+          console.log('CONFIRM_WITHDRAW===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
+        const args = [state.token, state.lotteryId]
+        console.log('CONFIRM_WITHDRAW===============>', args)
+        return callWithGasPrice(lotteryHelperContract, 'withdrawNFTPrize', args).catch((err) =>
           console.log('CONFIRM_WITHDRAW===============>', err),
         )
       }
@@ -463,13 +468,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           console.log('CONFIRM_CLOSE_LOTTERY===============>', err),
         )
       }
-      if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
-        const args = [state.lotteryId, currency?.address]
-        console.log('CONFIRM_ADMIN_WITHDRAW===============>', args)
-        return callWithGasPrice(lotteryContract, 'withdrawTreasury', args).catch((err) =>
-          console.log('CONFIRM_ADMIN_WITHDRAW===============>', err),
-        )
-      }
       if (stage === LockStage.CONFIRM_CLAIM_TICKETS) {
         const args = [state.token, state.lotteryId, state.ticketNumbers.split(','), state.brackets.split(',')]
         console.log('CONFIRM_CLAIM_TICKETS===============>', args)
@@ -479,8 +477,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       }
       if (stage === LockStage.CONFIRM_UPDATE_NFT_PRIZES) {
         const args = [state.token, account, state.lotteryId, state.tokenId]
-        console.log('CONFIRM_UPDATE_NFT_PRIZES===============>', args)
-        return callWithGasPrice(tokenContract, 'setApprovalForAll', [lotteryHelperContract.address, true]).then(() =>
+        console.log('CONFIRM_UPDATE_NFT_PRIZES===============>', args, tokenContract2)
+        return callWithGasPrice(tokenContract2, 'setApprovalForAll', [lotteryHelperContract.address, true]).then(() =>
           callWithGasPrice(lotteryHelperContract, 'updateNFTPrizes', args).catch((err) =>
             console.log('CONFIRM_UPDATE_NFT_PRIZES===============>', err),
           ),
@@ -566,6 +564,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.DRAW_FINAL_NUMBER)}>
             {t('DRAW FINAL NUMBER')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_NFT_PRIZES)}>
+            {t('ADD NFT PRIZE')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.CLOSE_LOTTERY)}>
             {t('CLOSE LOTTERY')}
           </Button>
@@ -645,14 +646,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         />
       )}
       {stage === LockStage.ADMIN_WITHDRAW && (
-        <AdminWithdrawStage
-          state={state}
-          account={pool.id}
-          currency={currency}
-          handleChange={handleChange}
-          continueToNextStage={continueToNextStage}
-          handleRawValueChange={handleRawValueChange}
-        />
+        <WithdrawStage2 state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.BURN_TOKEN_FOR_CREDIT && (
         <BurnForCreditStage
