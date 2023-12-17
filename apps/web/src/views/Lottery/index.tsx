@@ -40,7 +40,6 @@ const Lottery = () => {
   console.log('lottery=================>', lotteryData)
   const [historyTabMenuIndex, setHistoryTabMenuIndex] = useState(0)
   const endTimeAsInt = parseInt(endTime, 10)
-  const router = useRouter()
   const { nextEventTime, postCountdownText, preCountdownText } = useGetNextLotteryEvent(endTimeAsInt, status)
   const { numUserRoundsRequested, handleShowMoreUserRounds } = useShowMoreUserHistory()
   const [currentTokenId, setCurrentTokenId] = useState('0')

@@ -53,7 +53,7 @@ const CheckEarnings = ({ fromStake = false }) => {
     <ClaimPrizesModal earned={earned} veAddress={veAddress} tokenAddress={tokenAddress} tokenId={tokenId} />,
     false,
   )
-  const isFetchingRewards = status === FetchStatus.Fetching
+  const isFetchingRewards = fetchStatus === FetchStatus.Fetching
   const isCheckNowDisabled = earned?.toString() === '0'
 
   const fetchAllRewards = () => {

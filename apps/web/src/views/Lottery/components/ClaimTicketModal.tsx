@@ -7,11 +7,9 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { fetchLotteriesAsync } from 'state/lotteries'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGameHelper, useLotteryContract } from 'hooks/useContract'
+import { useLotteryContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from 'views/Accelerator/components/styles'
-import { getAuditorHelperContract } from 'utils/contractHelpers'
-import { getGameHelperAddress } from 'utils/addressHelpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
@@ -35,6 +33,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
     tickets: users?.map((user) => user.id)?.join(','),
     brackets: '0,1,2,3,4,5',
   }))
+
   const updateValue = (key: any, value: string | number | boolean | Date) => {
     setState((prevState) => ({
       ...prevState,
@@ -75,8 +74,10 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
   }, [
     fetchWithCatchTxError,
     onDismiss,
-    state,
-    account,
+    currTokenData?.token?.address,
+    lotteryId,
+    state.tickets,
+    state.brackets,
     lotteryContract,
     callWithGasPrice,
     toastError,

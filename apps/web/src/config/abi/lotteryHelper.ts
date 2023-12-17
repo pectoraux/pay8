@@ -270,6 +270,69 @@ export const lotteryHelperABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'nftPrizes',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bytes',
+        name: '',
+        type: 'bytes',
+      },
+    ],
+    name: 'onERC1155Received',
+    outputs: [
+      {
+        internalType: 'bytes4',
+        name: '',
+        type: 'bytes4',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '',
         type: 'address',
@@ -376,6 +439,11 @@ export const lotteryHelperABI = [
         type: 'bool',
       },
       {
+        internalType: 'uint256',
+        name: '_isNFT',
+        type: 'uint256',
+      },
+      {
         internalType: 'uint256[4]',
         name: '_values',
         type: 'uint256[4]',
@@ -443,6 +511,34 @@ export const lotteryHelperABI = [
       },
     ],
     name: 'updateBurnTokenForCredit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_from',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_lotteryId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateNFTPrizes',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -580,6 +676,24 @@ export const lotteryHelperABI = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_lotteryId',
+        type: 'uint256',
+      },
+    ],
+    name: 'withdrawNFTPrize',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

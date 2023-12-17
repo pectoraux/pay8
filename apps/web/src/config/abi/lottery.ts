@@ -3,6 +3,11 @@ export const lotteryABI = [
     inputs: [
       {
         internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
         name: '_randomGeneratorAddress',
         type: 'address',
       },
@@ -480,6 +485,29 @@ export const lotteryABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_user',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_lotteryId',
+        type: 'uint256',
+      },
+    ],
+    name: 'deleteReward',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'uint256',
         name: '_lotteryId',
         type: 'uint256',
@@ -676,19 +704,6 @@ export const lotteryABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
         name: '_owner',
         type: 'address',
       },
@@ -731,6 +746,11 @@ export const lotteryABI = [
         internalType: 'bool',
         name: '_useNFTicket',
         type: 'bool',
+      },
+      {
+        internalType: 'uint256',
+        name: '_isNFT',
+        type: 'uint256',
       },
       {
         internalType: 'uint256[4]',
@@ -951,6 +971,11 @@ export const lotteryABI = [
                 type: 'uint256',
               },
               {
+                internalType: 'enum NFTYPE',
+                name: 'isNFT',
+                type: 'uint8',
+              },
+              {
                 internalType: 'bool',
                 name: 'useNFTicket',
                 type: 'bool',
@@ -1027,6 +1052,24 @@ export const lotteryABI = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_lotteryId',
+        type: 'uint256',
+      },
+    ],
+    name: 'withdrawNFTPendingReward',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

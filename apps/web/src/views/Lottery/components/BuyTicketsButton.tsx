@@ -20,14 +20,21 @@ const BuyTicketsButton: React.FC<any> = ({ currentTokenId, currTokenData, disabl
   } = useLottery()
 
   const [onClaimTicketModal] = useModal(
-    <ClaimTicketModal currTokenData={currTokenData} lotteryId={lotteryId} users={users} />,
+    <ClaimTicketModal lotteryId={lotteryId} users={users} currTokenData={currTokenData} />,
   )
 
   const getBuyButtonText = () => {
     if (status === LotteryStatus.OPEN) {
       return t('Buy Tickets')
     }
-    return t('Claim Tickets!')
+    if (!disabled) {
+      return t('Claim Tickets')
+    }
+    return (
+      <>
+        <WaitIcon mr="4px" color="textDisabled" /> {t('On sale soon!')}
+      </>
+    )
   }
 
   const themeStr = themeMode ?? (isDark ? 'dark' : 'light')
@@ -36,6 +43,7 @@ const BuyTicketsButton: React.FC<any> = ({ currentTokenId, currTokenData, disabl
     <Button
       data-theme={themeStr}
       {...props}
+      disabled={status !== LotteryStatus.OPEN && disabled}
       onClick={status === LotteryStatus.OPEN ? onPresentBuyTicketsModal : onClaimTicketModal}
     >
       {getBuyButtonText()}

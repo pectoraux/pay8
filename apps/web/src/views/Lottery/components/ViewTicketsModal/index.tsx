@@ -17,13 +17,12 @@ interface ViewTicketsModalProps {
   onDismiss?: () => void
 }
 
-const ViewTicketsModal: React.FC<React.PropsWithChildren<ViewTicketsModalProps>> = ({ onDismiss }) => {
+const ViewTicketsModal: React.FC<any> = ({ currentTokenId, currTokenData, onDismiss }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-
   return (
     <StyledModal title={t('Ticket Info')} onDismiss={onDismiss} headerBackground={theme.colors.gradientCardHeader}>
-      <CurrentRoundTicketsInner />
+      <CurrentRoundTicketsInner currentTokenId={currentTokenId} currTokenData={currTokenData} />
     </StyledModal>
   )
 }

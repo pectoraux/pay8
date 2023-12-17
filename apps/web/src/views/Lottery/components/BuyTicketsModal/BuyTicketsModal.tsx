@@ -77,6 +77,7 @@ const BuyTicketsModal: React.FC<any> = ({ currentTokenId, onDismiss }) => {
     () => tokenData?.length && tokenData[parseInt(state.nfticketId ?? '0')],
     [state.nfticketId, tokenData],
   )
+  console.log('7currentTokenId====================>', currentTokenId, state, currToken)
   const decimals = currToken?.token?.decimals ?? 18
   const priceTicketInCake = useMemo(
     () => new BigNumber(currToken?.priceTicket?.toString() ?? '0'),

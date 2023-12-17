@@ -41,6 +41,7 @@ import DrawFinalNumberStage from './DrawFinalNumberStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import CloseLotteryStage from './CloseLotteryStage'
 import BuyTicketStage from './BuyTicketStage'
+import UpdateNftPrizesStage from './UpdateNftPrizesStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -57,11 +58,13 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.BUY_TICKETS]: t('Buy Tickets'),
   [LockStage.CLOSE_LOTTERY]: t('Close Lottery'),
   [LockStage.CLAIM_TICKETS]: t('Claim Tickets'),
+  [LockStage.UPDATE_NFT_PRIZES]: t('Add NFT Prize'),
   [LockStage.ADMIN_WITHDRAW]: t('Withdraw From Treasury'),
   [LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_START_LOTTERY]: t('Back'),
   [LockStage.CONFIRM_ADD_TOKEN]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_NFT_PRIZES]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BURN_TOKEN_FOR_CREDIT]: t('Back'),
   [LockStage.CONFIRM_CLAIM_LOTTERY_REVENUE]: t('Back'),
   [LockStage.CONFIRM_CLAIM_TICKETS]: t('Back'),
@@ -208,6 +211,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       case LockStage.ADD_TOKEN:
         setStage(LockStage.ADMIN_SETTINGS)
         break
+      case LockStage.CONFIRM_UPDATE_NFT_PRIZES:
+        setStage(LockStage.UPDATE_NFT_PRIZES)
+        break
+      case LockStage.UPDATE_NFT_PRIZES:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.CONFIRM_CLOSE_LOTTERY:
         setStage(LockStage.CLOSE_LOTTERY)
         break
@@ -253,6 +262,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         break
       case LockStage.CLAIM_TICKETS:
         setStage(LockStage.CONFIRM_CLAIM_TICKETS)
+        break
+      case LockStage.UPDATE_NFT_PRIZES:
+        setStage(LockStage.CONFIRM_UPDATE_NFT_PRIZES)
         break
       case LockStage.CLAIM_LOTTERY_REVENUE:
         setStage(LockStage.CONFIRM_CLAIM_LOTTERY_REVENUE)
@@ -455,6 +467,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           console.log('CONFIRM_CLAIM_TICKETS===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_UPDATE_NFT_PRIZES) {
+        const args = [state.token, account, state.lotteryId, state.tokenId]
+        console.log('CONFIRM_UPDATE_NFT_PRIZES===============>', args)
+        return callWithGasPrice(tokenContract, 'setApprovalForAll', [lotteryHelperContract.address, true]).then(() =>
+          callWithGasPrice(lotteryHelperContract, 'updateNFTPrizes', args).catch((err) =>
+            console.log('CONFIRM_UPDATE_NFT_PRIZES===============>', err),
+          ),
+        )
+      }
       return null
     },
     onSuccess: async ({ receipt }) => {
@@ -643,6 +664,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.UPDATE_NFT_PRIZES && (
+        <UpdateNftPrizesStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.CLOSE_LOTTERY && (
         <CloseLotteryStage

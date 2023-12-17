@@ -16,7 +16,7 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
   const [unclaimedRewards, setUnclaimedRewards] = useState([])
   const [fetchStatus, setFetchStatus] = useState<any>(FetchStatus.Idle)
   const currTokenData = useMemo(
-    () => (tokenData?.length ? tokenData[parseInt(currentTokenId) > 0 ? parseInt(currentTokenId) - 1 : 0] : {}),
+    () => (tokenData?.length ? tokenData[parseInt(currentTokenId) > 0 ? parseInt(currentTokenId) : 0] : {}),
     [currentTokenId, tokenData],
   )
   // const {

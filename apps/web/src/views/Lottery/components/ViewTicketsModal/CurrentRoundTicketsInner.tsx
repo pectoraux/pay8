@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { Flex, Box, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { LotteryStatus } from 'config/constants/types'
 import { useLottery } from 'state/lottery/hooks'
 import useTheme from 'hooks/useTheme'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
@@ -18,14 +17,13 @@ const ScrollBox = styled(Box)`
   padding-right: 20px;
 `
 
-const CurrentRoundTicketsInner = () => {
+const CurrentRoundTicketsInner: React.FC<any> = ({ currentTokenId, currTokenData }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const {
-    lotteryData: { status, users: userTickets },
+    lotteryData: { users: userTickets },
   } = useLottery()
   const { account } = useAccountActiveChain()
-  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN
 
   return (
     <>
@@ -42,7 +40,14 @@ const CurrentRoundTicketsInner = () => {
         </ScrollBox>
       </Flex>
       <Flex borderTop={`1px solid ${theme.colors.cardBorder}`} alignItems="center" justifyContent="center">
-        <BuyTicketsButton disabled={ticketBuyIsDisabled} userTickets={userTickets} mt="24px" width="100%" />
+        <BuyTicketsButton
+          currentTokenId={currentTokenId}
+          currTokenData={currTokenData}
+          disabled={false}
+          userTickets={userTickets}
+          mt="24px"
+          width="100%"
+        />
       </Flex>
     </>
   )

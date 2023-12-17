@@ -89,7 +89,7 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
           <Balance
             textAlign={['center', null, 'left']}
             lineHeight="1.1"
-            value={getBalanceNumber(pendingBatchClaims, currTokenData?.token?.decimals)}
+            value={pendingBatchClaims}
             fontSize="44px"
             bold
             color="secondary"

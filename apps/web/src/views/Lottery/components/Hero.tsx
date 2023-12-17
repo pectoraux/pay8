@@ -215,7 +215,6 @@ const Hero = ({ lottery, currentTokenId }) => {
   const tokenData = lottery?.tokenData?.length ? lottery?.tokenData[currentTokenId] : {}
   const prizeInBusd = tokenData?.amountCollected ?? 0
   const prizeTotal = getBalanceNumber(prizeInBusd, tokenData?.decimals ?? 18)
-  const ticketBuyIsDisabled = lottery?.status !== LotteryStatus.OPEN
   console.log('Hero=====================>', lottery, currentTokenId)
   const getHeroHeading = () => {
     if (lottery?.status === LotteryStatus.OPEN) {
@@ -253,7 +252,7 @@ const Hero = ({ lottery, currentTokenId }) => {
         <img src="/images/lottery/ticket-r.png" width="121px" height="72px" alt="" />
       </StarsDecorations>
       <Heading mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
-        {t('The PaySwap Lottery')}
+        {t('The %val% Lottery', { val: lottery?.id === '1' ? 'MarketPlace' : lottery?.collection?.name })}
       </Heading>
       {getHeroHeading()}
       <TicketContainer
@@ -264,7 +263,12 @@ const Hero = ({ lottery, currentTokenId }) => {
         justifyContent="center"
       >
         <ButtonWrapper>
-          <StyledBuyTicketButton disabled={ticketBuyIsDisabled} themeMode="light" />
+          <StyledBuyTicketButton
+            currentTokenId={currentTokenId}
+            disabled={lottery?.status !== LotteryStatus.OPEN}
+            fromHero
+            themeMode="light"
+          />
         </ButtonWrapper>
         <TicketSvgWrapper>
           <TicketPurchaseCard width="100%" />

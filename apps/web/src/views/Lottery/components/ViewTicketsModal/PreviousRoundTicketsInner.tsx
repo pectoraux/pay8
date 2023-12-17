@@ -63,7 +63,6 @@ const PreviousRoundTicketsInner: React.FC<React.PropsWithChildren<{ roundId: str
   }>({ allWinningTickets: null, ticketsWithUnclaimedRewards: null, isFetched: false, claimData: null })
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { account } = useWeb3React()
   const [onPresentClaimModal] = useModal(<ClaimPrizesModal roundsToClaim={[userWinningTickets.claimData]} />, false)
 
   const TooltipComponent = () => (

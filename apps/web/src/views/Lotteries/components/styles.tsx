@@ -25,6 +25,7 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_CLAIM_TICKETS,
   LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES,
   LockStage.CONFIRM_ADD_TOKEN,
+  LockStage.CONFIRM_UPDATE_NFT_PRIZES,
 ]
 
 export const stagesWithBackButton = [
@@ -43,6 +44,7 @@ export const stagesWithBackButton = [
   LockStage.BUY_TICKETS,
   LockStage.CLOSE_LOTTERY,
   LockStage.ADMIN_WITHDRAW,
+  LockStage.UPDATE_NFT_PRIZES,
   LockStage.CONFIRM_ADMIN_WITHDRAW,
   LockStage.CONFIRM_START_LOTTERY,
   LockStage.CONFIRM_UPDATE_BURN_TOKEN_FOR_CREDIT,
@@ -54,6 +56,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_BUY_TICKETS,
   LockStage.CONFIRM_CLOSE_LOTTERY,
   LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES,
+  LockStage.CONFIRM_UPDATE_NFT_PRIZES,
 ]
 
 export const Divider = styled.div`

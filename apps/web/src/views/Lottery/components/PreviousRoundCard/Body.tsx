@@ -46,7 +46,13 @@ const StyledCardRibbon = styled(CardRibbon)`
   }
 `
 
-const PreviousRoundCardBody: React.FC<any> = ({ lotteryNodeData, lotteryId, latestId }) => {
+const PreviousRoundCardBody: React.FC<any> = ({
+  currentTokenId,
+  currTokenData,
+  lotteryNodeData,
+  lotteryId,
+  latestId,
+}) => {
   const { t } = useTranslation()
   const { isLg, isXl, isXxl } = useMatchBreakpoints()
   const isLargerScreen = isLg || isXl || isXxl
@@ -55,9 +61,14 @@ const PreviousRoundCardBody: React.FC<any> = ({ lotteryNodeData, lotteryId, late
   const isLatestRound = Number(latestId ?? '') === Number(lotteryId ?? '')
 
   const [onPresentViewTicketsModal] = useModal(
-    <ViewTicketsModal roundId={lotteryId} roundStatus={lotteryNodeData?.status} />,
+    <ViewTicketsModal
+      roundId={lotteryId}
+      currentTokenId={currentTokenId}
+      currTokenData={currTokenData}
+      lotteryNodeData={lotteryNodeData}
+      roundStatus={lotteryNodeData?.status}
+    />,
   )
-  console.log('3lotteryNodeData==============>', lotteryNodeData)
   const totalTicketNumber =
     lotteryNodeData?.users?.filter((user) => user?.account?.toLowerCase() === account?.toLowerCase())?.length ?? 0
   const ticketRoundText =

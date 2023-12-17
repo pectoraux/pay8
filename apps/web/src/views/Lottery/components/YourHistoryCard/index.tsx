@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import styled from 'styled-components'
 import {
@@ -14,7 +14,7 @@ import {
   Box,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { LotteryStatus } from 'config/constants/types'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useLottery } from 'state/lottery/hooks'
 import { fetchLottery } from 'state/lotteries/helpers'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -24,7 +24,6 @@ import BuyTicketsButton from '../BuyTicketsButton'
 import PreviousRoundCardBody from '../PreviousRoundCard/Body'
 import { getDrawnDate } from '../../helpers'
 import PreviousRoundCardFooter from '../PreviousRoundCard/Footer'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface YourHistoryCardProps {
   handleShowMoreClick: () => void
@@ -63,9 +62,12 @@ const YourHistoryCard: React.FC<any> = ({ currentTokenId, handleShowMoreClick, n
   //   currentRound: { status },
   // } = useLottery()
   const { lotteryData } = useLottery()
-  const { status } = lotteryData
+  const { tokenData } = lotteryData
+  const currTokenData = useMemo(
+    () => (tokenData?.length ? tokenData[parseInt(currentTokenId)] : {}),
+    [tokenData, currentTokenId],
+  )
   // const userLotteryData = useGetUserLotteriesGraphData()
-  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN
 
   const handleHistoryRowClick = async (lotteryId: string) => {
     setShouldShowRoundDetail(true)
@@ -132,7 +134,12 @@ const YourHistoryCard: React.FC<any> = ({ currentTokenId, handleShowMoreClick, n
             <Text textAlign="center" color="textSubtle" mb="16px">
               {t('Buy tickets for the next round!')}
             </Text>
-            <BuyTicketsButton disabled={ticketBuyIsDisabled} width="100%" />
+            <BuyTicketsButton
+              currentTokenId={currentTokenId}
+              currTokenData={currTokenData}
+              disabled={false}
+              width="100%"
+            />
           </Box>
         </StyledCardBody>
       )

@@ -29,7 +29,6 @@ const ClaimInnerContainer: React.FC<any> = ({ earned, veAddress, tokenAddress, t
   const { data: tokenData } = useGetTokenData(tokenAddress)
   const winnings = getBalanceNumber(earned, tokenData?.decimals)
   console.log('currTokenData============>', veAddress, tokenAddress, tokenId, tokenData)
-  const trustBountiesVoterContract = useTrustBountiesVoterContract()
   const StakeMarketBribeContract = useStakeMarketBribeContract()
 
   const handleClaim = async () => {

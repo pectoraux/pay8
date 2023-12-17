@@ -65,7 +65,6 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
   const userTickets = lotteryData?.users
   const [onPresentViewTicketsModal] = useModal(<ViewTicketsModal roundId={currentLotteryId} roundStatus={status} />)
   const [isExpanded, setIsExpanded] = useState(false)
-  const ticketBuyIsDisabled = status !== LotteryStatus.OPEN
   // const cakePriceBusd = usePriceCakeBusd()
   const currTokenData = useMemo(
     () => (tokenData?.length ? tokenData[parseInt(currentTokenId)] : {}),
@@ -214,7 +213,7 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
             <BuyTicketsButton
               currentTokenId={currentTokenId}
               currTokenData={currTokenData}
-              disabled={ticketBuyIsDisabled}
+              disabled={false}
               maxWidth="280px"
             />
           </Flex>

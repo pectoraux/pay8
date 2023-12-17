@@ -1,16 +1,16 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { Card, Text, Skeleton, CardHeader, Box } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useAppDispatch } from 'state'
 import { useLottery } from 'state/lottery/hooks'
 import { fetchLottery } from 'state/lotteries/helpers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+
 import RoundSwitcher from './RoundSwitcher'
 import { getDrawnDate } from '../../helpers'
 import PreviousRoundCardBody from '../PreviousRoundCard/Body'
 import PreviousRoundCardFooter from '../PreviousRoundCard/Footer'
-import { useRouter } from 'next/router'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -36,7 +36,7 @@ const AllHistoryCard = ({ currentTokenId }) => {
   const { chainId } = useActiveChainId()
   const { id: currentLotteryId, history } = lotteryData
   const [latestRoundId, setLatestRoundId] = useState(null)
-  const [selectedRoundId, setSelectedRoundId] = useState('')
+  const [selectedRoundId, setSelectedRoundId] = useState(currentLotteryId)
   const [selectedLotteryNodeData, setSelectedLotteryNodeData] = useState(lotteryData)
   const timer = useRef(null)
   console.log(
@@ -46,6 +46,15 @@ const AllHistoryCard = ({ currentTokenId }) => {
     lotteryData,
     selectedLotteryNodeData,
   )
+  const currTokenData = useMemo(
+    () => (lotteryData?.tokenData?.length ? lotteryData?.tokenData[parseInt(currentTokenId)] : {}),
+    [lotteryData, currentTokenId],
+  )
+
+  useEffect(() => {
+    setSelectedRoundId(currentLotteryId)
+  }, [currentLotteryId])
+
   useEffect(() => {
     if (Number(currentLotteryId) > 0) {
       const mostRecentFinishedRoundId = history?.length ? history[history?.length - 1]?.id : 1
@@ -70,7 +79,7 @@ const AllHistoryCard = ({ currentTokenId }) => {
     }, 1000)
 
     return () => clearInterval(timer.current)
-  }, [selectedRoundId, currentLotteryId, dispatch])
+  }, [selectedRoundId, currentLotteryId, dispatch, chainId])
 
   const handleInputChange = (event) => {
     const {
@@ -97,7 +106,6 @@ const AllHistoryCard = ({ currentTokenId }) => {
       setSelectedRoundId(currentLotteryId)
     }
   }
-  console.log('9AllHistoryCard==================>', selectedLotteryNodeData, currentTokenId, currentLotteryId)
   return (
     <StyledCard>
       <StyledCardHeader>
@@ -119,6 +127,8 @@ const AllHistoryCard = ({ currentTokenId }) => {
         </Box>
       </StyledCardHeader>
       <PreviousRoundCardBody
+        currentTokenId={currentTokenId}
+        currTokenData={currTokenData}
         lotteryNodeData={selectedLotteryNodeData}
         lotteryId={selectedRoundId}
         latestId={history?.length ? history[history?.length - 1]?.id : currentLotteryId}
