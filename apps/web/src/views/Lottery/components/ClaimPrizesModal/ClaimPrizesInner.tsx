@@ -97,6 +97,7 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
             }
             fontSize="44px"
             bold
+            decimals={parseInt(isNFT) ? 0 : 3}
             color="secondary"
             prefix={parseInt(isNFT) ? 'NFT # ' : ''}
             unit={parseInt(isNFT) ? '' : ` ${currTokenData?.token?.symbol?.toUpperCase() ?? ''}`}
