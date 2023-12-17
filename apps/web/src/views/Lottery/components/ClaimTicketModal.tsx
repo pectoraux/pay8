@@ -53,7 +53,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const args = parseInt(lotteryData?.isNFT)
-        ? [currTokenData?.token?.address, lotteryId]
+        ? [lotteryData?.prizeAddress, lotteryId]
         : [currTokenData?.token?.address, lotteryId, state.tickets?.split(','), state.brackets?.split(',')]
       const contract = parseInt(lotteryData?.isNFT) ? lotteryHelperContract : lotteryContract
       const method = parseInt(lotteryData?.isNFT) ? 'withdrawNFTPrize' : 'claimTickets'

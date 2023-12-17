@@ -226,6 +226,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
     }
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
+      ...lottery,
       id: lotteryId,
       users: lottery?.users,
       history: lottery?.history,
