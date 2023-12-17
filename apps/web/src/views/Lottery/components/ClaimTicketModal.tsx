@@ -7,7 +7,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { fetchLotteriesAsync } from 'state/lotteries'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useLotteryContract, useLotteryHelperContract } from 'hooks/useContract'
+import { useLotteryContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from 'views/Accelerator/components/styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -26,7 +26,6 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
   const lotteryContract = useLotteryContract()
-  const lotteryHelperContract = useLotteryHelperContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
@@ -52,13 +51,14 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const args = parseInt(lotteryData?.isNFT)
-        ? [lotteryData?.prizeAddress, lotteryId]
-        : [currTokenData?.token?.address, lotteryId, state.tickets?.split(','), state.brackets?.split(',')]
-      const contract = parseInt(lotteryData?.isNFT) ? lotteryHelperContract : lotteryContract
-      const method = parseInt(lotteryData?.isNFT) ? 'withdrawNFTPrize' : 'claimTickets'
-      console.log('Confirm_claim_ticket================>', contract, method, args)
-      return callWithGasPrice(contract, method, args).catch((err) => {
+      const args = [
+        parseInt(lotteryData?.isNFT) ? lotteryData?.prizeAddress : currTokenData?.token?.address,
+        lotteryId,
+        state.tickets?.split(','),
+        state.brackets?.split(','),
+      ]
+      console.log('Confirm_claim_ticket================>', args)
+      return callWithGasPrice(lotteryContract, 'claimTickets', args).catch((err) => {
         console.log('Confirm_claim_ticket================>', err)
         setPendingFb(false)
         toastError(
@@ -81,12 +81,10 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
   }, [
     fetchWithCatchTxError,
     onDismiss,
-    lotteryData?.isNFT,
     currTokenData?.token?.address,
     lotteryId,
     state.tickets,
     state.brackets,
-    lotteryHelperContract,
     lotteryContract,
     callWithGasPrice,
     toastError,

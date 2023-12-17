@@ -5,7 +5,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { LotteryTicketClaimData } from 'config/constants/types'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { useLotteryContract } from 'hooks/useContract'
+import { useLotteryContract, useLotteryHelperContract } from 'hooks/useContract'
 import { useState, useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { fetchUserLotteries } from 'state/lottery'
@@ -24,11 +24,12 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const {
-    lotteryData: { id: currentLotteryId, tokenData },
+    lotteryData: { id: currentLotteryId, tokenData, isNFT, prizeAddress },
   } = useLottery()
   const gasPrice = useGasPrice()
   const { toastSuccess } = useToast()
   const lotteryContract = useLotteryContract()
+  const lotteryHelperContract = useLotteryHelperContract()
   const [identityTokenId, setIdentityTokenId] = useState('0')
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [activeClaimIndex, setActiveClaimIndex] = useState(0)
@@ -36,7 +37,7 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
     () => (tokenData?.length ? tokenData[parseInt(currentTokenId)] : {}),
     [tokenData, currentTokenId],
   )
-  console.log('currTokenData============>', currTokenData, currentTokenId, tokenData)
+  console.log('currTokenData============>', isNFT, prizeAddress, currTokenData, currentTokenId, tokenData)
   const [pendingBatchClaims, setPendingBatchClaims] = useState(roundsToClaim?.length ? roundsToClaim[0] : 0)
 
   const handleProgressToNextClaim = () => {
@@ -52,14 +53,14 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
   const handleClaim = async () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      return callWithEstimateGas(
-        lotteryContract,
-        'withdrawPendingReward',
-        [currTokenData?.token?.address, currentLotteryId, identityTokenId],
-        {
-          gasPrice,
-        },
-      )
+      const method = parseInt(isNFT) ? 'withdrawNFTPrize' : 'withdrawPendingReward'
+      const contract = parseInt(isNFT) ? lotteryHelperContract : lotteryContract
+      const args = parseInt(isNFT)
+        ? [prizeAddress, currentLotteryId]
+        : [currTokenData?.token?.address, currentLotteryId, identityTokenId]
+      return callWithEstimateGas(contract, method, args, {
+        gasPrice,
+      })
     })
     if (receipt?.status) {
       toastSuccess(
