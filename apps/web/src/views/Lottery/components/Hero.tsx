@@ -225,7 +225,7 @@ const Hero = ({ lottery, currentTokenId }) => {
         <Heading mb="32px" scale="lg" color="#ffffff">
           {t('Your prize!')}
         </Heading>
-        {lottery?.status === LotteryStatus.OPEN ? (
+        {lottery?.status !== LotteryStatus.OPEN ? (
           <Heading mb="24px" scale="xl" color="#ffffff">
             {t('Tickets on sale soon')}
           </Heading>
@@ -244,7 +244,7 @@ const Hero = ({ lottery, currentTokenId }) => {
         <Heading mb="32px" scale="lg" color="#ffffff">
           {t('in prizes!')}
         </Heading>
-        {lottery?.status === LotteryStatus.OPEN ? (
+        {lottery?.status !== LotteryStatus.OPEN ? (
           <Heading mb="24px" scale="xl" color="#ffffff">
             {t('Tickets on sale soon')}
           </Heading>
