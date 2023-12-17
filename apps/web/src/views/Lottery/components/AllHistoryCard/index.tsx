@@ -133,11 +133,13 @@ const AllHistoryCard = ({ currentTokenId }) => {
         lotteryId={selectedRoundId}
         latestId={history?.length ? history[history?.length - 1]?.id : currentLotteryId}
       />
-      <PreviousRoundCardFooter
-        currentTokenId={currentTokenId}
-        lotteryNodeData={selectedLotteryNodeData}
-        lotteryId={selectedRoundId}
-      />
+      {parseInt(lotteryData?.isNFT) ? null : (
+        <PreviousRoundCardFooter
+          currentTokenId={currentTokenId}
+          lotteryNodeData={selectedLotteryNodeData}
+          lotteryId={selectedRoundId}
+        />
+      )}
     </StyledCard>
   )
 }

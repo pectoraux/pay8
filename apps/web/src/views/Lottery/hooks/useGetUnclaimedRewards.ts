@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js'
 import { FetchStatus } from 'config/constants/types'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
-const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
+const useGetUnclaimedRewards = ({ currentTokenId, isNFT, prizeAddress, activeIndex }) => {
   const { account } = useWeb3React()
   const {
     lotteryData: { id: currentLotteryId, tokenData },
@@ -45,8 +45,8 @@ const useGetUnclaimedRewards = ({ currentTokenId, activeIndex }) => {
       const pendingRevenue = (await fetchPendingRevenue(
         currentLotteryId,
         account,
-        currTokenData?.token?.address,
-        !!activeIndex,
+        parseInt(isNFT) ? prizeAddress : currTokenData?.token?.address,
+        parseInt(isNFT) ? false : !!activeIndex,
         chainId,
       )) as any
       setUnclaimedRewards([getBalanceNumber(new BigNumber(pendingRevenue), currTokenData?.token?.decimals)])

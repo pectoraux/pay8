@@ -218,36 +218,42 @@ const Hero = ({ lottery, currentTokenId }) => {
   const prizeTotal = getBalanceNumber(prizeInBusd, tokenData?.decimals ?? 18)
   console.log('Hero=====================>', lottery, currentTokenId)
   const getHeroHeading = () => {
-    if (lottery?.status === LotteryStatus.OPEN) {
-      return lottery.isNFT ? (
-        <>
-          <Iframe url={lottery?.tokenURI} height="550px" styles={{ marginBottom: '10px' }} id="myId2" />
-          <Heading mb="32px" scale="lg" color="#ffffff">
-            {t('Your prize!')}
-          </Heading>
-        </>
-      ) : (
-        <>
-          <PrizeTotalBalance
-            fontSize="64px"
-            bold
-            unit={` ${tokenData?.token?.symbol ?? ''}`}
-            value={prizeTotal}
-            mb="8px"
-            decimals={3}
-          />
-          <Heading mb="32px" scale="lg" color="#ffffff">
-            {t('in prizes!')}
-          </Heading>
-        </>
-      )
-    }
-    return (
-      <Heading mb="24px" scale="xl" color="#ffffff">
-        {t('Tickets on sale soon')}
-      </Heading>
+    // if (lottery?.status === LotteryStatus.OPEN) {
+    return lottery.isNFT ? (
+      <>
+        <Iframe url={lottery?.tokenURI} height="550px" styles={{ marginBottom: '10px' }} id="myId2" />
+        <Heading mb="32px" scale="lg" color="#ffffff">
+          {t('Your prize!')}
+        </Heading>
+        <Heading mb="24px" scale="xl" color="#ffffff">
+          {t('Tickets on sale soon')}
+        </Heading>
+      </>
+    ) : (
+      <>
+        <PrizeTotalBalance
+          fontSize="64px"
+          bold
+          unit={` ${tokenData?.token?.symbol ?? ''}`}
+          value={prizeTotal}
+          mb="8px"
+          decimals={3}
+        />
+        <Heading mb="32px" scale="lg" color="#ffffff">
+          {t('in prizes!')}
+        </Heading>
+        <Heading mb="24px" scale="xl" color="#ffffff">
+          {t('Tickets on sale soon')}
+        </Heading>
+      </>
     )
   }
+  // return (
+  //   <Heading mb="24px" scale="xl" color="#ffffff">
+  //     {t('Tickets on sale soon')}
+  //   </Heading>
+  // )
+  // }
 
   return (
     <Flex flexDirection="column" alignItems="center" justifyContent="center">

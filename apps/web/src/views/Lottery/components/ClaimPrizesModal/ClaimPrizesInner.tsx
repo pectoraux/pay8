@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoRenewIcon, Button, Flex, PresentWonIcon, Text, useToast, Balance, Input } from '@pancakeswap/uikit'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { LotteryTicketClaimData } from 'config/constants/types'
@@ -90,11 +90,16 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
           <Balance
             textAlign={['center', null, 'left']}
             lineHeight="1.1"
-            value={pendingBatchClaims}
+            value={
+              parseInt(isNFT)
+                ? getDecimalAmount(pendingBatchClaims, currTokenData?.token?.decimals)
+                : pendingBatchClaims
+            }
             fontSize="44px"
             bold
             color="secondary"
-            unit={` ${currTokenData?.token?.symbol?.toUpperCase() ?? ''}`}
+            prefix={parseInt(isNFT) ? 'NFT # ' : ''}
+            unit={parseInt(isNFT) ? '' : ` ${currTokenData?.token?.symbol?.toUpperCase() ?? ''}`}
           />
           <PresentWonIcon ml={['0', null, '12px']} width="64px" />
         </Flex>
@@ -121,7 +126,12 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
           width="100%"
           onClick={() => handleClaim()}
         >
-          {pendingTx ? t('Claiming') : t('Claim')} {Number(pendingBatchClaims) > 0 ? `(${pendingBatchClaims})` : ''}
+          {pendingTx ? t('Claiming') : t('Claim')}{' '}
+          {parseInt(isNFT)
+            ? getDecimalAmount(pendingBatchClaims, currTokenData?.token?.decimals)?.toString()
+            : Number(pendingBatchClaims) > 0
+            ? `(${pendingBatchClaims})`
+            : ''}
         </Button>
       </Flex>
     </>

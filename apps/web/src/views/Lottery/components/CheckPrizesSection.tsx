@@ -28,14 +28,24 @@ const CheckPrizesSection = ({ currentTokenId }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const {
-    lotteryData: { status },
+    lotteryData: { status, isNFT, prizeAddress },
   } = useLottery()
   const [hasCheckedForRewards, setHasCheckedForRewards] = useState(false)
   const [hasRewardsToClaim, setHasRewardsToClaim] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
-  const { fetchAllRewards, unclaimedRewards, fetchStatus } = useGetUnclaimedRewards({ currentTokenId, activeIndex })
+  const { fetchAllRewards, unclaimedRewards, fetchStatus } = useGetUnclaimedRewards({
+    currentTokenId,
+    isNFT,
+    prizeAddress,
+    activeIndex,
+  })
   const [onPresentClaimModal] = useModal(
-    <ClaimPrizesModal currentTokenId={currentTokenId} roundsToClaim={unclaimedRewards} />,
+    <ClaimPrizesModal
+      currentTokenId={currentTokenId}
+      isNFT={isNFT}
+      prizeAddress={prizeAddress}
+      roundsToClaim={unclaimedRewards}
+    />,
     false,
   )
   const isFetchingRewards = fetchStatus === FetchStatus.Fetching

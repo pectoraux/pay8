@@ -85,9 +85,14 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
         textAlign={['center', null, null, 'left']}
         lineHeight="1"
         bold
-        unit={` ${currTokenData.token?.symbol ?? '$'}`}
-        value={getBalanceNumber(currTokenData?.amountCollected, currTokenData.token?.decimals)}
-        decimals={5}
+        prefix={parseInt(lotteryData?.isNFT) ? 'NFT # ' : ''}
+        unit={parseInt(lotteryData?.isNFT) ? '' : ` ${currTokenData.token?.symbol ?? '$'}`}
+        value={
+          parseInt(lotteryData?.isNFT)
+            ? lotteryData?.tokenId
+            : getBalanceNumber(currTokenData?.amountCollected, currTokenData.token?.decimals)
+        }
+        decimals={parseInt(lotteryData?.isNFT) ? 0 : 5}
       />
     )
   }

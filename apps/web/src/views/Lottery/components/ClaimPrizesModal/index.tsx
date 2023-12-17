@@ -48,7 +48,7 @@ interface ClaimPrizesModalModalProps {
   onDismiss?: () => void
 }
 
-const ClaimPrizesModal: React.FC<any> = ({ onDismiss, currentTokenId, roundsToClaim }) => {
+const ClaimPrizesModal: React.FC<any> = ({ onDismiss, currentTokenId, isNFT, prizeAddress, roundsToClaim }) => {
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -72,6 +72,8 @@ const ClaimPrizesModal: React.FC<any> = ({ onDismiss, currentTokenId, roundsToCl
             // dispatch(fetchUserLotteries({ account, currentLotteryId }))
             onDismiss?.()
           }}
+          isNFT={isNFT}
+          prizeAddress={prizeAddress}
           currentTokenId={currentTokenId}
           roundsToClaim={roundsToClaim}
         />

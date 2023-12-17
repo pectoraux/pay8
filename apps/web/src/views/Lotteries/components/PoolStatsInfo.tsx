@@ -89,10 +89,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
+      {parseInt(pool?.isNFT) && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
+          <ScanLink href={getBlockExploreLink(pool?.prizeAddress, 'address', chainId)} bold={false} small>
+            {t('View Prize Contract')}
           </ScanLink>
         </Flex>
       )}
