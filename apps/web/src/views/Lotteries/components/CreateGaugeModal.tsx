@@ -416,7 +416,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
             : !state.referrer
             ? 'withdrawPendingReward'
             : 'withrawReferrerFee'
-        console.log('CONFIRM_WITHDRAW===============>', args)
+        console.log('CONFIRM_WITHDRAW===============>', method, args)
         return callWithGasPrice(lotteryContract, method, args).catch((err) =>
           console.log('CONFIRM_WITHDRAW===============>', err),
         )

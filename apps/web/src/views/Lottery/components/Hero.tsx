@@ -225,9 +225,11 @@ const Hero = ({ lottery, currentTokenId }) => {
         <Heading mb="32px" scale="lg" color="#ffffff">
           {t('Your prize!')}
         </Heading>
-        <Heading mb="24px" scale="xl" color="#ffffff">
-          {t('Tickets on sale soon')}
-        </Heading>
+        {lottery?.status === LotteryStatus.OPEN ? (
+          <Heading mb="24px" scale="xl" color="#ffffff">
+            {t('Tickets on sale soon')}
+          </Heading>
+        ) : null}
       </>
     ) : (
       <>
@@ -242,9 +244,11 @@ const Hero = ({ lottery, currentTokenId }) => {
         <Heading mb="32px" scale="lg" color="#ffffff">
           {t('in prizes!')}
         </Heading>
-        <Heading mb="24px" scale="xl" color="#ffffff">
-          {t('Tickets on sale soon')}
-        </Heading>
+        {lottery?.status === LotteryStatus.OPEN ? (
+          <Heading mb="24px" scale="xl" color="#ffffff">
+            {t('Tickets on sale soon')}
+          </Heading>
+        ) : null}
       </>
     )
   }
@@ -266,7 +270,7 @@ const Hero = ({ lottery, currentTokenId }) => {
         <img src="/images/lottery/ticket-r.png" width="121px" height="72px" alt="" />
       </StarsDecorations>
       <Heading mb="8px" scale="md" color="#ffffff" id="lottery-hero-title">
-        {t('The %val% Lottery', { val: lottery?.id === '1' ? 'MarketPlace' : lottery?.collection?.name })}
+        {t('The %val% Lottery', { val: lottery?.id === '1' ? 'MarketPlace' : lottery?.collection?.name ?? '' })}
       </Heading>
       {getHeroHeading()}
       <TicketContainer
