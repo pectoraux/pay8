@@ -28,7 +28,6 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
 import { PageMeta } from 'components/Layout/Page'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { getBlockExploreLink } from 'utils'
 import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -68,6 +67,7 @@ const CreateProposal = () => {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const { name, choices } = state
   const formErrors = getFormErrors(state, t)
+  const crypto = require('crypto')
 
   const handleCreateData = useCallback(async () => {
     console.log('datadata===========================>', data)
@@ -87,12 +87,15 @@ const CreateProposal = () => {
           .map((choice, index) => {
             const pk = `-----BEGIN PUBLIC KEY-----${data.publicKey?.replace(/\s/g, '')}-----END PUBLIC KEY-----`
             console.log('1pk===================>', pk)
-            const encryptedAnswer = choice.value
-              ? encryptRsa.encryptStringWithRsaPublicKey({
-                  text: choice.value,
-                  publicKey: pk,
-                })
-              : ''
+            const encryptedAnswer =
+              choice.value && questions[index].value.toLowerCase() === 'ssid'
+                ? crypto.createHash('sha1').update(choice.value).digest('hex')
+                : choice.value
+                ? encryptRsa.encryptStringWithRsaPublicKey({
+                    text: choice.value,
+                    publicKey: pk,
+                  })
+                : ''
             console.log('2public===================>', data?.publicKey, [
               state.profileId,
               state.auditorProfileId,

@@ -27,12 +27,11 @@ import { useSSIContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider } from 'views/ARPs/components/styles'
 import { Entry, EntryState } from 'state/types'
+import { useSignMessage } from 'wagmi'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
 import { Label, SecondaryLabel } from '../CreateProposal/styles'
 import { combineDateAndTime } from '../CreateProposal/helpers'
-import { useSignMessage } from 'wagmi'
-import { useRouter } from 'next/router'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const CryptoJS = require('crypto-js')
@@ -261,6 +260,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
             entry.auditorProfileId?.id,
             deadline,
             entry.question,
+            entry.searchable ? answer : encryptedAnswer,
           ]).catch((err) => console.log('rerr===================>', err))
         }
       })
