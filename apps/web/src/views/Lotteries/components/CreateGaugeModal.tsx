@@ -403,12 +403,22 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
-        const args = !state.referrer
-          ? [currency.address, state.lotteryId, state.identityTokenId]
+        const args = parseInt(pool?.isNFT)
+          ? [state.token, state.lotteryId]
+          : !state.referrer
+          ? [state.token, state.lotteryId, state.identityTokenId]
           : [state.lotteryId, currency.address]
-        const method = !state.referrer ? 'withdrawPendingReward' : 'withrawReferrerFee'
+        const method =
+          parseInt(pool?.isNFT) && variant !== 'user'
+            ? 'withdrawNFTPendingReward'
+            : parseInt(pool?.isNFT)
+            ? 'withdrawNFTPrize'
+            : !state.referrer
+            ? 'withdrawPendingReward'
+            : 'withrawReferrerFee'
+        const contract = parseInt(pool?.isNFT) && variant === 'user' ? lotteryHelperContract : lotteryContract
         console.log('CONFIRM_WITHDRAW===============>', args)
-        return callWithGasPrice(lotteryContract, method, args).catch((err) =>
+        return callWithGasPrice(contract, method, args).catch((err) =>
           console.log('CONFIRM_WITHDRAW===============>', err),
         )
       }
@@ -562,7 +572,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES)}>
             {t('CONTRIBUTE RANDOM NUMBER FEES')}
           </Button>
-          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.ADMIN_WITHDRAW)}>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('WITHDRAW')}
           </Button>
         </Flex>

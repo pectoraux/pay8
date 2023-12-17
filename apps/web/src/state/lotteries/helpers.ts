@@ -115,6 +115,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
     const fee = viewLottery.treasury.fee
     const useNFTicket = viewLottery.treasury.useNFTicket
     const referrerFee = viewLottery.treasury.referrerFee
+    const isNFT = viewLottery.treasury.isNFT
 
     const _lottery = await getLotteries(0, 0, { id: lotteryId })
     const lottery = _lottery?.length && _lottery[0]
@@ -227,6 +228,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
       finalNumber: finalNumber.toString(),
       lockDuration: lockDuration.toString(),
       useNFTicket,
+      isNFT,
       owner,
       valuepool,
       tokenData,
