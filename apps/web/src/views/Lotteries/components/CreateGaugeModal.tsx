@@ -520,6 +520,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('WITHDRAW')}
           </Button>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.ADMIN_WITHDRAW)}>
+            {t('WITHDRAW NFT PRIZE')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.INJECT_FUNDS)}>
             {t('INJECT FUNDS')}
           </Button>
@@ -575,6 +578,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           </Button>
           <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('WITHDRAW')}
+          </Button>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.ADMIN_WITHDRAW)}>
+            {t('WITHDRAW NFT PRIZE')}
           </Button>
         </Flex>
       )}
