@@ -44,8 +44,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Input
           type="text"
           scale="sm"
-          name="token"
-          value={state.token}
+          name="prizeAddress"
+          value={state.prizeAddress}
           placeholder={t('input token address')}
           onChange={handleChange}
         />

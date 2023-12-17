@@ -105,7 +105,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     startReceivable: '',
     valuepool: '',
     periodReceivable: '',
-    token: parseInt(pool?.isNFT) ? pool?.prizeAddress : currency?.address,
+    token: currency?.address,
+    prizeAddress: pool?.prizeAddress,
     treasuryFee: '',
     referrerFee: '',
     discountDivisor: '',
@@ -421,7 +422,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
-        const args = [state.token, state.lotteryId]
+        const args = [state.prizeAddress, state.lotteryId]
         console.log('CONFIRM_WITHDRAW===============>', args)
         return callWithGasPrice(lotteryHelperContract, 'withdrawNFTPrize', args).catch((err) =>
           console.log('CONFIRM_WITHDRAW===============>', err),
