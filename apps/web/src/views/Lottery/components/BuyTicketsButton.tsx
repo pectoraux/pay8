@@ -11,15 +11,17 @@ interface BuyTicketsButtonProps extends ButtonProps {
   themeMode?: string
 }
 
-const BuyTicketsButton: React.FC<any> = ({ disabled, themeMode, ...props }) => {
+const BuyTicketsButton: React.FC<any> = ({ currentTokenId, currTokenData, disabled, themeMode, ...props }) => {
   const { t } = useTranslation()
   const { isDark } = useTheme()
-  const [onPresentBuyTicketsModal] = useModal(<BuyTicketsModal />)
+  const [onPresentBuyTicketsModal] = useModal(<BuyTicketsModal currentTokenId={currentTokenId} disabled={disabled} />)
   const {
     lotteryData: { status, id: lotteryId, users },
   } = useLottery()
 
-  const [onClaimTicketModal] = useModal(<ClaimTicketModal lotteryId={lotteryId} users={users} />)
+  const [onClaimTicketModal] = useModal(
+    <ClaimTicketModal currTokenData={currTokenData} lotteryId={lotteryId} users={users} />,
+  )
 
   const getBuyButtonText = () => {
     if (status === LotteryStatus.OPEN) {

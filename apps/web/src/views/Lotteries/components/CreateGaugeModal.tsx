@@ -449,7 +449,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_CLAIM_TICKETS) {
-        const args = [state.lotteryId, state.ticketNumbers.split(','), state.brackets.split(',')]
+        const args = [state.token, state.lotteryId, state.ticketNumbers.split(','), state.brackets.split(',')]
         console.log('CONFIRM_CLAIM_TICKETS===============>', args)
         return callWithGasPrice(lotteryContract, 'claimTickets', args).catch((err) =>
           console.log('CONFIRM_CLAIM_TICKETS===============>', err),

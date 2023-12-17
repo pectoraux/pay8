@@ -211,7 +211,12 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
                 )}
               </Flex>
             )}
-            <BuyTicketsButton disabled={ticketBuyIsDisabled} maxWidth="280px" />
+            <BuyTicketsButton
+              currentTokenId={currentTokenId}
+              currTokenData={currTokenData}
+              disabled={ticketBuyIsDisabled}
+              maxWidth="280px"
+            />
           </Flex>
         </Grid>
       </CardBody>

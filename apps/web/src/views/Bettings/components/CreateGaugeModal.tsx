@@ -18,6 +18,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { combineDateAndTime } from 'views/ReferralsVoting/CreateProposal/helpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -45,7 +46,6 @@ import DeleteBettingEventStage from './DeleteBettingEventStage'
 import SetBettingResultStage from './SetBettingResultStage'
 import ClaimTicketStage from './ClaimTicketStage'
 import CloseBettingStage from './CloseBettingStage'
-import { encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),

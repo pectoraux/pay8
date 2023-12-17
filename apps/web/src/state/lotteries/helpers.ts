@@ -235,6 +235,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
   } catch (err) {
     console.log('errr============>', err)
   }
+  return null
 }
 
 export const fetchLotteries = async ({ fromLottery, chainId }) => {

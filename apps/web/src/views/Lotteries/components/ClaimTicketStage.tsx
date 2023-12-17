@@ -26,7 +26,6 @@ interface SetPriceStageProps {
 const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const { account } = useWeb3React()
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -67,6 +66,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           name="lotteryId"
           value={state.lotteryId}
           placeholder={t('input lottery id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="token"
+          value={state.token}
+          placeholder={t('input token to claim')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

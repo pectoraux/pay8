@@ -60,7 +60,7 @@ enum BuyingStage {
   EDIT = 'Edit',
 }
 
-const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
+const BuyTicketsModal: React.FC<any> = ({ currentTokenId, onDismiss }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -69,7 +69,7 @@ const BuyTicketsModal: React.FC<any> = ({ onDismiss }) => {
   const { lotteryData } = useLottery()
   const { id: currentLotteryId, discountDivisor, tokenData } = lotteryData
   const [state, setState] = useState<any>(() => ({
-    nfticketId: '0',
+    nfticketId: parseInt(currentTokenId) ?? '0',
     identityTokenId: '',
     numbers: '',
   }))

@@ -439,6 +439,11 @@ export const lotteryABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: '_lotteryId',
         type: 'uint256',

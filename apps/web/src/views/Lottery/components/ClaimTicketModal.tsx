@@ -20,7 +20,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, onDismiss }) => {
+const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -50,7 +50,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, onDismiss }) => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const args = [lotteryId, state.tickets?.split(','), state.brackets?.split(',')]
+      const args = [currTokenData?.token?.address, lotteryId, state.tickets?.split(','), state.brackets?.split(',')]
       console.log('Confirm_claim_ticket================>', lotteryContract, args)
       return callWithGasPrice(lotteryContract, 'claimTickets', args).catch((err) => {
         console.log('Confirm_claim_ticket================>', err)
