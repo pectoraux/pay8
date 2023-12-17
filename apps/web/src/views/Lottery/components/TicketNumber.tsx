@@ -40,7 +40,7 @@ const TicketNumber: React.FC<any> = ({ localId, id, number, rewardBracket }) => 
     <Flex flexDirection="column" mb="12px">
       <Flex justifyContent="space-between">
         <Text fontSize="12px" color="textSubtle">
-          #{localId || id}
+          {/* #{localId || id} */}#{id}
         </Text>
         {rewardBracket >= 0 && (
           <Text fontSize="12px">
