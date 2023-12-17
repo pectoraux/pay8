@@ -50,7 +50,7 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currUser, decimals = 18 
                         decimals={5}
                         bold={!isMobile}
                         fontSize="13px"
-                        color={Number(currUser?.rewards) ? 'primary' : 'textDisabled'}
+                        color={Number(rwd.toString()) ? 'primary' : 'textDisabled'}
                         value={getBalanceNumber(new BigNumber(rwd.toString()), decimals) ?? 0}
                         prefix={`${index + 1}) `}
                       />
