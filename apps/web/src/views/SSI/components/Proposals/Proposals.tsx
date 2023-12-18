@@ -44,7 +44,9 @@ const Proposals = ({ searchQuery }) => {
     () => (searchQuery ? { question_contains_nocase: searchQuery, searchable: true } : {}),
     [searchQuery],
   )
-  const { status: status3, data: userDatas } = useSWR(['userDatas', where], async () => getUserData2(1000, 0, where))
+  const { status: status3, data: userDatas } = useSWR(['userDatas', searchQuery], async () =>
+    getUserData2(1000, 0, where),
+  )
   console.log('getSSIData================>', data, profile)
   const handleProposalTypeChange = (newProposalType: EntryType) => {
     setState((prevState) => ({
