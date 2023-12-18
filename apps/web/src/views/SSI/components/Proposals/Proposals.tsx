@@ -58,7 +58,7 @@ const Proposals = ({ searchQuery }) => {
   useEffect(() => {
     if (!data?.length) refetch()
     if (!profile) refetch2()
-  }, [data, status, status2])
+  }, [account, status, status2])
 
   const handleFilterChange = (newFilterState: EntryState) => {
     setState((prevState) => ({

@@ -123,8 +123,6 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
     return ''
   }
 
-  console.log('comparator==============>', entry, comparator, answer, generateIdentityProof())
-
   const handleIdentityProof = useCallback(async () => {
     setPendingFb(true)
     const identityProof = generateIdentityProof()
