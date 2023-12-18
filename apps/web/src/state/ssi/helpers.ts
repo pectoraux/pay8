@@ -161,7 +161,7 @@ export const getUserData2 = async (first = 5, skip = 0, where) => {
       GRAPH_API_SSI,
       gql`
         query getUserData2($first: Int!, $skip: Int!, $where: UserData_filter!, $orderDirection: OrderDirection) {
-          userData(where: $where) {
+          userDatas(where: $where) {
             ${ssiFields}
             ownerProfileId {
               ${profileFields}              
