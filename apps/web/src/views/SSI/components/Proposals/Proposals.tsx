@@ -54,6 +54,7 @@ const Proposals = ({ searchQuery }) => {
     filterProposalsByState(filterProposalsByType(data, profile, proposalType), filterState),
     searchQuery,
     userDatas,
+    proposalType,
   )
   console.log('filteredProposals==================>', filteredProposals)
   return (
