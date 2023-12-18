@@ -1,17 +1,13 @@
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { bscTokens } from '@pancakeswap/tokens'
-import BigNumber from 'bignumber.js'
 import { SNAPSHOT_HUB_API } from 'config/constants/endpoints'
 import fromPairs from 'lodash/fromPairs'
 import groupBy from 'lodash/groupBy'
 import { Proposal, EntryState, EntryType, Vote } from 'state/types'
-import { getCakeVaultAddress } from 'utils/addressHelpers'
-import { convertSharesToCake } from 'views/Pools/helpers'
 import { convertTimeToSeconds } from 'utils/timeHelper'
+import latinise from '@pancakeswap/utils/latinise'
 import { ADMINS, PANCAKE_SPACE, SNAPSHOT_VERSION } from './config'
 import { getScores } from './getScores'
-import * as strategies from './strategies'
-import { combineDateAndTime } from './CreateProposal/helpers'
 
 export const isCoreProposal = (proposal: Proposal) => {
   return true
@@ -64,6 +60,14 @@ export const filterProposalsByState = (proposals: any, state: any) => {
   if (state === EntryState.PENDING) {
     return proposals?.filter((proposal) => convertTimeToSeconds(proposal.startTime) > Date.now())
   }
+}
+
+export const filterProposalsByQuery = (proposals: any, searchQuery: any) => {
+  if (searchQuery && searchQuery?.length) {
+    const lowercaseQuery = latinise(searchQuery.toLowerCase())
+    return proposals?.filter((proposal) => latinise(proposal?.question?.toLowerCase()).includes(lowercaseQuery))
+  }
+  return proposals
 }
 
 export interface Message {

@@ -4,11 +4,12 @@ import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import Link from 'next/link'
 import useSWR from 'swr'
+import { useCallback } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { FetchStatus } from 'config/constants/types'
 import { getSSIDataFromAccount } from 'state/ssi/helpers'
-import SearchBar from './SearchBar'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import SearchBar from 'views/CanCan/market/components/SearchBar'
 
 const StyledHero = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
@@ -16,13 +17,16 @@ const StyledHero = styled(Box)`
   padding-top: 32px;
 `
 
-const Hero = () => {
+const Hero = ({ setSearchQuery }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { status, data } = useSWR(['profile-data', account?.toLowerCase()], async () =>
     getSSIDataFromAccount(account?.toLowerCase()),
   )
-
+  const handleChangeSearchQuery = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),
+    [setSearchQuery],
+  )
   return (
     <StyledHero>
       <Container>
@@ -66,7 +70,7 @@ const Hero = () => {
             </Flex>
           </Box>
           <Box>
-            <SearchBar />
+            <SearchBar onChange={handleChangeSearchQuery} />
           </Box>
         </Flex>
       </Container>

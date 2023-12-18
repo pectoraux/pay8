@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, ReactElement } from "react";
 import styled from "styled-components";
-import BigNumber from "bignumber.js";
 import partition from "lodash/partition";
 import { useTranslation } from "@pancakeswap/localization";
 import { useIntersectionObserver } from "@pancakeswap/hooks";
@@ -159,7 +158,7 @@ export function PoolControls<T>({
       return sortedPools.filter((pool: any) => latinise(pool?.id || "").includes(lowercaseQuery));
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 

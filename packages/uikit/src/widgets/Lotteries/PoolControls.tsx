@@ -161,7 +161,7 @@ export function PoolControls<T>({
       );
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 

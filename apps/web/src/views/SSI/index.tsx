@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Flex } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
 import styled from 'styled-components'
@@ -15,15 +16,16 @@ const Content = styled.div`
 `
 
 const SSI = () => {
+  const [searchQuery, setSearchQuery] = useState('')
   return (
     <>
       <PageMeta />
       <Flex flexDirection="column" minHeight="calc(100vh - 64px)">
         <Chrome>
-          <Hero />
+          <Hero setSearchQuery={setSearchQuery} />
         </Chrome>
         <Content>
-          <Proposals />
+          <Proposals searchQuery={searchQuery} />
         </Content>
         <Chrome>
           <Footer />

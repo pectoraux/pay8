@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import latinise from '@pancakeswap/utils/latinise'
 import TagFilters from 'views/CanCan/market/Collection/Items/TagFilters'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
@@ -12,11 +12,11 @@ import { FetchStatus } from 'config/constants/types'
 import PageLoader from 'components/Loader/PageLoader'
 import useTheme from 'hooks/useTheme'
 import orderBy from 'lodash/orderBy'
+import { selectFilteredData2 } from 'state/cancan/selectors'
 import SearchBar from '../components/SearchBar'
 import Collections from './Collections'
 import Newest from './Newest'
 import config from './config'
-import { selectFilteredData2 } from 'state/cancan/selectors'
 
 const Gradient = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientCardHeader};
@@ -72,7 +72,6 @@ const Home = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   const handleChangeSearchQuery = useCallback(

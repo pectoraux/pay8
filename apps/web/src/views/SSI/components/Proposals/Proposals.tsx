@@ -8,7 +8,7 @@ import { getProfileData, getSSIData } from 'state/ssi/helpers'
 import { FetchStatus } from 'config/constants/types'
 import { useSessionStorage } from 'hooks/useSessionStorage'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { filterProposalsByState, filterProposalsByType } from '../../helpers'
+import { filterProposalsByQuery, filterProposalsByState, filterProposalsByType } from '../../helpers'
 import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
 import ProposalRow from './ProposalRow'
@@ -19,7 +19,7 @@ interface State {
   filterState: EntryState
 }
 
-const Proposals = () => {
+const Proposals = ({ searchQuery }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
 
@@ -47,7 +47,10 @@ const Proposals = () => {
       filterState: newFilterState,
     }))
   }
-  const filteredProposals = filterProposalsByState(filterProposalsByType(data, profile, proposalType), filterState)
+  const filteredProposals = filterProposalsByQuery(
+    filterProposalsByState(filterProposalsByType(data, profile, proposalType), filterState),
+    searchQuery,
+  )
   console.log('filteredProposals==================>', filteredProposals)
   return (
     <Container py="40px">

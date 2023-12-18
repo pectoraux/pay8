@@ -1,6 +1,5 @@
 import { Button, ChevronRightIcon, Flex, Grid, Heading, Text, NextLinkFromReactRouter } from '@pancakeswap/uikit'
 import { cancanBaseUrl } from 'views/CanCan/market/constants'
-import { Collection } from 'state/nftMarket/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { CollectionCard } from '../components/CollectibleCard'
 import { BNBAmountLabel } from '../components/CollectibleCard/styles'
