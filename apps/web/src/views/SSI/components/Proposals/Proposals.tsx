@@ -4,7 +4,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import useSWR from 'swr'
 import { EntryState, EntryType } from 'state/types'
-import { getProfileData, getSSIData } from 'state/ssi/helpers'
+import { getProfileData, getSSIData, getUserData2 } from 'state/ssi/helpers'
 import { FetchStatus } from 'config/constants/types'
 import { useSessionStorage } from 'hooks/useSessionStorage'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -13,6 +13,7 @@ import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
 import ProposalRow from './ProposalRow'
 import Filters from './Filters'
+import { useMemo } from 'react'
 
 interface State {
   proposalType: EntryType
@@ -33,6 +34,8 @@ const Proposals = ({ searchQuery }) => {
   const { status: status2, data: profile } = useSWR(['data', filterState], async () =>
     getProfileData(1000, 0, account?.toLowerCase() ?? ''),
   )
+  const where = useMemo(() => (searchQuery ? { question_contains_nocase: searchQuery } : {}), [searchQuery])
+  const { status: status3, data: userDatas } = useSWR(['userDatas', where], async () => getUserData2(1000, 0, where))
   console.log('getSSIData================>', data, profile)
   const handleProposalTypeChange = (newProposalType: EntryType) => {
     setState((prevState) => ({
@@ -49,7 +52,7 @@ const Proposals = ({ searchQuery }) => {
   }
   const filteredProposals = filterProposalsByQuery(
     filterProposalsByState(filterProposalsByType(data, profile, proposalType), filterState),
-    searchQuery,
+    userDatas,
   )
   console.log('filteredProposals==================>', filteredProposals)
   return (

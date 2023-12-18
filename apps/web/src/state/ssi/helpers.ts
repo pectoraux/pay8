@@ -5,9 +5,10 @@ import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
 import { Proposal, ProposalState, Vote, VoteWhere } from 'state/types'
 import _chunk from 'lodash/chunk'
-import { ssiFields, profileFields, identityTokenFields } from './queries'
 import { decryptWithAES } from 'views/SSI/Proposal/Overview'
 import NodeRSA from 'encrypt-rsa'
+
+import { ssiFields, profileFields, identityTokenFields } from './queries'
 
 export const getSSIDataFromAccount = async (accountAddress: string) => {
   try {
@@ -150,6 +151,33 @@ export const getProfileData = async (first = 5, skip = 0, account) => {
     return res.profiles?.length ? res.profiles[0] : undefined
   } catch (error) {
     console.error('Failed to fetch profiledata=================>', error)
+    return null
+  }
+}
+
+export const getUserData2 = async (first = 5, skip = 0, where) => {
+  try {
+    const res = await request(
+      GRAPH_API_SSI,
+      gql`
+        query getUserData2($first: Int!, $skip: Int!, $where: UserData_filter!, $orderDirection: OrderDirection) {
+          userData(where: $where) {
+            ${ssiFields}
+            ownerProfileId {
+              ${profileFields}              
+            }
+            auditorProfileId {
+              ${profileFields}              
+            }
+          }
+        }
+      `,
+      { first, skip, where, orderDirection: 'desc' },
+    )
+    console.log('res.userDatas=======================>', res.userDatas)
+    return res.userDatas
+  } catch (error) {
+    console.error('Failed to fetch userDatas=================>', error)
     return null
   }
 }
