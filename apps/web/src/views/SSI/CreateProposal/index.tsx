@@ -15,6 +15,8 @@ import {
   useToast,
   HelpIcon,
   useTooltip,
+  ButtonMenu,
+  ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import useSWR from 'swr'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -186,6 +188,10 @@ const CreateProposal = () => {
 
   const handleTypeChange = (dataType_: string) => {
     updateValue('dataType', dataType_)
+  }
+
+  const handleRawValueChange = (key: string) => (value) => {
+    updateValue(key, value)
   }
 
   useEffect(() => {
@@ -421,6 +427,18 @@ const CreateProposal = () => {
                   placeholderText="00:00"
                 />
                 {formErrors.endTime && fieldsState.endTime && <FormErrors errors={formErrors.endTime} />}
+              </Box>
+              <Box mb="24px">
+                <SecondaryLabel>{t('Searchable')}</SecondaryLabel>
+                <ButtonMenu
+                  scale="xs"
+                  variant="subtle"
+                  activeIndex={state.searchable}
+                  onItemClick={handleRawValueChange('searchable')}
+                >
+                  <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+                  <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+                </ButtonMenu>
               </Box>
               {account && (
                 <Flex alignItems="center" mb="8px">
