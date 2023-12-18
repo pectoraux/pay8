@@ -15,8 +15,6 @@ import {
   useToast,
   HelpIcon,
   useTooltip,
-  ButtonMenu,
-  ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import useSWR from 'swr'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -38,8 +36,6 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useSSIContract } from 'hooks/useContract'
 import EncryptRsa from 'encrypt-rsa'
 import { getSSIDatum } from 'state/ssi/helpers'
-import { StyledItemRow } from 'views/CanCan/market/components/Filters/ListFilter/styles'
-
 import Choices, { Choice, makeChoice, MINIMUM_CHOICES } from './Choices'
 import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
@@ -186,10 +182,6 @@ const CreateProposal = () => {
 
   const handleDateChange = (key: string) => (value: Date) => {
     updateValue(key, value)
-  }
-
-  const handleRawValueChange = (searchable) => {
-    updateValue('searchable', searchable)
   }
 
   const handleTypeChange = (dataType_: string) => {
@@ -419,20 +411,6 @@ const CreateProposal = () => {
                   placeholderText="YYYY/MM/DD"
                 />
                 {formErrors.endDate && fieldsState.endDate && <FormErrors errors={formErrors.endDate} />}
-              </Box>
-              <Box mb="24px">
-                <StyledItemRow>
-                  <SecondaryLabel>{t('Searchable')}</SecondaryLabel>
-                  <ButtonMenu
-                    scale="xs"
-                    variant="subtle"
-                    activeIndex={state.searchable}
-                    onItemClick={handleRawValueChange('searchable')}
-                  >
-                    <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-                  </ButtonMenu>
-                </StyledItemRow>
               </Box>
               <Box mb="24px">
                 <SecondaryLabel>{t('End Time')}</SecondaryLabel>
