@@ -64,7 +64,7 @@ export const filterProposalsByState = (proposals: any, state: any) => {
 
 export const filterProposalsByQuery = (proposals: any, searchQuery: any, userDatas: any, entryType: any) => {
   if (searchQuery && searchQuery?.trim()?.length) {
-    if (entryType !== EntryType.AUDITED) {
+    if (entryType !== EntryType.SEARCHABLE) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase())
       return proposals?.filter((proposal) => latinise(proposal?.question?.toLowerCase()).includes(lowercaseQuery))
     }
