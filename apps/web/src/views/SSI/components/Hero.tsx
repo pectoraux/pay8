@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, ProposalIcon, AutoRenewIcon } from '@pancakeswap/uikit'
+import { Box, Button, Flex, Heading, ProposalIcon, AutoRenewIcon, SearchInput } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
@@ -9,7 +9,6 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { FetchStatus } from 'config/constants/types'
 import { getSSIDataFromAccount } from 'state/ssi/helpers'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import SearchBar from './SearchBar'
 
 const StyledHero = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
@@ -17,7 +16,7 @@ const StyledHero = styled(Box)`
   padding-top: 32px;
 `
 
-const Hero = ({ setSearchQuery }) => {
+const Hero = ({ searchQuery, setSearchQuery }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { status, data } = useSWR(['profile-data', account?.toLowerCase()], async () =>
@@ -70,7 +69,7 @@ const Hero = ({ setSearchQuery }) => {
             </Flex>
           </Box>
           <Box>
-            <SearchBar onChange={handleChangeSearchQuery} />
+            <SearchInput initialValue={searchQuery} onChange={handleChangeSearchQuery} placeholder={t('Search data')} />
           </Box>
         </Flex>
       </Container>

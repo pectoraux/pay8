@@ -2,7 +2,7 @@ import { Box, Breadcrumbs, Card, Flex, Heading, Text } from '@pancakeswap/uikit'
 import Link from 'next/link'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import useSWR from 'swr'
 import { EntryState, EntryType } from 'state/types'
 import { getProfileData, getSSIData, getUserData2 } from 'state/ssi/helpers'
@@ -30,10 +30,16 @@ const Proposals = ({ searchQuery }) => {
   })
 
   const { proposalType, filterState } = state
-  const { status, data } = useSWR(['data9', filterState], async () => getSSIData(1000, 0, account?.toLowerCase() ?? ''))
-  const { status: status2, data: profile } = useSWR(['data', filterState], async () =>
-    getProfileData(1000, 0, account?.toLowerCase() ?? ''),
-  )
+  const {
+    status,
+    data,
+    mutate: refetch,
+  } = useSWR(['data9', filterState], async () => getSSIData(1000, 0, account?.toLowerCase() ?? ''))
+  const {
+    status: status2,
+    data: profile,
+    mutate: refetch2,
+  } = useSWR(['data', filterState], async () => getProfileData(1000, 0, account?.toLowerCase() ?? ''))
   const where = useMemo(
     () => (searchQuery ? { question_contains_nocase: searchQuery, searchable: true } : {}),
     [searchQuery],
@@ -46,6 +52,11 @@ const Proposals = ({ searchQuery }) => {
       proposalType: newProposalType,
     }))
   }
+
+  useEffect(() => {
+    refetch()
+    refetch2()
+  }, [account, status, status2])
 
   const handleFilterChange = (newFilterState: EntryState) => {
     setState((prevState) => ({

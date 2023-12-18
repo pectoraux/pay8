@@ -22,7 +22,7 @@ const SSI = () => {
       <PageMeta />
       <Flex flexDirection="column" minHeight="calc(100vh - 64px)">
         <Chrome>
-          <Hero setSearchQuery={setSearchQuery} />
+          <Hero searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </Chrome>
         <Content>
           <Proposals searchQuery={searchQuery} />
