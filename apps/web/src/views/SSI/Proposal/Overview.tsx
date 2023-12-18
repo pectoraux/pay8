@@ -12,6 +12,7 @@ import {
   ReactMarkdown,
   NotFound,
 } from '@pancakeswap/uikit'
+import { useSignMessage } from 'wagmi'
 import { PageMeta } from 'components/Layout/Page'
 import { getUserData } from 'state/ssi/helpers'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -25,7 +26,6 @@ import { getEntryState } from '../helpers'
 import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
 import Details from './Details'
-import { useSignMessage } from 'wagmi'
 
 const CryptoJS = require('crypto-js')
 
@@ -51,7 +51,7 @@ const Overview = () => {
 
   console.log('1proposal================>', proposal)
   const [answer, setAnswer] = useState(proposal?.searchable ? proposal.answer : proposal?.answer?.slice(0, 100))
-  const [locked, setLocked] = useState(!proposal?.searchable)
+  const [locked, setLocked] = useState(!proposal?.searchable && proposal?.question === 'ssid')
 
   const handleDecrypt = useCallback(async () => {
     let privateKey

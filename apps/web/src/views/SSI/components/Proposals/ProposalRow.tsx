@@ -50,7 +50,7 @@ const decryptWithAES = (ciphertext, pk) => {
 
 const ProposalRow: React.FC<any> = ({ account, entry }) => {
   const [answer, setAnswer] = useState(entry.answer)
-  const [locked, setLocked] = useState(!entry.searchable)
+  const [locked, setLocked] = useState(!entry.searchable && entry.question !== 'ssid')
   const { signMessageAsync } = useSignMessage()
   const increaseRef = useRef<HTMLDivElement>(null)
   const moveLeftRef = useRef<boolean>(true)
