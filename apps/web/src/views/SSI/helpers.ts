@@ -38,7 +38,7 @@ export const filterProposalsByType = (entries: any, profile: any, entryType: any
         case EntryType.SEARCHABLE:
           return entries.filter((entry) => entry.searchable === true)
         case EntryType.AUDITED:
-          return profile?.dataAudited
+          return profile?.dataAudited ?? []
         default:
           return entries
       }
@@ -53,16 +53,16 @@ export const filterProposalsByType = (entries: any, profile: any, entryType: any
 // eslint-disable-next-line consistent-return
 export const filterProposalsByState = (proposals: any, state: any) => {
   if (state === EntryState.ACTIVE) {
-    return proposals.filter(
+    return proposals?.filter(
       (proposal) =>
         convertTimeToSeconds(proposal.startTime) <= Date.now() && Date.now() <= convertTimeToSeconds(proposal.endTime),
     )
   }
   if (state === EntryState.EXPIRED) {
-    return proposals.filter((proposal) => convertTimeToSeconds(proposal.endTime) < Date.now())
+    return proposals?.filter((proposal) => convertTimeToSeconds(proposal.endTime) < Date.now())
   }
   if (state === EntryState.PENDING) {
-    return proposals.filter((proposal) => convertTimeToSeconds(proposal.startTime) > Date.now())
+    return proposals?.filter((proposal) => convertTimeToSeconds(proposal.startTime) > Date.now())
   }
 }
 

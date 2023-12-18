@@ -48,6 +48,7 @@ const Proposals = () => {
     }))
   }
   const filteredProposals = filterProposalsByState(filterProposalsByType(data, profile, proposalType), filterState)
+  console.log('filteredProposals==================>', filteredProposals)
   return (
     <Container py="40px">
       <Box mb="48px">

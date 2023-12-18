@@ -228,7 +228,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
         deadline?.toString(),
         entry.searchable,
         entry.question,
-        entry.searchable ? answer : encryptedAnswer,
+        entry.searchable || entry.question === 'ssid' ? answer : encryptedAnswer,
         'shared',
       ])
       console.log('shareproof========================>', [
@@ -248,7 +248,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
         deadline?.toString(),
         entry.searchable,
         entry.question,
-        entry.searchable ? answer : encryptedAnswer,
+        entry.searchable || entry.question === 'ssid' ? answer : encryptedAnswer,
         'shared',
         // eslint-disable-next-line consistent-return
       ]).then(() => {

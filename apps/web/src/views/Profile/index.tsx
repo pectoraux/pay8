@@ -29,7 +29,8 @@ const DesktopButton = styled(Button)`
 `
 
 const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
-  const accountAddress = useRouter().query.accountAddress as string
+  const router = useRouter()
+  const accountAddress = router.query.accountAddress as string
   const { t } = useTranslation()
   usePoolsPageFetch()
   const invalidAddress = !accountAddress || isAddress(accountAddress) === false
@@ -38,7 +39,7 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
     if (howToElem != null) {
       howToElem.scrollIntoView()
     } else {
-      useRouter().push('/ifo#how-to')
+      router.push('/ifo#how-to')
     }
   }
   const {

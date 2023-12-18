@@ -593,7 +593,7 @@ export default {
   },
   profile: {
     56: '0x',
-    4002: '0x5E008DCE8095dE09BFF103Df85b566449c1dF7e2',
+    4002: '0x810EBEa7d4330B6A6EFa2f73FF7E7773c57F98CD',
   },
   profileHelper: {
     56: '0x',

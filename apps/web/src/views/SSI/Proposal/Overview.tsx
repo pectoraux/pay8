@@ -1,5 +1,5 @@
 import NodeRSA from 'encrypt-rsa'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import {
   ArrowBackIcon,
   Flex,
@@ -49,9 +49,16 @@ const Overview = () => {
 
   const { data: proposal, error } = useSWRImmutable(id ? ['entry3', id] : null, () => getUserData(id))
 
+  const [answer, setAnswer] = useState(
+    proposal?.searchable || proposal?.question === 'ssid' ? proposal.answer : proposal?.answer?.slice(0, 100),
+  )
+  const [locked, setLocked] = useState(!proposal?.searchable && proposal?.question !== 'ssid')
+
+  useEffect(() => {
+    setAnswer(proposal?.searchable || proposal?.question === 'ssid' ? proposal.answer : proposal?.answer?.slice(0, 100))
+    setLocked(!proposal?.searchable && proposal?.question !== 'ssid')
+  }, [proposal])
   console.log('1proposal================>', proposal)
-  const [answer, setAnswer] = useState(proposal?.searchable ? proposal.answer : proposal?.answer?.slice(0, 100))
-  const [locked, setLocked] = useState(!proposal?.searchable && proposal?.question === 'ssid')
 
   const handleDecrypt = useCallback(async () => {
     let privateKey
@@ -110,7 +117,7 @@ const Overview = () => {
               </IconButton>
             </Heading>
             <Box>
-              <ReactMarkdown>{answer}</ReactMarkdown>
+              <ReactMarkdown>{answer?.toString()}</ReactMarkdown>
             </Box>
           </Box>
         </Box>
