@@ -2,6 +2,7 @@ import { Box, Breadcrumbs, Card, Flex, Heading, Text } from '@pancakeswap/uikit'
 import Link from 'next/link'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 import { EntryState, EntryType } from 'state/types'
 import { getProfileData, getSSIData, getUserData2 } from 'state/ssi/helpers'
@@ -13,7 +14,6 @@ import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
 import ProposalRow from './ProposalRow'
 import Filters from './Filters'
-import { useMemo } from 'react'
 
 interface State {
   proposalType: EntryType
@@ -52,6 +52,7 @@ const Proposals = ({ searchQuery }) => {
   }
   const filteredProposals = filterProposalsByQuery(
     filterProposalsByState(filterProposalsByType(data, profile, proposalType), filterState),
+    searchQuery,
     userDatas,
   )
   console.log('filteredProposals==================>', filteredProposals)

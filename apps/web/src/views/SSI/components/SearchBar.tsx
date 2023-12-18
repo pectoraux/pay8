@@ -1,15 +1,15 @@
+import { useTranslation } from '@pancakeswap/localization'
 import AddressInputSelect from 'components/AddressInputSelect'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { useRouter } from 'next/router'
 
-const SearchBar: React.FC = (props) => {
+const SearchBar: React.FC<any> = (props) => {
   const router = useRouter()
-
+  const { t } = useTranslation()
   const handleAddressClick = (value: string) => {
-    router.push(`${nftsBaseUrl}/profile/${value}`)
+    router.push(`/profile/${value}`)
   }
 
-  return <AddressInputSelect onAddressClick={handleAddressClick} {...props} />
+  return <AddressInputSelect placeholder={t('search searchable data')} onAddressClick={handleAddressClick} {...props} />
 }
 
 export default SearchBar

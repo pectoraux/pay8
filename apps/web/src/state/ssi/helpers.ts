@@ -174,7 +174,7 @@ export const getUserData2 = async (first = 5, skip = 0, where) => {
       `,
       { first, skip, where, orderDirection: 'desc' },
     )
-    console.log('res.userDatas=======================>', res.userDatas)
+    console.log('res.userDatas=======================>', res.userDatas, where)
     return res.userDatas
   } catch (error) {
     console.error('Failed to fetch userDatas=================>', error)

@@ -62,12 +62,13 @@ export const filterProposalsByState = (proposals: any, state: any) => {
   }
 }
 
-export const filterProposalsByQuery = (proposals: any, userDatas: any) => {
-  // if (searchQuery && searchQuery?.length) {
-  //   const lowercaseQuery = latinise(searchQuery.toLowerCase())
-  //   return proposals?.filter((proposal) => latinise(proposal?.question?.toLowerCase()).includes(lowercaseQuery))
-  // }
-  return userDatas
+export const filterProposalsByQuery = (proposals: any, searchQuery: any, userDatas: any) => {
+  if (searchQuery && searchQuery?.length) {
+    //   const lowercaseQuery = latinise(searchQuery.toLowerCase())
+    //   return proposals?.filter((proposal) => latinise(proposal?.question?.toLowerCase()).includes(lowercaseQuery))
+    return userDatas ?? []
+  }
+  return proposals
 }
 
 export interface Message {

@@ -9,7 +9,7 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { FetchStatus } from 'config/constants/types'
 import { getSSIDataFromAccount } from 'state/ssi/helpers'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import SearchBar from 'views/CanCan/market/components/SearchBar'
+import SearchBar from './SearchBar'
 
 const StyledHero = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
