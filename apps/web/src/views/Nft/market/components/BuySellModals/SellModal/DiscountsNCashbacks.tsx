@@ -10,12 +10,10 @@ import {
   ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { NftToken } from 'state/cancan/types'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { Divider, RoundedImage } from '../shared/styles'
 import { GreyedOutContainer } from './styles'
-import { OptionType } from './types'
 
 interface TransferStageProps {
   nftToSell?: any

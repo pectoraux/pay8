@@ -15,6 +15,8 @@ import {
   useToast,
   HelpIcon,
   useTooltip,
+  ButtonMenu,
+  ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import useSWR from 'swr'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -36,6 +38,8 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useSSIContract } from 'hooks/useContract'
 import EncryptRsa from 'encrypt-rsa'
 import { getSSIDatum } from 'state/ssi/helpers'
+import { StyledItemRow } from 'views/CanCan/market/components/Filters/ListFilter/styles'
+
 import Choices, { Choice, makeChoice, MINIMUM_CHOICES } from './Choices'
 import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
@@ -52,7 +56,7 @@ const CreateProposal = () => {
     endTime: null,
     profileId: '',
     auditorProfileId: '',
-    searchable: false,
+    searchable: 0,
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
@@ -103,7 +107,7 @@ const CreateProposal = () => {
               account,
               combineDateAndTime(state.startDate, state.startTime)?.toString(),
               combineDateAndTime(state.endDate, state.endTime)?.toString(),
-              state.searchable,
+              !!state.searchable,
               questions[index].value.toLowerCase(),
               state.searchable ? choice.value : encryptedAnswer,
               state.dataType,
@@ -115,7 +119,7 @@ const CreateProposal = () => {
               account,
               combineDateAndTime(state.startDate, state.startTime)?.toString(),
               combineDateAndTime(state.endDate, state.endTime)?.toString(),
-              state.searchable,
+              !!state.searchable,
               questions[index].value.toLowerCase(),
               state.searchable ? choice.value : encryptedAnswer,
               state.dataType,
@@ -182,6 +186,10 @@ const CreateProposal = () => {
 
   const handleDateChange = (key: string) => (value: Date) => {
     updateValue(key, value)
+  }
+
+  const handleRawValueChange = (searchable) => {
+    updateValue('searchable', searchable)
   }
 
   const handleTypeChange = (dataType_: string) => {
@@ -411,6 +419,29 @@ const CreateProposal = () => {
                   placeholderText="YYYY/MM/DD"
                 />
                 {formErrors.endDate && fieldsState.endDate && <FormErrors errors={formErrors.endDate} />}
+              </Box>
+              <Box mb="24px">
+                <StyledItemRow>
+                  <Text
+                    fontSize="12px"
+                    color="secondary"
+                    textTransform="uppercase"
+                    paddingTop="3px"
+                    paddingRight="50px"
+                    bold
+                  >
+                    {t('Status')}
+                  </Text>
+                  <ButtonMenu
+                    scale="xs"
+                    variant="subtle"
+                    activeIndex={state.searchable}
+                    onItemClick={handleRawValueChange('searchable')}
+                  >
+                    <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+                  </ButtonMenu>
+                </StyledItemRow>
               </Box>
               <Box mb="24px">
                 <SecondaryLabel>{t('End Time')}</SecondaryLabel>
