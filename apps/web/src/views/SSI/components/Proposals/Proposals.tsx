@@ -34,7 +34,10 @@ const Proposals = ({ searchQuery }) => {
   const { status: status2, data: profile } = useSWR(['data', filterState], async () =>
     getProfileData(1000, 0, account?.toLowerCase() ?? ''),
   )
-  const where = useMemo(() => (searchQuery ? { question_contains_nocase: searchQuery } : {}), [searchQuery])
+  const where = useMemo(
+    () => (searchQuery ? { question_contains_nocase: searchQuery, searchable: true } : {}),
+    [searchQuery],
+  )
   const { status: status3, data: userDatas } = useSWR(['userDatas', where], async () => getUserData2(1000, 0, where))
   console.log('getSSIData================>', data, profile)
   const handleProposalTypeChange = (newProposalType: EntryType) => {
