@@ -136,7 +136,27 @@ const CreateProposal = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [t, data, state, choices, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
+  }, [
+    data,
+    fetchWithCatchTxError,
+    choices,
+    state.choices,
+    state.profileId,
+    state.auditorProfileId,
+    state.name,
+    state.startDate,
+    state.startTime,
+    state.endDate,
+    state.endTime,
+    state.searchable,
+    state.dataType,
+    crypto,
+    account,
+    callWithGasPrice,
+    ssiContract,
+    toastSuccess,
+    t,
+  ])
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({

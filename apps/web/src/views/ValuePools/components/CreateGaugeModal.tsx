@@ -29,6 +29,7 @@ import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { fetchValuepoolSgAsync } from 'state/valuepools'
+import { getNFTSVGContract } from 'utils/contractHelpers'
 
 import { stagesWithBackButton, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -45,6 +46,7 @@ import CheckRankStage from './CheckRankStage'
 import UpdateDescriptionStage from './UpdateDescriptionStage'
 import UpdateDescriptionStage2 from './UpdateDescriptionStage2'
 import UpdateMediaStage from './UpdateMediaStage'
+import ApproveUserStage from './ApproveUserStage'
 import UpdateTaxContractStage from './UpdateTaxContractStage'
 import UpdateMarketPlaceStage from './UpdateMarketPlaceStage'
 import UpdateTrustworthyMerchantStage from './UpdateTrustworthyMerchantStage'
@@ -66,7 +68,6 @@ import LocationStage from './LocationStage'
 import NotifyPaymentStage from './NotifyPaymentStage'
 import SwitchPoolStage from './SwitchPoolStage'
 import DepositStage from './DepositStage'
-import { getNFTSVGContract } from 'utils/contractHelpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -101,6 +102,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_TRUSTWORTHY_AUDITORS]: t('Update Trustworthy Auditors'),
   [LockStage.UPDATE_TRUSTWORTHY_MERCHANTS]: t('Update Trustworthy Merchants'),
   [LockStage.CHECK_RANK]: t('Check Rank'),
+  [LockStage.APPROVE_USER]: t('Approve User'),
   [LockStage.UPDATE_EXCLUDED_CONTENT]: t('Update Excluded Content'),
   [LockStage.UPDATE_BLACKLISTED_MERCHANTS]: t('Update Blacklisted Merchants'),
   [LockStage.UPDATE_MEDIA]: t('Update Media'),
@@ -126,6 +128,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_USER_IDENTITY_PROOFS]: t('Back'),
   [LockStage.CONFIRM_UPDATE_MERCHANT_IDENTITY_PROOFS]: t('Back'),
   [LockStage.CONFIRM_ADD_CREDIT]: t('Back'),
+  [LockStage.CONFIRM_APPROVE_USER]: t('Back'),
   [LockStage.CONFIRM_REIMBURSE_BNPL]: t('Back'),
   [LockStage.CONFIRM_REIMBURSE]: t('Back'),
   [LockStage.CONFIRM_ADD_SPONSORS]: t('Back'),
@@ -253,8 +256,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
     userTokenId: '',
     collectionAddress: '',
     merchantIdentityTokenId: '',
-    cosignEnabled: pool?.cosignEnabled,
-    minCosigners: pool?.minCosigners || '',
     requests: adminARP.userData?.requests?.length || [],
     amounts: adminARP.userData?.amounts?.length || [],
     cbcAddress: '',
@@ -386,6 +387,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         break
       case LockStage.CONFIRM_UPDATE_MEDIA:
         setStage(LockStage.UPDATE_MEDIA)
+        break
+      case LockStage.APPROVE_USER:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_APPROVE_USER:
+        setStage(LockStage.APPROVE_USER)
         break
       case LockStage.UPDATE_EXCLUDED_CONTENT:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -591,6 +598,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
         break
       case LockStage.UPDATE_MEDIA:
         setStage(LockStage.CONFIRM_UPDATE_MEDIA)
+        break
+      case LockStage.APPROVE_USER:
+        setStage(LockStage.CONFIRM_APPROVE_USER)
         break
       case LockStage.UPDATE_TRUSTWORTHY_AUDITORS:
         setStage(LockStage.CONFIRM_UPDATE_TRUSTWORTHY_AUDITORS)
@@ -957,6 +967,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           console.log('CONFIRM_UPDATE_MARKETPLACE===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_APPROVE_USER) {
+        const args = [state.owner, state.tokenId]
+        console.log('CONFIRM_APPROVE_USER===============>', args)
+        return callWithGasPrice(vaContract, 'approve', args).catch((err) =>
+          console.log('CONFIRM_APPROVE_USER===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_EXECUTE_NEXT_PURCHASE) {
         console.log('CONFIRM_EXECUTE_NEXT_PURCHASE1===============>')
         return callWithGasPrice(valuepoolContract, 'executeNextPurchase', []).catch((err) =>
@@ -1034,6 +1051,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
           </Button>
           <Button variant="subtle" mb="8px" onClick={() => setStage(LockStage.UPDATE_MEDIA)}>
             {t('UPDATE MEDIA')}
+          </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.APPROVE_USER)}>
+            {t('APPROVE USER')}
           </Button>
           <Button variant="subtle" mb="8px" onClick={() => setStage(LockStage.UPDATE_TAX_CONTRACT)}>
             {t('UPDATE TAX CONTRACT')}
@@ -1134,6 +1154,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_MARKETPLACE)}>
                 {t('UPDATE MARKETPLACE')}
               </Button>
+              <Button variant="success" mb="8px" onClick={() => setStage(LockStage.APPROVE_USER)}>
+                {t('APPROVE USER')}
+              </Button>
               <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.ADMIN_WITHDRAW)}>
                 {t('WITHDRAW')}
               </Button>
@@ -1204,6 +1227,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
       )}
       {stage === LockStage.UPDATE_MEDIA && (
         <UpdateMediaStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.APPROVE_USER && (
+        <ApproveUserStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_MARKETPLACE && (
         <UpdateMarketPlaceStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
