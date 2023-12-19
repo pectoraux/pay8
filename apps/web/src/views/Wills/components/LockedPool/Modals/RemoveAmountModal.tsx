@@ -1,58 +1,42 @@
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { differenceInSeconds } from 'date-fns'
 import { convertTimeToSeconds } from 'utils/timeHelper'
-import { Modal, Box, MessageText, Message, Checkbox, Flex, Text, Button, Skeleton } from '@pancakeswap/uikit'
+import { Button, Box, MessageText, Message, Flex, Text, Skeleton } from '@pancakeswap/uikit'
 import _noop from 'lodash/noop'
+import { setCurrPoolData } from 'state/valuepools'
+import { useCurrPool } from 'state/valuepools/hooks'
+import { useAppDispatch } from 'state'
+
 import { useTranslation } from '@pancakeswap/localization'
 import BigNumber from 'bignumber.js'
-import { useIfoCeiling } from 'state/pools/hooks'
-import { VaultKey } from 'state/types'
-import useTheme from 'hooks/useTheme'
+
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
-import { getBalanceNumber, getDecimalAmount, getBalanceAmount } from '@pancakeswap/utils/formatBalance'
-import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { useCheckVaultApprovalStatus } from '../../../hooks/useApprove'
 
-import RoiCalculatorModalProvider from './RoiCalculatorModalProvider'
-
-import BalanceField from '../Common/BalanceField'
+import BalanceField from '../Common/BalanceField2'
 import LockedBodyModal from '../Common/LockedModalBody'
 import Overview from '../Common/Overview'
 import { AddAmountModalProps } from '../types'
-import { setCurrPoolData } from 'state/valuepools'
-import { useAppDispatch } from 'state'
-import { useCurrPool } from 'state/valuepools/hooks'
+import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
 
-const RenewDuration = ({ setCheckedState, checkedState }) => {
+const RenewDuration = () => {
   const { t } = useTranslation()
 
   return (
-    <>
-      <Flex alignItems="center" maxWidth="420px">
-        {!checkedState && (
-          <Message variant="warning" mb="16px">
-            <MessageText>
-              {t(
-                'Adding more token will renew your lock, setting it to remaining duration. Due to shorter lock period, benefits decrease. To keep similar benefits, extend your lock.',
-              )}
-            </MessageText>
-          </Message>
-        )}
-      </Flex>
-      <Flex alignItems="center">
-        <Checkbox checked={checkedState} onChange={() => setCheckedState((prev) => !prev)} scale="sm" />
-        <Text ml="8px" color="text">
-          {t('Renew and extend your lock to keep similar benefits.')}
-        </Text>
-      </Flex>
-    </>
+    <Flex alignItems="center" maxWidth="420px">
+      <Message variant="warning" mb="16px">
+        <MessageText>
+          {t('This will effectively remove tokens from the vault and send them into your wallet.')}
+        </MessageText>
+      </Message>
+    </Flex>
   )
 }
-// add 60s buffer in order to make sure minimum duration by pass on renew extension
+// add 60s buffer in order to make sure minium duration by pass on renew extension
 const MIN_DURATION_BUFFER = 60
 
-const AddAmountModal: React.FC<any> = ({
+const RemoveAmountModal: React.FC<any> = ({
   pool,
   onDismiss,
   currentBalance,
@@ -63,19 +47,21 @@ const AddAmountModal: React.FC<any> = ({
 }) => {
   const ceiling = new BigNumber(1460).toJSON()
   const [lockedAmount, setLockedAmount] = useState('')
+  const [checkedState, setCheckedState] = useState(false)
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
-  const [checkedState, setCheckedState] = useState(false)
+  const { valuepoolAddress, userData } = pool
   const { t } = useTranslation()
-  const { tokenAddress, userData } = pool
   const lockedAmountAsBigNumber = !Number.isNaN(new BigNumber(lockedAmount).toNumber())
     ? new BigNumber(lockedAmount)
     : BIG_ZERO
   const totalLockedAmount: number = getBalanceNumber(
-    currentLockedAmount.plus(getDecimalAmount(lockedAmountAsBigNumber)),
+    currentLockedAmount.minus(getDecimalAmount(lockedAmountAsBigNumber)),
   )
+  const currentLockedAmountAsBalance = currentLockedAmount
   const usdValueStaked = useBUSDCakeAmount(lockedAmountAsBigNumber.toNumber())
   const usdValueNewStaked = useBUSDCakeAmount(totalLockedAmount)
+
   const remainingDuration = differenceInSeconds(new Date(convertTimeToSeconds(lockEndTime)), new Date(), {
     roundingMethod: 'ceil',
   })
@@ -86,8 +72,7 @@ const AddAmountModal: React.FC<any> = ({
     const extendDuration = atLeastOneWeekNewDuration - remainingDuration
     return {
       finalDuration: checkedState ? extendDuration : 0,
-      methodName: 'increase_amount',
-      checkedState,
+      methodName: 'withdraw',
     }
   }, [atLeastOneWeekNewDuration, checkedState, remainingDuration])
 
@@ -96,21 +81,22 @@ const AddAmountModal: React.FC<any> = ({
       <Overview
         isValidDuration
         openCalculator={_noop}
-        stakingToken={stakingToken}
+        // stakingToken={stakingToken}
         duration={remainingDuration}
         newDuration={checkedState ? duration : null}
-        lockedAmount={currentLockedAmount.toNumber()}
+        lockedAmount={currentLockedAmountAsBalance.toNumber()}
         newLockedAmount={totalLockedAmount}
         usdValueStaked={usdValueNewStaked}
         lockEndTime={lockEndTime}
-        ceiling={ceiling}
+        // ceiling={ceiling}
       />
     ),
     [
       stakingToken,
       remainingDuration,
       checkedState,
-      currentLockedAmount,
+      currentLockedAmountAsBalance,
+      // atLeastOneWeekNewDuration,
       totalLockedAmount,
       usdValueNewStaked,
       lockEndTime,
@@ -119,7 +105,7 @@ const AddAmountModal: React.FC<any> = ({
   )
 
   return (
-    <RoiCalculatorModalProvider lockedAmount={lockedAmount}>
+    <>
       <Text color="textSubtle" textTransform="uppercase" bold fontSize="12px">
         {t('Pick a token ID')}
       </Text>
@@ -129,13 +115,13 @@ const AddAmountModal: React.FC<any> = ({
             <Button
               key={balance.id}
               onClick={() => {
-                const newState = { ...currState, [pool?.valuepoolAddress]: balance.id }
+                const newState = { ...currState, [valuepoolAddress]: balance.id }
                 dispatch(setCurrPoolData(newState))
               }}
               mt="4px"
               mr={['2px', '2px', '4px', '4px']}
               scale="sm"
-              variant={currState[pool?.valuepoolAddress] === balance.id ? 'subtle' : 'tertiary'}
+              variant={currState[valuepoolAddress] === balance.id ? 'subtle' : 'tertiary'}
             >
               {balance.id}
             </Button>
@@ -157,18 +143,18 @@ const AddAmountModal: React.FC<any> = ({
         />
       </Box>
       <LockedBodyModal
-        pool={pool}
+        // pool={pool}
         currentBalance={currentBalance}
         stakingToken={stakingToken}
         onDismiss={onDismiss}
         lockedAmount={lockedAmountAsBigNumber}
-        editAmountOnly={<RenewDuration checkedState={checkedState} setCheckedState={setCheckedState} />}
-        checkedState={checkedState}
+        editAmountOnly={<RenewDuration />}
+        // checkedState={checkedState}
         prepConfirmArg={prepConfirmArg}
         customOverview={customOverview}
       />
-    </RoiCalculatorModalProvider>
+    </>
   )
 }
 
-export default AddAmountModal
+export default RemoveAmountModal

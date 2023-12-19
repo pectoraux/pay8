@@ -13,12 +13,11 @@ import BigNumber from 'bignumber.js'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
 
 import BalanceField from '../Common/BalanceField2'
 import LockedBodyModal from '../Common/LockedModalBody'
 import Overview from '../Common/Overview'
-import { AddAmountModalProps } from '../types'
-import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
 
 const RenewDuration = () => {
   const { t } = useTranslation()

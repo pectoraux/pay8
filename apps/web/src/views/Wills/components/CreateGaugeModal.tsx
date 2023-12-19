@@ -16,6 +16,9 @@ import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shar
 import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import BigNumber from 'bignumber.js'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -34,6 +37,7 @@ import UpdateTransferToNotePayableStage from './UpdateTransferToNotePayableStage
 import UpdateProtocolStage from './UpdateProtocolStage'
 import PayStage from './PayStage'
 import UpdateApprovalStage from './UpdateApprovalStage'
+import PresentBribeModal from './LockedPool/Modals/PresentBribeModal'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -52,6 +56,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.DELETE_PROTOCOL]: t('Delete Heir'),
   [LockStage.UPDATE_ACTIVE_PERIOD]: t('Update Active Period'),
   [LockStage.UPDATE_APPROVAL]: t('Update Approval'),
+  [LockStage.CREATE_LOCK]: t('Create Lock'),
   [LockStage.STOP_WITHDRAWAL_COUNTDOWN]: t('Stop Withdrawal Countdown'),
   [LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT]: t('Back'),
@@ -62,6 +67,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_ADD_BALANCE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_MEDIA]: t('Back'),
   [LockStage.CONFIRM_PAY]: t('Back'),
+  [LockStage.CONFIRM_CREATE_LOCK]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TAX]: t('Back'),
   [LockStage.CONFIRM_TRANSFER_TO_NOTE_PAYABLE]: t('Back'),
   [LockStage.CONFIRM_CLAIM_NOTE]: t('Back'),
@@ -97,6 +103,10 @@ const CreateGaugeModal: React.FC<any> = ({
   const willNoteContract = useWILLNote()
   console.log('mcurrencyy===============>', currAccount, currency, pool, willContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
+  const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+  const stakingTokenBalance = balance
+    ? getDecimalAmount(new BigNumber(balance.toExact()), currency?.decimals)
+    : BIG_ZERO
 
   // console.log("router===================>", router)
   // const { state: status, userAccount, session_id, userCurrency, amount } = router.query
@@ -154,6 +164,7 @@ const CreateGaugeModal: React.FC<any> = ({
     willDescription: pool?.willDescription ?? '',
     nftype: 0,
     approve: 0,
+    decimals: 18,
   }))
 
   const updateValue = (key: any, value: any) => {
@@ -213,6 +224,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CONFIRM_UPDATE_APPROVAL:
         setStage(LockStage.UPDATE_APPROVAL)
+        break
+      case LockStage.CREATE_LOCK:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_CREATE_LOCK:
+        setStage(LockStage.CREATE_LOCK)
         break
       case LockStage.REMOVE_BALANCE:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -302,6 +319,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.UPDATE_ACTIVE_PERIOD:
         setStage(LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD)
         break
+      case LockStage.CREATE_LOCK:
+        setStage(LockStage.CONFIRM_CREATE_LOCK)
+        break
       case LockStage.UPDATE_APPROVAL:
         setStage(LockStage.CONFIRM_UPDATE_APPROVAL)
         break
@@ -375,6 +395,14 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_UPDATE_ACTIVE_PERIOD===============>', args)
         return callWithGasPrice(willContract, 'updateActivePeriod', args).catch((err) =>
           console.log('CONFIRM_UPDATE_ACTIVE_PERIOD===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_CREATE_LOCK) {
+        const amount = getDecimalAmount(state.amountReceivable, state.decimals)
+        const args = [state.token, state.ve, state.lockDuration, state.identityTokenId, amount?.toString()]
+        console.log('CONFIRM_CREATE_LOCK===============>', args)
+        return callWithGasPrice(willContract, 'createLock', args).catch((err) =>
+          console.log('CONFIRM_CREATE_LOCK===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_APPROVAL) {
@@ -518,6 +546,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_ACTIVE_PERIOD)}>
             {t('UPDATE ACTIVE PERIOD')}
           </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_LOCK)}>
+            {t('CREATE LOCK')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_APPROVAL)}>
             {t('UPDATE APPROVAL')}
           </Button>
@@ -589,6 +620,7 @@ const CreateGaugeModal: React.FC<any> = ({
           continueToNextStage={continueToNextStage}
         />
       )}
+
       {stage === LockStage.UPDATE_TAX && (
         <UpdateTaxContractStage
           state={state}
@@ -649,6 +681,15 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.CLAIM_NOTE && (
         <ClaimNoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.CREATE_LOCK && (
+        <PresentBribeModal
+          pool={pool}
+          state={state}
+          stakingToken={currency}
+          handleChange={handleChange}
+          stakingTokenBalance={stakingTokenBalance}
+        />
       )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
       {stage === LockStage.DELETE_PROTOCOL && (

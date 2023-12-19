@@ -1,11 +1,11 @@
 import { useState, useCallback, Dispatch, SetStateAction } from 'react'
+import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
 import { useSWRConfig } from 'swr'
 import { useTranslation } from '@pancakeswap/localization'
 import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
-import { useAppDispatch } from 'state'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
-import { useVaultPoolContract } from 'hooks/useContract'
+import { useWILLContract } from 'hooks/useContract'
 import BigNumber from 'bignumber.js'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useToast } from '@pancakeswap/uikit'
@@ -14,7 +14,6 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { Token } from '@pancakeswap/sdk'
 import { vaultPoolConfig } from 'config/constants/pools'
 import { VaultKey } from 'state/types'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -36,15 +35,20 @@ interface HookReturn {
   handleConfirmClick: () => Promise<void>
 }
 
-export default function useLockedPool(hookArgs: HookArgs): HookReturn {
-  const { lockedAmount, stakingToken, onDismiss, prepConfirmArg, defaultDuration = ONE_WEEK_DEFAULT } = hookArgs
-
-  const dispatch = useAppDispatch()
-  const { chainId } = useActiveChainId()
-
+export default function useLockedPool(hookArgs: any): any {
+  const {
+    pool,
+    state,
+    lockedAmount,
+    stakingToken,
+    onDismiss,
+    prepConfirmArg,
+    defaultDuration = ONE_WEEK_DEFAULT,
+  } = hookArgs
+  const router = useRouter()
   const { address: account } = useAccount()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const vaultPoolContract = useVaultPoolContract(VaultKey.CakeVault)
+  const willContract = useWILLContract(pool?.id || router.query.will || '')
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const { t } = useTranslation()
@@ -60,8 +64,15 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
       }
 
       const receipt = await fetchWithCatchTxError(() => {
-        const methodArgs = [BigInt(convertedStakeAmount.toString()), BigInt(lockDuration)] as const
-        return callWithGasPrice(vaultPoolContract, 'deposit', methodArgs, callOptions)
+        const methodArgs = [
+          state.token,
+          state.ve,
+          BigInt(lockDuration),
+          state.identityTokenId,
+          BigInt(convertedStakeAmount.toString()),
+        ] as const
+        console.log('createLock============>', willContract, methodArgs)
+        return callWithGasPrice(willContract, 'createLock', methodArgs, callOptions)
       })
 
       if (receipt?.status) {
@@ -76,18 +87,7 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
         mutate(['userCakeLockStatus', account])
       }
     },
-    [
-      fetchWithCatchTxError,
-      toastSuccess,
-      dispatch,
-      onDismiss,
-      account,
-      vaultPoolContract,
-      t,
-      callWithGasPrice,
-      mutate,
-      chainId,
-    ],
+    [fetchWithCatchTxError, state, toastSuccess, onDismiss, account, willContract, t, callWithGasPrice, mutate],
   )
 
   const handleConfirmClick = useCallback(async () => {

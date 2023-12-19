@@ -13,10 +13,10 @@ import { VaultKey } from 'state/types'
 
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { PrepConfirmArg } from '../types'
 import { useCurrPool } from 'state/valuepools/hooks'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { vaultPoolConfig } from 'config/constants/pools'
+import { PrepConfirmArg } from '../types'
 
 interface HookArgs {
   lockedAmount: BigNumber

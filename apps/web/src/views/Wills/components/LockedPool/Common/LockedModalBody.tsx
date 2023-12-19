@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { Button, AutoRenewIcon, Box, Flex, Message, MessageText, Text } from '@pancakeswap/uikit'
+import { Button, AutoRenewIcon, Box, Flex, Message, MessageText, Text, Input } from '@pancakeswap/uikit'
 import _noop from 'lodash/noop'
 import { useTranslation } from '@pancakeswap/localization'
 import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
@@ -9,8 +9,9 @@ import BigNumber from 'bignumber.js'
 import { getBalanceAmount, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useIfoCeiling } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
+import { SecondaryLabel } from 'views/AcceleratorVoting/CreateProposal/styles'
 
-import { LockedModalBodyPropsType, ModalValidator } from '../types'
+import { ModalValidator } from '../types'
 
 import Overview from './Overview'
 import LockDurationField from './LockDurationField'
@@ -21,7 +22,9 @@ import { useCheckVaultApprovalStatus, useVaultApprove } from '../../../hooks/use
 
 const ExtendEnable = dynamic(() => import('./ExtendEnable'), { ssr: false })
 
-const LockedModalBody: React.FC<React.PropsWithChildren<LockedModalBodyPropsType>> = ({
+const LockedModalBody: React.FC<any> = ({
+  pool,
+  state,
   stakingToken,
   onDismiss,
   lockedAmount,
@@ -33,12 +36,15 @@ const LockedModalBody: React.FC<React.PropsWithChildren<LockedModalBodyPropsType
   validator,
   customOverview,
   isRenew,
+  handleChange,
   customLockWeekInSeconds,
 }) => {
   const { t } = useTranslation()
   const ceiling = useIfoCeiling()
   const { avgLockDurationsInSeconds } = useAvgLockDuration()
   const { usdValueStaked, duration, setDuration, pendingTx, handleConfirmClick } = useLockedPool({
+    pool,
+    state,
     stakingToken,
     onDismiss,
     lockedAmount,
@@ -116,6 +122,21 @@ const LockedModalBody: React.FC<React.PropsWithChildren<LockedModalBodyPropsType
             />
           </>
         )}
+      </Box>
+      <Box>
+        <SecondaryLabel>{t('Ve Address')}</SecondaryLabel>
+        <Input id="ve" name="ve" value={state.ve} scale="lg" onChange={handleChange} required />
+      </Box>
+      <Box>
+        <SecondaryLabel>{t('Identity Token ID')}</SecondaryLabel>
+        <Input
+          id="identityTokenId"
+          name="identityTokenId"
+          value={state.identityTokenId}
+          scale="lg"
+          onChange={handleChange}
+          required
+        />
       </Box>
       {customOverview ? (
         customOverview({
