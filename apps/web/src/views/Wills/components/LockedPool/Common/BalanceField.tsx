@@ -23,7 +23,7 @@ interface PropsType {
   needApprove: boolean
 }
 
-const BalanceField: React.FC<React.PropsWithChildren<PropsType>> = ({
+const BalanceField: React.FC<any> = ({
   stakingAddress,
   stakingSymbol,
   stakingDecimals,

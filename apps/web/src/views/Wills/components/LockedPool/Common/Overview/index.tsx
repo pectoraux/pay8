@@ -13,10 +13,9 @@ import BalanceRow from './BalanceRow'
 import DateRow from './DateRow'
 import formatRoi from '../../utils/formatRoi'
 import formatiCake from '../../utils/formatICake'
-import { OverviewPropsType } from '../../types'
 import CalculatorButton from '../../Buttons/CalculatorButton'
 
-const Overview: React.FC<React.PropsWithChildren<OverviewPropsType>> = ({
+const Overview: React.FC<any> = ({
   usdValueStaked,
   lockedAmount,
   duration,
