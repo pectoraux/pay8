@@ -1,4 +1,3 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex, LinkExternal } from '@pancakeswap/uikit'
@@ -34,6 +33,7 @@ import StopWithdrawallCountdownStage from './StopWithdrawallCountdownStage'
 import UpdateTransferToNotePayableStage from './UpdateTransferToNotePayableStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import PayStage from './PayStage'
+import UpdateApprovalStage from './UpdateApprovalStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -51,12 +51,14 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.DELETE]: t('Delete'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Heir'),
   [LockStage.UPDATE_ACTIVE_PERIOD]: t('Update Active Period'),
+  [LockStage.UPDATE_APPROVAL]: t('Update Approval'),
   [LockStage.STOP_WITHDRAWAL_COUNTDOWN]: t('Stop Withdrawal Countdown'),
   [LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT]: t('Back'),
   [LockStage.CONFIRM_UPDATE_OWNER]: t('Back'),
   [LockStage.CONFIRM_REMOVE_BALANCE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_APPROVAL]: t('Back'),
   [LockStage.CONFIRM_ADD_BALANCE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_MEDIA]: t('Back'),
   [LockStage.CONFIRM_PAY]: t('Back'),
@@ -150,8 +152,8 @@ const CreateGaugeModal: React.FC<any> = ({
     collectionId: '',
     applicationLink: pool?.applicationLink ?? '',
     willDescription: pool?.willDescription ?? '',
-    // owner: currAccount?.owner || account,
     nftype: 0,
+    approve: 0,
   }))
 
   const updateValue = (key: any, value: any) => {
@@ -205,6 +207,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD:
         setStage(LockStage.UPDATE_ACTIVE_PERIOD)
+        break
+      case LockStage.UPDATE_APPROVAL:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_APPROVAL:
+        setStage(LockStage.UPDATE_APPROVAL)
         break
       case LockStage.REMOVE_BALANCE:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -294,6 +302,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.UPDATE_ACTIVE_PERIOD:
         setStage(LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD)
         break
+      case LockStage.UPDATE_APPROVAL:
+        setStage(LockStage.CONFIRM_UPDATE_APPROVAL)
+        break
       case LockStage.REMOVE_BALANCE:
         setStage(LockStage.CONFIRM_REMOVE_BALANCE)
         break
@@ -364,6 +375,13 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_UPDATE_ACTIVE_PERIOD===============>', args)
         return callWithGasPrice(willContract, 'updateActivePeriod', args).catch((err) =>
           console.log('CONFIRM_UPDATE_ACTIVE_PERIOD===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_APPROVAL) {
+        const args = [state.ve, state.owner, state.approve]
+        console.log('CONFIRM_UPDATE_APPROVAL===============>', args)
+        return callWithGasPrice(willContract, 'updateAllowance', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_APPROVAL===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN) {
@@ -500,6 +518,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_ACTIVE_PERIOD)}>
             {t('UPDATE ACTIVE PERIOD')}
           </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_APPROVAL)}>
+            {t('UPDATE APPROVAL')}
+          </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.REMOVE_BALANCE)}>
             {t('REMOVE BALANCE')}
           </Button>
@@ -556,6 +577,14 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.UPDATE_ACTIVE_PERIOD && (
         <UpdateActivePeriodStage
           state={state}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_APPROVAL && (
+        <UpdateApprovalStage
+          state={state}
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />

@@ -25,9 +25,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_DELETE,
   LockStage.CONFIRM_DELETE_PROTOCOL,
   LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT,
+  LockStage.CONFIRM_UPDATE_APPROVAL,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_APPROVAL,
+  LockStage.CONFIRM_UPDATE_APPROVAL,
   LockStage.PAY,
   LockStage.UPDATE_TAX,
   LockStage.TRANSFER_TO_NOTE_PAYABLE,
