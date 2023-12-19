@@ -13,12 +13,12 @@ import BigNumber from 'bignumber.js'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
 
-import BalanceField from '../Common/BalanceField2'
+// import BalanceField from '../Common/BalanceField2'
 import LockedBodyModal from '../Common/LockedModalBody'
 import Overview from '../Common/Overview'
 import { AddAmountModalProps } from '../types'
-import { ONE_WEEK_DEFAULT } from '@pancakeswap/pools'
 
 const RenewDuration = () => {
   const { t } = useTranslation()
@@ -130,7 +130,7 @@ const RemoveAmountModal: React.FC<any> = ({
           <Skeleton width={180} height="32px" mb="2px" />
         )}
       </Flex>
-      <Box mb="16px">
+      {/* <Box mb="16px">
         <BalanceField
           stakingAddress={stakingToken.address}
           stakingSymbol={stakingToken.symbol}
@@ -141,8 +141,8 @@ const RemoveAmountModal: React.FC<any> = ({
           setLockedAmount={setLockedAmount}
           stakingTokenBalance={stakingTokenBalance}
         />
-      </Box>
-      <LockedBodyModal
+      </Box> */}
+      {/* <LockedBodyModal
         // pool={pool}
         currentBalance={currentBalance}
         stakingToken={stakingToken}
@@ -152,7 +152,7 @@ const RemoveAmountModal: React.FC<any> = ({
         // checkedState={checkedState}
         prepConfirmArg={prepConfirmArg}
         customOverview={customOverview}
-      />
+      /> */}
     </>
   )
 }
