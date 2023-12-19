@@ -42,7 +42,11 @@ export const lotteryFields = `
   startTime
   endTime
   collectionId
-  prizeAddress
+  nftPrizes {
+    id
+    tokenAddress
+    tokenId
+  }
   tokenId
   users {
     ${userFields}

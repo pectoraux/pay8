@@ -209,20 +209,24 @@ export const fetchLottery = async (lotteryId, chainId) => {
       })
     }
     const collection = await getCollection(lottery.collectionId)
-    let tokenURI
-    if (parseInt(isNFT) && parseInt(lottery.tokenId)) {
-      const [_tokenURI] = await bscClient.multicall({
-        allowFailure: true,
-        contracts: [
-          {
-            address: lottery.prizeAddress,
-            abi: erc721ABI,
-            functionName: 'tokenURI',
-            args: [BigInt(lottery.tokenId)],
-          },
-        ],
-      })
-      tokenURI = _tokenURI.result
+    let tokenURIs
+    if (lottery.nftPrizes?.length) {
+      tokenURIs = await Promise.all(
+        lottery.nftPrizes?.map(async (nftPrize) => {
+          const [_tokenURIs] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: nftPrize.tokenAddress,
+                abi: erc721ABI,
+                functionName: 'tokenURI',
+                args: [BigInt(nftPrize.tokenId)],
+              },
+            ],
+          })
+          return _tokenURIs.result
+        }),
+      )
     }
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
@@ -245,7 +249,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
       useNFTicket,
       isNFT,
       owner,
-      tokenURI,
+      tokenURIs,
       valuepool,
       tokenData,
       collection,

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, ChangeEvent } from 'react'
+import { useEffect, useRef, useState, useCallback, ChangeEvent, useMemo } from 'react'
 import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -19,7 +19,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDismiss }) => {
+const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currentTokenId, currTokenData, onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -34,7 +34,15 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
     tickets: users?.map((user) => user.id)?.join(','),
     brackets: '0,1,2,3,4,5',
   }))
+
   const { lotteryData } = useLottery()
+  const prizeAddress = useMemo(
+    () =>
+      lotteryData?.nftPrizes?.length >= currentTokenId
+        ? lotteryData?.nftPrizes[currentTokenId]?.tokenAddress
+        : lotteryData?.nftPrizes[0]?.tokenAddress,
+    [lotteryData, currentTokenId],
+  )
 
   const updateValue = (key: any, value: string | number | boolean | Date) => {
     setState((prevState) => ({
@@ -52,7 +60,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const args = [
-        parseInt(lotteryData?.isNFT) ? lotteryData?.prizeAddress : currTokenData?.token?.address,
+        parseInt(lotteryData?.isNFT) ? prizeAddress : currTokenData?.token?.address,
         lotteryId,
         state.tickets?.split(','),
         state.brackets?.split(','),
@@ -81,12 +89,14 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currTokenData, onDi
   }, [
     fetchWithCatchTxError,
     onDismiss,
+    lotteryData?.isNFT,
+    prizeAddress,
     currTokenData?.token?.address,
     lotteryId,
     state.tickets,
     state.brackets,
-    lotteryContract,
     callWithGasPrice,
+    lotteryContract,
     toastError,
     t,
     toastSuccess,

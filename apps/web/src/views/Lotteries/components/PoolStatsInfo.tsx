@@ -82,13 +82,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {parseInt(pool?.isNFT) ? (
+      {pool?.nftPrizes?.map((nftPrize, index) => (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.prizeAddress, 'address', chainId)} bold={false} small>
-            {t('View Prize Contract')}
+          <ScanLink href={getBlockExploreLink(nftPrize?.tokenAddress, 'address', chainId)} bold={false} small>
+            {t('View Prize %val% Contract', { val: index + 1 })}
           </ScanLink>
         </Flex>
-      ) : null}
+      ))}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
           {t('See Admin Channel')}

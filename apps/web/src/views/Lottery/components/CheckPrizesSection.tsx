@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Heading, Flex, useModal, AutoRenewIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -28,11 +28,15 @@ const CheckPrizesSection = ({ currentTokenId }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const {
-    lotteryData: { status, isNFT, prizeAddress },
+    lotteryData: { status, isNFT, nftPrizes },
   } = useLottery()
   const [hasCheckedForRewards, setHasCheckedForRewards] = useState(false)
   const [hasRewardsToClaim, setHasRewardsToClaim] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+  const prizeAddress = useMemo(
+    () => (nftPrizes?.length >= currentTokenId ? nftPrizes[currentTokenId]?.tokenAddress : nftPrizes[0]?.tokenAddress),
+    [nftPrizes, currentTokenId],
+  )
   const { fetchAllRewards, unclaimedRewards, fetchStatus } = useGetUnclaimedRewards({
     currentTokenId,
     isNFT,

@@ -20,7 +20,12 @@ const BuyTicketsButton: React.FC<any> = ({ currentTokenId, currTokenData, disabl
   } = useLottery()
 
   const [onClaimTicketModal] = useModal(
-    <ClaimTicketModal lotteryId={lotteryId} users={users} currTokenData={currTokenData} />,
+    <ClaimTicketModal
+      lotteryId={lotteryId}
+      users={users}
+      currentTokenId={currentTokenId}
+      currTokenData={currTokenData}
+    />,
   )
 
   const getBuyButtonText = () => {

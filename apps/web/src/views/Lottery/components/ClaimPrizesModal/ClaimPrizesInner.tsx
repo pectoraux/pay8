@@ -24,8 +24,12 @@ const ClaimInnerContainer: React.FC<any> = ({ currentTokenId, onSuccess, roundsT
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const {
-    lotteryData: { id: currentLotteryId, tokenData, isNFT, prizeAddress },
+    lotteryData: { id: currentLotteryId, tokenData, isNFT, nftPrizes },
   } = useLottery()
+  const prizeAddress = useMemo(
+    () => (nftPrizes?.length >= currentTokenId ? nftPrizes[currentTokenId]?.tokenAddress : nftPrizes[0]?.tokenAddress),
+    [nftPrizes, currentTokenId],
+  )
   const gasPrice = useGasPrice()
   const { toastSuccess } = useToast()
   const lotteryContract = useLotteryContract()
