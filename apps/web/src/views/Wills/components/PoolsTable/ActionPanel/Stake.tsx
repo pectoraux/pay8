@@ -23,11 +23,11 @@ interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
 }
 
-const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
+const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currToken }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const variant = pool?.collection?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
-  const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
+  const currencyId = useMemo(() => currToken?.address, [currToken])
   const inputCurrency = useCurrency(currencyId)
   const [currency, setCurrency] = useState(inputCurrency)
   const [openPresentControlPanel] = useModal(

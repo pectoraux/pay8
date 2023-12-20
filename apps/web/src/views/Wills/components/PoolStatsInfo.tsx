@@ -5,13 +5,6 @@ import {
   ScanLink,
   Link,
   Text,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
   Button,
   AutoRenewIcon,
   ArrowForwardIcon,
@@ -22,13 +15,12 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrBribe } from 'state/wills/hooks'
+import { useCurrBribe, useCurrPool } from 'state/wills/hooks'
 import { useAppDispatch } from 'state'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { useRouter } from 'next/router'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
-import { setCurrBribeData, setCurrPoolData } from 'state/wills'
-import { useCurrPool } from 'state/wills/hooks'
+import { setCurrBribeData } from 'state/wills'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -37,13 +29,7 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<any> = ({
-  pool,
-  account,
-  currAccount,
-  hideAccounts = false,
-  alignLinksToRight = true,
-}) => {
+const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const currState2 = useCurrBribe()

@@ -103,7 +103,7 @@ export const willABI = [
       },
       {
         internalType: 'address',
-        name: '_valuepool',
+        name: '_ve',
         type: 'address',
       },
       {
@@ -659,7 +659,7 @@ export const willABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_valuepool',
+        name: '_ve',
         type: 'address',
       },
       {
@@ -695,6 +695,29 @@ export const willABI = [
       },
     ],
     name: 'updateActivePeriod',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_to',
+        type: 'address',
+      },
+      {
+        internalType: 'bool',
+        name: '_approve',
+        type: 'bool',
+      },
+    ],
+    name: 'updateAllowance',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -739,12 +762,12 @@ export const willABI = [
       },
       {
         internalType: 'uint256',
-        name: '_minWithdrawableNow',
+        name: '_maxWithdrawableNow',
         type: 'uint256',
       },
       {
         internalType: 'uint256',
-        name: '_minNFTWithdrawableNow',
+        name: '_maxNFTWithdrawableNow',
         type: 'uint256',
       },
       {
