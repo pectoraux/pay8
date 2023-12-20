@@ -99,7 +99,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
   const router = useRouter()
-  const stakingTokenContract = useERC20(currency?.address || currToken?.address || '')
+  const stakingTokenContract = useERC20(currency?.address || currToken?.tokenAddress || '')
   const willContract = useWILLContract(pool?.id || router.query.will || '')
   const willNoteContract = useWILLNote()
   console.log('mcurrencyy===============>', currAccount, currency, pool, willContract)
