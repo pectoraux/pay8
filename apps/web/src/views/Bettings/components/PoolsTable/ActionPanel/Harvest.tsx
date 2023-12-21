@@ -40,7 +40,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const winBr = useGetWinnersPerBracketNPeriod(pool?.id, currAccount?.bettingId, arr2, currAccount?.ticketSize)
   const pendingRevenue = useGetPendingRevenue(pool?.id, currAccount?.token?.address)
   const { data: burnForCreditTokens } = useGetTokenForCredit(pool?.id) as any
-  const { data: paymentCredits } = useGetPaymentCredits(pool?.id, account, currAccount?.token?.address)
+  const { data: paymentCredits } = useGetPaymentCredits(pool?.id, account, currAccount?.bettingId)
   console.log(
     '8currAccount==================>',
     pool,

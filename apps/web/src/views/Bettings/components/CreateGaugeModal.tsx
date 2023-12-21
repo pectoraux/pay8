@@ -649,10 +649,10 @@ const CreateGaugeModal: React.FC<any> = ({
           state.betting,
           state.checker,
           state.destination,
+          state.bettingId,
           !state.checker || state.checker === ADDRESS_ZERO
             ? parseInt(state.discount ?? '0') * 100
             : getDecimalAmount(state.discount, state.decimals)?.toString(),
-          state.bettingId,
           state.collectionId,
           !!state.clear,
           state.item,
