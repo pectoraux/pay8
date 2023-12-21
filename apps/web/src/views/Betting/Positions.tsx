@@ -49,9 +49,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
     ogBetting?.bettingEvents?.length && ogBetting?.bettingEvents[parseInt(bettingId?.toString() || '1') - 1]
   const arr2 = Array.from(
     {
-      length: currEvent?.alphabetEncoding
-        ? Math.min(parseInt(currEvent?.currPeriod || 0) + 2, parseInt(currEvent?.numberOfPeriods))
-        : parseInt(currEvent?.currPeriod || 0) + 2,
+      length: Math.min(parseInt(currEvent?.currPeriod || 0) + 2, parseInt(currEvent?.numberOfPeriods)),
     },
     (v, i) => i,
   )?.slice(-DEFAULT_BET_SIZE / divisor)
