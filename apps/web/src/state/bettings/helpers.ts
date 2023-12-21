@@ -2,10 +2,14 @@ import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_BETTINGS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { getCollection } from 'state/cancan/helpers'
-import { bettingFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { bettingABI } from 'config/abi/betting'
 import { erc20ABI } from 'wagmi'
+
+import { getBettingHelperAddress } from 'utils/addressHelpers'
+import { bettingHelperABI } from 'config/abi/bettingHelper'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { bettingFields } from './queries'
 
 export const getTag = async () => {
   try {
@@ -311,4 +315,116 @@ export const getCalculateRewardsForTicketId = async (bettingAddress, bettingId, 
     }),
   )
   return rewards
+}
+
+export const getTokenForCredit = async (bettingAddress, chainId = 4002) => {
+  const bscClient = publicClient({ chainId })
+  try {
+    const [arrLength] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: getBettingHelperAddress(),
+          abi: bettingHelperABI,
+          functionName: 'burnTokenForCreditLength',
+          args: [bettingAddress],
+        },
+      ],
+    })
+    console.log('getTokenForCredit===============>', arrLength)
+    const arr = Array.from({ length: Number(arrLength.result) }, (v, i) => i)
+    const credits = await Promise.all(
+      arr?.map(async (idx) => {
+        const [burnTokenForCredit] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: getBettingHelperAddress(),
+              abi: bettingHelperABI,
+              functionName: 'burnTokenForCredit',
+              args: [bettingAddress, BigInt(idx)],
+            },
+          ],
+        })
+        const _token = burnTokenForCredit.result[0]
+        const checker = burnTokenForCredit.result[1]
+        const destination = burnTokenForCredit.result[2]
+        const discount = burnTokenForCredit.result[3]
+        const collectionId = burnTokenForCredit.result[4]
+        const item = burnTokenForCredit.result[5]
+
+        const [name, symbol] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+          ],
+        })
+        let decimals = 18
+        if (checker === ADDRESS_ZERO) {
+          const [_decimals] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'decimals',
+              },
+            ],
+          })
+          decimals = _decimals.result
+        }
+        return {
+          checker,
+          destination,
+          discount: discount.toString(),
+          collectionId: collectionId.toString(),
+          item,
+          token: new Token(
+            chainId,
+            _token,
+            decimals,
+            symbol.result?.toString()?.toUpperCase(),
+            name.result?.toString(),
+            `https://tokens.payswap.org/images/${_token}.png`,
+          ),
+        }
+      }),
+    )
+    console.log('arrLength=============>', arrLength, arr, credits)
+
+    return credits
+  } catch (error) {
+    console.error('===========>Failed to fetch credits tokens', error)
+    return []
+  }
+}
+
+export const getPaymentCredits = async (bettingAddress, userAddress, tokenAddress, chainId = 4002) => {
+  try {
+    const bscClient = publicClient({ chainId })
+    const [credits] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: bettingAddress,
+          abi: bettingABI,
+          functionName: 'paymentCredits',
+          args: [userAddress, tokenAddress],
+        },
+      ],
+    })
+    return credits.result.toString()
+  } catch (error) {
+    console.error('===========>Failed to fetch payment credits', error)
+    return []
+  }
 }

@@ -4,9 +4,15 @@ import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useBettingContract, useBettingMinter, useBettingHelper } from 'hooks/useContract'
+import {
+  useERC20,
+  useBettingContract,
+  useBettingMinter,
+  useBettingHelper,
+  useErc721CollectionContract,
+} from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useMemo, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
@@ -19,6 +25,7 @@ import { convertTimeToSeconds } from 'utils/timeHelper'
 import { combineDateAndTime } from 'views/ReferralsVoting/CreateProposal/helpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
+import { useGetTokenForCredit } from 'state/bettings/hooks'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -125,6 +132,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const bettingContract = useBettingContract(pool?.id || router.query.betting || '')
   const bettingMinterContract = useBettingMinter()
   const bettingHelperContract = useBettingHelper()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   console.log('mcurrencyy===============>', currAccount, currency, pool, bettingContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
 
@@ -180,8 +188,15 @@ const CreateGaugeModal: React.FC<any> = ({
     fungible: 0,
     brackets: '',
     bettingProfileId: '',
+    decimals: currency?.decimals,
     // owner: currAccount?.owner || account
   }))
+  const { data: burnForCreditTokens } = useGetTokenForCredit(pool?.id) as any
+  const burnForCreditToken = useMemo(
+    () => burnForCreditTokens?.length > state.position && burnForCreditTokens[state.position],
+    [burnForCreditTokens, state.position],
+  )
+  const tokenContract = useErc721CollectionContract(burnForCreditToken?.token?.address || '')
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -530,9 +545,13 @@ const CreateGaugeModal: React.FC<any> = ({
           : getDecimalAmount(state.amountReceivable, currency?.decimals)?.toString()
         const args = [state.betting, state.position, amount]
         console.log('CONFIRM_BURN_FOR_CREDIT===============>', args)
-        return callWithGasPrice(bettingHelperContract, 'burnForCredit', args).catch((err) =>
-          console.log('CONFIRM_BURN_FOR_CREDIT===============>', err),
-        )
+        return callWithGasPrice(tokenContract, 'setApprovalForAll', [bettingHelperContract.address, true])
+          .then(() => delay(5000))
+          .then(() =>
+            callWithGasPrice(bettingHelperContract, 'burnForCredit', args).catch((err) =>
+              console.log('CONFIRM_BURN_FOR_CREDIT===============>', err),
+            ),
+          )
       }
       if (stage === LockStage.CONFIRM_SPONSOR_TAG) {
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
@@ -626,12 +645,14 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_UPDATE_BURN_TOKEN_FOR_CREDIT) {
         const args = [
-          currency?.address,
+          state.token,
           state.betting,
           state.checker,
           state.destination,
-          parseInt(state.discount) * 100,
-          pool?.collectionId,
+          !state.checker || state.checker === ADDRESS_ZERO
+            ? parseInt(state.discount ?? '0') * 100
+            : getDecimalAmount(state.discount, state.decimals)?.toString(),
+          state.collectionId,
           !!state.clear,
           state.item,
         ]

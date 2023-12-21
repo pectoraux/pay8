@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "This is the address where 'burnt' tokens go, it can be the zero address (0x0000000000000000000000000000000000000000) in case you want users tokens burnt, your betting contract address in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.",
+        "This is the address where 'burnt' tokens go, it can be the zero address (0x0000000...) in case you want users tokens burnt, your betting contract address in case you want the tokens to be sent back to their owners or any other address you would like the tokens being 'burnt' to be sent.",
       )}
     </Text>
   )
@@ -64,6 +64,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       )}
     </Text>
   )
+  const TooltipComponent6 = () => <Text>{t("Input the id of your betting's channel here.")}</Text>
+
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -100,9 +102,60 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
+  const {
+    targetRef: targetRef6,
+    tooltip: tooltip6,
+    tooltipVisible: tooltipVisible6,
+  } = useTooltip(<TooltipComponent6 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="token"
+          value={state.token}
+          placeholder={t('input token address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Decimals')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="decimals"
+          value={state.decimals}
+          placeholder={t('input token decimals')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex ref={targetRef6}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Collection ID')}
+          </Text>
+          {tooltipVisible6 && tooltip6}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="collectionId"
+          value={state.collectionId}
+          placeholder={t('input collection id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

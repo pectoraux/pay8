@@ -7,11 +7,20 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { Button, Text, Flex, Box, Balance, ScanLink, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
+import {
+  useGetPaymentCredits,
+  useGetPendingRevenue,
+  useGetTokenForCredit,
+  useGetWinnersPerBracketNPeriod,
+} from 'state/bettings/hooks'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import BigNumber from 'bignumber.js'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import { getTicketAnswer } from '../Cells/TicketCell'
-import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
-import { useGetPendingRevenue, useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
+import { Divider } from '../../styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -30,7 +39,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   )?.slice(-DEFAULT_BET_SIZE / divisor)
   const winBr = useGetWinnersPerBracketNPeriod(pool?.id, currAccount?.bettingId, arr2, currAccount?.ticketSize)
   const pendingRevenue = useGetPendingRevenue(pool?.id, currAccount?.token?.address)
-  console.log('8currAccount==================>', pool, currAccount, winBr)
+  const { data: burnForCreditTokens } = useGetTokenForCredit(pool?.id) as any
+  const { data: paymentCredits } = useGetPaymentCredits(pool?.id, account, currAccount?.token?.address)
+  console.log(
+    '8currAccount==================>',
+    pool,
+    currAccount,
+    winBr,
+    burnForCreditTokens,
+    paymentCredits?.toString(),
+  )
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -187,8 +205,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             </>
           ) : null}
-        </Flex>
-        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {currAccount?.description ?? ''}
           </Text>
@@ -207,6 +223,8 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Start Time')}
           </Text>
+        </Flex>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Text lineHeight="1" mt="4px" fontSize="12px" color="textSubtle" as="span">
             {format(new Date(parseInt(currAccount?.currStart || 0) * 1000), 'yyyy-MM-dd HH:mm')}
           </Text>
@@ -286,6 +304,65 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Winners Per Bracket')}
             </Text>
           ) : null}
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={currAccount?.token?.decimals}
+              value={getBalanceNumber(new BigNumber(paymentCredits?.toString()), currAccount?.token?.decimals)}
+              unit={` ${currAccount?.token?.symbol}`}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Payment Credits')}
+            </Text>
+          </Box>
+          {burnForCreditTokens?.length > 0 &&
+            burnForCreditTokens?.map((data, index) => (
+              <>
+                <Divider />
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(`Token Position: ${index}`)}
+                </Text>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(`Token Name: ${data.token?.name}`)}
+                </Text>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(`Token Symbol: ${data.token?.symbol}`)}
+                </Text>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(
+                    `Discount: ${
+                      data.checker !== ADDRESS_ZERO
+                        ? getBalanceNumber(new BigNumber(data.discount))
+                        : parseInt(data.discount ?? '0') / 100
+                    }`,
+                  )}{' '}
+                  {data.checker !== ADDRESS_ZERO ? 'USD' : '%'}
+                </Text>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {t(`Collection ID: ${data.collectionId}`)}
+                </Text>
+                <Flex flexDirection="row">
+                  <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
+                    {t(`Checker: `)}
+                  </Text>
+                  <CopyAddress title={truncateHash(data.checker)} account={data.checker} />
+                </Flex>
+                <Flex flexDirection="row">
+                  <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
+                    {t(`Token Address: `)}
+                  </Text>
+                  <CopyAddress title={truncateHash(data.token?.address)} account={data.token?.address} />
+                </Flex>
+                <Flex flexDirection="row">
+                  <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
+                    {t(`Destination Address: `)}
+                  </Text>
+                  <CopyAddress title={truncateHash(data.destination)} account={data.destination} />
+                </Flex>
+              </>
+            ))}
         </Flex>
       </ActionContent>
     </ActionContainer>

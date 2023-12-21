@@ -130,6 +130,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Decimals')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="decimals"
+          value={state.decimals}
+          placeholder={t('input token decimals')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Collection ID')}

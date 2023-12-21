@@ -507,9 +507,9 @@ export const bettingABI = [
         type: 'address',
       },
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     name: 'paymentCredits',
@@ -1012,9 +1012,9 @@ export const bettingABI = [
         type: 'address',
       },
       {
-        internalType: 'address',
-        name: '_token',
-        type: 'address',
+        internalType: 'uint256',
+        name: '_bettingId',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',

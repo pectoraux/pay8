@@ -294,9 +294,9 @@ export const bettingHelperABI = [
       },
       {
         indexed: false,
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'UpdateMiscellaneous',
@@ -522,6 +522,11 @@ export const bettingHelperABI = [
       {
         internalType: 'uint256',
         name: 'discount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'bettingId',
         type: 'uint256',
       },
       {
@@ -905,9 +910,9 @@ export const bettingHelperABI = [
         type: 'address',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'emitUpdateMiscellaneous',
@@ -1292,6 +1297,11 @@ export const bettingHelperABI = [
         internalType: 'address',
         name: '_destination',
         type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_bettingId',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',

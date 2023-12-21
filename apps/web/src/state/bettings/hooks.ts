@@ -5,6 +5,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import useSWRImmutable from 'swr/immutable'
+import { FAST_INTERVAL } from 'config/constants'
 import { fetchBettingsAsync, fetchBettingSgAsync } from '.'
 import {
   currPoolSelector,
@@ -17,15 +18,39 @@ import {
   getAmountCollected,
   getCalculateRewardsForTicketId,
   getCountWinnersPerBracket,
+  getPaymentCredits,
   getPendingRevenue,
   getSubjects,
   getTag,
+  getTokenForCredit,
 } from './helpers'
-import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
   const { data } = useSWR('bettings-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useGetTokenForCredit = (bettingAddress: string) => {
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWRImmutable(['betting4', 'burnTokenForCredit', bettingAddress, chainId], async () =>
+    getTokenForCredit(bettingAddress, chainId),
+  )
+  return {
+    data,
+    status,
+  }
+}
+
+export const useGetPaymentCredits = (bettingAddress, userAddress, tokenAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWRImmutable(
+    ['betting', 'paymentcredits', bettingAddress, userAddress, tokenAddress, chainId],
+    async () => getPaymentCredits(bettingAddress, userAddress, tokenAddress, chainId),
+  )
+  return {
+    data,
+    status,
+  }
 }
 
 export const useGetAmountCollected = (bettingAddress, bettingId, period) => {

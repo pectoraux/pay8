@@ -230,9 +230,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={18}
-              value={getBalanceNumber(new BigNumber(paymentCredits?.toString()))}
-              unit=" USD"
+              decimals={pool?.tokenData?.length ? pool?.tokenData[0]?.token?.decimals : 18}
+              value={getBalanceNumber(
+                new BigNumber(paymentCredits?.toString()),
+                pool?.tokenData?.length ? pool?.tokenData[0]?.token?.decimals : 18,
+              )}
+              unit={` ${pool?.tokenData?.length ? pool?.tokenData[0]?.token?.symbol : 'USD'}`}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Payment Credits')}

@@ -95,6 +95,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   const lotteryContract = useLotteryContract()
   const lotteryHelperContract = useLotteryHelperContract()
   const randomNumberGeneratorContract = useLotteryRandomNumberGenerator()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   console.log('mcurrencyy===============>', currAccount, currency, pool, lotteryContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
 
@@ -134,6 +135,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     brackets: '',
     lotteryId: pool?.id ?? '',
     owner: pool?.owner,
+    decimals: currency?.decimals,
   }))
 
   const updateValue = (key: any, value: any) => {
@@ -370,7 +372,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           state.destination,
           !state.checker || state.checker === ADDRESS_ZERO
             ? parseInt(state.discount ?? '0') * 100
-            : getDecimalAmount(state.discount)?.toString(),
+            : getDecimalAmount(state.discount, state.decimals)?.toString(),
           state.collectionId,
           !!state.clear,
           state.item,
@@ -434,11 +436,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           : getDecimalAmount(state.amountReceivable ?? 0)?.toString()
         const args = [state.owner, state.position, amount]
         console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', args, tokenContract)
-        return callWithGasPrice(tokenContract, 'setApprovalForAll', [lotteryHelperContract.address, true]).then(() =>
-          callWithGasPrice(lotteryHelperContract, 'burnForCredit', args).catch((err) =>
-            console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', err),
-          ),
-        )
+        return callWithGasPrice(tokenContract, 'setApprovalForAll', [lotteryHelperContract.address, true])
+          .then(() => delay(5000))
+          .then(() =>
+            callWithGasPrice(lotteryHelperContract, 'burnForCredit', args).catch((err) =>
+              console.log('CONFIRM_BURN_TOKEN_FOR_CREDIT===============>', err),
+            ),
+          )
       }
       if (stage === LockStage.CONFIRM_DRAW_FINAL_NUMBER) {
         const args = [state.lotteryId]
