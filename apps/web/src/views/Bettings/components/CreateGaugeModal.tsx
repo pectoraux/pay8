@@ -464,7 +464,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
         const time = combineDateAndTime(state.startReceivable, state.startTime)
         const startReceivable = Math.max(Number(time) - Number(Date.now() / 1000), 0)
-        const rewardsBreakdown = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') - 1 }, (v, i) => i)
+        const rewardsBreakdown = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') - 1 }, (v, i) => 0)
         const args = [
           currency?.address,
           !!state.alphabetEncoding,
