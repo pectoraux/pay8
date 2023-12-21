@@ -44,6 +44,8 @@ export const bettingFields = `
   profileId
   owner
   active
+  createdAt
+  updatedAt
   bettingEvents {
     ${bettingEventFields}
   }

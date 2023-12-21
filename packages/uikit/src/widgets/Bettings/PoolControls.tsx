@@ -163,7 +163,7 @@ export function PoolControls<T>({
       );
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 
@@ -185,7 +185,7 @@ export function PoolControls<T>({
           setViewMode={setViewMode}
         />
         <FilterContainer>
-          {/* <LabelWrapper>
+          <LabelWrapper>
             <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
               {t("Sort by")}
             </Text>
@@ -193,30 +193,18 @@ export function PoolControls<T>({
               <Select
                 options={[
                   {
-                    label: t("Hot"),
-                    value: "hot",
+                    label: t("Creation Time"),
+                    value: "createdAt",
                   },
                   {
-                    label: t("APR"),
-                    value: "apr",
-                  },
-                  {
-                    label: t("Earned"),
-                    value: "earned",
-                  },
-                  {
-                    label: t("Total staked"),
-                    value: "totalStaked",
-                  },
-                  {
-                    label: t("Latest"),
-                    value: "latest",
+                    label: t("Update Time"),
+                    value: "updatedAt",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}
               />
             </ControlStretch>
-          </LabelWrapper> */}
+          </LabelWrapper>
           <LabelWrapper style={{ marginLeft: 16 }}>
             <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
               {t("Search")}
