@@ -408,7 +408,7 @@ export const getTokenForCredit = async (bettingAddress, chainId = 4002) => {
   }
 }
 
-export const getPaymentCredits = async (bettingAddress, userAddress, tokenAddress, chainId = 4002) => {
+export const getPaymentCredits = async (bettingAddress, userAddress, bettingId, chainId = 4002) => {
   try {
     const bscClient = publicClient({ chainId })
     const [credits] = await bscClient.multicall({
@@ -418,7 +418,7 @@ export const getPaymentCredits = async (bettingAddress, userAddress, tokenAddres
           address: bettingAddress,
           abi: bettingABI,
           functionName: 'paymentCredits',
-          args: [userAddress, tokenAddress],
+          args: [userAddress, bettingId],
         },
       ],
     })

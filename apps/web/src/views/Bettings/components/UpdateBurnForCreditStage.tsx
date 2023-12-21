@@ -157,6 +157,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Betting ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="bettingId"
+          value={state.bettingId}
+          placeholder={t('input betting id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Checker Address')}

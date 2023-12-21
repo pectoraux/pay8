@@ -41,11 +41,11 @@ export const useGetTokenForCredit = (bettingAddress: string) => {
   }
 }
 
-export const useGetPaymentCredits = (bettingAddress, userAddress, tokenAddress) => {
+export const useGetPaymentCredits = (bettingAddress, userAddress, bettingId) => {
   const { chainId } = useActiveChainId()
   const { data, status } = useSWRImmutable(
-    ['betting', 'paymentcredits', bettingAddress, userAddress, tokenAddress, chainId],
-    async () => getPaymentCredits(bettingAddress, userAddress, tokenAddress, chainId),
+    ['betting', 'paymentcredits', bettingAddress, userAddress, bettingId, chainId],
+    async () => getPaymentCredits(bettingAddress, userAddress, bettingId, chainId),
   )
   return {
     data,
