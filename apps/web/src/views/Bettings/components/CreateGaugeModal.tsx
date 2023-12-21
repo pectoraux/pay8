@@ -478,7 +478,7 @@ const CreateGaugeModal: React.FC<any> = ({
             amountReceivable.toString(),
             parseFloat(state.discountDivisor) * 100,
           ],
-          [...rewardsBreakdown, 100],
+          [...rewardsBreakdown, 10000],
           // state.rewardsBreakdown
           //   ?.split(',')
           //   ?.map((rwb) => rwb?.trim())
