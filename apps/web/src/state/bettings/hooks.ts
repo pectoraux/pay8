@@ -181,7 +181,7 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: false,
       revalidateOnReconnect: true,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 10,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )
