@@ -4,10 +4,9 @@ import { Box, Flex, FlexProps, Skeleton, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { BetPosition, NodeRound, Round } from 'state/types'
 import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
-import { formatBnb, formatUsd } from '../History/helpers'
-import PositionTag from '../PositionTag'
-import { useGetAmountCollected } from 'state/bettings/hooks'
 import BigNumber from 'bignumber.js'
+import { useGetAmountCollected } from 'state/bettings/hooks'
+import { formatBnb, formatUsd } from '../History/helpers'
 
 // PrizePoolRow
 interface PrizePoolRowProps extends FlexProps {
@@ -32,13 +31,26 @@ const Row = ({ children, ...props }) => {
 
 export const PrizePoolRow: React.FC<any> = ({ betting, ...props }) => {
   const { t } = useTranslation()
-  const { amountCollected } = useGetAmountCollected(betting?.id, betting?.bettingId, Number(betting?.currPeriod ?? 0))
+  const bettingAddress = betting?.id?.length && betting?.id?.split('_')[0]
+  const { amountCollected } = useGetAmountCollected(bettingAddress, betting?.bettingId, betting?.idx ?? 0)
   const totalAmount = getBalanceAmount(new BigNumber(amountCollected ?? '0'), betting?.token?.decimals ?? 18)
-  console.log('PrizePoolRow==================>', betting, amountCollected)
+  console.log(
+    '2PrizePoolRow==================>',
+    betting,
+    bettingAddress,
+    betting?.bettingId,
+    betting?.idx ?? 0,
+    amountCollected,
+  )
   return (
     <Row {...props}>
       <Text bold>{t('Prize Pool')}:</Text>
-      <Text bold>{`${totalAmount}`}</Text>
+      <Text bold>
+        {parseFloat(totalAmount?.toString()).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
+      </Text>
       {betting?.token?.symbol?.toUpperCase() || ''}
     </Row>
   )
@@ -50,7 +62,12 @@ export const PrizePoolRow2: React.FC<any> = ({ betting, ...props }) => {
   return (
     <Row {...props}>
       <Text bold>{t('Prize Pool')}:</Text>
-      <Text bold>{`${totalAmount}`}</Text>
+      <Text bold>
+        {parseFloat(totalAmount?.toString()).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
+      </Text>
       {betting?.token?.symbol?.toUpperCase() || ''}
     </Row>
   )
