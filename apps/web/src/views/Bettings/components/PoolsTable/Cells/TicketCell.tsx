@@ -52,7 +52,7 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 1
                       decimals={5}
                       bold={!isMobile}
                       fontSize="13px"
-                      color={Number(currTicket?.rewards) ? 'primary' : 'textDisabled'}
+                      color={Number(rwd.toString()) ? 'primary' : 'textDisabled'}
                       value={getBalanceNumber(new BigNumber(rwd.toString()), decimals) ?? 0}
                       prefix={`${index + 1}) `}
                     />
