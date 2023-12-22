@@ -436,15 +436,15 @@ export default {
     56: '0x',
   },
   bettingHelper: {
-    4002: '0xE1A64F5E91aF9224c3810eE81F040cEBfcEd073F',
+    4002: '0x5E02822B961d13Fe551683784711d3026d677092',
     56: '0x',
   },
   bettingMinter: {
-    4002: '0x41591dF24f1e96c0A2436D62C88Abb57E6b63C46',
+    4002: '0x1a5415e3C5D7d392A4EdDE1E57c95262c8498c3c',
     56: '0x',
   },
   bettingFactory: {
-    4002: '0xF500DdFdeee9F49Bb9065B7578ceddAc86379Df6',
+    4002: '0xBD97772D378e54179f07820F76E3Aa0EB3410D4A',
     56: '0x',
   },
   trustbounties: {
