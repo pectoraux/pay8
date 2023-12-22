@@ -29,15 +29,11 @@ const Row = ({ children, ...props }) => {
   )
 }
 
-export const PrizePoolRow: React.FC<any> = ({ betting, closeTimestamp, ...props }) => {
+export const PrizePoolRow: React.FC<any> = ({ betting, ...props }) => {
   const { t } = useTranslation()
   const bettingAddress = betting?.id?.length && betting?.id?.split('_')[0]
-  const { amountCollected, refetch } = useGetAmountCollected(bettingAddress, betting?.bettingId, betting?.idx ?? 0)
+  const { amountCollected } = useGetAmountCollected(bettingAddress, betting?.bettingId, betting?.idx ?? 0)
   const totalAmount = getBalanceAmount(new BigNumber(amountCollected ?? '0'), betting?.token?.decimals ?? 18)
-
-  useEffect(() => {
-    refetch()
-  }, [closeTimestamp])
 
   console.log(
     '2PrizePoolRow==================>',

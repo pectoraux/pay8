@@ -36,6 +36,7 @@ import EditNumbersModal from './EditNumbersModal'
 import NumTicketsToBuyButton from './NumTicketsToBuyButton'
 import { useTicketsReducer } from './useTicketsReducer'
 import { encodeAlphabet } from './generateTicketNumbers'
+import { useGetAmountCollected } from 'state/bettings/hooks'
 
 const StyledModal = styled(Modal)`
   ${({ theme }) => theme.mediaQueries.md} {
@@ -95,6 +96,7 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
   const [bettingPeriod, setBettingPeriod] = useState<any>(0)
   const [identityTokenId, setIdentityTokenId] = useState<any>(0)
   const bettingContract = useBettingContract(betting?.id?.split('_')[0] ?? '')
+  const { refetch } = useGetAmountCollected(betting?.id?.split('_')[0] ?? '', betting?.bettingId, betting?.idx ?? 0)
   // const { reader: cakeContractReader, signer: cakeContractApprover } = useCake()
   const cakeContract = useTokenContract(betting?.token?.address)
   const { toastSuccess } = useToast()
@@ -285,6 +287,7 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
       },
       onSuccess: async ({ receipt }) => {
         onDismiss?.()
+        refetch?.()
         // dispatch(fetchUserTicketsAndLotteries({ account, 1 }))
         toastSuccess(t('Lottery tickets purchased!'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       },
@@ -487,7 +490,7 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
                   setBuyingStage(BuyingStage.EDIT)
                 }}
               >
-                {t('View/Edit Numbers')}
+                {t('Input your bet')}
               </Button>
             )}
           </>
