@@ -509,7 +509,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
-        const padding = Array.from({ length: parseInt(state.ticketSize ?? '6') }, (v, i) => i?.toString())
+        const padding = Array.from({ length: parseInt(state.ticketSize ?? '6') }, (v, i) => 0)
         const newMinTicketNumber = ['1', ...padding]
         const newTicketRange = Array.from({ length: parseInt(state.ticketSize ?? '6') }, (v, i) => '9')
         const args = [state.collectionId, newMinTicketNumber?.join(''), newTicketRange?.join(''), state.ticketSize]
