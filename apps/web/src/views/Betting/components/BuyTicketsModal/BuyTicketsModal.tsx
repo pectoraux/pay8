@@ -30,13 +30,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAppDispatch } from 'state'
 import styled from 'styled-components'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { useGetAmountCollected } from 'state/bettings/hooks'
 import { getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
 import EditNumbersModal from './EditNumbersModal'
 import NumTicketsToBuyButton from './NumTicketsToBuyButton'
 import { useTicketsReducer } from './useTicketsReducer'
 import { encodeAlphabet } from './generateTicketNumbers'
-import { useGetAmountCollected } from 'state/bettings/hooks'
 
 const StyledModal = styled(Modal)`
   ${({ theme }) => theme.mediaQueries.md} {

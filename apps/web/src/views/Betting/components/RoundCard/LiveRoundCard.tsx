@@ -33,9 +33,9 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
   useEffect(() => {
     const secondsToClose = closeTimestamp ? closeTimestamp - getNow() : 0
     if (secondsToClose > 0) {
-      const refreshPriceTimeout = setTimeout(() => {}, secondsToClose * 1000)
+      const refreshPriceTimeout = setTimeout(() => 1, secondsToClose * 1000)
 
-      const calculatingPhaseTimeout = setTimeout(() => {}, secondsToClose * 1000)
+      const calculatingPhaseTimeout = setTimeout(() => 1, secondsToClose * 1000)
 
       return () => {
         clearTimeout(refreshPriceTimeout)
