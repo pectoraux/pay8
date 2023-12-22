@@ -18,7 +18,7 @@ const PoolRow: React.FC<any> = ({ pool, account, initialActivity }) => {
   const currAccount = useMemo(() => pool?.bettingEvents?.find((n) => n.id === currState[pool?.id]), [pool, currState])
   const currTicket = useMemo(
     () => currAccount?.tickets?.find((n) => n.id === currState2[pool?.id]),
-    [currAccount, currState2],
+    [currAccount?.tickets, currState2, pool?.id],
   )
   const tabs = (
     <>

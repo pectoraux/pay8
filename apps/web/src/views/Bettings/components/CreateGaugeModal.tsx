@@ -159,8 +159,8 @@ const CreateGaugeModal: React.FC<any> = ({
     media: currAccount?.media ?? '',
     identityTokenId: '0',
     discountDivisor: parseInt(currAccount?.discountDivisor || '0') / 100,
-    adminShare: currAccount?.adminShare ?? '',
-    referrerShare: currAccount?.referrerShare ?? '',
+    adminShare: parseInt(currAccount?.adminShare ?? '0') / 100,
+    referrerShare: parseInt(currAccount?.referrerShare ?? '0') / 100,
     ticketNumbers: '',
     rewardsBreakdown: currAccount?.rewardsBreakdown?.toString() ?? '',
     pricePerMinute: '',
@@ -509,9 +509,9 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
-        const padding = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') }, (v, i) => i?.toString())
+        const padding = Array.from({ length: parseInt(state.ticketSize ?? '6') }, (v, i) => i?.toString())
         const newMinTicketNumber = ['1', ...padding]
-        const newTicketRange = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') }, (v, i) => '9')
+        const newTicketRange = Array.from({ length: parseInt(state.ticketSize ?? '6') }, (v, i) => '9')
         const args = [state.collectionId, newMinTicketNumber?.join(''), newTicketRange?.join(''), state.ticketSize]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(bettingContract, 'updateParameters', args).catch((err) =>
