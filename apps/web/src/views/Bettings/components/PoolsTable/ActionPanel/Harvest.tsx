@@ -298,11 +298,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Latest Winning Answer')}
           </Text>
-          {winBr?.map((br) => (
-            <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
-              {br?.toString()}
-            </Text>
-          ))}
+          {winBr
+            ?.filter((br) => br?.length)
+            ?.map((br) => (
+              <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+                {br?.toString()}
+              </Text>
+            ))}
           {winBr?.length ? (
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Winners Per Bracket')}

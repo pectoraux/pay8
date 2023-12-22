@@ -512,7 +512,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const padding = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') }, (v, i) => i?.toString())
         const newMinTicketNumber = ['1', ...padding]
         const newTicketRange = Array.from({ length: parseInt(currAccount?.ticketSize ?? '6') }, (v, i) => '9')
-        const args = [state.collectionId, newMinTicketNumber?.toString(), newTicketRange?.toString(), state.ticketSize]
+        const args = [state.collectionId, newMinTicketNumber?.join(''), newTicketRange?.join(''), state.ticketSize]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(bettingContract, 'updateParameters', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PARAMETERS===============>', err),
