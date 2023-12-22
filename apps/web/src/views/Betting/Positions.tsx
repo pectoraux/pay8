@@ -53,6 +53,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
     },
     (v, i) => i,
   )?.slice(-DEFAULT_BET_SIZE / divisor)
+  const closeTimestamp = Math.ceil((parseInt(currEvent?.currEnd || 0) - Date.now() / 1000) / 60)
 
   const winBr = useGetWinnersPerBracketNPeriod(ogBetting?.id, currEvent?.bettingId, arr2, currEvent?.ticketSize)
   return (
@@ -88,7 +89,7 @@ const Positions: React.FC<any> = ({ view, ogBetting, allBettings }) => {
             const currPeriod = currEvent?.periods?.find((period) => parseInt(period.period) === idx)
             const betting =
               parseInt(currEvent?.currPeriod || 0) > idx ||
-              parseInt(currEvent?.numberOfPeriods) - 1 === parseInt(currEvent?.currPeriod || 0)
+              (parseInt(currEvent?.numberOfPeriods) - 1 === parseInt(currEvent?.currPeriod || 0) && closeTimestamp < 0)
                 ? {
                     idx,
                     rewardsBreakDown: currEvent?.rewardsBreakDown,
