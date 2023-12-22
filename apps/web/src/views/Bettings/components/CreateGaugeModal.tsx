@@ -163,7 +163,7 @@ const CreateGaugeModal: React.FC<any> = ({
     adminShare: parseInt(currAccount?.adminShare ?? '0') / 100,
     referrerShare: parseInt(currAccount?.referrerShare ?? '0') / 100,
     ticketNumbers: '',
-    rewardsBreakdown: currAccount?.rewardsBreakdown?.toString() ?? '',
+    rewardsBreakdown: currAccount?.rewardsBreakdown?.toString() ?? '0,0,0,0,0,100',
     pricePerMinute: '',
     action: currAccount?.action ?? '',
     item: '',
@@ -171,7 +171,7 @@ const CreateGaugeModal: React.FC<any> = ({
     destination: '',
     checker: '',
     clear: 0,
-    alphabetEncoding: 0,
+    alphabetEncoding: currAccount?.alphabetEncoding ? 1 : 0,
     tag: '',
     message: '',
     sponsor: '',
@@ -494,11 +494,12 @@ const CreateGaugeModal: React.FC<any> = ({
             amountReceivable.toString(),
             parseFloat(state.discountDivisor) * 100,
           ],
-          [...rewardsBreakdown, 10000],
-          // state.rewardsBreakdown
-          //   ?.split(',')
-          //   ?.map((rwb) => rwb?.trim())
-          //   .map((rwb) => parseInt(rwb) * 100),
+          state.alphabetEncoding
+            ? [...rewardsBreakdown, 10000]
+            : state.rewardsBreakdown
+                ?.split(',')
+                ?.map((rwb) => rwb?.trim())
+                .map((rwb) => parseInt(rwb) * 100),
           state.action,
           state.media,
           state.description,

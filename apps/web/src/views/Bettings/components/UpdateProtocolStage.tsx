@@ -334,6 +334,25 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           </ButtonMenu>
         </StyledItemRow>
       </GreyedOutContainer>
+      {state.alphabetEncoding ? null : (
+        <GreyedOutContainer>
+          <Flex ref={targetRef9}>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {t('Rewards Breakdown')}
+            </Text>
+            {tooltipVisible9 && tooltip9}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
+          <Input
+            type="text"
+            scale="sm"
+            name="rewardsBreakdown"
+            value={state.rewardsBreakdown}
+            placeholder="2.5,3.75,6.25,12.5,25,50"
+            onChange={handleChange}
+          />
+        </GreyedOutContainer>
+      )}
       <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

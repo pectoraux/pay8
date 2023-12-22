@@ -95,53 +95,29 @@ const OpenRoundCard: React.FC<any> = ({
         />
         <CardBody p="16px">
           <RoundResultBox isNext isLive>
-            {true ? (
-              // canEnterPosition
-              <>
-                <PrizePoolRow betting={betting} mb="8px" />
-                <Flex
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  flexDirection="column"
-                  overflow="auto"
-                  maxHeight="200px"
+            <PrizePoolRow betting={betting} closeTimestamp={betting?.currEnd} mb="8px" />
+            <Flex
+              justifyContent="flex-start"
+              alignItems="center"
+              flexDirection="column"
+              overflow="auto"
+              maxHeight="200px"
+            >
+              {betting?.subjects?.split(',')?.map((subject, index) => (
+                <Button
+                  // variant={variants[index % 6]}
+                  width="150px"
+                  height="200px"
+                  // onClick={() => handleSetPosition(BetPosition.BULL)}
+                  mb="4px"
+                  disabled
                 >
-                  {betting?.subjects?.split(',')?.map((subject, index) => (
-                    <Button
-                      // variant={variants[index % 6]}
-                      width="150px"
-                      height="200px"
-                      // onClick={() => handleSetPosition(BetPosition.BULL)}
-                      mb="4px"
-                      disabled
-                    >
-                      <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-                        {subject}
-                      </Text>
-                    </Button>
-                  ))}
-                </Flex>
-              </>
-            ) : positionEnteredText ? (
-              <>
-                <div ref={targetRef}>
-                  <Button disabled startIcon={positionEnteredIcon} width="100%" mb="8px">
-                    {t('%position% Entered', { position: positionEnteredText })}
-                  </Button>
-                </div>
-                <PrizePoolRow totalAmount={10} />
-                {tooltipVisible && tooltip}
-              </>
-            ) : (
-              <>
-                <div>
-                  <Button disabled width="100%" mb="8px">
-                    {t('No position entered')}
-                  </Button>
-                </div>
-                <PrizePoolRow totalAmount={10} />
-              </>
-            )}
+                  <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+                    {subject}
+                  </Text>
+                </Button>
+              ))}
+            </Flex>
           </RoundResultBox>
           <MultiplierArrow
             allBettings={allBettings}

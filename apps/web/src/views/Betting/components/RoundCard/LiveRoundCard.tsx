@@ -56,7 +56,7 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
       <RoundProgress variant="flat" scale="sm" lockTimestamp={lockTimestamp} closeTimestamp={closeTimestamp} />
       <CardBody p="16px">
         <RoundResultBox betPosition={isBull ? BetPosition.BULL : BetPosition.BEAR}>
-          <PrizePoolRow betting={betting} mb="8px" />
+          <PrizePoolRow betting={betting} closeTimestamp={closeTimestamp} mb="8px" />
           <Flex
             justifyContent="flex-start"
             alignItems="center"
