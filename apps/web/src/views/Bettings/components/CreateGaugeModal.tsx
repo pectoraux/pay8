@@ -153,7 +153,7 @@ const CreateGaugeModal: React.FC<any> = ({
     betting: pool?.id ?? '',
     amountPayable: '',
     amountReceivable: getBalanceNumber(currAccount?.pricePerTicket ?? 0, currency?.decimals),
-    periodReceivable: currAccount?.bracketDuration ?? '',
+    periodReceivable: parseInt(currAccount?.bracketDuration ?? '') / 60,
     startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
     description: currAccount?.description ?? '',
     media: currAccount?.media ?? '',

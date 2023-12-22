@@ -9,6 +9,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { Button, Text, Flex, Box, Balance, ScanLink, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
 import {
+  useGetAmountCollected,
   useGetPaymentCredits,
   useGetPendingRevenue,
   useGetTokenForCredit,
@@ -41,6 +42,11 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const pendingRevenue = useGetPendingRevenue(pool?.id, currAccount?.token?.address)
   const { data: burnForCreditTokens } = useGetTokenForCredit(pool?.id) as any
   const { data: paymentCredits } = useGetPaymentCredits(pool?.id, account, currAccount?.bettingId)
+  const { amountCollected } = useGetAmountCollected(
+    pool?.id,
+    currAccount?.bettingId,
+    currAccount?.periods?.length > 0 ? currAccount.periods.length - 1 : 0,
+  )
   console.log(
     '8currAccount==================>',
     pool,
@@ -273,10 +279,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
                 color="textSubtle"
                 fontSize="12px"
                 decimals={currAccount?.token?.decimals ?? 18}
-                value={getBalanceNumber(
-                  currAccount.periods[currAccount.periods.length - 1].amountCollected,
-                  currAccount?.token?.decimals ?? 18,
-                )}
+                value={getBalanceNumber(amountCollected, currAccount?.token?.decimals ?? 18)}
               />
             ) : (
               <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
