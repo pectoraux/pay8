@@ -56,7 +56,7 @@ export const useGetPaymentCredits = (bettingAddress, userAddress, bettingId) => 
 export const useGetAmountCollected = (bettingAddress, bettingId, period) => {
   const { chainId } = useActiveChainId()
   const { data: amountCollected, mutate: refetch } = useSWRImmutable(
-    ['amountCollected', bettingAddress, bettingId],
+    ['amountCollected', bettingAddress, bettingId, period],
     async () => getAmountCollected(bettingAddress, bettingId, parseInt(period), chainId),
   )
   return {
