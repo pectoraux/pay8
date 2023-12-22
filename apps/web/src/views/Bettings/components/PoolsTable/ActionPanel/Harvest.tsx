@@ -197,9 +197,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Text>
           {currAccount ? (
             <>
-              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                {pendingRevenue?.toString()}
-              </Text>
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={currAccount?.token?.decimals ?? 18}
+                value={getBalanceNumber(new BigNumber(pendingRevenue?.toString()), currAccount?.token?.decimals ?? 18)}
+              />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                 {t('Event Pending Revenue')}
               </Text>
