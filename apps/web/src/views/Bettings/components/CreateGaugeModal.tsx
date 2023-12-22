@@ -118,6 +118,7 @@ const CreateGaugeModal: React.FC<any> = ({
   pool,
   currAccount,
   currency,
+  refetch,
   onDismiss,
 }) => {
   const [stage, setStage] = useState(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
@@ -693,6 +694,9 @@ const CreateGaugeModal: React.FC<any> = ({
       return null
     },
     onSuccess: async ({ receipt }) => {
+      if (stage === LockStage.CONFIRM_BUY_TICKETS || stage === LockStage.CONFIRM_INJECT_FUNDS) {
+        refetch?.()
+      }
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)

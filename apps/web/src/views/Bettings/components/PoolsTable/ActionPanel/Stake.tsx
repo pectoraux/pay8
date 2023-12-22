@@ -29,6 +29,11 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
   const inputCurrency = useCurrency(currencyId)
   const [currency, setCurrency] = useState(inputCurrency)
+  const { refetch } = useGetAmountCollected(
+    pool?.id,
+    currAccount?.bettingId,
+    currAccount?.periods?.length > 0 ? currAccount.periods.length - 1 : 0,
+  )
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
       variant={variant}
@@ -36,6 +41,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
       pool={pool}
       currAccount={currAccount}
       currency={currency ?? inputCurrency}
+      refetch={refetch}
     />,
   )
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
