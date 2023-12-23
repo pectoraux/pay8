@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import { Flex, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
@@ -87,6 +87,13 @@ const TicketContainer: React.FC<React.PropsWithChildren<any>> = ({
   const digit7 = useRef<HTMLInputElement>(null)
   const digit8 = useRef<HTMLInputElement>(null)
   const digit9 = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (!ticket?.numbers?.length) {
+      // eslint-disable-next-line no-param-reassign
+      ticket.numbers = subject
+    }
+  }, [])
 
   const { t } = useTranslation()
   const ticketSize = parseInt(betting?.ticketSize || 0)
@@ -217,7 +224,7 @@ const TicketContainer: React.FC<React.PropsWithChildren<any>> = ({
         {digitRefs?.map((digit, index) => (
           <DigitInput
             ref={digit}
-            value={ticket.numbers?.length ? ticket.numbers[index] : subject}
+            value={ticket.numbers?.length ? ticket.numbers[index] : ''}
             onKeyDown={(e: React.KeyboardEvent) => onChangeHandler(e, index)}
             placeholder="_"
             onChange={(e) => e.preventDefault()}
