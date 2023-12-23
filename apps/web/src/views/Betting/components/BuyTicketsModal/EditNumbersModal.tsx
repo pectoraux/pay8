@@ -28,7 +28,6 @@ const EditNumbersModal: React.FC<React.PropsWithChildren<any>> = ({
   totalCost,
   updateTicket,
   tickets,
-  subject,
   allComplete,
   onConfirm,
   isConfirming,
@@ -59,7 +58,6 @@ const EditNumbersModal: React.FC<React.PropsWithChildren<any>> = ({
           <TicketInput
             key={ticket.id}
             ticket={ticket}
-            subject={subject}
             betting={betting}
             duplicateWith={ticket.duplicateWith}
             updateTicket={updateTicket}

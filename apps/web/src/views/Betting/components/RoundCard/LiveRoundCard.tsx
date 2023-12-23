@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Card, CardBody, Flex, Button, PlayCircleOutlineIcon, Text, useTooltip, useModal } from '@pancakeswap/uikit'
 import { getNow } from 'utils/getNow'
 import { useTranslation } from '@pancakeswap/localization'
@@ -22,11 +22,10 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
   const { t } = useTranslation()
   const closeTimestamp = betting?.currEnd
   const lockTimestamp = betting?.currStart
-  const [subject, setSubject] = useState()
-  // const variants = ['success', 'primary', 'secondary', 'tertiary', 'light', 'danger']
+
+  const variants = ['success', 'primary', 'secondary', 'tertiary', 'light', 'danger']
   const isBull = true
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-  const [onPresentBuyTicketsModal] = useModal(<BuyTicketsModal betting={betting} subject={subject} />)
+  const [onPresentBuyTicketsModal] = useModal(<BuyTicketsModal betting={betting} />)
   const { targetRef, tooltip, tooltipVisible } = useTooltip(t('Last price from Chainlink Oracle'), {
     placement: 'bottom',
   })
@@ -65,19 +64,10 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
             overflow="auto"
             maxHeight="200px"
           >
-            {betting?.subjects?.split(',')?.map((sb, index) => (
-              <Button
-                width="150px"
-                height="200px"
-                onClick={() => {
-                  setSubject(sb)
-                  delay(1000)
-                  onPresentBuyTicketsModal()
-                }}
-                mb="4px"
-              >
+            {betting?.subjects?.split(',')?.map((subject, index) => (
+              <Button width="150px" height="200px" onClick={onPresentBuyTicketsModal} mb="4px">
                 <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-                  {sb} ({index + 1})
+                  {subject} ({index + 1})
                 </Text>
               </Button>
             ))}

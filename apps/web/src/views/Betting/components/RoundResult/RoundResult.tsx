@@ -1,8 +1,10 @@
-import { BoxProps, Text, Flex, useModal } from '@pancakeswap/uikit'
+import { BoxProps, Text, Flex, useModal, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NodeRound, BetPosition } from 'state/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { getRoundPosition } from '../../helpers'
-import { LockPriceRow, PrizePoolRow, RoundPrice, RoundResultBox } from './styles'
+import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
+import { useGetWinnersPerBracketNPeriod } from 'state/bettings/hooks'
+
+import { PrizePoolRow, RoundPrice, RoundResultBox } from './styles'
 import ClaimTicketsModal from '../ClaimTicketsModal/ClaimTicketsModal'
 
 interface RoundResultProps extends BoxProps {
@@ -14,6 +16,14 @@ const RoundResult: React.FC<any> = ({ betting, children, ...props }) => {
   // const { lockPrice, closePrice, totalAmount } = round
   const betPosition = BetPosition.HOUSE // getRoundPosition(lockPrice, closePrice)
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
+  const divisor = isMobile ? 5 : 1
+  const arr2 = Array.from(
+    { length: Math.min(parseInt(betting?.currPeriod || 0) + 2, parseInt(betting?.numberOfPeriods)) },
+    (v, i) => i,
+  )?.slice(-DEFAULT_BET_SIZE / divisor)
+  const bettingAddress = betting?.id?.split('_')?.length && betting?.id?.split('_')[0]
+  const winBr = useGetWinnersPerBracketNPeriod(bettingAddress, betting?.bettingId, arr2, betting?.ticketSize)
   const [onPresentClaimTicketsModal] = useModal(<ClaimTicketsModal betting={betting} />)
 
   const subjects = betting?.subjects?.split(',')
@@ -38,7 +48,7 @@ const RoundResult: React.FC<any> = ({ betting, children, ...props }) => {
               <RoundPrice
                 percentReward={rwb}
                 option={subjects?.length && subjects[index]}
-                countOfWinners={betting?.countWinnersPerBracket?.length && betting?.countWinnersPerBracket[index]}
+                countOfWinners={winBr?.length && winBr[index]}
               />
             )
           })}

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import styled from 'styled-components'
 import { Flex, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
@@ -71,7 +71,6 @@ const getIdLabel = (id: number): string => {
 const TicketContainer: React.FC<React.PropsWithChildren<any>> = ({
   ticket,
   betting,
-  subject,
   duplicateWith,
   updateTicket,
   disabled,
@@ -87,12 +86,6 @@ const TicketContainer: React.FC<React.PropsWithChildren<any>> = ({
   const digit7 = useRef<HTMLInputElement>(null)
   const digit8 = useRef<HTMLInputElement>(null)
   const digit9 = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    if (!ticket?.numbers?.length) {
-      updateTicket(ticket.id, [...subject.split('')])
-    }
-  }, [])
 
   const { t } = useTranslation()
   const ticketSize = parseInt(betting?.ticketSize || 0)
