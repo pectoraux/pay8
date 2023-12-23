@@ -499,7 +499,7 @@ const CreateGaugeModal: React.FC<any> = ({
             : state.rewardsBreakdown
                 ?.split(',')
                 ?.map((rwb) => rwb?.trim())
-                .map((rwb) => parseInt(rwb) * 100),
+                .map((rwb) => parseFloat(rwb) * 100),
           state.action,
           state.media,
           state.description,
@@ -512,9 +512,16 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
         const padding = Array.from({ length: parseInt(state.ticketSize ?? '6') }, (v, i) => 0)
+        const mask = Array.from({ length: parseInt(state.ticketSize ?? '6') }, (v, i) => 1)
         const newMinTicketNumber = ['1', ...padding]
         const newTicketRange = Array.from({ length: parseInt(state.ticketSize ?? '6') }, (v, i) => '9')
-        const args = [state.collectionId, newMinTicketNumber?.join(''), newTicketRange?.join(''), state.ticketSize]
+        const args = [
+          state.collectionId,
+          newMinTicketNumber?.join(''),
+          newTicketRange?.join(''),
+          state.ticketSize,
+          mask,
+        ]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(bettingContract, 'updateParameters', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PARAMETERS===============>', err),
