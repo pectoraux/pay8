@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, CardBody, Flex, Button, PlayCircleOutlineIcon, Text, useTooltip, useModal } from '@pancakeswap/uikit'
 import { getNow } from 'utils/getNow'
 import { useTranslation } from '@pancakeswap/localization'
@@ -22,10 +22,10 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
   const { t } = useTranslation()
   const closeTimestamp = betting?.currEnd
   const lockTimestamp = betting?.currStart
-
+  const [subject, setSubject] = useState()
   const variants = ['success', 'primary', 'secondary', 'tertiary', 'light', 'danger']
   const isBull = true
-  const [onPresentBuyTicketsModal] = useModal(<BuyTicketsModal betting={betting} />)
+  const [onPresentBuyTicketsModal] = useModal(<BuyTicketsModal betting={betting} subject={subject} />)
   const { targetRef, tooltip, tooltipVisible } = useTooltip(t('Last price from Chainlink Oracle'), {
     placement: 'bottom',
   })
@@ -65,7 +65,15 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
             maxHeight="200px"
           >
             {betting?.subjects?.split(',')?.map((subject, index) => (
-              <Button width="150px" height="200px" onClick={onPresentBuyTicketsModal} mb="4px">
+              <Button
+                width="150px"
+                height="200px"
+                onClick={() => {
+                  setSubject(subject)
+                  onPresentBuyTicketsModal()
+                }}
+                mb="4px"
+              >
                 <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
                   {subject} ({index + 1})
                 </Text>

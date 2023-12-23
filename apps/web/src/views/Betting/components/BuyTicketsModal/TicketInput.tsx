@@ -71,6 +71,7 @@ const getIdLabel = (id: number): string => {
 const TicketContainer: React.FC<React.PropsWithChildren<any>> = ({
   ticket,
   betting,
+  subject,
   duplicateWith,
   updateTicket,
   disabled,
@@ -216,7 +217,7 @@ const TicketContainer: React.FC<React.PropsWithChildren<any>> = ({
         {digitRefs?.map((digit, index) => (
           <DigitInput
             ref={digit}
-            value={ticket.numbers?.length ? ticket.numbers[index] : ''}
+            value={ticket.numbers?.length ? ticket.numbers[index] : subject}
             onKeyDown={(e: React.KeyboardEvent) => onChangeHandler(e, index)}
             placeholder="_"
             onChange={(e) => e.preventDefault()}

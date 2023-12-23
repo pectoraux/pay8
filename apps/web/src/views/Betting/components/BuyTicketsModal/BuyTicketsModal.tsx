@@ -60,7 +60,7 @@ enum BuyingStage {
   EDIT = 'Edit',
 }
 
-const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
+const BuyTicketsModal: React.FC<any> = ({ betting, subject, onDismiss }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -320,6 +320,7 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
         updateTicket={updateTicket}
         randomize={randomize}
         tickets={tickets}
+        subject={subject}
         allComplete={allComplete}
         onConfirm={handleConfirm}
         isConfirming={isConfirming}
