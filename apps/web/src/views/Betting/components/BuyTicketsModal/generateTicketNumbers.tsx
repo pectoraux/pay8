@@ -9,7 +9,7 @@ export const encodeNumbers = (value: any) => {
 }
 
 export const encodeAlphabet = (value: any, ticketSize: any) => {
-  const processed = []
+  const processed = Array<any>()
   // const value = val?.toLowerCase()
   const ALPHABET = {
     a: 0,
@@ -38,17 +38,18 @@ export const encodeAlphabet = (value: any, ticketSize: any) => {
     x: 23,
     y: 24,
     z: 25,
-    ' ': 26,
-    0: 27,
-    1: 28,
-    2: 29,
-    3: 30,
-    4: 31,
-    5: 32,
-    6: 33,
-    7: 34,
-    8: 35,
-    9: 36,
+    0: 26,
+    1: 27,
+    2: 28,
+    3: 29,
+    4: 30,
+    5: 31,
+    6: 32,
+    7: 33,
+    8: 34,
+    9: 35,
+    '.': 36,
+    ' ': 37,
   }
   const res = Array.from({ length: ticketSize }, (_, j) => 0)
   let k = 1
@@ -94,26 +95,26 @@ export const decodeAlphabet = (value: any, ticketSize: any) => {
     23: 'x',
     24: 'y',
     25: 'z',
-    26: '',
-    27: '0',
-    28: '1',
-    29: '2',
-    30: '3',
-    31: '4',
-    32: '5',
-    33: '6',
-    34: '7',
-    35: '8',
-    36: '9',
+    26: '=',
+    27: '1',
+    28: '2',
+    29: '3',
+    30: '4',
+    31: '5',
+    32: '6',
+    33: '7',
+    34: '8',
+    35: '9',
+    36: '.',
   }
   const res = Array.from({ length: ticketSize }, (_, j) => 0)
   for (let i = 1; i < value.length; i++) {
-    if (value[i] !== 0) {
+    if (parseInt(value[i]) !== 0) {
       const pos = ALPHABET[i - 1]
-      res[value[i]] = pos
+      res[parseInt(value[i])] = pos
     }
   }
-  return res.join('').replaceAll('0', '').trim()
+  return res.join('').replaceAll('0', '').replaceAll('=', '0').trim()
 }
 
 /**

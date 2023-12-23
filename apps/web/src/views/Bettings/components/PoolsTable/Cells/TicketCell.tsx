@@ -17,8 +17,8 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-export const getTicketAnswer = (value, alphabetEncoding) => {
-  return alphabetEncoding ? `${decodeAlphabet(value, 27)}` : `#${value}`
+export const getTicketAnswer = (value, ticketSize, alphabetEncoding) => {
+  return alphabetEncoding ? `${decodeAlphabet(value, ticketSize)}` : `#${value}`
 }
 
 const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 18 }) => {
@@ -40,7 +40,9 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 1
           </Text>
           <Flex flexDirection="row" mb="30x">
             <Text mr="8px" mt="4px" fontSize="12px" color="primary" textAlign="left">
-              {currTicket ? getTicketAnswer(currTicket?.ticketNumber, currAccount.alphabetEncoding) : 'N/A'}
+              {currTicket
+                ? getTicketAnswer(currTicket?.ticketNumber, currAccount?.ticketSize, currAccount.alphabetEncoding)
+                : 'N/A'}
             </Text>
           </Flex>
           <Flex flexDirection="column" overflow="auto" maxHeight="50px" position="relative">
