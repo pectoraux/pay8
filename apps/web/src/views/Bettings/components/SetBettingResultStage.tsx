@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { decodeAlphabet, encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 
-import { encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
-import { keccak256 } from 'viem'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -136,7 +135,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
                 {encodeAlphabet(fn, state?.ticketSize) ?? 'N/A'}
               </Text>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {keccak256(fn)?.toString() ?? 'N/A'}
+                {decodeAlphabet(encodeAlphabet(fn, state?.ticketSize), state?.ticketSize) ?? 'N/A'}
               </Text>
             </>
           ))}
