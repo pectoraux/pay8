@@ -39,6 +39,16 @@ export const encodeAlphabet = (value: any, ticketSize: any) => {
     y: 24,
     z: 25,
     ' ': 26,
+    0: 27,
+    1: 28,
+    2: 29,
+    3: 30,
+    4: 31,
+    5: 32,
+    6: 33,
+    7: 34,
+    8: 35,
+    9: 36,
   }
   const res = Array.from({ length: ticketSize }, (_, j) => 0)
   let k = 1
@@ -85,6 +95,16 @@ export const decodeAlphabet = (value: any, ticketSize: any) => {
     24: 'y',
     25: 'z',
     26: '',
+    27: '0',
+    28: '1',
+    29: '2',
+    30: '3',
+    31: '4',
+    32: '5',
+    33: '6',
+    34: '7',
+    35: '8',
+    36: '9',
   }
   const res = Array.from({ length: ticketSize }, (_, j) => 0)
   for (let i = 1; i < value.length; i++) {

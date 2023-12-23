@@ -83,7 +83,6 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
   const discountDivisor = BigNumber(betting?.discountDivisor)
   const decimals = betting?.token?.decimals ?? 18
   const priceTicketInCake = BigNumber(betting?.pricePerTicket)
-  console.log('priceTicketInCake============>', priceTicketInCake)
   const { callWithGasPrice } = useCallWithGasPrice()
   const [ticketsToBuy, setTicketsToBuy] = useState('')
   const [discountValue, setDiscountValue] = useState('')
