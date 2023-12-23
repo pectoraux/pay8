@@ -130,14 +130,10 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           ?.split(',')
           ?.filter((fn) => !!fn)
           ?.map((fn) => (
-            <>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {encodeAlphabet(fn, state?.ticketSize) ?? 'N/A'}
-              </Text>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {decodeAlphabet(encodeAlphabet(fn, state?.ticketSize), state?.ticketSize) ?? 'N/A'}
-              </Text>
-            </>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {encodeAlphabet(fn, state?.ticketSize) ?? 'N/A'} {' => '}{' '}
+              {decodeAlphabet(encodeAlphabet(fn, state?.ticketSize), state?.ticketSize) ?? 'N/A'}
+            </Text>
           ))}
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
