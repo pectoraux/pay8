@@ -294,6 +294,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             {currAccount?.periods?.length && currAccount.periods[currAccount.periods.length - 1].finalNumber > 0
               ? getTicketAnswer(
                   currAccount.periods[currAccount.periods.length - 1].finalNumber,
+                  currAccount.ticketSize,
                   currAccount.alphabetEncoding,
                 )
               : 'N/A'}
