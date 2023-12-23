@@ -520,7 +520,7 @@ const CreateGaugeModal: React.FC<any> = ({
           newMinTicketNumber?.join(''),
           newTicketRange?.join(''),
           state.ticketSize,
-          mask,
+          mask?.join(''),
         ]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(bettingContract, 'updateParameters', args).catch((err) =>
