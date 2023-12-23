@@ -90,8 +90,7 @@ const TicketContainer: React.FC<React.PropsWithChildren<any>> = ({
 
   useEffect(() => {
     if (!ticket?.numbers?.length) {
-      // eslint-disable-next-line no-param-reassign
-      ticket.numbers = subject
+      updateTicket(ticket.id, [...subject.split('')])
     }
   }, [])
 
