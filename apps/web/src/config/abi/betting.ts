@@ -28,35 +28,6 @@ export const bettingABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_numberTickets',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_bettingId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '_user',
-        type: 'address',
-      },
-    ],
-    name: '_calculateTotalPriceForBulkTickets',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '_price',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
         name: '_owner',
         type: 'address',
@@ -132,6 +103,11 @@ export const bettingABI = [
         internalType: 'uint256[]',
         name: '_ticketNumbers',
         type: 'uint256[]',
+      },
+      {
+        internalType: 'string[]',
+        name: '_ticketNumbers2',
+        type: 'string[]',
       },
     ],
     name: 'buyWithContract',
@@ -415,88 +391,6 @@ export const bettingABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'nextToSet',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'numberTicketsPerBettingId',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bytes',
-        name: '',
-        type: 'bytes',
-      },
-    ],
-    name: 'onERC721Received',
-    outputs: [
-      {
-        internalType: 'bytes4',
-        name: '',
-        type: 'bytes4',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'oracle',
     outputs: [
@@ -724,12 +618,22 @@ export const bettingABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
+        internalType: 'uint256',
+        name: '_bettingId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_identityTokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string[]',
+        name: '_finalNumbers',
+        type: 'string[]',
       },
     ],
-    name: 'setContractAddress',
+    name: 'setBettingResults2',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -807,6 +711,11 @@ export const bettingABI = [
     name: 'tickets',
     outputs: [
       {
+        internalType: 'string',
+        name: 'letter',
+        type: 'string',
+      },
+      {
         internalType: 'uint256',
         name: 'number',
         type: 'uint256',
@@ -840,35 +749,6 @@ export const bettingABI = [
         internalType: 'address',
         name: 'owner',
         type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'tokenPerBracket',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
       },
     ],
     stateMutability: 'view',

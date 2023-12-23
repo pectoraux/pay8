@@ -86,10 +86,42 @@ const TicketContainer: React.FC<React.PropsWithChildren<any>> = ({
   const digit7 = useRef<HTMLInputElement>(null)
   const digit8 = useRef<HTMLInputElement>(null)
   const digit9 = useRef<HTMLInputElement>(null)
+  const digit10 = useRef<HTMLInputElement>(null)
+  const digit11 = useRef<HTMLInputElement>(null)
+  const digit12 = useRef<HTMLInputElement>(null)
+  const digit13 = useRef<HTMLInputElement>(null)
+  const digit14 = useRef<HTMLInputElement>(null)
+  const digit15 = useRef<HTMLInputElement>(null)
+  const digit16 = useRef<HTMLInputElement>(null)
+  const digit17 = useRef<HTMLInputElement>(null)
+  const digit18 = useRef<HTMLInputElement>(null)
+  const digit19 = useRef<HTMLInputElement>(null)
+  const digit20 = useRef<HTMLInputElement>(null)
 
   const { t } = useTranslation()
   const ticketSize = parseInt(betting?.ticketSize || 0)
-  const digitRefs = [digit1, digit2, digit3, digit4, digit5, digit6, digit7, digit8, digit9].slice(0, 6)
+  const digitRefs = [
+    digit1,
+    digit2,
+    digit3,
+    digit4,
+    digit5,
+    digit6,
+    digit7,
+    digit8,
+    digit9,
+    digit10,
+    digit11,
+    digit12,
+    digit13,
+    digit14,
+    digit15,
+    digit16,
+    digit17,
+    digit18,
+    digit19,
+    digit20,
+  ].slice(0, Math.min(parseInt(betting?.ticketSize ?? '6'), 20))
 
   const scrollInputIntoView = () => {
     if (containerRef.current) {

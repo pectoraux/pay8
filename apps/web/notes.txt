@@ -1,3 +1,5 @@
+betting encoding: no duplicates, keep it under 9 characters
+
 # TODO
 marketplace discounts/cashback
 option for subscriptions confuses yearly & regular

@@ -57,6 +57,43 @@ export const bettingHelperABI = [
         name: 'period',
         type: 'uint256',
       },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'auditor',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'finalNumber',
+        type: 'string',
+      },
+    ],
+    name: 'BettingResultsIn2',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'betting',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'bettingId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'period',
+        type: 'uint256',
+      },
     ],
     name: 'CloseBetting',
     type: 'event',
@@ -743,6 +780,34 @@ export const bettingHelperABI = [
       },
     ],
     name: 'emitBettingResultsIn',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bettingId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_period',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_auditor',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: '_finalNumber',
+        type: 'string',
+      },
+    ],
+    name: 'emitBettingResultsIn2',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
