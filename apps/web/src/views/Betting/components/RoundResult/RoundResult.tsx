@@ -16,14 +16,14 @@ const RoundResult: React.FC<any> = ({ betting, children, ...props }) => {
   // const { lockPrice, closePrice, totalAmount } = round
   const betPosition = BetPosition.HOUSE // getRoundPosition(lockPrice, closePrice)
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
-  const divisor = isMobile ? 5 : 1
-  const arr2 = Array.from(
-    { length: Math.min(parseInt(betting?.currPeriod || 0) + 2, parseInt(betting?.numberOfPeriods)) },
-    (v, i) => i,
-  )?.slice(-DEFAULT_BET_SIZE / divisor)
   const bettingAddress = betting?.id?.split('_')?.length && betting?.id?.split('_')[0]
-  const winBr = useGetWinnersPerBracketNPeriod(bettingAddress, betting?.bettingId, arr2, betting?.ticketSize)
+  const _winBr = useGetWinnersPerBracketNPeriod(
+    bettingAddress,
+    betting?.bettingId,
+    [betting?.idx ?? '0'],
+    betting?.ticketSize,
+  )
+  const winBr = _winBr?.length ? _winBr[0] : []
   const [onPresentClaimTicketsModal] = useModal(<ClaimTicketsModal betting={betting} />)
 
   const subjects = betting?.subjects?.split(',')
@@ -48,7 +48,7 @@ const RoundResult: React.FC<any> = ({ betting, children, ...props }) => {
               <RoundPrice
                 percentReward={rwb}
                 option={subjects?.length && subjects[index]}
-                countOfWinners={winBr?.length && winBr[index]}
+                countOfWinners={winBr?.length > index ? winBr[index] : ''}
               />
             )
           })}
