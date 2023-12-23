@@ -1,23 +1,10 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  ButtonMenuItem,
-  ButtonMenu,
-  Input,
-  ErrorIcon,
-  useTooltip,
-  HelpIcon,
-} from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { GreyedOutContainer, Divider } from './styles'
 import { encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
+import { keccak256 } from 'viem'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -144,9 +131,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           ?.split(',')
           ?.filter((fn) => !!fn)
           ?.map((fn) => (
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {encodeAlphabet(fn, state?.ticketSize) ?? 'N/A'}
-            </Text>
+            <>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {encodeAlphabet(fn, state?.ticketSize) ?? 'N/A'}
+              </Text>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {keccak256(fn)?.toString() ?? 'N/A'}
+              </Text>
+            </>
           ))}
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
