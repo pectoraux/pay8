@@ -25,6 +25,7 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
   const [subject, setSubject] = useState()
   const variants = ['success', 'primary', 'secondary', 'tertiary', 'light', 'danger']
   const isBull = true
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   const [onPresentBuyTicketsModal] = useModal(<BuyTicketsModal betting={betting} subject={subject} />)
   const { targetRef, tooltip, tooltipVisible } = useTooltip(t('Last price from Chainlink Oracle'), {
     placement: 'bottom',
@@ -64,18 +65,19 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
             overflow="auto"
             maxHeight="200px"
           >
-            {betting?.subjects?.split(',')?.map((subject, index) => (
+            {betting?.subjects?.split(',')?.map((sb, index) => (
               <Button
                 width="150px"
                 height="200px"
                 onClick={() => {
-                  setSubject(subject)
+                  setSubject(sb)
+                  delay(1000)
                   onPresentBuyTicketsModal()
                 }}
                 mb="4px"
               >
                 <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-                  {subject} ({index + 1})
+                  {sb} ({index + 1})
                 </Text>
               </Button>
             ))}
