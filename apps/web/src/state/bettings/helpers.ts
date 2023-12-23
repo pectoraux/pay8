@@ -236,10 +236,7 @@ export const fetchBetting = async (bettingAddress, chainId) => {
           },
         ],
       })
-      const _currPeriod = parseInt(numberOfPeriods.toString())
-        ? Math.min(parseInt(bettingEvent.currPeriod), parseInt(numberOfPeriods.toString()) - 1)
-        : parseInt(bettingEvent.currPeriod)
-      const currPeriod = _currPeriod // alphabetEncoding ? _currPeriod : parseInt(bettingEvent.currPeriod)
+      const currPeriod = Math.min(parseInt(bettingEvent.currPeriod), parseInt(numberOfPeriods.toString()) - 1)
       const currStart = parseInt(bettingEvent.startTime || 0) + currPeriod * parseInt(bettingEvent.bracketDuration || 0)
       return {
         id: bettingAddress,
