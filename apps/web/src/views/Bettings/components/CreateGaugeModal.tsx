@@ -701,7 +701,7 @@ const CreateGaugeModal: React.FC<any> = ({
           ticketNumbers,
           ticketNumbers2,
         ]
-        console.log('CONFIRM_BUY_TICKETS===============>', args)
+        console.log('1CONFIRM_BUY_TICKETS===============>', args)
         return callWithGasPrice(bettingContract, 'buyWithContract', args).catch((err) =>
           console.log('CONFIRM_BUY_TICKETS===============>', err, bettingContract),
         )

@@ -273,10 +273,6 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
       },
       // eslint-disable-next-line consistent-return
       onConfirm: () => {
-        // const ticketsForPurchase = getTicketsForPurchase()
-        // const ticketSize = parseInt(betting?.ticketSize)
-        // const ticketNumbers = betting?.alphabetEncoding ? arr2 : getTicketsForPurchase()
-        // const ticketNumbers2 = betting?.alphabetEncoding ? arr2 : userCurrentTickets
         const arr2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => 1)
         const str2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => '1')
         const ticketNumbers = betting?.alphabetEncoding ? arr2 : getTicketsForPurchase()
