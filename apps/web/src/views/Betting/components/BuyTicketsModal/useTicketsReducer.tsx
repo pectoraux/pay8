@@ -101,6 +101,7 @@ export type UpdateTicketAction = (ticketId: number, newNumbers: string[]) => voi
 export const useTicketsReducer = (
   amount: number,
   userCurrentTickets: LotteryTicket[],
+  alphabetEncoding: any,
 ): [UpdateTicketAction, () => void, Ticket[], boolean, () => any] => {
   const [state, dispatch] = useReducer(reducer, { amount, userCurrentTickets }, getInitialState)
 
@@ -121,10 +122,17 @@ export const useTicketsReducer = (
     return state.tickets
       .filter((ticket) => !!ticket.numbers)
       .map((ticket) => {
-        console.log('ticket===========>', ticket)
-        const reversedTicket = [...ticket.numbers] // .map((num) => parseInt(num, 10)).reverse()
-        // reversedTicket.unshift(1)
-        const ticketAsNumber = reversedTicket.join('')
+        if (alphabetEncoding) {
+          return [...ticket.numbers]
+        }
+        // console.log('ticket===========>', ticket)
+        // const reversedTicket = [...ticket.numbers] // .map((num) => parseInt(num, 10)).reverse()
+        // // reversedTicket.unshift(1)
+        // const ticketAsNumber = reversedTicket.join('')
+        // return ticketAsNumber
+        const reversedTicket = [...ticket.numbers].map((num) => parseInt(num, 10)).reverse()
+        reversedTicket.unshift(1)
+        const ticketAsNumber = parseInt(reversedTicket.join(''), 10)
         return ticketAsNumber
       })
   }

@@ -252,6 +252,7 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
   const [updateTicket, randomize, tickets, allComplete, getTicketsForPurchase] = useTicketsReducer(
     parseInt(ticketsToBuy, 10),
     userCurrentTickets,
+    betting?.alphabetEncoding,
   )
   useEffect(() => {
     if (userCurrentTickets.length === 0) setUserCurrentTickets(tickets)
@@ -276,7 +277,7 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
         const arr2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => 1)
         const str2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => '1')
         const ticketNumbers = betting?.alphabetEncoding ? arr2 : getTicketsForPurchase()
-        const ticketNumbers2 = betting?.alphabetEncoding ? userCurrentTickets : str2
+        const ticketNumbers2 = betting?.alphabetEncoding ? getTicketsForPurchase() : str2
         // .filter((ticket: any) => !!ticket)
         // .map((ticket) => {
         //   encodeAlphabet(ticket, ticketSize)
