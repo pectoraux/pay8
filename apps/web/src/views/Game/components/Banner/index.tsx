@@ -8,7 +8,7 @@ import StakeToWinButton from 'views/Game/components/Banner/StakeToWinButton'
 import { OutlineText, DarkTextStyle } from 'views/Game/components/TextStyle'
 import TicketsDecorations from 'views/Game/components/Banner/TicketsDecorations'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { usePotteryData } from 'state/pottery/hook'
+import { useGetGame } from 'state/games/hooks'
 import AvatarImage from 'views/CanCan/market/components/BannerHeader/AvatarImage'
 import StyledBannerImageWrapper from 'views/CanCan/market/components/BannerHeader/BannerImage'
 import MintButton from '../Pot/Deposit/MintButton'
@@ -69,7 +69,7 @@ interface BannerProps {
   handleScroll: () => void
 }
 
-const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
+const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   // const cakePriceBusd = usePriceCakeBusd()
@@ -79,6 +79,10 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
     return data?.accounts?.filter((protocol) => protocol.owner?.toLowerCase() === account?.toLowerCase())
   }, [data, account])
   console.log('ball==============>', data, userTickets)
+  const currAccount = useMemo(
+    () => userTickets?.find((tk) => parseInt(tk?.id) === parseInt(tokenId)),
+    [tokenId, userTickets],
+  )
   // const prizeInBusd = publicData.totalPrize.times(cakePriceBusd)
   const prizeTotal = getBalanceNumber(data?.totalPaid ?? 0, data?.token?.decimals ?? 18)
   const pricePerMinutes = getBalanceNumber(data?.pricePerMinutes ?? 0, data?.token?.decimals ?? 18)
@@ -91,6 +95,12 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
       // link={collection.telegramUrl}
     />,
   )
+
+  const gameData = useGetGame(data?.gameName?.toLowerCase(), currAccount?.id ?? '0') as any
+  const totalPaid = parseFloat(getBalanceNumber(data?.totalPaid, data?.token?.decimals)?.toString())
+  const earned =
+    (totalPaid * parseFloat(gameData?.score ?? '0')) /
+    Math.max(parseFloat(data?.totalScore) + parseFloat(gameData?.score ?? '0'), 1)
 
   return (
     <>
@@ -209,6 +219,14 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
                 {`${getBalanceNumber(data?.totalEarned ?? 0, data?.token?.decimals ?? 18)} ${symb}`}
               </DarkTextStyle>
             </Box>
+            <Box>
+              <Text color="white" bold as="span">
+                {t('Potential Game Earnings')}
+              </Text>
+              <DarkTextStyle ml="3px" bold as="span">
+                {`${earned} ${symb}`}
+              </DarkTextStyle>
+            </Box>
             {account ? (
               <Box>
                 <Text color="white" bold as="span">
@@ -218,11 +236,13 @@ const Banner: React.FC<any> = ({ collection, data, handleScroll }) => {
                   {`${userTickets?.length ?? 0} ticket(s)`}
                 </DarkTextStyle>
                 {userTickets?.length ? ' => ' : ''}
-                {userTickets?.map((ticket) => (
-                  <DarkTextStyle ml="3px" bold as="span">
-                    {t('Ticket #%val% | ', { val: ticket?.id })}
-                  </DarkTextStyle>
-                ))}
+                {userTickets
+                  ?.map((ticket) => (
+                    <DarkTextStyle ml="3px" bold as="span">
+                      {t('Ticket #%val% | ', { val: ticket?.id })}
+                    </DarkTextStyle>
+                  ))
+                  ?.trim('|')}
               </Box>
             ) : null}
             {/* <BannerTimer /> */}

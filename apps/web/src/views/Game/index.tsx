@@ -35,7 +35,7 @@ const Pottery: React.FC<React.PropsWithChildren> = () => {
   return (
     <Box position="relative">
       <PageMeta />
-      <Banner collection={collection} data={pool} handleScroll={handleScroll} />
+      <Banner collection={collection} tokenId={tokenId} data={pool} handleScroll={handleScroll} />
       <Box ref={potWrapperEl}>
         <Pot collection={collection} data={pool} tokenId={tokenId} setTokenId={setTokenId} />
       </Box>
