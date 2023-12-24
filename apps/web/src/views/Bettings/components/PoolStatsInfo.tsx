@@ -19,9 +19,9 @@ import { useCurrBribe, useCurrPool } from 'state/bettings/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrBribeData, setCurrPoolData } from 'state/bettings'
-import WebPagesModal from './WebPagesModal'
 import Divider from 'components/Divider'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>

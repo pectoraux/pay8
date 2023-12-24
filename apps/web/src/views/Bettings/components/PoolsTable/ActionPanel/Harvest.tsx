@@ -292,18 +292,19 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Box>
           <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
             {currAccount?.periods?.length && currAccount.periods[currAccount.periods.length - 1].finalNumber > 0
-              ? getTicketAnswer(
-                  currAccount.periods[currAccount.periods.length - 1].finalNumber,
-                  currAccount.ticketSize,
-                  currAccount.alphabetEncoding,
-                )
-              : 'N/A'}
+              ? currAccount.periods[currAccount.periods.length - 1].finalNumber
+              : // getTicketAnswer(
+                //     currAccount.periods[currAccount.periods.length - 1].finalNumber,
+                //     currAccount.ticketSize,
+                //     currAccount.alphabetEncoding,
+                //   )
+                'N/A'}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Latest Winning Answer')}
           </Text>
           {winBr
-            ?.filter((br) => br?.length)
+            ?.filter((br, index) => (currAccount.alphabetEncoding ? index === 0 : br?.length))
             ?.map((br) => (
               <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
                 {br?.toString()}
