@@ -305,7 +305,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Text>
           {winBr?.map((br) => (
             <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
-              {currAccount.alphabetEncoding ? br?.length && br[0]?.toString() : br[0]?.toString()}
+              {br?.toString()}
             </Text>
           ))}
           {winBr?.length ? (
