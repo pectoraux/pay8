@@ -181,7 +181,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
                 </Button>
               ))
           : null}
-        {currAccount?.tickets?.length ? (
+        {currAccount?.tickets?.length &&
+        currAccount?.tickets.filter(
+          (balance) =>
+            balance.owner?.toLowerCase() === account?.toLowerCase() ||
+            pool?.owner?.toLowerCase() === account?.toLowerCase(),
+        )?.length ? (
           <Button
             key="clear-all"
             variant="text"
