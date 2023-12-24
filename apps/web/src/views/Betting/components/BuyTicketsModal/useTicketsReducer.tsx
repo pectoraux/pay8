@@ -123,7 +123,7 @@ export const useTicketsReducer = (
       .filter((ticket) => !!ticket.numbers)
       .map((ticket) => {
         if (alphabetEncoding) {
-          return Array.from({ length: [...ticket.numbers].join('')?.length }, (v, i) => 1), [...ticket.numbers]
+          return [...ticket.numbers]?.join('')
         }
         // console.log('ticket===========>', ticket)
         // const reversedTicket = [...ticket.numbers] // .map((num) => parseInt(num, 10)).reverse()
@@ -133,7 +133,7 @@ export const useTicketsReducer = (
         const reversedTicket = [...ticket.numbers].map((num) => parseInt(num, 10)).reverse()
         reversedTicket.unshift(1)
         // const ticketAsNumber = parseInt(reversedTicket.join(''), 10)
-        return parseInt(reversedTicket.join(''), 10), [...ticket.numbers].map((num) => num?.toString())
+        return parseInt(reversedTicket.join(''), 10)
       })
   }
 

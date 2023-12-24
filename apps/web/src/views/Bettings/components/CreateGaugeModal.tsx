@@ -687,10 +687,10 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_BUY_TICKETS) {
         const userCurrentTickets = state.ticketNumbers?.split(',')
-        const arr2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => 1)
-        const str2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => '1')
-        const ticketNumbers = currAccount?.alphabetEncoding ? arr2 : userCurrentTickets
-        const ticketNumbers2 = currAccount?.alphabetEncoding ? userCurrentTickets : str2
+        const arr2 = Array.from({ length: userCurrentTickets?.length }, (v) => 1).join('')
+        const str2 = Array.from({ length: userCurrentTickets?.length }, (v) => `${v}`).join('')
+        const ticketNumbers = currAccount?.alphabetEncoding ? arr2 : userCurrentTickets.join('')
+        const ticketNumbers2 = currAccount?.alphabetEncoding ? userCurrentTickets.join('') : str2
         const args = [
           state.bettingId,
           account,
