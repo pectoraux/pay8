@@ -230,7 +230,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               : '-'}
           </Text>
           <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t('Time Purchased')}
+            {t('Closes At')}
           </Text>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
             {Number(currAccount?.deadline)
