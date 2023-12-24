@@ -72,18 +72,18 @@ const Deposit: React.FC<any> = ({ tokenId, data, setTokenId }) => {
           <Balance bold decimals={2} value={tokenData?.score || 0} />
         </Flex>
         <Flex justifyContent="space-between">
-          <Text color="textSubtle">{t('Time Purchased')}</Text>
+          <Text color="textSubtle">{t('Score Updated At')}</Text>
           <Text bold color="textSubtle">
-            {Number(tokenData?.userDeadLine)
-              ? format(new Date(parseInt(tokenData?.userDeadLine || 0) * 1000), 'yyyy-MM-dd HH:mm')
+            {Number(tokenData?.deadline)
+              ? format(new Date(parseInt(tokenData?.deadline || 0) * 1000), 'yyyy-MM-dd HH:mm')
               : '-'}
           </Text>
         </Flex>
         <Flex justifyContent="space-between">
-          <Text color="textSubtle">{t('Time Played')}</Text>
+          <Text color="textSubtle">{t('Closing Time')}</Text>
           <Text bold color="textSubtle">
-            {Number(tokenData?.deadline)
-              ? format(new Date(parseInt(tokenData?.deadline || 0) * 1000), 'yyyy-MM-dd HH:mm')
+            {Number(tokenData?.userDeadLine)
+              ? format(new Date(parseInt(tokenData?.userDeadLine || 0) * 1000), 'yyyy-MM-dd HH:mm')
               : '-'}
           </Text>
         </Flex>
