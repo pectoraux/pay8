@@ -22,9 +22,9 @@ import { getGameFactoryAddress } from 'utils/addressHelpers'
 import { useUserEnoughCakeValidator } from 'views/Pools/components/LockedPool/hooks/useUserEnoughCakeValidator'
 import { useGetRequiresApproval } from 'state/valuepools/hooks'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import EnableButton from './EnableButton'
 import DepositButton from './DepositButton'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const InputPanel = styled.div`
   display: flex;

@@ -8,6 +8,7 @@ import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
+import TotalValueCell2 from './Cells/TotalValueCell2'
 
 const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
   // const { pool } = usePool(sousId)
@@ -20,7 +21,7 @@ const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
     <>
       <NameCell pool={pool} />
       <TotalUsersCell labelText={t('Total Accounts')} amount={Number(pool?.numPlayers)} />
-      <TotalValueCell pool={pool} currAccount={currAccount} symbol={pool?.token?.symbol?.toUpperCase() ?? ''} />
+      <TotalValueCell2 pool={pool} currAccount={currAccount} symbol={pool?.token?.symbol?.toUpperCase() ?? ''} />
       <TotalValueCell symbol="" decimals={0} labelText={t('Total Score')} amount={pool?.totalScore} />
       <TotalValueCell
         decimals={5}

@@ -242,7 +242,7 @@ const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
                   {`${userTickets?.length ?? 0} ticket(s)`}
                 </DarkTextStyle>
                 {userTickets?.length ? ' => ' : ''}
-                {ticketText?.slice(0, ticketText?.length - 1)?.toString()}
+                {ticketText}
               </Box>
             ) : null}
             {/* <BannerTimer /> */}
