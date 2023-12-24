@@ -1,4 +1,4 @@
-import { Flex, Text, Balance, Pool, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Flex, Text, Balance, Pool } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
@@ -18,9 +18,8 @@ const StyledCell = styled(Pool.BaseCell)`
 
 const TotalValueCell: React.FC<any> = ({ pool, currAccount, symbol }) => {
   const { t } = useTranslation()
-  const gameData = useGetGame(pool?.gameName?.toLowerCase(), currAccount?.id ?? '0') as any
   const totalPaid = parseFloat(getBalanceNumber(pool?.totalPaid, pool?.token?.decimals)?.toString())
-  const earned = (totalPaid * parseFloat(gameData?.score ?? '0')) / Math.max(parseFloat(pool?.totalScore), 1)
+  const earned = (totalPaid * parseFloat(currAccount?.score ?? '0')) / Math.max(parseFloat(pool?.totalScore), 1)
   return (
     <StyledCell role="cell">
       <Pool.CellContent>

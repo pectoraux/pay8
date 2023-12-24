@@ -96,14 +96,13 @@ const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
     />,
   )
 
-  const gameData = useGetGame(data?.gameName?.toLowerCase(), currAccount?.id ?? '0') as any
   const totalPaid = parseFloat(getBalanceNumber(data?.totalPaid, data?.token?.decimals)?.toString())
-  const earned = (totalPaid * parseFloat(gameData?.score ?? '0')) / Math.max(parseFloat(data?.totalScore), 1)
+  const earned = (totalPaid * parseFloat(currAccount?.score ?? '0')) / Math.max(parseFloat(data?.totalScore), 1)
 
   const ticketText =
-    userTickets?.map((ticket) => (
+    userTickets?.map((ticket, index) => (
       <DarkTextStyle ml="3px" bold as="span">
-        {t('Ticket #%val% | ', { val: ticket?.id })}
+        {t('Ticket #%val% %val2%', { val: ticket?.id, val2: index === userTickets?.length - 1 ? '' : '|' })}
       </DarkTextStyle>
     )) ?? ''
   return (

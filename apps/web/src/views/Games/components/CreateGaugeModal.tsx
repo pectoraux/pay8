@@ -740,9 +740,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       }
     },
     onSuccess: async ({ receipt }) => {
-      if (stage === LockStage.CONFIRM_PROCESS_SCORE) {
-        await firestore.collection(pool?.gameName?.toLowerCase()).doc(currAccount?.id).delete()
-      }
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)

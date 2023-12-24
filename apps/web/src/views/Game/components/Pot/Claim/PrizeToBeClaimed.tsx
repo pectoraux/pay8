@@ -4,7 +4,6 @@ import { DeserializedPotteryUserData } from 'state/types'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import ClaimButton from './ClaimButton'
-import { BIG_ONE } from '@pancakeswap/utils/bigNumber'
 
 interface PrizeToBeClaimedProps {
   userData: DeserializedPotteryUserData
@@ -13,8 +12,7 @@ interface PrizeToBeClaimedProps {
 const PrizeToBeClaimed: React.FC<any> = ({ tokenId, tokenData, gameData }) => {
   const { t } = useTranslation()
   const symb = ` ${gameData?.token?.symbol?.toUpperCase() ?? '$'}`
-  const rewards =
-    (Number(gameData?.totalPaid) * Number(tokenData?.score)) / (Number(gameData?.totalScore) + Number(tokenData?.score))
+  const rewards = (Number(gameData?.totalPaid) * Number(tokenData?.score)) / Number(gameData?.totalScore)
   const rewardToken = getBalanceNumber(new BigNumber(rewards.toString()), gameData?.token?.decimals)
   return (
     <Box mt="20px">
