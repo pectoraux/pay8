@@ -466,8 +466,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [
           state.bettingId,
           state.identityTokenId,
-          state.finalNumbers,
-          // ?.split(',')
+          state.finalNumbers?.split(','),
           // ?.filter((fn) => !!fn)
           // ?.map((fn) => currAccount?.alphabetEncoding ? fn : ),
         ]
