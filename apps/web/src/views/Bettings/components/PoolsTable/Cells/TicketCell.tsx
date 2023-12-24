@@ -41,7 +41,9 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 1
           <Flex flexDirection="row" mb="30x">
             <Text mr="8px" mt="4px" fontSize="12px" color="primary" textAlign="left">
               {currTicket
-                ? currTicket?.ticketNumber // getTicketAnswer(currTicket?.ticketNumber, currAccount?.ticketSize, currAccount.alphabetEncoding)
+                ? currAccount.alphabetEncoding
+                  ? currTicket?.ticketNumber2
+                  : currTicket?.ticketNumber // getTicketAnswer(currTicket?.ticketNumber, currAccount?.ticketSize, currAccount.alphabetEncoding)
                 : 'N/A'}
             </Text>
           </Flex>

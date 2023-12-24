@@ -3,6 +3,7 @@ export const ticketField = `
   owner
   rewards
   ticketNumber
+  ticketNumber2
   metadataUrl
   claimed
 `
