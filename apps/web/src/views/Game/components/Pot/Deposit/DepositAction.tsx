@@ -92,9 +92,9 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
     refetch()
   }, [account, chainId])
 
-  if (needsApproval) {
-    return <EnableButton refetch={refetch} tokenContract={tokenContract} />
-  }
+  // if (needsApproval) {
+  //   return <EnableButton refetch={refetch} tokenContract={tokenContract} />
+  // }
 
   // if (publicData.getStatus !== PotteryDepositStatus.BEFORE_LOCK) {
   //   return (
@@ -168,11 +168,13 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
           </Flex>{' '}
         </Flex>
       </Flex> */}
-      {userNotEnoughCake ? (
+      {/* {userNotEnoughCake ? (
         <Button disabled mt="10px" width="100%">
           {notEnoughErrorMessage}
         </Button>
-      ) : (
+      ) : ( */}
+      <Flex flexDirection="column">
+        <EnableButton refetch={refetch} tokenContract={tokenContract} />
         <DepositButton
           tokenId={tokenId}
           numMinutes={numMinutes?.dividedBy(pricePerMinutes)}
@@ -182,7 +184,7 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
           setNumMinutes={setNumMinutes}
           setIdentityTokenId={setIdentityTokenId}
         />
-      )}
+      </Flex>
     </Box>
   )
 }
