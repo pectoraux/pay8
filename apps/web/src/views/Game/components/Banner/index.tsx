@@ -102,6 +102,12 @@ const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
     (totalPaid * parseFloat(gameData?.score ?? '0')) /
     Math.max(parseFloat(data?.totalScore) + parseFloat(gameData?.score ?? '0'), 1)
 
+  const ticketText =
+    userTickets?.map((ticket) => (
+      <DarkTextStyle ml="3px" bold as="span">
+        {t('Ticket #%val% | ', { val: ticket?.id })}
+      </DarkTextStyle>
+    )) ?? ''
   return (
     <>
       <Flex flexDirection="column">
@@ -224,7 +230,7 @@ const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
                 {t('Potential Game Earnings')}
               </Text>
               <DarkTextStyle ml="3px" bold as="span">
-                {`${earned} ${symb}`}
+                {`${earned ?? '0'} ${symb}`}
               </DarkTextStyle>
             </Box>
             {account ? (
@@ -236,13 +242,7 @@ const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
                   {`${userTickets?.length ?? 0} ticket(s)`}
                 </DarkTextStyle>
                 {userTickets?.length ? ' => ' : ''}
-                {userTickets
-                  ?.map((ticket) => (
-                    <DarkTextStyle ml="3px" bold as="span">
-                      {t('Ticket #%val% | ', { val: ticket?.id })}
-                    </DarkTextStyle>
-                  ))
-                  ?.trim('|')}
+                {ticketText?.trim('|')}
               </Box>
             ) : null}
             {/* <BannerTimer /> */}
