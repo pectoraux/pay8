@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Input, Button, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -12,7 +14,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, pool, score, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -21,6 +23,9 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       inputRef.current.focus()
     }
   }, [inputRef])
+
+  const totalPaid = parseFloat(getBalanceNumber(pool?.totalPaid, pool?.token?.decimals)?.toString())
+  const earned = (totalPaid * parseFloat(score)) / Math.max(parseFloat(pool?.totalScore) + parseFloat(score), 1)
 
   return (
     <>
@@ -49,6 +54,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           placeholder={t('input identity token id')}
           onChange={handleChange}
         />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Potential Earnings')}
+        </Text>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {earned?.toString()}
+        </Text>
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">

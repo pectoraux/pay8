@@ -26,6 +26,10 @@ import { useGetGame } from 'state/games/hooks'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { differenceInSeconds } from 'date-fns'
 import { fantomTestnet } from 'viem/chains'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { getGameMinterAddress } from 'utils/addressHelpers'
+import { gameMinterABI } from 'config/abi/gameMinter'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -44,7 +48,6 @@ import UpdatePricePerMinuteStage from './UpdatePricePerMinuteStage'
 import UpdateDestinationStage from './UpdateDestinationStage'
 import UpdateMaxUseStage from './UpdateMaxUseStage'
 import SponsorTagStage from './SponsorTagStage'
-import UpdateScoreStage from './UpdateScoreStage'
 import MintObjectStage from './MintObjectStage'
 import BurnObjectStage from './BurnObjectStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
@@ -58,10 +61,6 @@ import BlacklistTicketStage from './BlacklistTicketStage'
 import UpdateExcludedContentStage from './UpdateExcludedContentStage'
 import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 import UpdateInfoStage from './UpdateInfoStage'
-import { createPublicClient, http, custom, createWalletClient } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
-import { getGameMinterAddress } from 'utils/addressHelpers'
-import { gameMinterABI } from 'config/abi/gameMinter'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -897,11 +896,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       {stage === LockStage.WITHDRAW && (
         <AdminWithdrawStage
           state={state}
-          account={pool.id}
-          currency={currency}
+          pool={pool}
+          score={gameData?.score}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
-          handleRawValueChange={handleRawValueChange}
         />
       )}
       {stage === LockStage.MINT_OBJECT && (

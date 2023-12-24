@@ -118,24 +118,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      {/* <GreyedOutContainer>
-        <Flex ref={targetRef3}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Final Numbers')}
-          </Text>
-          {tooltipVisible3 && tooltip3}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        {state.finalNumbers
-          ?.split(',')
-          ?.filter((fn) => !!fn)
-          ?.map((fn) => (
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {encodeAlphabet(fn, state?.ticketSize) ?? 'N/A'} {' => '}{' '}
-              {decodeAlphabet(encodeAlphabet(fn, state?.ticketSize), state?.ticketSize) ?? 'N/A'}
-            </Text>
-          ))}
-      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

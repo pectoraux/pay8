@@ -138,7 +138,7 @@ export const getGames = async (first = 5, skip = 0, where) => {
 
 export const fetchGame = async (gameId, chainId) => {
   const gameFromSg = await getGame(gameId)
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [ticketInfo_, totalEarned] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
