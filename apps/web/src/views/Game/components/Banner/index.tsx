@@ -98,9 +98,7 @@ const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
 
   const gameData = useGetGame(data?.gameName?.toLowerCase(), currAccount?.id ?? '0') as any
   const totalPaid = parseFloat(getBalanceNumber(data?.totalPaid, data?.token?.decimals)?.toString())
-  const earned =
-    (totalPaid * parseFloat(gameData?.score ?? '0')) /
-    Math.max(parseFloat(data?.totalScore) + parseFloat(gameData?.score ?? '0'), 1)
+  const earned = (totalPaid * parseFloat(gameData?.score ?? '0')) / Math.max(parseFloat(data?.totalScore), 1)
 
   const ticketText =
     userTickets?.map((ticket) => (

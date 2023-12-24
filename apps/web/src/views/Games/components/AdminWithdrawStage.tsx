@@ -25,7 +25,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, score, handleChange, contin
   }, [inputRef])
 
   const totalPaid = parseFloat(getBalanceNumber(pool?.totalPaid, pool?.token?.decimals)?.toString())
-  const earned = (totalPaid * parseFloat(score)) / Math.max(parseFloat(pool?.totalScore) + parseFloat(score), 1)
+  const earned = (totalPaid * parseFloat(score)) / Math.max(parseFloat(pool?.totalScore), 1)
 
   return (
     <>
