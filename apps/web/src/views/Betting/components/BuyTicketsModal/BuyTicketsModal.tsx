@@ -273,13 +273,31 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
       },
       // eslint-disable-next-line consistent-return
       onConfirm: () => {
-        const ticketsForPurchase = getTicketsForPurchase()
-        const ticketSize = betting?.alphabetEncoding ? 27 : parseInt(betting?.ticketSize)
-        const ticketNumbers = ticketsForPurchase
-          .filter((ticket: any) => !!ticket)
-          .map((ticket) => encodeAlphabet(ticket, ticketSize))
-        const args = [betting.bettingId, account, ADDRESS_ZERO, identityTokenId, bettingPeriod, ticketNumbers]
-        console.log('ticketsForPurchase===============>', bettingContract, ticketsForPurchase, ticketNumbers, args)
+        // const ticketsForPurchase = getTicketsForPurchase()
+        // const ticketSize = parseInt(betting?.ticketSize)
+        // const ticketNumbers = betting?.alphabetEncoding ? arr2 : getTicketsForPurchase()
+        // const ticketNumbers2 = betting?.alphabetEncoding ? arr2 : userCurrentTickets
+        const arr2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => 1)
+        const str2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => '1')
+        const ticketNumbers = betting?.alphabetEncoding ? arr2 : getTicketsForPurchase()
+        const ticketNumbers2 = betting?.alphabetEncoding ? userCurrentTickets : str2
+        // .filter((ticket: any) => !!ticket)
+        // .map((ticket) => {
+        //   encodeAlphabet(ticket, ticketSize)
+        //   if () {
+        //   }
+        //   return ticket
+        // })
+        const args = [
+          betting.bettingId,
+          account,
+          ADDRESS_ZERO,
+          identityTokenId,
+          bettingPeriod,
+          ticketNumbers,
+          ticketNumbers2,
+        ]
+        console.log('ticketsForPurchase===============>', bettingContract, userCurrentTickets, ticketNumbers, args)
         return callWithGasPrice(bettingContract, 'buyWithContract', args).catch((err) =>
           console.log('ticketsForPurchase==============>', err),
         )

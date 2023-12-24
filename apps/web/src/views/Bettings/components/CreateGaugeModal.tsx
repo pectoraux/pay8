@@ -466,13 +466,14 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [
           state.bettingId,
           state.identityTokenId,
-          state.finalNumbers
-            ?.split(',')
-            ?.filter((fn) => !!fn)
-            ?.map((fn) => encodeAlphabet(fn, currAccount?.ticketSize)),
+          state.finalNumbers,
+          // ?.split(',')
+          // ?.filter((fn) => !!fn)
+          // ?.map((fn) => currAccount?.alphabetEncoding ? fn : ),
         ]
+        const method = currAccount?.alphabetEncoding ? 'setBettingResults2' : 'setBettingResults'
         console.log('CONFIRM_SET_BETTING_RESULTS===============>', args)
-        return callWithGasPrice(bettingContract, 'setBettingResults', args).catch((err) =>
+        return callWithGasPrice(bettingContract, method, args).catch((err) =>
           console.log('CONFIRM_SET_BETTING_RESULTS===============>', err),
         )
       }
@@ -686,13 +687,19 @@ const CreateGaugeModal: React.FC<any> = ({
         ]).catch((err) => console.log('CONFIRM_UPDATE_URI_GENERATOR===============>', err))
       }
       if (stage === LockStage.CONFIRM_BUY_TICKETS) {
+        const userCurrentTickets = state.ticketNumbers?.split(',')
+        const arr2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => 1)
+        const str2 = Array.from({ length: userCurrentTickets?.length }, (v, i) => '1')
+        const ticketNumbers = currAccount?.alphabetEncoding ? arr2 : userCurrentTickets
+        const ticketNumbers2 = currAccount?.alphabetEncoding ? userCurrentTickets : str2
         const args = [
           state.bettingId,
           account,
           ADDRESS_ZERO,
           state.identityTokenId,
           state.period,
-          state.ticketNumbers?.split(','),
+          ticketNumbers,
+          ticketNumbers2,
         ]
         console.log('CONFIRM_BUY_TICKETS===============>', args)
         return callWithGasPrice(bettingContract, 'buyWithContract', args).catch((err) =>
