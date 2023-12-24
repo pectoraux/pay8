@@ -145,7 +145,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   const gameMinterContract = useGameMinter()
   const gameHelperContract = useGameHelper()
   const gameHelper2Contract = useGameHelper2()
-  const gameData = useGetGame(pool?.collection?.name?.toLowerCase(), currAccount?.id ?? '0') as any
+  const gameData = useGetGame(pool?.gameName?.toLowerCase(), currAccount?.id ?? '0') as any
   console.log('gameMinterContractWithPayswapSigner==========>', gameData, gameMinterContract)
   console.log('mcurrencyy===============>', currAccount, currency, pool, gameContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
