@@ -13,6 +13,7 @@ import {
   useGameHelper2,
 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
+import { firestore } from 'utils/firebase'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
@@ -739,6 +740,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       }
     },
     onSuccess: async ({ receipt }) => {
+      if (stage === LockStage.CONFIRM_PROCESS_SCORE) {
+        await firestore.collection(pool?.gameName?.toLowerCase()).doc(currAccount?.id).delete()
+      }
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)
