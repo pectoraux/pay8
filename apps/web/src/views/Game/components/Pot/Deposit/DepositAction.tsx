@@ -92,9 +92,9 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
     refetch()
   }, [account, chainId])
 
-  // if (needsApproval) {
-  //   return <EnableButton refetch={refetch} tokenContract={tokenContract} />
-  // }
+  if (needsApproval) {
+    return <EnableButton refetch={refetch} tokenContract={tokenContract} />
+  }
 
   // if (publicData.getStatus !== PotteryDepositStatus.BEFORE_LOCK) {
   //   return (

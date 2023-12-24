@@ -309,19 +309,19 @@ export default {
   },
   gameHelper: {
     56: '0x',
-    4002: '0x480DcE63A675Aa93abcC1D5325Fe60C62f98C5c9',
+    4002: '0x59b1D23907717d35173b665e60E49C1cB9Bf6E72',
   },
   gameHelper2: {
     56: '0x',
-    4002: '0x3D629A0573319eDe31F4345774A4aFd4A5B275a3',
+    4002: '0x6be40806764187349d3054c09129383f42055804',
   },
   gameMinter: {
     56: '0x',
-    4002: '0x507Ad389bFd5d4D1d42fF7f387ff3dF646F2300b',
+    4002: '0x84EBf5d04bE997d0A3638804798A3F71f4782d5f',
   },
   gameFactory: {
     56: '0x',
-    4002: '0x5a32844f72CA1f58f310F1274f3631D58e916F0D',
+    4002: '0x0fCC013Ea98cA0362d903E9eE59460106027Efa5',
   },
   paywallARPHelper: {
     56: '0x',
