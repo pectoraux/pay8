@@ -571,14 +571,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_MINT_OBJECT) {
-        const args = [state.objectName, state.collectionId, state.tokenId, state.tokenIds?.split(',')]
+        const args = [state.objectName?.toLowerCase(), state.collectionId, state.tokenId, state.tokenIds?.split(',')]
         console.log('CONFIRM_MINT_OBJECT===============>', args)
         return callWithGasPrice(gameHelperContract, 'mintExtra', args).catch((err) =>
           console.log('CONFIRM_MINT_OBJECT===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_BURN_OBJECT) {
-        const args = [state.objectName, state.collectionId, state.tokenId, state.toAddress]
+        const args = [state.objectName?.toLowerCase(), state.collectionId, state.tokenId, state.toAddress]
         console.log('CONFIRM_BURN_OBJECT===============>', args)
         return callWithGasPrice(gameHelperContract, 'burnObject', args).catch((err) =>
           console.log('CONFIRM_BURN_OBJECT===============>', err),
@@ -671,7 +671,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_OBJECT) {
-        const args = [state.collectionId, state.objectName, state.tokenIds?.split(','), state.add]
+        const args = [state.collectionId, state.objectName?.toLowerCase(), state.tokenIds?.split(','), state.add]
         console.log('CONFIRM_UPDATE_OBJECT===============>', args)
         return callWithGasPrice(gameHelperContract, 'updateObject', args).catch((err) =>
           console.log('CONFIRM_UPDATE_OBJECT===============>', err),

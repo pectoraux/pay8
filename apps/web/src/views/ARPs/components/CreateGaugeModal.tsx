@@ -785,11 +785,14 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [state.token, state.isNFT ? state.amountReceivable : amountReceivable?.toString()]
         console.log('CONFIRM_NOTIFY_REWARDS===============>', collectionContract, args)
         if (state.isNFT > 0) {
-          return callWithGasPrice(collectionContract, 'setApprovalForAll', [arpContract.address, true]).then(() =>
-            callWithGasPrice(arpContract, 'notifyReward', args).catch((err) =>
-              console.log('CONFIRM_NOTIFY_REWARDS===============>', err),
-            ),
-          )
+          const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+          return callWithGasPrice(collectionContract, 'setApprovalForAll', [arpContract.address, true])
+            .then(() => delay(5000))
+            .then(() =>
+              callWithGasPrice(arpContract, 'notifyReward', args).catch((err) =>
+                console.log('CONFIRM_NOTIFY_REWARDS===============>', err),
+              ),
+            )
         }
         return callWithGasPrice(arpContract, 'notifyReward', args).catch((err) =>
           console.log('CONFIRM_NOTIFY_REWARDS===============>', err),

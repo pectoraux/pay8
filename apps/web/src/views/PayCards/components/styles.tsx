@@ -16,12 +16,15 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.CONFIRM_UPDATE_TOKEN_ID,
   LockStage.CONFIRM_TRANSFER_BALANCE,
+  LockStage.CONFIRM_DONATE_GAS_FEES,
   LockStage.CONFIRM_UPDATE_PASSWORD,
   LockStage.CONFIRM_UPDATE_PASSWORD2,
   LockStage.CONFIRM_UPDATE_PROFILE,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.DONATE_GAS_FEES,
+  LockStage.CONFIRM_DONATE_GAS_FEES,
   LockStage.UPDATE_PROFILE,
   LockStage.CONFIRM_UPDATE_PROFILE,
   LockStage.ADD_BALANCE,

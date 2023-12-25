@@ -21,31 +21,28 @@ import {
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { requiresApproval } from 'utils/requiresApproval'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { NftToken } from 'state/cancan/types'
 import {
-  useGetDiscounted,
   useGetPaymentCredits,
   useGetNftFilters,
   useGetPaywallARP,
   useGetSubscriptionStatus,
   useGetNftDiscounted,
 } from 'state/cancan/hooks'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
+import { decryptContent, getThumbnailNContent } from 'utils/cancan'
+import { useGetRequiresApproval } from 'state/valuepools/hooks'
+
 import { stagesWithBackButton, stagesWithApproveButton, stagesWithConfirmButton, StyledModal } from './styles'
 import ReviewStage from './ReviewStage'
-import PaywallReviewStage from './PaywallReviewStage'
 import ConfirmStage from '../shared/ConfirmStage'
 import ApproveAndConfirmStage from '../shared/ApproveAndConfirmStage'
 import { PaymentCurrency, BuyingStage } from './types'
 import TransactionConfirmed from '../shared/TransactionConfirmed'
 import PaymentCreditStage from './PaymentCreditStage'
 import CashbackStage from './CashbackStage'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
-import { decryptContent, getThumbnailNContent } from 'utils/cancan'
-import { useGetRequiresApproval } from 'state/valuepools/hooks'
-import { noop } from 'lodash'
 
 const modalTitles = (t: TranslateFunction) => ({
   [BuyingStage.REVIEW]: t('Review'),
@@ -96,11 +93,10 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, process
     nftToBuy?.ve?.toLowerCase(),
     nftToBuy?.tFIAT,
     nftToBuy?.usetFIAT,
-    bidPrice ? bidPrice : nftToBuy?.currentAskPrice,
+    bidPrice || nftToBuy?.currentAskPrice,
   )
   const stakingTokenContract = useErc721CollectionContract(currToken || '')
   const inputCurrency = mainCurrency?.address
-  const bnbContractReader = useERC20(inputCurrency ?? '')
   const bnbContractApprover = useERC20(inputCurrency ?? '')
   const nftMarketContract = useNftMarketTradesContract()
   const marketHelper3Contract = useNftMarketHelper3Contract()
@@ -109,12 +105,12 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, process
   const paywallMarketHelperContract = usePaywallMarketHelperContract()
   const callContract = variant === 'paywall' ? paywallMarketTradesContract : nftMarketContract
   const helperContract = variant === 'paywall' ? paywallMarketHelperContract : nftMarketHelperContract
-  const p = getDecimalAmount(bidPrice ? bidPrice : nftToBuy?.currentAskPrice, 18)
+  const p = getDecimalAmount(bidPrice || nftToBuy?.currentAskPrice, 18)
   const { toastSuccess } = useToast()
   const nftFilters = useGetNftFilters(account)
   const [recipient, setRecipient] = useState<string>('')
   const [tokenId, setTokenId] = useState<string>('')
-  const nftPrice = parseFloat(bidPrice ? bidPrice : nftToBuy?.currentAskPrice)
+  const nftPrice = parseFloat(bidPrice || nftToBuy?.currentAskPrice)
   const { data: paymentCredits, refetch: refetchPayment } = useGetPaymentCredits(
     nftToBuy?.collection?.id,
     nftToBuy?.tokenId,
@@ -149,11 +145,11 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, process
     let opt = []
     Object.values(nftFilters)?.map((vals) => {
       Object.keys(vals).map((elt) => {
-        const id =
-          variant === 'paywall'
-            ? nftToBuy.options?.findIndex((cat) => parseFloat(cat.value) === parseFloat(elt))
-            : nftToBuy.options?.findIndex((cat) => cat.element?.toLowerCase() === elt.toLowerCase())
-        const count = vals[elt]?.count
+        // const id =
+        //   variant === 'paywall'
+        //     ? nftToBuy.options?.findIndex((cat) => parseFloat(cat.value) === parseFloat(elt))
+        //     : nftToBuy.options?.findIndex((cat) => cat.element?.toLowerCase() === elt.toLowerCase())
+        // const count = vals[elt]?.count
         opt = [...opt, vals[elt].price]
         return opt
       })
@@ -162,7 +158,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, process
     return opt
   }, [variant, nftToBuy, nftFilters])
 
-  let userOptionsPrice = userOptionsPrices?.reduce((a, b) => a + b, 0)
+  const userOptionsPrice = userOptionsPrices?.reduce((a, b) => a + b, 0)
 
   const {
     discount,
@@ -188,7 +184,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, process
     new BigNumber(parseInt(p.toFixed()) + parseFloat(userOptionsPrice) - parseFloat(discount?.toString() ?? '0')),
   )
 
-  let { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
+  const { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
   const paywallARP = useGetPaywallARP(nftToBuy?.collection?.id ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
@@ -217,7 +213,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, process
     helperContract.address,
   )
 
-  const checkStage = () => stage === BuyingStage.CONFIRM_PAYMENT_CREDIT && !!activeButtonIndex
+  // const checkStage = () => stage === BuyingStage.CONFIRM_PAYMENT_CREDIT && !!activeButtonIndex
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
@@ -269,14 +265,15 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, process
           parseInt(decimals) === 0 ? amount : getDecimalAmount(new BigNumber(amount?.toString()), parseInt(decimals))
         const args = [nftToBuy?.currentSeller, position, _amount?.toString(), applyToTokenId]
         console.log('CONFIRM_PAYMENT_CREDIT================>', args)
-        if (!!activeButtonIndex) {
-          return callWithGasPrice(stakingTokenContract, 'setApprovalForAll', [helperContract.address, true]).then(
-            () => {
+        if (activeButtonIndex > 0) {
+          const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+          return callWithGasPrice(stakingTokenContract, 'setApprovalForAll', [helperContract.address, true])
+            .then(() => delay(5000))
+            .then(() => {
               return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
                 console.log('1CONFIRM_PAYMENT_CREDIT================>', err),
               )
-            },
-          )
+            })
         }
         return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
           console.log('CONFIRM_PAYMENT_CREDIT================>', err),

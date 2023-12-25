@@ -37,6 +37,7 @@ import UpdatePasswordStage from './UpdatePasswordStage'
 import UpdatePassword2Stage from './UpdatePassword2Stage'
 import UpdateProfileStage from './UpdateProfileStage'
 import MintStage from './MintStage'
+import DonateGasFeesStage from './DonateGasFeesStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -45,6 +46,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADD_BALANCE2]: t('Add Balance With Wallet'),
   [LockStage.REMOVE_BALANCE]: t('Remove Balance'),
   [LockStage.TRANSFER_BALANCE]: t('Transfer Balance'),
+  [LockStage.DONATE_GAS_FEES]: t('Donate Gas Fees'),
   [LockStage.EXECUTE_PURCHASE]: t('Execute Purchase'),
   [LockStage.UPDATE_PASSWORD]: t('Update Password'),
   [LockStage.UPDATE_PASSWORD2]: t('Update Password With Profile'),
@@ -58,6 +60,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_ADD_BALANCE2]: t('Back'),
   [LockStage.CONFIRM_REMOVE_BALANCE]: t('Back'),
   [LockStage.CONFIRM_TRANSFER_BALANCE]: t('Back'),
+  [LockStage.CONFIRM_DONATE_GAS_FEES]: t('Back'),
   [LockStage.CONFIRM_EXECUTE_PURCHASE]: t('Back'),
   [LockStage.TX_CONFIRMED]: t('Transaction Confirmed'),
 })
@@ -255,6 +258,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_TRANSFER_BALANCE:
         setStage(LockStage.TRANSFER_BALANCE)
         break
+      case LockStage.DONATE_GAS_FEES:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_DONATE_GAS_FEES:
+        setStage(LockStage.DONATE_GAS_FEES)
+        break
       case LockStage.EXECUTE_PURCHASE:
         setStage(LockStage.SETTINGS)
         break
@@ -300,6 +309,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.TRANSFER_BALANCE:
         setStage(LockStage.CONFIRM_TRANSFER_BALANCE)
+        break
+      case LockStage.DONATE_GAS_FEES:
+        setStage(LockStage.CONFIRM_DONATE_GAS_FEES)
         break
       case LockStage.UPDATE_PASSWORD:
         setStage(LockStage.CONFIRM_UPDATE_PASSWORD)
@@ -350,6 +362,14 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_ADD_BALANCE2===============>', args)
         return callWithGasPrice(cardContract, 'addBalance', args).catch((err) =>
           console.log('CONFIRM_ADD_BALANCE2===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_DONATE_GAS_FEES) {
+        const _amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
+        const args = [adminAccount?.address, _amountReceivable?.toString()]
+        console.log('CONFIRM_DONATE_GAS_FEES===============>', args)
+        return callWithGasPrice(stakingTokenContract, 'transfer', args).catch((err) =>
+          console.log('CONFIRM_DONATE_GAS_FEES===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_TRANSFER_BALANCE) {
@@ -561,6 +581,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_PROFILE)}>
             {t('ATTACH UNIQUE PROFILE')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.DONATE_GAS_FEES)}>
+            {t('DONATE GAS FEES')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.TRANSFER_BALANCE)}>
             {t('TRANSFER BALANCE')}
           </Button>
@@ -601,6 +624,14 @@ const CreateGaugeModal: React.FC<any> = ({
           account={account}
           currency={currency}
           handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.DONATE_GAS_FEES && (
+        <DonateGasFeesStage
+          state={state}
+          currency={currency}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />

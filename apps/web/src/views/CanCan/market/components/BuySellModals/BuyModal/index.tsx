@@ -286,13 +286,14 @@ const BuyModal: React.FC<any> = ({
         const args = [nftToBuy?.currentSeller, position, _amount?.toString(), applyToTokenId]
         console.log('CONFIRM_PAYMENT_CREDIT================>', stakingTokenContract, nftToBuy, args)
         if (activeButtonIndex) {
-          return callWithGasPrice(stakingTokenContract, 'setApprovalForAll', [helperContract.address, true]).then(
-            () => {
+          const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+          return callWithGasPrice(stakingTokenContract, 'setApprovalForAll', [helperContract.address, true])
+            .then(() => delay(5000))
+            .then(() => {
               return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
                 console.log('1CONFIRM_PAYMENT_CREDIT================>', err),
               )
-            },
-          )
+            })
         }
         return callWithGasPrice(helperContract, 'burnForCredit', args).catch((err) =>
           console.log('CONFIRM_PAYMENT_CREDIT================>', err),

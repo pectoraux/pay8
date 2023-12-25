@@ -325,7 +325,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             return null
           })
           .then(() => {
-            let args = [
+            const args10 = [
               state.tokenId?.split(' ')?.join('-')?.trim(),
               state.description,
               state.prices?.split(',')?.filter((val) => !!val),
@@ -340,8 +340,8 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
                 ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
                 : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
             ]
-            console.log('7CONFIRM_CREATE_PAYWALL2==============>')
-            return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args).catch((err) =>
+            console.log('7CONFIRM_CREATE_PAYWALL2==============>', args10)
+            return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args10).catch((err) =>
               console.log('CONFIRM_ADD_LOCATION================>', err),
             )
           })
@@ -401,6 +401,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             )
             if (!!state.customMinter && !!Number(state.nftTokenId)) {
               return callWithGasPrice(tokenContract, 'setApprovalForAll', [marketHelper3Contract.address, true])
+                .then(() => delay(5000))
                 .then(() => {
                   return callWithGasPrice(marketOrdersContract, 'createAskOrder', createArgs).catch((err) =>
                     console.log('rerr=============>', err),

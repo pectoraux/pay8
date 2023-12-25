@@ -483,11 +483,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       if (stage === LockStage.CONFIRM_UPDATE_NFT_PRIZES) {
         const args = [state.token, account, state.lotteryId, state.tokenId]
         console.log('CONFIRM_UPDATE_NFT_PRIZES===============>', args, tokenContract2)
-        return callWithGasPrice(tokenContract2, 'setApprovalForAll', [lotteryHelperContract.address, true]).then(() =>
-          callWithGasPrice(lotteryHelperContract, 'updateNFTPrizes', args).catch((err) =>
-            console.log('CONFIRM_UPDATE_NFT_PRIZES===============>', err),
-          ),
-        )
+        return callWithGasPrice(tokenContract2, 'setApprovalForAll', [lotteryHelperContract.address, true])
+          .then(() => delay(5000))
+          .then(() =>
+            callWithGasPrice(lotteryHelperContract, 'updateNFTPrizes', args).catch((err) =>
+              console.log('CONFIRM_UPDATE_NFT_PRIZES===============>', err),
+            ),
+          )
       }
       return null
     },

@@ -32,6 +32,7 @@ const MintModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
   const { toastSuccess, toastError } = useToast()
   const tokenContract = useErc721CollectionContract(getAuditorHelperAddress())
   console.log('MintModal============>', tokenId, data)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   const [state, setState] = useState<any>(() => ({
     ingredients: '',
     gameTokenId: tokenId ?? '',
@@ -54,6 +55,7 @@ const MintModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
       const args = [data?.name, data?.id?.split('-')[0], state.gameTokenId, state.ingredients?.split(',')]
       console.log('Confirm_Mint_object================>', gameHelperContract, args)
       return callWithGasPrice(tokenContract, 'setApprovalForAll', [gameHelperContract.address, true])
+        .then(() => delay(5000))
         .then(() => callWithGasPrice(gameHelperContract, 'mintObject', args))
         .catch((err) => {
           console.log('Confirm_Mint_object================>', err)

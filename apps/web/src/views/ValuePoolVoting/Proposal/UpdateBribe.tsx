@@ -1,24 +1,18 @@
 import { useEffect, useRef, useState, useCallback, ChangeEvent } from 'react'
 import {
-  Card,
   Flex,
   Grid,
   Box,
   Text,
   Modal,
   Button,
-  CardBody,
-  CardHeader,
   AutoRenewIcon,
   ErrorIcon,
   useToast,
-  Heading,
   ButtonMenu,
-  ReactMarkdown,
   ButtonMenuItem,
   Input,
 } from '@pancakeswap/uikit'
-import dynamic from 'next/dynamic'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -27,14 +21,12 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useERC20, useErc721CollectionContract, useValuepoolVoterContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider } from 'views/ARPs/components/styles'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { Label, SecondaryLabel } from '../CreateProposal/styles'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { useGetRequiresApproval } from 'state/trustbounties/hooks'
 import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 import { FetchStatus } from 'config/constants/types'
+import { SecondaryLabel } from '../CreateProposal/styles'
 
 interface SetPriceStageProps {
   litigationId?: string | null
@@ -86,8 +78,10 @@ const UpdateBribeModal: React.FC<any> = ({ veAddress, proposal, onDismiss }) => 
       ]
       console.log('createGauge==================>', args, stakingTokenContract, collectionContract)
       if (state.isNFT > 0) {
-        return callWithGasPrice(collectionContract, 'setApprovalForAll', [valuepoolVoterContract.address, true]).then(
-          (res) => {
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+        return callWithGasPrice(collectionContract, 'setApprovalForAll', [valuepoolVoterContract.address, true])
+          .then(() => delay(5000))
+          .then(() => {
             return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args).catch((err) => {
               setIsLoading(false)
               console.log('err==================>', err)
@@ -96,18 +90,16 @@ const UpdateBribeModal: React.FC<any> = ({ veAddress, proposal, onDismiss }) => 
                 <ToastDescriptionWithTx txHash={receipt?.transactionHash}>{err}</ToastDescriptionWithTx>,
               )
             })
-          },
-        )
-      } else {
-        return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args).catch((err) => {
-          setIsLoading(false)
-          console.log('err==================>', err)
-          toastError(
-            t('Issue adding bribe'),
-            <ToastDescriptionWithTx txHash={receipt?.transactionHash}>{err}</ToastDescriptionWithTx>,
-          )
-        })
+          })
       }
+      return callWithGasPrice(valuepoolVoterContract, 'lockBribe', args).catch((err) => {
+        setIsLoading(false)
+        console.log('err==================>', err)
+        toastError(
+          t('Issue adding bribe'),
+          <ToastDescriptionWithTx txHash={receipt?.transactionHash}>{err}</ToastDescriptionWithTx>,
+        )
+      })
     })
     if (receipt?.status) {
       setIsLoading(false)
