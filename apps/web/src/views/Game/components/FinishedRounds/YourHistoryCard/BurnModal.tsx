@@ -22,7 +22,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const BurnModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
+const BurnModal: React.FC<any> = ({ tokenId, data, objectName, onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -33,7 +33,7 @@ const BurnModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const { toastSuccess, toastError } = useToast()
-  console.log('BurnModal============>', tokenId, data)
+  console.log('BurnModal============>', tokenId, data, objectName)
   const [state, setState] = useState<any>(() => ({
     to: account ?? '',
     gameTokenId: tokenId ?? '',
@@ -53,7 +53,7 @@ const BurnModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const args = [data?.gameName, data?.id?.split('-')[0], state.gameTokenId, state.to]
+      const args = [objectName, data?.id?.split('-')[0], state.gameTokenId, state.to]
       console.log('Confirm_Burn_object================>', gameHelperContract, args)
       return callWithGasPrice(gameHelperContract, 'burnObject', args).catch((err) => {
         console.log('Confirm_Burn_object================>', err)
@@ -78,14 +78,17 @@ const BurnModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
   }, [
     fetchWithCatchTxError,
     onDismiss,
-    state,
-    account,
+    objectName,
+    data?.id,
+    state.gameTokenId,
+    state.to,
     gameHelperContract,
     callWithGasPrice,
     toastError,
     t,
     toastSuccess,
     dispatch,
+    chainId,
   ])
 
   useEffect(() => {

@@ -11,9 +11,9 @@ interface DepositButtonProps {
   setDepositAmount: (value: string) => void
 }
 
-const BurnButton: React.FC<any> = ({ data, tokenId }) => {
+const BurnButton: React.FC<any> = ({ data, tokenId, objectName }) => {
   const { t } = useTranslation()
-  const [onBurnModal] = useModal(<BurnModal tokenId={tokenId} data={data} />)
+  const [onBurnModal] = useModal(<BurnModal tokenId={tokenId} data={data} objectName={objectName} />)
 
   return (
     <Button

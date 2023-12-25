@@ -74,7 +74,7 @@ const PreviousRoundCardBody: React.FC<any> = ({ roundId, latestRoundId, objectNa
           <Text fontSize="20px" textAlign={['center', 'center', 'left']} lineHeight="110%" bold>
             {t('Burn Object')}
           </Text>
-          <BurnButton tokenId={tokenId} data={data} />
+          <BurnButton tokenId={tokenId} data={data} objectName={objectName} />
         </Flex>
         <LinkExternal
           m={['10px auto auto auto', '10px auto auto auto', 'auto 0 0 auto']}

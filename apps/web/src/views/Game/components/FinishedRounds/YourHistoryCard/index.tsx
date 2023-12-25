@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Card, Text, Skeleton, CardHeader, Flex, BunnyPlaceholderIcon } from '@pancakeswap/uikit'
+import { Card, Text, CardHeader, Flex, BunnyPlaceholderIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import RoundSwitcher from '../AllHistoryCard/RoundSwitcher'
 import PreviousRoundCardBody from './PreviousRoundCardBody'
-import { useWeb3React } from '@pancakeswap/wagmi'
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -31,7 +30,7 @@ const StyledCardHeader = styled(CardHeader)`
 const YourHistoryCard = ({ tokenId, data }) => {
   const { t } = useTranslation()
   const [obj, setObj] = useState([])
-  useEffect(() => setObj(data?.accounts?.find((ac) => ac?.id === tokenId)?.objectNames), [tokenId])
+  useEffect(() => setObj(data?.accounts?.find((ac) => ac?.id === tokenId)?.objectNames), [data?.accounts, tokenId])
 
   const [selectedRoundId, setSelectedRoundId] = useState('1')
   const latestRoundId = obj?.length
