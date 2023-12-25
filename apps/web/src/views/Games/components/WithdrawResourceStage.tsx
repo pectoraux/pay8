@@ -59,7 +59,7 @@ const UpdateInfoStage: React.FC<any> = ({ state, handleChange, continueToNextSta
       <GreyedOutContainer>
         {resources?.length ? (
           <>
-            <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
+            <Text color="primary" mb="3px" mr="3px" fontSize="12px" bold as="span" textTransform="uppercase">
               {t('Resources From Burnt')}
             </Text>
             <Text lineHeight="1" mb="3px" fontSize="12px" color="textSubtle" as="span">
