@@ -19,6 +19,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   //   hours: hoursReceivable,
   //   minutes: minutesReceivable,
   // } = getTimePeriods(Number(currAccount?.gameMinutes ?? '0'))
+  const objectNames = pool?.objectNames?.map((objectName) => objectName?.name)
   const gameData = useGetGame(pool?.gameName?.toLowerCase(), currAccount?.id ?? '0')
   console.log('gamepool1====>', gameData, currAccount)
 
@@ -232,22 +233,22 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Closes At')}
           </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+          <Text lineHeight="1" mb="3px" fontSize="12px" color="textSubtle" as="span">
             {Number(currAccount?.deadline)
               ? format(new Date(parseInt(currAccount?.deadline || 0) * 1000), 'yyyy-MM-dd HH:mm')
               : '-'}
           </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {pool?.objectNames?.length ? pool?.objectNames?.toString() : 'N/A'}
+          <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Time Played')}
           </Text>
-          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+          <Text lineHeight="1" mb="3px" fontSize="12px" color="textSubtle" as="span">
+            {objectNames?.length ? objectNames?.toString() : 'N/A'}
+          </Text>
+          <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Game Object Names')}
           </Text>
           {currAccount ? (
             <>
-              <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
-                {t('Time Played')}
-              </Text>
               <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
                 {currAccount?.objectNames?.length ? currAccount?.objectNames?.toString() : 'N/A'}
               </Text>
