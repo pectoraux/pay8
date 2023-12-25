@@ -11,6 +11,7 @@ import NodeRSA from 'encrypt-rsa'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { requiresApproval } from 'utils/requiresApproval'
 import { fetchRampAsync, fetchRampsAsync } from '.'
 import { VaultKey } from '../types'
 import {
@@ -26,7 +27,6 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
 } from './selectors'
-import { requiresApproval } from 'utils/requiresApproval'
 import { getAccountSg, getRampSg, getSession, getTag, getTokenData } from './helpers'
 
 export const useRampsConfigInitialize = () => {
@@ -63,14 +63,13 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: true,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 3,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )
 }
 
-export const fetchPoolsDataWithFarms = async (ramp, dispatch) => {
-  const { chainId } = useActiveChainId()
+export const fetchPoolsDataWithFarms2 = async (ramp, chainId, dispatch) => {
   if (ramp) {
     batch(() => {
       dispatch(fetchRampAsync(ramp, chainId))
@@ -154,45 +153,31 @@ export const useGetAccountSg = (accountAddress, channel) => {
 
 export const useGetSessionInfo = (sessionId, sk) => {
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-  try {
-    const sk0 = sk
-      ? nodeRSA.decryptStringWithRsaPrivateKey({
-          text: sk,
-          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-        })
-      : ''
-    const {
-      data,
-      status,
-      mutate: refetch,
-    } = useSWRImmutable(['stripe-session-info', sessionId ?? '0', sk0], async () =>
-      axios.post('/api/check', { sessionId, sk: sk0 }),
-    )
-    return { data: data?.data, refetch, status }
-  } catch (err) {
-    return {
-      data: null,
-      refetch: null,
-    }
-  }
+  const sk0 = sk
+    ? nodeRSA.decryptStringWithRsaPrivateKey({
+        text: sk,
+        privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+      })
+    : ''
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWRImmutable(['stripe-session-info', sessionId ?? '0', sk0], async () =>
+    axios.post('/api/check', { sessionId, sk: sk0 }),
+  )
+  return { data: data?.data, refetch, status }
 }
 
 export const useGetSessionInfo2 = (sessionId, sk) => {
-  try {
-    const {
-      data,
-      status,
-      mutate: refetch,
-    } = useSWRImmutable(['stripe-session-info-paycard', sessionId ?? '0', sk], async () =>
-      axios.post('/api/check', { sessionId, sk }),
-    )
-    return { data: data?.data, refetch, status }
-  } catch (err) {
-    return {
-      data: null,
-      refetch: null,
-    }
-  }
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWRImmutable(['stripe-session-info-paycard', sessionId ?? '0', sk], async () =>
+    axios.post('/api/check', { sessionId, sk }),
+  )
+  return { data: data?.data, refetch, status }
 }
 
 export const useGetRamp = (rampAddress) => {

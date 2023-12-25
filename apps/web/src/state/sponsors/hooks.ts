@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
+import { FAST_INTERVAL } from 'config/constants'
 import { fetchSponsorsAsync, fetchSponsorSgAsync } from '.'
 import {
   currPoolSelector,
@@ -14,7 +15,6 @@ import {
   filterSelector,
 } from './selectors'
 import { getTag } from './helpers'
-import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
   const { data } = useSWR('sponsors-tags', async () => getTag())
@@ -61,7 +61,7 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 3,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )

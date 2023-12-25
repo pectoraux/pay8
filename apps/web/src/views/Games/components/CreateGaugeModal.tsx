@@ -13,7 +13,6 @@ import {
   useGameHelper2,
 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { firestore } from 'utils/firebase'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'

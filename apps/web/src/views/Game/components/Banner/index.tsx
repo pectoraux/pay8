@@ -227,7 +227,7 @@ const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
                 {t('Potential Game Earnings')}
               </Text>
               <DarkTextStyle ml="3px" bold as="span">
-                {`${earned ?? '0'} ${symb}`}
+                {`${Number.isNaN(earned) ? '0' : earned} ${symb}`}
               </DarkTextStyle>
             </Box>
             {account ? (

@@ -43,7 +43,6 @@ export const useFetchPublicPoolsData = () => {
     async () => {
       const fetchPoolsDataWithFarms = async () => {
         batch(() => {
-          const init = false
           dispatch(fetchWorldsAsync({ chainId }))
         })
       }
@@ -55,7 +54,7 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 3,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )

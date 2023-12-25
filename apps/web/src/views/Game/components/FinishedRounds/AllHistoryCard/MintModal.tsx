@@ -1,19 +1,16 @@
 import { useEffect, useRef, useState, useCallback, ChangeEvent } from 'react'
 import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { fetchLotteriesAsync } from 'state/lotteries'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGameHelper } from 'hooks/useContract'
+import { useErc721CollectionContract, useGameHelper } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { Divider, GreyedOutContainer } from 'views/Accelerator/components/styles'
-import { getAuditorHelperContract } from 'utils/contractHelpers'
-import { getGameHelperAddress } from 'utils/addressHelpers'
+import { getAuditorHelperAddress } from 'utils/addressHelpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
@@ -33,6 +30,7 @@ const MintModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const { toastSuccess, toastError } = useToast()
+  const tokenContract = useErc721CollectionContract(getAuditorHelperAddress())
   console.log('MintModal============>', tokenId, data)
   const [state, setState] = useState<any>(() => ({
     ingredients: '',
@@ -55,7 +53,7 @@ const MintModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
     const receipt = await fetchWithCatchTxError(async () => {
       const args = [data?.name, data?.id?.split('-')[0], state.gameTokenId, state.ingredients?.split(',')]
       console.log('Confirm_Mint_object================>', gameHelperContract, args)
-      await callWithGasPrice(getAuditorHelperContract(), 'approve', [getGameHelperAddress(), state.gameTokenId])
+      return callWithGasPrice(tokenContract, 'setApprovalForAll', [gameHelperContract.address, true])
         .then(() => callWithGasPrice(gameHelperContract, 'mintObject', args))
         .catch((err) => {
           console.log('Confirm_Mint_object================>', err)
@@ -80,14 +78,18 @@ const MintModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
   }, [
     fetchWithCatchTxError,
     onDismiss,
-    state,
-    account,
+    data?.name,
+    data?.id,
+    state.gameTokenId,
+    state.ingredients,
     gameHelperContract,
     callWithGasPrice,
+    tokenContract,
     toastError,
     t,
     toastSuccess,
     dispatch,
+    chainId,
   ])
 
   useEffect(() => {

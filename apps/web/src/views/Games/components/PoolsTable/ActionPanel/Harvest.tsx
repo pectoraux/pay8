@@ -19,7 +19,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   //   hours: hoursReceivable,
   //   minutes: minutesReceivable,
   // } = getTimePeriods(Number(currAccount?.gameMinutes ?? '0'))
-  const gameData = useGetGame(pool?.collection?.name?.toLowerCase(), currAccount?.id ?? '0')
+  const gameData = useGetGame(pool?.gameName?.toLowerCase(), currAccount?.id ?? '0')
   console.log('gamepool1====>', gameData, currAccount)
 
   const actionTitle = (
@@ -237,15 +237,25 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               ? format(new Date(parseInt(currAccount?.deadline || 0) * 1000), 'yyyy-MM-dd HH:mm')
               : '-'}
           </Text>
-          <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t('Time Played')}
-          </Text>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {currAccount?.objectNames?.length ? currAccount?.objectNames?.toString() : 'N/A'}
+            {pool?.objectNames?.length ? pool?.objectNames?.toString() : 'N/A'}
           </Text>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t('Object Names')}
+            {t('Game Object Names')}
           </Text>
+          {currAccount ? (
+            <>
+              <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
+                {t('Time Played')}
+              </Text>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {currAccount?.objectNames?.length ? currAccount?.objectNames?.toString() : 'N/A'}
+              </Text>
+              <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+                {t('Token Object Names')}
+              </Text>
+            </>
+          ) : null}
           {currAccount && currAccount?.lender !== ADDRESS_ZERO ? (
             <>
               <CopyAddress title={truncateHash(currAccount?.lender)} account={currAccount?.lender} />

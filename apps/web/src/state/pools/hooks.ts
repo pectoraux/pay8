@@ -8,7 +8,6 @@ import { useAppDispatch } from 'state'
 import { requiresApproval } from 'utils/requiresApproval'
 import { FAST_INTERVAL } from 'config/constants'
 
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { fetchPairsAsync } from '.'
 import {
   currPoolSelector,
@@ -75,7 +74,7 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 3,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )
@@ -87,8 +86,8 @@ export const usePool = (sousId: number) => {
 }
 
 export const usePoolsPageFetch = () => {
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
+  // const { account } = useWeb3React()
+  // const dispatch = useAppDispatch()
   usePairsConfigInitialize()
   useFetchPublicPoolsData()
 
@@ -131,9 +130,9 @@ export const useCakeVaultUserData = () => {
   // }, [account, dispatch, chainId])
 }
 
-export const useCakeVaultPublicData = () => {}
+export const useCakeVaultPublicData = () => console.log('==>')
 
-export const useFetchIfo = () => {}
+export const useFetchIfo = () => console.log('==>')
 
 export const useCakeVault = () => {
   return {

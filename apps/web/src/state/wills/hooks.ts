@@ -4,9 +4,8 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
-import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { fetchWillsAsync, fetchWillSgAsync } from '.'
 import { FAST_INTERVAL } from 'config/constants'
+import { fetchWillsAsync, fetchWillSgAsync } from '.'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -61,7 +60,7 @@ export const useFetchPublicPoolsData = () => {
       revalidateIfStale: true,
       revalidateOnReconnect: false,
       revalidateOnMount: true,
-      refreshInterval: FAST_INTERVAL * 3,
+      refreshInterval: FAST_INTERVAL,
       keepPreviousData: true,
     },
   )

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { Card, Text, Skeleton, CardHeader, Flex, BunnyPlaceholderIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePotteryData } from 'state/pottery/hook'
 import RoundSwitcher from './RoundSwitcher'
 import PreviousRoundCardBody from './PreviousRoundCardBody'
 
