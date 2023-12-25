@@ -249,10 +249,10 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Text>
           {currAccount ? (
             <>
-              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+              <Text lineHeight="1" mb="3px" fontSize="12px" color="textSubtle" as="span">
                 {currAccount?.objectNames?.length ? currAccount?.objectNames?.toString() : 'N/A'}
               </Text>
-              <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+              <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
                 {t('Token Object Names')}
               </Text>
             </>

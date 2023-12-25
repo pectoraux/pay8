@@ -53,7 +53,7 @@ const BurnModal: React.FC<any> = ({ tokenId, data, onDismiss }) => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const args = [data?.name, data?.id?.split('-')[0], state.gameTokenId, state.to]
+      const args = [data?.gameName, data?.id?.split('-')[0], state.gameTokenId, state.to]
       console.log('Confirm_Burn_object================>', gameHelperContract, args)
       return callWithGasPrice(gameHelperContract, 'burnObject', args).catch((err) => {
         console.log('Confirm_Burn_object================>', err)
