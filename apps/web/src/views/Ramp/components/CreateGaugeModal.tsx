@@ -47,7 +47,6 @@ import UnlockBountyStage from './UnlockBountyStage'
 import UpdateProfileStage from './UpdateProfileStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),

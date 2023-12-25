@@ -5,7 +5,6 @@ import { useAccount } from 'wagmi'
 import {
   Heading,
   Flex,
-  Image,
   Text,
   Link,
   PageHeader,
@@ -18,12 +17,13 @@ import {
   Loading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms } from 'state/ramps/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector, fetchPoolsDataWithFarms2 } from 'state/ramps/hooks'
 import Page from 'components/Layout/Page'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { useCurrency } from 'hooks/Tokens'
 import { useEffect, useMemo, useState } from 'react'
 import { useAppDispatch } from 'state'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
@@ -40,9 +40,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { address: account } = useAccount()
+  const { chainId } = useActiveChainId()
   const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   const { ramp, session_id: sessionId, state: status, userCurrency } = router.query
-  const rampAddress = ramp as String
+  const rampAddress = ramp as any
   const ogRamp = useMemo(
     () => pools?.find((pool) => pool?.rampAddress?.toLowerCase() === rampAddress?.toLowerCase()),
     [pools],
@@ -78,8 +79,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   usePoolsPageFetch()
 
   useEffect(() => {
-    fetchPoolsDataWithFarms(router.query.ramp, dispatch)
-  }, [router.query, dispatch])
+    fetchPoolsDataWithFarms2(router.query.ramp, chainId, dispatch)
+  }, [router.query, chainId, dispatch])
 
   return (
     <>
