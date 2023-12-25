@@ -112,28 +112,13 @@ const BurnModal: React.FC<any> = ({ tokenId, data, objectName, onDismiss }) => {
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Recipient')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="to"
-          value={state.to}
-          placeholder={t('comma separated to')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will burn your object and send you its ingredients. Please read the documentation to learn more about game objects.',
-            )}
+            {t('This will burn your object. Please read the documentation to learn more about game objects.')}
           </Text>
         </Box>
       </Grid>
