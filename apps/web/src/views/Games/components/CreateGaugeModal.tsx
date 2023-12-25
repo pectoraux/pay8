@@ -50,6 +50,7 @@ import UpdateMaxUseStage from './UpdateMaxUseStage'
 import SponsorTagStage from './SponsorTagStage'
 import MintObjectStage from './MintObjectStage'
 import BurnObjectStage from './BurnObjectStage'
+import WithdrawResourceStage from './WithdrawResourceStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import DeleteStage from './DeleteStage'
 import BuyMinutesStage from './BuyMinutesStage'
@@ -73,6 +74,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.WITHDRAW]: t('Claim Rewards'),
   [LockStage.MINT_OBJECT]: t('Mint Object'),
   [LockStage.BURN_OBJECT]: t('Burn Object'),
+  [LockStage.WITHDRAW_RESOURCES]: t('Withdraw Resources'),
   [LockStage.UPDATE_DESTINATION]: t('Update Destination'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
@@ -94,6 +96,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_PRICE_PER_MINUTE]: t('Update Price Per Minute'),
   [LockStage.DELETE_GAME]: t('Delete Game'),
   [LockStage.CONFIRM_UPDATE_GAME]: t('Back'),
+  [LockStage.CONFIRM_WITHDRAW_RESOURCES]: t('Back'),
   [LockStage.CONFIRM_UPDATE_INFO]: t('Back'),
   [LockStage.CONFIRM_BURN_TOKEN]: t('Back'),
   [LockStage.CONFIRM_ATTACH_KILL_DETACH_TOKEN]: t('Back'),
@@ -158,7 +161,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     transport: custom(window.ethereum),
   })
   const [state, setState] = useState<any>(() => ({
-    tokenId: '',
+    tokenId: currAccount?.id ?? '',
     score: '',
     deadline: '',
     identityTokenId: '',
@@ -259,6 +262,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         break
       case LockStage.CONFIRM_BURN_OBJECT:
         setStage(LockStage.BURN_OBJECT)
+        break
+      case LockStage.WITHDRAW_RESOURCES:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_WITHDRAW_RESOURCES:
+        setStage(LockStage.WITHDRAW_RESOURCES)
         break
       case LockStage.UPDATE_DESTINATION:
         setStage(LockStage.SETTINGS)
@@ -410,6 +419,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         break
       case LockStage.BURN_OBJECT:
         setStage(LockStage.CONFIRM_BURN_OBJECT)
+        break
+      case LockStage.WITHDRAW_RESOURCES:
+        setStage(LockStage.CONFIRM_WITHDRAW_RESOURCES)
         break
       case LockStage.UPDATE_DESTINATION:
         setStage(LockStage.CONFIRM_UPDATE_DESTINATION)
@@ -570,6 +582,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         console.log('CONFIRM_BURN_OBJECT===============>', args)
         return callWithGasPrice(gameHelperContract, 'burnObject', args).catch((err) =>
           console.log('CONFIRM_BURN_OBJECT===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_WITHDRAW_RESOURCES) {
+        const args = [state.tokenId, state.toAddress]
+        console.log('CONFIRM_WITHDRAW_RESOURCES===============>', args)
+        return callWithGasPrice(gameHelperContract, 'withdrawResources', args).catch((err) =>
+          console.log('CONFIRM_WITHDRAW_RESOURCES===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_DESTINATION) {
@@ -778,6 +797,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.BURN_OBJECT)}>
             {t('BURN OBJECT')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.WITHDRAW_RESOURCES)}>
+            {t('WITHDRAW RESOURCES')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_DESTINATION)}>
             {t('UPDATE DESTINATION')}
           </Button>
@@ -912,6 +934,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       )}
       {stage === LockStage.BURN_OBJECT && (
         <BurnObjectStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.WITHDRAW_RESOURCES && (
+        <WithdrawResourceStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}

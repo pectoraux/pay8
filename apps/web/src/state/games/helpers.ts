@@ -136,6 +136,22 @@ export const getGames = async (first = 5, skip = 0, where) => {
   }
 }
 
+export const getAllResources = async (tokenId, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [allObjects] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getGameHelperAddress(),
+        abi: gameHelperABI,
+        functionName: 'getAllResources',
+        args: [BigInt(tokenId), BigInt(0)],
+      },
+    ],
+  })
+  return allObjects.result
+}
+
 export const fetchGame = async (gameId, chainId) => {
   const gameFromSg = await getGame(gameId)
   const bscClient = publicClient({ chainId })

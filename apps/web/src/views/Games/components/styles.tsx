@@ -16,6 +16,7 @@ export const stagesWithApproveButton = [
 ]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_WITHDRAW_RESOURCES,
   LockStage.CONFIRM_UPDATE_INFO,
   LockStage.CONFIRM_CREATE_GAMING_NFT,
   LockStage.CONFIRM_PROCESS_SCORE,
@@ -43,6 +44,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.WITHDRAW_RESOURCES,
+  LockStage.CONFIRM_WITHDRAW_RESOURCES,
   LockStage.UPDATE_INFO,
   LockStage.CONFIRM_UPDATE_INFO,
   LockStage.CREATE_GAMING_NFT,

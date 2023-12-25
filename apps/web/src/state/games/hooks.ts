@@ -7,7 +7,7 @@ import useSWRImmutable from 'swr/immutable'
 import { FAST_INTERVAL } from 'config/constants'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
-import { fetchGameData, getTag } from './helpers'
+import { fetchGameData, getAllResources, getTag } from './helpers'
 import { fetchGamesAsync, fetchGameSgAsync } from '.'
 import {
   currPoolSelector,
@@ -41,6 +41,17 @@ export const useGamesConfigInitialize = () => {
       })
     }
   }, [dispatch, chainId])
+}
+
+export const useGetAllResources = (tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate: refetch } = useSWR(['useGetAllResources', tokenId, chainId], async () =>
+    getAllResources(tokenId, chainId),
+  )
+  return {
+    data,
+    refetch,
+  }
 }
 
 export const useFetchPublicPoolsData = () => {

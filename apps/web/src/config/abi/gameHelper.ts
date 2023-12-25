@@ -1,6 +1,12 @@
 export const gameHelperABI = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
@@ -245,11 +251,6 @@ export const gameHelperABI = [
         name: '_gameTokenId',
         type: 'uint256',
       },
-      {
-        internalType: 'address',
-        name: '_to',
-        type: 'address',
-      },
     ],
     name: 'burnObject',
     outputs: [],
@@ -299,6 +300,30 @@ export const gameHelperABI = [
       },
     ],
     name: 'getAllProtocolObjects',
+    outputs: [
+      {
+        internalType: 'uint256[]',
+        name: '_tokenIds',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_gameTokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_start',
+        type: 'uint256',
+      },
+    ],
+    name: 'getAllResources',
     outputs: [
       {
         internalType: 'uint256[]',
@@ -718,19 +743,6 @@ export const gameHelperABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'bytes4',
         name: 'interfaceId',
         type: 'bytes4',
@@ -890,6 +902,24 @@ export const gameHelperABI = [
       },
     ],
     name: 'updateObject',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_gameTokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_to',
+        type: 'address',
+      },
+    ],
+    name: 'withdrawResources',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { useMemo, useState } from 'react'
 import {
-  Box,
   Flex,
   Grid,
   Text,
@@ -12,22 +11,19 @@ import {
   LinkExternal,
   ButtonMenu,
   ButtonMenuItem,
-  HelpIcon,
-  useTooltip,
   Skeleton,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { NftToken } from 'state/cancan/types'
-import { useGetNftTokenForCredit, useGetTokenForCredit } from 'state/cancan/hooks'
-import { isAddress } from 'utils'
-import { Divider, RoundedImage } from '../shared/styles'
-import { GreyedOutContainer } from '../SellModal/styles'
+import { useGetNftTokenForCredit } from 'state/cancan/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useErc721CollectionContract } from 'hooks/useContract'
 import { FetchStatus } from 'config/constants/types'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
+
+import { Divider, RoundedImage } from '../shared/styles'
+import { GreyedOutContainer } from '../SellModal/styles'
 
 interface TransferStageProps {
   nftToBuy: NftToken

@@ -2,7 +2,7 @@ import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { useGetGame } from 'state/games/hooks'
+import { useGetAllResources, useGetGame } from 'state/games/hooks'
 
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
@@ -21,6 +21,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   // } = getTimePeriods(Number(currAccount?.gameMinutes ?? '0'))
   const objectNames = pool?.objectNames?.map((objectName) => objectName?.name)
   const gameData = useGetGame(pool?.gameName?.toLowerCase(), currAccount?.id ?? '0')
+  const { data: resources } = useGetAllResources(currAccount?.id)
   console.log('gamepool1====>', gameData, currAccount)
 
   const actionTitle = (
@@ -247,6 +248,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Game Object Names')}
           </Text>
+          {resources?.length ? (
+            <>
+              <Text lineHeight="1" mb="3px" fontSize="12px" color="textSubtle" as="span">
+                {resources?.toString()}
+              </Text>
+              <Text color="primary" mb="3px" fontSize="12px" bold as="span" textTransform="uppercase">
+                {t('Resources From Burnt')}
+              </Text>
+            </>
+          ) : null}
           {currAccount ? (
             <>
               <Text lineHeight="1" mb="3px" fontSize="12px" color="textSubtle" as="span">
