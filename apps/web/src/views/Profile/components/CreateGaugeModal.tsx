@@ -54,7 +54,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
   [LockStage.BROADCAST]: t('Broadcast'),
   [LockStage.UPDATE_SSID]: t('Update SSID'),
-  [LockStage.CLAIM_REVENUE]: t('Withdraw'),
+  [LockStage.CLAIM_REVENUE]: t('Withdraw Liquidity'),
   [LockStage.REMOVE_ACCOUNT]: t('Remove Account'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.ADD_ACCOUNT_FROM_SSI]: t('Add Account From SSID'),
@@ -587,7 +587,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
             {t('BROADCAST')}
           </Button>
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CLAIM_REVENUE)}>
-            {t('CLAIM REVENUE')}
+            {t('WITHDRAW LIQUIDITY')}
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT)}>
             {t('UPDATE TIME CONSTRAINT')}
@@ -665,6 +665,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
         <ClaimRevenueStage
           state={state}
           currency={currency}
+          account={pool.id}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />

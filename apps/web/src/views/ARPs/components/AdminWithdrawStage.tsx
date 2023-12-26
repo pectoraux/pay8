@@ -9,11 +9,9 @@ import {
   ButtonMenu,
   ButtonMenuItem,
   useTooltip,
-  HelpIcon,
   Input,
   Balance,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
@@ -22,9 +20,10 @@ import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useGetBalanceOf } from 'state/valuepools/hooks'
+
 import BribeField from './LockedPool/Common/BribeField'
 import { GreyedOutContainer, Divider } from './styles'
-import { useGetBalanceOf } from 'state/valuepools/hooks'
 
 interface SetPriceStageProps {
   currency?: any
