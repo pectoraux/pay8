@@ -252,7 +252,7 @@ export const fetchProfiles = async ({ chainId }) => {
             })
             return {
               ...token,
-              amount: pendingRevenue.result,
+              // amount: pendingRevenue.result,
               tokenName: tokenName.result,
               decimals: decimals.result,
               symbol: symbol.result?.toUpperCase(),
