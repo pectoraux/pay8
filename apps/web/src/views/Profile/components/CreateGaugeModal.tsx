@@ -101,7 +101,7 @@ const getToastText = (stage: LockStage, t: ContextApi['t']) => {
   }
 }
 
-const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, onSuccess, onDismiss }) => {
+const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency, profile, onSuccess, onDismiss }) => {
   const [stage, setStage] = useState(
     variant === 'admin'
       ? LockStage.ADMIN_SETTINGS
@@ -664,8 +664,8 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currency, profile, on
       {stage === LockStage.CLAIM_REVENUE && (
         <ClaimRevenueStage
           state={state}
+          currAccount={currAccount}
           currency={currency}
-          account={pool.id}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />

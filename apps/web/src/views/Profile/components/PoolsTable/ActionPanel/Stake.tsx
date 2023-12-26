@@ -29,7 +29,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   console.log('adminAccount===========>', adminAccount)
   const variant = adminAccount ? 'admin' : 'user'
   const [openPresentSettings] = useModal(
-    <CreateGaugeModal variant={variant} pool={pool} currency={currency ?? currencyA} />,
+    <CreateGaugeModal variant={variant} pool={pool} currAccount={currAccount} currency={currency ?? currencyA} />,
   )
   const [openFollow] = useModal(<CreateGaugeModal variant="follow" pool={pool} currency={currency ?? currencyA} />)
   const [openUnfollow] = useModal(<CreateGaugeModal variant="unfollow" pool={pool} currency={currency ?? currencyA} />)

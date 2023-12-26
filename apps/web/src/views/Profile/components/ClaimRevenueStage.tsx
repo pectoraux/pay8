@@ -21,13 +21,12 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, account, currency, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, currAccount, currency, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const [lockedAmount, setLockedAmount] = useState('')
-  const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-  const stakingTokenBalance = balance
-    ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
+  const stakingTokenBalance = currAccount
+    ? getDecimalAmount(new BigNumber(currAccount?.amount), currency?.decimals)
     : BIG_ZERO
   const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
