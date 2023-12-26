@@ -41,7 +41,7 @@ const TotalValueCell: React.FC<any> = ({ t, pool, value, symbol, decimals }) => 
           </Box>
         </Flex>
         <Text fontSize="12px" color="textSubtle" textAlign="left">
-          {t('Active Period End')}
+          {t('Active Period End Date')}
         </Text>
         <Flex height="20px" alignItems="center">
           {parseInt(pool?.activePeriod ?? '0')

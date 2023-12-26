@@ -3,11 +3,9 @@ import { Flex, Grid, Box, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BribeField from 'views/Ramps/components/LockedPool/Common/BribeField'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -26,7 +24,7 @@ const SetPriceStage: React.FC<any> = ({ state, currAccount, currency, handleRawV
   const inputRef = useRef<HTMLInputElement>()
   const [lockedAmount, setLockedAmount] = useState('')
   const stakingTokenBalance = currAccount
-    ? getDecimalAmount(new BigNumber(currAccount?.amount), currency?.decimals)
+    ? getBalanceNumber(new BigNumber(currAccount?.amount), currency?.decimals)
     : BIG_ZERO
   const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 

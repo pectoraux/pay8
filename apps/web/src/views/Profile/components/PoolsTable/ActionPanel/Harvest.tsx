@@ -6,6 +6,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useGetIsUnique } from 'state/profile/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
@@ -123,7 +124,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               color="textSubtle"
               fontSize="12px"
               decimals={currAccount?.token?.decimals}
-              value={pool?.paidPayable}
+              value={getBalanceNumber(new BigNumber(pool?.paidPayable), currAccount?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Paid Payable')}
