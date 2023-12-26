@@ -218,6 +218,17 @@ export const fetchProfiles = async ({ chainId }) => {
         const badgeIds = _badgeIds.result.map((badgeId) => badgeId.toString())
         const tokens = await Promise.all(
           gauge?.tokens?.map(async (token) => {
+            const [_bountyId] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: getProfileAddress(),
+                  abi: profileABI,
+                  functionName: 'bounties',
+                  args: [BigInt(gauge.id), token.tokenAddress],
+                },
+              ],
+            })
             const [tokenName, decimals, symbol, bountyBalance] = await bscClient.multicall({
               allowFailure: true,
               contracts: [
@@ -240,12 +251,13 @@ export const fetchProfiles = async ({ chainId }) => {
                   address: getTrustBountiesAddress(),
                   abi: trustBountiesABI,
                   functionName: 'getBalance',
-                  args: [BigInt(token.bountyId ?? 0)],
+                  args: [BigInt(_bountyId.result ?? 0)],
                 },
               ],
             })
             return {
               ...token,
+              bountyId: _bountyId.result,
               tokenName: tokenName.result,
               decimals: decimals.result,
               symbol: symbol.result?.toUpperCase(),

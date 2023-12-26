@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { getAchievements } from 'state/achievements/helpers'
 import { FetchStatus } from 'config/constants/types'
 import useSWR, { KeyedMutator } from 'swr'
 import { localStorageMiddleware } from 'hooks/useSWRContract'
@@ -9,8 +8,6 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { getIsUnique, getProfile, getProfileId } from './helpers'
-import { Profile } from '../types'
 import { fetchProfilesAsync } from '.'
 import {
   currPoolSelector,
@@ -18,7 +15,16 @@ import {
   poolsWithFilterSelector,
   makePoolWithUserDataLoadingSelector,
 } from './selectors'
-import { getIsNameUsed, getProfileData, getProfileDataFromUser, getSSIDatum, getSharedEmail } from './helpers'
+import {
+  getIsNameUsed,
+  getProfileData,
+  getProfileDataFromUser,
+  getSSIDatum,
+  getSharedEmail,
+  getIsUnique,
+  getProfile,
+  getProfileId,
+} from './helpers'
 
 export const useProfilesConfigInitialize = () => {
   const { chainId } = useActiveChainId()
