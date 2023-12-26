@@ -21,7 +21,7 @@ const PoolRow: React.FC<any> = ({ sousId, account }) => {
     <>
       <NameCell pool={pool} />
       <TotalUsersCell labelText={t('Followers')} numCount={pool?.followers?.length} />
-      <TotalUsersCell labelText={t('Following')} numCount={pool?.followees?.length} />
+      <TotalUsersCell labelText={t('Following')} numCount={pool?.following?.length} />
       <TotalValueCell2 t={t} pool={pool} value={token?.amount} symbol={token?.symbol} decimals={token?.decimals} />
       <TotalValueCell
         labelText={t('Total Bounty')}
