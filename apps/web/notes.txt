@@ -1,5 +1,3 @@
-betting encoding: no duplicates, keep it under 9 characters
-
 # TODO
 marketplace discounts/cashback
 option for subscriptions confuses yearly & regular
@@ -12,6 +10,8 @@ games objects
 ssi searchables
 lottery with valuepool
 lottery with multiple tokens
+using valuepools to make purchases on Lotteries/Bettings/Games/StakeMarket/TrustBounties/Wills/etc.
+gaugebalance/profile payments/
 
 stakes enable you to pay in instalments considering you've described your payment plan in your stake's terms and the seller still applied to your stake 
 users can track their purchases on the marketplaces from the NFTickets' section of their profile page

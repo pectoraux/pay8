@@ -1,9 +1,7 @@
-import BigNumber from 'bignumber.js'
 import { gql, request } from 'graphql-request'
 import { GRAPH_API_PROFILE, GRAPH_API_SSI } from 'config/constants/endpoints'
 import { identityTokenFields } from 'state/ssi/queries'
 import { getCollection } from 'state/cancan/helpers'
-import { blacklistFields, registrationFields, accountFields, tokenFields, profileFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { profileABI } from 'config/abi/profile'
 import { getProfileAddress, getProfileHelperAddress, getTrustBountiesAddress } from 'utils/addressHelpers'
@@ -11,6 +9,7 @@ import { Address } from 'viem'
 import { profileHelperABI } from 'config/abi/profileHelper'
 import { erc20ABI } from 'wagmi'
 import { trustBountiesABI } from 'config/abi/trustBounties'
+import { blacklistFields, registrationFields, accountFields, tokenFields, profileFields } from './queries'
 
 export const getProfileData = async (profileId) => {
   try {
@@ -87,7 +86,7 @@ export const getProfilesData = async (first = 5, skip = 0, where = {}) => {
 }
 
 export const getSharedEmail = async (accountAddress, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [shared] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -103,7 +102,7 @@ export const getSharedEmail = async (accountAddress, chainId) => {
 }
 
 export const getIsNameUsed = async (name, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [isNameTaken] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -124,7 +123,7 @@ export const getProfileDataFromUser = async (address, chainId) => {
 }
 
 export const getProfileId = async (address, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [profileId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -167,7 +166,7 @@ export const fetchProfiles = async ({ chainId }) => {
   const profiles = await Promise.all(
     gauges
       .map(async (gauge) => {
-        const bscClient = publicClient({ chainId: chainId })
+        const bscClient = publicClient({ chainId })
         const [profileInfo, _badgeIds, accounts, broadcast] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -219,7 +218,7 @@ export const fetchProfiles = async ({ chainId }) => {
         const badgeIds = _badgeIds.result.map((badgeId) => badgeId.toString())
         const tokens = await Promise.all(
           gauge?.tokens?.map(async (token) => {
-            const [tokenName, decimals, symbol, bountyBalance] = await bscClient.multicall({
+            const [tokenName, decimals, symbol, pendingRevenue, bountyBalance] = await bscClient.multicall({
               allowFailure: true,
               contracts: [
                 {
@@ -238,6 +237,12 @@ export const fetchProfiles = async ({ chainId }) => {
                   functionName: 'symbol',
                 },
                 {
+                  address: getProfileAddress(),
+                  abi: profileABI,
+                  functionName: 'pendingRevenue',
+                  args: [BigInt(gauge.id), token.tokenAddress],
+                },
+                {
                   address: getTrustBountiesAddress(),
                   abi: trustBountiesABI,
                   functionName: 'getBalance',
@@ -247,6 +252,7 @@ export const fetchProfiles = async ({ chainId }) => {
             })
             return {
               ...token,
+              amount: pendingRevenue.result,
               tokenName: tokenName.result,
               decimals: decimals.result,
               symbol: symbol.result?.toUpperCase(),
@@ -286,7 +292,7 @@ export const fetchProfiles = async ({ chainId }) => {
 }
 
 export const getIsUnique = async (profileId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [unique] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -303,7 +309,7 @@ export const getIsUnique = async (profileId, chainId) => {
 
 export const getProfile = async (address, chainId) => {
   try {
-    const bscClient = publicClient({ chainId: chainId })
+    const bscClient = publicClient({ chainId })
     const [profileId] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
