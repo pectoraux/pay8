@@ -147,7 +147,7 @@ export const useProfile = (): {
   const isInitialized = status === FetchStatus.Fetched || status === FetchStatus.Failed
   const hasProfile = isInitialized && Number(profileId) > 0
   const hasActiveProfile = true
-  return { profile, hasProfile, hasActiveProfile, isInitialized, isLoading, refresh: mutate }
+  return { profile, hasProfile, status, hasActiveProfile, isInitialized, isLoading, refresh: mutate }
 }
 
 export const useGetSharedEmail = (account) => {

@@ -27,6 +27,7 @@ import { useMemo, useState, useCallback } from 'react'
 import { useGetSharedEmail, useProfile } from 'state/profile/hooks'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateBountyModal from 'views/TrustBounties/components/CreateBountyModal'
+import { FetchStatus } from 'config/constants/types'
 import EditProfileAvatar from './EditProfileAvatar'
 import BannerHeader from '../../Nft/market/components/BannerHeader'
 import StatBox, { StatBoxItem } from '../../Nft/market/components/StatBox'
@@ -57,7 +58,7 @@ const ProfileHeader: React.FC<any> = ({
   const { sharedEmail } = useGetSharedEmail(account)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
-  const p = useProfile()
+  const p = useProfile() as any
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [openPresentCreateProfile] = useModal(
     <CreateGaugeModal variant="create" profile={profile} onSuccess={onSuccess} />,
@@ -68,11 +69,10 @@ const ProfileHeader: React.FC<any> = ({
   const isConnectedAccount = isAddress(account) === isAddress(accountPath)
   const numNftCollected = profile ? (nftCollected ? formatNumber(nftCollected, 0, 0) : '-') : '-'
   const numFollowers = profile ? (profile.followers?.length ? formatNumber(profile.followers?.length, 0, 0) : '-') : '-'
-  const numFollowees = profile ? (profile.followees?.length ? formatNumber(profile.followees?.length, 0, 0) : '-') : '-'
+  const numFollowees = profile ? (profile.following?.length ? formatNumber(profile.following?.length, 0, 0) : '-') : '-'
 
   const avatarImage = p?.profile?.collection?.avatar || '/images/nfts/no-profile-md.png'
-  const profileTeamId = profile?.teamId
-  const hasProfile = !!p?.profile
+  const hasProfile = !!p?.profile || p?.status !== FetchStatus.Fetched
   const toggleUsername = () => setShowUsername(!showUsername)
   const profileUsername = showUsername ? profile?.name : null
 
