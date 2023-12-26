@@ -127,6 +127,7 @@ export const useSSIForAddress = (
 export const useProfile = (): {
   profile?: any
   hasProfile: boolean
+  status: any
   hasActiveProfile: boolean
   isInitialized: boolean
   isLoading: boolean
