@@ -97,7 +97,9 @@ export function PoolControls<T>({
     [router.query]
   );
   const [_searchQuery, setSearchQuery] = useState("");
+  const [_searchQuery2, setSearchQuery2] = useState("");
   const searchQuery = normalizedUrlSearch && !_searchQuery ? normalizedUrlSearch : _searchQuery;
+  const searchQuery2 = normalizedUrlSearch && !_searchQuery2 ? normalizedUrlSearch : _searchQuery2;
   const [sortOption, setSortOption] = useState("likes");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const chosenPoolsLength = useRef(0);
@@ -139,6 +141,11 @@ export function PoolControls<T>({
     []
   );
 
+  const handleChangeSearchQuery2 = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery2(event.target.value),
+    []
+  );
+
   const handleSortOptionChange = useCallback((option: OptionProps) => setSortOption(option.value), []);
 
   let chosenPools: any;
@@ -155,14 +162,14 @@ export function PoolControls<T>({
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
-      return sortedPools.filter(
-        (pool: any) =>
-          (Number.isNaN(lowercaseQuery) && latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery)) ||
-          pool?.category === lowercaseQuery
-      );
+      return sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
+    }
+    if (searchQuery2) {
+      const lowercaseQuery2 = latinise(searchQuery2.toLowerCase());
+      return sortedPools.filter((pool: any) => pool?.category === lowercaseQuery2);
     }
     return sortedPools;
-  }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, numberOfPoolsVisible, searchQuery, searchQuery2, favoritesOnly, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 
@@ -219,7 +226,17 @@ export function PoolControls<T>({
             <SearchInput
               initialValue={searchQuery}
               onChange={handleChangeSearchQuery}
-              placeholder={t("Search by Auditor Addresses/Categories")}
+              placeholder={t("Search by Addresses")}
+            />
+          </LabelWrapper>
+          <LabelWrapper style={{ marginLeft: 16 }}>
+            <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+              {t("Search")}
+            </Text>
+            <SearchInput
+              initialValue={searchQuery2}
+              onChange={handleChangeSearchQuery2}
+              placeholder={t("Search by Categories")}
             />
           </LabelWrapper>
         </FilterContainer>
