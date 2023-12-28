@@ -164,7 +164,7 @@ const CreateGaugeModal: React.FC<any> = ({
     auditor: pool?.auditorAddress ?? '',
     legend: currAccount?.ratingLegend,
     amountReceivable: getBalanceNumber(currAccount?.amountReceivable ?? 0, currency?.decimals),
-    periodReceivable: parseInt(currAccount?.periodReceivable) / 60,
+    periodReceivable: parseInt(currAccount?.periodReceivable ?? '0') / 60,
     startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
     description: currAccount?.description ?? '',
     ratings: currAccount?.ratings?.toString() ?? '',

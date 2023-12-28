@@ -3,9 +3,9 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { format } from 'date-fns'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import { format } from 'date-fns'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -199,7 +199,9 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {currAccount?.ratings?.length ? currAccount?.ratings.map((r) => r + ', ') : 'N/A'}
+            {currAccount?.ratings?.length
+              ? currAccount?.ratings.map((r, index) => (index === currAccount?.ratings.length - 1 ? r : `${r}, `))
+              : 'N/A'}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Ratings')}

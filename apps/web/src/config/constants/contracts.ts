@@ -524,19 +524,19 @@ export default {
     56: '0x',
   },
   auditorNote: {
-    4002: '0xB0E9915A944a464EaA940e91a71B1F9C765fE3B2',
+    4002: '0x99738C0faE8763eD4B90b6Ac21BAD993afB08C79',
     56: '0x',
   },
   auditorHelper: {
-    4002: '0x791119DBefe04360Ed963764dC8Db706369816E4',
+    4002: '0xDc9839B8c104b2610aae97eeaB7638Fb561bc0D0',
     56: '0x',
   },
   auditorHelper2: {
-    4002: '0x040C13BC4479b11bFB4Cf3A1D8dF347126a491b9',
+    4002: '0xbAb596A8776Af248f87bB82F829f8FD6A3C4bfAb',
     56: '0x',
   },
   auditorFactory: {
-    4002: '0x256dfeaD0554CacCf9595EC1360f1FEb08280Fd7',
+    4002: '0x5D9E0Ca55AeFf4e9461091BCEcdC501e7c8B1d20',
     56: '0x',
   },
   sponsorHelper: {
