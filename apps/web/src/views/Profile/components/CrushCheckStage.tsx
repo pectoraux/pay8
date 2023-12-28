@@ -31,7 +31,7 @@ const SetPriceStage: React.FC<any> = ({ state }) => {
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="50px" paddingTop="3px" bold>
-            {t('Current Crush?')}
+            {t('Reveal Crush?')}
           </Text>
           <ButtonMenu scale="xs" variant="subtle" activeIndex={reveal} onItemClick={() => setReveal(reveal ? 0 : 1)}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
