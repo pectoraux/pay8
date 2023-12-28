@@ -54,7 +54,6 @@ const SetPriceStage: React.FC<any> = ({ state }) => {
           </Text>
         </Box>
       </Grid>
-      <Divider />
     </>
   )
 }

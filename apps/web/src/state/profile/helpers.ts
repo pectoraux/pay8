@@ -119,7 +119,7 @@ export const getIsNameUsed = async (name, chainId) => {
 
 export const getIsCrush = async (profileId, chainId) => {
   const bscClient = publicClient({ chainId })
-  const [isNameTaken] = await bscClient.multicall({
+  const [isCrush] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -130,7 +130,8 @@ export const getIsCrush = async (profileId, chainId) => {
       },
     ],
   })
-  return isNameTaken.result
+  console.log('getIsCrush===================>', profileId, isCrush)
+  return isCrush.result
 }
 
 export const getProfileDataFromUser = async (address, chainId) => {
