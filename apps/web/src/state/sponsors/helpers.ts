@@ -263,6 +263,22 @@ export const fetchSponsor = async (sponsorAddress, chainId) => {
   }
 }
 
+export const getPendingRevenue = async (tokenId, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [note] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getSponsorHelperAddress(),
+        abi: sponsorNoteABI,
+        functionName: 'notes',
+        args: [BigInt(tokenId)],
+      },
+    ],
+  })
+  return note.result
+}
+
 export const fetchSponsors = async ({ fromSponsor, chainId }) => {
   const bscClient = publicClient({ chainId })
   const [sponsorAddresses] = await bscClient.multicall({

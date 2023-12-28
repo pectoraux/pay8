@@ -540,11 +540,11 @@ export default {
     56: '0x',
   },
   sponsorHelper: {
-    4002: '0xDF1Fd12D700110CF763A540e059349ce4a453C5A',
+    4002: '0x16bc1C7285bB312b8023ca4879F32d57bB706343',
     56: '0x',
   },
   sponsorFactory: {
-    4002: '0x71324803103f17D00e2E2Fe6449f27d301693c0A',
+    4002: '0xA23Aea1EE6835DD000d8279d5f49212869ddD863',
     56: '0x',
   },
   plusCodes: {

@@ -19,6 +19,8 @@ import { convertTimeToSeconds } from 'utils/timeHelper'
 import { combineDateAndTime } from 'views/Voting/CreateProposal/helpers'
 import { differenceInSeconds } from 'date-fns'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import LocationStage from 'views/Ramps/components/LocationStage'
+import UpdateApplicationStage from 'views/ARPs/components/UpdateApplicationStage'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -36,8 +38,6 @@ import DepositDueStage from './DepositDueStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import DeleteStage from './DeleteStage'
 import DeleteSponsorStage from './DeleteSponsorStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
-import UpdateApplicationStage from 'views/ARPs/components/UpdateApplicationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -114,6 +114,7 @@ const CreateGaugeModal: React.FC<any> = ({
     periodPayable: parseInt(currAccount?.periodPayable ?? '0') / 60,
     startPayable: convertTimeToSeconds(currAccount?.startPayable ?? '0'),
     startTime: '',
+    decimals: currency?.decimals,
     description: currAccount?.description ?? '',
     rating: currAccount?.rating ?? '0',
     protocolId: currAccount?.protocolId ?? '0',
