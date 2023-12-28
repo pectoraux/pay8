@@ -237,7 +237,7 @@ export const useGetIsCrush = (profileId) => {
   const { data, status, mutate } = useSWR(['useGetIsCrush', profileId, account, chainId], async () =>
     getIsCrush(profileId, chainId),
   )
-  console.log('useGetIsCrush=================>', profileId, account)
+  console.log('useGetIsCrush=================>', profileId, account, data)
   return {
     status,
     refetch: mutate,

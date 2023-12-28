@@ -126,7 +126,7 @@ export const getIsCrush = async (profileId, chainId) => {
         address: getProfileHelperAddress(),
         abi: profileHelperABI,
         functionName: 'checkCrush',
-        args: [BigInt(profileId)],
+        args: [BigInt(1)],
       },
     ],
   })
