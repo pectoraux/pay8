@@ -50,6 +50,7 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_CREATE,
   LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI,
   LockStage.CONFIRM_CRUSH_UPDATE,
+  LockStage.CONFIRM_CRUSH_CHECK,
 ]
 
 export const stagesWithBackButton = [
@@ -57,6 +58,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_CRUSH_UPDATE,
   LockStage.UPDATE_SSID,
   LockStage.CRUSH_CHECK,
+  LockStage.CONFIRM_CRUSH_CHECK,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.FOLLOW,

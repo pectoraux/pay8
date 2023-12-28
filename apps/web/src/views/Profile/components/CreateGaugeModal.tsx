@@ -78,6 +78,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_BADGE_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BLACKLIST]: t('Back'),
   [LockStage.CONFIRM_CRUSH_UPDATE]: t('Back'),
+  [LockStage.CONFIRM_CRUSH_CHECK]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT]: t('Back'),
   [LockStage.CONFIRM_BROADCAST]: t('Back'),
   [LockStage.CONFIRM_CLAIM_REVENUE]: t('Back'),
@@ -96,6 +97,9 @@ interface BuyModalProps extends InjectedModalProps {
 const getApproveToastText = (stage: any, t: ContextApi['t']) => {
   if (stage === LockStage.CONFIRM_UPDATE_SSID) {
     return t('Contract approved - you can now send tokens into your bribe contract')
+  }
+  if (stage === LockStage.CONFIRM_CRUSH_CHECK) {
+    return t('You are a crush of this profile')
   }
 }
 
@@ -192,9 +196,6 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       case LockStage.CONFIRM_UPDATE_LATE_DAYS:
         setStage(LockStage.UPDATE_LATE_DAYS)
         break
-      case LockStage.CRUSH_CHECK:
-        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
-        break
       case LockStage.CONFIRM_FOLLOW:
         if (variant !== 'follow') setStage(LockStage.SETTINGS)
         break
@@ -245,6 +246,12 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         break
       case LockStage.CONFIRM_CRUSH_UPDATE:
         setStage(LockStage.CRUSH_UPDATE)
+        break
+      case LockStage.CRUSH_CHECK:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_CRUSH_CHECK:
+        setStage(LockStage.CRUSH_CHECK)
         break
       case LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -336,6 +343,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         break
       case LockStage.CRUSH_UPDATE:
         setStage(LockStage.CONFIRM_CRUSH_UPDATE)
+        break
+      case LockStage.CRUSH_CHECK:
+        setStage(LockStage.CONFIRM_CRUSH_CHECK)
         break
       case LockStage.BROADCAST:
         setStage(LockStage.CONFIRM_BROADCAST)
@@ -500,6 +510,12 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         console.log('CONFIRM_CRUSH_UPDATE==================>', [state.profileId, !!state.add])
         return callWithGasPrice(profileHelperContract, 'updateCrush', [state.profileId, !!state.add]).catch((err) =>
           console.log('CONFIRM_CRUSH_UPDATE==================>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_CRUSH_CHECK) {
+        console.log('CONFIRM_CRUSH_CHECK==================>', [state.profileId])
+        return callWithGasPrice(profileHelperContract, 'checkCrush', [state.profileId]).catch((err) =>
+          console.log('CONFIRM_CRUSH_CHECK==================>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT) {
@@ -715,7 +731,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       {stage === LockStage.CREATE && (
         <CreateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
-      {stage === LockStage.CRUSH_CHECK && <CrushCheckStage state={state} />}
+      {stage === LockStage.CRUSH_CHECK && <CrushCheckStage state={state} handleChange={handleChange} />}
       {stage === LockStage.CRUSH_UPDATE && (
         <CrushUpdateStage
           state={state}
