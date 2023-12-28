@@ -7,7 +7,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
     padding: 0;
   }
 `
-export const stagesWithApproveButton = [LockStage.CONFIRM_UPDATE_AUTOCHARGE]
+export const stagesWithApproveButton = [LockStage.CONFIRM_ADMIN_AUTOCHARGE, LockStage.CONFIRM_UPDATE_AUTOCHARGE]
 
 export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_MINT_INFO,
@@ -35,7 +35,6 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_WITHDRAW,
   LockStage.CONFIRM_UPDATE_PARAMETERS,
   LockStage.CONFIRM_UPDATE_URI_GENERATOR,
-  LockStage.CONFIRM_ADMIN_AUTOCHARGE,
   LockStage.CONFIRM_UPDATE_OWNER,
   LockStage.CONFIRM_UPDATE_BOUNTY_ID,
   LockStage.CONFIRM_UPDATE_OWNER,
