@@ -71,7 +71,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_PRICE_PER_MINUTE]: t('Update Price Per Minute'),
   [LockStage.UPDATE_EXCLUDED_CONTENT]: t('Update Excluded Content'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
-  [LockStage.ADMIN_AUTOCHARGE]: t('Charge Wallet'),
+  [LockStage.ADMIN_AUTOCHARGE]: t('Pay Due Receivable'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.MINT_EXTRA]: t('Mint Extra'),
   [LockStage.DELETE]: t('Delete'),
@@ -164,7 +164,7 @@ const CreateGaugeModal: React.FC<any> = ({
     auditor: pool?.auditorAddress ?? '',
     legend: currAccount?.ratingLegend,
     amountReceivable: getBalanceNumber(currAccount?.amountReceivable ?? 0, currency?.decimals),
-    periodReceivable: currAccount?.periodReceivable,
+    periodReceivable: parseInt(currAccount?.periodReceivable) / 60,
     startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
     description: currAccount?.description ?? '',
     ratings: currAccount?.ratings?.toString() ?? '',
@@ -580,7 +580,12 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [
           state.owner,
           currency?.address,
-          [amountReceivable.toString(), state.periodReceivable, startReceivable.toString(), state.optionId],
+          [
+            amountReceivable.toString(),
+            parseInt(state.periodReceivable) * 60,
+            startReceivable.toString(),
+            state.optionId,
+          ],
           state.identityTokenId,
           state.esgRating,
           state.protocolId,
@@ -788,7 +793,7 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('SPONSOR TAG')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
-            {t('CHARGE WALLET')}
+            {t('PAY DUE RECEIVABLE')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_AUTOCHARGE)}>
             {t('UPDATE AUTOCHARGE')}
@@ -825,7 +830,7 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE APPLICATION')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
-            {t('CHARGE WALLET')}
+            {t('PAY DUE RECEIVABLE')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.UPDATE_DATA_KEEPER)}>
             {t('UPDATE DATA KEEPER')}

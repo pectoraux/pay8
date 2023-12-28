@@ -102,7 +102,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Charge Wallet')}
+          {t('Pay')}
         </Button>
       </Flex>
     </>

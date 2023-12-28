@@ -523,20 +523,20 @@ export default {
     4002: '0x95f203aE002cA6b147dD9F4C9234ad59eF5f8E9B',
     56: '0x',
   },
+  auditorNote: {
+    4002: '0xB0E9915A944a464EaA940e91a71B1F9C765fE3B2',
+    56: '0x',
+  },
   auditorHelper: {
-    4002: '0xEE0A3DE3952B71cfadaA155182878Ed49a6D93a2',
+    4002: '0x791119DBefe04360Ed963764dC8Db706369816E4',
     56: '0x',
   },
   auditorHelper2: {
-    4002: '0x0e5d8abf5F9A31b8A17e0f35dd89cCcDd1227DC8',
-    56: '0x',
-  },
-  auditorNote: {
-    4002: '0x51ccF98593809607bdB08509e8b8d670658f86C0',
+    4002: '0x040C13BC4479b11bFB4Cf3A1D8dF347126a491b9',
     56: '0x',
   },
   auditorFactory: {
-    4002: '0xa78F0762FAFd64B90B2F8fb52A8aF923cD399ddD',
+    4002: '0x256dfeaD0554CacCf9595EC1360f1FEb08280Fd7',
     56: '0x',
   },
   sponsorHelper: {

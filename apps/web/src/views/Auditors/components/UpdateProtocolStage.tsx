@@ -137,6 +137,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Protocol ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="protocolId"
+          value={state.protocolId}
+          placeholder={t('input protocol id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Account Owner')}
         </Text>
         <Input
@@ -202,7 +215,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Period Receivable')}
+            {t('Period Receivable (minutes)')}
           </Text>
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
