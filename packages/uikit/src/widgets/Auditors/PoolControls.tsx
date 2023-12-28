@@ -156,17 +156,17 @@ export function PoolControls<T>({
   }
 
   chosenPools = useMemo(() => {
-    const sortedPools = sortPools<T>(sortOption, chosenPools)
+    let sortedPools = sortPools<T>(sortOption, chosenPools)
       .slice(0, numberOfPoolsVisible)
       .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p.id) : true));
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
-      return sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
+      sortedPools = sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
     }
     if (searchQuery2) {
       const lowercaseQuery2 = latinise(searchQuery2.toLowerCase());
-      return sortedPools.filter((pool: any) => pool?.category === lowercaseQuery2);
+      sortedPools = sortedPools.filter((pool: any) => pool?.category === lowercaseQuery2);
     }
     return sortedPools;
   }, [sortOption, chosenPools, numberOfPoolsVisible, searchQuery, searchQuery2, favoritesOnly, watchlistTokens]);
