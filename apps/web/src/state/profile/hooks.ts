@@ -241,7 +241,7 @@ export const useGetIsCrush = (profileId) => {
   return {
     status,
     refetch: mutate,
-    isCrush: data ?? false,
+    isCrush: data as any,
   }
 }
 
