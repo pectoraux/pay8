@@ -619,9 +619,6 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
             {t('UPDATE BOUNTY')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CRUSH_CHECK)}>
-            {t('AM I A CRUSH')}
-          </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
             {t('ATTACH BADGE')}
           </Button>
