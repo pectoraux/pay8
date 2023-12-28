@@ -5,10 +5,11 @@ import { getCollection } from 'state/cancan/helpers'
 import { publicClient } from 'utils/wagmi'
 import { profileABI } from 'config/abi/profile'
 import { getProfileAddress, getProfileHelperAddress, getTrustBountiesAddress } from 'utils/addressHelpers'
-import { Address } from 'viem'
+import { Address, createPublicClient, createWalletClient, http, custom } from 'viem'
 import { profileHelperABI } from 'config/abi/profileHelper'
 import { erc20ABI } from 'wagmi'
 import { trustBountiesABI } from 'config/abi/trustBounties'
+import { fantomTestnet } from 'viem/chains'
 import { blacklistFields, registrationFields, accountFields, tokenFields, profileFields } from './queries'
 
 export const getProfileData = async (profileId) => {
@@ -117,7 +118,7 @@ export const getIsNameUsed = async (name, chainId) => {
   return isNameTaken.result
 }
 
-export const getIsCrush = async (profileId, chainId) => {
+export const getIsCrush = async (account, profileId, chainId) => {
   const bscClient = publicClient({ chainId })
   const [isCrush] = await bscClient.multicall({
     allowFailure: true,
@@ -126,11 +127,11 @@ export const getIsCrush = async (profileId, chainId) => {
         address: getProfileHelperAddress(),
         abi: profileHelperABI,
         functionName: 'checkCrush',
-        args: [BigInt(1)],
+        args: [BigInt(profileId), account],
       },
     ],
   })
-  console.log('getIsCrush===================>', profileId, isCrush)
+  console.log('getIsCrush===================>', account, profileId, isCrush)
   return isCrush.result
 }
 

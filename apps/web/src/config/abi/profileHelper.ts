@@ -285,6 +285,11 @@ export const profileHelperABI = [
         name: '_profileId',
         type: 'uint256',
       },
+      {
+        internalType: 'address',
+        name: '_account',
+        type: 'address',
+      },
     ],
     name: 'checkCrush',
     outputs: [
