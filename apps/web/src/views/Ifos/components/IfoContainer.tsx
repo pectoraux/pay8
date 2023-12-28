@@ -12,12 +12,9 @@ const IfoStepBackground = styled(Box)`
 
 interface TypeProps {
   ifoSection: ReactElement
-  ifoSteps: ReactElement
 }
 
-const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection, ifoSteps }) => {
-  const { t } = useTranslation()
-
+const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection }) => {
   return (
     <IfoLayout id="current-ifo" py={['24px', '24px', '40px']}>
       <Container>
@@ -26,19 +23,9 @@ const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection
           {ifoSection}
         </IfoLayoutWrapper>
       </Container>
-      <IfoStepBackground>
-        <Container>{ifoSteps}</Container>
-      </IfoStepBackground>
-      <Container>
+      {/* <Container>
         <IfoQuestions />
-        <LinkExternal
-          href="https://docs.pancakeswap.finance/contact-us/business-partnerships#ifos-token-sales"
-          mx="auto"
-          mt="16px"
-        >
-          {t('Apply to run an IFO!')}
-        </LinkExternal>
-      </Container>
+      </Container> */}
     </IfoLayout>
   )
 }

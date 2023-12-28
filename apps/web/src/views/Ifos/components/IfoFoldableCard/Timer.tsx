@@ -1,11 +1,11 @@
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
-import { Flex, Heading, PocketWatchIcon, Text, Skeleton, Link, TimerIcon } from '@pancakeswap/uikit'
+import { Flex, Heading, PocketWatchIcon, Text, Link, TimerIcon } from '@pancakeswap/uikit'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import { getBlockExploreLink } from 'utils'
 import { PublicIfoData } from 'views/Ifos/types'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { differenceInSeconds } from 'date-fns'
 
 interface Props {
   publicIfoData: PublicIfoData
@@ -23,63 +23,20 @@ const FlexGap = styled(Flex)<{ gap: string }>`
   gap: ${({ gap }) => gap};
 `
 
-const USE_BLOCK_TIMESTAMP_UNTIL = 3
-
-export const SoonTimer: React.FC<React.PropsWithChildren<Props>> = ({ publicIfoData }) => {
+export const SoonTimer: React.FC<any> = () => {
   const { chainId } = useActiveChainId()
   const { t } = useTranslation()
-  const { status, secondsUntilStart, startBlockNum } = publicIfoData
-  const currentBlockTimestamp = useCurrentBlockTimestamp()
-  const hoursLeft =
-    publicIfoData.plannedStartTime && currentBlockTimestamp
-      ? (publicIfoData.plannedStartTime - Number(currentBlockTimestamp)) / 3600
-      : 0
-  const fallbackToBlockTimestamp = hoursLeft > USE_BLOCK_TIMESTAMP_UNTIL
-  let timeUntil
-  if (fallbackToBlockTimestamp) {
-    timeUntil = getTimePeriods(publicIfoData.plannedStartTime - Number(currentBlockTimestamp))
-  } else {
-    timeUntil = getTimePeriods(secondsUntilStart)
-  }
 
   return (
     <Flex justifyContent="center" position="relative">
-      {status === 'idle' ? (
-        <Skeleton animation="pulse" variant="rect" width="100%" height="48px" />
-      ) : (
-        <Link external href={getBlockExploreLink(startBlockNum, 'countdown', chainId)} color="secondary">
-          <FlexGap gap="8px" alignItems="center">
-            <Heading as="h3" scale="lg" color="secondary">
-              {t('Start in')}
-            </Heading>
-            <FlexGap gap="4px" alignItems="baseline">
-              {timeUntil.days ? (
-                <>
-                  <Heading scale="lg" color="secondary">
-                    {timeUntil.days}
-                  </Heading>
-                  <Text color="secondary">{t('d')}</Text>
-                </>
-              ) : null}
-              {timeUntil.days || timeUntil.hours ? (
-                <>
-                  <Heading color="secondary" scale="lg">
-                    {timeUntil.hours}
-                  </Heading>
-                  <Text color="secondary">{t('h')}</Text>
-                </>
-              ) : null}
-              <>
-                <Heading color="secondary" scale="lg">
-                  {!timeUntil.days && !timeUntil.hours && timeUntil.minutes === 0 ? '< 1' : timeUntil.minutes}
-                </Heading>
-                <Text color="secondary">{t('m')}</Text>
-              </>
-            </FlexGap>
-          </FlexGap>
-          <TimerIcon ml="4px" color="secondary" />
-        </Link>
-      )}
+      <Link external href={getBlockExploreLink(100000, 'countdown', chainId)} color="secondary">
+        <FlexGap gap="8px" alignItems="center">
+          <Heading as="h3" scale="lg" color="secondary">
+            {t('Waiting for first bid on Profile ID')}
+          </Heading>
+        </FlexGap>
+        <TimerIcon ml="4px" color="secondary" />
+      </Link>
     </Flex>
   )
 }
@@ -106,47 +63,48 @@ const LiveNowHeading = styled(EndInHeading)`
   }
 `
 
-const LiveTimer: React.FC<React.PropsWithChildren<Props>> = ({ publicIfoData }) => {
+const LiveTimer: React.FC<any> = ({ data }) => {
   const { chainId } = useActiveChainId()
   const { t } = useTranslation()
-  const { status, secondsUntilEnd, endBlockNum } = publicIfoData
-  const timeUntil = getTimePeriods(secondsUntilEnd)
+  const diff = Math.max(
+    differenceInSeconds(new Date(parseInt(data?.bid[1]) * 1000 + 86400 * 7 * 1000), new Date(), {
+      roundingMethod: 'ceil',
+    }),
+    0,
+  )
+  const timeUntil = getTimePeriods(diff ?? 0)
   return (
     <Flex justifyContent="center" position="relative">
-      {status === 'idle' ? (
-        <Skeleton animation="pulse" variant="rect" width="100%" height="48px" />
-      ) : (
-        <Link external href={getBlockExploreLink(endBlockNum, 'countdown', chainId)} color="white">
-          <PocketWatchIcon width="42px" mr="8px" />
-          <FlexGap gap="8px" alignItems="center">
-            <LiveNowHeading textTransform="uppercase" as="h3">{`${t('Live Now')}!`}</LiveNowHeading>
-            <EndInHeading as="h3" scale="lg" color="white">
-              {t('Ends in')}
-            </EndInHeading>
-            <FlexGap gap="4px" alignItems="baseline">
-              {timeUntil.days ? (
-                <>
-                  <GradientText scale="lg">{timeUntil.days}</GradientText>
-                  <Text color="white">{t('d')}</Text>
-                </>
-              ) : null}
-              {timeUntil.days || timeUntil.hours ? (
-                <>
-                  <GradientText scale="lg">{timeUntil.hours}</GradientText>
-                  <Text color="white">{t('h')}</Text>
-                </>
-              ) : null}
+      <Link external href={getBlockExploreLink(100000, 'countdown', chainId)} color="white">
+        <PocketWatchIcon width="42px" mr="8px" />
+        <FlexGap gap="8px" alignItems="center">
+          <LiveNowHeading textTransform="uppercase" as="h3">{`${t('Live Now')}!`}</LiveNowHeading>
+          <EndInHeading as="h3" scale="lg" color="white">
+            {t('Ends in')}
+          </EndInHeading>
+          <FlexGap gap="4px" alignItems="baseline">
+            {timeUntil.days ? (
               <>
-                <GradientText scale="lg">
-                  {!timeUntil.days && !timeUntil.hours && timeUntil.minutes === 0 ? '< 1' : timeUntil.minutes}
-                </GradientText>
-                <Text color="white">{t('m')}</Text>
+                <GradientText scale="lg">{timeUntil.days}</GradientText>
+                <Text color="white">{t('d')}</Text>
               </>
-            </FlexGap>
+            ) : null}
+            {timeUntil.days || timeUntil.hours ? (
+              <>
+                <GradientText scale="lg">{timeUntil.hours}</GradientText>
+                <Text color="white">{t('h')}</Text>
+              </>
+            ) : null}
+            <>
+              <GradientText scale="lg">
+                {!timeUntil.days && !timeUntil.hours && timeUntil.minutes === 0 ? '< 1' : timeUntil.minutes}
+              </GradientText>
+              <Text color="white">{t('m')}</Text>
+            </>
           </FlexGap>
-          <TimerIcon ml="4px" color="white" />
-        </Link>
-      )}
+        </FlexGap>
+        <TimerIcon ml="4px" color="white" />
+      </Link>
     </Flex>
   )
 }

@@ -1,7 +1,20 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  Input,
+  ErrorIcon,
+  HelpIcon,
+  useTooltip,
+  ButtonMenu,
+  ButtonMenuItem,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useGetIsNameUsed } from 'state/profile/hooks'
+import { StyledItemRow } from 'views/CanCan/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -12,7 +25,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { isNameUsed } = useGetIsNameUsed(state.name)
@@ -23,17 +36,11 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     }
   }, [inputRef])
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
-      )}
-    </Text>
-  )
+  const TooltipComponent = () => <Text>{t('Input the profile id of anyone you might have a crush on.')}</Text>
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Pick the marketplace where the item is listed, pick Subscription if it is a subscription product, NFT if it is purchased from eCollectibles but not a subscription product and CanCan otherwise.',
+        'Use this field to update the status of your crush on the specified profile id. Beware that a count of the total number of profiles you currently have a crush on is visible from the parameter section of your profile',
       )}
     </Text>
   )
@@ -55,7 +62,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('User Name')}
+            {t('Crush Profile ID')}
           </Text>
           {tooltipVisible && tooltip}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -63,33 +70,26 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Input
           type="text"
           scale="sm"
-          name="name"
-          value={state.name}
-          placeholder={t('input user name')}
+          name="profileId"
+          value={state.profileId}
+          placeholder={t('input profile id of crush')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      {state.name ? (
-        <Text color="primary" ml="20px" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-          {t('%name% is %pos% taken', { name: state.name, pos: isNameUsed ? '' : 'not' })}
-        </Text>
-      ) : null}
       <GreyedOutContainer>
-        <Flex ref={targetRef2}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Referrer Profile ID')}
-          </Text>
-          {tooltipVisible2 && tooltip2}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="referrerProfileId"
-          value={state.referrerProfileId}
-          placeholder={t('input referrer profile id')}
-          onChange={handleChange}
-        />
+        <StyledItemRow>
+          <Flex ref={targetRef2} paddingRight="50px">
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+              {t('Current Crush?')}
+            </Text>
+            {tooltipVisible2 && tooltip2}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
+          <ButtonMenu scale="xs" variant="subtle" activeIndex={state.add} onItemClick={handleRawValueChange('add')}>
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
@@ -97,14 +97,16 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will create a new profile for your account. Please read the documentation for more details')}
+            {t(
+              'PaySwap provides a simple way to avoid sexually harassing people in the office. Just update your crush status on them so they can check whether you like them or not whenever they want. If they like you back, they might update their own status and if they do, you can whether you are their crush or not.',
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Create Profile')}
+          {t('Update Crush')}
         </Button>
       </Flex>
     </>

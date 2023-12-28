@@ -1,6 +1,7 @@
 import { Box, Flex, Heading, Progress, ProgressBar } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
+import { differenceInSeconds } from 'date-fns'
 import { PublicIfoData } from '../../types'
 import LiveTimer, { SoonTimer } from './Timer'
 
@@ -36,21 +37,32 @@ const BigCurve = styled(Box)<{ $status: PublicIfoData['status'] }>`
   }}
 `
 
-export const IfoRibbon = ({ publicIfoData }: { publicIfoData: PublicIfoData }) => {
-  const { status } = publicIfoData
-
+export const IfoRibbon = ({ data, status = 'live' }) => {
   let Component
   if (status === 'finished') {
     Component = <IfoRibbonEnd />
   } else if (status === 'live') {
-    Component = <IfoRibbonLive publicIfoData={publicIfoData} />
+    Component = <IfoRibbonLive data={data} />
   } else if (status === 'coming_soon') {
-    Component = <IfoRibbonSoon publicIfoData={publicIfoData} />
+    Component = <IfoRibbonSoon />
   }
-
-  if (status === 'idle') {
-    return null
-  }
+  const diff = Math.max(
+    differenceInSeconds(new Date(), new Date(parseInt(data?.bid[1]) * 1000 ?? 0), {
+      roundingMethod: 'ceil',
+    }),
+    0,
+  )
+  const diff2 = Math.max(
+    differenceInSeconds(
+      new Date(parseInt(data?.bid[1]) * 1000 + 86400 * 7 * 1000),
+      new Date(parseInt(data?.bid[1]) * 1000 ?? 0),
+      {
+        roundingMethod: 'ceil',
+      },
+    ),
+    0,
+  )
+  const progress = (diff * 100) / diff2
 
   return (
     <>
@@ -59,7 +71,7 @@ export const IfoRibbon = ({ publicIfoData }: { publicIfoData: PublicIfoData }) =
           <ProgressBar
             $useDark
             $background="linear-gradient(273deg, #ffd800 -2.87%, #eb8c00 113.73%)"
-            style={{ width: `${Math.min(Math.max(publicIfoData.progress, 0), 100)}%` }}
+            style={{ width: `${Math.min(Math.max(progress, 0), 100)}%` }}
           />
         </Progress>
       )}
@@ -84,32 +96,32 @@ const IfoRibbonEnd = () => {
       <BigCurve $status="finished" />
       <Box position="relative">
         <Heading as="h3" scale="lg" color="textSubtle">
-          {t('Sale Finished!')}
+          {t('Auction Finished!')}
         </Heading>
       </Box>
     </>
   )
 }
 
-const IfoRibbonSoon = ({ publicIfoData }: { publicIfoData: PublicIfoData }) => {
+const IfoRibbonSoon = () => {
   return (
     <>
       <BigCurve $status="coming_soon" />
       <Box position="relative">
         <Heading as="h3" scale="lg" color="secondary">
-          <SoonTimer publicIfoData={publicIfoData} />
+          <SoonTimer />
         </Heading>
       </Box>
     </>
   )
 }
 
-const IfoRibbonLive = ({ publicIfoData }: { publicIfoData: PublicIfoData }) => {
+const IfoRibbonLive = ({ data }) => {
   return (
     <>
       <BigCurve $status="live" />
       <Box position="relative">
-        <LiveTimer publicIfoData={publicIfoData} />
+        <LiveTimer data={data} />
       </Box>
     </>
   )

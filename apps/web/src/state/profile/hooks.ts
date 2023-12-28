@@ -24,6 +24,9 @@ import {
   getIsUnique,
   getProfile,
   getProfileId,
+  getProfileAuctionData,
+  getBoughtProfileAuctionData,
+  getIsCrush,
 } from './helpers'
 
 export const useProfilesConfigInitialize = () => {
@@ -168,6 +171,36 @@ export const useGetSharedEmail = (account) => {
   }
 }
 
+export const useGetProfileAuctionData = () => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetProfileAuctionData', chainId], async () => getProfileAuctionData(chainId))
+  return {
+    status,
+    data,
+    refetch,
+  }
+}
+
+export const useGetBoughtProfileAuctionData = (profileId) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetBoughtProfileAuctionData', profileId, chainId], async () =>
+    getBoughtProfileAuctionData(profileId, chainId),
+  )
+  return {
+    status,
+    data,
+    refetch,
+  }
+}
+
 export const useGetIsUnique = (profileId) => {
   const { chainId } = useActiveChainId()
   const { data, status } = useSWR(['useGetIsUnique', profileId, chainId], async () => getIsUnique(profileId, chainId))
@@ -195,6 +228,18 @@ export const useGetIsNameUsed = (name) => {
     status,
     refetch: mutate,
     isNameUsed: data ?? false,
+  }
+}
+
+export const useGetIsCrush = (profileId) => {
+  const { chainId } = useActiveChainId()
+  const { data, status, mutate } = useSWR(['useGetIsCrush', profileId, chainId], async () =>
+    getIsCrush(profileId, chainId),
+  )
+  return {
+    status,
+    refetch: mutate,
+    isCrush: data ?? false,
   }
 }
 

@@ -1,17 +1,16 @@
-import useGetPublicIfoV3Data from 'views/Ifos/hooks/v3/useGetPublicIfoData'
-import useGetWalletIfoV3Data from 'views/Ifos/hooks/v3/useGetWalletIfoData'
 import { Ifo } from 'config/constants/types'
+import { useGetBoughtProfileAuctionData } from 'state/profile/hooks'
 import IfoFoldableCard from './IfoFoldableCard'
 
 interface Props {
   ifo: Ifo
 }
 
-const IfoCardV3Data: React.FC<React.PropsWithChildren<Props>> = ({ ifo }) => {
-  const publicIfoData = useGetPublicIfoV3Data(ifo)
-  const walletIfoData = useGetWalletIfoV3Data(ifo)
+const IfoCardV3Data: React.FC<any> = ({ ifo, index }) => {
+  const { data, refetch } = useGetBoughtProfileAuctionData(ifo)
+  console.log('arr2===============>', data, ifo)
 
-  return <IfoFoldableCard ifo={ifo} publicIfoData={publicIfoData} walletIfoData={walletIfoData} />
+  return <IfoFoldableCard ifo={ifo} status="finished" index={index} data={data} refetch={refetch} />
 }
 
 export default IfoCardV3Data

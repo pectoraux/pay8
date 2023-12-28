@@ -112,73 +112,6 @@ export const profileHelperABI = [
     type: 'event',
   },
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'senderProfileId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'receiverProfileId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'expiresAt',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'notifyCrush',
-        type: 'bool',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'secretCrush',
-        type: 'bool',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'active',
-        type: 'bool',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'friendly',
-        type: 'bool',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'guessQuestion',
-        type: 'string',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'guessAnswer',
-        type: 'string',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'sharedInfo',
-        type: 'string',
-      },
-    ],
-    name: 'UpdateCrush',
-    type: 'event',
-  },
-  {
     inputs: [
       {
         internalType: 'uint256',
@@ -296,6 +229,19 @@ export const profileHelperABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'boughtProfileId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -331,6 +277,25 @@ export const profileHelperABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_profileId',
+        type: 'uint256',
+      },
+    ],
+    name: 'checkCrush',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: '',
         type: 'uint256',
       },
@@ -347,24 +312,13 @@ export const profileHelperABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'crushes',
+    inputs: [],
+    name: 'crushCount',
     outputs: [
       {
-        internalType: 'bool',
+        internalType: 'uint256',
         name: '',
-        type: 'bool',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -489,11 +443,6 @@ export const profileHelperABI = [
         internalType: 'address',
         name: '',
         type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
       },
       {
         internalType: 'uint256',
@@ -837,44 +786,9 @@ export const profileHelperABI = [
         type: 'uint256',
       },
       {
-        internalType: 'uint256',
-        name: '_expiresAt',
-        type: 'uint256',
-      },
-      {
         internalType: 'bool',
-        name: '_notifyCrush',
+        name: '_add',
         type: 'bool',
-      },
-      {
-        internalType: 'bool',
-        name: '_secretCrush',
-        type: 'bool',
-      },
-      {
-        internalType: 'bool',
-        name: '_active',
-        type: 'bool',
-      },
-      {
-        internalType: 'bool',
-        name: '_friendly',
-        type: 'bool',
-      },
-      {
-        internalType: 'string',
-        name: '_guessQuestion',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: '_guessAnswer',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: '_sharedInfo',
-        type: 'string',
       },
     ],
     name: 'updateCrush',

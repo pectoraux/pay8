@@ -44,7 +44,6 @@ const StyledSubTitle = styled(Text)`
 `
 
 const Hero = () => {
-  const router = useRouter()
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
@@ -52,7 +51,6 @@ const Hero = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
 
@@ -67,18 +65,18 @@ const Hero = () => {
           >
             <Box>
               <StyledHeading as="h1" mb={['12px', '12px', '16px']}>
-                {t('IFO: Initial Farm Offerings')}
+                {t('Unique Profile ID Auctions')}
               </StyledHeading>
               <StyledSubTitle bold>
-                {t('Buy new tokens launching on BNB Smart Chain')}
+                {t('Bid on a unique ID for your PaySwap profile')}
                 {isMobile && <StyledButton onClick={handleClick}>{t('How does it work?')}</StyledButton>}
               </StyledSubTitle>
             </Box>
-            {!isMobile && (
+            {/* {!isMobile && (
               <DesktopButton onClick={handleClick} variant="subtle">
                 {t('How does it work?')}
               </DesktopButton>
-            )}
+            )} */}
           </Flex>
         </Container>
       </StyledHero>

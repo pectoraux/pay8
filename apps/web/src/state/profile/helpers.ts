@@ -117,6 +117,22 @@ export const getIsNameUsed = async (name, chainId) => {
   return isNameTaken.result
 }
 
+export const getIsCrush = async (profileId, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [isNameTaken] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getProfileHelperAddress(),
+        abi: profileHelperABI,
+        functionName: 'checkCrush',
+        args: [profileId],
+      },
+    ],
+  })
+  return isNameTaken.result
+}
+
 export const getProfileDataFromUser = async (address, chainId) => {
   const profileId = await getProfileId(address, chainId)
   return getProfileData(profileId)
@@ -161,13 +177,62 @@ export const getSSIDatum = async (account: string) => {
   }
 }
 
+export const getProfileAuctionData = async (chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [_boughtProfileId] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        abi: profileHelperABI,
+        address: getProfileHelperAddress(),
+        functionName: 'boughtProfileId',
+      },
+    ],
+  })
+
+  const [bid] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        abi: profileHelperABI,
+        address: getProfileHelperAddress(),
+        functionName: 'bids',
+        args: [BigInt(_boughtProfileId.result)],
+      },
+    ],
+  })
+  return {
+    bid: bid.result,
+    boughtProfileId: _boughtProfileId.result?.toString(),
+  }
+}
+
+export const getBoughtProfileAuctionData = async (profileId, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [bid] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        abi: profileHelperABI,
+        address: getProfileHelperAddress(),
+        functionName: 'bids',
+        args: [BigInt(profileId)],
+      },
+    ],
+  })
+  return {
+    bid: bid.result,
+    boughtProfileId: profileId,
+  }
+}
+
 export const fetchProfiles = async ({ chainId }) => {
   const gauges = await getProfilesData(1000, 0, { active: true })
   const profiles = await Promise.all(
     gauges
       .map(async (gauge) => {
         const bscClient = publicClient({ chainId })
-        const [profileInfo, _badgeIds, accounts, broadcast] = await bscClient.multicall({
+        const [profileInfo, _badgeIds, accounts, broadcast, crushCount] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -192,6 +257,12 @@ export const fetchProfiles = async ({ chainId }) => {
               address: getProfileHelperAddress(),
               abi: profileHelperABI,
               functionName: 'broadcast',
+              args: [BigInt(gauge.id)],
+            },
+            {
+              address: getProfileHelperAddress(),
+              abi: profileHelperABI,
+              functionName: 'crushCount',
               args: [BigInt(gauge.id)],
             },
           ],
@@ -277,6 +348,7 @@ export const fetchProfiles = async ({ chainId }) => {
           collection,
           ssid,
           name,
+          crushCount: crushCount.result.toString(),
           ssidAuditorProfileId: ssidAuditorProfileId.toString(),
           createdAt: createdAt.toString(),
           activePeriod: activePeriod.toString(),

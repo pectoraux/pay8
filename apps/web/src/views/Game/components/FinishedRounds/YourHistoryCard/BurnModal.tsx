@@ -1,20 +1,13 @@
 import { useEffect, useRef, useState, useCallback, ChangeEvent } from 'react'
 import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
-import { useAppDispatch } from 'state'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { fetchLotteriesAsync } from 'state/lotteries'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useGameHelper } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { Divider, GreyedOutContainer } from 'views/Accelerator/components/styles'
-import { getAuditorHelperContract } from 'utils/contractHelpers'
-import { getGameHelperAddress } from 'utils/addressHelpers'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -26,8 +19,6 @@ const BurnModal: React.FC<any> = ({ tokenId, data, objectName, onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
-  const { chainId } = useActiveChainId()
   const gameHelperContract = useGameHelper()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -72,7 +63,6 @@ const BurnModal: React.FC<any> = ({ tokenId, data, objectName, onDismiss }) => {
           {t('You can now use your ingrdients in games.')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchLotteriesAsync({ fromLottery: true, chainId }))
     }
     onDismiss()
   }, [
@@ -81,14 +71,11 @@ const BurnModal: React.FC<any> = ({ tokenId, data, objectName, onDismiss }) => {
     objectName,
     data?.id,
     state.gameTokenId,
-    state.to,
     gameHelperContract,
     callWithGasPrice,
     toastError,
     t,
     toastSuccess,
-    dispatch,
-    chainId,
   ])
 
   useEffect(() => {

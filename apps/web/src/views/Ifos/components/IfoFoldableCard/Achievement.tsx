@@ -20,6 +20,8 @@ import { Ifo } from 'config/constants/types'
 import { BIG_TEN } from '@pancakeswap/utils/bigNumber'
 import { getBlockExploreLink } from 'utils'
 import { formatBigInt } from '@pancakeswap/utils/formatBalance'
+import { getProfileAddress, getProfileHelperAddress } from 'utils/addressHelpers'
+import { useRouter } from 'next/router'
 
 const SmartContractIcon: React.FC<React.PropsWithChildren<SvgProps>> = (props) => {
   return (
@@ -84,77 +86,56 @@ const InlinePrize = styled(Flex)`
   vertical-align: top;
 `
 
-const IfoAchievement: React.FC<React.PropsWithChildren<Props>> = ({ ifo, publicIfoData }) => {
+const IfoAchievement: React.FC<any> = ({ ifo, data }) => {
   const { t } = useTranslation()
-  const tokenName = ifo.token.symbol?.toLowerCase()
-  const projectUrl = ifo.token.projectLink
-  const campaignTitle = ifo.name
-  const minLpForAchievement = publicIfoData.thresholdPoints
-    ? formatBigInt(publicIfoData.thresholdPoints, 3)
-    : FIXED_MIN_DOLLAR_FOR_ACHIEVEMENT.div(publicIfoData.currencyPriceInUSD).toNumber().toFixed(3)
-
+  const router = useRouter()
+  const isFinishedPage = router.pathname.includes('history')
   return (
     <Container p="16px" pb="32px">
-      <AchievementFlex isFinished={publicIfoData.status === 'finished'} alignItems="flex-start" flex={1}>
-        <Image
-          src={`/images/achievements/ifo-${tokenName}.svg`}
-          fallbackSrc="/images/achievements/ifo-placeholder-bun.png"
-          width={56}
-          height={56}
-          mr="8px"
-        />
+      <AchievementFlex isFinished={isFinishedPage} alignItems="flex-start" flex={1}>
+        <Image src="/images/logo.png" width={56} height={56} mr="8px" />
         <Flex flexDirection="column" ml="8px">
           <Text color="secondary" fontSize="12px">
-            {`${t('Achievement')}:`}
+            {`${t('Profile ID')}`}
           </Text>
           <Flex>
             <Text bold mr="8px" lineHeight={1.2}>
-              {t('IFO Shopper: %title%', { title: campaignTitle })}
               <InlinePrize alignItems="center" ml="8px">
                 <PrizeIcon color="textSubtle" width="16px" mr="4px" />
                 <Text lineHeight={1.2} color="textSubtle">
-                  {publicIfoData.numberPoints}
+                  #{data?.boughtProfileId}
                 </Text>
               </InlinePrize>
             </Text>
           </Flex>
-          {publicIfoData.currencyPriceInUSD.gt(0) ? (
-            <Text color="textSubtle" fontSize="12px">
-              {t('Commit ~%amount% %symbol% in total to earn!', {
-                amount: minLpForAchievement,
-                symbol: ifo.currency === bscTokens.cake ? 'CAKE' : 'LP',
-              })}
-            </Text>
-          ) : (
-            <Skeleton minHeight={18} width={80} />
-          )}
+          <Text color="textSubtle" fontSize="12px">
+            {t('Total Unique Profiles: 1 Million')}
+          </Text>
           <FlexGap gap="16px" pt="24px" pl="4px">
-            <Link external href={projectUrl}>
+            <Link external href="https://paychat.payswap.org">
               <LanguageIcon color="textSubtle" />
             </Link>
-            <Link external href={ifo.articleUrl}>
-              <ProposalIcon color="textSubtle" />
-            </Link>
-            <Link external href={getBlockExploreLink(ifo.address, 'address')}>
+            <Link external href="https://docs.payswap.org">
               <SmartContractIcon color="textSubtle" />
             </Link>
-            {ifo.twitterUrl && (
-              <Link external href={ifo.twitterUrl}>
-                <TwitterIcon color="textSubtle" />
-              </Link>
-            )}
-            {ifo.telegramUrl && (
-              <Link external href={ifo.telegramUrl}>
-                <TelegramIcon color="textSubtle" />
-              </Link>
-            )}
+            <Link external href={getBlockExploreLink(getProfileHelperAddress(), 'address')}>
+              <SmartContractIcon color="textSubtle" />
+            </Link>
+            <Link external href="https://twitter.com/payswap_org">
+              <TwitterIcon color="textSubtle" />
+            </Link>
+            <Link external href="t.me/payswaporg">
+              <TelegramIcon color="textSubtle" />
+            </Link>
           </FlexGap>
         </Flex>
       </AchievementFlex>
       {ifo.description && (
         <Flex alignItems="flex-end" flexDirection="column" flex={1}>
           <Text fontSize="14px" lineHeight={1.2} style={{ whiteSpace: 'pre-line' }}>
-            {ifo.description}
+            {t(
+              'Profiles are a way to prove your identity to other members of the community. Anyone can create a profile for free on the profile page. Unique Profile IDs are easier to memorize as they only go from 1 to 1 Million and can be a status symbol in the PaySwap community. To get a unique profile id, you can either take over an expired one or participate in an ongoing auction for a new one.',
+            )}
           </Text>
         </Flex>
       )}

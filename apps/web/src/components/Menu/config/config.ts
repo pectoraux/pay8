@@ -292,6 +292,12 @@ const config: (
           image: '/images/voting/voting-bunny.png',
         },
         {
+          label: t('Profile Auctions'),
+          href: '/profileAuctions',
+          // supportChainIds: SUPPORT_ONLY_BSC,
+          image: '/images/voting/voting-bunny.png',
+        },
+        {
           type: DropdownMenuItemType.DIVIDER,
         },
         {

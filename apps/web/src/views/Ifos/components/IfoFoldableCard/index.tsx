@@ -69,7 +69,7 @@ const StyledCard = styled(Card)<{ $isCurrent?: boolean }>`
   }
 `
 
-const Header = styled(CardHeader)<{ ifoId: string; $isCurrent?: boolean }>`
+const Header = styled(CardHeader)<{ ifoId; $isCurrent?: boolean }>`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -80,7 +80,7 @@ const Header = styled(CardHeader)<{ ifoId: string; $isCurrent?: boolean }>`
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
   background-color: ${({ theme }) => theme.colors.dropdown};
-  background-image: ${({ ifoId }) => `url('/images/ifos/${ifoId}-bg.png')`};
+  background-image: ${({ ifoId }) => `url('/images/cancan/${ifoId}.jpg')`};
   ${({ theme }) => theme.mediaQueries.md} {
     height: 112px;
   }
@@ -143,56 +143,29 @@ const NoHatBunny = ({ isLive, isCurrent }: { isLive?: boolean; isCurrent?: boole
 }
 
 // Active Ifo
-export const IfoCurrentCard = ({
-  ifo,
-  publicIfoData,
-  walletIfoData,
-}: {
-  ifo: Ifo
-  publicIfoData: PublicIfoData
-  walletIfoData: WalletIfoData
-}) => {
+export const IfoCurrentCard = ({ ifo, data, refetch }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
-  const shouldShowBunny = publicIfoData.status === 'live' || publicIfoData.status === 'coming_soon'
-
   return (
-    <>
-      {isMobile && (
-        <Box
-          className="sticky-header"
-          position="sticky"
-          bottom="48px"
-          width="100%"
-          zIndex={6}
-          maxWidth={['400px', '400px', '400px', '100%']}
-        >
-          <Header $isCurrent ifoId={ifo.id} />
-          <IfoRibbon publicIfoData={publicIfoData} />
-          {shouldShowBunny && <NoHatBunny isLive={publicIfoData.status === 'live'} />}
-        </Box>
-      )}
-      <Box position="relative" width="100%" maxWidth={['400px', '400px', '400px', '400px', '400px', '100%']}>
-        {!isMobile && shouldShowBunny && <NoHatBunny isCurrent isLive={publicIfoData.status === 'live'} />}
-        <StyledCard $isCurrent>
-          {!isMobile && (
-            <>
-              <Header $isCurrent ifoId={ifo.id} />
-              <IfoRibbon publicIfoData={publicIfoData} />
-            </>
-          )}
-          <IfoCard ifo={ifo} publicIfoData={publicIfoData} walletIfoData={walletIfoData} />
-          <StyledCardFooter>
-            <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)}>
-              {isExpanded ? t('Hide') : t('Details')}
-            </ExpandableLabel>
-            {isExpanded && <IfoAchievement ifo={ifo} publicIfoData={publicIfoData} />}
-          </StyledCardFooter>
-        </StyledCard>
-      </Box>
-    </>
+    <Box position="relative" width="100%" maxWidth={['400px', '400px', '400px', '400px', '400px', '100%']}>
+      <StyledCard $isCurrent>
+        {!isMobile && (
+          <>
+            <Header $isCurrent ifoId={1} />
+            <IfoRibbon data={data} status={data?.bid?.length && parseInt(data?.bid[0]) ? 'live' : 'coming_soon'} />
+          </>
+        )}
+        <IfoCard ifo={ifo} data={data} refetch={refetch} />
+        <StyledCardFooter>
+          <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)}>
+            {isExpanded ? t('Hide') : t('Details')}
+          </ExpandableLabel>
+          {isExpanded && <IfoAchievement ifo={ifo} data={data} />}
+        </StyledCardFooter>
+      </StyledCard>
+    </Box>
   )
 }
 
@@ -201,17 +174,8 @@ const FoldableContent = styled.div<{ isVisible: boolean }>`
 `
 
 // Past Ifo
-const IfoFoldableCard = ({
-  ifo,
-  publicIfoData,
-  walletIfoData,
-}: {
-  ifo: Ifo
-  publicIfoData: PublicIfoData
-  walletIfoData: WalletIfoData
-}) => {
+const IfoFoldableCard = ({ ifo, index, status, refetch, data }) => {
   const { asPath } = useRouter()
-  const { isDesktop } = useMatchBreakpoints()
   const [isExpanded, setIsExpanded] = useState(false)
   const wrapperEl = useRef<HTMLDivElement>(null)
 
@@ -225,93 +189,32 @@ const IfoFoldableCard = ({
 
   return (
     <Box id={ifo.id} ref={wrapperEl} position="relative">
-      {isExpanded && isDesktop && <NoHatBunny isLive={false} />}
       <Box as={StyledCard} borderRadius="32px">
         <Box position="relative">
-          <Header ifoId={ifo.id}>
+          <Header ifoId={index + 50}>
             <ExpandableButton expanded={isExpanded} onClick={() => setIsExpanded((prev) => !prev)} />
           </Header>
           {isExpanded && (
             <>
-              <IfoRibbon publicIfoData={publicIfoData} />
+              <IfoRibbon status="finished" data={data} />
             </>
           )}
         </Box>
         <FoldableContent isVisible={isExpanded}>
-          <IfoCard ifo={ifo} publicIfoData={publicIfoData} walletIfoData={walletIfoData} />
-          <IfoAchievement ifo={ifo} publicIfoData={publicIfoData} />
+          <IfoCard ifo={ifo} status={status} data={data} refetch={refetch} walletIfoData={data} />
+          <IfoAchievement ifo={ifo} publicIfoData={data} />
         </FoldableContent>
       </Box>
     </Box>
   )
 }
 
-const IfoCard: React.FC<React.PropsWithChildren<IfoFoldableCardProps>> = ({ ifo, publicIfoData, walletIfoData }) => {
-  const currentBlock = useCurrentBlock()
-  const { fetchIfoData: fetchPublicIfoData, isInitialized: isPublicIfoDataInitialized, secondsUntilEnd } = publicIfoData
-  const {
-    contract,
-    fetchIfoData: fetchWalletIfoData,
-    resetIfoData: resetWalletIfoData,
-    isInitialized: isWalletDataInitialized,
-  } = walletIfoData
+const IfoCard: React.FC<any> = ({ ifo, status, data, refetch }) => {
   const [enableStatus, setEnableStatus] = useState(EnableStatus.DISABLED)
   const { t } = useTranslation()
-  const { address: account } = useAccount()
-  const raisingTokenContract = useERC20(ifo.currency.address)
-  // Continue to fetch 2 more minutes / is vesting need get latest data
-  const isRecentlyActive =
-    (publicIfoData.status !== 'finished' ||
-      (publicIfoData.status === 'finished' && secondsUntilEnd >= -120) ||
-      (publicIfoData.status === 'finished' &&
-        ifo.version >= 3.2 &&
-        (publicIfoData[PoolIds.poolBasic].vestingInformation.percentage > 0 ||
-          publicIfoData[PoolIds.poolUnlimited].vestingInformation.percentage > 0))) &&
-    ifo.isActive
-  const onApprove = useIfoApprove(ifo, contract.address)
+  const onApprove = useIfoApprove()
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError } = useCatchTxError()
-  const isWindowVisible = useIsWindowVisible()
-
-  const hasVesting = useMemo(() => {
-    return (
-      account &&
-      ifo.version >= 3.2 &&
-      publicIfoData.status === 'finished' &&
-      (publicIfoData[PoolIds.poolBasic].vestingInformation.percentage > 0 ||
-        publicIfoData[PoolIds.poolUnlimited].vestingInformation.percentage > 0) &&
-      (walletIfoData[PoolIds.poolBasic].amountTokenCommittedInLP.gt(0) ||
-        walletIfoData[PoolIds.poolUnlimited].amountTokenCommittedInLP.gt(0))
-    )
-  }, [account, ifo, publicIfoData, walletIfoData])
-
-  useSWRImmutable(
-    currentBlock &&
-      (isRecentlyActive
-        ? ['fetchPublicIfoData', currentBlock, ifo.id]
-        : !isPublicIfoDataInitialized
-        ? ['fetchPublicIfoData', ifo.id]
-        : null),
-    async () => fetchPublicIfoData(currentBlock),
-  )
-
-  useSWRImmutable(
-    isWindowVisible &&
-      (isRecentlyActive || !isWalletDataInitialized || hasVesting) &&
-      account && ['fetchWalletIfoData', account, ifo.id],
-    async () => fetchWalletIfoData(),
-    isRecentlyActive || hasVesting
-      ? {
-          refreshInterval: FAST_INTERVAL,
-        }
-      : {},
-  )
-
-  useEffect(() => {
-    if (!account && isWalletDataInitialized) {
-      resetWalletIfoData()
-    }
-  }, [account, isWalletDataInitialized, resetWalletIfoData])
 
   const handleApprove = async () => {
     const receipt = await fetchWithCatchTxError(() => {
@@ -322,7 +225,7 @@ const IfoCard: React.FC<React.PropsWithChildren<IfoFoldableCardProps>> = ({ ifo,
       toastSuccess(
         t('Successfully Enabled!'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now participate in the %symbol% IFO.', { symbol: ifo.token.symbol })}
+          {t('You can now participate in the bidding process.')}
         </ToastDescriptionWithTx>,
       )
       setEnableStatus(EnableStatus.ENABLED)
@@ -330,40 +233,16 @@ const IfoCard: React.FC<React.PropsWithChildren<IfoFoldableCardProps>> = ({ ifo,
       setEnableStatus(EnableStatus.DISABLED)
     }
   }
-
-  useEffect(() => {
-    const checkAllowance = async () => {
-      const approvalRequired = await requiresApproval(raisingTokenContract, account, contract.address)
-      setEnableStatus(approvalRequired ? EnableStatus.DISABLED : EnableStatus.ENABLED)
-    }
-
-    if (account) {
-      checkAllowance()
-    }
-  }, [account, raisingTokenContract, contract, setEnableStatus])
-
   return (
     <>
       <StyledCardBody>
-        <CardsWrapper
-          shouldReverse={ifo.version >= 3.1}
-          singleCard={!publicIfoData.poolBasic || !walletIfoData.poolBasic}
-        >
-          {publicIfoData.poolBasic && walletIfoData.poolBasic && (
-            <IfoPoolCard
-              poolId={PoolIds.poolBasic}
-              ifo={ifo}
-              publicIfoData={publicIfoData}
-              walletIfoData={walletIfoData}
-              onApprove={handleApprove}
-              enableStatus={enableStatus}
-            />
-          )}
+        <CardsWrapper shouldReverse={false} singleCard>
           <IfoPoolCard
-            poolId={PoolIds.poolUnlimited}
+            poolId={PoolIds.poolBasic}
             ifo={ifo}
-            publicIfoData={publicIfoData}
-            walletIfoData={walletIfoData}
+            data={data}
+            refetch={refetch}
+            status={status}
             onApprove={handleApprove}
             enableStatus={enableStatus}
           />

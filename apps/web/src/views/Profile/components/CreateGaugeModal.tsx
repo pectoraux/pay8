@@ -34,7 +34,9 @@ import BroadCastStage from './BroadCastStage'
 import ClaimRevenueStage from './ClaimRevenueStage'
 import RemoveAccountStage from './RemoveAccountStage'
 import CreateProfileStage from './CreateProfileStage'
+import CrushCheckStage from './CrushCheckStage'
 import UpdateSSIDStage from './UpdateSSIDStage'
+import CrushUpdateStage from './CrushUpdateStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 
@@ -46,12 +48,14 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.PAY]: t('Pay Profile'),
   [LockStage.CREATE]: t('Create Profile'),
   [LockStage.UPDATE_LATE_DAYS]: t('Update Late Days'),
+  [LockStage.CRUSH_CHECK]: t('Crush Check'),
   [LockStage.ADD_ACCOUNT_FROM_PROOF]: t('Add Account'),
   [LockStage.UPDATE_COLLECTION_ID]: t('Update Collection'),
   [LockStage.UPDATE_BOUNTY]: t('Update Bounty'),
   [LockStage.DELETE]: t('Delete'),
   [LockStage.UPDATE_BADGE_ID]: t('Attach Badge'),
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
+  [LockStage.CRUSH_UPDATE]: t('Update Crush'),
   [LockStage.BROADCAST]: t('Broadcast'),
   [LockStage.UPDATE_SSID]: t('Update SSID'),
   [LockStage.CLAIM_REVENUE]: t('Withdraw Liquidity'),
@@ -73,6 +77,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_SSID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BADGE_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BLACKLIST]: t('Back'),
+  [LockStage.CONFIRM_CRUSH_UPDATE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT]: t('Back'),
   [LockStage.CONFIRM_BROADCAST]: t('Back'),
   [LockStage.CONFIRM_CLAIM_REVENUE]: t('Back'),
@@ -187,6 +192,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       case LockStage.CONFIRM_UPDATE_LATE_DAYS:
         setStage(LockStage.UPDATE_LATE_DAYS)
         break
+      case LockStage.CRUSH_CHECK:
+        setStage(LockStage.SETTINGS)
+        break
       case LockStage.CONFIRM_FOLLOW:
         if (variant !== 'follow') setStage(LockStage.SETTINGS)
         break
@@ -231,6 +239,12 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         break
       case LockStage.CONFIRM_UPDATE_BLACKLIST:
         setStage(LockStage.UPDATE_BLACKLIST)
+        break
+      case LockStage.CRUSH_UPDATE:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_CRUSH_UPDATE:
+        setStage(LockStage.CRUSH_UPDATE)
         break
       case LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -319,6 +333,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         break
       case LockStage.UPDATE_BLACKLIST:
         setStage(LockStage.CONFIRM_UPDATE_BLACKLIST)
+        break
+      case LockStage.CRUSH_UPDATE:
+        setStage(LockStage.CONFIRM_CRUSH_UPDATE)
         break
       case LockStage.BROADCAST:
         setStage(LockStage.CONFIRM_BROADCAST)
@@ -479,6 +496,12 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
           console.log('CONFIRM_UPDATE_BLACKLIST==================>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_CRUSH_UPDATE) {
+        console.log('CONFIRM_CRUSH_UPDATE==================>', [state.profileId, !!state.add])
+        return callWithGasPrice(profileHelperContract, 'updateCrush', [state.profileId, !!state.add]).catch((err) =>
+          console.log('CONFIRM_CRUSH_UPDATE==================>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT) {
         console.log('CONFIRM_UPDATE_TIME_CONSTRAINT===============>')
         return callWithGasPrice(profileContract, 'updateTimeConstraint', []).catch((err) =>
@@ -543,6 +566,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CONFIRM_FOLLOW)}>
             {t('FOLLOW')}
           </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CRUSH_CHECK)}>
+            {t('AM I YOUR CRUSH')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.PAY)}>
             {t('PAY PROFILE')}
           </Button>
@@ -582,6 +608,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BLACKLIST)}>
             {t('UPDATE BLACKLIST')}
+          </Button>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.CRUSH_UPDATE)}>
+            {t('UPDATE CRUSH')}
           </Button>
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.BROADCAST)}>
             {t('BROADCAST')}
@@ -682,6 +711,17 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       )}
       {stage === LockStage.CREATE && (
         <CreateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.CRUSH_CHECK && (
+        <CrushCheckStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.CRUSH_UPDATE && (
+        <CrushUpdateStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
+        />
       )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage

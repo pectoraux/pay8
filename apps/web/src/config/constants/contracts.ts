@@ -593,11 +593,11 @@ export default {
   },
   profile: {
     56: '0x',
-    4002: '0x942f531FC4a50b483878A741Da36C0d47F4d26C2',
+    4002: '0xb9542549381DcceeCa667a4C0d5D86302791A803',
   },
   profileHelper: {
     56: '0x',
-    4002: '0x6E919B529656eEbCacD9E6B4F85E397d9c59dbE9',
+    4002: '0xfb18348815fd2CeAd3C5F03f338f50FfF6a37Cb9',
   },
   nftSVG: {
     56: '0x',

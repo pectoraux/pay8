@@ -1440,7 +1440,7 @@ export const getFeeToContract = (signer?: WalletClient, chainId?: number) => {
 
 export const getProfileHelperContract = (signer?: WalletClient, chainId?: number) => {
   return getContract({
-    abi: feeToABI,
+    abi: profileHelperABI,
     address: getProfileHelperAddress(),
     signer,
     chainId,
