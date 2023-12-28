@@ -193,7 +193,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         setStage(LockStage.UPDATE_LATE_DAYS)
         break
       case LockStage.CRUSH_CHECK:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_FOLLOW:
         if (variant !== 'follow') setStage(LockStage.SETTINGS)
@@ -602,6 +602,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
             {t('UPDATE BOUNTY')}
+          </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CRUSH_CHECK)}>
+            {t('AM I A CRUSH')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
             {t('ATTACH BADGE')}
