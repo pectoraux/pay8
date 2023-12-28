@@ -72,9 +72,9 @@ const ProfileHeader: React.FC<any> = ({
   const numFollowees = profile ? (profile.following?.length ? formatNumber(profile.following?.length, 0, 0) : '-') : '-'
 
   const avatarImage = p?.profile?.collection?.avatar || '/images/nfts/no-profile-md.png'
-  const hasProfile = !!p?.profile || p?.status !== FetchStatus.Fetched
   const toggleUsername = () => setShowUsername(!showUsername)
   const profileUsername = showUsername ? profile?.name : null
+  const hasProfile = profile?.name?.length > 0
 
   const Icon = !showUsername ? VisibilityOff : VisibilityOn
   const isBounties = useRouter().asPath.includes('bounties')

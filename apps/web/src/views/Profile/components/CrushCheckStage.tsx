@@ -33,7 +33,7 @@ const SetPriceStage: React.FC<any> = ({ state }) => {
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="50px" paddingTop="3px" bold>
             {t('Current Crush?')}
           </Text>
-          <ButtonMenu scale="xs" variant="subtle" activeIndex={reveal} onItemClick={setReveal(reveal ? 0 : 1)}>
+          <ButtonMenu scale="xs" variant="subtle" activeIndex={reveal} onItemClick={() => setReveal(reveal ? 0 : 1)}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
             <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
           </ButtonMenu>

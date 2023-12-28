@@ -567,7 +567,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
             {t('FOLLOW')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CRUSH_CHECK)}>
-            {t('AM I YOUR CRUSH')}
+            {t('AM I A CRUSH')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.PAY)}>
             {t('PAY PROFILE')}
@@ -712,9 +712,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       {stage === LockStage.CREATE && (
         <CreateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
-      {stage === LockStage.CRUSH_CHECK && (
-        <CrushCheckStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
+      {stage === LockStage.CRUSH_CHECK && <CrushCheckStage state={state} />}
       {stage === LockStage.CRUSH_UPDATE && (
         <CrushUpdateStage
           state={state}
