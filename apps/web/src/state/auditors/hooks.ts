@@ -14,11 +14,22 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getProtocolsSg, getTag } from './helpers'
+import { getPendingRevenue, getProtocolsSg, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('auditors-tags', async () => getTag())
   return data?.name ?? ''
+}
+
+export const useGetPendingFromNote = (tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetPendingFromNote-auditor', tokenId, chainId], async () =>
+    getPendingRevenue(tokenId, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
 }
 
 export const useGetProtocols = (userAddress) => {

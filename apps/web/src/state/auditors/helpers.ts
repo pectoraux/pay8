@@ -155,6 +155,31 @@ export const getAuditors = async (first = 5, skip = 0, where) => {
   }
 }
 
+export const getPendingRevenue = async (tokenId, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [pendingRevenueFromNote, note] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getAuditorNoteAddress(),
+        abi: auditorNoteABI,
+        functionName: 'pendingRevenueFromNote',
+        args: [BigInt(tokenId)],
+      },
+      {
+        address: getAuditorNoteAddress(),
+        abi: auditorNoteABI,
+        functionName: 'notes',
+        args: [BigInt(tokenId)],
+      },
+    ],
+  })
+  return {
+    note: note.result,
+    pendingRevenueFromNote: pendingRevenueFromNote.result,
+  }
+}
+
 export const fetchAuditor = async (auditorAddress, chainId) => {
   const auditor = await getAuditor(auditorAddress.toLowerCase())
 

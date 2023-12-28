@@ -14,7 +14,6 @@ import {
 } from '@pancakeswap/uikit'
 import _toNumber from 'lodash/toNumber'
 import { useTranslation } from '@pancakeswap/localization'
-import { GreyedOutContainer, Divider } from './styles'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useGetPendingFromNote } from 'state/arps/hooks'
 import BigNumber from 'bignumber.js'
@@ -23,6 +22,7 @@ import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import styled from 'styled-components'
 import Timer from 'views/StakeMarket/components/PoolsTable/Cells/Timer'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   state: any
