@@ -155,7 +155,11 @@ export function PoolControls<T>({
 
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
-      return sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
+      return sortedPools.filter(
+        (pool: any) =>
+          (Number.isNaN(lowercaseQuery) && latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery)) ||
+          pool?.category === lowercaseQuery
+      );
     }
     return sortedPools;
   }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
@@ -215,7 +219,7 @@ export function PoolControls<T>({
             <SearchInput
               initialValue={searchQuery}
               onChange={handleChangeSearchQuery}
-              placeholder={t("Search Auditor Addresses")}
+              placeholder={t("Search by Auditor Addresses/Categories")}
             />
           </LabelWrapper>
         </FilterContainer>
