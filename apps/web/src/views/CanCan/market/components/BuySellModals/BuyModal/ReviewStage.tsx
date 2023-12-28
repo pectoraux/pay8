@@ -322,24 +322,29 @@ const ReviewStage: React.FC<any> = ({
           <Text small color="textSubtle">
             {t('Pay with')}
           </Text>
-          <ButtonMenu
-            activeIndex={paymentCurrency}
-            onItemClick={(index) => setPaymentCurrency(index)}
-            scale="sm"
-            variant="subtle"
-          >
-            <ButtonMenuItem>{account ? mainCurrency?.symbol : t('PayCard')}</ButtonMenuItem>
-            {account ? (
-              <>
-                <ButtonMenuItem>{t('Stake Market')}</ButtonMenuItem>
-                <ButtonMenuItem>
-                  {isMobile || paymentCurrency === 2 ? slicedContract : t('Contract').slice(0, 8)}
-                </ButtonMenuItem>
-              </>
-            ) : (
-              <></>
-            )}
-          </ButtonMenu>
+          {account ? (
+            <ButtonMenu
+              activeIndex={paymentCurrency}
+              onItemClick={(index) => setPaymentCurrency(index)}
+              scale="sm"
+              variant="subtle"
+            >
+              <ButtonMenuItem>{mainCurrency?.symbol}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Stake Market')}</ButtonMenuItem>
+              <ButtonMenuItem>
+                {isMobile || paymentCurrency === 2 ? slicedContract : t('Contract').slice(0, 8)}
+              </ButtonMenuItem>
+            </ButtonMenu>
+          ) : (
+            <ButtonMenu
+              activeIndex={paymentCurrency}
+              onItemClick={(index) => setPaymentCurrency(index)}
+              scale="sm"
+              variant="subtle"
+            >
+              <ButtonMenuItem>{t('PayCard')}</ButtonMenuItem>
+            </ButtonMenu>
+          )}
         </StyledBorderedBox>
         <StyledBorderedBox>
           <Text small color="textSubtle">

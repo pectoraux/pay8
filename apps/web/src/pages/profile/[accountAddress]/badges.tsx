@@ -27,12 +27,11 @@ const NftProfilePage = () => {
     refresh: refreshUserNfts,
   } = useNftsForAddress(accountAddress, profile, isProfileFetching)
   const protocols = useGetProtocols(account?.toLowerCase())
-  let tokens = []
-  protocols?.data?.length &&
-    protocols?.data?.map((pt) => {
-      const rt = pt?.tokens?.length && pt?.tokens?.map((tk) => tk.metadataUrl)
-      return tokens.push(...rt)
-    })
+  const tokens = []
+  protocols?.data?.map((pt) => {
+    const rt = pt?.tokens?.length && pt?.tokens?.map((tk) => tk.metadataUrl)
+    return tokens.push(...rt)
+  })
   return (
     <>
       <SubMenu />
