@@ -14,7 +14,7 @@ interface TypeProps {
   ifoSection: ReactElement
 }
 
-const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection }) => {
+const IfoContainer: React.FC<any> = ({ ifoSection }) => {
   return (
     <IfoLayout id="current-ifo" py={['24px', '24px', '40px']}>
       <Container>

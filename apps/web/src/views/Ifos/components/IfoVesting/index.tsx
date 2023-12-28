@@ -2,25 +2,13 @@ import { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import Trans from 'components/Trans'
-import {
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
-  Flex,
-  Text,
-  Image,
-  Pool,
-  IfoNotTokens,
-  BunnyPlaceholderIcon,
-  Button,
-} from '@pancakeswap/uikit'
+import { Box, Card, CardBody, CardHeader, Flex, Text, Image, Pool } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
 import { Token } from '@pancakeswap/sdk'
 import { PrizesIcon } from 'views/TradingCompetition/svgs'
+import { useGetProfileAuctionData } from 'state/profile/hooks'
 import { VestingStatus } from './types'
 import useFetchVestingData from '../../hooks/vesting/useFetchVestingData'
-import { useGetProfileAuctionData } from 'state/profile/hooks'
 import StakeVaultButton from '../IfoFoldableCard/StakeVaultButton'
 
 const StyleVestingCard = styled(Card)`

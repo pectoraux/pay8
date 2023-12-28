@@ -10,19 +10,12 @@ import {
   useMatchBreakpoints,
   useToast,
 } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { Ifo, PoolIds } from 'config/constants/types'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { useERC20 } from 'hooks/useContract'
-import { useIsWindowVisible } from '@pancakeswap/hooks'
-import useSWRImmutable from 'swr/immutable'
-import { FAST_INTERVAL } from 'config/constants'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState, useMemo } from 'react'
-import { useCurrentBlock } from 'state/block/hooks'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { requiresApproval } from 'utils/requiresApproval'
 import { PublicIfoData, WalletIfoData } from 'views/Ifos/types'
 import useIfoApprove from '../../hooks/useIfoApprove'
 import { CardsWrapper } from '../IfoCardStyles'
@@ -99,51 +92,8 @@ const StyledCardFooter = styled(CardFooter)`
   text-align: center;
 `
 
-const StyledNoHatBunny = styled.div<{ $isLive: boolean; $isCurrent?: boolean }>`
-  position: absolute;
-  left: -24px;
-  z-index: 1;
-  top: 33px;
-  display: none;
-
-  > img {
-    width: 78px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl} {
-    display: block;
-    left: auto;
-    top: ${({ $isLive }) => ($isLive ? '63px' : '48px')};
-    right: ${({ $isCurrent }) => ($isCurrent ? '17px' : '90px')};
-
-    > img {
-      width: 123px;
-    }
-  }
-
-  ${({ theme }) => theme.mediaQueries.xxl} {
-    right: 90px;
-  }
-`
-
-const NoHatBunny = ({ isLive, isCurrent }: { isLive?: boolean; isCurrent?: boolean }) => {
-  const { isXs, isSm, isMd } = useMatchBreakpoints()
-  const isSmallerThanTablet = isXs || isSm || isMd
-  if (isSmallerThanTablet && isLive) return null
-  return (
-    <StyledNoHatBunny $isLive={isLive} $isCurrent={isCurrent}>
-      <img
-        src={`/images/ifos/assets/bunnypop-${!isSmallerThanTablet ? 'right' : 'left'}.png`}
-        width={123}
-        height={162}
-        alt="bunny"
-      />
-    </StyledNoHatBunny>
-  )
-}
-
 // Active Ifo
-export const IfoCurrentCard = ({ ifo, data, refetch }) => {
+export const IfoCurrentCard: React.FC<any> = ({ ifo, data, refetch }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
@@ -174,7 +124,7 @@ const FoldableContent = styled.div<{ isVisible: boolean }>`
 `
 
 // Past Ifo
-const IfoFoldableCard = ({ ifo, index, status, refetch, data }) => {
+const IfoFoldableCard: React.FC<any> = ({ ifo, index, status, refetch, data }) => {
   const { asPath } = useRouter()
   const [isExpanded, setIsExpanded] = useState(false)
   const wrapperEl = useRef<HTMLDivElement>(null)
