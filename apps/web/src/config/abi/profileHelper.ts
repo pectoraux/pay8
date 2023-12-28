@@ -205,6 +205,11 @@ export const profileHelperABI = [
         name: 'lastBidder',
         type: 'address',
       },
+      {
+        internalType: 'uint256',
+        name: 'auctionTime',
+        type: 'uint256',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
@@ -312,7 +317,13 @@ export const profileHelperABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     name: 'crushCount',
     outputs: [
       {
@@ -842,6 +853,11 @@ export const profileHelperABI = [
       {
         internalType: 'uint256',
         name: '_bidDuration',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_periodReceivable',
         type: 'uint256',
       },
       {
