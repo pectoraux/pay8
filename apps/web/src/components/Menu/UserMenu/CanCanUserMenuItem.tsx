@@ -17,11 +17,7 @@ const Dot = styled.div`
   width: 8px;
 `
 
-const CanCanUserMenuItem: React.FC<React.PropsWithChildren<CanCanUserMenuItemProps>> = ({
-  isLoading,
-  hasChannel,
-  disabled,
-}) => {
+const CanCanUserMenuItem: React.FC<any> = ({ profile, isLoading, hasChannel, disabled }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
 
@@ -47,7 +43,7 @@ const CanCanUserMenuItem: React.FC<React.PropsWithChildren<CanCanUserMenuItemPro
   }
 
   return (
-    <NextLink href={`/cancan/${account?.toLowerCase()}`} passHref>
+    <NextLink href={`/cancan/collections/${profile?.collectionId}`} passHref>
       <UserMenuItem as="a" disabled={disabled}>
         {t('Your Channel')}
       </UserMenuItem>

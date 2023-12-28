@@ -62,6 +62,7 @@ const UserMenuItems = () => {
         disabled={isWrongNetwork || chainId !== ChainId.FANTOM_TESTNET}
       />
       <CanCanUserMenuItem
+        profile={profile}
         isLoading={isLoading}
         hasChannel={!!Number(profile?.collectionId)}
         disabled={isWrongNetwork || chainId !== ChainId.FANTOM_TESTNET}
