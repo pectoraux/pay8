@@ -1,9 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, ErrorIcon, ButtonMenu, ButtonMenuItem, Button, Input } from '@pancakeswap/uikit'
+import { useEffect, useRef } from 'react'
+import { Flex, Grid, Box, Text, ErrorIcon, Button, Input } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useGetIsCrush } from 'state/profile/hooks'
-import { StyledItemRow } from 'views/CanCan/market/components/Filters/ListFilter/styles'
-import { FetchStatus } from 'config/constants/types'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {

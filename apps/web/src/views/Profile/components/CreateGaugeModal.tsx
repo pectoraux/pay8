@@ -731,7 +731,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       {stage === LockStage.CREATE && (
         <CreateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
-      {stage === LockStage.CRUSH_CHECK && <CrushCheckStage state={state} handleChange={handleChange} />}
+      {stage === LockStage.CRUSH_CHECK && (
+        <CrushCheckStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
       {stage === LockStage.CRUSH_UPDATE && (
         <CrushUpdateStage
           state={state}
