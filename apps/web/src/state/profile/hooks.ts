@@ -233,9 +233,11 @@ export const useGetIsNameUsed = (name) => {
 
 export const useGetIsCrush = (profileId) => {
   const { chainId } = useActiveChainId()
-  const { data, status, mutate } = useSWR(['useGetIsCrush', profileId, chainId], async () =>
+  const { account } = useWeb3React()
+  const { data, status, mutate } = useSWR(['useGetIsCrush', profileId, account, chainId], async () =>
     getIsCrush(profileId, chainId),
   )
+  console.log('useGetIsCrush=================>', profileId, account)
   return {
     status,
     refetch: mutate,
