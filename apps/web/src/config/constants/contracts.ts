@@ -560,7 +560,7 @@ export default {
     56: '0x',
   },
   worldFactory: {
-    4002: '0x5986B9cB9C406Bb6fDD100b4327F6A67BB24eAc0',
+    4002: '0x74C39613755a7b8480cA05b3763348e49A0D0792',
     56: '0x',
   },
   worldNote: {
