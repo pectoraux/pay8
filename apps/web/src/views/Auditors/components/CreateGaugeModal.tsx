@@ -174,7 +174,7 @@ const CreateGaugeModal: React.FC<any> = ({
     message: '',
     tag: '',
     protocolId: currAccount?.protocolId ?? '0',
-    toAddress: '',
+    toAddress: currAccount?.id ?? '',
     uriGenerator: '',
     autoCharge: 0,
     like: 0,
@@ -188,7 +188,7 @@ const CreateGaugeModal: React.FC<any> = ({
     applicationLink: pool?.applicationLink ?? '',
     auditorDescription: pool?.auditorDescription ?? '',
     datakeeper: 0,
-    accounts: currAccount?.id,
+    accounts: currAccount?.id ?? '',
     decimals: currAccount?.token?.decimals ?? currency?.decimals ?? 18,
     customTags: '',
   }))

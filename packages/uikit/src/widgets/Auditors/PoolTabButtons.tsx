@@ -60,7 +60,16 @@ interface PoolTableButtonsPropsType {
   hasStakeInFinishedPools: boolean;
 }
 
-const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavoritesOnly, viewMode, setViewMode }: any) => {
+const PoolTabButtons = ({
+  stakedOnly,
+  setStakedOnly,
+  favoritesOnly,
+  setFavoritesOnly,
+  keepersOnly,
+  setKeepersOnly,
+  viewMode,
+  setViewMode,
+}: any) => {
   const router = useRouter();
 
   const { t } = useTranslation();
@@ -96,11 +105,19 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
     </ToggleWrapper>
   );
 
+  const keepersOnlySwitch = (
+    <ToggleWrapper>
+      <Toggle checked={keepersOnly} onChange={() => setKeepersOnly(!keepersOnly)} scale="sm" />
+      <Text> {t("Data Keepers")}</Text>
+    </ToggleWrapper>
+  );
+
   return (
     <ViewControls>
       {/* {viewModeToggle} */}
       {stakedOnlySwitch}
       {favoritesOnlySwitch}
+      {keepersOnlySwitch}
       {liveOrFinishedSwitch}
     </ViewControls>
   );

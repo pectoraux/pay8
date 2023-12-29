@@ -184,7 +184,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
   const auditor = await getAuditor(auditorAddress.toLowerCase())
 
   const bscClient = publicClient({ chainId })
-  const [devaddr_, bountyRequired, collectionId, category, percentiles] = await bscClient.multicall({
+  const [devaddr_, bountyRequired, collectionId, category, percentiles, dataKeeper] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -212,6 +212,12 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
         address: getAuditorNoteAddress(),
         abi: auditorNoteABI,
         functionName: 'percentiles',
+        args: [auditorAddress],
+      },
+      {
+        address: getAuditorNoteAddress(),
+        abi: auditorNoteABI,
+        functionName: 'dataKeeper',
         args: [auditorAddress],
       },
     ],
@@ -319,6 +325,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
     collection,
     auditorAddress,
     accounts,
+    dataKeeper: dataKeeper.result,
     category: category.result?.toString(),
     bountyRequired: bountyRequired.result,
     percentiles: percentiles.result?.toString(),

@@ -102,6 +102,7 @@ export function PoolControls<T>({
   const searchQuery2 = normalizedUrlSearch && !_searchQuery2 ? normalizedUrlSearch : _searchQuery2;
   const [sortOption, setSortOption] = useState("likes");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const [keepersOnly, setKeepersOnly] = useState(false);
   const chosenPoolsLength = useRef(0);
   const [watchlistTokens] = useWatchlistTokens();
 
@@ -160,6 +161,9 @@ export function PoolControls<T>({
       .slice(0, numberOfPoolsVisible)
       .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p.id) : true));
 
+    if (keepersOnly) {
+      sortedPools = sortedPools.filter((pool: any) => pool?.dataKeeper);
+    }
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
       sortedPools = sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
@@ -169,7 +173,16 @@ export function PoolControls<T>({
       sortedPools = sortedPools.filter((pool: any) => pool?.category === lowercaseQuery2);
     }
     return sortedPools;
-  }, [sortOption, chosenPools, numberOfPoolsVisible, searchQuery, searchQuery2, favoritesOnly, watchlistTokens]);
+  }, [
+    sortOption,
+    chosenPools,
+    numberOfPoolsVisible,
+    keepersOnly,
+    searchQuery,
+    searchQuery2,
+    favoritesOnly,
+    watchlistTokens,
+  ]);
 
   chosenPoolsLength.current = chosenPools.length;
 
@@ -186,6 +199,8 @@ export function PoolControls<T>({
           setStakedOnly={setStakedOnly}
           favoritesOnly={favoritesOnly}
           setFavoritesOnly={setFavoritesOnly}
+          keepersOnly={keepersOnly}
+          setKeepersOnly={setKeepersOnly}
           hasStakeInFinishedPools={hasStakeInFinishedPools}
           viewMode={viewMode}
           setViewMode={setViewMode}
