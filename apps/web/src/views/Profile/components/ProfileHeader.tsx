@@ -146,7 +146,10 @@ const ProfileHeader: React.FC<any> = ({
       if (!sharedEmail) {
         return (
           <ReactRouterLink to="/ssi/proposal/createAutomaticData">
-            <Button disabled={!isProfileLoading && !isValidating} mt="16px">
+            <Button
+              // disabled={!isProfileLoading && !isValidating}
+              mt="16px"
+            >
               {t('Verify Your Email')}
             </Button>
           </ReactRouterLink>
