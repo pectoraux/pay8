@@ -143,15 +143,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
   const worldHelperContract = useWorldHelper()
   const worldHelper2Contract = useWorldHelper2()
   const worldHelper3Contract = useWorldHelper3()
-  const currAccount = pool.accounts?.find((acct) => acct === account)
-  console.log('mcurrencyy===============>', currency, pool, worldContract)
+  const currAccount = pool.accounts?.find((acct) => acct?.toLowerCase() === account?.toLowerCase())
+  console.log('mcurrencyy===============>', currAccount, currency, pool, worldContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
 
   // console.log("router===================>", router)
   // const { state: status, userAccount, session_id, userCurrency, amount } = router.query
   const [state, setState] = useState<any>(() => ({
     owner: pool?.owner,
-    avatar: pool?.world?.avatar,
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
     tokenId: pool?.tokenId,
