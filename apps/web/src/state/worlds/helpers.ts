@@ -150,51 +150,44 @@ export const fetchWorld = async (worldAddress, chainId) => {
       }
     }),
   )
-  const [devaddr_, bountyRequired, collectionId, category, profileId, bountyId, tradingFee] = await bscClient.multicall(
-    {
-      allowFailure: true,
-      contracts: [
-        {
-          address: worldAddress,
-          abi: worldABI,
-          functionName: 'devaddr_',
-        },
-        {
-          address: worldAddress,
-          abi: worldABI,
-          functionName: 'bountyRequired',
-        },
-        {
-          address: worldAddress,
-          abi: worldABI,
-          functionName: 'collectionId',
-        },
-        {
-          address: getWorldHelper2Address(),
-          abi: worldHelper2ABI,
-          functionName: 'getWorldType',
-          args: [worldAddress],
-        },
-        {
-          address: getWorldNoteAddress(),
-          abi: worldNoteABI,
-          functionName: 'worldToProfileId',
-          args: [worldAddress],
-        },
-        {
-          address: getWorldHelper2Address(),
-          abi: worldHelper2ABI,
-          functionName: 'bounties',
-          args: [worldAddress],
-        },
-        {
-          address: getWorldHelper3Address(),
-          abi: worldHelper3ABI,
-          functionName: 'tradingFee',
-        },
-      ],
-    },
-  )
+  const [devaddr_, collectionId, category, profileId, bountyId, tradingFee] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: worldAddress,
+        abi: worldABI,
+        functionName: 'devaddr_',
+      },
+      {
+        address: worldAddress,
+        abi: worldABI,
+        functionName: 'collectionId',
+      },
+      {
+        address: getWorldHelper2Address(),
+        abi: worldHelper2ABI,
+        functionName: 'getWorldType',
+        args: [worldAddress],
+      },
+      {
+        address: getWorldNoteAddress(),
+        abi: worldNoteABI,
+        functionName: 'worldToProfileId',
+        args: [worldAddress],
+      },
+      {
+        address: getWorldHelper2Address(),
+        abi: worldHelper2ABI,
+        functionName: 'bounties',
+        args: [worldAddress],
+      },
+      {
+        address: getWorldHelper3Address(),
+        abi: worldHelper3ABI,
+        functionName: 'tradingFee',
+      },
+    ],
+  })
   const [gaugeNColor, pricePerAttachMinutes] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -304,7 +297,6 @@ export const fetchWorld = async (worldAddress, chainId) => {
     ...world,
     worldNFTs,
     accounts,
-    bountyRequired: bountyRequired.result,
     devaddr_: devaddr_.result,
     collection,
     category: category.result,
