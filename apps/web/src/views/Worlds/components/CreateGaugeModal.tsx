@@ -621,6 +621,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
         )
       }
       if (stage === LockStage.CONFIRM_DELETE_PROTOCOL) {
+        console.log('CONFIRM_DELETE_PROTOCOL===============>', [state.protocolId])
         return callWithGasPrice(worldContract, 'deleteProtocol', [state.protocolId]).catch((err) =>
           console.log('CONFIRM_DELETE_PROTOCOL===============>', err),
         )
