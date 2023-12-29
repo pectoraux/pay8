@@ -9,13 +9,6 @@ import {
   useModal,
   Button,
   Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
   ReactMarkdown,
   Text,
 } from '@pancakeswap/uikit'
@@ -29,8 +22,8 @@ import { useCurrPool } from 'state/worlds/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/worlds'
-import WebPagesModal from './WebPagesModal'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -48,8 +41,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" worldNFTs={pool?.worldNFTs} />)
-  const [onPresentNotes] = useModal(<WebPagesModal height="500px" worldNFTs={pool?.notes} />)
+  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.worldNFTs} />)
+  const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
@@ -93,10 +86,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('Bounty Required')} {`->`} {pool?.bountyRequired ? t('True') : t('False')}
         </Text>
         <Text color="primary" fontSize="14px">
-          {t('World Id')} {`->`} {pool?.profileId}
+          {t('World ID')} {`->`} {pool?.profileId}
         </Text>
         <Text color="primary" fontSize="14px">
-          {t('Bounty Id')} {`->`} {pool?.bountyId}
+          {t('Bounty ID')} {`->`} {pool?.bountyId}
         </Text>
         <Text color="primary" fontSize="14px">
           {t('World Color')} {`->`} {pool?.color ?? ''}
@@ -129,9 +122,9 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
+      {pool?.id && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
+          <ScanLink href={getBlockExploreLink(pool?.id, 'address', chainId)} bold={false} small>
             {t('View Contract')}
           </ScanLink>
         </Flex>
@@ -141,11 +134,20 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
-          {t('View NFTs')}
-        </LinkExternal>
-      </Flex>
+      {pool?.worldNFTs?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
+            {t('View NFTs')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
+      {pool?.notes?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNotes} bold={false} small>
+            {t('View Notes')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
