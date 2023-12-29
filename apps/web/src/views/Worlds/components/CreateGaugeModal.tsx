@@ -758,8 +758,9 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_DELETE) {
-        return callWithGasPrice(worldNoteContract, 'deleteWorld', [pool?.worldAddress]).catch((err) =>
-          console.log('CONFIRM_DELETE_PROTOCOL===============>', err),
+        console.log('CONFIRM_DELETE===============>', [pool?.id])
+        return callWithGasPrice(worldNoteContract, 'deleteWorld', [pool?.id]).catch((err) =>
+          console.log('CONFIRM_DELETE===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_AUTOCHARGE) {
@@ -915,11 +916,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
             {t('DELETE PROTOCOL')}
           </Button>
-          {location === 'fromAuditor' ? (
-            <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
-              {t('DELETE WORLD')}
-            </Button>
-          ) : null}
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
+            {t('DELETE WORLD')}
+          </Button>
         </Flex>
       )}
       {stage === LockStage.UPDATE_LOCATION && (

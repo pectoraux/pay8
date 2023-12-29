@@ -673,9 +673,9 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_DELETE) {
-        console.log('CONFIRM_DELETE_PROTOCOL===============>', [state.auditor])
+        console.log('CONFIRM_DELETE===============>', [state.auditor])
         return callWithGasPrice(auditorNoteContract, 'deleteAuditor', [state.auditor]).catch((err) =>
-          console.log('CONFIRM_DELETE_PROTOCOL===============>', err),
+          console.log('CONFIRM_DELETE===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_BOUNTY_ID) {
@@ -889,11 +889,9 @@ const CreateGaugeModal: React.FC<any> = ({
               </Button>
             </>
           ) : null}
-          {location === 'fromAuditor' ? (
-            <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
-              {t('DELETE CONTRACT')}
-            </Button>
-          ) : null}
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
+            {t('DELETE CONTRACT')}
+          </Button>
         </Flex>
       )}
       {stage === LockStage.UPDATE_LOCATION && (

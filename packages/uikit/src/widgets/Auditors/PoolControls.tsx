@@ -244,17 +244,17 @@ export function PoolControls<T>({
               placeholder={t("Search by Addresses")}
             />
           </LabelWrapper>
-          <LabelWrapper style={{ marginLeft: 16 }}>
-            <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
-              {t("Search")}
-            </Text>
-            <SearchInput
-              initialValue={searchQuery2}
-              onChange={handleChangeSearchQuery2}
-              placeholder={t("Search by Categories")}
-            />
-          </LabelWrapper>
         </FilterContainer>
+        <LabelWrapper style={{ marginLeft: 16 }}>
+          <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+            {t("Search")}
+          </Text>
+          <SearchInput
+            initialValue={searchQuery2}
+            onChange={handleChangeSearchQuery2}
+            placeholder={t("Search by Categories")}
+          />
+        </LabelWrapper>
       </PoolControlsView>
       {children(childrenReturn)}
       <div ref={observerRef} />

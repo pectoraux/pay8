@@ -589,11 +589,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
             {t('DELETE PROTOCOL')}
           </Button>
-          {location !== 'fromStake' ? (
-            <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
-              {t('DELETE CONTRACT')}
-            </Button>
-          ) : null}
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
+            {t('DELETE CONTRACT')}
+          </Button>
         </Flex>
       )}
       {stage === LockStage.UPDATE_LOCATION && (

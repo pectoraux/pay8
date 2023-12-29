@@ -805,11 +805,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('WITHDRAW')}
           </Button>
-          {location === 'fromBetting' ? (
-            <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
-              {t('DELETE BETTING EVENT')}
-            </Button>
-          ) : null}
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
+            {t('DELETE BETTING EVENT')}
+          </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
             {t('DELETE BETTING CONTRACT')}
           </Button>
