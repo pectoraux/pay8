@@ -195,7 +195,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
         address: getWorldNoteAddress(),
         abi: worldNoteABI,
         functionName: 'getGaugeNColor',
-        args: [BigInt(profileId.result?.toString()), Number(category.result?.toString())],
+        args: [worldAddress, Number(category.result?.toString())],
       },
       {
         address: getWorldHelper3Address(),
