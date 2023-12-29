@@ -777,8 +777,8 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_VOTE) {
-        return callWithGasPrice(worldNoteContract, 'vote', [pool.worldAddress, state.profileId, !!state.like]).catch(
-          (err) => console.log('CONFIRM_VOTE===============>', err),
+        return callWithGasPrice(worldNoteContract, 'vote', [pool.worldAddress, !!state.like]).catch((err) =>
+          console.log('CONFIRM_VOTE===============>', err),
         )
       }
       return null

@@ -26,14 +26,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Profile ID')}
+          {t('World Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="profileId"
-          value={state.profileId}
-          placeholder={t('input your profile id')}
+          name="world"
+          value={state.world}
+          placeholder={t('input your world address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
