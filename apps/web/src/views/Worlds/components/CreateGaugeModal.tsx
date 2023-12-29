@@ -106,7 +106,6 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_TAG_REGISTRATION]: t('Back'),
   [LockStage.CONFIRM_CLAIM_NOTE]: t('Back'),
   [LockStage.CONFIRM_TRANSFER_RECEIVABLE_TO_NOTE]: t('Back'),
-  [LockStage.CONFIRM_UPDATE_PROFILE_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TOKEN_IDS]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BOUNTY]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PROTOCOL]: t('Back'),
@@ -316,12 +315,6 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR:
         setStage(LockStage.UPDATE_PENALTY_DIVISOR)
         break
-      case LockStage.CONFIRM_UPDATE_PROFILE_ID:
-        setStage(LockStage.UPDATE_PROFILE_ID)
-        break
-      case LockStage.UPDATE_PROFILE_ID:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
       case LockStage.CONFIRM_CLAIM_NOTE:
         setStage(LockStage.CLAIM_NOTE)
         break
@@ -412,9 +405,6 @@ const CreateGaugeModal: React.FC<any> = ({
     switch (stage) {
       case LockStage.UPDATE_LOCATION:
         setStage(LockStage.CONFIRM_UPDATE_LOCATION)
-        break
-      case LockStage.UPDATE_PROFILE_ID:
-        setStage(LockStage.CONFIRM_UPDATE_PROFILE_ID)
         break
       case LockStage.UPDATE_AUTOCHARGE:
         setStage(LockStage.CONFIRM_UPDATE_AUTOCHARGE)
@@ -610,13 +600,6 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', args)
         return callWithGasPrice(worldContract, 'updatePenaltyDivisor', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PENALTY_DIVISOR===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_PROFILE_ID) {
-        const args = [pool?.worldAddress]
-        console.log('CONFIRM_UPDATE_PROFILE_ID===============>', args)
-        return callWithGasPrice(worldNoteContract, 'updateProfile', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_PROFILE_ID===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
@@ -858,9 +841,6 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
-          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROFILE_ID)}>
-            {t('UPDATE PROFILE ID')}
-          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
             {t('CREATE/UPDATE ACCOUNT')}
           </Button>

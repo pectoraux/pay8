@@ -682,9 +682,9 @@ export const worldNoteABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_ssidWorldProfileId',
-        type: 'uint256',
+        internalType: 'address',
+        name: '_world',
+        type: 'address',
       },
       {
         internalType: 'enum WorldType',
@@ -762,30 +762,6 @@ export const worldNoteABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'enum WorldType',
-        name: '',
-        type: 'uint8',
-      },
-    ],
-    name: 'profiles',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
         name: '_contractAddress',
         type: 'address',
@@ -851,24 +827,6 @@ export const worldNoteABI = [
         internalType: 'address',
         name: '_world',
         type: 'address',
-      },
-    ],
-    name: 'updateProfile',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_world',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'profileId',
-        type: 'uint256',
       },
       {
         internalType: 'bool',
