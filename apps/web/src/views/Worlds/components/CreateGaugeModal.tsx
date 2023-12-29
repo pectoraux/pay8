@@ -128,7 +128,14 @@ interface BuyModalProps extends InjectedModalProps {
   nftToBuy: NftToken
 }
 
-const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromStake', pool, currency, onDismiss }) => {
+const CreateGaugeModal: React.FC<any> = ({
+  variant = 'user',
+  location = 'fromStake',
+  pool,
+  currency,
+  currAccount,
+  onDismiss,
+}) => {
   const [stage, setStage] = useState(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const { t } = useTranslation()
@@ -143,7 +150,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
   const worldHelperContract = useWorldHelper()
   const worldHelper2Contract = useWorldHelper2()
   const worldHelper3Contract = useWorldHelper3()
-  const currAccount = pool.accounts?.find((acct) => acct?.toLowerCase() === account?.toLowerCase())
   console.log('mcurrencyy===============>', currAccount, currency, pool, worldContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
 

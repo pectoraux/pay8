@@ -31,7 +31,9 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
   const rampCurrencyInput = useCurrency(currencyId)
   const [currency, setCurrency] = useState(rampCurrencyInput)
-  const [openPresentControlPanel] = useModal(<CreateGaugeModal variant={variant} pool={pool} currency={currency} />)
+  const [openPresentControlPanel] = useModal(
+    <CreateGaugeModal variant={variant} pool={pool} currency={currency} currAccount={currAccount} />,
+  )
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
 
   if (!account) {
