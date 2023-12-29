@@ -131,7 +131,7 @@ const CreateGaugeModal: React.FC<any> = ({
     ve: pool?._ve,
     token: currency?.address,
     name: pool?.name,
-    toAddress: '',
+    toAddress: currAccount?.owner ?? '',
     protocol: currAccount?.owner ?? '',
     applicationLink: pool?.applicationLink || '',
     sponsorDescription: pool?.sponsorDescription ?? '',
@@ -432,9 +432,10 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_PAY) {
         console.log('CONFIRM_PAY===============>', [currAccount?.owner, state.numPeriods ?? 0])
-        return callWithGasPrice(sponsorContract, 'payInvoicePayable', [currAccount?.owner]).catch((err) =>
-          console.log('CONFIRM_PAY===============>', err, sponsorContract),
-        )
+        return callWithGasPrice(sponsorContract, 'payInvoicePayable', [
+          currAccount?.owner,
+          state.numPeriods ?? 0,
+        ]).catch((err) => console.log('CONFIRM_PAY===============>', err, sponsorContract))
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
         const amount = getDecimalAmount(state.amountPayable ?? '0', currency?.decimals)
