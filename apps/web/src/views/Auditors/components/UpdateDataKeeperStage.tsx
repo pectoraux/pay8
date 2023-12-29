@@ -46,8 +46,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           <ButtonMenu
             scale="xs"
             variant="subtle"
-            activeIndex={state.autoCharge ? 1 : 0}
-            onItemClick={handleRawValueChange('autoCharge')}
+            activeIndex={state.datakeeper ? 1 : 0}
+            onItemClick={handleRawValueChange('datakeeper')}
           >
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
             <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
