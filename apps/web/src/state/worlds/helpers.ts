@@ -146,7 +146,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
       })
       return {
         ...nft,
-        owner,
+        owner: owner.result,
       }
     }),
   )

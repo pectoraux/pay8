@@ -40,7 +40,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         return callWithGasPrice(worldFactoryContract, 'createGauge', [profileId, account]).catch((err) => {
           toastError(
             t('Issue deploying world, make sure you have an active profile and a channel'),
-            <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
+            <ToastDescriptionWithTx txHash={receipt?.transactionHash}>{err}</ToastDescriptionWithTx>,
           )
         })
       } catch (err) {
