@@ -524,19 +524,19 @@ export default {
     56: '0x',
   },
   auditorNote: {
-    4002: '0x588EB4fa93cE8eC49d09c64be24F3e52d3C12F1B',
+    4002: '0x232DcDe2D2c26C7EC2c0bfc755A2A540E015ABBf',
     56: '0x',
   },
   auditorHelper: {
-    4002: '0xB11FC59614722954a69Ce242DbFEB02f5564148d',
+    4002: '0x00852F6b102E9685E47abf43CB65c14c8bC13ECb',
     56: '0x',
   },
   auditorHelper2: {
-    4002: '0x35500917fc270C8484b586A36a7086fd80b6DC70',
+    4002: '0x4Bd9Fd85E27a2aD3b823f891bF22450c0eE9EB6e',
     56: '0x',
   },
   auditorFactory: {
-    4002: '0x949CBc87D0531b95e9D8DA184126808960bB02D4',
+    4002: '0xaC3Ab517d81EE6C1169a76724DDE2fE1AE32177b',
     56: '0x',
   },
   sponsorHelper: {
@@ -559,24 +559,24 @@ export default {
     4002: '0x586adF5F95Ff0A51fbf1135Bd48D93A4C9872600',
     56: '0x',
   },
+  worldFactory: {
+    4002: '0x5986B9cB9C406Bb6fDD100b4327F6A67BB24eAc0',
+    56: '0x',
+  },
   worldNote: {
-    4002: '0xfC28F508032e3D18e3130791F0b376Bd99aB1374',
+    4002: '0xA05BFa68DAaE029B1B216bd10F2fcbFc6c82A53f',
     56: '0x',
   },
   worldHelper: {
-    4002: '0x0691B361313da730d1528f3100fD4ab7d95370B3',
+    4002: '0x259bF8B31Ce2029dAb9463A5114AEBFA65D82E24',
     56: '0x',
   },
   worldHelper2: {
-    4002: '0x350aB48Ad25003D1887a17D269f947f7DD27a2C8',
+    4002: '0x3ec4F8A4B3a67D0243a1d4585f974877bED34fa1',
     56: '0x',
   },
   worldHelper3: {
-    4002: '0x29cF710FA955E4F3A6e8E672d4885fd9A43F380F',
-    56: '0x',
-  },
-  worldFactory: {
-    4002: '0x0Bb7F9c3dDb587A8843D92f2De22B936c0537545',
+    4002: '0xdeE1d8c7AAFDb4e253d6ACc34A79ed6881c49e61',
     56: '0x',
   },
   ssi: {

@@ -178,6 +178,35 @@ export const auditorHelper2ABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: 'tm1',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'tm2',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_period',
+        type: 'uint256',
+      },
+    ],
+    name: 'getNumPeriods',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '_auditor',
         type: 'address',

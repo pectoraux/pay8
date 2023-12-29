@@ -449,6 +449,19 @@ export const auditorNoteABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
+    name: 'attach',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: 'owner',
         type: 'address',
@@ -460,19 +473,6 @@ export const auditorNoteABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'check',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
       },
     ],
     stateMutability: 'view',
@@ -532,6 +532,19 @@ export const auditorNoteABI = [
       },
     ],
     name: 'deleteAuditor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
+    name: 'detach',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

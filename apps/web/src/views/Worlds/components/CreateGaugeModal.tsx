@@ -16,7 +16,7 @@ import {
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
@@ -67,7 +67,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.VOTE]: t('Vote'),
   [LockStage.UPDATE_AUTOCHARGE]: t('Update Autocharge'),
   [LockStage.UPDATE_TAX_CONTRACT]: t('Update Tax Contract'),
-  [LockStage.ADMIN_AUTOCHARGE]: t('Autocharge'),
+  [LockStage.ADMIN_AUTOCHARGE]: t('Pay Due Receivable'),
   [LockStage.DELETE]: t('Delete'),
   [LockStage.UPDATE_DISCOUNT_DIVISOR]: t('Update Discount Divisor'),
   [LockStage.UPDATE_PENALTY_DIVISOR]: t('Update Penalty Divisor'),
@@ -167,8 +167,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
     first4: '',
     last4: '',
     planet: '',
-    amountReceivable: currAccount?.amountReceivable,
-    periodReceivable: currAccount?.periodReceivable ?? '0',
+    amountReceivable: getBalanceNumber(currAccount?.amountReceivable ?? 0, currAccount?.token?.decimals),
+    periodReceivable: parseInt(currAccount?.periodReceivable ?? '0') / 60,
     startReceivable: currAccount?.startReceivable,
     description: currAccount?.description,
     rating: currAccount?.description ?? '',
@@ -179,19 +179,17 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
     like: 0,
     add: 0,
     optionId: currAccount?.optionId ?? '0',
+    decimals: currAccount?.token?.decimals ?? currency?.decimals ?? 18,
     factor: '',
     period: '',
     cap: '',
     message: '',
-    world: pool?.worldAddress,
-    bountyRequired: pool?.bountyRequired,
+    world: pool?.id,
     ve: pool?._ve,
-    cosignEnabled: pool?.cosignEnabled,
-    minCosigners: pool?.minCosigners || '',
     token: currency?.address,
     name: pool?.name,
     applicationLink: pool?.world?.applicationLink,
-    accounts: [],
+    accounts: currAccount?.id,
     customTags: '',
     // owner: currAccount?.owner || account
   }))
@@ -260,7 +258,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
         setStage(LockStage.UPDATE_BOUNTY)
         break
       case LockStage.ADMIN_AUTOCHARGE:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_ADMIN_AUTOCHARGE:
         setStage(LockStage.ADMIN_AUTOCHARGE)
@@ -565,11 +563,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
           console.log('CONFIRM_UPDATE_PROTOCOL===============>', err),
         )
       }
-      if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
-        return callWithGasPrice(worldContract, 'updateParameters', [!!state.bountyRequired]).catch((err) =>
-          console.log('CONFIRM_UPDATE_PARAMETERS===============>', err),
-        )
-      }
       if (stage === LockStage.CONFIRM_UPDATE_ADMIN) {
         return callWithGasPrice(worldContract, 'updateAdmin', [state.owner, !!state.add]).catch((err) =>
           console.log('CONFIRM_UPDATE_ADMIN===============>', err, worldContract),
@@ -810,6 +803,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
               {t('APPLY FOR AN AUDIT')}
             </LinkExternal>
           </Flex>
+          <Button mb="8px" variant="text" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
+            {t('PAY DUE RECEIVABLE')}
+          </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.VOTE)}>
             {t('VOTE')}
           </Button>
@@ -869,7 +865,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'fromSta
             {t('UPDATE CATEGORY')}
           </Button>
           <Button mb="8px" variant="text" onClick={() => setStage(LockStage.ADMIN_AUTOCHARGE)}>
-            {t('AUTO CHARGE')}
+            {t('PAY DUE RECEIVABLE')}
           </Button>
           <Button mb="8px" variant="subtle" onClick={() => setStage(LockStage.UPDATE_DISCOUNT_DIVISOR)}>
             {t('UPDATE DISCOUNT DIVISOR')}

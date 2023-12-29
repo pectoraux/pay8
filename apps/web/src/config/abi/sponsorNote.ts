@@ -674,7 +674,7 @@ export const sponsorNoteABI = [
       },
       {
         internalType: 'uint256',
-        name: '_numPeriods',
+        name: '_numExtraPeriods',
         type: 'uint256',
       },
     ],
@@ -721,35 +721,6 @@ export const sponsorNoteABI = [
       },
     ],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'tm1',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'tm2',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_period',
-        type: 'uint256',
-      },
-    ],
-    name: 'getNumPeriods',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'pure',
     type: 'function',
   },
   {

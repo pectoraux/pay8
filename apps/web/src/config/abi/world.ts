@@ -78,19 +78,6 @@ export const worldABI = [
   },
   {
     inputs: [],
-    name: 'bountyRequired',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'collectionId',
     outputs: [
       {
@@ -571,19 +558,6 @@ export const worldABI = [
       },
     ],
     name: 'updateDiscountDivisor',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'bool',
-        name: '_bountyRequired',
-        type: 'bool',
-      },
-    ],
-    name: 'updateParameters',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

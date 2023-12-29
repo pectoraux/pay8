@@ -32,6 +32,7 @@ import UpdateTokenStage from './UpdateTokenStage'
 import VoteStage from './VoteStage'
 import PayStage from './PayStage'
 import UpdateTransferToNoteReceivableStage from './UpdateTransferToNoteReceivableStage'
+import DepositStage from './DepositStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import DepositDueStage from './DepositDueStage'
@@ -51,14 +52,16 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_TOKEN_ID]: t('Update Attached veNFT Token'),
   [LockStage.UPDATE_BOUNTY_ID]: t('Update Attached Bounty'),
   [LockStage.VOTE]: t('Vote'),
-  [LockStage.PAY]: t('Pay Pending Payments'),
+  [LockStage.PAY]: t('Pay Due Payable'),
   [LockStage.DELETE]: t('Delete'),
+  [LockStage.DEPOSIT]: t('Deposit'),
   [LockStage.CLAIM_NOTE]: t('Claim Note'),
   [LockStage.TRANSFER_TO_NOTE_RECEIVABLE]: t('Transfer Note Receivable'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.UPDATE_APPLICATION]: t('Update Application Link'),
   [LockStage.CONFIRM_UPDATE_APPLICATION]: t('Back'),
+  [LockStage.CONFIRM_DEPOSIT]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PROTOCOL]: t('Back'),
   [LockStage.CONFIRM_CLAIM_NOTE]: t('Back'),
@@ -108,13 +111,14 @@ const CreateGaugeModal: React.FC<any> = ({
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
     tokenId: pool?.tokenId,
-    sponsor: pool?.sponsorAddress,
+    sponsor: pool?.id,
     maxNotesPerProtocol: pool?.maxNotesPerProtocol,
-    amountPayable: getBalanceNumber(currAccount?.amountPayable ?? '0', currency?.decimals),
+    amountReceivable: '0',
+    amountPayable: getBalanceNumber(currAccount?.amountPayable ?? '0', currAccount?.token?.decimals),
     periodPayable: parseInt(currAccount?.periodPayable ?? '0') / 60,
     startPayable: convertTimeToSeconds(currAccount?.startPayable ?? '0'),
     startTime: '',
-    decimals: currency?.decimals,
+    decimals: currAccount?.token?.decimals ?? currency?.decimals ?? 18,
     description: currAccount?.description ?? '',
     rating: currAccount?.rating ?? '0',
     protocolId: currAccount?.protocolId ?? '0',
@@ -124,10 +128,7 @@ const CreateGaugeModal: React.FC<any> = ({
     like: 0,
     contentType: '',
     add: 0,
-    bountyRequired: pool?.bountyRequired,
     ve: pool?._ve,
-    cosignEnabled: pool?.cosignEnabled,
-    minCosigners: pool?.minCosigners || '',
     token: currency?.address,
     name: pool?.name,
     toAddress: '',
@@ -264,6 +265,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.WITHDRAW:
         setStage(LockStage.ADMIN_SETTINGS)
         break
+      case LockStage.DEPOSIT:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_DEPOSIT:
+        setStage(LockStage.DEPOSIT)
+        break
       default:
         break
     }
@@ -276,6 +283,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_APPLICATION:
         setStage(LockStage.CONFIRM_UPDATE_APPLICATION)
+        break
+      case LockStage.DEPOSIT:
+        setStage(LockStage.CONFIRM_DEPOSIT)
         break
       case LockStage.CLAIM_NOTE:
         setStage(LockStage.CONFIRM_CLAIM_NOTE)
@@ -359,6 +369,14 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_UPDATE_LOCATION===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_DEPOSIT) {
+        const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
+        const args = [pool?.id, amountReceivable?.toString()]
+        console.log('CONFIRM_DEPOSIT===============>', args)
+        return callWithGasPrice(stakingTokenContract, 'transfer', args).catch((err) =>
+          console.log('CONFIRM_DEPOSIT===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_UPDATE_APPLICATION) {
         const args = ['0', '0', '', '', '0', '0', ADDRESS_ZERO, state.applicationLink]
         console.log('CONFIRM_UPDATE_APPLICATION===============>', args)
@@ -399,7 +417,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
-        const args = [!!state.bountyRequired, state.ve, state.maxNotesPerProtocol]
+        const args = [state.ve, state.maxNotesPerProtocol]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
         return callWithGasPrice(sponsorContract, 'updateParameters', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PARAMETERS===============>', err),
@@ -528,7 +546,10 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('CREATE DEAL')}
           </Button>
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.PAY)}>
-            {t('PAY PENDING PAYMENTS')}
+            {t('PAY DUE PAYABLE')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.DEPOSIT)}>
+            {t('DEPOSIT')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
@@ -655,6 +676,14 @@ const CreateGaugeModal: React.FC<any> = ({
           state={state}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.DEPOSIT && (
+        <DepositStage
+          state={state}
+          currency={currency}
+          continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
         />
       )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}

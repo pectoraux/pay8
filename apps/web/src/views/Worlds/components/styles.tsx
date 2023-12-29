@@ -8,7 +8,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
   }
 `
 
-export const stagesWithApproveButton = [LockStage.CONFIRM_UPDATE_AUTOCHARGE]
+export const stagesWithApproveButton = [LockStage.CONFIRM_DEPOSIT, LockStage.CONFIRM_UPDATE_AUTOCHARGE]
 
 export const stagesWithConfirmButton = [
   LockStage.CONFIRM_DELETE,
@@ -45,6 +45,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.DEPOSIT,
+  LockStage.CONFIRM_DEPOSIT,
   LockStage.UPDATE_PROFILE_ID,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,

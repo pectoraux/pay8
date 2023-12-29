@@ -13,7 +13,7 @@ export const sponsorABI = [
       },
       {
         internalType: 'address',
-        name: '__contractAddress',
+        name: '_contractAddress',
         type: 'address',
       },
     ],
@@ -73,60 +73,6 @@ export const sponsorABI = [
   },
   {
     inputs: [],
-    name: 'bountyRequired',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '__sender',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'changeDouble',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_owner',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_identityTokenId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: 'checkUnique',
-        type: 'bool',
-      },
-    ],
-    name: 'checkIdentityProof',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'collectionId',
     outputs: [
       {
@@ -158,26 +104,13 @@ export const sponsorABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_cosignee',
-        type: 'address',
-      },
-    ],
-    name: 'cosign',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
-    name: 'cosignEnabled',
+    name: 'contractAddress',
     outputs: [
       {
-        internalType: 'bool',
+        internalType: 'address',
         name: '',
-        type: 'bool',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -202,6 +135,11 @@ export const sponsorABI = [
         internalType: 'address',
         name: '_protocol',
         type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_numPeriods',
+        type: 'uint256',
       },
     ],
     name: 'depositDue',
@@ -244,82 +182,12 @@ export const sponsorABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_start',
-        type: 'uint256',
-      },
-    ],
-    name: 'getAllRequests',
-    outputs: [
-      {
-        internalType: 'address[]',
-        name: '_requests',
-        type: 'address[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_start',
-        type: 'uint256',
-      },
-    ],
-    name: 'getAllTrustWorthyAuditors',
-    outputs: [
-      {
-        internalType: 'address[]',
-        name: '_auditors',
-        type: 'address[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'helper',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
         name: '',
         type: 'address',
       },
     ],
     name: 'isAdmin',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_auditor',
-        type: 'address',
-      },
-    ],
-    name: 'isTrustWorthyAuditor',
     outputs: [
       {
         internalType: 'bool',
@@ -344,40 +212,8 @@ export const sponsorABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'limits',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'maxNotesPerProtocol',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'minCosigners',
     outputs: [
       {
         internalType: 'uint256',
@@ -412,34 +248,20 @@ export const sponsorABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'onlyTrustWorthyAuditors',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
         name: '_protocol',
         type: 'address',
       },
-    ],
-    name: 'payInvoicePayable',
-    outputs: [
       {
         internalType: 'uint256',
-        name: '',
+        name: '_numPeriods',
         type: 'uint256',
       },
     ],
+    name: 'payInvoicePayable',
+    outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
@@ -580,40 +402,33 @@ export const sponsorABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'requestCosign',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'requiredIndentity',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
-        name: '__contractAddress',
+        name: '_contractAddress',
         type: 'address',
       },
     ],
     name: 'setContractAddress',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'taxContract',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -656,24 +471,6 @@ export const sponsorABI = [
   {
     inputs: [
       {
-        internalType: 'uint256[]',
-        name: 'userProfileIds',
-        type: 'uint256[]',
-      },
-      {
-        internalType: 'bool',
-        name: 'blacklist',
-        type: 'bool',
-      },
-    ],
-    name: 'updateBlacklistedIdentities',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'uint256',
         name: '_bountyId',
         type: 'uint256',
@@ -698,24 +495,6 @@ export const sponsorABI = [
       },
     ],
     name: 'updateContents',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'bool',
-        name: '_enable',
-        type: 'bool',
-      },
-      {
-        internalType: 'uint256',
-        name: '_minCosigners',
-        type: 'uint256',
-      },
-    ],
-    name: 'updateCosign',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -784,11 +563,6 @@ export const sponsorABI = [
   },
   {
     inputs: [
-      {
-        internalType: 'bool',
-        name: '_bountyRequired',
-        type: 'bool',
-      },
       {
         internalType: 'address',
         name: '__ve',
@@ -861,6 +635,19 @@ export const sponsorABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '_taxContract',
+        type: 'address',
+      },
+    ],
+    name: 'updateTaxContract',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'uint256',
         name: '_tokenId',
         type: 'uint256',
@@ -869,93 +656,6 @@ export const sponsorABI = [
     name: 'updateTokenId',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address[]',
-        name: '_gauges',
-        type: 'address[]',
-      },
-      {
-        internalType: 'bool',
-        name: '_add',
-        type: 'bool',
-      },
-    ],
-    name: 'updateTrustWorthyAuditors',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_senderProfileId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bytes32',
-        name: '_identityCode',
-        type: 'bytes32',
-      },
-    ],
-    name: 'updateUserToIdentityCode',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'enum COLOR',
-        name: '_idColor',
-        type: 'uint8',
-      },
-      {
-        internalType: 'bool',
-        name: '_onlyTrustWorthyAuditors',
-        type: 'bool',
-      },
-      {
-        internalType: 'bool',
-        name: '_dataKeeperOnly',
-        type: 'bool',
-      },
-      {
-        internalType: 'uint256',
-        name: '_maxUse',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: '_valueName',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: '_value',
-        type: 'string',
-      },
-    ],
-    name: 'updateValueNameNCode',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'valueName',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {

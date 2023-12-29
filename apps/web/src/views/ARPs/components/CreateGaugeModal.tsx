@@ -203,12 +203,12 @@ const CreateGaugeModal: React.FC<any> = ({
     toAddress: account ?? '',
     amountPayable: pool?.percentages
       ? parseInt(currAccount?.amountPayable ?? '0') / 100
-      : getBalanceNumber(currAccount?.amountPayable ?? 0, currency?.decimals),
+      : getBalanceNumber(currAccount?.amountPayable ?? 0, currAccount?.token?.decimals),
     periodPayable: parseInt(currAccount?.periodPayable ?? '0') / 60,
     bufferTime: parseInt(pool?.bufferTime) / 60 ?? '',
     amountReceivable: pool?.percentages
       ? parseInt(currAccount?.amountReceivable ?? '0') / 100
-      : getBalanceNumber(currAccount?.amountReceivable ?? 0, currency?.decimals),
+      : getBalanceNumber(currAccount?.amountReceivable ?? 0, currAccount?.token?.decimals),
     periodReceivable: parseInt(currAccount?.periodReceivable ?? '0') / 60,
     startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
     description: currAccount?.description ?? '',
@@ -230,7 +230,7 @@ const CreateGaugeModal: React.FC<any> = ({
     adminNote: 0,
     contentType: '',
     numPeriods: '',
-    decimals: currAccount?.token?.decimals ?? 18,
+    decimals: currAccount?.token?.decimals ?? currency?.decimals ?? 18,
     name: pool?.name,
     collectionId: pool?.collection?.id ?? '',
     maxAccounts: '0',

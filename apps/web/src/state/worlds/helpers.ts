@@ -102,6 +102,31 @@ export const getWorld = async (worldAddress) => {
   }
 }
 
+export const getPendingRevenue = async (tokenId, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [pendingRevenueFromNote, note] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getWorldHelper3Address(),
+        abi: worldHelper3ABI,
+        functionName: 'pendingRevenueFromNote',
+        args: [BigInt(tokenId)],
+      },
+      {
+        address: getWorldHelper3Address(),
+        abi: worldHelper3ABI,
+        functionName: 'notes',
+        args: [BigInt(tokenId)],
+      },
+    ],
+  })
+  return {
+    note: note.result,
+    pendingRevenueFromNote: pendingRevenueFromNote.result,
+  }
+}
+
 export const fetchWorld = async (worldAddress, chainId) => {
   const protocols = await getProtocol(worldAddress.toLowerCase())
   const world = (await getWorld(worldAddress.toLowerCase())) || []

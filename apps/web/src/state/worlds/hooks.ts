@@ -13,7 +13,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getPendingRevenue, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('worlds-tags', async () => getTag())
@@ -84,4 +84,15 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetPendingFromNote = (tokenId) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetPendingFromNote-worlds', tokenId, chainId], async () =>
+    getPendingRevenue(tokenId, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
 }
