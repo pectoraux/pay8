@@ -27,14 +27,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Protocol ID')}
+          {t('Code Token ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input your protocol id')}
+          placeholder={t('input your code token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

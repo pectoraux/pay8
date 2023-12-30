@@ -159,7 +159,7 @@ const CreateGaugeModal: React.FC<any> = ({
     owner: pool?.owner,
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
-    tokenId: pool?.tokenId,
+    tokenId: currAccount?.protocolId ?? '0',
     maxNotesPerProtocol: pool?.maxNotesPerProtocol,
     amountPayable: '',
     taxAddress: '',
@@ -194,7 +194,7 @@ const CreateGaugeModal: React.FC<any> = ({
     token: currency?.address,
     name: pool?.name,
     applicationLink: pool?.world?.applicationLink,
-    accounts: currAccount?.id,
+    accounts: currAccount?.protocolId,
     customTags: '',
     // owner: currAccount?.owner || account
   }))

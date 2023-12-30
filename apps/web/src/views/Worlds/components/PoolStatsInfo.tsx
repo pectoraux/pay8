@@ -92,6 +92,9 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('Bounty ID')} {`->`} {pool?.bountyId}
         </Text>
         <Text color="primary" fontSize="14px">
+          {t('Total Code Supply')} {`->`} {pool?.totalSupply}
+        </Text>
+        <Text color="primary" fontSize="14px">
           {t('World Color')} {`->`} {pool?.color ?? ''}
         </Text>
         <Text color="primary" fontSize="14px">

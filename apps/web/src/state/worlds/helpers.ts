@@ -157,7 +157,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
       }
     }),
   )
-  const [devaddr_, collectionId, category, profileId, bountyId, tradingFee] = await bscClient.multicall({
+  const [devaddr_, collectionId, totalSupply, category, profileId, bountyId, tradingFee] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -169,6 +169,11 @@ export const fetchWorld = async (worldAddress, chainId) => {
         address: worldAddress,
         abi: worldABI,
         functionName: 'collectionId',
+      },
+      {
+        address: worldAddress,
+        abi: worldABI,
+        functionName: 'totalSupply',
       },
       {
         address: getWorldHelper2Address(),
@@ -320,6 +325,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
     tradingFee: tradingFee.result.toString(),
     profileId: profileId.result.toString(),
     collectionId: collectionId.result.toString(),
+    totalSupply: totalSupply.result.toString(),
   }
 }
 
