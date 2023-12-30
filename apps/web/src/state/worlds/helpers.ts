@@ -133,7 +133,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
   const bscClient = publicClient({ chainId })
   const worldNFTs = await Promise.all(
     world?.worldNFTs?.map(async (nft) => {
-      const [owner] = await bscClient.multicall({
+      const [owner, metadataUrl] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
           {
@@ -142,10 +142,17 @@ export const fetchWorld = async (worldAddress, chainId) => {
             functionName: 'ownerOf',
             args: [BigInt(nft.tokenId)],
           },
+          {
+            address: getWorldHelper2Address(),
+            abi: worldHelper2ABI,
+            functionName: 'tokenURI',
+            args: [BigInt(nft.tokenId)],
+          },
         ],
       })
       return {
         ...nft,
+        metadataUrl: metadataUrl.result,
         owner: owner.result,
       }
     }),

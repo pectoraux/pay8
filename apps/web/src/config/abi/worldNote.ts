@@ -154,7 +154,7 @@ export const worldNoteABI = [
       {
         indexed: false,
         internalType: 'address',
-        name: 'to',
+        name: 'world',
         type: 'address',
       },
     ],
@@ -490,7 +490,7 @@ export const worldNoteABI = [
       },
       {
         internalType: 'address',
-        name: '_to',
+        name: '_world',
         type: 'address',
       },
     ],
