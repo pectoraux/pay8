@@ -343,7 +343,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
     worldAddress,
     ...world,
     worldNFTs,
-    worldNotes,
+    worldNotes: worldNotes?.filter((nft) => !!nft.metadataUrl),
     accounts,
     devaddr_: devaddr_.result,
     collection,
