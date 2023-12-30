@@ -19,7 +19,9 @@ const EndsInCell: React.FC<any> = ({ labelText, currAccount }) => {
   console.log('currAccount===============>', currAccount)
   const getDate = () => {
     try {
-      return Number('1982182712') ? format(convertTimeToSeconds('1982182712'), 'MMM do, yyyy HH:mm') : '-'
+      return Number(currAccount?.nextDueReceivable)
+        ? format(convertTimeToSeconds(currAccount?.nextDueReceivable), 'MMM do, yyyy HH:mm')
+        : '-'
     } catch (err) {
       return '-'
     }

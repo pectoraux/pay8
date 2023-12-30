@@ -24,6 +24,7 @@ import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shar
 import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { differenceInSeconds } from 'date-fns'
+import { convertTimeToSeconds } from 'utils/timeHelper'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -173,7 +174,7 @@ const CreateGaugeModal: React.FC<any> = ({
     planet: '1',
     amountReceivable: getBalanceNumber(currAccount?.amountReceivable ?? 0, currAccount?.token?.decimals),
     periodReceivable: parseInt(currAccount?.periodReceivable ?? '0') / 60,
-    startReceivable: currAccount?.startReceivable,
+    startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
     description: currAccount?.description,
     rating: currAccount?.description ?? '',
     media: pool?.media,
@@ -543,7 +544,12 @@ const CreateGaugeModal: React.FC<any> = ({
           args = [
             state.owner,
             currency.address,
-            [amountReceivable.toString(), state.periodReceivable, startReceivable.toString(), state.optionId],
+            [
+              amountReceivable.toString(),
+              parseInt(state.periodReceivable) * 60,
+              startReceivable.toString(),
+              state.optionId,
+            ],
             state.identityTokenId,
             state.protocolId,
             state.rating,
@@ -642,6 +648,7 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_UPDATE_CODE_INFO) {
         const args = [state.world, state.accounts?.split(','), state.rating]
+        console.log('CONFIRM_UPDATE_CODE_INFO===============>', args)
         return callWithGasPrice(worldHelperContract, 'updateCodeInfo', args).catch((err) =>
           console.log('CONFIRM_UPDATE_CODE_INFO===============>', err),
         )
