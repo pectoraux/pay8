@@ -41,12 +41,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
-  const [onPresentNFTs] = useModal(
-    <WebPagesModal
-      height="500px"
-      nfts={pool?.worldNFTs?.filter((nft) => nft?.owner?.toLowerCase() === account?.toLowerCase())}
-    />,
-  )
+  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.worldNFTs} />)
   const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
