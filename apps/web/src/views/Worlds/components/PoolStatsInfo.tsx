@@ -42,7 +42,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.worldNFTs} />)
-  const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} />)
+  const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.worldNotes} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (

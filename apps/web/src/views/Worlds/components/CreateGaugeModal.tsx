@@ -782,9 +782,9 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_AUTOCHARGE) {
-        console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', [!!state.autoCharge, state.tokenId])
-        return callWithGasPrice(worldContract, 'updateAutoCharge', [!!state.autoCharge, state.tokenId]).catch((err) =>
-          console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', err),
+        console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', [!!state.autoCharge, state.protocolId])
+        return callWithGasPrice(worldContract, 'updateAutoCharge', [!!state.autoCharge, state.protocolId]).catch(
+          (err) => console.log('CONFIRM_UPDATE_AUTOCHARGE===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_TAX_CONTRACT) {
