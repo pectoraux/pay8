@@ -50,12 +50,12 @@ export const useFetchPublicPoolsData = () => {
       fetchPoolsDataWithFarms()
     },
     {
-      // revalidateOnFocus: false,
-      // revalidateIfStale: true,
-      // revalidateOnReconnect: false,
-      // revalidateOnMount: true,
+      revalidateOnFocus: false,
+      revalidateIfStale: true,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true,
       refreshInterval: FAST_INTERVAL,
-      // keepPreviousData: true,
+      keepPreviousData: true,
     },
   )
   return {

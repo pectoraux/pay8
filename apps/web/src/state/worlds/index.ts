@@ -1,7 +1,7 @@
+import { keyBy } from 'lodash'
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchWorlds } from './helpers'
 import { resetUserState } from '../global/actions'
-import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,
