@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
@@ -10,8 +9,9 @@ import { fetchRampsAsync } from 'state/ramps'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRampFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { Divider, GreyedOutContainer } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useRouter } from 'next/router'
+import { Divider } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -19,8 +19,9 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
+const CreateRampModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
+  const { reload } = useRouter()
   const { chainId } = useActiveChainId()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -54,19 +55,21 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchRampsAsync({ chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    chainId,
-    account,
+    fetchWithCatchTxError,
     onDismiss,
-    dispatch,
-    toastError,
-    toastSuccess,
+    account,
     callWithGasPrice,
     rampFactoryContract,
-    fetchWithCatchTxError,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {

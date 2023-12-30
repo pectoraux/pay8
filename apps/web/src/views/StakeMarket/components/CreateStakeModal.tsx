@@ -47,7 +47,6 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 
 import { useApprovePool } from '../hooks/useApprove'
 import { GreyedOutContainer, Divider } from './styles'
-import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 
 interface SetPriceStageProps {
   currency?: any
@@ -57,7 +56,8 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { t } = useTranslation()
-  const collectionId = useRouter().query.collectionAddress as string
+  const { reload, query } = useRouter()
+  const collectionId = query.collectionAddress as string
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const titleName = 'Stake Market'
@@ -156,24 +156,37 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchStakesAsync(collectionId, chainId))
+      reload()
     }
     onDismiss()
   }, [
-    chainId,
-    onDismiss,
-    dispatch,
-    state,
-    account,
-    nftFilters,
-    collectionId,
-    currency,
-    stakeMarketContract,
-    currencyAddress,
-    t,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
     fetchWithCatchTxError,
+    onDismiss,
+    nftFilters?.workspace?.value,
+    state.amountPayable,
+    state.amountReceivable,
+    state.startPayable,
+    state.startReceivable,
+    state.source,
+    state.tokenId,
+    state.userTokenId,
+    state.identityTokenId,
+    state.periodPayable,
+    state.periodReceivable,
+    state.waitingPeriod,
+    state.requireUpfrontPayment,
+    currency?.decimals,
+    currencyAddress,
+    account,
+    collectionId,
+    callWithGasPrice,
+    stakeMarketContract,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   const updateValue = (key: any, value: any) => {

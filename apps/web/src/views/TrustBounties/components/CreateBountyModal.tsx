@@ -25,8 +25,6 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useERC20, useTrustBountiesContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
-import { Divider, GreyedOutContainer } from './styles'
-import { useApprovePool } from '../hooks/useApprove'
 import { useRouter } from 'next/router'
 import { useGetRequiresApproval } from 'state/trustbounties/hooks'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
@@ -38,7 +36,8 @@ import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/st
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { fetchBountiesAsync } from 'state/trustbounties'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
+import { Divider, GreyedOutContainer } from './styles'
+import { useApprovePool } from '../hooks/useApprove'
 
 interface SetPriceStageProps {
   currency?: any
@@ -187,17 +186,18 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
           chainId,
         }),
       )
+      router.reload()
     }
     onDismiss()
   }, [
     chainId,
     onDismiss,
+    router,
     dispatch,
     nftFilters,
     state,
     account,
     trustBountiesContract,
-    currencyAddress,
     t,
     toastError,
     toastSuccess,

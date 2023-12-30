@@ -23,14 +23,15 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   console.log('pools=============>', pools)
   const nftFilters = useFilters()
   const tags = useGetTags()
+
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
     }
   }
-  const { refresh } = usePoolsPageFetch()
-  const [onPresentCreateGauge] = useModal(<CreateWorldModal refresh={refresh} />)
+  usePoolsPageFetch()
+  const [onPresentCreateGauge] = useModal(<CreateWorldModal />)
 
   return (
     <>

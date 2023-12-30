@@ -1,32 +1,18 @@
 import EncryptRsa from 'encrypt-rsa'
 import { useEffect, useRef, useState, useCallback } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Input,
-  Modal,
-  Button,
-  AutoRenewIcon,
-  ErrorIcon,
-  useToast,
-  useModal,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
-import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { fetchCardsAsync } from 'state/cards'
 import { cardABI } from 'config/abi/card'
 import { getCardAddress } from 'utils/addressHelpers'
-import { useCardContract } from 'hooks/useContract'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
+import { useRouter } from 'next/router'
 
 import { Divider, GreyedOutContainer } from './styles'
 
@@ -36,8 +22,9 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
+const CreateCardModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
+  const { reload } = useRouter()
   const inputRef = useRef<HTMLInputElement>()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
@@ -96,6 +83,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchCardsAsync({ fromCard: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
@@ -111,6 +99,7 @@ const CreateCardModal: React.FC<any> = ({ currency, onDismiss }) => {
     toastSuccess,
     dispatch,
     chainId,
+    reload,
   ])
 
   useEffect(() => {

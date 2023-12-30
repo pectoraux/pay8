@@ -23,9 +23,10 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useBettingFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useRouter } from 'next/router'
 
 import { Divider, GreyedOutContainer } from './styles'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -33,7 +34,8 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateBettingModal: React.FC<any> = ({ currency, onDismiss }) => {
+const CreateBettingModal: React.FC<any> = ({ onDismiss }) => {
+  const { reload } = useRouter()
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -71,20 +73,23 @@ const CreateBettingModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchBettingsAsync({ fromBetting: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    profileId,
-    oracle,
-    account,
-    dispatch,
-    onDismiss,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
     fetchWithCatchTxError,
+    onDismiss,
+    profileId,
+    account,
+    oracle,
     bettingFactoryContract,
+    callWithGasPrice,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {

@@ -14,6 +14,7 @@ import {
   useTooltip,
 } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
+import { useRouter } from 'next/router'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -24,8 +25,8 @@ import { useContributorsContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { Divider, GreyedOutContainer } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { Divider, GreyedOutContainer } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -35,6 +36,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
+  const { reload } = useRouter()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
@@ -75,20 +77,23 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchContributorsGaugesAsync({ chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    nftFilters,
-    dispatch,
+    fetchWithCatchTxError,
     onDismiss,
-    toastError,
+    nftFilters?.workspace?.value,
+    callWithGasPrice,
+    contributorsContract,
     original,
     thumbnail,
+    toastError,
+    t,
     toastSuccess,
-    callWithGasPrice,
-    fetchWithCatchTxError,
-    contributorsContract,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {

@@ -23,9 +23,10 @@ import { fetchFutureCollateralsAsync } from 'state/futureCollaterals'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useFutureCollateralContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useRouter } from 'next/router'
 import { Divider, GreyedOutContainer } from './styles'
 import CreateGaugeModal from './CreateGaugeModal'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -35,6 +36,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { t } = useTranslation()
+  const { reload } = useRouter()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
@@ -43,12 +45,6 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
-  const [auditor, setAuditor] = useState('')
-  const [stakeId, setStakeId] = useState('')
-  const [userBountyId, setUserBountyId] = useState('')
-  const [auditorBountyId, setAuditorBountyId] = useState('')
-  const [channel, setChannel] = useState('')
-  const [profileId, setProfileId] = useState('')
   const [stage, setStage] = useState('PICK_CHANNEL')
   const { toastSuccess, toastError } = useToast()
   const [state, setState] = useState<any>(() => ({
@@ -98,19 +94,22 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    state,
-    account,
-    dispatch,
-    onDismiss,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
     fetchWithCatchTxError,
+    onDismiss,
     futureCollateralContract,
+    state.profileId,
+    state.channel,
+    callWithGasPrice,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {

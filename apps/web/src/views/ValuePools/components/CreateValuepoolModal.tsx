@@ -42,7 +42,8 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const titleName = 'Value Pool'
-  const fromValuepool = useRouter().query.valuepool
+  const { reload, query } = useRouter()
+  const fromValuepool = query.valuepool
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
@@ -119,14 +120,14 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
           fromValuepool,
         }),
       )
-      // reload()
+      reload()
     }
     onDismiss()
   }, [
     onDismiss,
     dispatch,
     account,
-    // reload,
+    reload,
     fromValuepool,
     valuepoolFactoryContract,
     state,

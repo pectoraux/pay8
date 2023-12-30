@@ -28,9 +28,9 @@ import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import BigNumber from 'bignumber.js'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-
-import { Divider, GreyedOutContainer } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useRouter } from 'next/router'
+import { Divider, GreyedOutContainer } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -40,6 +40,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { t } = useTranslation()
+  const { reload } = useRouter()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
@@ -87,24 +88,27 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchGamesAsync({ fromGame: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    currency,
-    gameContract,
     pricePerMinutes,
+    currency?.decimals,
+    currency?.address,
+    fetchWithCatchTxError,
+    onDismiss,
+    gameContract,
     creatorShare,
     referrerFee,
     claimable,
-    dispatch,
-    onDismiss,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
-    fetchWithCatchTxError,
     gameFactoryContract,
+    callWithGasPrice,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
     chainId,
+    reload,
   ])
 
   useEffect(() => {

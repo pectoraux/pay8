@@ -15,6 +15,7 @@ import {
   ButtonMenu,
   ButtonMenuItem,
 } from '@pancakeswap/uikit'
+import { useRouter } from 'next/router'
 import { differenceInSeconds } from 'date-fns'
 import { useAppDispatch } from 'state'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
@@ -43,6 +44,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
+  const { reload } = useRouter()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
@@ -139,12 +141,26 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchLotteriesAsync({ fromLottery: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
     fetchWithCatchTxError,
     onDismiss,
-    state,
+    state.startDate,
+    state.startTime,
+    state.endDate,
+    state.endTime,
+    state.endAmount,
+    state.priceTicket,
+    state.valuepool,
+    state.lockDuration,
+    state.useNFTicket,
+    state.isNFT,
+    state.treasuryFee,
+    state.referrerFee,
+    state.discountDivisor,
+    state.rewardsBreakdown,
     account,
     lotteryHelperContract,
     callWithGasPrice,
@@ -153,6 +169,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
     toastSuccess,
     dispatch,
     chainId,
+    reload,
   ])
 
   useEffect(() => {

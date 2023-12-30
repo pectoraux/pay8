@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
+import { useRouter } from 'next/router'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -24,6 +25,7 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const { reload } = useRouter()
   const { chainId } = useActiveChainId()
   const sponsorFactoryContract = useSponsorFactory()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
@@ -54,20 +56,22 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchSponsorsAsync({ fromSponsor: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    chainId,
+    fetchWithCatchTxError,
+    onDismiss,
+    callWithGasPrice,
+    sponsorFactoryContract,
     profileId,
     account,
-    dispatch,
-    onDismiss,
     toastError,
+    t,
     toastSuccess,
-    callWithGasPrice,
-    fetchWithCatchTxError,
-    sponsorFactoryContract,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {

@@ -24,8 +24,9 @@ import { useAcceleratorContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { Divider, GreyedOutContainer } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useRouter } from 'next/router'
+import { Divider, GreyedOutContainer } from './styles'
 
 interface SetPriceStageProps {
   onDismiss?: any
@@ -34,6 +35,7 @@ interface SetPriceStageProps {
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
+  const { reload } = useRouter()
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -78,19 +80,22 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchAcceleratorGaugesAsync({ chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    nftFilters,
-    dispatch,
+    nftFilters?.workspace?.value,
+    fetchWithCatchTxError,
     onDismiss,
     original,
     thumbnail,
-    toastSuccess,
     callWithGasPrice,
-    fetchWithCatchTxError,
     acceleratorContract,
+    toastSuccess,
+    t,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {

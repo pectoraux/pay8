@@ -16,6 +16,7 @@ import {
   useTooltip,
 } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
+import { useRouter } from 'next/router'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -37,6 +38,7 @@ interface SetPriceStageProps {
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
+  const { reload } = useRouter()
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -93,22 +95,25 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchArpsAsync({ fromArp: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    account,
-    profileId,
-    valuepool,
-    percentages,
-    automatic,
-    immutableContract,
-    dispatch,
-    onDismiss,
-    toastSuccess,
-    callWithGasPrice,
     fetchWithCatchTxError,
+    onDismiss,
     arpFactoryContract,
+    profileId,
+    account,
+    valuepool,
+    automatic,
+    percentages,
+    immutableContract,
+    callWithGasPrice,
+    toastSuccess,
+    t,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {

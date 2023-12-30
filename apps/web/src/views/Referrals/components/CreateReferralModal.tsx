@@ -9,8 +9,9 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useReferralVoter } from 'hooks/useContract'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
-import { Divider } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useRouter } from 'next/router'
+import { Divider } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -21,6 +22,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
+  const { reload } = useRouter()
   const { chainId } = useActiveChainId()
   const inputRef = useRef<HTMLInputElement>()
   const [pendingFb, setPendingFb] = useState(false)
@@ -61,19 +63,21 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchReferralGaugesAsync({ chainId }))
-      onDismiss()
+      reload()
     }
+    onDismiss()
   }, [
-    chainId,
-    nftFilters,
-    onDismiss,
-    dispatch,
-    referralVoterContract,
-    t,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
     fetchWithCatchTxError,
+    nftFilters?.workspace?.value,
+    callWithGasPrice,
+    referralVoterContract,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
+    chainId,
+    reload,
+    onDismiss,
   ])
 
   return (

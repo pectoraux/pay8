@@ -15,7 +15,6 @@ import {
   useTooltip,
   HelpIcon,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
@@ -26,8 +25,9 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useBILLFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { Divider, GreyedOutContainer } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useRouter } from 'next/router'
+import { Divider, GreyedOutContainer } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -36,6 +36,7 @@ interface SetPriceStageProps {
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
+  const { reload } = useRouter()
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -72,20 +73,23 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchBillsAsync({ fromBill: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    account,
-    profileId,
-    isPayable,
-    dispatch,
-    onDismiss,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
     fetchWithCatchTxError,
+    onDismiss,
     billFactoryContract,
+    profileId,
+    account,
+    isPayable,
+    callWithGasPrice,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {

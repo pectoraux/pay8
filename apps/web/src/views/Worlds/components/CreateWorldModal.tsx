@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Flex, Grid, Box, Text, Input, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
@@ -18,7 +19,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateAuditorModal: React.FC<any> = ({ refresh, onDismiss }) => {
+const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -30,6 +31,7 @@ const CreateAuditorModal: React.FC<any> = ({ refresh, onDismiss }) => {
   const [pendingFb, setPendingFb] = useState(false)
   const [profileId, setProfileId] = useState('')
   const { toastSuccess, toastError } = useToast()
+  const { reload } = useRouter()
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -57,13 +59,13 @@ const CreateAuditorModal: React.FC<any> = ({ refresh, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchWorldsAsync({ chainId }))
-      refresh()
+      reload()
     }
     onDismiss()
   }, [
     t,
+    reload,
     chainId,
-    refresh,
     account,
     profileId,
     dispatch,

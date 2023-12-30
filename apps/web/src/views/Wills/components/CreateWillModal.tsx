@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Flex, Grid, Box, Text, Modal, Button, AutoRenewIcon, ErrorIcon, useToast } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
@@ -9,9 +10,9 @@ import { fetchWillsAsync } from 'state/wills'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useWILLFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import { Divider } from './styles'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface SetPriceStageProps {
   currency?: any
@@ -21,6 +22,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
   const { t } = useTranslation()
+  const { reload } = useRouter()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
@@ -54,19 +56,21 @@ const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchWillsAsync({ fromWill: true, chainId }))
+      reload()
     }
     onDismiss()
   }, [
-    t,
-    chainId,
-    account,
-    dispatch,
-    onDismiss,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
     fetchWithCatchTxError,
+    onDismiss,
     willFactoryContract,
+    callWithGasPrice,
+    account,
+    toastError,
+    t,
+    toastSuccess,
+    dispatch,
+    chainId,
+    reload,
   ])
 
   useEffect(() => {
