@@ -21,7 +21,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
-  const [onPresentCreateGauge] = useModal(<CreateWorldModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
   const handleClick = () => {
@@ -30,7 +29,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       howToElem.scrollIntoView()
     }
   }
-  usePoolsPageFetch()
+  const { refresh } = usePoolsPageFetch()
+  const [onPresentCreateGauge] = useModal(<CreateWorldModal refresh={refresh} />)
 
   return (
     <>

@@ -38,7 +38,7 @@ export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
 
-  useSWR(
+  const { mutate, status } = useSWR(
     ['/worlds', chainId],
     async () => {
       const fetchPoolsDataWithFarms = async () => {
@@ -50,14 +50,18 @@ export const useFetchPublicPoolsData = () => {
       fetchPoolsDataWithFarms()
     },
     {
-      revalidateOnFocus: false,
-      revalidateIfStale: true,
-      revalidateOnReconnect: false,
-      revalidateOnMount: true,
+      // revalidateOnFocus: false,
+      // revalidateIfStale: true,
+      // revalidateOnReconnect: false,
+      // revalidateOnMount: true,
       refreshInterval: FAST_INTERVAL,
-      keepPreviousData: true,
+      // keepPreviousData: true,
     },
   )
+  return {
+    refresh: mutate,
+    status,
+  }
 }
 
 export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean } => {
@@ -67,7 +71,7 @@ export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean }
 
 export const usePoolsPageFetch = () => {
   useWorldsConfigInitialize()
-  useFetchPublicPoolsData()
+  return useFetchPublicPoolsData()
 }
 
 export const useCurrBribe = () => {

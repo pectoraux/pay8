@@ -9,8 +9,8 @@ import { fetchWorldsAsync } from 'state/worlds'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useWorldFactory } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { Divider, GreyedOutContainer } from './styles'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { Divider, GreyedOutContainer } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -18,7 +18,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
+const CreateAuditorModal: React.FC<any> = ({ refresh, onDismiss }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -57,11 +57,13 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchWorldsAsync({ chainId }))
+      refresh()
     }
     onDismiss()
   }, [
     t,
     chainId,
+    refresh,
     account,
     profileId,
     dispatch,

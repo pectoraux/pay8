@@ -5,6 +5,7 @@ import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { requiresApproval } from 'utils/requiresApproval'
+import { FAST_INTERVAL } from 'config/constants'
 import { fetchBountiesAsync } from '.'
 import {
   currBribeSelector,
@@ -23,7 +24,6 @@ import {
   getTag,
   getTokenData,
 } from './helpers'
-import { FAST_INTERVAL } from 'config/constants'
 
 export const useGetTags = () => {
   const { data } = useSWR('trustbounties-tags', async () => getTag())
