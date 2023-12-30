@@ -703,9 +703,23 @@ const CreateGaugeModal: React.FC<any> = ({
             state.world,
             startReceivable.toString(),
             state.planet,
-            state.first4?.split(',')?.map((first4) => [first4[0], first4[1], first4[2], first4[3]]),
-            state.last4?.split(',')?.map((last4) => [last4[0], last4[1], last4[2], last4[3]]),
-            state.nfts?.split(',')?.map((nft) => [nft]),
+            state.first4
+              ?.split(',')
+              ?.map((first4) => [
+                first4[0]?.toLowerCase(),
+                first4[1]?.toLowerCase(),
+                first4[2]?.toLowerCase(),
+                first4[3]?.toLowerCase(),
+              ]),
+            state.last4
+              ?.split(',')
+              ?.map((last4) => [
+                last4[0]?.toLowerCase(),
+                last4[1]?.toLowerCase(),
+                last4[2]?.toLowerCase(),
+                last4[3]?.toLowerCase(),
+              ]),
+            state.nfts?.split(',')?.map((nft) => [nft?.toLowerCase()]),
           ]
           console.log('CONFIRM_MINT_PAST_WORLD===============>', args)
           return callWithGasPrice(worldHelper2Contract, 'mintPastWorld', args).catch((err) =>
