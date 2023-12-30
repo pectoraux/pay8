@@ -272,6 +272,19 @@ export const worldHelper2ABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'getPeriod',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -411,19 +424,19 @@ export const worldHelper2ABI = [
         type: 'uint256',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string[][]',
         name: '_first4',
-        type: 'string[]',
+        type: 'string[][]',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string[][]',
         name: '_last4',
-        type: 'string[]',
+        type: 'string[][]',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string[][]',
         name: '_nfts',
-        type: 'string[]',
+        type: 'string[][]',
       },
     ],
     name: 'mintPastWorld',
