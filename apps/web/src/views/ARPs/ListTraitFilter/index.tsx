@@ -16,11 +16,11 @@ import { useTranslation } from '@pancakeswap/localization'
 import orderBy from 'lodash/orderBy'
 import styled from 'styled-components'
 import { FilterButton, ListOrderState, SearchWrapper } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { Item } from './types'
-import { TraitItemRow } from './styles'
 import { setFilters } from 'state/arps'
 import { useFilters } from 'state/arps/hooks'
 import { useAppDispatch } from 'state'
+import { Item } from './types'
+import { TraitItemRow } from './styles'
 
 interface ListTraitFilterProps {
   title?: string

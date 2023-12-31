@@ -14,21 +14,15 @@ import {
   useTooltip,
   HelpIcon,
   Flex,
-  ButtonMenu,
-  ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import snapshot from '@snapshot-labs/snapshot.js'
-import isEmpty from 'lodash/isEmpty'
-import times from 'lodash/times'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
-import { useInitialBlock } from 'state/block/hooks'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useERC20, useValuepoolVoterContract } from 'hooks/useContract'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 
 import { useTranslation } from '@pancakeswap/localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -39,25 +33,20 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import NextStepButton from 'views/ChannelCreation/NextStepButton'
+import { useGetRequiresApproval } from 'state/trustbounties/hooks'
+import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 import Layout from '../components/Layout'
 import { ADMINS } from '../config'
 import { Label, SecondaryLabel } from './styles'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import NextStepButton from 'views/ChannelCreation/NextStepButton'
-import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
-import { useGetRequiresApproval } from 'state/trustbounties/hooks'
-import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
-import { FetchStatus } from 'config/constants/types'
-
-const hub = 'https://hub.snapshot.org'
-const client = new snapshot.Client712(hub)
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
 })
 
 const CreateProposal = () => {
-  const { push, query } = useRouter()
+  const { push } = useRouter()
   const [state, setState] = useState<any>(() => ({
     title: '',
     body: '',
@@ -83,20 +72,20 @@ const CreateProposal = () => {
   const { title, body } = state
   const [nftFilters, setNftFilters] = useState<any>({})
   const { callWithGasPrice } = useCallWithGasPrice()
-  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { fetchWithCatchTxError } = useCatchTxError()
   const valuepoolVoterContract = useValuepoolVoterContract()
   const stakingTokenContract = useERC20(state.bribeToken)
-  const { status, needsApproval, refetch } = useGetRequiresApproval(
-    stakingTokenContract,
-    account,
-    valuepoolVoterContract.address,
-  )
-  const { handleApprove: handlePoolApprove, pendingTx: allowing } = useApprovePool(
-    stakingTokenContract,
-    valuepoolVoterContract.address,
-    'Bribe Token',
-    refetch,
-  )
+  // const { refetch } = useGetRequiresApproval(
+  //   stakingTokenContract,
+  //   account,
+  //   valuepoolVoterContract.address,
+  // )
+  // const { handleApprove: handlePoolApprove, pendingTx: allowing } = useApprovePool(
+  //   stakingTokenContract,
+  //   valuepoolVoterContract.address,
+  //   'Bribe Token',
+  //   refetch,
+  // )
 
   const handleSubmit = useCallback(async () => {
     setIsLoading(true)
@@ -194,9 +183,9 @@ const CreateProposal = () => {
     updateValue('body', value)
   }
 
-  const handleRawValueChange = (key: any) => (value: number) => {
-    updateValue(key, value)
-  }
+  // const handleRawValueChange = (key: any) => (value: number) => {
+  //   updateValue(key, value)
+  // }
 
   const options = useMemo(() => {
     return {

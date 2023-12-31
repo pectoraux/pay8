@@ -4,7 +4,6 @@ import { Box, Flex, Grid, Text } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
 import { NftAttribute } from 'state/cancan/types'
 import { Item } from 'views/CanCan/market/components/Filters'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { WORKSPACES } from 'config'
 import { ListTraitFilter } from './ListTraitFilter'
 

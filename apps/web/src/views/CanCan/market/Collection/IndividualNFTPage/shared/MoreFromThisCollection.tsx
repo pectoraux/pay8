@@ -2,6 +2,7 @@ import { useGetCollection } from 'state/cancan/hooks'
 import { useState, useMemo, ReactNode } from 'react'
 import shuffle from 'lodash/shuffle'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 // eslint-disable-next-line import/no-unresolved
 import { Swiper, SwiperSlide } from 'swiper/react'
 // eslint-disable-next-line import/no-unresolved
@@ -9,6 +10,8 @@ import 'swiper/css/bundle'
 import SwiperCore from 'swiper'
 import { ArrowBackIcon, ArrowForwardIcon, Box, IconButton, Text, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Trans from 'components/Trans'
+// eslint-disable-next-line lodash/import-scope
+import { orderBy } from 'lodash'
 import { CollectibleLinkCard } from '../../../components/CollectibleCard'
 
 const INITIAL_SLIDE = 4
@@ -41,12 +44,16 @@ const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisColle
   nft,
   title = <Trans>More from this collection</Trans>,
 }) => {
+  const { paywallId } = useRouter().query as any
   const { collection } = useGetCollection(collectionAddress)
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
   const [activeIndex, setActiveIndex] = useState(1)
   const { isMobile, isMd, isLg } = useMatchBreakpoints()
 
   let nftsToShow = useMemo(() => {
+    const paywall = collection?.paywalls?.find((p) => p.tokenId?.toLowerCase() === paywallId?.toLowerCase())
+    const paywallItems = orderBy(paywall?.mirrors, 'createdAt', 'asc')?.map((mirror) => mirror.item)
+    if (paywallItems?.length) return paywallItems
     const fromWorkspace = collection?.items?.filter(
       (thisNft) => thisNft.tokenId !== nft.tokenId && thisNft.workspace === nft.workspace,
     )
@@ -56,7 +63,8 @@ const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisColle
       ) ?? []
     if (!collection?.paywalls) return [...res]
     return [...res, ...collection?.paywalls]
-  }, [collection, nft])
+    return []
+  }, [collection?.items, collection?.paywalls, nft.tokenId, nft.workspace, paywallId])
 
   if (!nftsToShow || nftsToShow.length === 0) {
     return null
@@ -110,9 +118,9 @@ const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisColle
       {isMobile ? (
         <StyledSwiper>
           <Swiper spaceBetween={16} slidesPerView={1.5}>
-            {nftsToShow?.map((nft) => (
-              <SwiperSlide key={nft.tokenId}>
-                <CollectibleLinkCard nft={nft} />
+            {nftsToShow?.map((_nft) => (
+              <SwiperSlide key={_nft.tokenId}>
+                <CollectibleLinkCard nft={_nft} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -127,13 +135,13 @@ const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisColle
             slidesPerGroup={slidesPerView}
             initialSlide={INITIAL_SLIDE}
           >
-            {nftsToShow?.map((nft) => {
-              const currentAskPriceAsNumber = nft && parseFloat(nft?.currentAskPrice)
+            {nftsToShow?.map((_nft) => {
+              const currentAskPriceAsNumber = _nft && parseFloat(_nft?.currentAskPrice)
               return (
-                <SwiperSlide key={nft.tokenId}>
+                <SwiperSlide key={_nft.tokenId}>
                   <CollectibleLinkCard
-                    key={nft?.tokenId}
-                    nft={nft}
+                    key={_nft?.tokenId}
+                    nft={_nft}
                     // referrer={owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase() && nft?.currentSeller}
                     currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
                   />

@@ -6,12 +6,10 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Flex,
   Heading,
   Input,
   ReactMarkdown,
   Text,
-  useModal,
   useToast,
 } from '@pancakeswap/uikit'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -29,21 +27,16 @@ import Container from 'components/Layout/Container'
 import { PageMeta } from 'components/Layout/Page'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import Layout from '../components/Layout'
 import { ADMINS } from '../config'
 import { Label, SecondaryLabel } from './styles'
-
-const hub = 'https://hub.snapshot.org'
-const client = new snapshot.Client712(hub)
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
 })
 
 const CreateProposal = () => {
-  const { push, query } = useRouter()
   const [state, setState] = useState<any>(() => ({
     title: '',
     body: '',
@@ -66,7 +59,7 @@ const CreateProposal = () => {
   // const { status, data } = useSWR([`votes-${pool?.name ?? ''}`, filterState], async () => getVavaVotes(pool?._va ?? ''))
 
   const { callWithGasPrice } = useCallWithGasPrice()
-  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { fetchWithCatchTxError } = useCatchTxError()
   const stakeMarketContract = useStakeMarketContract()
 
   const handleSubmit = useCallback(async () => {

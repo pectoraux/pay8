@@ -6,10 +6,8 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Flex,
   Heading,
   Input,
-  LinkExternal,
   Text,
   ReactMarkdown,
   useToast,
@@ -35,15 +33,11 @@ import Layout from '../components/Layout'
 import { ADMINS } from '../config'
 import { Label, SecondaryLabel } from './styles'
 
-const hub = 'https://hub.snapshot.org'
-const client = new snapshot.Client712(hub)
-
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
 })
 
 const CreateProposal = () => {
-  const { push, query } = useRouter()
   const [state, setState] = useState<any>(() => ({
     title: '',
     body: '',
@@ -66,7 +60,7 @@ const CreateProposal = () => {
   // const { status, data } = useSWR([`votes-${pool?.name ?? ''}`, filterState], async () => getVavaVotes(pool?._va ?? ''))
 
   const { callWithGasPrice } = useCallWithGasPrice()
-  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { fetchWithCatchTxError } = useCatchTxError()
   const stakeMarketContract = useStakeMarketContract()
 
   const handleSubmit = useCallback(async () => {

@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   BunnyPlaceholderIcon,
   Spinner,
@@ -15,9 +15,10 @@ import {
   HelpIcon,
   useTooltip,
   Balance,
-  Box,
   TabMenu,
 } from '@pancakeswap/uikit'
+// eslint-disable-next-line lodash/import-scope
+import { orderBy } from 'lodash'
 import { Collection } from 'state/cancan/types'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
@@ -27,7 +28,6 @@ import {
   useGetNftShowOnlyUsers,
   useGetNftShowOnlyOnSale,
   useGetNftShowSearch,
-  useGetNftFilters,
   useGetProtocolInfo,
 } from 'state/cancan/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -36,7 +36,6 @@ import { FetchStatus } from 'config/constants/types'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
 import Divider from 'components/Divider'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { orderBy } from 'lodash'
 import latinise from '@pancakeswap/utils/latinise'
 import { selectFilteredData } from 'state/cancan/selectors'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
@@ -410,7 +409,7 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
 
   useEffect(() => {
     refetch()
-  }, [paywallARP, nfticketId, account, paywall])
+  }, [paywallARP, nfticketId, account, paywall, refetch])
 
   const TooltipComponent = () => (
     <Text>

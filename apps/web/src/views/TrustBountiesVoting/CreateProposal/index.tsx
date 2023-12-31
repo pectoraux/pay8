@@ -85,7 +85,6 @@ const CreateProposal = () => {
   const { toastSuccess, toastError } = useToast()
   const [pendingFb, setPendingFb] = useState(false)
   const trustBountiesContract = useTrustBountiesContract()
-  const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal block={state.snapshot} />)
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const { name, body } = state
   const [allowing, setAllowing] = useState(false)
