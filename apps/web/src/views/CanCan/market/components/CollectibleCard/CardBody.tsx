@@ -7,13 +7,12 @@ import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import styled from 'styled-components'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import Timer from './Timer'
 import PreviewImage from './PreviewImage'
 import { CostLabel, MetaRow } from './styles'
-import LocationTag from './LocationTag'
 import NFTMedia from '../NFTMedia'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const StyledTimerText = styled(Heading)`
   background: ${({ theme }) => theme.colors.gradientGold};

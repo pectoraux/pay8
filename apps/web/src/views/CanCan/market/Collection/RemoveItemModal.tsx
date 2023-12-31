@@ -78,21 +78,43 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
+      let format = ''
       const chunks = item?.images && item?.images?.split(',')
-      const thumb = chunks?.length > 0 && item?.images?.split(',')[0]
-      const mp4 = chunks?.length > 1 && item?.images?.split(',').slice(1).join(',')
+      let thumb = chunks?.length > 0 && item?.images?.split(',')[0]
+      let mp4 = chunks?.length > 1 && item?.images?.split(',').slice(1).join(',')
       let [img0, img1] = [thumb, mp4]
-      const isArticle = img0 !== img1
+      let isArticle = img0 !== img1
+      if (chunks?.length && chunks[0] === 'img') {
+        thumb = chunks[2]
+          ? nodeRSA.decryptStringWithRsaPrivateKey({
+              text: chunks[2],
+              privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+            })
+          : ''
+        isArticle = false
+        mp4 = chunks[2]
+        format = 'img'
+      } else if (chunks?.length && chunks[0] === 'video') {
+        thumb = chunks[1]
+        isArticle = false
+        mp4 = chunks[2]
+        format = 'video'
+      } else if (chunks?.length && chunks[0] === 'form') {
+        thumb = chunks[1]
+        isArticle = false
+        mp4 = chunks[2]
+        format = 'form'
+      }
       try {
         if (isArticle) {
           img1 = article
         } else {
           img0 = thumb
-            ? nodeRSA.decryptStringWithRsaPrivateKey({
-                text: thumb,
-                privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
-              })
-            : ''
+          // ? nodeRSA.decryptStringWithRsaPrivateKey({
+          //     text: thumb,
+          //     privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+          //   })
+          // : ''
           img1 = mp4
             ? nodeRSA.decryptStringWithRsaPrivateKey({
                 text: mp4,
@@ -103,7 +125,7 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
       } catch (err) {
         console.log('errhandleRemoveItem============>', err)
       }
-      const args = [state.productId, paywall?.id, false, false, `${img0},${img1}`]
+      const args = [state.productId, paywall?.id, false, false, `${format},${img0},${img1}`]
       console.log('handleRemoveItem====================>', args)
       return callWithGasPrice(marketEventsContract, 'updatePaywall', args).catch((err) => {
         console.log('handleRemoveItem====================>', err)
@@ -118,7 +140,17 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
       )
       setIsDone(true)
     }
-  }, [t, item, state, paywall, toastSuccess, callWithGasPrice, marketEventsContract, fetchWithCatchTxError])
+  }, [
+    fetchWithCatchTxError,
+    item?.images,
+    state.productId,
+    paywall?.id,
+    callWithGasPrice,
+    marketEventsContract,
+    article,
+    toastSuccess,
+    t,
+  ])
 
   return (
     <Modal title={t('Remove Item from Wall')} onDismiss={onDismiss}>

@@ -150,7 +150,6 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
       ...option,
     }
   })
-
   return (
     <Card mb="40px">
       {contentType === 'form' || contentType === 'video' ? (
@@ -311,12 +310,9 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
           </Flex>
           {!isArticle ? (
             <Flex flex="2" justifyContent={['center', null, 'flex-end']} alignItems="center" maxWidth={440}>
-              <NFTMedia key={nft.tokenId} nft={nft} width={440} height={440} />
+              <NFTMedia key={nft.tokenId} nft={nft} showThumbnail={false} width={440} height={440} />
             </Flex>
           ) : null}
-
-          {/* <Flex flex="2" ml="50%" style={{ position: 'relative', bottom: '40%'}} justifyContent='flex-end' alignItems="flex-end"  maxWidth={440}> */}
-          {/* </Flex> */}
         </Container>
         <MarketPageTitle>
           <StatBox style={{ backgroundColor: itemColor }}>

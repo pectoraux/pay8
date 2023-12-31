@@ -1,4 +1,3 @@
-import NodeRSA from 'encrypt-rsa'
 import EncryptRsa from 'encrypt-rsa'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useState, useMemo, useCallback } from 'react'
@@ -99,7 +98,7 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
       let [img0, img1] = [thumb, mp4]
       let isArticle = img0 !== img1
       if (chunks?.length && chunks[0] === 'img') {
-        thumb = chunks[1]
+        thumb = 'https://payswap.org/logo.png'
         isArticle = false
         mp4 = chunks[1]
         format = 'img'

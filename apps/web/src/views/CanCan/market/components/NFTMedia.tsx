@@ -119,6 +119,8 @@ const NFTMedia: FC<any> = ({
         )
       }
     }
+    // eslint-disable-next-line no-param-reassign
+    media = __mp4
   }
   return <RoundedImage width={width} height={height} src={media ?? _thumbnail} alt={nft?.tokenId} as={as} {...props} />
 }

@@ -406,13 +406,16 @@ const EditStage: React.FC<any> = ({
             let img1
             if (paywallId?.length > 0) {
               const encryptRsa = new EncryptRsa()
-              if (state.thumbnail === state.original) {
-                img0 = state.thumbnail
+              img0 = state.thumbnail
+              if (state.mediaType === 0) {
+                img0 = 'https://www.payswap.org/logo.png'
+                img1 = state.thumbnail
                   ? encryptRsa.encryptStringWithRsaPublicKey({
                       text: state.thumbnail,
                       publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
                     })
                   : ''
+              } else if (state.mediaType < 3) {
                 img1 = state.original
                   ? encryptRsa.encryptStringWithRsaPublicKey({
                       text: state.original,
@@ -421,7 +424,6 @@ const EditStage: React.FC<any> = ({
                   : ''
               } else {
                 // article
-                img0 = state.thumbnail
                 img1 = encryptArticle(encryptRsa, state.original)
               }
               content = `${contentType},${img0},${img1}`

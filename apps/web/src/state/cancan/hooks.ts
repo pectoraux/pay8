@@ -570,7 +570,7 @@ export const useGetTimeEstimates = (collectionId, item, marketPlaceHelper, optio
 }
 
 export const useGetThumbnailNContent = (nft) => {
-  const { data, mutate } = useSWRImmutable(['useGetThumbnailNContent1', nft?.id], async () => getThumbnailNContent(nft))
+  const { data, mutate } = useSWRImmutable(['useGetThumbnailNContent', nft?.id], async () => getThumbnailNContent(nft))
   return {
     refetch: mutate,
     mp4: data?.mp4,
