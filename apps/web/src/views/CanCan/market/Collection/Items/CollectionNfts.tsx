@@ -350,7 +350,7 @@ const Content: React.FC<any> = ({ owner, referrerFee, registration }) => {
 const Paywall: React.FC<any> = ({ collection, paywall }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any
+  const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '', paywall?.tokenId ?? '') as any
   const [nfticketId, setNfticketId] = useState('')
   const defaultCurrency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(defaultCurrency)

@@ -136,7 +136,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
   console.log('options=============>', options)
   const { account } = useWeb3React()
   const { mp4, thumbnail } = getThumbnailNContent(nftToSell)
-  const paywallARP = useGetPaywallARP(nftToSell?.collection?.id ?? '')
+  const paywallARP = useGetPaywallARP(nftToSell?.collection?.id ?? '', nftToSell?.tokenId ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',

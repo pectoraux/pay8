@@ -6,7 +6,6 @@ import {
   CardBody,
   Heading,
   Flex,
-  Skeleton,
   Text,
   useModal,
   ChevronLeftIcon,
@@ -23,16 +22,15 @@ import { CurrencyLogo } from 'components/Logo'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
 import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import Countdown from 'views/Lottery/components/Countdown'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
-import RichTextEditor from 'components/RichText'
 import { useGetMedia, useGetNftOrder } from 'state/cancan/hooks'
 import { getThumbnailNContent } from 'utils/cancan'
 import { useState } from 'react'
 import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import { useGetTokenURIs } from 'state/valuepools/hooks'
 
 import Timer from './Timer'
 import MarketPageTitle from '../../../components/MarketPageTitle'
@@ -42,7 +40,6 @@ import SellModal from '../../../components/BuySellModals/SellModal'
 import { nftsBaseUrl } from '../../../constants'
 import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
-import { useGetTokenURIs } from 'state/valuepools/hooks'
 
 interface MainNFTCardProps {
   nft: NftToken
@@ -79,7 +76,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     priceInSecondaryCurrency,
   } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   const { isMobile } = useMatchBreakpoints()
-  let { mp4, isArticle } = getThumbnailNContent(nft)
+  const { mp4, isArticle } = getThumbnailNContent(nft)
   const [bought, setBought] = useState(false)
   const contactChannels = collection?.contactChannels?.split(',') ?? []
   const contacts = collection?.contacts?.split(',') ?? []

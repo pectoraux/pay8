@@ -185,7 +185,7 @@ const BuyModal: React.FC<any> = ({ variant = 'item', nftToBuy, bidPrice, process
   )
 
   const { mp4, thumbnail } = getThumbnailNContent(nftToBuy)
-  const paywallARP = useGetPaywallARP(nftToBuy?.collection?.id ?? '')
+  const paywallARP = useGetPaywallARP(nftToBuy?.collection?.id ?? '', nftToBuy?.tokenId) as any
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',

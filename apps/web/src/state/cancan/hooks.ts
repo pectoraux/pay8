@@ -469,9 +469,9 @@ export const useGetNftDiscounted = (
   }
 }
 
-export const useGetPaywallARP = (collectionAddress: string) => {
-  const { data } = useSWRImmutable(['cancan', 'getPaywallARP', collectionAddress], async () =>
-    getPaywallARP(collectionAddress),
+export const useGetPaywallARP = (collectionAddress: string, tokenId) => {
+  const { data } = useSWRImmutable(['cancan', 'getPaywallARP', collectionAddress, tokenId], async () =>
+    getPaywallARP(collectionAddress, tokenId),
   )
   return data as any
 }

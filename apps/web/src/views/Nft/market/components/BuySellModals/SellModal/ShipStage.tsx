@@ -86,8 +86,8 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
       : SellingStage.CREATE_ASK_ORDER,
   )
   const [expand, setExpand] = useState(false)
-  const paywallARP = useGetPaywallARP(collection?.id ?? '') as any
-  const [step1Complete, setStep1Complete] = useState(!!paywallARP?.paywallAddress)
+  // const paywallARP = useGetPaywallARP(collection?.id ?? '', nftToSell?.tokenId) as any
+  const [step1Complete, setStep1Complete] = useState(false)
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')

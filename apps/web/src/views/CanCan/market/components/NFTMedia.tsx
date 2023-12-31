@@ -50,7 +50,7 @@ const NFTMedia: FC<any> = ({
   const paywallId = useRouter().query.paywallId as any
   const [article, setArticle] = useState(_article ?? '')
   const { data: article2 } = useDecryptArticle2(chks, cursor)
-  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
+  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '', paywallId ?? '') as any
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',

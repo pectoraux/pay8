@@ -34,7 +34,7 @@ interface FormState {
   gameName: string
 }
 
-const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss }) => {
+const PartnerModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
   const [state, setState] = useState<any>(() => ({
     nfticketId: '',
     pickedOption: '',
@@ -46,7 +46,8 @@ const PartnerModal: React.FC<any> = ({ collection, paywall, onConfirm, onDismiss
   const { callWithGasPrice } = useCallWithGasPrice()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [isDone, setIsDone] = useState(false)
-  const paywallARPAddress = useGetPaywallARP(collection?.id ?? '')
+  const paywallARP = useGetPaywallARP(collection?.id ?? '', paywall?.tokenId)
+  const paywallARPAddress = paywallARP?.address
   const paywallContract = usePaywallContract(paywallARPAddress ?? '')
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const item = useMemo(

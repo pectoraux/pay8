@@ -26,8 +26,7 @@ const NFTMedia: FC<any> = ({ width, height, nft, borderRadius = 'default', as, .
   const dispatch = useAppDispatch()
   const { setTryVideoNftMedia } = useNftStorage()
   const { account } = useWeb3React()
-  // const paywallARP = useGetPaywallARP(collection?.id ?? '', paywall?.id ?? '')
-  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
+  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '', nft?.tokenId) as any
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',

@@ -299,8 +299,7 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
   console.log('paywall======================>', paywall)
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  // const paywallARP = useGetPaywallARP(collection?.id ?? '', paywall?.id ?? '')
-  const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any as any
+  const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '', paywall?.tokenId ?? '') as any
   const [nfticketId, setNfticketId] = useState('')
   const { ongoingSubscription, status } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
@@ -381,6 +380,7 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
               <CollectibleLinkCard
                 key={nft?.tokenId}
                 nft={nft}
+                paywallId={paywall?.tokenId}
                 referrer={
                   mirror?.partner && collection?.owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase()
                     ? collection?.owner

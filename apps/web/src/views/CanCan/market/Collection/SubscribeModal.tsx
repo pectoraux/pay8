@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { ChangeEvent, useState, useMemo, useCallback } from 'react'
+import { ChangeEvent, useState, useCallback } from 'react'
 import { Flex, Text, Button, Modal, Input, useToast, AutoRenewIcon, Box, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
@@ -8,7 +8,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider, GreyedOutContainer } from 'views/Auditors/components/styles'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { usePaywallARPFactoryContract, usePaywallContract } from 'hooks/useContract'
+import { usePaywallContract } from 'hooks/useContract'
 import { useGetPaywallARP } from 'state/cancan/hooks'
 
 interface DepositModalProps {
@@ -46,15 +46,14 @@ const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const [isDone, setIsDone] = useState(false)
-  const paywallARP = useGetPaywallARP(collection?.id ?? '')
+  const paywallARP = useGetPaywallARP(collection?.id ?? '', paywall?.tokenId ?? '') as any
   // const paywallContract = usePaywallContract('0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F')
   const paywallContract = usePaywallContract(paywallARP?.paywallAddress ?? '')
-  const paywallARPFactory = usePaywallARPFactoryContract()
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
-  const item = useMemo(
-    () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
-    [collection, state],
-  )
+  // const item = useMemo(
+  //   () => collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase()),
+  //   [collection, state],
+  // )
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,

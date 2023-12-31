@@ -11,9 +11,9 @@ import SubscribeModal from '../../SubscribeModal'
 const ContentCard: React.FC<any> = ({ collection, nft, mp4 }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
-  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
   const paywallId = useRouter().query.paywallId as any
   const paywall = collection?.paywalls?.find((payw) => payw.tokenId?.toLowerCase() === paywallId?.toLowerCase())
+  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '', paywall?.tokenId ?? '') as any
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',

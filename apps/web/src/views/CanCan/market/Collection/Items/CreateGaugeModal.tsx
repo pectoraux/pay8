@@ -1,10 +1,10 @@
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
-import { InjectedModalProps, useToast, Button, Flex, LinkExternal } from '@pancakeswap/uikit'
+import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, usePaywallContract } from 'hooks/useContract'
+import { useERC20, usePaywallARPHelperContract, usePaywallContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
@@ -13,9 +13,7 @@ import { requiresApproval } from 'utils/requiresApproval'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
-import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { convertTimeToSeconds } from 'utils/timeHelper'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -23,6 +21,7 @@ import UpdateParametersStage from './UpdateParametersStage'
 import AutoChargeStage from './AutoChargeStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import DeleteARPStage from './DeleteARPStage'
+import DeleteARPProtocolStage from './DeleteARPProtocolStage'
 import UpdateProfileIdStage from './UpdateProfileIdStage'
 import UpdateDiscountDivisorStage from './UpdateDiscountDivisorStage'
 import UpdatePenaltyDivisorStage from './UpdatePenaltyDivisorStage'
@@ -46,6 +45,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
   [LockStage.AUTOCHARGE]: t('Pay Due Receivable'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
+  [LockStage.DELETE]: t('Delete Paywall ARP'),
   [LockStage.CONFIRM_UPDATE_AUTOCHARGE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PROFILE_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_FREE_TRIAL]: t('Back'),
@@ -58,6 +58,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_PARAMETERS]: t('Back'),
   [LockStage.CONFIRM_UPDATE_OWNER]: t('Back'),
   [LockStage.CONFIRM_DELETE_PROTOCOL]: t('Back'),
+  [LockStage.CONFIRM_DELETE]: t('Back'),
   [LockStage.TX_CONFIRMED]: t('Transaction Confirmed'),
 })
 
@@ -86,9 +87,8 @@ const CreateGaugeModal: React.FC<any> = ({
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
-  const router = useRouter()
   const stakingTokenContract = useERC20(currency?.address || currAccount?.token?.address || '')
-  // const paywallArpContract = usePaywallContract('0x48b43B35e5Afd7d3A107f379604b4954DFcBF93F')
+  const paywallArpHelperContract = usePaywallARPHelperContract()
   const paywallArpContract = usePaywallContract(paywallARP?.paywallAddress || '')
   console.log('1mcurrencyy===============>', pool, paywallArpContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
@@ -104,7 +104,7 @@ const CreateGaugeModal: React.FC<any> = ({
     factor: '',
     period: '',
     cap: '',
-    tokenId: '',
+    tokenId: pool?.tokenId ?? '',
     startPayable: '',
     creditFactor: '',
     toAddress: account ?? '',
@@ -199,6 +199,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_DELETE_PROTOCOL:
         setStage(LockStage.DELETE_PROTOCOL)
         break
+      case LockStage.DELETE:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_DELETE:
+        setStage(LockStage.DELETE)
+        break
       case LockStage.UPDATE_PROFILE_ID:
         setStage(LockStage.SETTINGS)
         break
@@ -238,6 +244,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.DELETE_PROTOCOL:
         setStage(LockStage.CONFIRM_DELETE_PROTOCOL)
+        break
+      case LockStage.DELETE:
+        setStage(LockStage.CONFIRM_DELETE)
         break
       case LockStage.UPDATE_FREE_TRIAL:
         setStage(LockStage.CONFIRM_UPDATE_FREE_TRIAL)
@@ -374,6 +383,13 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_DELETE_PROTOCOL===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_DELETE) {
+        console.log('CONFIRM_DELETE===============>', [paywallArpContract.address, state.tokenId])
+        return callWithGasPrice(paywallArpHelperContract, 'deleteARP', [
+          paywallArpContract.address,
+          state.tokenId,
+        ]).catch((err) => console.log('CONFIRM_DELETE===============>', err))
+      }
     },
     onSuccess: async ({ receipt }) => {
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
@@ -433,6 +449,9 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
             {t('DELETE ACCOUNT')}
+          </Button>
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
+            {t('DELETE PAYWALL ARP')}
           </Button>
         </Flex>
       )}
@@ -500,8 +519,9 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.UPDATE_PROFILE_ID && <UpdateProfileIdStage continueToNextStage={continueToNextStage} />}
       {stage === LockStage.DELETE_PROTOCOL && (
-        <DeleteARPStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <DeleteARPProtocolStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
+      {stage === LockStage.DELETE && <DeleteARPStage continueToNextStage={continueToNextStage} />}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage
           variant="buy"

@@ -14,8 +14,6 @@ import {
   Dots,
   Balance,
   TabMenu,
-  useTooltip,
-  HelpIcon,
 } from '@pancakeswap/uikit'
 import { Collection } from 'state/cancan/types'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -45,6 +43,8 @@ import { convertTimeToSeconds } from 'utils/timeHelper'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateGaugeModal from 'views/CanCan/market/Collection/Items/CreateGaugeModal'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 import ShipStage from '../../components/BuySellModals/SellModal/ShipStage'
 import GridPlaceholder from '../../components/GridPlaceholder'
@@ -61,8 +61,6 @@ import AddPartnerModal from '../AddPartnerModal'
 import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
-import truncateHash from '@pancakeswap/utils/truncateHash'
-import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -344,7 +342,7 @@ const Content: React.FC<any> = ({ owner, referrerFee, registration }) => {
 const Paywall: React.FC<any> = ({ collection, paywall }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '') as any
+  const paywallARP = useGetPaywallARP(paywall?.collection?.id ?? '', paywall?.tokenId) as any
   const [nfticketId, setNfticketId] = useState('')
   const defaultCurrency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(defaultCurrency)

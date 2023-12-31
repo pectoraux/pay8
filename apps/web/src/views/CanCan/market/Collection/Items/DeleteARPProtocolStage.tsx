@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -25,40 +25,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Option ID')}
+          {t('Protocol ID')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="optionId"
-          value={state.optionId}
-          placeholder={t('input option id')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Paywall Token ID')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="tokenId"
-          value={state.tokenId}
-          placeholder={t('input paywall token id')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Free Trial Period (minutes')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="freeTrialPeriod"
-          value={state.freeTrialPeriod}
-          placeholder={t('input free trial period')}
+          name="protocolId"
+          value={state.protocolId}
+          placeholder={t('input account id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -68,14 +42,16 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will update the free trial period on the specified option')}
+            {t(
+              'This will delete the specified account from this paywall. Please read the documentation for more information on this.',
+            )}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update')}
+        <Button mb="8px" variant="danger" onClick={continueToNextStage}>
+          {t('Delete')}
         </Button>
       </Flex>
     </>

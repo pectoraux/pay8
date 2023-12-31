@@ -763,7 +763,13 @@ export const getNFTMarketTokenForCredit = async (collectionAddress, chainId = 40
   }
 }
 
-export const getPaywallARP = async (collectionAddress: string, first = 1000, skip = 0): Promise<TokenMarketData[]> => {
+export const getPaywallARP = async (
+  collectionAddress: string,
+  tokenId,
+  first = 1000,
+  skip = 0,
+): Promise<TokenMarketData[]> => {
+  const paywallARPId = `${collectionAddress}-${tokenId}`
   try {
     const res = await request(
       GRAPH_API_CANCAN,

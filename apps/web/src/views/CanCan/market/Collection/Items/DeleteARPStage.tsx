@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon, ButtonMenu, ButtonMenuItem, Input } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { GreyedOutContainer, Divider } from './styles'
+import { Divider } from './styles'
 
 interface SetPriceStageProps {
   state: any
@@ -12,7 +11,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -24,28 +23,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
 
   return (
     <>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Protocol ID')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="protocolId"
-          value={state.protocolId}
-          placeholder={t('input account id')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will delete the specified account from this paywall. Please read the documentation for more information on this.',
-            )}
+            {t('This will delete the current paywall ARP. Please read the documentation for more information on this.')}
           </Text>
         </Box>
       </Grid>

@@ -94,7 +94,7 @@ const EditStage: React.FC<any> = ({
   )
   console.log('currency?.address==============>', currency?.address)
   const [expand, setExpand] = useState(false)
-  const paywallARP = useGetPaywallARP(collection?.id ?? '') as any
+  const paywallARP = useGetPaywallARP(collection?.id ?? '', paywallId)
   const [step1Complete, setStep1Complete] = useState(!!paywallARP?.paywallAddress)
   const { toastSuccess } = useToast()
   const { callWithGasPrice } = useCallWithGasPrice()

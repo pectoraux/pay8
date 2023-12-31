@@ -46,7 +46,7 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
   const [currency, setCurrency] = useState(mainCurrency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   let { mp4, thumbnail } = getThumbnailNContent(nft)
-  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
+  const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '', nft?.tokenId)
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
     account ?? '',

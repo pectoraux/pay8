@@ -20,9 +20,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_DISCOUNT_DIVISOR,
   LockStage.CONFIRM_UPDATE_PENALTY_DIVISOR,
   LockStage.CONFIRM_UPDATE_PROFILE_ID,
+  LockStage.CONFIRM_DELETE,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.DELETE,
+  LockStage.CONFIRM_DELETE,
   LockStage.PARTNER,
   LockStage.CONFIRM_PARTNER,
   LockStage.UPDATE_FREE_TRIAL,
