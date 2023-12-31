@@ -23,8 +23,8 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/worlds'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
-import WebPagesModal from './WebPagesModal'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>

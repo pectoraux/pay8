@@ -59,6 +59,9 @@ const SetPriceStage: React.FC<any> = ({
   const TooltipComponent4 = () => (
     <Text>{t('Input the link to the media you would like to show in the purchased ad-spot')}</Text>
   )
+  const TooltipComponent5 = () => (
+    <Text>{t('Input the number of minutes you would like your media to appear on NFTs from this contract.')}</Text>
+  )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -84,6 +87,14 @@ const SetPriceStage: React.FC<any> = ({
     tooltip: tooltip4,
     tooltipVisible: tooltipVisible4,
   } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef5,
+    tooltip: tooltip5,
+    tooltipVisible: tooltipVisible5,
+  } = useTooltip(<TooltipComponent5 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
@@ -159,16 +170,20 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <BribeField
-          add="pay"
-          stakingAddress={currency?.address}
-          stakingSymbol={currency?.symbol}
-          stakingDecimals={currency?.decimals}
-          lockedAmount={state.amountReceivable}
-          usedValueStaked={usdValueStaked}
-          stakingMax={stakingTokenBalance}
-          setLockedAmount={handleRawValueChange('amountReceivable')}
-          stakingTokenBalance={stakingTokenBalance}
+        <Flex ref={targetRef5}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Number of Minutes')}
+          </Text>
+          {tooltipVisible5 && tooltip5}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="numMinutes"
+          value={state.numMinutes}
+          placeholder={t('input number of minutes')}
+          onChange={handleChange}
         />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">

@@ -172,6 +172,7 @@ const CreateGaugeModal: React.FC<any> = ({
     first4: '',
     last4: '',
     planet: '1',
+    numMinutes: '',
     amountReceivable: getBalanceNumber(currAccount?.amountReceivable ?? 0, currAccount?.token?.decimals),
     periodReceivable: parseInt(currAccount?.periodReceivable ?? '0') / 60,
     startReceivable: convertTimeToSeconds(currAccount?.startReceivable ?? 0),
@@ -505,7 +506,9 @@ const CreateGaugeModal: React.FC<any> = ({
       }
     },
     onApprove: () => {
-      return callWithGasPrice(stakingTokenContract, 'approve', [worldContract.address, MaxUint256])
+      return callWithGasPrice(stakingTokenContract, 'approve', [worldContract.address, MaxUint256]).then(() =>
+        callWithGasPrice(stakingTokenContract, 'approve', [worldHelperContract.address, MaxUint256]),
+      )
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
@@ -640,8 +643,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_SPONSOR_TAG) {
-        const amount = getDecimalAmount(new BigNumber(state.amountReceivable), currency.decimals)
-        const args = [state.sponsor, state.world, amount.toString(), state.tag, state.message]
+        const args = [state.sponsor, state.world, state.numMinutes, state.tag, state.message]
         console.log('CONFIRM_SPONSOR_TAG===============>', args)
         return callWithGasPrice(worldHelperContract, 'sponsorTag', args).catch((err) =>
           console.log('CONFIRM_SPONSOR_TAG===============>', err),
