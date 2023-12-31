@@ -79,7 +79,7 @@ const NFTMedia: FC<any> = ({
 
   if (!showThumbnail) {
     if (!isArticle) {
-      _thumbnail = ongoingSubscription ? __thumbnail : _thumbnail
+      _thumbnail = ongoingSubscription ? __thumbnail : 'https://payswap.org/logo.png'
       _mp4 = __mp4
     }
     if (tokenURI?.metadataUrl) {
