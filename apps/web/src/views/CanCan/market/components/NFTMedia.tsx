@@ -79,7 +79,7 @@ const NFTMedia: FC<any> = ({
 
   if (!showThumbnail) {
     if (!isArticle) {
-      _thumbnail = ongoingSubscription ? __thumbnail : 'https://payswap.org/logo.png'
+      _thumbnail = __thumbnail
       _mp4 = __mp4
     }
     if (tokenURI?.metadataUrl) {
@@ -120,7 +120,7 @@ const NFTMedia: FC<any> = ({
       }
     }
     // eslint-disable-next-line no-param-reassign
-    media = __mp4
+    media = ongoingSubscription ? __mp4 : 'https://payswap.org/logo.png'
   }
   return <RoundedImage width={width} height={height} src={media ?? _thumbnail} alt={nft?.tokenId} as={as} {...props} />
 }
