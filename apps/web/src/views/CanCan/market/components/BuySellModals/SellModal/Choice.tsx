@@ -17,7 +17,6 @@ interface ChoiceProps extends InputProps, InputHTMLAttributes<HTMLInputElement> 
 
 const Choice: React.FC<any> = ({
   id,
-  item,
   index,
   addValue,
   onRemove,
@@ -110,7 +109,7 @@ const Choice: React.FC<any> = ({
       <Box position="relative" mb="5px">
         <Input
           {...props}
-          placeholder={t('Category (%txt%)', { txt: props.addValue ? 'Subscription' : 'Meat' })}
+          placeholder={t('Category (%txt%)', { txt: addValue ? 'Subscription' : 'Meat' })}
           value={props.category}
           onChange={handleChangeCategory}
           isWarning={isWarning}
@@ -119,17 +118,17 @@ const Choice: React.FC<any> = ({
       <Box position="relative" mb="5px">
         <Input
           {...props}
-          placeholder={t('Element (%txt%)', { txt: props.addValue ? 'Monthly' : '$1 Tilapia' })}
+          placeholder={t('Element (%txt%)', { txt: addValue ? 'Monthly' : '$1 Tilapia' })}
           value={props.element}
           onChange={handleChangeElement}
           isWarning={isWarning}
         />
       </Box>
-      {props.addValue ? (
+      {addValue ? (
         <Box position="relative" mb="5px">
           <Input
             {...props}
-            placeholder={t('Value (%txt%)', { txt: props.addValue ? '43200 minutes in a month' : '' })}
+            placeholder={t('Value (%txt%)', { txt: addValue ? '43200 minutes in a month' : '' })}
             value={props.value}
             onChange={handleChangeValue}
             isWarning={isWarning}

@@ -92,21 +92,38 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const encryptRsa = new EncryptRsa()
+      let format = ''
       const chunks = item?.images && item?.images?.split(',')
-      const thumb = chunks?.length > 0 && item?.images?.split(',')[0]
-      const mp4 = chunks?.length > 1 && item?.images?.split(',').slice(1).join(',')
+      let thumb = chunks?.length > 0 && item?.images?.split(',')[0]
+      let mp4 = chunks?.length > 1 && item?.images?.split(',').slice(1).join(',')
       let [img0, img1] = [thumb, mp4]
-      const isArticle = img0 !== img1
+      let isArticle = img0 !== img1
+      if (chunks?.length && chunks[0] === 'img') {
+        thumb = chunks[1]
+        isArticle = false
+        mp4 = chunks[1]
+        format = 'img'
+      } else if (chunks?.length && chunks[0] === 'video') {
+        thumb = chunks[1]
+        isArticle = false
+        mp4 = chunks[2]
+        format = 'video'
+      } else if (chunks?.length && chunks[0] === 'form') {
+        thumb = chunks[1]
+        isArticle = false
+        mp4 = chunks[2]
+        format = 'form'
+      }
       try {
         if (isArticle) {
           img1 = mp4 // encryptArticle(encryptRsa, mp4)
         } else {
           img0 = thumb
-            ? encryptRsa.encryptStringWithRsaPublicKey({
-                text: thumb,
-                publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
-              })
-            : ''
+          // ? encryptRsa.encryptStringWithRsaPublicKey({
+          //     text: thumb,
+          //     publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+          //   })
+          // : ''
           img1 = mp4
             ? encryptRsa.encryptStringWithRsaPublicKey({
                 text: mp4,
@@ -128,8 +145,8 @@ const AddItemModal: React.FC<any> = ({ collection, paywall, partner, onDismiss }
             `${img0},${img1}`,
             [state.referrerFee, state.bountyId, 2],
           ]
-        : [state.productId, paywall?.id, true, false, `${img0},${img1}`]
-      console.log('handleAddItem================>', method, args)
+        : [state.productId, paywall?.id, true, false, `${format},${img0},${img1}`]
+      console.log('handleAddItem================>', method, isArticle, args)
       return callWithGasPrice(contract, method, args).catch((err) => {
         console.log('2handleAddItem====================>', err)
       })

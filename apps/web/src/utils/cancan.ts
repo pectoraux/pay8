@@ -60,13 +60,14 @@ export function decryptContent(nft, thumbnail, mp4, ongoingSubscription, account
             privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
           })
         : ''
-      // eslint-disable-next-line no-param-reassign
-      thumbnail = thumbnail
+      const _thumbnail = thumbnail
         ? nodeRSA.decryptStringWithRsaPrivateKey({
             text: thumbnail,
             privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
           })
         : ''
+      // eslint-disable-next-line no-param-reassign
+      thumbnail = _thumbnail ?? thumbnail
     } catch (err) {
       console.log('nftmedia==============>', err)
     }

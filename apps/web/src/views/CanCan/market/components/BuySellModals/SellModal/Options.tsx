@@ -3,9 +3,6 @@ import uniqueId from 'lodash/uniqueId'
 import { useTranslation } from '@pancakeswap/localization'
 import { OptionType } from './types'
 import Choice from './Choice'
-import { useRouter } from 'next/router'
-import { useGetTimeEstimates } from 'state/cancan/hooks'
-import { getMarketHelperAddress } from 'utils/addressHelpers'
 
 interface ChoicesProps {
   choices: OptionType[]

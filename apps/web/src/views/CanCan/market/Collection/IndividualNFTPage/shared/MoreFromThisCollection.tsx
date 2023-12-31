@@ -53,7 +53,9 @@ const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisColle
   let nftsToShow = useMemo(() => {
     const paywall = collection?.paywalls?.find((p) => p.tokenId?.toLowerCase() === paywallId?.toLowerCase())
     const paywallItems = orderBy(paywall?.mirrors, 'createdAt', 'asc')?.map((mirror) => mirror.item)
-    if (paywallItems?.length) return paywallItems
+    if (paywallItems?.length) {
+      return paywallItems
+    }
     const fromWorkspace = collection?.items?.filter(
       (thisNft) => thisNft.tokenId !== nft.tokenId && thisNft.workspace === nft.workspace,
     )
@@ -142,6 +144,7 @@ const MoreFromThisCollection: React.FC<React.PropsWithChildren<MoreFromThisColle
                   <CollectibleLinkCard
                     key={_nft?.tokenId}
                     nft={_nft}
+                    paywallId={paywallId}
                     // referrer={owner?.toLowerCase() !== nft?.currentSeller?.toLowerCase() && nft?.currentSeller}
                     currentAskPrice={currentAskPriceAsNumber > 0 ? currentAskPriceAsNumber : undefined}
                   />

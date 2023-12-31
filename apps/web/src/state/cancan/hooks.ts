@@ -10,7 +10,7 @@ import shuffle from 'lodash/shuffle'
 import fromPairs from 'lodash/fromPairs'
 import { getProfile } from 'state/profile/helpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { decryptAllArticle, decryptArticle, decryptArticle2, getThumbnailNContent } from 'utils/cancan'
+import { decryptAllArticle, decryptArticle, decryptArticle2, decryptContent, getThumbnailNContent } from 'utils/cancan'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { ApiCollections, NftToken, NftAttribute, MarketEvent } from './types'
@@ -570,12 +570,25 @@ export const useGetTimeEstimates = (collectionId, item, marketPlaceHelper, optio
 }
 
 export const useGetThumbnailNContent = (nft) => {
-  const { data } = useSWRImmutable(['useGetThumbnailNContent1', nft?.id], async () => getThumbnailNContent(nft))
+  const { data, mutate } = useSWRImmutable(['useGetThumbnailNContent1', nft?.id], async () => getThumbnailNContent(nft))
   return {
+    refetch: mutate,
     mp4: data?.mp4,
     thumbnail: data?.thumbnail,
     isArticle: data?.isArticle,
     contentType: data?.contentType,
+  }
+}
+
+export const useGetDecryptedContent = (nft, thumbnail, mp4, ongoingSubscription, account) => {
+  const { data, mutate } = useSWRImmutable(
+    ['useGetDecryptedContent', nft?.id, thumbnail, mp4, ongoingSubscription, account],
+    async () => decryptContent(nft, thumbnail, mp4, ongoingSubscription, account),
+  )
+  return {
+    refetch: mutate,
+    mp4: data?.mp4,
+    thumbnail: data?.thumbnail,
   }
 }
 

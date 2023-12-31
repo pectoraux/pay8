@@ -464,12 +464,16 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
 
   const tabs = (
     <>
-      <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
-        {t('Protocol ID')}
-      </Text>
-      <Text mr="10px" fontSize="14px" color="primary" bold>
-        {parseInt(protocolId?.toString())}
-      </Text>
+      {parseInt(protocolId?.toString() ?? '0') ? (
+        <>
+          <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">
+            {t('Protocol ID')}
+          </Text>
+          <Text mr="10px" fontSize="14px" color="primary" bold>
+            {parseInt(protocolId?.toString() ?? '0')}
+          </Text>
+        </>
+      ) : null}
       {dueReceivables?.length ? (
         <>
           <Text fontSize="12px" mr="5px" color="textSubtle" textAlign="left">

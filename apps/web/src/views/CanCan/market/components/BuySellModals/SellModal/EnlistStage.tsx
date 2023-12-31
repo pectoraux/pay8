@@ -44,7 +44,6 @@ const EnlistStage: React.FC<any> = ({
 }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()

@@ -69,10 +69,16 @@ const NFTMedia: FC<any> = ({
 
   let _thumbnail = thumbnail
   let _mp4 = article
+  const { mp4: __mp4, thumbnail: __thumbnail } = useGetDecryptedContent(
+    nft,
+    thumbnail,
+    mp4,
+    ongoingSubscription,
+    account,
+  )
 
   if (!showThumbnail) {
     if (!isArticle) {
-      const { thumbnail: __thumbnail, mp4: __mp4 } = decryptContent(nft, thumbnail, mp4, ongoingSubscription, account)
       _thumbnail = __thumbnail
       _mp4 = __mp4
     }

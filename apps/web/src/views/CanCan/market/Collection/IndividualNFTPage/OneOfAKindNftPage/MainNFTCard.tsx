@@ -13,7 +13,7 @@ import {
   Heading,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useColor } from 'hooks/useColor'
@@ -38,6 +38,7 @@ import { cancanBaseUrl } from '../../../constants'
 import { Container } from '../shared/styles'
 import OptionFilters from '../../../components/BuySellModals/BuyModal/OptionFilters'
 import Timer from './Timer'
+import ContentCard from './ContentCard'
 
 interface MainNFTCardProps {
   nft: NftToken
@@ -74,7 +75,8 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
     priceInSecondaryCurrency,
   } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
   const { isMobile } = useMatchBreakpoints()
-  const { mp4, isArticle, contentType } = useGetThumbnailNContent(nft)
+  const { mp4, isArticle, contentType, refetch } = useGetThumbnailNContent(nft)
+  console.log('useGetThumbnailNContent====================>', mp4, isArticle, contentType, nft)
   // const { isArticle } = getThumbnailNContent(nft)
   const [bought, setBought] = useState(false)
   const contactChannels = collection?.contactChannels?.split(',') ?? []
@@ -103,6 +105,10 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
   )
   const { days: days2, hours: hours2, minutes: minutes2 } = getTimePeriods(diff2 ?? 0)
   const dropInDatePassed = !(days2 || hours2 || minutes2)
+
+  useEffect(() => {
+    refetch()
+  }, [account, refetch])
 
   const [onPresentBuyModal] = useModal(
     <BuyModal
@@ -147,6 +153,9 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
 
   return (
     <Card mb="40px">
+      {contentType === 'form' || contentType === 'video' ? (
+        <ContentCard collection={collection} nft={nft} mp4={mp4} />
+      ) : null}
       <CardBody>
         <Container flexDirection={['column-reverse', null, 'row']}>
           <Flex flex="2">
@@ -346,8 +355,6 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
           </StatBox>
         </MarketPageTitle>
       </CardBody>
-      {contentType === 'form' ? <RichText readOnly value={mp4} id="rte" /> : null}
-      {contentType === 'video' ? <RichText readOnly value={mp4} id="rte" /> : null}
     </Card>
   )
 }
