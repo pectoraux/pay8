@@ -120,7 +120,7 @@ const NFTMedia: FC<any> = ({
       }
     }
     // eslint-disable-next-line no-param-reassign
-    media = ongoingSubscription ? __mp4 : 'https://payswap.org/logo.png'
+    media = ongoingSubscription ? __mp4 : thumbnail
   }
   return <RoundedImage width={width} height={height} src={media ?? _thumbnail} alt={nft?.tokenId} as={as} {...props} />
 }
