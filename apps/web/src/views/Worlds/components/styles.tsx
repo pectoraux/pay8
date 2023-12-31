@@ -8,7 +8,11 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
   }
 `
 
-export const stagesWithApproveButton = [LockStage.CONFIRM_DEPOSIT, LockStage.CONFIRM_UPDATE_AUTOCHARGE]
+export const stagesWithApproveButton = [
+  LockStage.CONFIRM_DEPOSIT,
+  LockStage.CONFIRM_UPDATE_AUTOCHARGE,
+  LockStage.CONFIRM_SPONSOR_TAG,
+]
 
 export const stagesWithConfirmButton = [
   LockStage.CONFIRM_DELETE,
@@ -28,7 +32,6 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_PROFILE_ID,
   LockStage.CONFIRM_TRANSFER_RECEIVABLE_TO_NOTE,
   LockStage.CONFIRM_CLAIM_NOTE,
-  LockStage.CONFIRM_SPONSOR_TAG,
   LockStage.CONFIRM_UPDATE_TAG_REGISTRATION,
   LockStage.CONFIRM_UPDATE_CODE_INFO,
   LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA,

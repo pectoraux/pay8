@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/worlds'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import WebPagesModal from './WebPagesModal'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -99,6 +100,9 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Text>
         <Text color="primary" fontSize="14px">
           {t('Trading Fee')} {`->`} {parseInt(pool?.tradingFee) / 100}%
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Price Per Minutes')} {`->`} {getBalanceNumber(pool?.pricePerAttachMinutes)} USD
         </Text>
         {pool?.collection?.countries ? (
           <Text color="primary" fontSize="14px">

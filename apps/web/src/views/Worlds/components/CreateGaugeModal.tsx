@@ -642,6 +642,7 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_SPONSOR_TAG) {
         const amount = getDecimalAmount(new BigNumber(state.amountReceivable), currency.decimals)
         const args = [state.sponsor, state.world, amount.toString(), state.tag, state.message]
+        console.log('CONFIRM_SPONSOR_TAG===============>', args)
         return callWithGasPrice(worldHelperContract, 'sponsorTag', args).catch((err) =>
           console.log('CONFIRM_SPONSOR_TAG===============>', err),
         )
