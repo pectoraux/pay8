@@ -79,7 +79,7 @@ const NFTMedia: FC<any> = ({
 
   if (!showThumbnail) {
     if (!isArticle) {
-      _thumbnail = __thumbnail
+      _thumbnail = ongoingSubscription ? __thumbnail : _thumbnail
       _mp4 = __mp4
     }
     if (tokenURI?.metadataUrl) {
