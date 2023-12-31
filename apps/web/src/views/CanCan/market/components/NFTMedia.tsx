@@ -4,12 +4,12 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import RichTextEditor from 'components/RichText'
 import {
   useDecryptArticle2,
+  useGetDecryptedContent,
   useGetPaywallARP,
   useGetSubscriptionStatus,
   useGetThumbnailNContent,
 } from 'state/cancan/hooks'
 import styled from 'styled-components'
-import { decryptContent } from 'utils/cancan'
 import { useTranslation } from '@pancakeswap/localization'
 import Iframe from 'react-iframe'
 import { useRouter } from 'next/router'
@@ -49,7 +49,7 @@ const NFTMedia: FC<any> = ({
   const { mp4, thumbnail, isArticle, contentType } = useGetThumbnailNContent(nft)
   const paywallId = useRouter().query.paywallId as any
   const [article, setArticle] = useState(_article ?? '')
-  const { data: article2, status: status2, refetch } = useDecryptArticle2(chks, cursor)
+  const { data: article2 } = useDecryptArticle2(chks, cursor)
   const paywallARP = useGetPaywallARP(nft?.collection?.id ?? '')
   const { ongoingSubscription } = useGetSubscriptionStatus(
     paywallARP?.paywallAddress ?? '',
