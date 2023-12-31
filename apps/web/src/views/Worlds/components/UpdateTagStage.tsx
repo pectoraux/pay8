@@ -35,14 +35,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('World Profile ID')}
+          {t('World Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="protocolId"
-          value={state.protocolId}
-          placeholder={t('input world profile id')}
+          name="world"
+          value={state.world}
+          placeholder={t('input world address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -65,16 +65,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will update the media showing up in ads from the contract. Please read the documentation for more details.',
-            )}
+            {t('This will update a tag associated with your world. Please read the documentation for more details.')}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update Sponsor Media')}
+          {t('Update')}
         </Button>
       </Flex>
     </>

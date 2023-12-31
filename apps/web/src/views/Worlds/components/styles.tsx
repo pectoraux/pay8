@@ -15,6 +15,7 @@ export const stagesWithApproveButton = [
 ]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_UPDATE_TAG,
   LockStage.CONFIRM_DELETE,
   LockStage.CONFIRM_WITHDRAW,
   LockStage.CONFIRM_DELETE_PROTOCOL,
@@ -48,6 +49,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_TAG,
+  LockStage.CONFIRM_UPDATE_TAG,
   LockStage.DEPOSIT,
   LockStage.CONFIRM_DEPOSIT,
   LockStage.UPDATE_PROFILE_ID,

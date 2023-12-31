@@ -1,14 +1,18 @@
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
-import { useERC20 } from 'hooks/useContract'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useGetRequiresApproval } from 'state/valuepools/hooks'
+import { useERC20 } from 'hooks/useContract'
+import { getWorldHelperAddress } from 'utils/addressHelpers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
@@ -27,14 +31,38 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
+  const { chainId } = useActiveChainId()
   const variant = pool?.devaddr_ === account ? 'admin' : 'user'
   const currencyId = useMemo(() => currAccount?.token?.address, [currAccount])
   const rampCurrencyInput = useCurrency(currencyId)
-  const [currency, setCurrency] = useState(rampCurrencyInput)
+  const [currency, setCurrency] = useState(currencyId)
+  const stakingTokenContract = useERC20(currency?.address || '')
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal variant={variant} pool={pool} currency={currency} currAccount={currAccount} />,
   )
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  const { isRequired, refetch } = useGetRequiresApproval(stakingTokenContract, account, pool?.id)
+  const { isRequired: isRequired2, refetch: refetch2 } = useGetRequiresApproval(
+    stakingTokenContract,
+    account,
+    getWorldHelperAddress(),
+  )
+
+  useEffect(() => {
+    refetch()
+  }, [refetch, account, chainId])
+
+  useEffect(() => {
+    refetch2()
+  }, [refetch2, account, chainId])
+
+  const { handleApprove, pendingTx } = useApprovePool(stakingTokenContract, pool?.id, currency?.symbol, refetch)
+  const { handleApprove: handleApprove2, pendingTx: pendingTx2 } = useApprovePool(
+    stakingTokenContract,
+    getWorldHelperAddress(),
+    currency?.symbol,
+    refetch2,
+  )
 
   if (!account) {
     return (
@@ -46,6 +74,34 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
         </ActionTitles>
         <ActionContent>
           <ConnectWalletButton width="100%" />
+        </ActionContent>
+      </ActionContainer>
+    )
+  }
+
+  if (isRequired || isRequired2) {
+    return (
+      <ActionContainer>
+        <ActionTitles>
+          <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+            {t('Enable %va% pool', {
+              va: isRequired && isRequired2 ? 'World & WorldHelper' : isRequired ? 'World' : 'WorldHelper',
+            })}
+          </Text>
+        </ActionTitles>
+        <ActionContent>
+          {isRequired ? (
+            <Button width="100%" disabled={pendingTx} onClick={handleApprove} variant="secondary">
+              {t('Enable World')}
+            </Button>
+          ) : null}
+        </ActionContent>
+        <ActionContent>
+          {isRequired2 ? (
+            <Button width="100%" disabled={pendingTx2} onClick={handleApprove2} variant="secondary">
+              {t('Enable WorldHelper')}
+            </Button>
+          ) : null}
         </ActionContent>
       </ActionContainer>
     )

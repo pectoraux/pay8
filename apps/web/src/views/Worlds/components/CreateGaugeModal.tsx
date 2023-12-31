@@ -42,6 +42,7 @@ import UpdateMintPastWorldStage from './UpdateMintPastWorldStage'
 import UpdateMintPresentWorldStage from './UpdateMintPresentWorldStage'
 import UpdateUriStage from './UpdateUriStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
+import UpdateTagStage from './UpdateTagStage'
 import SponsorTagStage from './SponsorTagStage'
 import UpdateTagRegistrationStage from './UpdateTagRegistrationStage'
 import UpdateTransferToNoteReceivableStage from './UpdateTransferToNoteReceivableStage'
@@ -87,6 +88,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_WORLD_BOUNTY]: t('Update World Bounty'),
   [LockStage.MINT_PAST_WORLD]: t('Mint Past World'),
   [LockStage.MINT_PRESENT_WORLD]: t('Mint World'),
+  [LockStage.UPDATE_TAG]: t('Update Tag'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.UPDATE_DEV]: t('Update Contract Owner'),
@@ -95,6 +97,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
   [LockStage.CONFIRM_UPDATE_URI_GENERATOR]: t('Back'),
   [LockStage.CONFIRM_MINT_PRESENT_WORLD]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_TAG]: t('Back'),
   [LockStage.CONFIRM_MINT_PAST_WORLD]: t('Back'),
   [LockStage.CONFIRM_UPDATE_WORLD_BOUNTY]: t('Back'),
   [LockStage.CONFIRM_UPDATE_EXCLUDED_CONTENT]: t('Back'),
@@ -383,6 +386,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.MINT_PRESENT_WORLD:
         setStage(LockStage.ADMIN_SETTINGS)
         break
+      case LockStage.CONFIRM_UPDATE_TAG:
+        setStage(LockStage.UPDATE_TAG)
+        break
+      case LockStage.UPDATE_TAG:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.CONFIRM_UPDATE_URI_GENERATOR:
         setStage(LockStage.UPDATE_URI_GENERATOR)
         break
@@ -431,6 +440,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA)
+        break
+      case LockStage.UPDATE_TAG:
+        setStage(LockStage.CONFIRM_UPDATE_TAG)
         break
       case LockStage.CLAIM_TOKEN_SPONSOR_FUND:
         setStage(LockStage.CONFIRM_CLAIM_TOKEN_SPONSOR_FUND)
@@ -506,9 +518,7 @@ const CreateGaugeModal: React.FC<any> = ({
       }
     },
     onApprove: () => {
-      return callWithGasPrice(stakingTokenContract, 'approve', [worldContract.address, MaxUint256]).then(() =>
-        callWithGasPrice(stakingTokenContract, 'approve', [worldHelperContract.address, MaxUint256]),
-      )
+      return callWithGasPrice(stakingTokenContract, 'approve', [worldContract.address, MaxUint256])
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
@@ -660,6 +670,13 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [state.protocolId, state.tag]
         return callWithGasPrice(worldHelperContract, 'updateSponsorMedia', args).catch((err) =>
           console.log('CONFIRM_UPDATE_SPONSOR_MEDIA===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_TAG) {
+        const args = [state.world, state.tag]
+        console.log('CONFIRM_UPDATE_TAG===============>', args)
+        return callWithGasPrice(worldHelperContract, 'updateTags', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_TAG===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_CLAIM_TOKEN_SPONSOR_FUND) {
@@ -925,6 +942,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_SPONSOR_MEDIA)}>
             {t('UPDATE SPONSOR MEDIA')}
           </Button>
+          <Button mb="8px" variant="text" onClick={() => setStage(LockStage.UPDATE_TAG)}>
+            {t('UPDATE TAG')}
+          </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.CLAIM_TOKEN_SPONSOR_FUND)}>
             {t('CLAIM TOKEN SPONSOR FUND')}
           </Button>
@@ -1065,6 +1085,14 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.UPDATE_SPONSOR_MEDIA && (
         <UpdateSponsorMediaStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_TAG && (
+        <UpdateTagStage
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
