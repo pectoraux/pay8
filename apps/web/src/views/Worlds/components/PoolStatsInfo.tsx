@@ -42,7 +42,15 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.worldNFTs} />)
+  const [onPresentNFTs] = useModal(
+    <WebPagesModal
+      height="500px"
+      nfts={pool?.worldNFTs?.filter(
+        (nft) =>
+          nft?.owner?.toLowerCase() === account?.toLowerCase() || account?.toLowerCase() === pool?.owner?.toLowerCase(),
+      )}
+    />,
+  )
   const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.worldNotes} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
@@ -195,7 +203,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
                 </Button>
               ))
           : null}
-        {pool?.accounts?.length ? (
+        {pool?.accounts?.length &&
+        pool?.accounts.filter(
+          (protocol) =>
+            account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
+            account?.toLowerCase() === pool?.owner?.toLowerCase(),
+        )?.length ? (
           <Button
             key="clear-all"
             variant="text"
