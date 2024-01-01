@@ -174,7 +174,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
         {pool?.accounts?.length
           ? pool?.accounts
-              .filter((protocol) => account?.toLowerCase() === protocol?.owner?.toLowerCase())
+              .filter(
+                (protocol) =>
+                  account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
+                  account?.toLowerCase() === pool?.owner?.toLowerCase(),
+              )
               .map((balance) => (
                 <Button
                   key={balance.id}
