@@ -31,35 +31,6 @@ export const worldHelperABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    name: 'channels',
-    outputs: [
-      {
-        internalType: 'string',
-        name: 'message',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'active_period',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'claimPendingRevenue',
     outputs: [],
@@ -166,6 +137,35 @@ export const worldHelperABI = [
     name: 'detach',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_start',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_worldId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_tag',
+        type: 'string',
+      },
+    ],
+    name: 'getAllMedia',
+    outputs: [
+      {
+        internalType: 'string[]',
+        name: '_media',
+        type: 'string[]',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -342,6 +342,11 @@ export const worldHelperABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: 'active_period',
+        type: 'uint256',
+      },
+      {
         internalType: 'string',
         name: 'message',
         type: 'string',
@@ -405,7 +410,7 @@ export const worldHelperABI = [
       },
       {
         internalType: 'uint256',
-        name: '_amount',
+        name: '_numMinutes',
         type: 'uint256',
       },
       {
@@ -450,11 +455,6 @@ export const worldHelperABI = [
   },
   {
     inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
       {
         internalType: 'uint256',
         name: '',
@@ -548,6 +548,11 @@ export const worldHelperABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '_world',
+        type: 'address',
+      },
+      {
         internalType: 'string',
         name: '_tag',
         type: 'string',
@@ -559,6 +564,24 @@ export const worldHelperABI = [
       },
     ],
     name: 'updateTagRegistration',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_world',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: '_tag',
+        type: 'string',
+      },
+    ],
+    name: 'updateTags',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
