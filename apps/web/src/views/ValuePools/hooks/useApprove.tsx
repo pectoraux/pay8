@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { useTranslation } from '@pancakeswap/localization'
-import { useERC20, useVaultPoolContract } from 'hooks/useContract'
+import { useVaultPoolContract } from 'hooks/useContract'
 import { useToast } from '@pancakeswap/uikit'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -9,12 +9,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import useCakeApprove from 'hooks/useCakeApprove'
 import useCakeApprovalStatus from 'hooks/useCakeApprovalStatus'
 
-export const useApprovePool = (
-  lpContract: ReturnType<typeof useERC20>,
-  address,
-  earningTokenSymbol,
-  onSuccess = null,
-) => {
+export const useApprovePool = (lpContract, address, earningTokenSymbol, onSuccess = null) => {
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
