@@ -548,11 +548,6 @@ export const worldHelperABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_world',
-        type: 'address',
-      },
-      {
         internalType: 'string',
         name: '_tag',
         type: 'string',
