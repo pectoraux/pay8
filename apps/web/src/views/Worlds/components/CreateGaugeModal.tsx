@@ -655,9 +655,9 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_SPONSOR_TAG) {
         const args = [state.sponsor, state.world, state.numMinutes, state.tag, state.message]
         console.log('CONFIRM_SPONSOR_TAG===============>', args)
-        return callWithGasPrice(worldHelperContract, 'sponsorTag', args).catch((err) =>
-          console.log('CONFIRM_SPONSOR_TAG===============>', err),
-        )
+        return callWithGasPrice(stakingTokenContract, 'approve', [worldHelperContract.address, MaxUint256])
+          .then(() => callWithGasPrice(worldHelperContract, 'sponsorTag', args))
+          .catch((err) => console.log('CONFIRM_SPONSOR_TAG===============>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_CODE_INFO) {
         const args = [state.world, state.accounts?.split(','), state.rating]
