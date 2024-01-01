@@ -647,7 +647,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_TAG_REGISTRATION) {
-        const args = [state.tag, !!state.add]
+        const args = [state.world, state.tag, !!state.add]
         return callWithGasPrice(worldHelperContract, 'updateTagRegistration', args).catch((err) =>
           console.log('CONFIRM_UPDATE_TAG_REGISTRATION===============>', err),
         )
