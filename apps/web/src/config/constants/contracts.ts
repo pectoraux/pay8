@@ -560,23 +560,23 @@ export default {
     56: '0x',
   },
   worldFactory: {
-    4002: '0x68b89ff93246cfB1009DaCe151E08f8EFeF760D1',
+    4002: '0x4f5Bf9BC27f3d7499037632cc9C32F34Fd62d631',
     56: '0x',
   },
   worldNote: {
-    4002: '0x899e448B120cfd7d704bBc17220228439daa3a90',
+    4002: '0x8d509E5e652917F7Bf10f0790Fc7E511954BAC67',
     56: '0x',
   },
   worldHelper: {
-    4002: '0xF4b226b72aAfd603Dd50c19dCEc19442e025343d',
+    4002: '0xeDfE5559C25d00C4Eb679a8B951435bDe1B0e3B8',
     56: '0x',
   },
   worldHelper2: {
-    4002: '0x15902B9c3831380a143762c448d5DE2a67290B6A',
+    4002: '0xc23B20f5f28713D1F1a2807f6C563120254d1752',
     56: '0x',
   },
   worldHelper3: {
-    4002: '0x8801618760af75433A9c608CF33279ea6A5714EC',
+    4002: '0x848De1DA5b9516Cd808f0842ebc7522067eA0916',
     56: '0x',
   },
   ssi: {
