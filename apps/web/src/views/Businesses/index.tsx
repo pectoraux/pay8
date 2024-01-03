@@ -1,16 +1,6 @@
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Loading,
-} from '@pancakeswap/uikit'
+import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
+import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/businesses/hooks'
 import Page from 'components/Layout/Page'
@@ -25,7 +15,6 @@ import CreateBusinessModal from './components/CreateBusinessModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -35,9 +24,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
-  const inputCurency = useCurrency(DEFAULT_TFIAT)
-  const [currency, setCurrency] = useState(inputCurency)
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateBusinessModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
@@ -45,7 +31,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   usePoolsPageFetch()
@@ -67,7 +52,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Deploy My Businesss')}{' '}
+                  {t('Deploy My Business')}{' '}
                 </Text>
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />

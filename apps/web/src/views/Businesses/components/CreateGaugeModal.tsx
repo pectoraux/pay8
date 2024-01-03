@@ -1,7 +1,6 @@
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
-import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useERC20, useBusinessVoter, useBribeContract, useGaugeContract } from 'hooks/useContract'
@@ -16,6 +15,7 @@ import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shar
 import { useAppDispatch } from 'state'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { fetchBusinessGaugesAsync } from 'state/businesses'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
@@ -24,7 +24,6 @@ import UpdateBountyStage from './UpdateBountyStage'
 import BribesStage from './BribesStage'
 import WithdrawStage from './WithdrawStage'
 import DeletePitchStage from './DeletePitchStage'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),

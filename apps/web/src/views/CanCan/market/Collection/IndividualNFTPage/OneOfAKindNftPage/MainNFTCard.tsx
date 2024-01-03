@@ -310,7 +310,13 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
           </Flex>
           {!isArticle ? (
             <Flex flex="2" justifyContent={['center', null, 'flex-end']} alignItems="center" maxWidth={440}>
-              <NFTMedia key={nft.tokenId} nft={nft} showThumbnail={contentType !== 'img'} width={440} height={440} />
+              <NFTMedia
+                key={nft.tokenId}
+                nft={nft}
+                showThumbnail={contentType !== 'img' || !Number(nft.behindPaywall)}
+                width={440}
+                height={440}
+              />
             </Flex>
           ) : null}
         </Container>

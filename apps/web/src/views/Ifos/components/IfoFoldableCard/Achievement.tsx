@@ -90,6 +90,7 @@ const IfoAchievement: React.FC<any> = ({ ifo, data }) => {
   const { t } = useTranslation()
   const router = useRouter()
   const isFinishedPage = router.pathname.includes('history')
+  console.log('IfoAchievement===============>', data, ifo)
   return (
     <Container p="16px" pb="32px">
       <AchievementFlex isFinished={isFinishedPage} alignItems="flex-start" flex={1}>
@@ -103,7 +104,7 @@ const IfoAchievement: React.FC<any> = ({ ifo, data }) => {
               <InlinePrize alignItems="center" ml="8px">
                 <PrizeIcon color="textSubtle" width="16px" mr="4px" />
                 <Text lineHeight={1.2} color="textSubtle">
-                  #{data?.boughtProfileId}
+                  #{data?.boughtProfileId?.toString()}
                 </Text>
               </InlinePrize>
             </Text>

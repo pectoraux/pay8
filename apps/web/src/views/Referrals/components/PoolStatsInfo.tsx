@@ -1,4 +1,4 @@
-import { Flex, LinkExternal, Pool, ScanLink, Button } from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Pool, ScanLink, Button, Box, ReactMarkdown } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -30,6 +30,14 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
+      <Box>
+        <ReactMarkdown>{pool?.description}</ReactMarkdown>
+      </Box>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <LinkExternal color="failure" href={`/referrals/voting/${pool?.id}`} bold>
+          {t('OPEN VOTES')}
+        </LinkExternal>
+      </Flex>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
