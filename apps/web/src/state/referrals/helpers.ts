@@ -56,7 +56,7 @@ export const getReferralsData = async () => {
 
 export const fetchReferrals = async ({ chainId }) => {
   const gauges = await getReferralsData()
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const referrals = await Promise.all(
     gauges
       ?.map(async (gauge) => {
@@ -185,7 +185,7 @@ export const fetchReferrals = async ({ chainId }) => {
 }
 
 export const fetchReferralsUserData = async (account, pools, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const augmentedPools = await Promise.all(
     pools
       ?.map(async (pool) => {
@@ -264,4 +264,31 @@ export const fetchReferralsUserData = async (account, pools, chainId) => {
       .flat(),
   )
   return augmentedPools
+}
+
+export const getWeight = async (collectionId, vaAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [weights, totalWeight] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getReferralVoterAddress(),
+        abi: referralVoterABI,
+        functionName: 'weights',
+        args: [BigInt(collectionId), vaAddress],
+      },
+      {
+        address: getReferralVoterAddress(),
+        abi: referralVoterABI,
+        functionName: 'totalWeight',
+        args: [vaAddress],
+      },
+    ],
+  })
+  return {
+    weights: weights.result.toString(),
+    totalWeight: totalWeight.result.toString(),
+    weightPercent:
+      (parseFloat(weights.result.toString()) * 100) / Math.max(1, parseFloat(totalWeight.result.toString())),
+  }
 }

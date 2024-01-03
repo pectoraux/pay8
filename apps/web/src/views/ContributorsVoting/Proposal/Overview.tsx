@@ -10,6 +10,7 @@ import PageLoader from 'components/Loader/PageLoader'
 import { FetchStatus } from 'config/constants/types'
 import { getPitchSg } from 'state/contributorsvoting/helpers'
 import { Divider } from 'views/ARPs/components/styles'
+import RichTextEditor from 'components/RichText'
 import { ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
 import Details from './Details'
@@ -64,6 +65,13 @@ const Overview = () => {
               {pitch?.title}
             </Heading>
             <Box>
+              {pitch?.images?.length > 3 ? (
+                <RichTextEditor
+                  readOnly
+                  value={`<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${pitch?.images[3]}" height="467" width="830"></iframe>`}
+                  id="rte"
+                />
+              ) : null}
               <ReactMarkdown>{pitch.description}</ReactMarkdown>
             </Box>
             <Divider />

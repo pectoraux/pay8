@@ -54,13 +54,40 @@ export const getContributorsData = async () => {
   }
 }
 
+export const getWeight = async (collectionId, vaAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [weights, totalWeight] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getContributorsVoterAddress(),
+        abi: contributorsVoterABI,
+        functionName: 'weights',
+        args: [BigInt(collectionId), vaAddress],
+      },
+      {
+        address: getContributorsVoterAddress(),
+        abi: contributorsVoterABI,
+        functionName: 'totalWeight',
+        args: [vaAddress],
+      },
+    ],
+  })
+  return {
+    weights: weights.result.toString(),
+    totalWeight: totalWeight.result.toString(),
+    weightPercent:
+      (parseFloat(weights.result.toString()) * 100) / Math.max(1, parseFloat(totalWeight.result.toString())),
+  }
+}
+
 export const fetchContributors = async (chainId) => {
   const gauges = await getContributorsData()
   const businesses = await Promise.all(
     gauges
       .map(async (gauge) => {
         const collection = await getCollection(gauge.id)
-        const bscClient = publicClient({ chainId: chainId })
+        const bscClient = publicClient({ chainId })
         const [totalWeight, gaugeWeight, claimable, vestingTokenAddress] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -185,7 +212,7 @@ export const fetchContributors = async (chainId) => {
 }
 
 export const fetchContributorsUserData = async (account, pools, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const augmentedPools = await Promise.all(
     pools
       ?.map(async (pool) => {

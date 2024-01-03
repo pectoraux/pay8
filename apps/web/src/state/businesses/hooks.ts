@@ -1,12 +1,10 @@
 import { useEffect, useMemo } from 'react'
 import useSWR from 'swr'
-import { useRouter } from 'next/router'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { fetchBusinessGaugesAsync, fetchBusinessesUserDataAsync } from '.'
+import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import { fetchBusinessGaugesAsync } from '.'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -14,7 +12,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getTag, getWeight } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('businesses-tags', async () => getTag())
@@ -83,4 +81,15 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetWeight = (collectionId, vaAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetWeight-business', collectionId, vaAddress, chainId], async () =>
+    getWeight(collectionId, vaAddress, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
 }

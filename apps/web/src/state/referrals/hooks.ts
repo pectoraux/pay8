@@ -4,8 +4,8 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { fetchReferralGaugesAsync, fetchReferralsUserDataAsync } from '.'
+import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import { fetchReferralGaugesAsync } from '.'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -13,7 +13,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getTag, getWeight } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('referrals-tags', async () => getTag())
@@ -55,8 +55,6 @@ export const usePool = (sousId: number): { pool?: any; userDataLoaded: boolean }
 }
 
 export const usePoolsPageFetch = () => {
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
   useSponsorsConfigInitialize()
   useFetchPublicPoolsData()
   // useFastRefreshEffect(() => {
@@ -82,4 +80,15 @@ export const useFilters = () => {
 
 export const usePoolsWithFilterSelector = () => {
   return useSelector(poolsWithFilterSelector)
+}
+
+export const useGetWeight = (collectionId, vaAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetWeight-referral', collectionId, vaAddress, chainId], async () =>
+    getWeight(collectionId, vaAddress, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
 }

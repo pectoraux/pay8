@@ -1,11 +1,10 @@
 import { useEffect, useMemo } from 'react'
 import useSWR from 'swr'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { fetchContributorsGaugesAsync, fetchContributorsUserDataAsync } from '.'
+import { fetchContributorsGaugesAsync } from '.'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -13,7 +12,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getTag, getWeight } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('contributors-tags', async () => getTag())
@@ -82,4 +81,15 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetWeight = (collectionId, vaAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetWeight-contributor', collectionId, vaAddress, chainId], async () =>
+    getWeight(collectionId, vaAddress, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
 }

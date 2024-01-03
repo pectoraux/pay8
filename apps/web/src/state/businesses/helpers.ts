@@ -266,3 +266,30 @@ export const fetchBusinessesUserData = async (account, pools, chainId = 4002) =>
   )
   return augmentedPools
 }
+
+export const getWeight = async (collectionId, vaAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [weights, totalWeight] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getBusinessVoterAddress(),
+        abi: businessVoterABI,
+        functionName: 'weights',
+        args: [BigInt(collectionId), vaAddress],
+      },
+      {
+        address: getBusinessVoterAddress(),
+        abi: businessVoterABI,
+        functionName: 'totalWeight',
+        args: [vaAddress],
+      },
+    ],
+  })
+  return {
+    weights: weights.result.toString(),
+    totalWeight: totalWeight.result.toString(),
+    weightPercent:
+      (parseFloat(weights.result.toString()) * 100) / Math.max(1, parseFloat(totalWeight.result.toString())),
+  }
+}

@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useGetWeight } from 'state/contributors/hooks'
 
 interface TotalStakedCellProps {
   totalStakedBalance: number
@@ -16,7 +18,9 @@ const StyledCell = styled(Pool.BaseCell)`
 
 const TotalVotesCell: React.FC<any> = ({ pool }) => {
   const { t } = useTranslation()
-  const hasEarnings = new BigNumber(pool?.gaugeWeight).gt(0)
+  const { data } = useGetWeight(pool?.collection?.id, pool?.ve)
+  const hasEarnings = new BigNumber(data?.weights).gt(0)
+  console.log('useGetWeight============>', data)
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
@@ -28,18 +32,18 @@ const TotalVotesCell: React.FC<any> = ({ pool }) => {
             <Balance
               mt="4px"
               fontSize="16px"
-              value={hasEarnings ? pool?.gaugeWeight : 0}
+              value={hasEarnings ? getBalanceNumber(new BigNumber(data?.weights)) : 0}
               decimals={hasEarnings ? 5 : 1}
               color={hasEarnings ? 'primary' : 'textDisabled'}
             />
-            {pool?.weightPercent > 0 ? (
+            {data?.weightPercent > 0 ? (
               <Balance
                 display="inline"
                 fontSize="12px"
                 color="textSubtle"
                 decimals={2}
                 prefix="~"
-                value={pool?.weightPercent}
+                value={data?.weightPercent}
                 unit=" %"
               />
             ) : (
