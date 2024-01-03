@@ -9,6 +9,7 @@ import Container from 'components/Layout/Container'
 import PageLoader from 'components/Loader/PageLoader'
 import { FetchStatus } from 'config/constants/types'
 import { getPitchSg } from 'state/acceleratorvoting/helpers'
+import RichTextEditor from 'components/RichText'
 import { Divider } from 'views/ARPs/components/styles'
 import { ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
@@ -28,9 +29,10 @@ const Overview = () => {
     data: pitch,
     error,
     mutate: refetch,
-  } = useSWRImmutable(id ? ['accelerator-pitch', id] : null, () => getPitchSg(id))
+  } = useSWRImmutable(id ? ['accelerator-pitch1', id] : null, () => getPitchSg(id))
 
-  const accountVote = pitch?.votes?.find((vote) => vote.voter?.toLowerCase() === account?.toLowerCase())
+  console.log('getpitchsSg==============>', pitch)
+  const accountVote = pitch?.votes?.find((vote) => vote.owner?.toLowerCase() === account?.toLowerCase())
   const hasAccountVoted = account && !!accountVote
 
   console.log('getpitchsSg==============>', pitch, hasAccountVoted)
@@ -65,6 +67,13 @@ const Overview = () => {
               {pitch?.title}
             </Heading>
             <Box>
+              {pitch?.images?.length > 3 ? (
+                <RichTextEditor
+                  readOnly
+                  value={`<iframe class="ql-video" frameborder="0" allowfullscreen="true" src="${pitch?.images[3]}" height="467" width="830"></iframe>`}
+                  id="rte"
+                />
+              ) : null}
               <ReactMarkdown>{pitch.description}</ReactMarkdown>
             </Box>
             <Divider />

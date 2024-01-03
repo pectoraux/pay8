@@ -36,7 +36,10 @@ export const getPitchSg = async (pitchId: string) => {
             },
           ],
         })
-        return { ...vote, voter }
+        return {
+          ...vote,
+          voter: voter.result,
+        }
       }),
     )
     return {

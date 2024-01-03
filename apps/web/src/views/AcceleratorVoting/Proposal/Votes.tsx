@@ -31,7 +31,7 @@ const Votes: React.FC<any> = ({ votes, totalVotes }) => {
   const handleClick = () => {
     setShowAll(!showAll)
   }
-
+  console.log('displayVotes==================>', displayVotes)
   return (
     <Card>
       <CardHeader>
