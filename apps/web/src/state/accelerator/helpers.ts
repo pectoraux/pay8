@@ -9,7 +9,7 @@ import { acceleratorVoterABI } from 'config/abi/acceleratorvoter'
 import { vestingABI } from 'config/abi/vesting'
 import { gaugeABI } from 'config/abi/gauge'
 import { bribeABI } from 'config/abi/bribe'
-import { getProfileAddress } from 'utils/addressHelpers'
+import { getAcceleratorVoterAddress, getProfileAddress } from 'utils/addressHelpers'
 import { profileABI } from 'config/abi/profile'
 import { getCollection } from 'state/cancan/helpers'
 
@@ -55,6 +55,32 @@ export const getAcceleratorData = async () => {
   }
 }
 
+export const getWeight = async (collectionId, vaAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [weights, totalWeight] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getAcceleratorVoterAddress(),
+        abi: acceleratorVoterABI,
+        functionName: 'weights',
+        args: [BigInt(collectionId), vaAddress],
+      },
+      {
+        address: getAcceleratorVoterAddress(),
+        abi: acceleratorVoterABI,
+        functionName: 'totalWeight',
+        args: [vaAddress],
+      },
+    ],
+  })
+  return {
+    weights: weights.result.toString(),
+    totalWeight: totalWeight.result.toString(),
+    weightPercent: parseFloat(weights.result.toString()) / parseFloat(totalWeight.result.toString()),
+  }
+}
+
 export const fetchAccelerator = async ({ chainId }) => {
   const acceleratorVoterContract = getAcceleratorVoterContract()
   const gauges = await getAcceleratorData()
@@ -62,7 +88,7 @@ export const fetchAccelerator = async ({ chainId }) => {
     gauges
       .map(async (gauge) => {
         const collection = await getCollection(gauge.id)
-        const bscClient = publicClient({ chainId: chainId })
+        const bscClient = publicClient({ chainId })
         const [totalWeight, gaugeWeight, claimable, vestingTokenAddress] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -181,7 +207,7 @@ export const fetchAccelerator = async ({ chainId }) => {
 }
 
 export const fetchAcceleratorUserData = async (account, pools, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const augmentedPools = await Promise.all(
     pools
       ?.map(async (pool) => {

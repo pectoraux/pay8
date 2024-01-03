@@ -4,8 +4,8 @@ import { GRAPH_API_ACC_VOTER } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import _chunk from 'lodash/chunk'
 import { publicClient } from 'utils/wagmi'
-import { pitchFields } from './queries'
 import { vestingABI } from 'config/abi/vesting'
+import { pitchFields } from './queries'
 
 export const getPitchSg = async (pitchId: string) => {
   try {

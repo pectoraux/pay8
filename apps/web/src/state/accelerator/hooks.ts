@@ -14,7 +14,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getTag, getWeight } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('acc-tags', async () => getTag())
@@ -73,8 +73,6 @@ export const usePool = (sousId): { pool?: any; userDataLoaded: boolean } => {
 }
 
 export const usePoolsPageFetch = () => {
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
   useAcceleratorConfigInitialize()
   useFetchPublicPoolsData()
   // useSlowRefreshEffect(() => {
@@ -100,4 +98,15 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetWeight = (collectionId, vaAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetWeight', collectionId, vaAddress, chainId], async () =>
+    getWeight(collectionId, vaAddress, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
 }
