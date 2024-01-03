@@ -77,7 +77,8 @@ export const getWeight = async (collectionId, vaAddress, chainId) => {
   return {
     weights: weights.result.toString(),
     totalWeight: totalWeight.result.toString(),
-    weightPercent: parseFloat(weights.result.toString()) / Math.max(1, parseFloat(totalWeight.result.toString())),
+    weightPercent:
+      (parseFloat(weights.result.toString()) * 100) / Math.max(1, parseFloat(totalWeight.result.toString())),
   }
 }
 
