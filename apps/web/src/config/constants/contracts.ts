@@ -516,7 +516,7 @@ export default {
     56: '0x',
   },
   contributorsVoter: {
-    4002: '0xdA228f491E1e658B98cADf7418904F632383297e',
+    4002: '0xfB04a7B676D56a628c177CE56a1B40CDc2A70011',
     56: '0x',
   },
   affiliatesVoter: {
