@@ -233,19 +233,19 @@ export default {
   },
   rampHelper: {
     56: '0x',
-    4002: '0x23Be44620Fa12769260E02C7060193e1Df86D260',
+    4002: '0x7163C18B91b99008931499b5F3990Db2dB71aa9b',
   },
   rampHelper2: {
     56: '0x',
-    4002: '0xfDcF4202C251600Ce957080b0986Fe2e5311c4AF',
+    4002: '0xA7D1c88d50B5f31cECf724be1306397e4E0B876d',
   },
   rampFactory: {
     56: '0x',
-    4002: '0x5F578d98eA02e6F637123780436Bd2A4D185F868',
+    4002: '0xF9Eb83D872356d58a57630039E3Cec932F3f5f51',
   },
   rampAds: {
     56: '0x',
-    4002: '0xdBae46e2b19A39300139dBC6437678A2a3e12347',
+    4002: '0x93570729A733736FD06D511cD0A878e11c0856B2',
   },
   extraTokenFactory: {
     56: '0x',
@@ -261,35 +261,35 @@ export default {
   },
   ARPNote: {
     56: '0x',
-    4002: '0xEFD289a07972Fa58FF0F9b4d37a0A9EFd2566550',
+    4002: '0xA80005eE4763d24D5bBd800B1E65D87508157C71',
   },
   ARPHelper: {
     56: '0x',
-    4002: '0x18988deb80151Cd52aB68f203c074B1BCAaD32e9',
+    4002: '0xc96696332D29fecb302BECD1B4e32eada684F3FA',
   },
   ARPMinter: {
     56: '0x',
-    4002: '0x700532cc53282cD577f2299ce60f15Da11308a25',
+    4002: '0x366e179794a12041E95AbdEFA5a1dCfAe8E9Bb20',
   },
   ARPFactory: {
     56: '0x',
-    4002: '0xB43FfE737042aD45191eb8d4e397c631D66a23FD',
+    4002: '0xC6B2e9ea0864a3A3171D2c303ed834471c82D1eb',
   },
   BILLNote: {
     56: '0x',
-    4002: '0x729124dBeC963b743dfFC8aAA29236d95F1C7a55',
+    4002: '0x25702f0130bB427e7bcb2722D3C05729D7b3D6Ce',
   },
   BILLHelper: {
     56: '0x',
-    4002: '0xbdb2ec1b244ACa734A5dA0ce7cd89d447319a2fA',
+    4002: '0x5FFaB566e027492997f6A3e9A4CA1D7bcA63E315',
   },
   BILLMinter: {
     56: '0x',
-    4002: '0x90256b159FC802c497b6C2BF7799DE75eAD936F2',
+    4002: '0xB86179Ca4a75c5430d62280c319508B9F1Fc8642',
   },
   BILLFactory: {
     56: '0x',
-    4002: '0xE697b2D4135b14216DB09e379f50E93dd281fD16',
+    4002: '0x1CCc9309F72ca90b63071f64b053214a4953960a',
   },
   lottery: {
     56: '0x',
@@ -309,19 +309,19 @@ export default {
   },
   gameFactory: {
     56: '0x',
-    4002: '0xFefe9BDfbc270Ab756Cd3A407c6Af87d9D4BF99f',
+    4002: '0xe1624A26c6faC1db81c26E9B6AED4Ce86057f6C2',
   },
   gameMinter: {
     56: '0x',
-    4002: '0x6D6322884Fc2FB9621bB5447Eb0fcAB257012846',
+    4002: '0xF05d6037027e45C76aC339114e8cF7C07851641F',
   },
   gameHelper: {
     56: '0x',
-    4002: '0x7d3AFD77572DE66432FD02Ef1C58F6eeD2e12213',
+    4002: '0x1B3a841Bfc8F7726E47BCfe17CDcA2Ed13662A80',
   },
   gameHelper2: {
     56: '0x',
-    4002: '0x3d606442837d05d30350b3E55662FF93558A9426',
+    4002: '0x6501C1dd23b4F9B1B6311A94D48f810Ba53CA22C',
   },
   paywallARPHelper: {
     56: '0x',
@@ -436,15 +436,15 @@ export default {
     56: '0x',
   },
   bettingHelper: {
-    4002: '0x35E19a2Ff5221468b0D0a1F2dae359942c406eAd',
+    4002: '0xD1a149c8eF80c41927b80756D1b7E9dB56d26e1F',
     56: '0x',
   },
   bettingMinter: {
-    4002: '0xB50184eA3204193901F7b8531A4D9B94536699E7',
+    4002: '0x2A9768883eB091E2c1fdDB8Bf4D9d243FF487D6A',
     56: '0x',
   },
   bettingFactory: {
-    4002: '0x3276211F6458A665c15548766345b31c95F23B95',
+    4002: '0xaF9BC1531331d538428bf951a8B4DFCE3CF8C41c',
     56: '0x',
   },
   trustbounties: {
@@ -524,19 +524,19 @@ export default {
     56: '0x',
   },
   auditorNote: {
-    4002: '0x232DcDe2D2c26C7EC2c0bfc755A2A540E015ABBf',
+    4002: '0xdaF12B05685d5A4D8449e54939F6F9E8f19D4A4f',
     56: '0x',
   },
   auditorHelper: {
-    4002: '0x00852F6b102E9685E47abf43CB65c14c8bC13ECb',
+    4002: '0xD3855fD1b3f467cb7ED91caA037D4f7b6529698b',
     56: '0x',
   },
   auditorHelper2: {
-    4002: '0x4Bd9Fd85E27a2aD3b823f891bF22450c0eE9EB6e',
+    4002: '0x8c2479569146d74058A997b7Ed16CA74c9578920',
     56: '0x',
   },
   auditorFactory: {
-    4002: '0xaC3Ab517d81EE6C1169a76724DDE2fE1AE32177b',
+    4002: '0x13eE93a80Fe5B9934a3C079a52Dd36566FAD3061',
     56: '0x',
   },
   sponsorHelper: {
