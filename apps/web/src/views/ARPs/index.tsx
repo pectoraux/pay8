@@ -1,4 +1,5 @@
 import { useAccount } from 'wagmi'
+import styled from 'styled-components'
 import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/arps/hooks'
@@ -11,8 +12,6 @@ import CreateARPModal from './components/CreateARPModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
-import { useRouter } from 'next/router'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -29,7 +28,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   usePoolsPageFetch()

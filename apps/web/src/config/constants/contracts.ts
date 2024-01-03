@@ -512,7 +512,7 @@ export default {
     56: '0x',
   },
   acceleratorVoter: {
-    4002: '0x84779D6bCf31E90DE81Ac4155EFA9A725a60B7f9',
+    4002: '0xcB6aE596798c65ca73fea10D479ec97F8E076744',
     56: '0x',
   },
   contributorsVoter: {
