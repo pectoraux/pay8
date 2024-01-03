@@ -500,7 +500,7 @@ export default {
     56: '0x',
   },
   referralBribeFactory: {
-    4002: '0x3D262AD24C4ff3F8598367a23bA5288Df3581da2',
+    4002: '0x287aa029f946347c43209a65286Fa010875c1bDe',
     56: '0x',
   },
   referralVoter: {
@@ -512,7 +512,7 @@ export default {
     56: '0x',
   },
   acceleratorVoter: {
-    4002: '0xcB6aE596798c65ca73fea10D479ec97F8E076744',
+    4002: '0xc273b264C148E95Fcc66f143eFf1F52710ebB617',
     56: '0x',
   },
   contributorsVoter: {
