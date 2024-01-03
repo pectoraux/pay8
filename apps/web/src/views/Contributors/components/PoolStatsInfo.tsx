@@ -1,18 +1,4 @@
-import {
-  Flex,
-  LinkExternal,
-  Pool,
-  ScanLink,
-  Button,
-  Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
-} from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Pool, ScanLink, Button } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -23,6 +9,7 @@ import { useCurrBribe } from 'state/contributors/hooks'
 import { useAppDispatch } from 'state'
 import { setCurrPoolData } from 'state/contributors'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
+import { getContributorsVoterAddress } from 'utils/addressHelpers'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -44,7 +31,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   return (
     <>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal color="failure" href={`/contributor/voting/${pool?.id}`} bold>
+        <LinkExternal color="failure" href={`/contributors/voting/${pool?.id}`} bold>
           {t('OPEN PITCH')}
         </LinkExternal>
       </Flex>
@@ -62,15 +49,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.rampAddress && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.rampAddress, 'address', chainId)} bold={false} small>
-            {t('View Contract')}
-          </ScanLink>
-        </Flex>
-      )}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
+        <ScanLink href={getBlockExploreLink(getContributorsVoterAddress(), 'address', chainId)} bold={false} small>
+          {t('View Contract')}
+        </ScanLink>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <LinkExternal href={`/cancan/collections/${pool?.collection?.id}`} bold={false} small>
           {t('See Admin Channel')}
         </LinkExternal>
       </Flex>
