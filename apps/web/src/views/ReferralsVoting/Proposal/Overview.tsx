@@ -7,15 +7,12 @@ import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import PageLoader from 'components/Loader/PageLoader'
-import { FetchStatus } from 'config/constants/types'
 import { getCollectionSg } from 'state/referralsvoting/helpers'
 import { Divider } from 'views/ARPs/components/styles'
-import { isCoreProposal } from '../helpers'
-import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
+import { ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
 import Details from './Details'
 import Results from './Results'
-import Vote from './Vote'
 import Votes from './Votes'
 
 const Overview = () => {
@@ -30,7 +27,7 @@ const Overview = () => {
     mutate: refetch,
   } = useSWRImmutable(id ? ['referral-gauge', id] : null, () => getCollectionSg(id))
 
-  const accountVote = referral?.votes?.find((vote) => vote.voter?.toLowerCase() === account?.toLowerCase())
+  const accountVote = referral?.votes?.find((vote) => vote.owner?.toLowerCase() === account?.toLowerCase())
   const hasAccountVoted = account && !!accountVote
 
   console.log('getCollectionSg==============>', referral, hasAccountVoted)
