@@ -27,7 +27,7 @@ const Overview = () => {
     mutate: refetch,
   } = useSWRImmutable(id ? ['referral-gauge', id] : null, () => getCollectionSg(id))
 
-  const accountVote = referral?.votes?.find((vote) => vote.owner?.toLowerCase() === account?.toLowerCase())
+  const accountVote = referral?.votes?.find((vote) => vote.voter?.toLowerCase() === account?.toLowerCase())
   const hasAccountVoted = account && !!accountVote
 
   console.log('getCollectionSg==============>', referral, hasAccountVoted)
@@ -69,7 +69,7 @@ const Overview = () => {
         </Box>
         <Box position="sticky" top="60px">
           <Details proposal={referral} onSuccess={refetch} />
-          <Results referral={referral} accountVote={accountVote} hasAccountVoted={hasAccountVoted} />
+          <Results referral={referral} hasAccountVoted={hasAccountVoted} />
         </Box>
       </Layout>
     </Container>

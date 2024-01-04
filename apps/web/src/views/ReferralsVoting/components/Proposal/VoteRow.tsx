@@ -3,6 +3,7 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
 import { Vote } from 'state/types'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { IPFS_GATEWAY } from '../../config'
 import TextEllipsis from '../TextEllipsis'
 import Row, { AddressColumn, ChoiceColumn, VotingPowerColumn } from './Row'
@@ -16,12 +17,7 @@ const VoteRow: React.FC<any> = ({ vote, isVoter }) => {
   const { t } = useTranslation()
   const hasVotingPower = !!vote.votingPower
 
-  const votingPower = hasVotingPower
-    ? parseFloat(vote.votingPower).toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 3,
-      })
-    : '--'
+  const votingPower = hasVotingPower ? getBalanceNumber(vote.votingPower) : '--'
 
   return (
     <Row>

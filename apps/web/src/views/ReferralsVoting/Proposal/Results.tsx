@@ -21,10 +21,9 @@ interface ResultsProps {
   // votesLoadingStatus: FetchStatus
 }
 
-const Results: React.FC<any> = ({ referral, accountVote, hasAccountVoted }) => {
+const Results: React.FC<any> = ({ referral, hasAccountVoted }) => {
   const { t } = useTranslation()
-  const totalVotes = referral?.votes?.length ? referral.votes.reduce((ac, v) => ac + parseInt(v.votingPower), 0) : 0
-  const progress = (accountVote?.votingPower * 100) / Math.max(totalVotes, 1) || 0
+  const progress = 100
 
   return (
     <Card>
