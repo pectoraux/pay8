@@ -484,7 +484,7 @@ export default {
     56: '0x',
   },
   businessVoter: {
-    4002: '0x96CfCE07d103EF2299Eee439aBfB5a1970648635',
+    4002: '0x1Dd073365BCF1e4060E8F90730DE96aB5966be89',
     56: '0x',
   },
   businessMinter: {
@@ -492,7 +492,7 @@ export default {
     56: '0x',
   },
   businessBribeFactory: {
-    4002: '0xee1388EeFb6F9206836eB6C64F12bFBAEa14d9Cd',
+    4002: '0x66290cB912Ea1E7cFF9eC48FD9E3CE9874a2C67d',
     56: '0x',
   },
   businessGaugeFactory: {
