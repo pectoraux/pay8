@@ -10,10 +10,8 @@ import {
   Tag,
   CheckmarkCircleIcon,
 } from '@pancakeswap/uikit'
-import { Vote } from 'state/types'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { FetchStatus } from 'config/constants/types'
 import TextEllipsis from '../components/TextEllipsis'
 
 // interface ResultsProps {

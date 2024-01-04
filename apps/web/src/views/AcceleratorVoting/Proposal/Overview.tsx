@@ -32,7 +32,7 @@ const Overview = () => {
   } = useSWRImmutable(id ? ['accelerator-pitch1', id] : null, () => getPitchSg(id))
 
   console.log('getpitchsSg==============>', pitch)
-  const accountVote = pitch?.votes?.find((vote) => vote.owner?.toLowerCase() === account?.toLowerCase())
+  const accountVote = pitch?.votes?.find((vote) => vote.voter?.toLowerCase() === account?.toLowerCase())
   const hasAccountVoted = account && !!accountVote
 
   console.log('getpitchsSg==============>', pitch, hasAccountVoted)
