@@ -3,7 +3,13 @@ import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useReferralVoter, useBribeContract, useGaugeContract } from 'hooks/useContract'
+import {
+  useERC20,
+  useReferralVoter,
+  useBribeContract,
+  useGaugeContract,
+  useBusinessMinterContract,
+} from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
@@ -57,11 +63,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const { chainId } = useActiveChainId()
   const { callWithGasPrice } = useCallWithGasPrice()
   const referralVoterContract = useReferralVoter()
+  const businessMinterContract = useBusinessMinterContract()
   const bribeTokenContract = useERC20(currency?.address || '')
   const bribeContract = useBribeContract(pool.bribe || '')
   const gaugeContract = useGaugeContract(pool.gauge || '')
   const [lockedAmount, setLockedAmount] = useState('')
   const [currBribeAddress, setCurrBribeAddress] = useState('')
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   console.log('pppoool================>', pool)
 
   const goBack = () => {
@@ -156,9 +164,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       }
       if (stage === LockStage.CONFIRM_DISTRIBUTE) {
         console.log('CONFIRM_DISTRIBUTE==================>', [pool.gauge, pool.ve])
-        return callWithGasPrice(referralVoterContract, 'distribute', [pool.gauge, pool.ve]).catch((err) =>
-          console.log('CONFIRM_DISTRIBUTE==================>', err),
-        )
+        return callWithGasPrice(businessMinterContract, 'update_period', [])
+          .then(() => delay(5000))
+          .then(() => callWithGasPrice(referralVoterContract, 'distribute', [pool.gauge, pool.ve]))
+          .catch((err) => console.log('CONFIRM_DISTRIBUTE==================>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_GAUGE) {
         console.log('CONFIRM_UPDATE_GAUGE==================>', [pool.gauge, pool.ve])

@@ -141,6 +141,7 @@ import {
   getLotteryRandomNumberGeneratorContract,
   getLotteryHelperContract,
   getNFTSVGContract,
+  getBusinessMinterContract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
@@ -510,7 +511,7 @@ export const useRampAds = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) =>
 
 export const useRampContract = (rampAddress: Address) => {
   const { chainId } = useActiveChainId()
-  let { data: signer } = useWalletClient()
+  const { data: signer } = useWalletClient()
   return useMemo(() => rampAddress && getRampContract(rampAddress, signer, chainId), [rampAddress, signer, chainId])
 }
 
@@ -733,7 +734,7 @@ export const useBettingContract = (bettingAddress: Address) => {
 
 export const useCardContract = () => {
   const { chainId } = useActiveChainId()
-  let { data: signer } = useWalletClient()
+  const { data: signer } = useWalletClient()
   return useMemo(() => getCardContract(signer, chainId), [signer, chainId])
 }
 
@@ -945,6 +946,12 @@ export const useContributorsContract = ({ chainId: chainId_ }: { chainId?: Chain
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(() => getContributorsVoterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useBusinessMinterContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getBusinessMinterContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }
 
 export const useSponsorHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {

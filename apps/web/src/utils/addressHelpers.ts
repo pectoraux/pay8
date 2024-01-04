@@ -249,6 +249,10 @@ export const getContributorsVoterAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.contributorsVoter, chainId)
 }
 
+export const getBusinessMinterAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.businessMinter, chainId)
+}
+
 export const getAcceleratorVoterAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.acceleratorVoter, chainId)
 }

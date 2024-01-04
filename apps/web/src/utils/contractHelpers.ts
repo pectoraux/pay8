@@ -116,6 +116,7 @@ import {
   getLotteryRandomNumberGeneratorAddress,
   getProfileAddress,
   getNFTSVGAddress,
+  getBusinessMinterAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -732,6 +733,15 @@ export const getContributorsVoterContract = (signer?: WalletClient, chainId?: nu
   return getContract({
     abi: contributorsVoterABI,
     address: getContributorsVoterAddress(),
+    signer,
+    chainId,
+  })
+}
+
+export const getBusinessMinterContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: businessMinterABI,
+    address: getBusinessMinterAddress(),
     signer,
     chainId,
   })
