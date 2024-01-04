@@ -500,11 +500,11 @@ export default {
     56: '0x',
   },
   referralBribeFactory: {
-    4002: '0x287aa029f946347c43209a65286Fa010875c1bDe',
+    4002: '0xc2Bdff16fa13bBffFEB42602cC15d2a514a413eD',
     56: '0x',
   },
   referralVoter: {
-    4002: '0xC091c5A5b752Ef5fbc9549D692E05e9236164bAF',
+    4002: '0xBbf4aaF74Ea4a03620F3987059405d85ad6870Ef',
     56: '0x',
   },
   contractAddress: {
