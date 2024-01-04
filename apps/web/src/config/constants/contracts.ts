@@ -484,7 +484,7 @@ export default {
     56: '0x',
   },
   businessVoter: {
-    4002: '0x5E336B9Fa2F857e27620a34bAb1A3844F37A5576',
+    4002: '0x96CfCE07d103EF2299Eee439aBfB5a1970648635',
     56: '0x',
   },
   businessMinter: {
