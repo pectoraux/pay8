@@ -83,7 +83,7 @@ export const fetchReferrals = async ({ chainId }) => {
             },
           ],
         })
-        const [gaugeEarned, vestingTokenName, vestingTokenDecimals, vestingTokenSymbol, tokensLength] =
+        const [gaugeEarned, vestingTokenName, vestingTokenDecimals, vestingTokenSymbol, tokensLength, _balanceOf] =
           await bscClient.multicall({
             allowFailure: true,
             contracts: [
@@ -112,6 +112,12 @@ export const fetchReferrals = async ({ chainId }) => {
                 address: gauge.bribe,
                 abi: bribeABI,
                 functionName: 'rewardsListLength',
+              },
+              {
+                address: vestingTokenAddress.result,
+                abi: erc20ABI,
+                functionName: 'balanceOf',
+                args: [gauge.gauge],
               },
             ],
           })
@@ -176,6 +182,7 @@ export const fetchReferrals = async ({ chainId }) => {
           gaugeWeight: gaugeWeight.result.toString(),
           weightPercent: weightPercent === 'NaN' ? '0' : weightPercent,
           gaugeEarned: gaugeEarned.result.toString(),
+          balanceOf: _balanceOf.result.toString(),
           ...gauge,
         }
       })

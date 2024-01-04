@@ -39,7 +39,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalValueCell labelText={t('Claimable')} amount={pool?.claimable} symbol={pool?.vestingTokenSymbol || ''} />
       <TotalValueCell
         labelText={t('Rewards Claimed')}
-        amount={getBalanceNumber(pool?.gaugeEarned)}
+        amount={getBalanceNumber(pool?.balanceOf)}
         symbol={pool?.vestingTokenSymbol || ''}
       />
       <TotalVotesCell pool={pool} />

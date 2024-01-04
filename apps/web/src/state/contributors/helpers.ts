@@ -116,32 +116,39 @@ export const fetchContributors = async (chainId) => {
             },
           ],
         })
-        const [gaugeEarned, vestingTokenSymbol, vestingTokenDecimals, tokensLength] = await bscClient.multicall({
-          allowFailure: true,
-          contracts: [
-            {
-              address: gauge.gauge,
-              abi: gaugeABI,
-              functionName: 'totalSupply',
-              args: [vestingTokenAddress.result],
-            },
-            {
-              address: vestingTokenAddress.result,
-              abi: erc20ABI,
-              functionName: 'symbol',
-            },
-            {
-              address: vestingTokenAddress.result,
-              abi: erc20ABI,
-              functionName: 'decimals',
-            },
-            {
-              address: gauge.bribe,
-              abi: bribeABI,
-              functionName: 'rewardsListLength',
-            },
-          ],
-        })
+        const [gaugeEarned, vestingTokenSymbol, vestingTokenDecimals, tokensLength, _balanceOf] =
+          await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: gauge.gauge,
+                abi: gaugeABI,
+                functionName: 'totalSupply',
+                args: [vestingTokenAddress.result],
+              },
+              {
+                address: vestingTokenAddress.result,
+                abi: erc20ABI,
+                functionName: 'symbol',
+              },
+              {
+                address: vestingTokenAddress.result,
+                abi: erc20ABI,
+                functionName: 'decimals',
+              },
+              {
+                address: gauge.bribe,
+                abi: bribeABI,
+                functionName: 'rewardsListLength',
+              },
+              {
+                address: vestingTokenAddress.result,
+                abi: erc20ABI,
+                functionName: 'balanceOf',
+                args: [gauge.gauge],
+              },
+            ],
+          })
         const arry = Array.from({ length: Number(tokensLength.result) }, (v, i) => i)
         const bribes = await Promise.all(
           arry.map(async (bIdx) => {
@@ -203,6 +210,7 @@ export const fetchContributors = async (chainId) => {
           gaugeWeight: gaugeWeight.result.toString(),
           weightPercent: weightPercent === 'NaN' ? '0' : weightPercent,
           gaugeEarned: gaugeEarned.result.toString(),
+          balanceOf: _balanceOf.result.toString(),
           ...gauge,
         }
       })
