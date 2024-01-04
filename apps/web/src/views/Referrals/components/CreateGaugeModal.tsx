@@ -1,7 +1,6 @@
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
-import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useERC20, useReferralVoter, useBribeContract, useGaugeContract } from 'hooks/useContract'
@@ -16,6 +15,7 @@ import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shar
 import { useAppDispatch } from 'state'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { fetchReferralGaugesAsync } from 'state/referrals'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
@@ -24,7 +24,6 @@ import UpdateBountyStage from './UpdateBountyStage'
 import BribesStage from './BribesStage'
 import WithdrawStage from './WithdrawStage'
 import DeletePitchStage from './DeletePitchStage'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -49,7 +48,6 @@ interface BuyModalProps extends InjectedModalProps {
 const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onDismiss }) => {
   const [stage, setStage] = useState(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
-  const [votes, setVotes] = useState('')
   const [tokenId, setTokenId] = useState('')
   const { account } = useWeb3React()
   const { t } = useTranslation()
@@ -57,18 +55,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const { toastSuccess } = useToast()
   const referralVoterContract = useReferralVoter()
   const bribeTokenContract = useERC20(currency?.address || '')
   const bribeContract = useBribeContract(pool.bribe || '')
   const gaugeContract = useGaugeContract(pool.gauge || '')
   const [lockedAmount, setLockedAmount] = useState('')
-  const [original, setOriginal] = useState('')
-  const [description, setDescription] = useState<any>('')
-  const [title, setTitle] = useState('')
-  const [thumbnail, setThumbnail] = useState('')
   const [currBribeAddress, setCurrBribeAddress] = useState('')
   console.log('pppoool================>', pool)
+
   const goBack = () => {
     switch (stage) {
       case LockStage.UPDATE_BRIBES:
@@ -157,9 +151,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         )
       }
       if (stage === LockStage.CONFIRM_DISTRIBUTE) {
-        console.log('CONFIRM_DISTRIBUTE==================>', [[pool.gauge], [[currency.address]]])
-        return callWithGasPrice(referralVoterContract, 'claimRewards', [[pool.gauge], [[currency.address]]]).catch(
-          (err) => console.log('CONFIRM_DISTRIBUTE==================>', err),
+        console.log('CONFIRM_DISTRIBUTE==================>', [pool.gauge, pool.ve])
+        return callWithGasPrice(referralVoterContract, 'distribute', [pool.gauge, pool.ve]).catch((err) =>
+          console.log('CONFIRM_DISTRIBUTE==================>', err),
         )
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {

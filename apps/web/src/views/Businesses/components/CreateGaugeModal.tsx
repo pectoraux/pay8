@@ -156,9 +156,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         )
       }
       if (stage === LockStage.CONFIRM_DISTRIBUTE) {
-        console.log('CONFIRM_DISTRIBUTE==================>', [[pool.gauge], [[currency.address]]])
-        return callWithGasPrice(businessVoterContract, 'claimRewards', [[pool.gauge], [[currency.address]]]).catch(
-          (err) => console.log('CONFIRM_DISTRIBUTE==================>', err),
+        console.log('CONFIRM_DISTRIBUTE==================>', [pool.gauge, pool.ve])
+        return callWithGasPrice(businessVoterContract, 'distribute', [pool.gauge, pool.ve]).catch((err) =>
+          console.log('CONFIRM_DISTRIBUTE==================>', err),
         )
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
