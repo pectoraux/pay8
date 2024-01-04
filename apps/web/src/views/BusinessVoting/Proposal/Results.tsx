@@ -20,10 +20,9 @@ import TextEllipsis from '../components/TextEllipsis'
 //   votesLoadingStatus: FetchStatus
 // }
 
-const Results: React.FC<any> = ({ business, accountVote, hasAccountVoted }) => {
+const Results: React.FC<any> = ({ business, hasAccountVoted }) => {
   const { t } = useTranslation()
-  const totalVotes = business?.votes?.length ? business?.votes?.reduce((ac, v) => ac + parseInt(v.votingPower), 0) : 0
-  const progress = (accountVote?.votingPower * 100) / Math.max(totalVotes, 1) || 0
+  const progress = 100
 
   return (
     <Card>

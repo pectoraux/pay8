@@ -27,7 +27,7 @@ const Overview = () => {
     mutate: refetch,
   } = useSWRImmutable(id ? ['business-gauge', id] : null, () => getCollectionSg(id))
 
-  const accountVote = business?.votes?.find((vote) => vote.owner?.toLowerCase() === account?.toLowerCase())
+  const accountVote = business?.votes?.find((vote) => vote.voter?.toLowerCase() === account?.toLowerCase())
   const hasAccountVoted = account && !!accountVote
 
   console.log('getCollectionSg==============>', business, hasAccountVoted)
@@ -69,7 +69,7 @@ const Overview = () => {
         </Box>
         <Box position="sticky" top="60px">
           <Details proposal={business} onSuccess={refetch} />
-          <Results business={business} accountVote={accountVote} hasAccountVoted={hasAccountVoted} />
+          <Results business={business} hasAccountVoted={hasAccountVoted} />
         </Box>
       </Layout>
     </Container>
