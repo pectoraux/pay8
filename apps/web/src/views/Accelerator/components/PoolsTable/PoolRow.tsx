@@ -2,6 +2,7 @@ import { memo, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrBribe } from 'state/accelerator/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import NameCell from './Cells/NameCell'
 import BribesCell from './Cells/BribesCell'
@@ -30,7 +31,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalValueCell labelText={t('To Distribute')} amount={pool?.claimable} symbol={pool?.vestingTokenSymbol || ''} />
       <TotalValueCell
         labelText={t('Rewards Claimed')}
-        amount={pool?.gaugeEarned}
+        amount={getBalanceNumber(pool?.gaugeEarned)}
         symbol={pool?.vestingTokenSymbol || ''}
       />
       <TotalVotesCell pool={pool} account={account} />

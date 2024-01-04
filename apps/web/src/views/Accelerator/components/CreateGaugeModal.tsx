@@ -40,6 +40,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_BRIBES]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BOUNTY]: t('Back'),
   [LockStage.CONFIRM_DISTRIBUTE]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_GAUGE]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_DELETE]: t('Back'),
@@ -86,6 +87,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         break
       case LockStage.CONFIRM_DISTRIBUTE:
         setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_GAUGE:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_VOTE_UP:
         setStage(LockStage.VOTE_UP)
@@ -165,37 +169,27 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       if (stage === LockStage.CONFIRM_UPDATE_BRIBES) {
         const convertedBribeAmount: BigNumber = getDecimalAmount(new BigNumber(lockedAmount), currency?.decimals)
         console.log('CONFIRM_UPDATE_BRIBES================>', [currency?.address, convertedBribeAmount.toString()])
-        try {
-          return callWithGasPrice(bribeContract, 'notifyRewardAmount', [
-            currency?.address,
-            convertedBribeAmount.toString(),
-          ])
-        } catch (err) {
-          return console.log('CONFIRM_UPDATE_BRIBES==================>', err)
-        }
+        return callWithGasPrice(bribeContract, 'notifyRewardAmount', [
+          currency?.address,
+          convertedBribeAmount.toString(),
+        ]).catch((err) => console.log('CONFIRM_UPDATE_BRIBES==================>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_BOUNTY) {
-        try {
-          return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId])
-        } catch (err1) {
-          return console.log('CONFIRM_UPDATE_BOUNTY==================>', err1)
-        }
+        return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId]).catch((err1) =>
+          console.log('CONFIRM_UPDATE_BOUNTY==================>', err1),
+        )
       }
       if (stage === LockStage.CONFIRM_VOTE_UP) {
         console.log('CONFIRM_VOTE_UP==================>', [tokenId, pool.id, pool.gauge, pool.ve, true])
-        try {
-          return callWithGasPrice(acceleratorVoterContract, 'vote', [tokenId, pool.id, pool.gauge, pool.ve, true])
-        } catch (err3) {
-          return console.log('CONFIRM_VOTE_UP==================>', err3)
-        }
+        return callWithGasPrice(acceleratorVoterContract, 'vote', [tokenId, pool.id, pool.gauge, pool.ve, true]).catch(
+          (err3) => console.log('CONFIRM_VOTE_UP==================>', err3),
+        )
       }
       if (stage === LockStage.CONFIRM_VOTE_DOWN) {
         console.log('CONFIRM_VOTE_DOWN==================>', [tokenId, pool.id, pool.gauge, pool.ve, false])
-        try {
-          return callWithGasPrice(acceleratorVoterContract, 'vote', [tokenId, pool.id, pool.gauge, pool.ve, false])
-        } catch (err4) {
-          return console.log('CONFIRM_VOTE_DOWN==================>', err4)
-        }
+        return callWithGasPrice(acceleratorVoterContract, 'vote', [tokenId, pool.id, pool.gauge, pool.ve, false]).catch(
+          (err4) => console.log('CONFIRM_VOTE_DOWN==================>', err4),
+        )
       }
       if (stage === LockStage.CONFIRM_DISTRIBUTE) {
         console.log('CONFIRM_DISTRIBUTE==================>', [pool.gauge, pool.ve])
@@ -205,26 +199,26 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
         console.log('CONFIRM_WITHDRAW==================>', [[pool.bribe], [[currBribeAddress]]])
-        try {
-          return callWithGasPrice(acceleratorVoterContract, 'claimBribes', [[pool.bribe], [[currBribeAddress]]])
-        } catch (err6) {
-          return console.log('CONFIRM_WITHDRAW==================>', err6)
-        }
+        return callWithGasPrice(acceleratorVoterContract, 'claimBribes', [[pool.bribe], [[currBribeAddress]]]).catch(
+          (err6) => console.log('CONFIRM_WITHDRAW==================>', err6),
+        )
       }
       if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
         console.log('CONFIRM_ADMIN_WITHDRAW==================>', [])
-        try {
-          return callWithGasPrice(gaugeContract, 'withdrawAll', [])
-        } catch (err7) {
-          return console.log('CONFIRM_ADMIN_WITHDRAW==================>', err7)
-        }
+        return callWithGasPrice(gaugeContract, 'withdrawAll', []).catch((err7) =>
+          console.log('CONFIRM_ADMIN_WITHDRAW==================>', err7),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_GAUGE) {
+        console.log('CONFIRM_UPDATE_GAUGE==================>', [pool.gauge, pool.ve])
+        return callWithGasPrice(acceleratorVoterContract, 'updateGauge', [pool.gauge, pool.ve]).catch((err7) =>
+          console.log('CONFIRM_UPDATE_GAUGE==================>', err7),
+        )
       }
       if (stage === LockStage.CONFIRM_DELETE) {
-        try {
-          return callWithGasPrice(acceleratorVoterContract, 'deactivatePitch', [])
-        } catch (err8) {
-          return console.log('CONFIRM_DELETE==================>', err8)
-        }
+        return callWithGasPrice(acceleratorVoterContract, 'deactivatePitch', []).catch((err8) =>
+          console.log('CONFIRM_DELETE==================>', err8),
+        )
       }
     },
     onSuccess: async ({ receipt }) => {
@@ -248,6 +242,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
     >
       {stage === LockStage.SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
+          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_GAUGE)}>
+            {t('UPDATE REWARDS')}
+          </Button>
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('WITHDRAW')}
           </Button>
@@ -265,6 +262,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
             {t('UPDATE BOUNTY')}
+          </Button>
+          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_GAUGE)}>
+            {t('UPDATE REWARDS')}
           </Button>
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_DISTRIBUTE)}>
             {t('DISTRIBUTE REWARDS')}

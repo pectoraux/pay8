@@ -2,6 +2,7 @@ import { memo, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/contributors/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import NameCell from './Cells/NameCell'
 import BribesCell from './Cells/BribesCell'
@@ -15,17 +16,13 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const currState = useCurrPool()
   const tokenAddress = pool?.vestingTokenAddress || ''
   const { isMobile } = useMatchBreakpoints()
-  const rampAccount = useMemo(
-    () => pool.accounts?.find((acct) => acct.token.address === currState[pool.rampAddress]),
-    [pool, currState],
-  )
   const currBribe = useMemo(() => {
     if (pool?.userDataLoaded) {
       return pool?.userData?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
     }
     return pool?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
   }, [currState, tokenAddress, pool])
-  console.log('ramppool=================>', pool)
+  console.log('contributorpool=================>', pool)
   const tabs = (
     <>
       <NameCell pool={pool} />
@@ -33,7 +30,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalValueCell labelText={t('To Distribute')} amount={pool?.claimable} symbol={pool?.vestingTokenSymbol || ''} />
       <TotalValueCell
         labelText={t('Rewards Claimed')}
-        amount={pool?.gaugeEarned}
+        amount={getBalanceNumber(pool?.gaugeEarned)}
         symbol={pool?.vestingTokenSymbol || ''}
       />
       <TotalVotesCell pool={pool} />
