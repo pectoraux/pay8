@@ -59,6 +59,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { theme } = useTheme()
+  const [add, setAdd] = useState(0)
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -158,8 +159,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         ]).catch((err) => console.log('CONFIRM_UPDATE_BRIBES==================>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_BOUNTY) {
-        return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId]).catch((err) =>
-          console.log('CONFIRM_UPDATE_BOUNTY==================>', err),
+        console.log('CONFIRM_UPDATE_BOUNTY==================>', [tokenId, !!add])
+        return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId, !!add]).catch((err1) =>
+          console.log('CONFIRM_UPDATE_BOUNTY==================>', err1),
         )
       }
       if (stage === LockStage.CONFIRM_DISTRIBUTE) {
@@ -245,7 +247,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         </Flex>
       )}
       {stage === LockStage.UPDATE_BOUNTY && (
-        <UpdateBountyStage tokenId={tokenId} setTokenId={setTokenId} continueToNextStage={continueToNextStage} />
+        <UpdateBountyStage
+          tokenId={tokenId}
+          setTokenId={setTokenId}
+          add={add}
+          setAdd={setAdd}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE_BRIBES && (
         <BribesStage

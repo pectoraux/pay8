@@ -1,5 +1,4 @@
-import { useState, useMemo } from 'react'
-import { Flex, Box, Text, Button, Pool } from '@pancakeswap/uikit'
+import { Flex, Box, Text, Button, Input } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -12,22 +11,35 @@ interface RemoveStageProps {
 
 const RemoveStage: React.FC<any> = ({
   pool,
-  tokenId,
+  profileId,
   currBribeAddress,
-  setTokenId,
+  setProfileId,
   setCurrBribeAddress,
   continueToNextStage,
 }) => {
   const { t } = useTranslation()
-  const currBribe = useMemo(() => {
-    if (pool.userDataLoaded) {
-      return pool.userData.bribes?.find((bribe) => bribe.tokenAddress === currBribeAddress)
-    }
-    return pool.poolBribes?.find((bribe) => bribe.tokenAddress === currBribeAddress)
-  }, [currBribeAddress, pool])
+  // const currBribe = useMemo(() => {
+  //   if (pool.userDataLoaded) {
+  //     return pool.userData.bribes?.find((bribe) => bribe.tokenAddress === currBribeAddress)
+  //   }
+  //   return pool.poolBribes?.find((bribe) => bribe.tokenAddress === currBribeAddress)
+  // }, [currBribeAddress, pool])
 
   return (
     <>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Bounty ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="profileId"
+          value={profileId}
+          placeholder={t('input your profile Id')}
+          onChange={(e) => setProfileId(e.target.value)}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         {pool.bribes?.length ? (
           <Flex mt="8px" mb="2px" justifyContent="center">

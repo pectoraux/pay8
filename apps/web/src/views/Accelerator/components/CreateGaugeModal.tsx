@@ -70,6 +70,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const { chainId } = useActiveChainId()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const [tokenId, setTokenId] = useState('')
+  const [add, setAdd] = useState(0)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -183,7 +184,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         ]).catch((err) => console.log('CONFIRM_UPDATE_BRIBES==================>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_BOUNTY) {
-        return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId]).catch((err1) =>
+        console.log('CONFIRM_UPDATE_BOUNTY==================>', [tokenId, !!add])
+        return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId, !!add]).catch((err1) =>
           console.log('CONFIRM_UPDATE_BOUNTY==================>', err1),
         )
       }
@@ -213,8 +215,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         )
       }
       if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
-        console.log('CONFIRM_ADMIN_WITHDRAW==================>', [])
-        return callWithGasPrice(gaugeContract, 'withdrawAll', []).catch((err7) =>
+        console.log('CONFIRM_ADMIN_WITHDRAW==================>', [0])
+        return callWithGasPrice(gaugeContract, 'withdrawAll', [0]).catch((err7) =>
           console.log('CONFIRM_ADMIN_WITHDRAW==================>', err7),
         )
       }
@@ -287,7 +289,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         </Flex>
       )}
       {stage === LockStage.UPDATE_BOUNTY && (
-        <UpdateBountyStage tokenId={tokenId} setTokenId={setTokenId} continueToNextStage={continueToNextStage} />
+        <UpdateBountyStage
+          tokenId={tokenId}
+          setTokenId={setTokenId}
+          add={add}
+          setAdd={setAdd}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE_BRIBES && (
         <BribesStage

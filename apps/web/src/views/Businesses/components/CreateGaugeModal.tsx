@@ -1,6 +1,6 @@
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
-import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
+import { InjectedModalProps, Button, Flex } from '@pancakeswap/uikit'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import {
@@ -56,6 +56,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const [stage, setStage] = useState(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const [tokenId, setTokenId] = useState('')
+  const [add, setAdd] = useState(0)
+  const [profileId, setProfileId] = useState(0)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -71,6 +73,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const [currBribeAddress, setCurrBribeAddress] = useState('')
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   console.log('pppoool================>', pool)
+
   const goBack = () => {
     switch (stage) {
       case LockStage.UPDATE_BRIBES:
@@ -157,8 +160,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         ]).catch((err) => console.log('CONFIRM_UPDATE_BRIBES==================>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_BOUNTY) {
-        return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId]).catch((err) =>
-          console.log('CONFIRM_UPDATE_BOUNTY==================>', err),
+        console.log('CONFIRM_UPDATE_BOUNTY==================>', [tokenId, !!add])
+        return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId, !!add]).catch((err1) =>
+          console.log('CONFIRM_UPDATE_BOUNTY==================>', err1),
         )
       }
       if (stage === LockStage.CONFIRM_DISTRIBUTE) {
@@ -175,14 +179,16 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         )
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
-        console.log('CONFIRM_WITHDRAW==================>', [[pool.bribe], [[currBribeAddress]]])
-        return callWithGasPrice(businessVoterContract, 'claimBribes', [[pool.bribe], [[currBribeAddress]]]).catch(
-          (err) => console.log('CONFIRM_WITHDRAW==================>', err),
-        )
+        console.log('CONFIRM_WITHDRAW==================>', [[pool.bribe], [[currBribeAddress]], profileId])
+        return callWithGasPrice(businessVoterContract, 'claimBribes', [
+          [pool.bribe],
+          [[currBribeAddress]],
+          profileId,
+        ]).catch((err) => console.log('CONFIRM_WITHDRAW==================>', err))
       }
       if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
-        console.log('CONFIRM_ADMIN_WITHDRAW==================>', [])
-        return callWithGasPrice(gaugeContract, 'withdrawAll', []).catch((err) =>
+        console.log('CONFIRM_ADMIN_WITHDRAW==================>', [0])
+        return callWithGasPrice(gaugeContract, 'withdrawAll', [0]).catch((err) =>
           console.log('CONFIRM_ADMIN_WITHDRAW==================>', err),
         )
       }
@@ -245,7 +251,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         </Flex>
       )}
       {stage === LockStage.UPDATE_BOUNTY && (
-        <UpdateBountyStage tokenId={tokenId} setTokenId={setTokenId} continueToNextStage={continueToNextStage} />
+        <UpdateBountyStage
+          tokenId={tokenId}
+          setTokenId={setTokenId}
+          add={add}
+          setAdd={setAdd}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE_BRIBES && (
         <BribesStage
@@ -260,6 +272,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           pool={pool}
           tokenId={tokenId}
           setTokenId={setTokenId}
+          profileId={profileId}
+          setProfileId={setProfileId}
           currBribeAddress={currBribeAddress}
           setCurrBribeAddress={setCurrBribeAddress}
           continueToNextStage={continueToNextStage}
