@@ -22,7 +22,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <NameCell pool={pool} symbol={pool?.token?.symbol} />
       <TotalUsersCell labelText={t('Total Users')} amount={parseInt(pool?.partnerStakeId) ? 2 : 1} />
       <TotalValueCell
-        labelText={parseInt(pool?.isNFT) ? t('Locked Collateral ID') : t('Total Liquidity')}
+        labelText={parseInt(pool?.isNFT) ? t('Locked Collateral ID') : t('Total Balance')}
         pool={pool}
         amount={getBalanceNumber(pool?.totalLiquidity, parseInt(pool?.isNFT) ? 0 : token?.decimals)}
         symbol={token?.symbol ?? ''}
