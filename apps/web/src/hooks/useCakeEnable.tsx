@@ -22,7 +22,7 @@ export const useCakeEnable = (enableAmount: BigNumber) => {
 
   const parsedAmount = tryParseAmount(swapAmount, CAKE[chainId])
 
-  const trade = useTradeExactOut(Native.onChain(ChainId.BSC), parsedAmount)
+  const trade = useTradeExactOut(Native.onChain(ChainId.FANTOM_TESTNET), parsedAmount)
 
   const swapCalls = useSwapCallArguments(trade, INITIAL_ALLOWED_SLIPPAGE, null)
 

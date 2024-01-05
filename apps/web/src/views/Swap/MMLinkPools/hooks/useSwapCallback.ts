@@ -52,6 +52,7 @@ export function useSwapCallback(
   const addTransaction = useTransactionAdder()
 
   const recipient = recipientAddress === null ? account : recipientAddress
+  console.log('2useSwapCallback===================>', swapCalls)
 
   return useMemo(() => {
     if (!trade || !account || !chainId) {

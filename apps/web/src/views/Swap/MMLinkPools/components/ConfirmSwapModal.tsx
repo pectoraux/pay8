@@ -130,6 +130,7 @@ const ConfirmSwapModal: React.FC<React.PropsWithChildren<InjectedModalProps & Co
       isRFQReady,
     ],
   )
+  console.log('3useSwapCallback===================>', trade)
 
   // text to show while loading
   const pendingText = useMemo(() => {
