@@ -496,7 +496,7 @@ export default {
     56: '0x',
   },
   businessGaugeFactory: {
-    4002: '0x3a5F4F01Bbe5729b8EC35f453d4a92A364F9eF66',
+    4002: '0xcC1eFB19657d225b44675C2b3D0E58872e44E193',
     56: '0x',
   },
   referralBribeFactory: {
