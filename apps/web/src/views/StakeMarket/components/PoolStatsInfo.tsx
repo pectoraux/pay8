@@ -1,19 +1,4 @@
-import {
-  Flex,
-  LinkExternal,
-  Pool,
-  ScanLink,
-  useModal,
-  Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
-  Text,
-} from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Pool, ScanLink, useModal, Text } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'

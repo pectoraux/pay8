@@ -368,7 +368,7 @@ export const fetchBounties = async (
           owner,
           claims,
           friendlyClaims,
-          claimableBy: claimableBy === ADDRESS_ZERO ? '' : claimableBy,
+          claimableBy,
           parentBountyId: parentBountyId?.toString(),
           startTime: startTime?.toString(),
           endTime: endTime?.toString(),

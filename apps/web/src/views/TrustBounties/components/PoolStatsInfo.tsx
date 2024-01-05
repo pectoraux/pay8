@@ -9,12 +9,11 @@ import { useCurrPool } from 'state/trustbounties/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/trustbounties'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { getTrustBountiesAddress } from 'utils/addressHelpers'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 import WebPagesModal from './WebPagesModal'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { getTrustBountiesAddress } from 'utils/addressHelpers'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -26,10 +25,7 @@ interface ExpandedFooterProps {
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
-  const [pendingTx, setPendingTx] = useState(false)
-  const { earningToken, rampAddress } = pool
-  const isBounty = router.pathname.includes('bounties')
+  const { earningToken } = pool
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
@@ -96,13 +92,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
-      {pool?.claimableBy && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.claimableBy, 'address', chainId)} bold={false} small>
-            {t('Claimable By')} {pool?.claimableBy === ADDRESS_ZERO ? 'Anyone' : ''}
-          </ScanLink>
-        </Flex>
-      )}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <ScanLink href={getBlockExploreLink(pool?.claimableBy, 'address', chainId)} bold={false} small>
+          {t('Claimable By')} {pool?.claimableBy === ADDRESS_ZERO ? t('Anyone') : ''}
+        </ScanLink>
+      </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <ScanLink href={getBlockExploreLink(getTrustBountiesAddress(), 'address', chainId)} bold={false} small>
           {t('View TrustBounties Contract')}
