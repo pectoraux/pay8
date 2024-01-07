@@ -32,8 +32,8 @@ export const getTag = async () => {
     )
 
     const mtags = res.tags.map((tag) => tag.id)
-    console.log('getTag===========>', res, mtags)
-    return mtags
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
     return null
