@@ -81,7 +81,7 @@ export default function PoolListPage() {
   const { account, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
 
-  const [selectedTypeIndex, setSelectedTypeIndex] = useState(FILTER.V3)
+  const [selectedTypeIndex, setSelectedTypeIndex] = useState(FILTER.ALL)
   const [hideClosedPositions, setHideClosedPositions] = useHideClosePosition()
 
   const { positions, loading: v3Loading } = useV3Positions(account)
