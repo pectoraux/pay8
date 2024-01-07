@@ -189,7 +189,8 @@ export default function PoolListPage() {
       // Order should be v3, stable, v2
       const sections = [v3PairsSection, stablePairsSection, v2PairsSection]
 
-      resultSection = selectedTypeIndex ? sections.filter((_, index) => selectedTypeIndex === index + 1) : sections
+      // resultSection = selectedTypeIndex ? sections.filter((_, index) => selectedTypeIndex === index + 1) : sections
+      resultSection = sections.filter((_, index) => selectedTypeIndex === index + 1)
     }
 
     return resultSection
