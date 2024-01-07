@@ -31,8 +31,7 @@ export const getTag = async () => {
       {},
     )
 
-    const mres = res.tags?.length && res.tags[0]
-    const mtags = mres.map((tag) => tag.id)
+    const mtags = res.tags.map((tag) => tag.id)
     console.log('getTag===========>', res, mtags)
     return mtags
   } catch (error) {
