@@ -81,7 +81,7 @@ export default function PoolListPage() {
   const { account, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
 
-  const [selectedTypeIndex, setSelectedTypeIndex] = useState(FILTER.ALL)
+  const [selectedTypeIndex, setSelectedTypeIndex] = useState(FILTER.V3)
   const [hideClosedPositions, setHideClosedPositions] = useHideClosePosition()
 
   const { positions, loading: v3Loading } = useV3Positions(account)
@@ -240,12 +240,12 @@ export default function PoolListPage() {
                 onItemClick={(index) => setSelectedTypeIndex(index)}
                 variant="subtle"
               >
-                <ButtonMenuItem>{t('All')}</ButtonMenuItem>
+                {/* <ButtonMenuItem>{t('All')}</ButtonMenuItem> */}
                 <ButtonMenuItem>V3</ButtonMenuItem>
-                <ButtonMenuItem display={isStableSwapSupported(chainId) ? 'inline-flex' : 'none'}>
+                {/* <ButtonMenuItem display={isStableSwapSupported(chainId) ? 'inline-flex' : 'none'}>
                   {t('StableSwap')}
                 </ButtonMenuItem>
-                <ButtonMenuItem>V2</ButtonMenuItem>
+                <ButtonMenuItem>V2</ButtonMenuItem> */}
               </ButtonMenu>
             </>
           }

@@ -138,10 +138,10 @@ const config: (
           href: '/futureCollaterals',
           image: '/images/decorations/lottery.png',
         },
-        {
-          label: t('Pools'),
-          href: '/pools',
-        },
+        // {
+        //   label: t('Pools'),
+        //   href: '/pools',
+        // },
         {
           label: t('Sponsors'),
           href: '/sponsors',

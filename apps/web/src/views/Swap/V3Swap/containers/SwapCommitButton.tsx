@@ -99,7 +99,7 @@ export const SwapCommitButton = memo(function SwapCommitButton({
   const swapInputError = useSwapInputError(trade, currencyBalances)
   const parsedAmounts = useParsedAmounts(trade, currencyBalances, showWrap)
   const parsedIndepentFieldAmount = parsedAmounts[independentField]
-
+  console.log('0useSwapCallback=================>', trade)
   // the callback to execute the swap
   const deadline = useTransactionDeadline()
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback({ trade, deadline })

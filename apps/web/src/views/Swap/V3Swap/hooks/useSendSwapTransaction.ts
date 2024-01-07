@@ -91,7 +91,7 @@ export default function useSendSwapTransaction(
               })
           }),
         )
-
+        console.log('estimatedCalls===========================>', estimatedCalls)
         // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
         let bestCallOption: SuccessfulCall | SwapCallEstimate | undefined = estimatedCalls.find(
           (el, ix, list): el is SuccessfulCall =>
@@ -113,6 +113,7 @@ export default function useSendSwapTransaction(
           call: { address, calldata, value },
         } = bestCallOption
 
+        console.log('1estimatedCalls===========================>', bestCallOption)
         return sendTransactionAsync({
           account,
           chainId,
