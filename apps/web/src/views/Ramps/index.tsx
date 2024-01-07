@@ -2,18 +2,7 @@ import { useAccount } from 'wagmi'
 import styled from 'styled-components'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Loading,
-} from '@pancakeswap/uikit'
+import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
 import { useFilters, useGetTags, usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 
