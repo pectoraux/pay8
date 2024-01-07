@@ -131,7 +131,7 @@ const Filters: React.FC<any> = ({ tags, nftFilters, workspace = true }) => {
     count: attr.count ? attr.count : undefined,
     attr,
   }))
-  let countryItems =
+  const countryItems =
     countries.Country?.map((attr) => ({
       label: capitalize(attr.value as string),
       count: attr.count ? attr.count : undefined,
@@ -146,7 +146,7 @@ const Filters: React.FC<any> = ({ tags, nftFilters, workspace = true }) => {
       count: 0,
     },
   })
-  let cityItems =
+  const cityItems =
     cities.City?.map((attr) => ({
       label: attr.value as string,
       count: attr.count ? attr.count : undefined,

@@ -199,7 +199,7 @@ export const useGetRequiresApproval = (c, a, s) => {
 
 export const useGetTags = () => {
   const { data } = useSWR('ramps-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const usePoolsPageFetch = () => {

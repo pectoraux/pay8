@@ -453,7 +453,9 @@ export const fetchRamp = async (address, chainId) => {
             privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
           })
         : ''
-    } catch (err) {}
+    } catch (err) {
+      console.log('err=============>', err)
+    }
     const collection = await getCollection(gauge.collectionId)
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
