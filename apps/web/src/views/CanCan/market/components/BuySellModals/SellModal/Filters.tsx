@@ -40,6 +40,7 @@ const Filters: React.FC<any> = ({
   showCity = true,
   showProduct = true,
 }) => {
+  console.log('productsproducts================>', products, products?.length)
   let Country = require('country-state-city').Country
   let City = require('country-state-city').City
   const code = useMemo(
