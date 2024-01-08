@@ -41,8 +41,10 @@ const Filters: React.FC<any> = ({
   showProduct = true,
 }) => {
   const nftFilters = useGetNftFilters(address) as any
-  let Country = require('country-state-city').Country
-  let City = require('country-state-city').City
+  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+  const { Country } = require('country-state-city')
+  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+  const { City } = require('country-state-city')
   const tags = useGetTags()
   const code = useMemo(
     () =>
