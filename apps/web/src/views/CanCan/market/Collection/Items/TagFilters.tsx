@@ -34,7 +34,6 @@ const ScrollableFlexContainer = styled(Flex)`
 
 const Filters: React.FC<any> = ({
   address,
-  collection,
   setNftFilters,
   showWorkspace = true,
   showCountry = true,

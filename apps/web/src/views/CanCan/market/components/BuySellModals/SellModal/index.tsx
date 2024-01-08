@@ -26,7 +26,7 @@ import { useGetLowestPriceFromNft } from 'views/CanCan/market/hooks/useGetLowest
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
-import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
+import { useGetPaywallARP, useGetSubscriptionStatus, useGetTagsFromProductId } from 'state/cancan/hooks'
 import { getSSIContract } from 'utils/contractHelpers'
 import { getMarketHelperAddress, getPaywallMarketHelperAddress } from 'utils/addressHelpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
@@ -252,10 +252,11 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
   const helpersSigner = variant === 'paywall' ? paywallMarketHelperContract : marketHelperContract
   const helpers2Signer = variant === 'paywall' ? paywallMarketHelper2Contract : marketHelper2Contract
   const nftMarketContract = useNftMarketContract()
+  const products = useGetTagsFromProductId(nftToSell?.tokenId)
   const [nftFilters, setNftFilters] = useState({
     country: nftToSell?.countries,
     city: nftToSell?.cities,
-    product: nftToSell?.products,
+    product: products,
   })
 
   const updateValue = (key: any, value: any) => {
