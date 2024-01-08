@@ -45,9 +45,8 @@ export const getTagFromRamp = async ({ rampAddress }) => {
     const res = await request(
       GRAPH_API_RAMPS,
       gql`
-        query getTagFromRamp($rampAddress: String!) 
-        {
-          tags(where: { active: true, ramp_: {id: rampAddress.toLowerCase() } }) {
+        query getTagFromRamp($rampAddress: String!) {
+          tags(where: { active: true, ramp_: { id: rampAddress } }) {
             id
           }
         }
