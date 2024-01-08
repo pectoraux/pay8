@@ -33,7 +33,7 @@ const ScrollableFlexContainer = styled(Flex)`
 
 const Filters: React.FC<any> = ({
   nftFilters,
-  collection,
+  products,
   setNftFilters,
   showWorkspace = true,
   showCountry = true,
@@ -76,7 +76,7 @@ const Filters: React.FC<any> = ({
       { traitType: 'City', value: 'All', count: 0 } as any,
     ) || []
   const productsHome =
-    collection?.products?.split(',')?.reduce(
+    products?.split(',')?.reduce(
       (accum: any, attr: any) => ({
         ...accum,
         Product: accum.Product
@@ -90,7 +90,7 @@ const Filters: React.FC<any> = ({
     count: attr.count ? attr.count : undefined,
     attr,
   }))
-  let countryItems =
+  const countryItems =
     countries.Country?.map((attr) => ({
       label: capitalize(attr.value as string),
       count: attr.count ? attr.count : undefined,
@@ -105,7 +105,7 @@ const Filters: React.FC<any> = ({
       count: 0,
     },
   })
-  let cityItems =
+  const cityItems =
     cities.City?.map((attr) => ({
       label: attr.value as string,
       count: attr.count ? attr.count : undefined,

@@ -30,6 +30,7 @@ interface RemoveStageProps {
 const LocationStage: React.FC<any> = ({
   state,
   variant,
+  products,
   updateValue,
   thumbnail,
   nftToSell,
@@ -319,7 +320,7 @@ const LocationStage: React.FC<any> = ({
             </Text>
             <Flex ref={targetRef7}>
               <Filters
-                collection={collection}
+                products={products}
                 showWorkspace={false}
                 nftFilters={nftFilters}
                 setNftFilters={setNftFilters}

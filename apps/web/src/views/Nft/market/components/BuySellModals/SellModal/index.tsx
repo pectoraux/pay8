@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import { useState, ChangeEvent } from 'react'
 import { differenceInSeconds } from 'date-fns'
 import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import BigNumber from 'bignumber.js'
 import { getBalanceAmount, getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
@@ -22,12 +21,11 @@ import {
   usePaywallMarketHelper2Contract,
   useNftMarketHelper2Contract,
 } from 'hooks/useContract'
-import { NftToken } from 'state/cancan/types'
 import { useGetLowestPriceFromNft } from 'views/CanCan/market/hooks/useGetLowestPrice'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
-import { useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
+import { useGetPaywallARP, useGetSubscriptionStatus, useGetTagsFromProductId } from 'state/cancan/hooks'
 import { getSSIContract } from 'utils/contractHelpers'
 
 import SetPriceStage from './SetPriceStage'
@@ -208,6 +206,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
     profileId: '',
     proofType: '',
   }))
+  const products = useGetTagsFromProductId(nftToSell?.tokenId)
   const [stage, setStage] = useState(SellingStage.EDIT)
   const [price, setPrice] = useState(nftToSell?.currentAskPrice)
   const [burnForCreditToken, setBurnForCreditToken] = useState('')
@@ -237,7 +236,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
   const [nftFilters, setNftFilters] = useState({
     country: nftToSell?.countries,
     city: nftToSell?.cities,
-    product: nftToSell?.products,
+    product: products,
   })
 
   const updateValue = (key: any, value: any) => {
@@ -820,6 +819,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           nftToSell={nftToSell}
           thumbnail={_thumbnail}
           nftFilters={nftFilters}
+          products={products}
           collection={nftToSell?.collection}
           collectionId={collectionId}
           updateValue={updateValue}

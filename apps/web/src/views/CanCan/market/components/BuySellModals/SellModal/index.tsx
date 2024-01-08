@@ -888,6 +888,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
           collectionId={collectionId}
           state={state}
           variant={variant}
+          products={products}
           nftFilters={nftFilters}
           collection={nftToSell?.collection}
           setNftFilters={setNftFilters}

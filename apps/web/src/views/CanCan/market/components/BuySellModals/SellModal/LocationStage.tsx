@@ -31,6 +31,7 @@ interface RemoveStageProps {
 
 const LocationStage: React.FC<any> = ({
   state,
+  products,
   paywallId,
   collection,
   variant,
