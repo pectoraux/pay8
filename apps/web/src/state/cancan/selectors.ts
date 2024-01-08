@@ -1,11 +1,10 @@
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { getTagFromProductId } from './helpers'
 
 export const selectFilteredData = (nfts, filters) => {
   const _ve = filters?.workspace?.value ? getVeFromWorkspace(filters?.workspace.value.toLowerCase()) : ADDRESS_ZERO
   const _res = nfts?.filter((nft) => {
-    const mtags = nft.tags.map((tag) => tag.id)
+    const mtags = nft?.tags?.map((tag) => tag.id)
     const tags = mtags?.toString()
     const res =
       (!filters.workspace || nft?.ve?.toLowerCase() === _ve?.toLowerCase()) &&
@@ -19,18 +18,15 @@ export const selectFilteredData = (nfts, filters) => {
           0) &&
       (!filters.product ||
         filters.product.filter((value) => tags?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length > 0)
-    console.log('selectFilteredData==============>', nft, filters, _ve, tags, tags?.toLowerCase()?.split(','), res)
     return res
   })
-  console.log('1__nfts====================>', _res)
   return _res
 }
 
 export const selectFilteredData2 = (nfts, filters) => {
   const _ve = filters?.workspace?.value ? getVeFromWorkspace(filters?.workspace.value.toLowerCase()) : ADDRESS_ZERO
-  console.log('1selectFilteredData==============>', nfts, filters, _ve)
   return nfts?.filter((nft) => {
-    const mtags = nft.tags.map((tag) => tag.id)
+    const mtags = nft?.tags?.map((tag) => tag.id)
     const tags = mtags?.toString()
     return (
       (!filters.workspace || nft?.workspaces?.toLowerCase() === _ve?.toLowerCase()) &&
