@@ -158,6 +158,9 @@ paywall {
 
 export const baseFields = `
 id
+tags {
+  id
+}
 tokenId
 currentSeller
 lastBidder
