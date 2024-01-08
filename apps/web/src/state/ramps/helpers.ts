@@ -40,6 +40,29 @@ export const getTag = async () => {
   }
 }
 
+export const getTagFromRamp = async ({ rampAddress }) => {
+  try {
+    const res = await request(
+      GRAPH_API_RAMPS,
+      gql`
+        query getTagFromRamp($rampAddress: String!) 
+        {
+          tags(where: { active: true, ramp_: {id: rampAddress.toLowerCase() } }) {
+            id
+          }
+        }
+      `,
+      { rampAddress },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), rampAddress)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from ramp=============>', error)
+    return null
+  }
+}
+
 export const getRamps = async (first = 5, skip = 0, where = {}) => {
   try {
     const res = await request(
@@ -476,6 +499,7 @@ export const fetchRamp = async (address, chainId) => {
       rampSalePrice: rampSalePrice.toString(),
       soldAccounts: soldAccounts.toString(),
       collection,
+      products: getTagFromRamp(rampAddress),
     }
   } catch (err) {
     console.log('fetchRamp err================>', err)
