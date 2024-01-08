@@ -258,7 +258,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     city: nftToSell?.cities,
     product: products,
   })
-
+  console.log('useGetTagsFromProductId==============>', products)
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,

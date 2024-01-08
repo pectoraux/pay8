@@ -381,7 +381,7 @@ const LocationStage: React.FC<any> = ({
             <GreyedOutContainer style={{ paddingTop: '18px' }}>
               <Flex ref={targetRef8}>
                 <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Not satisfied with above tags ? Add a custom tag')}
+                  {t('Not satisfied with above tags? Add a custom tag')}
                 </Text>
                 {tooltipVisible8 && tooltip8}
                 <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
