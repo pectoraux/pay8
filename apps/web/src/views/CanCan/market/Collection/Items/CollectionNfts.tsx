@@ -91,6 +91,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
 
   const filters = useGetNftFilters(id ?? '') as any
   const _nfts = selectFilteredData(__nfts, filters)
+  console.log('__nfts=====================>', _nfts)
   const nfts = useMemo(() => {
     const newests = orderBy(_nfts, (nft) => (nft?.updatedAt ? Date.parse(nft.updatedAt) : 0), 'desc')
     const newData = newests.filter((newest: any) => {
