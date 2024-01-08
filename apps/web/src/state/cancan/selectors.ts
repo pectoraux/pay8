@@ -18,7 +18,7 @@ export const selectFilteredData = (nfts, filters) => {
           0) &&
       (!filters.product ||
         filters.product.filter((value) => tags?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length > 0)
-    console.log('selectFilteredData==============>', nfts, filters, _ve, tags, tags?.toLowerCase()?.split(','), res)
+    console.log('selectFilteredData==============>', nft, filters, _ve, tags, tags?.toLowerCase()?.split(','), res)
     return res
   })
 }
