@@ -370,6 +370,7 @@ const LocationStage: React.FC<any> = ({
             </Text>
             <Flex ref={targetRef7}>
               <Filters
+                products={products}
                 collection={collection}
                 showWorkspace={false}
                 nftFilters={nftFilters}
