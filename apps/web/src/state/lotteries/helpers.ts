@@ -20,17 +20,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromLottery = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_LOTTERIES,
+      gql`
+        query getTagFromLottery($address: String!) {
+          tags(where: { active: true, lottery_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -228,6 +250,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
         }),
       )
     }
+    const products = await getTagFromLottery(lotteryId)
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
       ...lottery,
@@ -253,6 +276,7 @@ export const fetchLottery = async (lotteryId, chainId) => {
       valuepool,
       tokenData,
       collection,
+      products,
     }
   } catch (err) {
     console.log('errr============>', err)

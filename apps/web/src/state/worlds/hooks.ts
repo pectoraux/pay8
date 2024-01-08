@@ -17,7 +17,7 @@ import { getPendingRevenue, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('worlds-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useWorldsConfigInitialize = () => {

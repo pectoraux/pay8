@@ -2,7 +2,6 @@ import { Native, Token } from '@pancakeswap/sdk'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_TRUSTBOUNTIES } from 'config/constants/endpoints'
 import { publicClient } from 'utils/wagmi'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { trustBountiesABI } from 'config/abi/trustBounties'
 import { getCollection } from 'state/cancan/helpers'
 import {
@@ -25,17 +24,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromBounty = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_TRUSTBOUNTIES,
+      gql`
+        query getTagFromBounty($address: String!) {
+          tags(where: { active: true, bounty_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -348,6 +369,7 @@ export const fetchBounties = async (
         )
         const friendlyClaims = claims.filter((claim) => claim.friendly && !claim.atPeace)
         const { name, symbol, decimals } = await getTokenData(token, chainId)
+        const products = await getTagFromBounty(bountyId)
         return {
           ...bounty,
           collection,
@@ -375,6 +397,7 @@ export const fetchBounties = async (
           minToClaim: minToClaim?.toString(),
           isNFT,
           totalLiquidity: totalLiquidity.result?.toString(),
+          products,
         }
       })
       .flat(),

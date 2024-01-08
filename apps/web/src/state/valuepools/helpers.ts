@@ -125,17 +125,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromValuepool = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_VALUEPOOLS,
+      gql`
+        query getTagFromValuepool($address: String!) {
+          tags(where: { active: true, token_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -458,6 +480,7 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
     const _maxWithdrawable = new BigNumber(100)
       .minus(new BigNumber(maxWithdrawable.result.toString()).div(100))
       .toJSON()
+    const products = await getTagFromValuepool(tokenAddress.result)
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
       _va: _va.result,
@@ -491,6 +514,7 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
       minBountyRequired: minBountyRequired.result?.toString(),
       minDifference: minDifference.result?.toString(),
       minimumLockValue: minimumLockValue.result?.toString(),
+      products,
     }
   } catch (err) {
     console.log('rerr==============>', err)

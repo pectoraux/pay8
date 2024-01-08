@@ -89,7 +89,7 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useGetTags = () => {
   const { data } = useSWR('lotteries-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useGetTicket = (ticketId) => {

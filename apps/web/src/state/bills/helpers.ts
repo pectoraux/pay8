@@ -1,16 +1,6 @@
-import BigNumber from 'bignumber.js'
-import { firestore } from 'utils/firebase'
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_BILLS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import {
-  getBILLNoteContract,
-  getBILLMinterContract,
-  getBILLContract,
-  getBep20Contract,
-} from '../../utils/contractHelpers'
-import { billFields, protocolFields } from './queries'
 import { publicClient } from 'utils/wagmi'
 import { billABI } from 'config/abi/bill'
 import { erc20ABI } from 'wagmi'
@@ -18,6 +8,7 @@ import { getBILLMinterAddress, getBILLNoteAddress } from 'utils/addressHelpers'
 import { billNoteABI } from 'config/abi/billNote'
 import { billMinterABI } from 'config/abi/billMinter'
 import { getCollection } from 'state/cancan/helpers'
+import { billFields, protocolFields } from './queries'
 
 export const getTag = async () => {
   try {
@@ -27,17 +18,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromBill = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_BILLS,
+      gql`
+        query getTagFromBill($address: String!) {
+          tags(where: { active: true, bill_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -139,7 +152,7 @@ export const getBills = async (first = 5, skip = 0, where) => {
 }
 
 export const getPendingRevenue = async (tokenId, chainId) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [pendingRevenueFromNote, note] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -165,7 +178,7 @@ export const getPendingRevenue = async (tokenId, chainId) => {
 
 export const fetchBill = async (billAddress, chainId) => {
   const bill = await getBill(billAddress.toLowerCase())
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [
     devaddr_,
     bountyRequired,
@@ -473,6 +486,7 @@ export const fetchBill = async (billAddress, chainId) => {
       }
     }),
   )
+  const products = await getTagFromBill(billAddress)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...bill,
@@ -493,11 +507,12 @@ export const fetchBill = async (billAddress, chainId) => {
     bufferTime: bufferTime.result?.toString(),
     collectionId: collectionId.result.toString(),
     bountyRequired: bountyRequired.result.toString(),
+    products,
   }
 }
 
 export const fetchBills = async ({ fromBill, chainId }) => {
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [billAddresses] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

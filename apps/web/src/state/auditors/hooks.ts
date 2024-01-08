@@ -18,7 +18,7 @@ import { getPendingRevenue, getProtocolsSg, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('auditors-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useGetPendingFromNote = (tokenId) => {

@@ -21,17 +21,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromAcc = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_ACC_VOTER,
+      gql`
+        query getTagFromAcc($address: String!) {
+          tags(where: { active: true, ramp_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }

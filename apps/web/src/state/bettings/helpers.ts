@@ -19,17 +19,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromBetting = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_BETTINGS,
+      gql`
+        query getTagFromBetting($address: String!) {
+          tags(where: { active: true, betting_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -238,6 +260,7 @@ export const fetchBetting = async (bettingAddress, chainId) => {
       })
       const currPeriod = Math.min(parseInt(bettingEvent.currPeriod), parseInt(numberOfPeriods.toString()) - 1)
       const currStart = parseInt(bettingEvent.startTime || 0) + currPeriod * parseInt(bettingEvent.bracketDuration || 0)
+      const products = await getTagFromBetting(bettingAddress)
       return {
         id: bettingAddress,
         ...bettingEvent,
@@ -256,6 +279,7 @@ export const fetchBetting = async (bettingAddress, chainId) => {
         currPeriod,
         currStart,
         currEnd: currStart + parseInt(bettingEvent.bracketDuration),
+        products,
         token: new Token(
           chainId,
           _token,

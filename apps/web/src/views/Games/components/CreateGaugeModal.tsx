@@ -53,6 +53,7 @@ import BurnObjectStage from './BurnObjectStage'
 import WithdrawResourceStage from './WithdrawResourceStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import DeleteStage from './DeleteStage'
+import LocationStage from './LocationStage'
 import BuyMinutesStage from './BuyMinutesStage'
 import BurnTokenForCreditStage from './BurnTokenForCreditStage'
 import UpdateUriStage from './UpdateUriStage'
@@ -74,6 +75,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.WITHDRAW]: t('Claim Rewards'),
   [LockStage.MINT_OBJECT]: t('Mint Object'),
   [LockStage.BURN_OBJECT]: t('Burn Object'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.WITHDRAW_RESOURCES]: t('Withdraw Resources'),
   [LockStage.UPDATE_DESTINATION]: t('Update Destination'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
@@ -95,6 +97,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_TAG_REGISTRATION]: t('Update Tag Registration'),
   [LockStage.UPDATE_PRICE_PER_MINUTE]: t('Update Price Per Minute'),
   [LockStage.DELETE_GAME]: t('Delete Game'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_GAME]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW_RESOURCES]: t('Back'),
   [LockStage.CONFIRM_UPDATE_INFO]: t('Back'),
@@ -197,7 +200,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     owner: pool?.owner || '',
     gameName: '',
     gameLink: '',
+    customTags: '',
   }))
+
+  const [nftFilters, setNftFilters] = useState<any>({
+    countries: pool?.countries,
+    cities: pool?.cities,
+    products: pool?.products,
+  })
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -215,6 +225,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
 
   const goBack = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       case LockStage.CREATE_GAMING_NFT:
         setStage(LockStage.SETTINGS)
         break
@@ -396,6 +412,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.CREATE_GAMING_NFT:
         setStage(LockStage.CONFIRM_CREATE_GAMING_NFT)
         break
@@ -656,6 +675,23 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           console.log('CONFIRM_UPDATE_INFO===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const customTags = state.customTags?.split(',')
+        const args = [
+          '4',
+          pool?.collection?.id,
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.id,
+          customTags?.length && customTags[0],
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(gameFactoryContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_UPDATE_TOKEN_ID) {
         const args = [state.tokenId, state.collectionId]
         console.log('CONFIRM_UPDATE_TOKEN_ID===============>', args)
@@ -824,6 +860,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_INFO)}>
             {t('UPDATE INFO')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID)}>
             {t('UPDATE TOKEN ID')}
@@ -1106,6 +1145,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       )}
       {stage === LockStage.DELETE_GAME && (
         <DeleteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage

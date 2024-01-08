@@ -19,7 +19,7 @@ import {
 
 export const useGetTags = () => {
   const { data } = useSWR('games-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useGetGame = (gameName: string, tokenId: string) => {

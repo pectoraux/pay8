@@ -63,17 +63,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromStake = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_STAKES,
+      gql`
+        query getTagFromStake($address: String!) {
+          tags(where: { active: true, stake_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -304,6 +326,7 @@ export const fetchStakes = async (collectionId, chainId) => {
             }
           }),
         )
+        const products = await getTagFromStake(stakeId)
         return {
           ...stake,
           payableNotes,
@@ -347,6 +370,7 @@ export const fetchStakes = async (collectionId, chainId) => {
           nextDuePayable: nextDuePayable.result?.length > 1 ? nextDuePayable.result[1].toString() : null,
           nextDueReceivable: nextDueReceivable.result?.length > 1 ? nextDueReceivable.result[1].toString() : null,
           totalLiquidity: totalLiquidity.result.toString(),
+          products,
         }
       })
       .flat(),

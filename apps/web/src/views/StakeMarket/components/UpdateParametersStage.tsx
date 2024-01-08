@@ -281,14 +281,14 @@ const SetPriceStage: React.FC<any> = ({
       <Flex justifyContent="center" alignSelf="center">
         <GreyedOutContainer style={{ width: '100%', paddingTop: '18px' }}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Add custom tags')}
+            {t('Add a custom tag')}
           </Text>
           <Input
             type="text"
             scale="sm"
             name="customTags"
             value={state.customTags}
-            placeholder={t('comma separated tags')}
+            placeholder={t('input a custom tag')}
             onChange={handleChange}
           />
         </GreyedOutContainer>

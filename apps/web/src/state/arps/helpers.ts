@@ -20,17 +20,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromARP = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_ARPS,
+      gql`
+        query getTagFromARP($address: String!) {
+          tags(where: { active: true, arp_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -448,6 +470,7 @@ export const fetchArp = async (arpAddress, chainId) => {
       }
     }),
   )
+  const products = await getTagFromARP(arpAddress)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...arp,
@@ -471,6 +494,7 @@ export const fetchArp = async (arpAddress, chainId) => {
     devaddr_: devaddr_.result,
     collectionId: collectionId.result.toString(),
     bountyRequired: bountyRequired.result.toString(),
+    products,
   }
 }
 

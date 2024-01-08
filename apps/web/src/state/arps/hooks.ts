@@ -18,7 +18,7 @@ import { getPendingRevenue, getTag, getTotalLiquidity } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('arps-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useARPsConfigInitialize = () => {

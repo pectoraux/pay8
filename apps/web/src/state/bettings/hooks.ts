@@ -27,7 +27,7 @@ import {
 
 export const useGetTags = () => {
   const { data } = useSWR('bettings-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useGetTokenForCredit = (bettingAddress: string) => {

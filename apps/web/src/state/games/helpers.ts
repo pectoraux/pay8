@@ -25,17 +25,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromGame = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_GAMES,
+      gql`
+        query getTagFromGame($address: String!) {
+          tags(where: { active: true, game_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -323,7 +345,7 @@ export const fetchGame = async (gameId, chainId) => {
         }
       }),
   )
-
+  const products = await getTagFromGame(gameId)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...gameFromSg,
@@ -344,6 +366,7 @@ export const fetchGame = async (gameId, chainId) => {
     totalPaid: totalPaid.toString(),
     totalScore: totalScore.toString(),
     totalEarned: totalEarned.result.toString(),
+    products,
     token: new Token(
       56,
       _token,

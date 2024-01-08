@@ -19,12 +19,11 @@ import { getNote, getStake, getStakeApplication, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('stakemarket-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useStakesConfigInitialize = () => {
   const dispatch = useAppDispatch()
-  const router = useRouter()
   const { chainId } = useActiveChainId()
   const collectionId = useRouter().query.collectionAddress as string
 

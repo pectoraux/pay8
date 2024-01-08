@@ -21,17 +21,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromAuditor = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_AUDITORS,
+      gql`
+        query getTagFromAuditor($address: String!) {
+          tags(where: { active: true, auditor_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -319,6 +341,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
       }),
   )
   const percentile = parseInt(percentiles.result?.toString())
+  const products = await getTagFromAuditor(auditorAddress)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...auditor,
@@ -332,6 +355,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
     color: percentile >= 75 ? 'Gold' : percentile >= 50 ? 'Silver' : percentile >= 25 ? 'Brown' : 'Black',
     devaddr_: devaddr_.result,
     collectionId: collectionId.result.toString(),
+    products,
   }
 }
 

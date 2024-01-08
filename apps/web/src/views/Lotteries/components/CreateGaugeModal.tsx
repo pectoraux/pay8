@@ -41,6 +41,7 @@ import DrawFinalNumberStage from './DrawFinalNumberStage'
 import WithdrawStage2 from './WithdrawStage2'
 import CloseLotteryStage from './CloseLotteryStage'
 import BuyTicketStage from './BuyTicketStage'
+import LocationStage from './LocationStage'
 import UpdateNftPrizesStage from './UpdateNftPrizesStage'
 
 const modalTitles = (t: TranslateFunction) => ({
@@ -52,6 +53,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CLAIM_LOTTERY_REVENUE]: t('Claim Lottery Revenue'),
   [LockStage.INJECT_FUNDS]: t('Inject Funds'),
   [LockStage.ADD_TOKEN]: t('Add Token'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.BURN_TOKEN_FOR_CREDIT]: t('Burn Token For Credit'),
   [LockStage.WITHDRAW]: t('Withdraw'),
   [LockStage.DRAW_FINAL_NUMBER]: t('Draw Final Number'),
@@ -61,6 +63,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_NFT_PRIZES]: t('Add NFT Prize'),
   [LockStage.ADMIN_WITHDRAW]: t('Withdraw NFT Prize'),
   [LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_START_LOTTERY]: t('Back'),
   [LockStage.CONFIRM_ADD_TOKEN]: t('Back'),
@@ -136,8 +139,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     lotteryId: pool?.id ?? '',
     owner: pool?.owner,
     decimals: currency?.decimals,
+    customTags: '',
   }))
 
+  const [nftFilters, setNftFilters] = useState<any>({
+    countries: pool?.countries,
+    cities: pool?.cities,
+    products: pool?.products,
+  })
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -245,6 +254,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       case LockStage.CLAIM_LOTTERY_REVENUE:
         setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       default:
         break
     }
@@ -252,6 +267,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.INJECT_FUNDS:
         setStage(LockStage.CONFIRM_INJECT_FUNDS)
         break
@@ -355,6 +373,23 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         console.log('CONFIRM_START_LOTTERY===============>', lotteryHelperContract, args)
         return callWithGasPrice(lotteryHelperContract, 'startLottery', args).catch((err) =>
           console.log('CONFIRM_START_LOTTERY===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const customTags = state.customTags?.split(',')
+        const args = [
+          '1',
+          state.collectionId,
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          ADDRESS_ZERO,
+          customTags?.length && customTags[0],
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(lotteryContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES) {
@@ -565,6 +600,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           >
             {t('CLAIM LOTTERY REVENUE')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_BURN_TOKEN_FOR_CREDIT)}>
             {t('UPDATE BURN TOKEN FOR CREDIT')}
           </Button>
@@ -684,6 +722,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       )}
       {stage === LockStage.UPDATE_NFT_PRIZES && (
         <UpdateNftPrizesStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.CLOSE_LOTTERY && (
         <CloseLotteryStage

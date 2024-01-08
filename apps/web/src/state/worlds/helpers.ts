@@ -20,17 +20,39 @@ export const getTag = async () => {
         {
           tags(id: tags) {
             id
-            name
           }
         }
       `,
       {},
     )
-    console.log('getTag===========>', res)
 
-    return res.tags?.length && res.tags[0]
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString())
+    return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags=============>', error)
+    return null
+  }
+}
+
+export const getTagFromWorld = async (address) => {
+  try {
+    const res = await request(
+      GRAPH_API_WORLDS,
+      gql`
+        query getTagFromValuepool($address: String!) {
+          tags(where: { active: true, world_: { id: $address } }) {
+            id
+          }
+        }
+      `,
+      { address },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTag===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
     return null
   }
 }
@@ -338,6 +360,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
         }
       }),
   )
+  const products = await getTagFromWorld(worldAddress)
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     worldAddress,
@@ -362,6 +385,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
     profileId: profileId.result.toString(),
     collectionId: collectionId.result.toString(),
     totalSupply: totalSupply.result.toString(),
+    products,
   }
 }
 

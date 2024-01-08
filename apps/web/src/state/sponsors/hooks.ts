@@ -18,7 +18,7 @@ import { getPendingRevenue, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('sponsors-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useSponsorsConfigInitialize = () => {

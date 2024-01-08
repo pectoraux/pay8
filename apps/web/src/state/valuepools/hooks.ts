@@ -31,7 +31,7 @@ import {
 export const useGetTags = () => {
   const { data } = useSWR('valuepools-tags6', async () => getTag())
   console.log('usetag============>', data)
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useValuepoolsConfigInitialize = () => {

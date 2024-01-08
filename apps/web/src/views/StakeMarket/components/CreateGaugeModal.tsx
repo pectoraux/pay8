@@ -66,9 +66,9 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_BEFORE_LITIGATIONS]: t('Update Before Litigations'),
   [LockStage.CANCEL_STAKE]: t('Cancel Stake'),
   [LockStage.CANCEL_APPLICATION]: t('Cancel Application'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.SWITCH_STAKE]: t('Switch Stake'),
   [LockStage.MINT_IOU]: t('Mint IOU'),
-  [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_MINT_IOU]: t('Back'),
   [LockStage.CONFIRM_SWITCH_STAKE]: t('Back'),
@@ -390,23 +390,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
-      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
-        const customTags = state.customTags?.split(',')
-        const args = [
-          '0',
-          '0',
-          nftFilters?.country?.toString(),
-          nftFilters?.city?.toString(),
-          '0',
-          '0',
-          ADDRESS_ZERO,
-          customTags.length && customTags[0],
-        ]
-        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
-        return callWithGasPrice(stakeMarketContract, 'emitUpdateMiscellaneous', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
-        )
-      }
       if (stage === LockStage.CONFIRM_APPLY) {
         const amountPayable = getDecimalAmount(new BigNumber(state.amountPayable), currency.decimals)
         const amountReceivable = getDecimalAmount(new BigNumber(state.amountReceivable), currency.decimals)
@@ -557,6 +540,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
       }
       if (stage === LockStage.CONFIRM_UPDATE) {
         const stakeRequired = getDecimalAmount(state.stakeRequired, currency?.decimals)
+        const customTags = state.customTags?.split(',')
         const args = [
           pool.id.toString(),
           state.profileId,
@@ -568,7 +552,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
           state.terms ?? '',
           nftFilters?.country?.toString() ?? '',
           nftFilters?.city?.toString() ?? '',
-          state.customTags ?? '',
+          customTags.length && customTags[0],
         ]
         console.log('CONFIRM_UPDATE===============>', args)
         return callWithGasPrice(stakeMarketContract, 'updateRequirements', args).catch((err) =>
@@ -607,9 +591,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
           </Button>
           <Button variant="light" mb="8px" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('PAY DUE PAYABLE')}
-          </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
-            {t('UPDATE LOCATION')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE)}>
             {t('UPDATE REQUIREMENTS')}
@@ -669,15 +650,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
             </LinkExternal>
           </Flex>
         </Flex>
-      )}
-      {stage === LockStage.UPDATE_LOCATION && (
-        <LocationStage
-          state={state}
-          nftFilters={nftFilters}
-          setNftFilters={setNftFilters}
-          handleChange={handleChange}
-          continueToNextStage={continueToNextStage}
-        />
       )}
       {stage === LockStage.UPDATE && (
         <UpdateParametersStage
