@@ -29,6 +29,7 @@ import {
   useGetNftShowOnlyOnSale,
   useGetNftShowSearch,
   useGetProtocolInfo,
+  useGetNftFilters,
 } from 'state/cancan/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import CollapsibleCard from 'components/CollapsibleCard'
@@ -88,7 +89,8 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
     setPage(page + 1)
   }, [setPage, page])
 
-  const _nfts = selectFilteredData(id, __nfts)
+  const filters = useGetNftFilters(id ?? '') as any
+  const _nfts = selectFilteredData(__nfts, filters)
   const nfts = useMemo(() => {
     const newests = orderBy(_nfts, (nft) => (nft?.updatedAt ? Date.parse(nft.updatedAt) : 0), 'desc')
     const newData = newests.filter((newest: any) => {

@@ -305,7 +305,7 @@ export const useApprovalNfts = (nftsInWallet: NftToken[]) => {
 
 export const useGetTags = () => {
   const { data } = useSWR('cancan-tags', async () => getTag())
-  return data?.name ?? ''
+  return data ?? ''
 }
 
 export const useGetNftFilters = (collectionAddress: string): Readonly<Record<string, NftAttribute>> => {

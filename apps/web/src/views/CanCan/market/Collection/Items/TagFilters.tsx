@@ -4,7 +4,7 @@ import { Flex } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
 import { Item } from 'views/CanCan/market/components/Filters'
 import { WORKSPACES } from 'config'
-import { useGetNftFilters } from 'state/cancan/hooks'
+import { useGetNftFilters, useGetTags } from 'state/cancan/hooks'
 
 import { ListTraitFilter } from './ListTraitFilter'
 import { ListTraitFilter2 } from './ListTraitFilter2'
@@ -44,6 +44,7 @@ const Filters: React.FC<any> = ({
   const nftFilters = useGetNftFilters(address) as any
   let Country = require('country-state-city').Country
   let City = require('country-state-city').City
+  const tags = useGetTags()
   const code = useMemo(
     () =>
       nftFilters?.country?.length &&
@@ -78,7 +79,7 @@ const Filters: React.FC<any> = ({
       { traitType: 'City', value: 'All', count: 0 } as any,
     ) || []
   const productsHome =
-    collection?.products?.split(',')?.reduce(
+    tags?.split(',')?.reduce(
       (accum: any, attr: any) => ({
         ...accum,
         Product: accum.Product
@@ -92,7 +93,7 @@ const Filters: React.FC<any> = ({
     count: attr.count ? attr.count : undefined,
     attr,
   }))
-  let countryItems =
+  const countryItems =
     countries.Country?.map((attr) => ({
       label: capitalize(attr.value as string),
       count: attr.count ? attr.count : undefined,
@@ -107,7 +108,7 @@ const Filters: React.FC<any> = ({
       count: 0,
     },
   })
-  let cityItems =
+  const cityItems =
     cities.City?.map((attr) => ({
       label: attr.value as string,
       count: attr.count ? attr.count : undefined,

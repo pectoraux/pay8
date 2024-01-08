@@ -22,7 +22,7 @@ const Items = () => {
   const handleChangeSearchQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) =>
       setShowSearch({ collection: collection?.id || '', showSearch: event.target.value }),
-    [],
+    [collection?.id, setShowSearch],
   )
   return (
     <Box py="32px">

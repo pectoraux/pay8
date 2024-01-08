@@ -127,7 +127,8 @@ const Collectible = () => {
       },
     ]
   }, [t])
-  const shuffledCollections = selectFilteredData2(ADDRESS_ZERO, _shuffledCollections) || _shuffledCollections
+  const filters = useGetNftFilters(ADDRESS_ZERO ?? '') as any
+  const shuffledCollections = selectFilteredData2(_shuffledCollections, filters) || _shuffledCollections
 
   const { data: collections = [], status } = useSWR<
     (Collection & Partial<{ lowestPrice: number; highestPrice: number }>)[]

@@ -54,13 +54,13 @@ export const useCollectionNfts = (collectionAddress: string) => {
     nftFilters,
   })
 
-  // We don't know the amount in advance if nft filters exist
-  const resultSize =
-    !Object.keys(nftFilters).length && collection
-      ? showOnlyNftsOnSale
-        ? collection.numberTokensListed
-        : collection?.totalSupply
-      : null
+  // // We don't know the amount in advance if nft filters exist
+  // const resultSize =
+  //   !Object.keys(nftFilters).length && collection
+  //     ? showOnlyNftsOnSale
+  //       ? collection.numberTokensListed
+  //       : collection?.totalSupply
+  //     : null
 
   const itemListingSettingsJson = JSON.stringify(itemListingSettings)
   const filtersJson = JSON.stringify(nftFilters)

@@ -71,7 +71,6 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   const { owner, id } = collection || {}
   const { t } = useTranslation()
   const { nfts: __nfts, isFetchingNfts, page, setPage, resultSize, isLastPage } = useCollectionNfts(id)
-  const showNftFilters = useGetNftFilters(id)
   const showSearch = useGetNftShowSearch(id)
   const showOnlyNftsUsers = useGetNftShowOnlyUsers(id)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(id)
@@ -85,7 +84,8 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
     setPage(page + 1)
   }, [setPage, page])
 
-  const _nfts = selectFilteredData(id, __nfts)
+  const filters = useGetNftFilters(id ?? '') as any
+  const _nfts = selectFilteredData(__nfts, filters)
   const nfts = useMemo(() => {
     const newests = orderBy(_nfts, (nft) => (nft?.updatedAt ? Date.parse(nft.updatedAt) : 0), 'desc')
     const newData = newests.filter((newest: any) => {

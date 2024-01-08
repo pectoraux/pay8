@@ -1,13 +1,13 @@
-import { useGetNftFilters } from './hooks'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { getTagFromProductId } from './helpers'
 
-export const selectFilteredData = (address, nfts) => {
-  const filters = useGetNftFilters(address ?? '') as any
+export const selectFilteredData = (nfts, filters) => {
   const _ve = filters?.workspace?.value ? getVeFromWorkspace(filters?.workspace.value.toLowerCase()) : ADDRESS_ZERO
-  console.log('selectFilteredData==============>', nfts, filters, _ve)
-  return nfts?.filter(
-    (nft) =>
+  return nfts?.filter(async (nft) => {
+    const tags = await getTagFromProductId(nft?.id)
+    console.log('selectFilteredData==============>', nfts, filters, _ve, tags)
+    return (
       (!filters.workspace || nft?.ve?.toLowerCase() === _ve?.toLowerCase()) &&
       (!filters.country ||
         filters.country.includes('All') ||
@@ -18,17 +18,17 @@ export const selectFilteredData = (address, nfts) => {
         filters.city.filter((value) => nft?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length >
           0) &&
       (!filters.product ||
-        filters.product.filter((value) => nft?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()))
-          ?.length > 0),
-  )
+        filters.product.filter((value) => tags?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length > 0)
+    )
+  })
 }
 
-export const selectFilteredData2 = (address, nfts) => {
-  const filters = useGetNftFilters(address ?? '') as any
+export const selectFilteredData2 = (nfts, filters) => {
   const _ve = filters?.workspace?.value ? getVeFromWorkspace(filters?.workspace.value.toLowerCase()) : ADDRESS_ZERO
   console.log('1selectFilteredData==============>', nfts, filters, _ve)
-  return nfts?.filter(
-    (nft) =>
+  return nfts?.filter(async (nft) => {
+    const tags = await getTagFromProductId(nft?.id)
+    return (
       (!filters.workspace || nft?.workspaces?.toLowerCase() === _ve?.toLowerCase()) &&
       (!filters.country ||
         filters.country.includes('All') ||
@@ -39,7 +39,7 @@ export const selectFilteredData2 = (address, nfts) => {
         filters.city.filter((value) => nft?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length >
           0) &&
       (!filters.product ||
-        filters.product.filter((value) => nft?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()))
-          ?.length > 0),
-  )
+        filters.product.filter((value) => tags?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length > 0)
+    )
+  })
 }

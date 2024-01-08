@@ -7,7 +7,7 @@ import { Box, Button, Flex, Heading, PageHeader, NextLinkFromReactRouter, PageSe
 import { useAccount } from 'wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import SectionsWithFoldableText from 'components/FoldableSection/SectionsWithFoldableText'
-import { useGetCollections } from 'state/cancan/hooks'
+import { useGetCollections, useGetNftFilters } from 'state/cancan/hooks'
 import { FetchStatus } from 'config/constants/types'
 import PageLoader from 'components/Loader/PageLoader'
 import useTheme from 'hooks/useTheme'
@@ -110,8 +110,9 @@ const Home = () => {
     return newData
   }, [status, collections, searchQuery])
 
-  const searchedNewestCollections2 = selectFilteredData2(ADDRESS_ZERO, searchedNewestCollections)
-  const searchedHotCollections2 = selectFilteredData2(ADDRESS_ZERO, searchedHotCollections)
+  const filters = useGetNftFilters(ADDRESS_ZERO ?? '') as any
+  const searchedNewestCollections2 = selectFilteredData2(searchedNewestCollections, filters)
+  const searchedHotCollections2 = selectFilteredData2(searchedHotCollections, filters)
 
   return (
     <>
