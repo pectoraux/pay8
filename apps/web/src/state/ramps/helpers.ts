@@ -46,7 +46,7 @@ export const getTagFromRamp = async ({ rampAddress }) => {
       GRAPH_API_RAMPS,
       gql`
         query getTagFromRamp($rampAddress: String!) {
-          tags(where: { active: true, ramp_: { id: rampAddress } }) {
+          tags(where: { active: true, ramp_: { id: $rampAddress } }) {
             id
           }
         }
