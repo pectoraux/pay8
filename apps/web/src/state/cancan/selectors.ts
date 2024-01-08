@@ -6,8 +6,7 @@ export const selectFilteredData = (nfts, filters) => {
   const _ve = filters?.workspace?.value ? getVeFromWorkspace(filters?.workspace.value.toLowerCase()) : ADDRESS_ZERO
   return nfts?.filter(async (nft) => {
     const tags = await getTagFromProductId(nft?.id)
-    console.log('selectFilteredData==============>', nfts, filters, _ve, tags)
-    return (
+    const res =
       (!filters.workspace || nft?.ve?.toLowerCase() === _ve?.toLowerCase()) &&
       (!filters.country ||
         filters.country.includes('All') ||
@@ -19,7 +18,8 @@ export const selectFilteredData = (nfts, filters) => {
           0) &&
       (!filters.product ||
         filters.product.filter((value) => tags?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length > 0)
-    )
+    console.log('selectFilteredData==============>', nfts, filters, _ve, tags, tags?.toLowerCase()?.split(','), res)
+    return res
   })
 }
 
