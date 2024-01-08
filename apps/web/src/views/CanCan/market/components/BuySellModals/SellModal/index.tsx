@@ -567,7 +567,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
       if (stage === SellingStage.CONFIRM_ADD_LOCATION) {
         let args = []
         try {
-          const delim = state.customTags?.length ? ',' : ''
+          const customTags = state.customTags?.split(',')
           args = [
             state.tokenId,
             state.description,
@@ -579,7 +579,7 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
             state.isArticle ? `${state.thumbnail},${state.mp4}` : `${state.thumbnail},${state.thumbnail}`,
             nftFilters?.country?.toString(),
             nftFilters?.city?.toString(),
-            nftFilters?.product?.toString() + delim + state.customTags,
+            customTags.length && customTags[0],
           ]
           console.log('12CONFIRM_ADD_LOCATION==============>', args, state.thumbnail)
         } catch (err) {

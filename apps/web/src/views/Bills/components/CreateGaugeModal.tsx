@@ -14,12 +14,15 @@ import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/sh
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { useRouter } from 'next/router'
-import UpdateUserOwnerStage from './UpdateUserOwnerStage'
+import LocationStage from 'views/Ramps/components/LocationStage'
+import DepositStage from 'views/ARPs/components/DepositStage'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { differenceInSeconds } from 'date-fns'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import UpdateApplicationStage from 'views/ARPs/components/UpdateApplicationStage'
+
+import UpdateUserOwnerStage from './UpdateUserOwnerStage'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -58,8 +61,6 @@ import UpdateDiscountDivisorStage from './UpdateDiscountDivisorStage'
 import UpdatePenaltyDivisorStage from './UpdatePenaltyDivisorStage'
 import UpdateMigrateStage from './UpdateMigrateStage'
 import UpdateAdminStage from './UpdateAdminStage'
-import LocationStage from 'views/Ramps/components/LocationStage'
-import DepositStage from 'views/ARPs/components/DepositStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -632,6 +633,7 @@ const CreateGaugeModal: React.FC<any> = ({
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
       if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const customTags = state.customTags?.split(',')
         const args = [
           '0',
           '0',
@@ -640,7 +642,7 @@ const CreateGaugeModal: React.FC<any> = ({
           '0',
           '0',
           pool?.id,
-          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+          customTags.length && customTags[0],
         ]
         console.log('CONFIRM_UPDATE_LOCATION===============>', args)
         return callWithGasPrice(billMinterContract, 'emitUpdateMiscellaneous', args).catch((err) =>

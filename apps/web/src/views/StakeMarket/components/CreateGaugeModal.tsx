@@ -14,7 +14,6 @@ import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
-import { requiresApproval } from 'utils/requiresApproval'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
@@ -30,6 +29,7 @@ import { fetchStakesAsync } from 'state/stakemarket'
 import LocationStage from 'views/Ramps/components/LocationStage'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { combineDateAndTime } from 'views/SSI/CreateProposal/helpers'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -49,7 +49,6 @@ import SwitchStakeStage from './SwitchStakeStage'
 import CancelStakeStage from './CancelStakeStage'
 import CancelApplicationStage from './CancelApplicationStage'
 import WaitingPeriodStage from './WaitingPeriodStage'
-import { combineDateAndTime } from 'views/SSI/CreateProposal/helpers'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.SETTINGS]: t('Control Panel'),
@@ -392,6 +391,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
       if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const customTags = state.customTags?.split(',')
         const args = [
           '0',
           '0',
@@ -400,7 +400,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, sousId, curre
           '0',
           '0',
           ADDRESS_ZERO,
-          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+          customTags.length && customTags[0],
         ]
         console.log('CONFIRM_UPDATE_LOCATION===============>', args)
         return callWithGasPrice(stakeMarketContract, 'emitUpdateMiscellaneous', args).catch((err) =>

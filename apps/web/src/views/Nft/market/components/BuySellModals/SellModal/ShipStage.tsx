@@ -376,6 +376,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase()),
           ]
           const args = [state.tokenId?.split(' ')?.join('-')?.trim(), state.name, state.symbol, state.img?.split(',')]
+          const customTags = state.customTags?.split(',')
           const args2 = [
             state.tokenId?.split(' ')?.join('-')?.trim(),
             state.description,
@@ -387,9 +388,7 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
             `${state.thumbnail},${state.thumbnail}`,
             nftFilters?.country?.toString() ?? '',
             nftFilters?.city?.toString() ?? '',
-            nftFilters?.product
-              ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
-              : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
+            customTags.length && customTags[0],
           ]
           console.log('CONFIRM_CREATE_ASK_ORDER===========================>', createArgs, args, args2)
           if (state.customMinter) {

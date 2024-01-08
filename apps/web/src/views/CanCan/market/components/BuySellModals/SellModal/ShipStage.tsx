@@ -430,6 +430,7 @@ const EditStage: React.FC<any> = ({
             } else {
               content = `${contentType},${state.thumbnail},${state.original}`
             }
+            const customTags = state.customTags?.split(',')
             const args = [
               state.tokenId?.split(' ')?.join('-')?.trim(),
               state.description,
@@ -441,9 +442,7 @@ const EditStage: React.FC<any> = ({
               content,
               nftFilters?.country?.toString() ?? '',
               nftFilters?.city?.toString() ?? '',
-              nftFilters?.product
-                ? [...nftFilters?.product, ...state.customTags.split(',')]?.filter((val) => !!val)?.toString()
-                : [...state.customTags.split(',')]?.filter((val) => !!val)?.toString(),
+              customTags.length && customTags[0],
             ]
             console.log('11CONFIRM_ADD_LOCATION==============>', marketCollectionsContract, args)
             return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', args).catch((err) =>

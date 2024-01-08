@@ -330,7 +330,7 @@ const LocationStage: React.FC<any> = ({
             <GreyedOutContainer style={{ paddingTop: '18px' }}>
               <Flex ref={targetRef8}>
                 <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                  {t('Not satisfied with above tags ? Add custom tags')}
+                  {t('Not satisfied with above tags ? Add a custom tag')}
                 </Text>
                 {tooltipVisible8 && tooltip8}
                 <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -340,7 +340,7 @@ const LocationStage: React.FC<any> = ({
                 scale="sm"
                 name="customTags"
                 value={state.customTags}
-                placeholder={t('comma separated tags')}
+                placeholder={t('input a custom tag')}
                 onChange={handleChange}
               />
             </GreyedOutContainer>

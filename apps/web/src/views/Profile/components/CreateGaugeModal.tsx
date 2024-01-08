@@ -386,6 +386,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
       if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const customTags = state.customTags?.split(',')
         const args = [
           '0',
           '0',
@@ -394,7 +395,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
           '0',
           '0',
           pool?.id,
-          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+          customTags.length && customTags[0],
         ]
         console.log('CONFIRM_UPDATE_LOCATION===============>', args)
         return callWithGasPrice(profileContract, 'emitUpdateMiscellaneous', args).catch((err) =>

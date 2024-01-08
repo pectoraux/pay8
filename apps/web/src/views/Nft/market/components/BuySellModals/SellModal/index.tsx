@@ -540,6 +540,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
         } catch (err) {
           console.log('1CONFIRM_ADD_LOCATION============>', err)
         }
+        const customTags = state.customTags?.split(',')
         return callWithGasPrice(marketCollectionsContract, 'emitAskInfo', [
           state.tokenId,
           state.description,
@@ -551,11 +552,7 @@ const SellModal: React.FC<any> = ({ variant, currency, nftToSell, onDismiss }) =
           `${state.thumbnail},${state.mp4}`,
           nftFilters?.country?.reduce((accum, attr) => [...accum, attr], []),
           nftFilters?.city?.reduce((accum, attr) => [...accum, attr], []),
-          nftFilters?.product
-            ? [...nftFilters?.product, ...state.customTags.split(',')]
-                ?.filter((val) => !!val)
-                ?.reduce((accum, attr) => [...accum, attr], [])
-            : [...state.customTags.split(',')]?.filter((val) => !!val)?.reduce((accum, attr) => [...accum, attr], []),
+          customTags.length && customTags[0],
         ]).catch((err) => console.log('CONFIRM_ADD_LOCATION================>', err))
       }
       if (stage === SellingStage.CONFIRM_UPDATE_IDENTITY_REQUIREMENTS) {

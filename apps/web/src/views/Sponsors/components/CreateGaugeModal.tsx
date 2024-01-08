@@ -354,6 +354,7 @@ const CreateGaugeModal: React.FC<any> = ({
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
       if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const customTags = state.customTags?.split(',')
         const args = [
           '0',
           '0',
@@ -362,7 +363,7 @@ const CreateGaugeModal: React.FC<any> = ({
           '0',
           '0',
           pool?.id,
-          [nftFilters?.products?.toString()].filter((val) => !!val)?.toString() + state.customTags,
+          customTags.length && customTags[0],
         ]
         console.log('CONFIRM_UPDATE_LOCATION===============>', args)
         return callWithGasPrice(sponsorHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>

@@ -40,7 +40,7 @@ export const getTag = async () => {
   }
 }
 
-export const getTagFromRamp = async ({ rampAddress }) => {
+export const getTagFromRamp = async (rampAddress) => {
   try {
     const res = await request(
       GRAPH_API_RAMPS,

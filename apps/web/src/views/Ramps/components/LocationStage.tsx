@@ -17,14 +17,14 @@ const LocationStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
       </GreyedOutContainer>
       <GreyedOutContainer style={{ paddingTop: '18px' }}>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Not satisfied with above tags ? Add custom tags')}
+          {t('Not satisfied with above tags ? Add a custom tag')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="customTags"
           value={state.customTags}
-          placeholder={t('comma separated tags')}
+          placeholder={t('input a custom tag')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -35,7 +35,7 @@ const LocationStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handle
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the location information of your contract to enable users to find it more easily. Location tags can be helpful for instance in the case of manual ramps that process cash and want their users to be able to locate them in the real world for their transactions. You can also add more custom tags related to your payment methods so users willing to transact in those payment methods can discover your ramp faster.',
+              'This will update the location information of your contract to enable users to find it more easily. Location tags can be helpful for instance in the case of manual ramps that process cash and want their users to be able to locate them in the real world for their transactions. You can also add more custom tags related to your payment methods so users willing to transact in those payment methods can discover your ramp faster. Run this function multiple times to add multiple custom tags',
             )}
           </Text>
         </Box>
