@@ -75,16 +75,17 @@ const Filters: React.FC<any> = ({
       }),
       { traitType: 'City', value: 'All', count: 0 } as any,
     ) || []
-  const productsHome =
-    products?.split(',')?.reduce(
-      (accum: any, attr: any) => ({
-        ...accum,
-        Product: accum.Product
-          ? [...accum.Product, { traitType: 'Product', value: attr, count: 0 }]
-          : [{ traitType: 'Product', value: attr, count: 0 }],
-      }),
-      {} as any,
-    ) || []
+  const productsHome = products?.length
+    ? products?.split(',')?.reduce(
+        (accum: any, attr: any) => ({
+          ...accum,
+          Product: accum.Product
+            ? [...accum.Product, { traitType: 'Product', value: attr, count: 0 }]
+            : [{ traitType: 'Product', value: attr, count: 0 }],
+        }),
+        {} as any,
+      )
+    : []
   const workspaceItems: Item[] = workspaces.Workspace.map((attr) => ({
     label: attr.value as string,
     count: attr.count ? attr.count : undefined,
