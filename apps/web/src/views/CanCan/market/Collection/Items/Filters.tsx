@@ -95,7 +95,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({ address, col
   const showOnlyNftsUsers = useGetNftShowOnlyUsers(address)
   const showOnlyNftsOnSale = useGetNftShowOnlyOnSale(address)
   const { setShowOnlyOnSale, setShowOnlyUsers } = useNftStorage()
-  const [, setActiveButtonIndex] = useState(showOnlyNftsOnSale ? 1 : 0)
+  const [, setActiveButtonIndex] = useState(showOnlyNftsOnSale ? 1 : showOnlyNftsUsers ? 2 : 0)
 
   useEffect(() => {
     if (showOnlyNftsOnSale && !showOnlyNftsUsers) {
