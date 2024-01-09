@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { getProfileAddress, getReferralVoterAddress } from 'utils/addressHelpers'
+import { getMarketCollectionsAddress, getProfileAddress, getReferralVoterAddress } from 'utils/addressHelpers'
 import { gql, request } from 'graphql-request'
 import { GRAPH_API_REFERRAL } from 'config/constants/endpoints'
 import { collectionFields } from 'state/referralsvoting/queries'
@@ -11,6 +11,7 @@ import { erc20ABI } from 'wagmi'
 import { bribeABI } from 'config/abi/bribe'
 import { profileABI } from 'config/abi/profile'
 import { getCollection } from 'state/cancan/helpers'
+import { marketCollectionsABI } from 'config/abi/marketCollections'
 
 export const getTag = async () => {
   try {
@@ -60,8 +61,7 @@ export const fetchReferrals = async ({ chainId }) => {
   const referrals = await Promise.all(
     gauges
       ?.map(async (gauge) => {
-        const collection = await getCollection(gauge.id)
-        const [totalWeight, gaugeWeight, vestingTokenAddress] = await bscClient.multicall({
+        const [totalWeight, gaugeWeight, vestingTokenAddress, collectionId] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -81,8 +81,15 @@ export const fetchReferrals = async ({ chainId }) => {
               abi: vestingABI,
               functionName: 'token',
             },
+            {
+              address: getMarketCollectionsAddress(),
+              abi: marketCollectionsABI,
+              functionName: 'addressToCollectionId',
+              args: [gauge.owner],
+            },
           ],
         })
+        const collection = await getCollection(collectionId.result?.toString())
         const [gaugeEarned, vestingTokenName, vestingTokenDecimals, vestingTokenSymbol, tokensLength, _balanceOf] =
           await bscClient.multicall({
             allowFailure: true,
