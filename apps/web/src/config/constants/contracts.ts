@@ -633,7 +633,7 @@ export default {
     56: '0x',
   },
   'apparel, beauty & cosmetics': {
-    4002: '0xfF1daEEA44Ff513Af0124942cA90968C79c42cee',
+    4002: '0xAA5D3992b6efb23b2a20914fC9C731B29E6AA99E',
     56: '0x',
   },
   energy: {
