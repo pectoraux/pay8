@@ -35,16 +35,17 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useSSIContract } from 'hooks/useContract'
 import EncryptRsa from 'encrypt-rsa'
 import axios from 'axios'
-import { SecondaryLabel } from './styles'
-import Layout from '../components/Layout'
 import { useProfileFromSSI } from 'state/ssi/hooks'
 import { addYears } from 'date-fns'
 import { privateKeyToAccount } from 'viem/accounts'
-import { Address, createPublicClient, createWalletClient, custom, http } from 'viem'
+import { createPublicClient, createWalletClient, custom, http } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { getProfileAddress, getSSIAddress } from 'utils/addressHelpers'
 import { profileABI } from 'config/abi/profile'
 import { ssiABI } from 'config/abi/ssi'
+
+import { SecondaryLabel } from './styles'
+import Layout from '../components/Layout'
 
 const CreateProposal = () => {
   const [state, setState] = useState<any>(() => ({
@@ -74,14 +75,14 @@ const CreateProposal = () => {
   const profile = userProfile ?? payswapProfile
   const randomCode = useMemo(() => uniqueId(Date.now()?.toString()), [])
 
-  // console.log(
-  //   'randomCode==============>',
-  //   randomCode,
-  //   profile,
-  //   payswapProfile,
-  //   userProfile,
-  //   process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS,
-  // )
+  console.log(
+    'randomCode==============>',
+    // randomCode,
+    profile,
+    payswapProfile,
+    // userProfile,
+    // process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS,
+  )
   const handleSubmit = async () => {
     setIsLoading(true)
     const messageHtml = `

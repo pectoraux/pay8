@@ -27,7 +27,6 @@ import { useMemo, useState, useCallback } from 'react'
 import { useGetSharedEmail, useProfile } from 'state/profile/hooks'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateBountyModal from 'views/TrustBounties/components/CreateBountyModal'
-import { FetchStatus } from 'config/constants/types'
 import EditProfileAvatar from './EditProfileAvatar'
 import BannerHeader from '../../Nft/market/components/BannerHeader'
 import StatBox, { StatBoxItem } from '../../Nft/market/components/StatBox'
@@ -143,18 +142,18 @@ const ProfileHeader: React.FC<any> = ({
   const description = useMemo(() => {
     // eslint-disable-next-line consistent-return
     const getActivateButton = () => {
-      if (!sharedEmail) {
-        return (
-          <ReactRouterLink to="/ssi/proposal/createAutomaticData">
-            <Button
-              // disabled={!isProfileLoading && !isValidating}
-              mt="16px"
-            >
-              {t('Verify Your Email')}
-            </Button>
-          </ReactRouterLink>
-        )
-      }
+      // if (!sharedEmail) {
+      //   return (
+      //     <ReactRouterLink to="/ssi/proposal/createAutomaticData">
+      //       <Button
+      //         // disabled={!isProfileLoading && !isValidating}
+      //         mt="16px"
+      //       >
+      //         {t('Verify Your Email')}
+      //       </Button>
+      //     </ReactRouterLink>
+      //   )
+      // }
       // if (hasProfile) {
       // }
       // if (profile && !profile?.accounts?.length) {
@@ -164,32 +163,54 @@ const ProfileHeader: React.FC<any> = ({
       //     </Button>
       //   )
       // }
-      if (isBounties) {
-        return (
-          // <Button width="fit-content" mt="16px" onClick={openPresentAddAccount}>
-          //   {t('Create Bounty')}
-          // </Button>
-          <Flex>
-            <Button p="0" disabled={!isProfileLoading && !isValidating} variant="text">
-              <Text color="primary" onClick={onPresentTrustBounties} bold fontSize="16px" mr="4px">
-                {t('Create a Bounty in ')}{' '}
-              </Text>
-              <CurrencyInputPanel
-                showInput={false}
-                currency={currency ?? inputCurency}
-                onCurrencySelect={handleInputSelect}
-                otherCurrency={currency ?? inputCurency}
-                id="bounties-currency"
-              />
-            </Button>
-            <ArrowForwardIcon onClick={onPresentTrustBounties} color="primary" />
-          </Flex>
-        )
-      }
+      // if (isBounties) {
+      //   return (
+      //     // <Button width="fit-content" mt="16px" onClick={openPresentAddAccount}>
+      //     //   {t('Create Bounty')}
+      //     // </Button>
+      //     <Flex>
+      //       <Button p="0" disabled={!isProfileLoading && !isValidating} variant="text">
+      //         <Text color="primary" onClick={onPresentTrustBounties} bold fontSize="16px" mr="4px">
+      //           {t('Create a Bounty in ')}{' '}
+      //         </Text>
+      //         <CurrencyInputPanel
+      //           showInput={false}
+      //           currency={currency ?? inputCurency}
+      //           onCurrencySelect={handleInputSelect}
+      //           otherCurrency={currency ?? inputCurency}
+      //           id="bounties-currency"
+      //         />
+      //       </Button>
+      //       <ArrowForwardIcon onClick={onPresentTrustBounties} color="primary" />
+      //     </Flex>
+      //   )
+      // }
       return (
-        <Button width="fit-content" mt="16px" disabled={hasProfile} onClick={openPresentCreateProfile}>
-          {t('Create Profile')}
-        </Button>
+        <Flex flexDirection="column">
+          <Button p="0" disabled={!isProfileLoading && !isValidating} variant="text">
+            <Text color="primary" onClick={onPresentTrustBounties} bold fontSize="16px" mr="4px">
+              {t('Create a Bounty in ')}{' '}
+            </Text>
+            <CurrencyInputPanel
+              showInput={false}
+              currency={currency ?? inputCurency}
+              onCurrencySelect={handleInputSelect}
+              otherCurrency={currency ?? inputCurency}
+              id="bounties-currency"
+            />
+          </Button>
+          <ReactRouterLink to="/ssi/proposal/createAutomaticData">
+            <Button
+              // disabled={!isProfileLoading && !isValidating}
+              mt="16px"
+            >
+              {t('Verify Your Email')}
+            </Button>
+          </ReactRouterLink>
+          <Button width="fit-content" mt="16px" disabled={hasProfile} onClick={openPresentCreateProfile}>
+            {t('Create Profile')}
+          </Button>
+        </Flex>
       )
     }
 
