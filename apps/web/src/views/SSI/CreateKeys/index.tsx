@@ -12,7 +12,6 @@ import {
   Input,
   LinkExternal,
   Text,
-  useModal,
   useToast,
   useTooltip,
 } from '@pancakeswap/uikit'
@@ -24,6 +23,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
 import { PageMeta } from 'components/Layout/Page'
+import { useSignMessage } from 'wagmi'
 import Link from 'next/link'
 import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -32,7 +32,6 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useSSIContract } from 'hooks/useContract'
 import { SecondaryLabel } from './styles'
 import Layout from '../components/Layout'
-import { useSignMessage } from 'wagmi'
 
 const CryptoJS = require('crypto-js')
 
@@ -48,7 +47,7 @@ const CreateKeys = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
-  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { fetchWithCatchTxError } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const ssiContract = useSSIContract()
   const { toastSuccess, toastError } = useToast()
