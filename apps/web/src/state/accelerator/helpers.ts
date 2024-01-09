@@ -9,9 +9,10 @@ import { acceleratorVoterABI } from 'config/abi/acceleratorvoter'
 import { vestingABI } from 'config/abi/vesting'
 import { gaugeABI } from 'config/abi/gauge'
 import { bribeABI } from 'config/abi/bribe'
-import { getAcceleratorVoterAddress, getProfileAddress } from 'utils/addressHelpers'
+import { getAcceleratorVoterAddress, getBusinessMinterAddress, getProfileAddress } from 'utils/addressHelpers'
 import { profileABI } from 'config/abi/profile'
 import { getCollection } from 'state/cancan/helpers'
+import { businessMinterABI } from 'config/abi/businessMinter'
 
 export const getTag = async () => {
   try {
@@ -102,6 +103,22 @@ export const getWeight = async (collectionId, vaAddress, chainId) => {
     weightPercent:
       (parseFloat(weights.result.toString()) * 100) / Math.max(1, parseFloat(totalWeight.result.toString())),
   }
+}
+
+export const getEarlyAdopter = async (vaAddress, userAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [earlyAdopter] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getBusinessMinterAddress(),
+        abi: businessMinterABI,
+        functionName: 'earlyAdopters',
+        args: [userAddress, vaAddress],
+      },
+    ],
+  })
+  return earlyAdopter.result
 }
 
 export const fetchAccelerator = async ({ chainId }) => {

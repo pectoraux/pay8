@@ -6,7 +6,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
-import { fetchAcceleratorGaugesAsync, fetchAcceleratorUserDataAsync } from '.'
+import { fetchAcceleratorGaugesAsync } from '.'
 import {
   currPoolSelector,
   currBribeSelector,
@@ -14,7 +14,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag, getWeight } from './helpers'
+import { getEarlyAdopter, getTag, getWeight } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('acc-tags', async () => getTag())
@@ -104,6 +104,17 @@ export const useGetWeight = (collectionId, vaAddress) => {
   const { chainId } = useActiveChainId()
   const { data, mutate } = useSWR(['useGetWeight', collectionId, vaAddress, chainId], async () =>
     getWeight(collectionId, vaAddress, chainId),
+  )
+  return {
+    data,
+    refetch: mutate,
+  }
+}
+
+export const useGetEarlyAdopter = (vaAddress, userAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetEarlyAdopter', vaAddress, userAddress, chainId], async () =>
+    getEarlyAdopter(vaAddress, userAddress, chainId),
   )
   return {
     data,

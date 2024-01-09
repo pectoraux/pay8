@@ -23,6 +23,8 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
 import { fetchAcceleratorGaugesAsync } from 'state/accelerator'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useGetEarlyAdopter } from 'state/accelerator/hooks'
+
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import UpdateBountyStage from './UpdateBountyStage'
@@ -47,6 +49,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_BOUNTY]: t('Back'),
   [LockStage.CONFIRM_DISTRIBUTE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_GAUGE]: t('Back'),
+  [LockStage.CONFIRM_LOCK_TOKENS]: t('Back'),
   [LockStage.CONFIRM_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_DELETE]: t('Back'),
@@ -76,6 +79,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const { theme } = useTheme()
   const dispatch = useAppDispatch()
   const { callWithGasPrice } = useCallWithGasPrice()
+  const { data: isEarlyAdopter } = useGetEarlyAdopter(pool?.ve, account)
   const acceleratorVoterContract = useAcceleratorContract()
   const businessMinterContract = useBusinessMinterContract()
   const bribeTokenContract = useERC20(currency?.address || '')
@@ -98,6 +102,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_GAUGE:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_LOCK_TOKENS:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_VOTE_UP:
@@ -226,6 +233,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           console.log('CONFIRM_UPDATE_GAUGE==================>', err7),
         )
       }
+      if (stage === LockStage.CONFIRM_LOCK_TOKENS) {
+        console.log('CONFIRM_LOCK_TOKENS==================>', [pool.ve])
+        return callWithGasPrice(businessMinterContract, 'lockTokens', [pool.ve]).catch((err7) =>
+          console.log('CONFIRM_LOCK_TOKENS==================>', err7),
+        )
+      }
       if (stage === LockStage.CONFIRM_DELETE) {
         return callWithGasPrice(acceleratorVoterContract, 'deactivatePitch', []).catch((err8) =>
           console.log('CONFIRM_DELETE==================>', err8),
@@ -276,6 +289,14 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           </Button>
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_GAUGE)}>
             {t('UPDATE REWARDS')}
+          </Button>
+          <Button
+            variant="tertiary"
+            disabled={!isEarlyAdopter}
+            mb="8px"
+            onClick={() => setStage(LockStage.CONFIRM_LOCK_TOKENS)}
+          >
+            {t('LOCK TOKENS')}
           </Button>
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_DISTRIBUTE)}>
             {t('DISTRIBUTE REWARDS')}
