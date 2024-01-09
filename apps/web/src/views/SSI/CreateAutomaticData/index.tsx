@@ -176,16 +176,16 @@ const CreateProposal = () => {
         functionName: 'shareEmail',
         args: [account],
       })
-      await walletClient
+      return walletClient
         .writeContract(rq2)
-        //   setIsLoading(false)
-        //   toastSuccess(
-        //     t('Data Created'),
-        //     <ToastDescriptionWithTx>
-        //       {t('You can now start sharing this data with different services/users')}
-        //     </ToastDescriptionWithTx>,
-        //   )
         .catch((err) => console.log('rerr2=================>', err, rq2, getProfileAddress(), client))
+      //   setIsLoading(false)
+      //   toastSuccess(
+      //     t('Data Created'),
+      //     <ToastDescriptionWithTx>
+      //       {t('You can now start sharing this data with different services/users')}
+      //     </ToastDescriptionWithTx>,
+      //   )
     } catch (err) {
       setIsLoading(false)
       console.log('try err====================>', err)
