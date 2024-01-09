@@ -72,9 +72,9 @@ const CreateProposal = () => {
   const ssiContract = useSSIContract()
   const { toastSuccess, toastError } = useToast()
   const { profile: payswapProfile } = useProfileFromSSI(`0x${process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS}`)
-  // const { profile: userProfile } = useProfileFromSSI(account)
-  // const profile = userProfile?.profile ?? payswapProfile
-  const profile = payswapProfile
+  const { profile: userProfile } = useProfileFromSSI(account)
+  const profile = userProfile?.profile ?? payswapProfile
+  // const profile = payswapProfile
   const randomCode = useMemo(() => uniqueId(Date.now()?.toString()), [])
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
   const client = createPublicClient({
