@@ -61,6 +61,7 @@ const CreateProposal = () => {
     searchable: false,
   }))
   const [isLoading, setIsLoading] = useState(false)
+  const [isLoading2, setIsLoading2] = useState(false)
   const [codeSent, setCodeSent] = useState('')
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
@@ -75,6 +76,15 @@ const CreateProposal = () => {
   // const profile = userProfile?.profile ?? payswapProfile
   const profile = payswapProfile
   const randomCode = useMemo(() => uniqueId(Date.now()?.toString()), [])
+  const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
 
   console.log(
     'randomCode==============>',
@@ -115,18 +125,41 @@ const CreateProposal = () => {
     }
   }
 
+  // eslint-disable-next-line consistent-return
   const handleCreateData = useCallback(async () => {
     try {
       setIsLoading(true)
-      const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
-      const client = createPublicClient({
-        chain: fantomTestnet,
-        transport: http(),
+      console.log('public===================>', account, client, acct)
+      const { request } = await client.simulateContract({
+        account: acct,
+        address: getProfileAddress(),
+        abi: profileABI,
+        functionName: 'shareEmail',
+        args: [account],
       })
-      const walletClient = createWalletClient({
-        chain: fantomTestnet,
-        transport: custom(window.ethereum),
-      })
+
+      return walletClient
+        .writeContract(request)
+        .then((res) => {
+          setIsLoading(false)
+          toastSuccess(
+            t('Email successfully shared'),
+            <ToastDescriptionWithTx txHash={res}>
+              {t('Your email data has been created and shared with PaySwap.')}
+            </ToastDescriptionWithTx>,
+          )
+        })
+        .catch((err) => console.log('rerr2=================>', err, client))
+    } catch (err) {
+      setIsLoading(false)
+      console.log('try err====================>', err)
+    }
+  }, [t, profile, state, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
+
+  // eslint-disable-next-line consistent-return
+  const handleCreateData2 = useCallback(async () => {
+    try {
+      setIsLoading2(true)
       const encryptRsa = new EncryptRsa()
       const pk = `-----BEGIN PUBLIC KEY-----${profile?.publicKey?.replace(/\s/g, '')}-----END PUBLIC KEY-----`
       const encryptedAnswer = state.name
@@ -148,7 +181,7 @@ const CreateProposal = () => {
         encryptedAnswer,
         'general',
       ]
-      console.log('public===================>', args, account)
+      console.log('public===================>', args, account, client, acct)
       const { request } = await client.simulateContract({
         account: acct,
         address: getSSIAddress(),
@@ -167,27 +200,20 @@ const CreateProposal = () => {
           'general',
         ],
       })
-      await walletClient.writeContract(request).catch((err) => console.log('rerr1=================>', err))
-
-      const { request: rq2 } = await client.simulateContract({
-        account: acct,
-        address: getProfileAddress(),
-        abi: profileABI,
-        functionName: 'shareEmail',
-        args: [account],
-      })
       return walletClient
-        .writeContract(rq2)
-        .catch((err) => console.log('rerr2=================>', err, rq2, getProfileAddress(), client))
-      //   setIsLoading(false)
-      //   toastSuccess(
-      //     t('Data Created'),
-      //     <ToastDescriptionWithTx>
-      //       {t('You can now start sharing this data with different services/users')}
-      //     </ToastDescriptionWithTx>,
-      //   )
+        .writeContract(request)
+        .then((res) => {
+          setIsLoading2(false)
+          toastSuccess(
+            t('Data successfully published'),
+            <ToastDescriptionWithTx txHash={res}>
+              {t('Your email data has been created and can now be shared with others.')}
+            </ToastDescriptionWithTx>,
+          )
+        })
+        .catch((err) => console.log('rerr2=================>', err, client))
     } catch (err) {
-      setIsLoading(false)
+      setIsLoading2(false)
       console.log('try err====================>', err)
     }
   }, [t, profile, state, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
@@ -300,17 +326,45 @@ const CreateProposal = () => {
               )}
               {account ? (
                 <>
-                  <Button
-                    type="submit"
-                    width="100%"
-                    isLoading={isLoading}
-                    onClick={!codeSent ? handleSubmit : handleCreateData}
-                    endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
-                    disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
-                    mb="16px"
-                  >
-                    {!codeSent ? t('Send') : t('Publish')}
-                  </Button>
+                  {!codeSent ? (
+                    <Button
+                      type="submit"
+                      width="100%"
+                      isLoading={isLoading}
+                      onClick={handleSubmit}
+                      endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
+                      disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
+                      mb="16px"
+                    >
+                      {t('Send')}
+                    </Button>
+                  ) : (
+                    <Flex>
+                      <Button
+                        type="submit"
+                        width="100%"
+                        mr="10px"
+                        isLoading={isLoading}
+                        onClick={handleCreateData}
+                        endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
+                        disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
+                        mb="16px"
+                      >
+                        {t('Share Email')}
+                      </Button>
+                      <Button
+                        type="submit"
+                        width="100%"
+                        isLoading={isLoading2}
+                        onClick={handleCreateData2}
+                        endIcon={isLoading2 ? <AutoRenewIcon spin color="currentColor" /> : null}
+                        disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
+                        mb="16px"
+                      >
+                        {t('Publish Email')}
+                      </Button>
+                    </Flex>
+                  )}
                 </>
               ) : (
                 <ConnectWalletButton width="100%" type="button" />
