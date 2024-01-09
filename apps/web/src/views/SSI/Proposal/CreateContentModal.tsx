@@ -135,7 +135,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
           entry.auditorProfileId.id,
           entry.endTime,
           entry.question,
-          identityProof,
+          entry?.question?.toLowerCase() === 'ssid' ? testimony : identityProof,
         ]
         console.log('generateIdentityProof===================>', args)
         return callWithGasPrice(ssiContract, 'generateIdentityProof', args)
@@ -158,28 +158,34 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
     }
     onDismiss()
   }, [
-    t,
-    entry,
-    onDismiss,
-    ssiContract,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
     generateIdentityProof,
+    onDismiss,
     fetchWithCatchTxError,
+    entry.owner,
+    entry.ownerProfileId.id,
+    entry.auditorProfileId.id,
+    entry.endTime,
+    entry.question,
+    testimony,
+    callWithGasPrice,
+    ssiContract,
+    toastSuccess,
+    t,
+    toastError,
   ])
 
   const handleIdentityProof2 = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
+      const identityProof = generateIdentityProof()
       const args = [
         entry.ownerProfileId?.owner,
         entry.ownerProfileId?.id,
         entry.auditorProfileId?.id,
         entry?.endTime,
         entry?.question,
-        testimony,
+        entry?.question?.toLowerCase() === 'ssid' ? testimony : identityProof,
       ]
       console.log('handleIdentityProof2===================>', args)
       return callWithGasPrice(ssiContract, 'generateIdentityProof', args)
@@ -194,15 +200,18 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
     }
     onDismiss()
   }, [
-    t,
-    entry,
-    onDismiss,
-    ssiContract,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
-    generateIdentityProof,
     fetchWithCatchTxError,
+    onDismiss,
+    entry.ownerProfileId?.owner,
+    entry.ownerProfileId?.id,
+    entry.auditorProfileId?.id,
+    entry?.endTime,
+    entry?.question,
+    testimony,
+    callWithGasPrice,
+    ssiContract,
+    toastSuccess,
+    t,
   ])
 
   const handleShare = useCallback(async () => {

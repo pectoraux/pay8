@@ -7,6 +7,7 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useGetIsUnique } from 'state/profile/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
@@ -142,9 +143,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
           </Box>
           <Box mr="8px" height="32px" mb="8px">
             <Flex flexDirection="column">
-              <Text fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {pool?.ssid?.length ? pool?.ssid : 'N/A'}
-              </Text>
+              {!pool?.ssid?.length ? (
+                <Text fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                  N/A
+                </Text>
+              ) : (
+                <CopyAddress title={truncateHash(pool?.ssid)} account={pool?.ssid} />
+              )}
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                 {t('SSID')}
               </Text>
