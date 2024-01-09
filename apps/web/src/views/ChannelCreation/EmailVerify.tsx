@@ -1,18 +1,16 @@
-import { useState } from 'react'
+import { noop } from 'lodash'
 import { Card, CardBody, Heading, Text, LinkExternal, Checkbox, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import NextStepButton from './NextStepButton'
-import useProfileCreation from './contexts/hook'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useGetSharedEmail } from 'state/profile/hooks'
-import { noop } from 'lodash'
+import NextStepButton from './NextStepButton'
+import useProfileCreation from './contexts/hook'
 
 const EmailVerify: React.FC = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { actions } = useProfileCreation()
   const { sharedEmail } = useGetSharedEmail(account)
-
   return (
     <>
       <Text fontSize="20px" color="textSubtle" bold>

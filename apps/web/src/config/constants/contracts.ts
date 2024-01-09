@@ -489,7 +489,7 @@ export default {
     56: '0x',
   },
   businessMinter: {
-    4002: '0xfcEecAda309584614DDF2Cc1E084B9C8E4BcEC8a',
+    4002: '0xdBdEC71A1A0cf1D14D5Ea39a69E9Bcfa67719f40',
     56: '0x',
   },
   businessBribeFactory: {
@@ -633,7 +633,7 @@ export default {
     56: '0x',
   },
   'apparel, beauty & cosmetics': {
-    4002: '0xC853D1c9B60962a5CDB361379595BC6400aaE722',
+    4002: '0xfF1daEEA44Ff513Af0124942cA90968C79c42cee',
     56: '0x',
   },
   energy: {
