@@ -15,11 +15,11 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import orderBy from 'lodash/orderBy'
 import styled from 'styled-components'
+import { useNftStorage } from 'state/cancan/storage'
+import { useGetNftFilters } from 'state/cancan/hooks'
 import { FilterButton, ListOrderState, SearchWrapper } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { Item } from './types'
 import { TraitItemRow } from './styles'
-import { useNftStorage } from 'state/cancan/storage'
-import { useGetNftFilters } from 'state/cancan/hooks'
 
 interface ListTraitFilterProps {
   title?: string
