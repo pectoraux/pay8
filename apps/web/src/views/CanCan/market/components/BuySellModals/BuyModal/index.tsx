@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router'
 import EncryptRsa from 'encrypt-rsa'
 import NodeRSA from 'encrypt-rsa'
+import { noop } from 'lodash'
 import { useState, useMemo, useEffect } from 'react'
-import { InjectedModalProps, Skeleton, useToast } from '@pancakeswap/uikit'
+import { InjectedModalProps, useToast } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { useTranslation, TranslateFunction } from '@pancakeswap/localization'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
@@ -36,7 +37,6 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { decryptContent, getThumbnailNContent } from 'utils/cancan'
-import { noop } from 'lodash'
 import { useGetRequiresApproval } from 'state/valuepools/hooks'
 import { marketEventsABI } from 'config/abi/marketEvents'
 import { getCardAddress, getMarketEventsAddress } from 'utils/addressHelpers'
@@ -373,7 +373,6 @@ const BuyModal: React.FC<any> = ({
             transport: custom(window.ethereum),
           })
           const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
-
           const card = await getCard(accountId)
           const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
           const _username = nodeRSA.decryptStringWithRsaPrivateKey({

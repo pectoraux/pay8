@@ -88,7 +88,6 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   const handleLoadMore = useCallback(() => {
     setPage(page + 1)
   }, [setPage, page])
-
   const filters = useGetNftFilters(id ?? '') as any
   const _nfts = selectFilteredData(__nfts, filters)
   const nfts = useMemo(() => {

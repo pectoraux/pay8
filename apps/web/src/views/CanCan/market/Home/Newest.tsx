@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Heading, Flex, Button, Grid, ChevronRightIcon, NextLinkFromReactRouter } from '@pancakeswap/uikit'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useGetNftFilters } from 'state/cancan/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getLatestListedItems } from 'state/cancan/helpers'
-import { cancanBaseUrl, nftsBaseUrl } from 'views/CanCan/market/constants'
-import { isAddress } from 'utils'
-
-import { CollectibleLinkCard } from '../components/CollectibleCard'
-import GridPlaceholder from '../components/GridPlaceholder'
 import { selectFilteredData } from 'state/cancan/selectors'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { cancanBaseUrl } from 'views/CanCan/market/constants'
+import { Heading, Flex, Button, Grid, ChevronRightIcon, NextLinkFromReactRouter } from '@pancakeswap/uikit'
+
+import GridPlaceholder from '../components/GridPlaceholder'
+import { CollectibleLinkCard } from '../components/CollectibleCard'
 
 /**
  * Fetch latest NFTs data from SG+API and combine them
@@ -32,7 +32,8 @@ const useNewestNfts = () => {
 const Newest: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const _nfts = useNewestNfts()
-  const nfts = selectFilteredData(ADDRESS_ZERO, _nfts)
+  const filters = useGetNftFilters(ADDRESS_ZERO) as any
+  const nfts = selectFilteredData(_nfts, filters)
 
   return (
     <>
