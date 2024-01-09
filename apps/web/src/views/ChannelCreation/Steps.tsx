@@ -17,15 +17,15 @@ const Steps = () => {
   }
 
   if (currentStep === 0) {
-    return <EmailVerify />
-  }
-
-  if (currentStep === 1) {
     return <CreateProfile />
   }
 
-  if (currentStep === 2) {
+  if (currentStep === 1) {
     return <SSIKeys />
+  }
+
+  if (currentStep === 2) {
+    return <EmailVerify />
   }
 
   if (currentStep === 3) {
