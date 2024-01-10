@@ -142,7 +142,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchLotteriesAsync({ fromLottery: true, chainId }))
-      delay(3000)
+      delay(6000)
       reload()
     }
     onDismiss()

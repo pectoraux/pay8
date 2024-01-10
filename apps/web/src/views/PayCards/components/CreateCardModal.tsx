@@ -84,7 +84,7 @@ const CreateCardModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchCardsAsync({ fromCard: true, chainId }))
-      delay(3000)
+      delay(6000)
       reload()
     }
     onDismiss()

@@ -122,7 +122,7 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
           fromValuepool,
         }),
       )
-      delay(3000)
+      delay(6000)
       reload()
     }
     onDismiss()

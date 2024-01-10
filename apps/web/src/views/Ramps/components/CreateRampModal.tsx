@@ -56,7 +56,7 @@ const CreateRampModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchRampsAsync({ chainId }))
-      delay(3000)
+      delay(6000)
       reload()
     }
     onDismiss()

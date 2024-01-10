@@ -57,7 +57,7 @@ const CreateWILLModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchWillsAsync({ fromWill: true, chainId }))
-      delay(3000)
+      delay(6000)
       reload()
     }
     onDismiss()
