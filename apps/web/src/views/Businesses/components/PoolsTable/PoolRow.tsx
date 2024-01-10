@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrBribe } from 'state/businesses/hooks'
@@ -20,7 +20,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const currState = useCurrBribe()
   const { isMobile } = useMatchBreakpoints()
   const tokenAddress = pool?.vestingTokenAddress || ''
-  const { data: totalLiquidity } = useGetTotalLiquidity(tokenAddress, getBusinessVoterAddress())
+  const { data: totalLiquidity, refetch } = useGetTotalLiquidity(tokenAddress, getBusinessVoterAddress())
 
   const currBribe = useMemo(() => {
     if (pool?.userDataLoaded) {
@@ -29,6 +29,11 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
     return pool.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
   }, [currState, tokenAddress, pool])
   console.log('currBribe====================>', currBribe, tokenAddress, currState)
+
+  useEffect(() => {
+    refetch()
+  }, [pool.claimable, refetch])
+
   const tabs = (
     <>
       <NameCell pool={pool} />

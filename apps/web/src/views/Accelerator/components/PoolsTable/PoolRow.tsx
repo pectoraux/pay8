@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { memo, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrBribe } from 'state/accelerator/hooks'
 import { useTranslation } from '@pancakeswap/localization'
@@ -22,13 +22,18 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const currState = useCurrBribe()
   const { isMobile } = useMatchBreakpoints()
   const tokenAddress = pool?.vestingTokenAddress || ''
-  const { data: totalLiquidity } = useGetTotalLiquidity(tokenAddress, getAcceleratorVoterAddress())
+  const { data: totalLiquidity, refetch } = useGetTotalLiquidity(tokenAddress, getAcceleratorVoterAddress())
   const currBribe = useMemo(() => {
     if (pool?.userDataLoaded) {
       return pool?.userData?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
     }
     return pool?.bribes?.find((bribe) => bribe.tokenAddress === currState[tokenAddress])
   }, [currState, tokenAddress, pool])
+
+  useEffect(() => {
+    refetch()
+  }, [pool.claimable, refetch])
+
   const tabs = (
     <>
       <NameCell pool={pool} />
