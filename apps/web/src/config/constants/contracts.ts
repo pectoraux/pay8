@@ -489,7 +489,7 @@ export default {
     56: '0x',
   },
   businessMinter: {
-    4002: '0x9A2c537f1bFb95be8A38964E46983B4eD679Abf8',
+    4002: '0xBdf901C35FfA73f36dBF7FC88708Ce0Ab95089B6',
     56: '0x',
   },
   businessBribeFactory: {
