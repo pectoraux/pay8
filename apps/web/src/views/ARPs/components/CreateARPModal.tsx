@@ -96,8 +96,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchArpsAsync({ fromArp: true, chainId }))
-      delay(6000)
-      reload()
+      delay(3000).then(() => reload())
     }
     onDismiss()
   }, [

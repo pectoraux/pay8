@@ -74,8 +74,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchBillsAsync({ fromBill: true, chainId }))
-      delay(6000)
-      reload()
+      delay(3000).then(() => reload())
     }
     onDismiss()
   }, [

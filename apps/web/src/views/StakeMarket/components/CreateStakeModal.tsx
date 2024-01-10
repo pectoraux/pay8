@@ -158,8 +158,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchStakesAsync(collectionId, chainId))
-      delay(6000)
-      reload()
+      delay(3000).then(() => reload())
     }
     onDismiss()
   }, [

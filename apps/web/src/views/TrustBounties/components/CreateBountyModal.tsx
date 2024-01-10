@@ -187,8 +187,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
           chainId,
         }),
       )
-      delay(6000)
-      router.reload()
+      delay(3000).then(() => router.reload())
     }
     onDismiss()
   }, [
