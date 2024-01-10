@@ -1,7 +1,5 @@
 import styled from 'styled-components'
-import { Modal, Grid, Flex, Text, Box, Input } from '@pancakeswap/uikit'
-import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
-import { multiplyPriceByAmount } from 'utils/prices'
+import { Modal, Grid, Box, Input } from '@pancakeswap/uikit'
 import { LockStage } from './types'
 
 export const StyledModal = styled(Modal)<{ stage: LockStage }>`
@@ -19,6 +17,7 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_ADMIN_WITHDRAW,
   LockStage.CONFIRM_UPDATE_BOUNTY,
   LockStage.CONFIRM_UPDATE_GAUGE,
+  LockStage.CONFIRM_LOCK_TOKENS,
 ]
 
 export const stagesWithBackButton = [
@@ -27,6 +26,7 @@ export const stagesWithBackButton = [
   LockStage.WITHDRAW,
   LockStage.DELETE,
   LockStage.DELETE,
+  LockStage.CONFIRM_LOCK_TOKENS,
   LockStage.CONFIRM_UPDATE_GAUGE,
   LockStage.CONFIRM_DISTRIBUTE,
   LockStage.CONFIRM_DELETE,

@@ -17,6 +17,7 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_ADMIN_WITHDRAW,
   LockStage.CONFIRM_UPDATE_BOUNTY,
   LockStage.CONFIRM_UPDATE_GAUGE,
+  LockStage.CONFIRM_LOCK_TOKENS,
 ]
 
 export const stagesWithBackButton = [
@@ -25,6 +26,7 @@ export const stagesWithBackButton = [
   LockStage.WITHDRAW,
   LockStage.DELETE,
   LockStage.DELETE,
+  LockStage.CONFIRM_LOCK_TOKENS,
   LockStage.CONFIRM_UPDATE_GAUGE,
   LockStage.CONFIRM_DISTRIBUTE,
   LockStage.CONFIRM_DELETE,
