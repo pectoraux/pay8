@@ -233,7 +233,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         )
       }
       if (stage === LockStage.CONFIRM_DELETE) {
-        return callWithGasPrice(contributorsVoterContract, 'deactivatePitch', []).catch((err) =>
+        return callWithGasPrice(contributorsVoterContract, 'deactivatePitch', [pool.ve]).catch((err) =>
           console.log('CONFIRM_DELETE==================>', err),
         )
       }
@@ -270,7 +270,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Flex mb="8px" justifyContent="center" alignItems="center">
-            <LinkExternal color="failure" href="/contributors/voting/create" bold>
+            <LinkExternal color="failure" href={`contributors/voting/create?ve=${pool.ve}`} bold>
               {t('UPDATE PITCH')}
             </LinkExternal>
           </Flex>

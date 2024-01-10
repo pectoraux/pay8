@@ -54,6 +54,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   const [immutableContract, setImmutableContract] = useState(0)
   const { chainId } = useActiveChainId()
   const { toastSuccess, toastError } = useToast()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -95,6 +96,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchArpsAsync({ fromArp: true, chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

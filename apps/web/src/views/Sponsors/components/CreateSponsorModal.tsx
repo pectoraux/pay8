@@ -33,6 +33,7 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
   const [pendingFb, setPendingFb] = useState(false)
   const [profileId, setProfileId] = useState('')
   const { toastSuccess, toastError } = useToast()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -56,6 +57,7 @@ const CreateSponsorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchSponsorsAsync({ fromSponsor: true, chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

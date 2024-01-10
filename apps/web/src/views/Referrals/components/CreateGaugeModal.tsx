@@ -190,7 +190,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         )
       }
       if (stage === LockStage.CONFIRM_DELETE) {
-        return callWithGasPrice(referralVoterContract, 'deactivateGauge', []).catch((err) =>
+        return callWithGasPrice(referralVoterContract, 'deactivateGauge', [pool.ve]).catch((err) =>
           console.log('CONFIRM_DELETE==================>', err),
         )
       }

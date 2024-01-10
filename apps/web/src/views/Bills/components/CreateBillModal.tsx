@@ -49,6 +49,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
   const [profileId, setProfileId] = useState('')
   const [isPayable, setIsPayable] = useState(0)
   const { toastSuccess, toastError } = useToast()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -73,6 +74,7 @@ const CreateBILLModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchBillsAsync({ fromBill: true, chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

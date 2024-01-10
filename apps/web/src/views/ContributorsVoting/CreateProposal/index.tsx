@@ -14,6 +14,7 @@ import {
   useToast,
   ReactMarkdown,
 } from '@pancakeswap/uikit'
+import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -34,10 +35,9 @@ import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { useContributorsContract } from 'hooks/useContract'
 import Layout from '../components/Layout'
 import { ADMINS } from '../config'
-import { Choice, makeChoice, MINIMUM_CHOICES } from './Choices'
+import { makeChoice, MINIMUM_CHOICES } from './Choices'
 import { getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
-import { FormState } from './types'
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
@@ -57,6 +57,7 @@ const CreateProposal = () => {
     original: '',
     thumbnail: '',
   }))
+  const { query } = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
@@ -76,12 +77,12 @@ const CreateProposal = () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       console.log('createClaim===============>', contributorsContract, [
-        ['', '', '', state.original, state.thumbnail],
+        ['', '', '', query.ve, state.original, state.thumbnail],
         state.name,
         state.body,
       ])
       return callWithGasPrice(contributorsContract, 'updateContent', [
-        ['', '', '', state.original, state.thumbnail],
+        ['', '', '', query.ve, state.original, state.thumbnail],
         state.name,
         state.body,
       ]).catch((err) => {
@@ -102,7 +103,19 @@ const CreateProposal = () => {
         </ToastDescriptionWithTx>,
       )
     }
-  }, [t, state, toastError, toastSuccess, callWithGasPrice, contributorsContract, fetchWithCatchTxError])
+  }, [
+    fetchWithCatchTxError,
+    contributorsContract,
+    query.ve,
+    state.original,
+    state.thumbnail,
+    state.name,
+    state.body,
+    callWithGasPrice,
+    toastError,
+    t,
+    toastSuccess,
+  ])
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({

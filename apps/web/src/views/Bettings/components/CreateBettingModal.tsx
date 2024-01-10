@@ -48,6 +48,7 @@ const CreateBettingModal: React.FC<any> = ({ onDismiss }) => {
   const [profileId, setProfileId] = useState('')
   const [oracle, setOracle] = useState('')
   const { toastSuccess, toastError } = useToast()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -73,6 +74,7 @@ const CreateBettingModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchBettingsAsync({ fromBetting: true, chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

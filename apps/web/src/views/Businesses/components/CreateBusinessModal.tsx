@@ -29,6 +29,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   const dispatch = useAppDispatch()
   const { chainId } = useActiveChainId()
   const [nftFilters, setNftFilters] = useState<any>({})
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -63,6 +64,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchBusinessGaugesAsync({ chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

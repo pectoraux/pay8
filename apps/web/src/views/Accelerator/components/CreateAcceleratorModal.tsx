@@ -49,6 +49,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const [original, setOriginal] = useState('')
   const { toastSuccess, toastError } = useToast()
   const [nftFilters, setNftFilters] = useState({} as any)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -59,9 +60,11 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         const args = [ve]
         const args2 = [['', '', '', original, thumbnail], '', '']
         console.log('createGauge=====================>', args, args2)
-        return callWithGasPrice(acceleratorContract, 'createGauge', args)
-          .then(() => callWithGasPrice(acceleratorContract, 'updateContent', args2))
-          .catch((err) => console.log('rerr=====================>', err))
+        return (
+          callWithGasPrice(acceleratorContract, 'createGauge', args)
+            // .then(() => callWithGasPrice(acceleratorContract, 'updateContent', args2))
+            .catch((err) => console.log('rerr=====================>', err))
+        )
       } catch (err) {
         setPendingFb(false)
         // toastError(
@@ -80,6 +83,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchAcceleratorGaugesAsync({ chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()
@@ -161,7 +165,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
       </Flex>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Media Link')}
@@ -192,7 +196,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
           placeholder={t('input link to thumbnail')}
           onChange={(e) => setThumbnail(e.target.value)}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

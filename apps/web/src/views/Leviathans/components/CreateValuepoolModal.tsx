@@ -86,6 +86,7 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
   const handleRawValueChange = (key: string) => (value: string | number) => {
     updateValue(key, !!value)
   }
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -121,6 +122,7 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
           fromValuepool,
         }),
       )
+      delay(3000)
       reload()
     }
     onDismiss()

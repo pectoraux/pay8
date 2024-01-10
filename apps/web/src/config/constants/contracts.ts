@@ -485,7 +485,7 @@ export default {
     56: '0x',
   },
   businessVoter: {
-    4002: '0x2D90Abfd3306B4500EEc97dDEC8E89864A194d0D',
+    4002: '0x46a5a19D12ec1BEf43aCded2F00C64BE8FD2f1C8',
     56: '0x',
   },
   businessMinter: {
@@ -505,7 +505,7 @@ export default {
     56: '0x',
   },
   referralVoter: {
-    4002: '0x69F950eF3F609c0A9f15A8b59a080cC9A5df163E',
+    4002: '0x6604e6aEe666a8C6849a86a8519afdD92a888A46',
     56: '0x',
   },
   contractAddress: {
@@ -513,11 +513,11 @@ export default {
     56: '0x',
   },
   acceleratorVoter: {
-    4002: '0xea21755fc81B7c18c9B1360D3623eb9DF68a7B7a',
+    4002: '0x514F785152Caa540A1c4FF0b7cd34E0c015E73a6',
     56: '0x',
   },
   contributorsVoter: {
-    4002: '0xfc5E05Cd6F14890d2c42117F48cDd495b139C24f',
+    4002: '0x432e6406197b31A52Ac24E553aA8dDdBB573F219',
     56: '0x',
   },
   affiliatesVoter: {

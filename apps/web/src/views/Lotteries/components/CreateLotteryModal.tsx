@@ -84,6 +84,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
   const handleRawValueChange = (key: string) => (value: Date | number | boolean | string) => {
     updateValue(key, value)
   }
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -141,6 +142,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchLotteriesAsync({ fromLottery: true, chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

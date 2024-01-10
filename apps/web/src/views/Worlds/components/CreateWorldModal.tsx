@@ -32,6 +32,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const [profileId, setProfileId] = useState('')
   const { toastSuccess, toastError } = useToast()
   const { reload } = useRouter()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -59,6 +60,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchWorldsAsync({ chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

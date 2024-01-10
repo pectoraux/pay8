@@ -31,6 +31,7 @@ const CreateRampModal: React.FC<any> = ({ onDismiss }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const { toastSuccess, toastError } = useToast()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -55,6 +56,7 @@ const CreateRampModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchRampsAsync({ chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

@@ -100,6 +100,8 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
     userTokenId: 0,
     identityTokenId: 0,
   })
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
@@ -156,6 +158,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchStakesAsync(collectionId, chainId))
+      delay(3000)
       reload()
     }
     onDismiss()

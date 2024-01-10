@@ -111,6 +111,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     currency?.symbol,
     refetch,
   )
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   useEffect(() => {
     refetch()
@@ -186,6 +187,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
           chainId,
         }),
       )
+      delay(3000)
       router.reload()
     }
     onDismiss()

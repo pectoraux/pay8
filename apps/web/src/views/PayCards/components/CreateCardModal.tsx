@@ -42,6 +42,7 @@ const CreateCardModal: React.FC<any> = ({ onDismiss }) => {
     transport: custom(window.ethereum),
   })
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -83,6 +84,7 @@ const CreateCardModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchCardsAsync({ fromCard: true, chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

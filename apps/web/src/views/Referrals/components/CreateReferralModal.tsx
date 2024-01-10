@@ -39,6 +39,8 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
   const { toastSuccess, toastError } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
@@ -63,6 +65,7 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchReferralGaugesAsync({ chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

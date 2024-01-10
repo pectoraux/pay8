@@ -55,6 +55,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
   const [referrerFee, setReferrerFee] = useState<any>(0)
   const [claimable, setClaimable] = useState(0)
   const { toastSuccess, toastError } = useToast()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -88,6 +89,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchGamesAsync({ fromGame: true, chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()

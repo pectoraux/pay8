@@ -49,24 +49,27 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const [original, setOriginal] = useState('')
   const { toastSuccess, toastError } = useToast()
   const [nftFilters, setNftFilters] = useState<any>({})
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       const ve = getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase())
-      return callWithGasPrice(contributorsContract, 'createGauge', [ve])
-        .then(() => {
-          return callWithGasPrice(contributorsContract, 'updateContent', [['', '', '', original, thumbnail], '', ''])
-        })
-        .catch((err) => {
-          console.log('rerr=====================>', err, [ve])
-          setPendingFb(false)
-          toastError(
-            t('Issue deploying contributor'),
-            <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
-          )
-        })
+      return (
+        callWithGasPrice(contributorsContract, 'createGauge', [ve])
+          // .then(() => {
+          //   return callWithGasPrice(contributorsContract, 'updateContent', [['', '', '', original, thumbnail], '', ''])
+          // })
+          .catch((err) => {
+            console.log('rerr=====================>', err, [ve])
+            setPendingFb(false)
+            toastError(
+              t('Issue deploying contributor'),
+              <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
+            )
+          })
+      )
     })
     if (receipt?.status) {
       setPendingFb(false)
@@ -77,6 +80,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchContributorsGaugesAsync({ chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()
@@ -86,8 +90,6 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
     nftFilters?.workspace?.value,
     callWithGasPrice,
     contributorsContract,
-    original,
-    thumbnail,
     toastError,
     t,
     toastSuccess,
@@ -140,7 +142,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
           showProduct={false}
         />
       </Flex>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Media Link')}
@@ -171,7 +173,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
           placeholder={t('input link to thumbnail')}
           onChange={(e) => setThumbnail(e.target.value)}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

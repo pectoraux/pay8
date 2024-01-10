@@ -68,6 +68,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
     updateValue(inputName, value)
   }
   const [openPresentControlPanel] = useModal(<CreateGaugeModal variant="add" state2={state} currency={currency} />)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -94,6 +95,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral: true, chainId }))
+      delay(3000)
       reload()
     }
     onDismiss()
