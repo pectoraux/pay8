@@ -83,6 +83,7 @@ const CreateProposal = () => {
         state.body,
       ])
       return callWithGasPrice(contributorsContract, 'updateContent', [
+        query.ve,
         ['', '', '', state.original, state.thumbnail],
         state.name,
         state.body,
