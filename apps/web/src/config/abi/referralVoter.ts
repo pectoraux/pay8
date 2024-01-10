@@ -39,6 +39,12 @@ export const referralVoterABI = [
         name: 'collectionId',
         type: 'uint256',
       },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
     ],
     name: 'DeactivateGauge',
     type: 'event',
@@ -159,6 +165,67 @@ export const referralVoterABI = [
       },
     ],
     name: 'NotifyReward',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'idx',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'collectionId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramName',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramValue',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'paramValue2',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'paramValue3',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'paramValue4',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramValue5',
+        type: 'string',
+      },
+    ],
+    name: 'UpdateMiscellaneous',
     type: 'event',
   },
   {
@@ -346,7 +413,13 @@ export const referralVoterABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+    ],
     name: 'deactivateGauge',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -389,6 +462,54 @@ export const referralVoterABI = [
       },
     ],
     name: 'emitDeposit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_idx',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'paramName',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'paramValue',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'paramValue2',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'paramValue3',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'paramValue4',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: 'paramValue5',
+        type: 'string',
+      },
+    ],
+    name: 'emitUpdateMiscellaneous',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

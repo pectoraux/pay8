@@ -39,6 +39,12 @@ export const businessVoterABI = [
         name: 'collectionId',
         type: 'uint256',
       },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
     ],
     name: 'DeactivateGauge',
     type: 'event',
@@ -165,6 +171,67 @@ export const businessVoterABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'idx',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'collectionId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramName',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramValue',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'paramValue2',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'paramValue3',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'paramValue4',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramValue5',
+        type: 'string',
+      },
+    ],
+    name: 'UpdateMiscellaneous',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: 'uint256',
         name: '_collectionId',
@@ -185,13 +252,13 @@ export const businessVoterABI = [
       {
         indexed: false,
         internalType: 'address',
-        name: '_ve',
+        name: 'voter',
         type: 'address',
       },
       {
         indexed: false,
         internalType: 'address',
-        name: 'voter',
+        name: '_ve',
         type: 'address',
       },
     ],
@@ -341,7 +408,13 @@ export const businessVoterABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+    ],
     name: 'deactivateGauge',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -384,6 +457,54 @@ export const businessVoterABI = [
       },
     ],
     name: 'emitDeposit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_idx',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'paramName',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'paramValue',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'paramValue2',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'paramValue3',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'paramValue4',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: 'paramValue5',
+        type: 'string',
+      },
+    ],
+    name: 'emitUpdateMiscellaneous',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -438,25 +559,22 @@ export const businessVoterABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
         internalType: 'address',
-        name: '',
+        name: '_ve',
         type: 'address',
       },
     ],
-    name: 'initialReward',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'initialRewardValue',
+    name: 'getVotes',
     outputs: [
       {
         internalType: 'uint256',
@@ -666,19 +784,6 @@ export const businessVoterABI = [
       },
     ],
     name: 'updateGauge',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_initialRewardValue',
-        type: 'uint256',
-      },
-    ],
-    name: 'updateInitialReward',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

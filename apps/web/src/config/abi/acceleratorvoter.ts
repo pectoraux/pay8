@@ -39,6 +39,12 @@ export const acceleratorVoterABI = [
         name: 'collectionId',
         type: 'uint256',
       },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
     ],
     name: 'DeactivatePitch',
     type: 'event',
@@ -147,6 +153,12 @@ export const acceleratorVoterABI = [
       },
       {
         indexed: false,
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+      {
+        indexed: false,
         internalType: 'string',
         name: 'title',
         type: 'string',
@@ -165,6 +177,67 @@ export const acceleratorVoterABI = [
       },
     ],
     name: 'UpdateContent',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'idx',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'collectionId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramName',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramValue',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'paramValue2',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'paramValue3',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'paramValue4',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramValue5',
+        type: 'string',
+      },
+    ],
+    name: 'UpdateMiscellaneous',
     type: 'event',
   },
   {
@@ -311,7 +384,13 @@ export const acceleratorVoterABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+    ],
     name: 'deactivatePitch',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -339,6 +418,54 @@ export const acceleratorVoterABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_idx',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'paramName',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'paramValue',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'paramValue2',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'paramValue3',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'paramValue4',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: 'paramValue5',
+        type: 'string',
+      },
+    ],
+    name: 'emitUpdateMiscellaneous',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: '',
         type: 'uint256',
       },
@@ -354,6 +481,35 @@ export const acceleratorVoterABI = [
         internalType: 'address',
         name: '',
         type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+    ],
+    name: 'getVotes',
+    outputs: [
+      {
+        internalType: 'int256',
+        name: '',
+        type: 'int256',
       },
     ],
     stateMutability: 'view',
@@ -505,6 +661,11 @@ export const acceleratorVoterABI = [
   },
   {
     inputs: [
+      {
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
       {
         internalType: 'string[5]',
         name: '_images',

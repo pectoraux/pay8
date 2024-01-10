@@ -1,36 +1,5 @@
 export const contributorsVoterABI = [
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_gauges',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_bribes',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_minter',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_profile',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_marketCollections',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -69,6 +38,12 @@ export const contributorsVoterABI = [
         internalType: 'uint256',
         name: 'collectionId',
         type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
       },
     ],
     name: 'DeactivatePitch',
@@ -178,6 +153,12 @@ export const contributorsVoterABI = [
       },
       {
         indexed: false,
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+      {
+        indexed: false,
         internalType: 'string',
         name: 'title',
         type: 'string',
@@ -196,6 +177,67 @@ export const contributorsVoterABI = [
       },
     ],
     name: 'UpdateContent',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'idx',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'collectionId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramName',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramValue',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'paramValue2',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'paramValue3',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'paramValue4',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'paramValue5',
+        type: 'string',
+      },
+    ],
+    name: 'UpdateMiscellaneous',
     type: 'event',
   },
   {
@@ -234,19 +276,6 @@ export const contributorsVoterABI = [
     ],
     name: 'Voted',
     type: 'event',
-  },
-  {
-    inputs: [],
-    name: 'bribefactory',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
   },
   {
     inputs: [
@@ -323,6 +352,19 @@ export const contributorsVoterABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'contractAddress',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -342,23 +384,16 @@ export const contributorsVoterABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'deactivatePitch',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'devaddr_',
-    outputs: [
+    inputs: [
       {
         internalType: 'address',
-        name: '',
+        name: '_ve',
         type: 'address',
       },
     ],
-    stateMutability: 'view',
+    name: 'deactivatePitch',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -380,16 +415,51 @@ export const contributorsVoterABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'gaugefactory',
-    outputs: [
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_idx',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_collectionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'paramName',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'paramValue',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'paramValue2',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'paramValue3',
+        type: 'uint256',
+      },
       {
         internalType: 'address',
-        name: '',
+        name: 'paramValue4',
         type: 'address',
       },
+      {
+        internalType: 'string',
+        name: 'paramValue5',
+        type: 'string',
+      },
     ],
-    stateMutability: 'view',
+    name: 'emitUpdateMiscellaneous',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -449,19 +519,6 @@ export const contributorsVoterABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'minter',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -532,6 +589,19 @@ export const contributorsVoterABI = [
     inputs: [
       {
         internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+    ],
+    name: 'setContractAddress',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -563,6 +633,11 @@ export const contributorsVoterABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '_ve',
+        type: 'address',
+      },
+      {
         internalType: 'string[5]',
         name: '_images',
         type: 'string[5]',
@@ -579,19 +654,6 @@ export const contributorsVoterABI = [
       },
     ],
     name: 'updateContent',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_devaddr',
-        type: 'address',
-      },
-    ],
-    name: 'updateDev',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
