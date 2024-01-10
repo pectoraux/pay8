@@ -303,7 +303,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_ADMIN_WITHDRAW)}>
             {t('WITHDRAW CLAIMED REWARDS')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.ERASE_DEBT)}>
+          <Button mb="8px" onClick={() => setStage(LockStage.CONFIRM_ERASE_DEBT)}>
             {t('ERASE DEBT WITH TREASURY')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ERASE_DEBT2)}>
