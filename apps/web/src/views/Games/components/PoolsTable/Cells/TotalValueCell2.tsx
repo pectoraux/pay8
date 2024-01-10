@@ -30,7 +30,7 @@ const TotalValueCell: React.FC<any> = ({ pool, currAccount, symbol }) => {
           <Balance
             fontSize="16px"
             value={getBalanceNumber(pool?.totalEarned, pool?.token?.decimals)}
-            decimals={5}
+            decimals={3}
             unit={` ${symbol}`}
           />
         </Flex>
@@ -39,7 +39,7 @@ const TotalValueCell: React.FC<any> = ({ pool, currAccount, symbol }) => {
         </Text>
         <Flex height="20px" alignItems="center">
           {earned ? (
-            <Balance fontSize="16px" value={earned} decimals={5} unit={` ${symbol}`} />
+            <Balance fontSize="16px" value={earned} decimals={3} unit={` ${symbol}`} />
           ) : (
             <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
               -

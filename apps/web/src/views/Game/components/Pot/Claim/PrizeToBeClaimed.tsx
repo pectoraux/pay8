@@ -28,7 +28,7 @@ const PrizeToBeClaimed: React.FC<any> = ({ tokenId, tokenData, gameData }) => {
             fontSize="20px"
             lineHeight="110%"
             color="textSubtle"
-            decimals={5}
+            decimals={3}
             unit={symb}
             value={getBalanceNumber(new BigNumber(rewards.toString()), gameData?.token?.decimals)}
           />

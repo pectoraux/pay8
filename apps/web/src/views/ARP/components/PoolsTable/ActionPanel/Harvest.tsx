@@ -39,7 +39,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={3}
               value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -52,7 +52,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={3}
               value={getBalanceNumber(currAccount?.paidPayable, currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -65,7 +65,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={3}
               value={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -78,7 +78,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={3}
               value={getBalanceNumber(currAccount?.amountPayable, currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />

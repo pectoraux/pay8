@@ -33,7 +33,7 @@ const CreditCell: React.FC<any> = ({ currAccount }) => {
           <Balance
             fontSize="16px"
             value={getBalanceNumber(currAccount?.credit, currAccount?.token?.decimals)}
-            decimals={5}
+            decimals={3}
             unit={` ${currAccount?.token?.symbol ?? ''}`}
           />
         </Flex>

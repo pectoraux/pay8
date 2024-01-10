@@ -59,7 +59,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={3}
               value={getBalanceNumber(currAccount?.minted)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -72,7 +72,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={3}
               value={getBalanceNumber(currAccount?.burnt)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -85,7 +85,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
+              decimals={3}
               value={getBalanceNumber(currAccount?.salePrice)}
               unit={` ${currAccount?.token?.symbol}`}
             />

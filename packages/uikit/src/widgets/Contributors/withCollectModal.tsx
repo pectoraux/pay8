@@ -33,7 +33,7 @@ const HarvestActions: React.FC<React.PropsWithChildren<HarvestActionsProps>> = (
           <>
             {hasEarnings ? (
               <>
-                <Balance bold fontSize="20px" decimals={5} value={earningTokenBalance} />
+                <Balance bold fontSize="20px" decimals={3} value={earningTokenBalance} />
                 {earningTokenPrice > 0 && (
                   <Balance
                     display="inline"

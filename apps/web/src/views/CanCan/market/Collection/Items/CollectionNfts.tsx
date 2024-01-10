@@ -484,7 +484,7 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
             <Balance
               fontSize="16px"
               value={getBalanceNumber(dueReceivables[0])}
-              decimals={5}
+              decimals={3}
               unit={` ${currency?.symbol}`}
             />
           </Flex>
@@ -517,7 +517,7 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
             <Balance
               fontSize="16px"
               value={getBalanceNumber(protocolInfo[2])}
-              decimals={5}
+              decimals={3}
               unit={` ${currency?.symbol}`}
             />
           </Flex>
@@ -534,7 +534,7 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
             <Balance
               fontSize="16px"
               value={getBalanceNumber(protocolInfo[4])}
-              decimals={5}
+              decimals={3}
               unit={` ${currency?.symbol}`}
             />
           </Flex>
@@ -569,7 +569,7 @@ const Paywall: React.FC<any> = ({ collection, paywall }) => {
             <Balance
               fontSize="16px"
               value={getBalanceNumber(pricePerSecond)}
-              decimals={5}
+              decimals={3}
               unit={` ${currency?.symbol}`}
             />
           </Flex>

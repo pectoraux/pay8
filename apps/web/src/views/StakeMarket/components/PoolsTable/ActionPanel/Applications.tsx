@@ -123,7 +123,7 @@ const DataCard = ({ pool, sousId, token }) => {
                   lineHeight="1"
                   color="textSubtle"
                   fontSize="12px"
-                  decimals={5}
+                  decimals={3}
                   value={getBalanceNumber(pool?.paidReceivable, token?.decimals)}
                   unit={` ${token?.symbol}`}
                 />
@@ -136,7 +136,7 @@ const DataCard = ({ pool, sousId, token }) => {
                   lineHeight="1"
                   color="textSubtle"
                   fontSize="12px"
-                  decimals={5}
+                  decimals={3}
                   value={getBalanceNumber(pool?.amountPayable, token?.decimals)}
                   unit={` ${token?.symbol}`}
                 />
@@ -149,7 +149,7 @@ const DataCard = ({ pool, sousId, token }) => {
                   lineHeight="1"
                   color="textSubtle"
                   fontSize="12px"
-                  decimals={5}
+                  decimals={3}
                   value={getBalanceNumber(pool?.amountReceivable, token?.decimals)}
                   unit={` ${token?.symbol}`}
                 />

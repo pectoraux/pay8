@@ -33,7 +33,7 @@ const VaSpecsCell: React.FC<any> = ({ pool, vpCurrencyInput }) => {
                   bold={!isMobile}
                   fontSize="14px"
                   color="primary"
-                  decimals={5}
+                  decimals={3}
                   unit={` ${vpCurrencyInput?.symbol ?? ''}`}
                   value={parseFloat(getBalanceAmount(nft.lockValue, pool?.vaDecimals)?.toString())}
                 />
@@ -44,7 +44,7 @@ const VaSpecsCell: React.FC<any> = ({ pool, vpCurrencyInput }) => {
                   bold={!isMobile}
                   fontSize="14px"
                   color="primary"
-                  decimals={5}
+                  decimals={3}
                   unit={` ${vpCurrencyInput?.symbol ?? ''}`}
                   value={parseFloat(getBalanceAmount(nft.lockAmount, pool?.vaDecimals)?.toString())}
                 />

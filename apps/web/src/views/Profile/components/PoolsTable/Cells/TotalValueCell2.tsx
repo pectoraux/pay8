@@ -34,7 +34,7 @@ const TotalValueCell: React.FC<any> = ({ t, pool, value, symbol, decimals }) => 
               bold={!isMobile}
               fontSize={isMobile ? '14px' : '16px'}
               color={Number(totalStakedBalance) ? 'primary' : 'textDisabled'}
-              decimals={5}
+              decimals={3}
               unit={` ${symbol ?? ''}`}
               value={Number(totalStakedBalance) ?? 0}
             />

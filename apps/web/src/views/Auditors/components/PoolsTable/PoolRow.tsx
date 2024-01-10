@@ -28,7 +28,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <VotesCell pool={pool} />
       <TotalValueCell
         labelText={t('Amount Due')}
-        decimals={5}
+        decimals={3}
         amount={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token?.decimals)}
         symbol={currAccount?.token?.symbol ?? ''}
       />

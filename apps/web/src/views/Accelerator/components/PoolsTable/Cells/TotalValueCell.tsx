@@ -17,11 +17,11 @@ const TotalValueCell: React.FC<any> = ({ labelText, amount, symbol }) => {
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
-        <Text fontSize="12px" color="textSubtle" textAlign="left">
+        <Text fontSize="12px" color="textSubtle" textAlign="left" mb="3px">
           {labelText}
         </Text>
         <Flex height="20px" alignItems="center">
-          <Balance fontSize="16px" value={amount} decimals={5} unit={` ${symbol}`} />
+          <Balance fontSize="16px" value={amount} decimals={3} unit={` ${symbol}`} />
         </Flex>
       </Pool.CellContent>
     </StyledCell>

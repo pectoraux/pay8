@@ -53,7 +53,7 @@ const TicketCell: React.FC<any> = ({ pool, currAccount, currTicket, decimals = 1
                   ?.filter((rwd) => !!rwd)
                   ?.map((rwd, index) => (
                     <Balance
-                      decimals={5}
+                      decimals={3}
                       bold={!isMobile}
                       fontSize="13px"
                       color={Number(rwd.toString()) ? 'primary' : 'textDisabled'}

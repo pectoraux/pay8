@@ -34,7 +34,7 @@ const TotalValueCell: React.FC<any> = ({ labelText, value, symbol, decimals }) =
               bold={!isMobile}
               fontSize={isMobile ? '14px' : '16px'}
               color={Number(value) ? 'primary' : 'textDisabled'}
-              decimals={5}
+              decimals={3}
               unit={` ${symbol}`}
               value={Number(value) ? totalStakedBalance : 0}
             />

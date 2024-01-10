@@ -116,7 +116,7 @@ const Step1 = ({ hasProfile }: { hasProfile: boolean }) => {
                 <Text bold fontSize="12px" textTransform="uppercase" color="secondary">
                   {t('Your max CAKE entry')}
                 </Text>
-                <Balance fontSize="20px" bold decimals={5} value={getBalanceNumber(credit)} />
+                <Balance fontSize="20px" bold decimals={3} value={getBalanceNumber(credit)} />
                 <Text fontSize="12px" color="textSubtle">
                   {creditDollarValue !== undefined ? (
                     <Balance

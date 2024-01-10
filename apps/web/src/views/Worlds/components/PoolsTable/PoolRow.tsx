@@ -32,7 +32,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
       <TotalValueCell
         labelText={t('Amount Due')}
         amount={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals)}
-        decimals={5}
+        decimals={3}
         symbol={currAccount?.token?.symbol ?? ''}
       />
       <EndsInCell labelText={t('Next Due')} currAccount={currAccount} />

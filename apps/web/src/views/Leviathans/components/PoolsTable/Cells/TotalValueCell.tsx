@@ -27,7 +27,7 @@ const TotalValueCell: React.FC<any> = ({ pool, vpCurrencyInput }) => {
               bold={!isMobile}
               fontSize="14px"
               color={Number(pool?.totalLiquidity || 0) ? 'primary' : 'textDisabled'}
-              decimals={5}
+              decimals={3}
               unit={` ${vpCurrencyInput?.symbol ?? ''}`}
               value={pool?.totalLiquidity}
             />
@@ -38,7 +38,7 @@ const TotalValueCell: React.FC<any> = ({ pool, vpCurrencyInput }) => {
               bold={!isMobile}
               fontSize="14px"
               color={Number(pool?.vaBalance || 0) ? 'primary' : 'textDisabled'}
-              decimals={5}
+              decimals={3}
               unit={` ${vpCurrencyInput?.symbol ?? ''}`}
               value={parseFloat(getBalanceAmount(pool?.vaBalance, pool?.vaDecimals)?.toString())}
             />

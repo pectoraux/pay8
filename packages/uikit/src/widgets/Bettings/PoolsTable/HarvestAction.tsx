@@ -84,7 +84,7 @@ export function HarvestAction({
           <>
             {hasEarnings ? (
               <>
-                <Balance lineHeight="1" bold fontSize="20px" decimals={5} value={earningTokenBalance} />
+                <Balance lineHeight="1" bold fontSize="20px" decimals={3} value={earningTokenBalance} />
                 {Boolean(earningTokenPrice) && (
                   <Balance
                     display="inline"

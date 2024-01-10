@@ -24,7 +24,7 @@ const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
       <TotalValueCell2 pool={pool} currAccount={currAccount} symbol={pool?.token?.symbol?.toUpperCase() ?? ''} />
       <TotalValueCell symbol="" decimals={0} labelText={t('Total Score')} amount={pool?.totalScore} />
       <TotalValueCell
-        decimals={5}
+        decimals={3}
         labelText={t('Price Per Minute')}
         amount={getBalanceNumber(pool?.pricePerMinutes, pool?.token?.decimals)}
         symbol={pool?.token?.symbol?.toUpperCase() ?? ''}
