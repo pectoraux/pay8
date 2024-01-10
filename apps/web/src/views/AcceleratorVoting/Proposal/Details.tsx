@@ -55,7 +55,7 @@ const Details: React.FC<any> = ({ proposal }) => {
           </Flex>
         </DetailBox>
         <Flex mt="8px" mb="8px" justifyContent="center" alignItems="center">
-          <StyledLinkExternal href="/accelerator/voting/create" bold>
+          <StyledLinkExternal href={`/contributors/voting/create/${proposal.id.split('-')[1]}`} bold>
             {t('Update Pitch')}
           </StyledLinkExternal>
         </Flex>

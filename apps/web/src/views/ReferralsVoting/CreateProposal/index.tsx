@@ -11,15 +11,10 @@ import {
   Input,
   LinkExternal,
   Text,
-  useModal,
   useToast,
-  ButtonMenu,
   ReactMarkdown,
-  ButtonMenuItem,
 } from '@pancakeswap/uikit'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import snapshot from '@snapshot-labs/snapshot.js'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
@@ -38,14 +33,11 @@ import Link from 'next/link'
 import { getBlockExploreLink } from 'utils'
 import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { useAcceleratorContract } from 'hooks/useContract'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import Layout from '../components/Layout'
-import VoteDetailsModal from '../components/VoteDetailsModal'
-import { ADMINS, VOTE_THRESHOLD } from '../config'
-import Choices, { Choice, makeChoice, MINIMUM_CHOICES } from './Choices'
-import { combineDateAndTime, getFormErrors } from './helpers'
+import { ADMINS } from '../config'
+import { makeChoice, MINIMUM_CHOICES } from './Choices'
+import { getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
-import { FormState } from './types'
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
@@ -65,6 +57,7 @@ const CreateProposal = () => {
     original: '',
     thumbnail: '',
   }))
+  const { query } = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
@@ -84,11 +77,13 @@ const CreateProposal = () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       console.log('createClaim===============>', acceleratorContract, [
+        query.ve,
         ['', '', '', state.original, state.thumbnail],
         state.name,
         state.body,
       ])
       return callWithGasPrice(acceleratorContract, 'updateContent', [
+        query.ve,
         ['', '', '', state.original, state.thumbnail],
         state.name,
         state.body,
@@ -110,7 +105,19 @@ const CreateProposal = () => {
         </ToastDescriptionWithTx>,
       )
     }
-  }, [t, state, toastError, toastSuccess, callWithGasPrice, acceleratorContract, fetchWithCatchTxError])
+  }, [
+    fetchWithCatchTxError,
+    acceleratorContract,
+    query.ve,
+    state.original,
+    state.thumbnail,
+    state.name,
+    state.body,
+    callWithGasPrice,
+    toastError,
+    t,
+    toastSuccess,
+  ])
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({

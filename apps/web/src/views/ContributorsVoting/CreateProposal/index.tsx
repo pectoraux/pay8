@@ -77,12 +77,13 @@ const CreateProposal = () => {
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
       console.log('createClaim===============>', contributorsContract, [
-        ['', '', '', query.ve, state.original, state.thumbnail],
+        query.ve,
+        ['', '', '', state.original, state.thumbnail],
         state.name,
         state.body,
       ])
       return callWithGasPrice(contributorsContract, 'updateContent', [
-        ['', '', '', query.ve, state.original, state.thumbnail],
+        ['', '', '', state.original, state.thumbnail],
         state.name,
         state.body,
       ]).catch((err) => {
@@ -137,10 +138,6 @@ const CreateProposal = () => {
 
   const handleEasyMdeChange = (value: string) => {
     updateValue('body', value)
-  }
-
-  const handleRawValueChange = (key: string) => (value: string) => {
-    updateValue(key, value)
   }
 
   const options = useMemo(() => {

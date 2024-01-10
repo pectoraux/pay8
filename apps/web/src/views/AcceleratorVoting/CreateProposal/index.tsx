@@ -76,7 +76,7 @@ const CreateProposal = () => {
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const args = [['', '', '', query.ve, state.original, state.thumbnail], state.name, state.body]
+      const args = [query.ve, ['', '', '', query.ve, state.original, state.thumbnail], state.name, state.body]
       console.log('createClaim===============>', acceleratorContract, args)
       try {
         return callWithGasPrice(acceleratorContract, 'updateContent', args)
@@ -132,10 +132,6 @@ const CreateProposal = () => {
 
   const handleEasyMdeChange = (value: string) => {
     updateValue('body', value)
-  }
-
-  const handleRawValueChange = (key: string) => (value: string) => {
-    updateValue(key, value)
   }
 
   const options = useMemo(() => {
