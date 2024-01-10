@@ -19,10 +19,8 @@ const StyledCell = styled(Pool.BaseCell)`
 const TotalVotesCell: React.FC<any> = ({ pool }) => {
   const { t } = useTranslation()
   const { data } = useGetWeight(pool?.collection?.id, pool?.ve)
-  const weights = parseInt(data?.weights) ?? parseInt(pool?.gaugeWeight)
-  const weightPercent = parseInt(data?.weightPercent?.toString()) ?? parseInt(pool?.weightPercent)
-  const hasEarnings = new BigNumber(weights).gt(0)
-  console.log('useGetWeight============>', data)
+  const hasEarnings = new BigNumber(data?.weights).gt(0)
+  console.log('7useGetWeight============>', data, hasEarnings, pool)
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
@@ -34,18 +32,18 @@ const TotalVotesCell: React.FC<any> = ({ pool }) => {
             <Balance
               mt="4px"
               fontSize="16px"
-              value={hasEarnings ? getBalanceNumber(new BigNumber(weights)) : 0}
+              value={getBalanceNumber(new BigNumber(data?.weights))}
               decimals={hasEarnings ? 5 : 1}
               color={hasEarnings ? 'primary' : 'textDisabled'}
             />
-            {weightPercent > 0 ? (
+            {data?.weightPercent > 0 ? (
               <Balance
                 display="inline"
                 fontSize="12px"
                 color="textSubtle"
                 decimals={2}
                 prefix="~"
-                value={weightPercent}
+                value={data?.weightPercent}
                 unit=" %"
               />
             ) : (
