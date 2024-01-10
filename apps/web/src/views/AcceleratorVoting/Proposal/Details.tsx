@@ -5,6 +5,7 @@ import { getBlockExploreLink } from 'utils'
 import { format } from 'date-fns'
 import { useTranslation } from '@pancakeswap/localization'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { IPFS_GATEWAY } from '../config'
 import { ProposalStateTag } from '../components/Proposals/tags'
 
@@ -23,6 +24,7 @@ const StyledLinkExternal = styled(LinkExternal)`
 
 const Details: React.FC<any> = ({ proposal }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
   const startDate = new Date(proposal.creationTime * 1000)
 
   return (
@@ -41,7 +43,7 @@ const Details: React.FC<any> = ({ proposal }) => {
         </Flex>
         <Flex alignItems="center" mb="8px">
           <Text color="textSubtle">{t('Owner Address')}</Text>
-          <LinkExternal href={getBlockExploreLink(proposal.owner, 'address')} ml="8px">
+          <LinkExternal href={getBlockExploreLink(proposal.owner, 'address', chainId)} ml="8px">
             {truncateHash(proposal.owner, 10)}
           </LinkExternal>
         </Flex>

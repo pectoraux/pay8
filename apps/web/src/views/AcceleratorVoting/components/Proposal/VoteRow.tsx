@@ -4,6 +4,7 @@ import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
 import { Vote } from 'state/types'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { IPFS_GATEWAY } from '../../config'
 import TextEllipsis from '../TextEllipsis'
 import Row, { AddressColumn, ChoiceColumn, VotingPowerColumn } from './Row'
@@ -16,6 +17,7 @@ interface VoteRowProps {
 const VoteRow: React.FC<any> = ({ vote, isVoter }) => {
   const { t } = useTranslation()
   const hasVotingPower = !!vote.votingPower
+  const { chainId } = useActiveChainId()
 
   const votingPower = hasVotingPower ? getBalanceNumber(vote.votingPower) : '--'
   console.log('isVoter====================>', isVoter)
@@ -23,7 +25,9 @@ const VoteRow: React.FC<any> = ({ vote, isVoter }) => {
     <Row>
       <AddressColumn>
         <Flex alignItems="center">
-          <LinkExternal href={getBlockExploreLink(vote.voter, 'address')}>{truncateHash(vote.voter)}</LinkExternal>
+          <LinkExternal href={getBlockExploreLink(vote.voter, 'address', chainId)}>
+            {truncateHash(vote.voter)}
+          </LinkExternal>
           {isVoter && (
             <Tag variant="success" outline ml="8px">
               <CheckmarkCircleIcon mr="4px" /> {t('Voted')}
