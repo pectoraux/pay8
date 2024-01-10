@@ -173,7 +173,7 @@ export const fetchBusinesses = async ({ chainId }) => {
           .toFixed(2)
         // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
         return {
-          sousId: gauge.id,
+          sousId: gauge.id.split('-')[0],
           bribes,
           collection,
           vestingTokenAddress: vestingTokenAddress.result,
