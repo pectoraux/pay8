@@ -13,6 +13,7 @@ import BribesCell from './Cells/BribesCell'
 import ActionPanel from './ActionPanel/ActionPanel'
 import TotalVotesCell from './Cells/TotalVotesCell'
 import TotalValueCell from './Cells/TotalValueCell'
+import EndsInCell from './Cells/EndsInCell'
 
 const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { pool } = usePool(sousId)
@@ -48,6 +49,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
         symbol={pool?.vestingTokenSymbol || ''}
       />
       <TotalVotesCell pool={pool} />
+      <EndsInCell pool={pool} />
     </>
   )
   return (

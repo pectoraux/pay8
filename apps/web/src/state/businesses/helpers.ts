@@ -7,10 +7,11 @@ import { vestingABI } from 'config/abi/vesting'
 import { gaugeABI } from 'config/abi/gauge'
 import { bribeABI } from 'config/abi/bribe'
 import { collectionFields } from 'state/businessvoting/queries'
-import { getBusinessVoterAddress, getProfileAddress } from 'utils/addressHelpers'
+import { getBusinessMinterAddress, getBusinessVoterAddress, getProfileAddress } from 'utils/addressHelpers'
 import { businessVoterABI } from 'config/abi/businessVoter'
 import { profileABI } from 'config/abi/profile'
 import { getCollection } from 'state/cancan/helpers'
+import { businessMinterABI } from 'config/abi/businessMinter'
 
 export const getTag = async () => {
   try {
@@ -61,7 +62,7 @@ export const fetchBusinesses = async ({ chainId }) => {
       .map(async (gauge, index) => {
         const collection = await getCollection(gauge.id.split('-')[0])
         const bscClient = publicClient({ chainId })
-        const [totalWeight, gaugeWeight, vestingTokenAddress] = await bscClient.multicall({
+        const [totalWeight, gaugeWeight, vestingTokenAddress, activePeriod] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -80,6 +81,11 @@ export const fetchBusinesses = async ({ chainId }) => {
               address: gauge.ve,
               abi: vestingABI,
               functionName: 'token',
+            },
+            {
+              address: getBusinessMinterAddress(),
+              abi: businessMinterABI,
+              functionName: 'active_period',
             },
           ],
         })
@@ -177,6 +183,7 @@ export const fetchBusinesses = async ({ chainId }) => {
           pid: gauge.id.split('-')[0],
           bribes,
           collection,
+          activePeriod: activePeriod.result.toString(),
           vestingTokenAddress: vestingTokenAddress.result,
           vestingTokenSymbol: vestingTokenSymbol.result,
           vestingTokenName: vestingTokenName.result,

@@ -129,7 +129,7 @@ export const fetchAccelerator = async ({ chainId }) => {
       .map(async (gauge, index) => {
         const collection = await getCollection(gauge.id.split('-')[0])
         const bscClient = publicClient({ chainId })
-        const [totalWeight, gaugeWeight, claimable, vestingTokenAddress] = await bscClient.multicall({
+        const [totalWeight, gaugeWeight, claimable, vestingTokenAddress, activePeriod] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -154,6 +154,11 @@ export const fetchAccelerator = async ({ chainId }) => {
               address: gauge.ve,
               abi: vestingABI,
               functionName: 'token',
+            },
+            {
+              address: getBusinessMinterAddress(),
+              abi: businessMinterABI,
+              functionName: 'active_period',
             },
           ],
         })
@@ -239,6 +244,7 @@ export const fetchAccelerator = async ({ chainId }) => {
           pid: gauge.id.split('-')[0],
           bribes,
           collection,
+          activePeriod: activePeriod.result.toString(),
           vestingTokenAddress: vestingTokenAddress.result,
           vestingTokenSymbol: vestingTokenSymbol.result?.toUpperCase(),
           claimable: claimable.result.toString(),
