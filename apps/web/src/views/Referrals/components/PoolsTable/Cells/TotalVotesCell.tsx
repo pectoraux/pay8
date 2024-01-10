@@ -18,7 +18,7 @@ const StyledCell = styled(Pool.BaseCell)`
 
 const TotalVotesCell: React.FC<any> = ({ pool }) => {
   const { t } = useTranslation()
-  const { data } = useGetWeight(pool?.collection?.id, pool?.ve)
+  const { data } = useGetWeight(pool?.id, pool?.ve)
   const hasEarnings = new BigNumber(data?.weights).gt(0)
   console.log('7useGetWeight============>', data, hasEarnings, pool)
   return (

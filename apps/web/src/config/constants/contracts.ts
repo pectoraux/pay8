@@ -465,23 +465,23 @@ export default {
     56: '0x',
   },
   valuepoolVoter: {
-    4002: '0x4095b759f10505b2cc5D7B947Cb77BAff264aD21',
+    4002: '0x2cC04852fD270122e8B618D257460ED7c04dc7e0',
     56: '0x',
   },
   vaFactory: {
-    4002: '0xCe218dc13B7882cF4dB6490cFC4D58b57D09B1d7',
+    4002: '0x485B9Edfb403cFb367A322471de56DBDd54a2f4d',
     56: '0x',
   },
   valuepoolFactory: {
-    4002: '0x26B3B9dfefaa2CD918919Fb2df93584Ed5CF0f22',
+    4002: '0x6395A7f0989eEa4d70ABe643847558cBD1f25CA0',
     56: '0x',
   },
   valuepoolHelper: {
-    4002: '0x34e2973a48f31793fABdc39e8cb118f12c51461e',
+    4002: '0x3235eF5716f10372575CB394EBac70C437F99c3F',
     56: '0x',
   },
   valuepoolHelper2: {
-    4002: '0x0961a86b961685d23bEAc3036fDAa4d1438dfde7',
+    4002: '0x41588Fa804a990dC0db34850f305a8c546a14d11',
     56: '0x',
   },
   businessVoter: {
@@ -489,7 +489,7 @@ export default {
     56: '0x',
   },
   businessMinter: {
-    4002: '0x3d3eEea1388634F4dD69D3382E86F2DF68efe7E9',
+    4002: '0x9A2c537f1bFb95be8A38964E46983B4eD679Abf8',
     56: '0x',
   },
   businessBribeFactory: {

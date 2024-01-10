@@ -1,7 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import useSWR from 'swr'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
@@ -82,10 +81,10 @@ export const usePoolsWithFilterSelector = () => {
   return useSelector(poolsWithFilterSelector)
 }
 
-export const useGetWeight = (collectionId, vaAddress) => {
+export const useGetWeight = (profileId, vaAddress) => {
   const { chainId } = useActiveChainId()
-  const { data, mutate } = useSWR(['useGetWeight-referral', collectionId, vaAddress, chainId], async () =>
-    getWeight(collectionId, vaAddress, chainId),
+  const { data, mutate } = useSWR(['useGetWeight-referral', profileId, vaAddress, chainId], async () =>
+    getWeight(profileId, vaAddress, chainId),
   )
   return {
     data,

@@ -280,7 +280,7 @@ export const fetchReferralsUserData = async (account, pools, chainId) => {
   return augmentedPools
 }
 
-export const getWeight = async (collectionId, vaAddress, chainId) => {
+export const getWeight = async (profileId, vaAddress, chainId) => {
   const bscClient = publicClient({ chainId })
   const [weights, totalWeight] = await bscClient.multicall({
     allowFailure: true,
@@ -289,7 +289,7 @@ export const getWeight = async (collectionId, vaAddress, chainId) => {
         address: getReferralVoterAddress(),
         abi: referralVoterABI,
         functionName: 'weights',
-        args: [BigInt(collectionId), vaAddress],
+        args: [BigInt(profileId), vaAddress],
       },
       {
         address: getReferralVoterAddress(),
