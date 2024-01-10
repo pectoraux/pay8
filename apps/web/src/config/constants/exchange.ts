@@ -140,4 +140,4 @@ export const LIMIT_ORDERS_DOCS_URL = 'https://docs.pancakeswap.finance/products/
 
 export const EXCHANGE_PAGE_PATHS = ['/swap', '/limit-orders', 'liquidity', '/add', '/find', '/remove']
 
-export const LEVIATHANS = ['0x6cbb35914070a592e1d69dfdbe00202ca7ff707b']
+export const LEVIATHANS = ['0x0a115076bc86679712e1a98c03de52d3f127a7a5', '0xf0d8bd80b6c46c6486fd2bb52c82d2a2037c5595']

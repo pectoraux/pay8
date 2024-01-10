@@ -1,6 +1,6 @@
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
-import { InjectedModalProps, useToast, Button, Flex, LinkExternal } from '@pancakeswap/uikit'
+import { InjectedModalProps, Button, Flex, LinkExternal } from '@pancakeswap/uikit'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import {
@@ -24,6 +24,7 @@ import BigNumber from 'bignumber.js'
 import { fetchAcceleratorGaugesAsync } from 'state/accelerator'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useGetEarlyAdopter } from 'state/accelerator/hooks'
+import EraseWithDonationsStage from 'views/Referrals/components/EraseWithDonationsStage'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -41,6 +42,10 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.DELETE]: t('Delete'),
   [LockStage.UPDATE_BOUNTY]: t('Update Bounty'),
   [LockStage.WITHDRAW]: t('Withdraw'),
+  [LockStage.ERASE_DEBT]: t('Erase Debt With Treasury'),
+  [LockStage.ERASE_DEBT2]: t('Erase Debt With Donation'),
+  [LockStage.CONFIRM_ERASE_DEBT]: t('Back'),
+  [LockStage.CONFIRM_ERASE_DEBT2]: t('Back'),
   [LockStage.VOTE_UP]: t('Vote Up'),
   [LockStage.VOTE_DOWN]: t('Vote Down'),
   [LockStage.CONFIRM_VOTE_UP]: t('Back'),
@@ -73,6 +78,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
   const { chainId } = useActiveChainId()
   const [confirmedTxHash, setConfirmedTxHash] = useState('')
   const [tokenId, setTokenId] = useState('')
+  const [amountReceivable, setAmountReceivable] = useState('')
   const [add, setAdd] = useState(0)
   const { account } = useWeb3React()
   const { t } = useTranslation()
@@ -100,6 +106,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         break
       case LockStage.CONFIRM_DISTRIBUTE:
         setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_ERASE_DEBT:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.ERASE_DEBT2:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_ERASE_DEBT2:
+        setStage(LockStage.ERASE_DEBT2)
         break
       case LockStage.CONFIRM_UPDATE_GAUGE:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
@@ -159,6 +174,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       case LockStage.DELETE:
         setStage(LockStage.CONFIRM_DELETE)
         break
+      case LockStage.ERASE_DEBT2:
+        setStage(LockStage.CONFIRM_ERASE_DEBT2)
+        break
       default:
         break
     }
@@ -195,6 +213,20 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         return callWithGasPrice(gaugeContract, 'updateBounty', [tokenId, !!add]).catch((err1) =>
           console.log('CONFIRM_UPDATE_BOUNTY==================>', err1),
         )
+      }
+      if (stage === LockStage.CONFIRM_ERASE_DEBT) {
+        console.log('CONFIRM_ERASE_DEBT==================>', [pool?.vestingTokenAddress])
+        return callWithGasPrice(businessMinterContract, 'eraseDebtWithTreasuryFund', [pool?.vestingTokenAddress]).catch(
+          (err1) => console.log('CONFIRM_ERASE_DEBT==================>', err1),
+        )
+      }
+      if (stage === LockStage.CONFIRM_ERASE_DEBT2) {
+        const amount = getDecimalAmount(new BigNumber(amountReceivable), pool?.vestingTokenDecimals)
+        console.log('CONFIRM_ERASE_DEBT2==================>', [pool?.vestingTokenAddress, amount?.toString()])
+        return callWithGasPrice(businessMinterContract, 'eraseDebtWithDonations', [
+          pool?.vestingTokenAddress,
+          amount?.toString(),
+        ]).catch((err1) => console.log('CONFIRM_ERASE_DEBT2==================>', err1))
       }
       if (stage === LockStage.CONFIRM_VOTE_UP) {
         console.log('CONFIRM_VOTE_UP==================>', [tokenId, pool.id.split('-')[0], pool.gauge, pool.ve, true])
@@ -286,6 +318,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('WITHDRAW')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.CONFIRM_ERASE_DEBT)}>
+            {t('ERASE DEBT WITH TREASURY')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.ERASE_DEBT2)}>
+            {t('ERASE DEBT WITH DONATIONS')}
+          </Button>
         </Flex>
       )}
       {stage === LockStage.ADMIN_SETTINGS && (
@@ -318,6 +356,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_ADMIN_WITHDRAW)}>
             {t('WITHDRAW CLAIMED REWARDS')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.ERASE_DEBT)}>
+            {t('ERASE DEBT WITH TREASURY')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.ERASE_DEBT2)}>
+            {t('ERASE DEBT WITH DONATIONS')}
+          </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
             {t('DELETE PITCH')}
           </Button>
@@ -329,6 +373,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
           setTokenId={setTokenId}
           add={add}
           setAdd={setAdd}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.ERASE_DEBT2 && (
+        <EraseWithDonationsStage
+          amountReceivable={amountReceivable}
+          setAmountReceivable={setAmountReceivable}
           continueToNextStage={continueToNextStage}
         />
       )}

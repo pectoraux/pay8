@@ -67,7 +67,7 @@ export const fetchReferrals = async ({ chainId }) => {
   const referrals = await Promise.all(
     gauges
       ?.map(async (gauge, index) => {
-        const [totalWeight, gaugeWeight, vestingTokenAddress, collectionId, activePeriod] = await bscClient.multicall({
+        const [totalWeight, gaugeWeight, vestingTokenAddress, collectionId] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -93,13 +93,49 @@ export const fetchReferrals = async ({ chainId }) => {
               functionName: 'addressToCollectionId',
               args: [gauge.owner],
             },
-            {
-              address: getBusinessMinterAddress(),
-              abi: businessMinterABI,
-              functionName: 'active_period',
-            },
           ],
         })
+        const [activePeriod, weeklyEmission, treasuryFees, currentVolume, currentDebt, previousVolume] =
+          await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getBusinessMinterAddress(),
+                abi: businessMinterABI,
+                functionName: 'active_period',
+              },
+              {
+                address: getBusinessMinterAddress(),
+                abi: businessMinterABI,
+                functionName: 'weekly_emission',
+                args: [vestingTokenAddress.result],
+              },
+              {
+                address: getBusinessMinterAddress(),
+                abi: businessMinterABI,
+                functionName: 'treasuryFees',
+                args: [vestingTokenAddress.result],
+              },
+              {
+                address: getBusinessMinterAddress(),
+                abi: businessMinterABI,
+                functionName: 'currentVolume',
+                args: [vestingTokenAddress.result],
+              },
+              {
+                address: getBusinessMinterAddress(),
+                abi: businessMinterABI,
+                functionName: 'currentDebt',
+                args: [vestingTokenAddress.result],
+              },
+              {
+                address: getBusinessMinterAddress(),
+                abi: businessMinterABI,
+                functionName: 'previousVolume',
+                args: [vestingTokenAddress.result],
+              },
+            ],
+          })
         const collection = await getCollection(collectionId.result?.toString())
         const [gaugeEarned, vestingTokenName, vestingTokenDecimals, vestingTokenSymbol, tokensLength, _balanceOf] =
           await bscClient.multicall({
@@ -195,6 +231,12 @@ export const fetchReferrals = async ({ chainId }) => {
           bribes,
           collection,
           activePeriod: activePeriod.result.toString(),
+          toMint: weeklyEmission.result[0].toString(),
+          toErase: weeklyEmission.result[1].toString(),
+          treasuryFees: treasuryFees.result.toString(),
+          currentVolume: currentVolume.result.toString(),
+          currentDebt: currentDebt.result.toString(),
+          previousVolume: previousVolume.result.toString(),
           vestingTokenAddress: vestingTokenAddress.result,
           vestingTokenName: vestingTokenName.result,
           vestingTokenDecimals: vestingTokenDecimals.result,

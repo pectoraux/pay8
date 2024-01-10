@@ -1,18 +1,91 @@
-import { Text } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
+import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { ActionContainer, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { t } = useTranslation()
+
   return (
     <ActionContainer>
       <ActionContent>
-        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-          {t('%val1% %val2%', { val1: pool?.title ? 'Title:' : '', val2: pool?.title ?? '' })}
-          {t('Open the pitch for more details')}
-        </Text>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={pool?.vestingTokenDecimals ?? 18}
+              value={getBalanceNumber(pool?.toMint, pool?.vestingTokenDecimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Amount To Mint')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={pool?.vestingTokenDecimals ?? 18}
+              value={getBalanceNumber(pool?.toErase, pool?.vestingTokenDecimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Debt To Erase')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={pool?.vestingTokenDecimals ?? 18}
+              value={getBalanceNumber(pool?.treasuryFees, pool?.vestingTokenDecimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Treasury Fees')}
+            </Text>
+          </Box>
+        </Flex>
+        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={pool?.vestingTokenDecimals ?? 18}
+              value={getBalanceNumber(pool?.currentVolume, pool?.vestingTokenDecimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Current Volume')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={pool?.vestingTokenDecimals ?? 18}
+              value={getBalanceNumber(pool?.currentDebt, pool?.vestingTokenDecimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Current Debt')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={pool?.vestingTokenDecimals ?? 18}
+              value={getBalanceNumber(pool?.previousVolume, pool?.vestingTokenDecimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Previous Volume')}
+            </Text>
+          </Box>
+        </Flex>
       </ActionContent>
     </ActionContainer>
   )

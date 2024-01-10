@@ -8,7 +8,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
   }
 `
 
-export const stagesWithApproveButton = [LockStage.CONFIRM_UPDATE_BRIBES]
+export const stagesWithApproveButton = [LockStage.CONFIRM_UPDATE_BRIBES, LockStage.CONFIRM_ERASE_DEBT2]
 
 export const stagesWithConfirmButton = [
   LockStage.CONFIRM_DELETE,
@@ -18,9 +18,14 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_BOUNTY,
   LockStage.CONFIRM_UPDATE_GAUGE,
   LockStage.CONFIRM_LOCK_TOKENS,
+  LockStage.CONFIRM_ERASE_DEBT,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.ERASE_DEBT,
+  LockStage.ERASE_DEBT2,
+  LockStage.CONFIRM_ERASE_DEBT,
+  LockStage.CONFIRM_ERASE_DEBT2,
   LockStage.UPDATE_BRIBES,
   LockStage.UPDATE_BOUNTY,
   LockStage.WITHDRAW,

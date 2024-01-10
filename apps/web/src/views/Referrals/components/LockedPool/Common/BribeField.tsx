@@ -32,7 +32,6 @@ const BribeField: React.FC<any> = ({
   lockedAmount,
   stakingMax,
   setLockedAmount,
-  usedValueStaked,
   stakingTokenBalance,
   setShare,
   add = 'add',
