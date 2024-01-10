@@ -74,7 +74,7 @@ export const fetchReferrals = async ({ chainId }) => {
               address: getReferralVoterAddress(),
               abi: referralVoterABI,
               functionName: 'weights',
-              args: [BigInt(gauge.id), gauge.ve],
+              args: [BigInt(gauge.id.split('-')[0]), gauge.ve],
             },
             {
               address: gauge.ve,

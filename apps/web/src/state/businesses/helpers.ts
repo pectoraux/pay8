@@ -59,7 +59,7 @@ export const fetchBusinesses = async ({ chainId }) => {
   const businesses = await Promise.all(
     gauges
       .map(async (gauge) => {
-        const collection = await getCollection(gauge.id)
+        const collection = await getCollection(gauge.id.split('-')[0])
         const bscClient = publicClient({ chainId })
         const [totalWeight, gaugeWeight, vestingTokenAddress] = await bscClient.multicall({
           allowFailure: true,
@@ -74,7 +74,7 @@ export const fetchBusinesses = async ({ chainId }) => {
               address: getBusinessVoterAddress(),
               abi: businessVoterABI,
               functionName: 'weights',
-              args: [BigInt(gauge.id), gauge.ve],
+              args: [BigInt(gauge.id.split('-')[0]), gauge.ve],
             },
             {
               address: gauge.ve,
