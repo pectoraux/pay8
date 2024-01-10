@@ -36,7 +36,7 @@ const Details: React.FC<any> = ({ proposal }) => {
         <Flex alignItems="center" mb="8px">
           <Text color="textSubtle">{t('Pitch ID')}</Text>
           <LinkExternal href={`${IPFS_GATEWAY}/${proposal.id}`} ml="8px">
-            {proposal.id}
+            {truncateHash(proposal.id, 10)}
           </LinkExternal>
         </Flex>
         <Flex alignItems="center" mb="8px">

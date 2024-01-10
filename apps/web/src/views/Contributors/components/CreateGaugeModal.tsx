@@ -192,16 +192,26 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         )
       }
       if (stage === LockStage.CONFIRM_VOTE_UP) {
-        console.log('CONFIRM_VOTE_UP==================>', [tokenId, pool.id, pool.gauge, pool.ve, true])
-        return callWithGasPrice(contributorsVoterContract, 'vote', [tokenId, pool.id, pool.gauge, pool.ve, true]).catch(
-          (err) => console.log('CONFIRM_VOTE_UP==================>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_VOTE_DOWN) {
-        console.log('CONFIRM_VOTE_DOWN==================>', [tokenId, pool.id, pool.gauge, pool.ve, false])
+        console.log('CONFIRM_VOTE_UP==================>', [tokenId, pool.id.split('-')[0], pool.gauge, pool.ve, true])
         return callWithGasPrice(contributorsVoterContract, 'vote', [
           tokenId,
-          pool.id,
+          pool.id.split('-')[0],
+          pool.gauge,
+          pool.ve,
+          true,
+        ]).catch((err) => console.log('CONFIRM_VOTE_UP==================>', err))
+      }
+      if (stage === LockStage.CONFIRM_VOTE_DOWN) {
+        console.log('CONFIRM_VOTE_DOWN==================>', [
+          tokenId,
+          pool.id.split('-')[0],
+          pool.gauge,
+          pool.ve,
+          false,
+        ])
+        return callWithGasPrice(contributorsVoterContract, 'vote', [
+          tokenId,
+          pool.id.split('-')[0],
           pool.gauge,
           pool.ve,
           false,

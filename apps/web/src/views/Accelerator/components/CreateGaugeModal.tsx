@@ -197,16 +197,30 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
         )
       }
       if (stage === LockStage.CONFIRM_VOTE_UP) {
-        console.log('CONFIRM_VOTE_UP==================>', [tokenId, pool.id, pool.gauge, pool.ve, true])
-        return callWithGasPrice(acceleratorVoterContract, 'vote', [tokenId, pool.id, pool.gauge, pool.ve, true]).catch(
-          (err3) => console.log('CONFIRM_VOTE_UP==================>', err3),
-        )
+        console.log('CONFIRM_VOTE_UP==================>', [tokenId, pool.id.split('-')[0], pool.gauge, pool.ve, true])
+        return callWithGasPrice(acceleratorVoterContract, 'vote', [
+          tokenId,
+          pool.id.split('-')[0],
+          pool.gauge,
+          pool.ve,
+          true,
+        ]).catch((err3) => console.log('CONFIRM_VOTE_UP==================>', err3))
       }
       if (stage === LockStage.CONFIRM_VOTE_DOWN) {
-        console.log('CONFIRM_VOTE_DOWN==================>', [tokenId, pool.id, pool.gauge, pool.ve, false])
-        return callWithGasPrice(acceleratorVoterContract, 'vote', [tokenId, pool.id, pool.gauge, pool.ve, false]).catch(
-          (err4) => console.log('CONFIRM_VOTE_DOWN==================>', err4),
-        )
+        console.log('CONFIRM_VOTE_DOWN==================>', [
+          tokenId,
+          pool.id.split('-')[0],
+          pool.gauge,
+          pool.ve,
+          false,
+        ])
+        return callWithGasPrice(acceleratorVoterContract, 'vote', [
+          tokenId,
+          pool.id.split('-')[0],
+          pool.gauge,
+          pool.ve,
+          false,
+        ]).catch((err4) => console.log('CONFIRM_VOTE_DOWN==================>', err4))
       }
       if (stage === LockStage.CONFIRM_DISTRIBUTE) {
         console.log('CONFIRM_DISTRIBUTE==================>', [pool.gauge, pool.ve])
