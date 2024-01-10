@@ -85,7 +85,7 @@ export const fetchContributors = async (chainId) => {
   const gauges = await getContributorsData()
   const businesses = await Promise.all(
     gauges
-      .map(async (gauge) => {
+      .map(async (gauge, index) => {
         const collection = await getCollection(gauge.id.split('-')[0])
         const bscClient = publicClient({ chainId })
         const [totalWeight, gaugeWeight, claimable, vestingTokenAddress] = await bscClient.multicall({
@@ -200,7 +200,8 @@ export const fetchContributors = async (chainId) => {
           .toFixed(2)
         // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
         return {
-          sousId: gauge.id.split('-')[0],
+          sousId: index,
+          pid: gauge.id.split('-')[0],
           bribes,
           collection,
           vestingTokenAddress: vestingTokenAddress.result,

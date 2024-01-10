@@ -1,18 +1,6 @@
 import { useAccount } from 'wagmi'
 import styled from 'styled-components'
-import { useRouter } from 'next/router'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Loading,
-} from '@pancakeswap/uikit'
+import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/accelerator/hooks'
 import Page from 'components/Layout/Page'
@@ -36,9 +24,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
-  const inputCurency = useCurrency(DEFAULT_TFIAT)
-  const [currency, setCurrency] = useState(inputCurency)
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateAcceleratorModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
@@ -46,7 +31,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   usePoolsPageFetch()

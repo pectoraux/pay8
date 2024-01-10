@@ -60,7 +60,7 @@ export const fetchReferrals = async ({ chainId }) => {
   const bscClient = publicClient({ chainId })
   const referrals = await Promise.all(
     gauges
-      ?.map(async (gauge) => {
+      ?.map(async (gauge, index) => {
         const [totalWeight, gaugeWeight, vestingTokenAddress, collectionId] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
@@ -179,7 +179,8 @@ export const fetchReferrals = async ({ chainId }) => {
           .toFixed(2)
         // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
         return {
-          sousId: gauge.id.split('-')[0],
+          sousId: index,
+          pid: gauge.id.split('-')[0],
           bribes,
           collection,
           vestingTokenAddress: vestingTokenAddress.result,
