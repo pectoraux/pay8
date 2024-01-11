@@ -12,7 +12,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag, getWeight } from './helpers'
+import { getLatestTokenId, getTag, getWeight } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('referrals-tags', async () => getTag())
@@ -86,6 +86,15 @@ export const useGetWeight = (profileId, vaAddress) => {
   const { data, mutate } = useSWR(['useGetWeight-referral', profileId, vaAddress, chainId], async () =>
     getWeight(profileId, vaAddress, chainId),
   )
+  return {
+    data,
+    refetch: mutate,
+  }
+}
+
+export const useGetLatestTokenId = () => {
+  const { chainId } = useActiveChainId()
+  const { data, mutate } = useSWR(['useGetLatestTokenId', chainId], async () => getLatestTokenId(chainId))
   return {
     data,
     refetch: mutate,

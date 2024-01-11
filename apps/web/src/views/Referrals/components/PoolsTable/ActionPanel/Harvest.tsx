@@ -1,11 +1,19 @@
+import { useEffect } from 'react'
 import { Balance, Box, Flex, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useGetLatestTokenId } from 'state/referrals/hooks'
 
 import { ActionContainer, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { t } = useTranslation()
+  const { data: latestTokenId, refetch } = useGetLatestTokenId()
+
+  useEffect(() => {
+    refetch()
+  }, [pool, refetch])
+
   return (
     <ActionContainer>
       <ActionContent>
@@ -82,6 +90,19 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Previous Volume')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={0}
+              value={Number(latestTokenId)}
+              prefix="#"
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Number Of Donors So Far')}
             </Text>
           </Box>
         </Flex>

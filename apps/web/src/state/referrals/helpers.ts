@@ -361,3 +361,18 @@ export const getWeight = async (profileId, vaAddress, chainId) => {
       (parseFloat(weights.result.toString()) * 100) / Math.max(1, parseFloat(totalWeight.result.toString())),
   }
 }
+
+export const getLatestTokenId = async (chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [tokenId] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getBusinessMinterAddress(),
+        abi: businessMinterABI,
+        functionName: 'tokenId',
+      },
+    ],
+  })
+  return tokenId.result
+}
