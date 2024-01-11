@@ -385,8 +385,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, onD
       )}
       {stage === LockStage.ERASE_DEBT2 && (
         <EraseWithDonationsStage
-          amountReceivable={amountReceivable}
-          setAmountReceivable={setAmountReceivable}
+          currency={currency}
+          lockedAmount={amountReceivable}
+          setLockedAmount={setAmountReceivable}
           continueToNextStage={continueToNextStage}
         />
       )}
