@@ -23,16 +23,16 @@ const selectFilteredData = (state: State) => {
       (!state.bettings.filters.country ||
         state.bettings.filters.country.includes('All') ||
         state.bettings.filters.country.filter((value) =>
-          betting?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          betting?.collection?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length) &&
       (!state.bettings.filters.city ||
         state.bettings.filters.city.includes('All') ||
         state.bettings.filters.city.filter((value) =>
-          betting?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          betting?.collection?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.bettings.filters.product ||
         state.bettings.filters.product.filter((value) =>
-          betting?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          betting?.collection?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)
     )
   })

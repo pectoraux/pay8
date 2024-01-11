@@ -82,8 +82,10 @@ const ScrollableFlexContainer = styled(Flex)`
 `
 
 const Filters: React.FC<any> = ({ collection, nftFilters, setNftFilters, workspace = true }) => {
-  let Country = require('country-state-city').Country
-  let City = require('country-state-city').City
+  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+  const { Country } = require('country-state-city')
+  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+  const { City } = require('country-state-city')
   const code = useMemo(
     () =>
       nftFilters?.country?.length &&
@@ -131,7 +133,7 @@ const Filters: React.FC<any> = ({ collection, nftFilters, setNftFilters, workspa
     count: attr.count ? attr.count : undefined,
     attr,
   }))
-  let countryItems =
+  const countryItems =
     countries.Country?.map((attr) => ({
       label: capitalize(attr.value as string),
       count: attr.count ? attr.count : undefined,
@@ -146,7 +148,7 @@ const Filters: React.FC<any> = ({ collection, nftFilters, setNftFilters, workspa
       count: 0,
     },
   })
-  let cityItems =
+  const cityItems =
     cities.City?.map((attr) => ({
       label: attr.value as string,
       count: attr.count ? attr.count : undefined,

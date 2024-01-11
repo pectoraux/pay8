@@ -1,17 +1,6 @@
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Spinner,
-  Loading,
-} from '@pancakeswap/uikit'
+import styled from 'styled-components'
+import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/bettings/hooks'
 import Page from 'components/Layout/Page'
@@ -23,7 +12,6 @@ import CreateBettingModal from './components/CreateBettingModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -40,7 +28,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   usePoolsPageFetch()

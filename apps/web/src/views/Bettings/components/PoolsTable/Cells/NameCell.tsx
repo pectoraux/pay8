@@ -33,7 +33,7 @@ const NameCell: React.FC<any> = ({ pool, currAccount }) => {
             style={{ marginRight: '20px', position: 'relative' }}
           />
           <Text bold={!isMobile} small={isMobile}>
-            <TokenImage mr="8px" width={40} height={40} src={currAccount?.media} />
+            <TokenImage mr="8px" width={40} height={40} src={currAccount?.media ?? pool?.collection?.avatar} />
             {t(pool?.collection?.name ?? '')}
           </Text>
         </Flex>
