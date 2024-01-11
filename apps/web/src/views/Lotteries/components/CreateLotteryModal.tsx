@@ -112,7 +112,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
         startTime,
         endTime,
         endAmount.toString(),
-        parseInt(state.lockDuration) * 60,
+        parseInt(state.lockDuration ?? 0) * 60,
         !!state.useNFTicket,
         state.isNFT,
         [
