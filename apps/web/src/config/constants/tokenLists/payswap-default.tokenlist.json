@@ -12,7 +12,7 @@
     {
       "name": "Free Apparel & Beauty & Cosmetics Token",
       "symbol": "FABT",
-      "address": "0xd17C814f5609889609720D95e1A7369f9F798aB4",
+      "address": "0x61717A9427a47c959C796B7E9ef96B118380D0B2",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FABT.svg"
@@ -20,7 +20,7 @@
     {
       "name": "Free Beverage Token",
       "symbol": "FBT",
-      "address": "0x77B0e504900997eE937c0C10E027236aeCD386EF",
+      "address": "0x140eb5e979796bc233e129ED1Dc8A9AFE7F18dAA",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FBT.svg"
@@ -28,7 +28,7 @@
     {
       "name": "Free Culture & Entertainment Token",
       "symbol": "FECT",
-      "address": "0x406BD6A54A4807E207823D28AB908b0E9466678E",
+      "address": "0x031B80f0e15b321A52c722F128Fe389A09e96194",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FECT.svg"
@@ -36,7 +36,7 @@
     {
       "name": "Free Energy Token",
       "symbol": "FET",
-      "address": "0xd1a7aB1a1E1aaDD5CD51F51570885c7896bb3139",
+      "address": "0x9820779cD8eDb1fC82B3B360CFC0221A7F65e768",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FET.svg"
@@ -44,7 +44,7 @@
     {
       "name": "Free Food Token",
       "symbol": "FFT",
-      "address": "0x7D797d2D96EA6187E85008B8B2F386a552C86d6b",
+      "address": "0x11D38bDe61af6baA177198b6C35de1E573782b4C",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FFT.svg"
@@ -52,7 +52,7 @@
     {
       "name": "Free HealthCare Token",
       "symbol": "FHT",
-      "address": "0x272D5d2E5Be74ec1216162D3418be7EDF929d2a9",
+      "address": "0x798d7ec0058654320F2513Ef7f5ca9688e398A4e",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FHT.svg"
@@ -60,7 +60,7 @@
     {
       "name": "Free Law & Order Token",
       "symbol": "FLOT",
-      "address": "0x05Da08335F8B187769E60F3D92254e69ed5dF3EE",
+      "address": "0xD2BC877C4ad694C05Cd1e9CB05F3941e8A749Ad6",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FLOT.svg"
@@ -68,7 +68,7 @@
     {
       "name": "Free Mining Token",
       "symbol": "FMT",
-      "address": "0xBa9fCa9130BF46FbB09740A3b02d5Ce9deB6ae11",
+      "address": "0xAD77753F29dc30F17Dc61Bb24e68A3db86D2c9A9",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FMT.svg"
@@ -76,7 +76,7 @@
     {
       "name": "Free NSFW Token",
       "symbol": "FNT",
-      "address": "0x7F52Da327C3a6bbFc1dF348994919a66dcAC33e0",
+      "address": "0x0a7597014ADbd0CE1C275b511E706559A5f1F07e",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FNT.svg"
@@ -84,7 +84,7 @@
     {
       "name": "Free Real Estate Token",
       "symbol": "FRET",
-      "address": "0x6E91468E9685bF6Ddd9Ef0a7Cce5597698878E9D",
+      "address": "0x5Ecc7dc2987729bcf7E0Fc749e70F518BBB3Aa56",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FRET.svg"
@@ -92,7 +92,7 @@
     {
       "name": "Free Software & Telecommunication Token",
       "symbol": "FSTT",
-      "address": "0x59013988E3730A66A9A973a812fb94056E6e7855",
+      "address": "0xA151e4494e7a0519178663d956cD1c54Fa11e7B5",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FSTT.svg"
@@ -100,7 +100,7 @@
     {
       "name": "Free Transportation Token",
       "symbol": "FTT",
-      "address": "0x023803056E3532348E8a6Deac35dafD4732F792b",
+      "address": "0x47D74c85fce4c5A484467020Ae0C2c5A63620680",
       "chainId": 4002,
       "decimals": 18,
       "logoURI": "https://tokens.payswap.org/images/FTT.svg"
