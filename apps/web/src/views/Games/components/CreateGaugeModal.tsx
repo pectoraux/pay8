@@ -684,7 +684,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           nftFilters?.city?.toString(),
           '0',
           '0',
-          pool?.id,
+          ADDRESS_ZERO,
           customTags?.length && customTags[0],
         ]
         console.log('CONFIRM_UPDATE_LOCATION===============>', args)
