@@ -8,22 +8,12 @@ export const gaugeABI = [
       },
       {
         internalType: 'address',
-        name: '_trustBounty',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
         name: '_ve',
         type: 'address',
       },
       {
         internalType: 'address',
         name: '_voter',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_marketCollections',
         type: 'address',
       },
     ],
@@ -156,7 +146,13 @@ export const gaugeABI = [
     type: 'event',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
     name: 'active_period',
     outputs: [
       {
@@ -238,6 +234,19 @@ export const gaugeABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'contractAddress',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -284,6 +293,25 @@ export const gaugeABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_start',
+        type: 'uint256',
+      },
+    ],
+    name: 'getAllTokens',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: '_tokens',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address[]',
         name: '_tokens',
         type: 'address[]',
@@ -308,6 +336,19 @@ export const gaugeABI = [
       },
     ],
     name: 'notifyRewardAmount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_contractAddress',
+        type: 'address',
+      },
+    ],
+    name: 'setContractAddress',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -351,16 +392,16 @@ export const gaugeABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'trustBounty',
-    outputs: [
+    inputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        internalType: 'uint256',
+        name: '_start',
+        type: 'uint256',
       },
     ],
-    stateMutability: 'view',
+    name: 'updateBalances',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -370,6 +411,11 @@ export const gaugeABI = [
         name: '_bountyId',
         type: 'uint256',
       },
+      {
+        internalType: 'bool',
+        name: '_add',
+        type: 'bool',
+      },
     ],
     name: 'updateBounty',
     outputs: [],
@@ -377,7 +423,13 @@ export const gaugeABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_start',
+        type: 'uint256',
+      },
+    ],
     name: 'withdrawAll',
     outputs: [],
     stateMutability: 'nonpayable',

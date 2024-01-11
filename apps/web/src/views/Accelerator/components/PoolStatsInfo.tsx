@@ -31,9 +31,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   console.log('PoolStatsInfo===========>', pool)
   return (
     <>
-      <Box>
-        <ReactMarkdown>{pool?.description}</ReactMarkdown>
-      </Box>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal color="failure" href={`/accelerator/voting/${pool?.id}`} bold>
           {t('OPEN PITCH')}
