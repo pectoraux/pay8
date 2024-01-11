@@ -98,7 +98,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
               color="textSubtle"
               fontSize="12px"
               decimals={0}
-              value={Number(latestTokenId)}
+              value={Number(latestTokenId) - 1}
               prefix="#"
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
