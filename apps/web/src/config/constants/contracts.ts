@@ -605,19 +605,19 @@ export default {
     4002: '0x4b81e883C13405D92F8986C06738Ff4Fa10d1573',
   },
   'real estate': {
-    4002: '0xb9858E52175Dc194686E29875570703B5C986Fe3', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
+    4002: '0xa68a8c8979dEdf77c4A36e05D06c6a6e803Bed33', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
     56: '0x',
   },
   transportation: {
-    4002: '0x4E53C05E933CE8281CfaBe75b456528d40fcBAFc',
+    4002: '0xAb9C6F27Bf60B54348D41aDaA04016ED7f545Fff',
     56: '0x',
   },
   healthcare: {
-    4002: '0xdE46100D142FD66f50697dF99c296796100983de',
+    4002: '0x078aaD24DADD93105e88794E79316d711680eB8a',
     56: '0x',
   },
   food: {
-    4002: '0x2cc1F3A5A27ef2985768ff98526337db6E05C847',
+    4002: '0x916a1741323Ab488EB89E1ae1eC22Bd75805D554',
     56: '0x',
   },
   beverage: {
@@ -625,11 +625,11 @@ export default {
     56: '0x',
   },
   'law & order': {
-    4002: '0x06BF8AF06Bf883D8124EF7466ABc68Dd8036a5C6',
+    4002: '0x25747920013905D87B5CF184bD0f87B5eC1D8986',
     56: '0x',
   },
   'software & telco & other': {
-    4002: '0x6f491e004Df2e5797F9355F89E4fa4Ae6592e89f',
+    4002: '0xb2a75385638e8D264fd50D26EF3D9c11cAD17A8d',
     56: '0x',
   },
   'apparel, beauty & cosmetics': {
@@ -637,19 +637,19 @@ export default {
     56: '0x',
   },
   energy: {
-    4002: '0xae6a2d4DbA638766bD3b522cD397cA90F173fDd2',
+    4002: '0x00B0f1165Ff308059C80A4FB31572D307E797230',
     56: '0x',
   },
   mining: {
-    4002: '0x86130B7eec5561706Ac18877D19ee7D1A584E807',
+    4002: '0xc4c8fd6E3A451D490a242Fb097Fa81EC6d01139C',
     56: '0x',
   },
   'culture & entertainment': {
-    4002: '0xb55A821877d473D972B4ECBB18E41739687c539f',
+    4002: '0x67BA3f68a1F99a941A6DcA76eAB938f9E3E5A70A',
     56: '0x',
   },
   nsfw: {
-    4002: '0x1a8e20B265A9D5D1Cd3BA0b157da15d5EfB8Ea62',
+    4002: '0xEbc5A777650B93dE9DF706139ee1e7e7E3CD0F26',
     56: '0x',
   },
   FRET: {

@@ -32,9 +32,6 @@ import Questions from './components/Questions'
 const DesktopButton = styled(Button)`
   align-self: flex-end;
 `
-const CardLayout = styled(FlexLayout)`
-  justify-content: center;
-`
 
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
@@ -88,21 +85,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
                 />
               </Button>
               <ArrowForwardIcon onClick={onPresentTrustBounties} color="primary" />
-            </Flex>
-            <Flex
-              style={{ gap: '16px', padding: '16px 16px 0 0' }}
-              alignItems={[null, null, 'center']}
-              flexDirection={['column', 'column', 'row']}
-              // flexWrap={isMd ? 'wrap' : 'nowrap'}
-            >
-              <Button
-                mb="8px"
-                scale="sm"
-                onClick={() => refresh()}
-                // {...(isMd && { width: '100%' })}
-              >
-                {t('Refresh')}
-              </Button>
             </Flex>
           </Flex>
           <Flex justifyContent="flex-end" alignItems="flex-end">
