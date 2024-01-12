@@ -14,17 +14,19 @@ import {
   InfoFilledIcon,
   ScanLink,
 } from '@pancakeswap/uikit'
+import BigNumber from 'bignumber.js'
 import { ChainId, WNATIVE } from '@pancakeswap/sdk'
 import { FetchStatus } from 'config/constants/types'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from '@pancakeswap/localization'
 import useAuth from 'hooks/useAuth'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import useTokenBalance, { useBSCCakeBalance } from 'hooks/useTokenBalance'
+import useTokenBalance from 'hooks/useTokenBalance'
 import { ChainLogo } from 'components/Logo/ChainLogo'
+import { useGetFreeTokenBalances } from 'state/bettings/hooks'
 
 import { getBlockExploreLink, getBlockExploreName } from 'utils'
-import { getFullDisplayBalance, formatBigInt } from '@pancakeswap/utils/formatBalance'
+import { getFullDisplayBalance, formatBigInt, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useBalance } from 'wagmi'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import { isMobile } from 'react-device-detect'
@@ -55,7 +57,8 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const wBNBToken = WNATIVE[ChainId.BSC]
   const { balance: wNativeBalance, fetchStatus: wNativeFetchStatus } = useTokenBalance(wNativeToken?.address)
   const { balance: wBNBBalance, fetchStatus: wBNBFetchStatus } = useTokenBalance(wBNBToken?.address, true)
-  const { balance: cakeBalance, fetchStatus: cakeFetchStatus } = useBSCCakeBalance()
+  // const { balance: cakeBalance, fetchStatus: cakeFetchStatus } = useBSCCakeBalance()
+  const { data: balances, status: cakeFetchStatus } = useGetFreeTokenBalances(account)
   const [mobileTooltipShow, setMobileTooltipShow] = useState(false)
   const { logout } = useAuth()
 
@@ -206,16 +209,18 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
             )}
           </Flex>
         )}
-        <Flex alignItems="center" justifyContent="space-between">
-          <Text color="textSubtle">{t('CAKE Balance')}</Text>
-          {cakeFetchStatus !== FetchStatus.Fetched ? (
-            <Skeleton height="22px" width="60px" />
-          ) : (
-            <Text>{formatBigInt(cakeBalance, 3)}</Text>
-          )}
-        </Flex>
+        {balances?.map((balance) => (
+          <Flex alignItems="center" justifyContent="space-between">
+            <Text color="textSubtle">{t('%symb% Balance', { symb: balance?.symbol })}</Text>
+            {cakeFetchStatus !== FetchStatus.Fetched ? (
+              <Skeleton height="22px" width="60px" />
+            ) : (
+              <Text>{getBalanceNumber(new BigNumber(balance?.value))}</Text>
+            )}
+          </Flex>
+        ))}
       </Box>
-      <CakeBenefitsCard onDismiss={onDismiss} />
+      {/* <CakeBenefitsCard onDismiss={onDismiss} /> */}
       <Button variant="secondary" width="100%" minHeight={48} onClick={handleLogout}>
         {t('Disconnect Wallet')}
       </Button>

@@ -51,8 +51,8 @@ import DeleteStage from './DeleteStage'
 import DeleteBettingEventStage from './DeleteBettingEventStage'
 import SetBettingResultStage from './SetBettingResultStage'
 import ClaimTicketStage from './ClaimTicketStage'
-import CloseBettingStage from './CloseBettingStage'
 import LocationStage from './LocationStage'
+import CloseBettingStage from './CloseBettingStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),

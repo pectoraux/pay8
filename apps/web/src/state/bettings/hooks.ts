@@ -18,6 +18,7 @@ import {
   getAmountCollected,
   getCalculateRewardsForTicketId,
   getCountWinnersPerBracket,
+  getFreeTokenBalances,
   getPaymentCredits,
   getPendingRevenue,
   getSubjects,
@@ -119,6 +120,17 @@ export const useGetWinnersPerBracket = (bettingAddress, bettingId, period, ticke
     return []
   })
   return winners
+}
+
+export const useGetFreeTokenBalances = (userAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data, status } = useSWR(['useGetFreeTokenBalances', userAddress, chainId], async () =>
+    getFreeTokenBalances(userAddress, chainId),
+  )
+  return {
+    data,
+    status,
+  }
 }
 
 export const useGetWinnersPerBracketNPeriod = (bettingAddress, bettingId, periods, ticketSize) => {

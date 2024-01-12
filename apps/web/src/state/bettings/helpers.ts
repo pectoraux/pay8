@@ -6,7 +6,7 @@ import { publicClient } from 'utils/wagmi'
 import { bettingABI } from 'config/abi/betting'
 import { erc20ABI } from 'wagmi'
 
-import { getBettingHelperAddress } from 'utils/addressHelpers'
+import { getBettingHelperAddress, getVeFromWorkspace } from 'utils/addressHelpers'
 import { bettingHelperABI } from 'config/abi/bettingHelper'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { bettingFields } from './queries'
@@ -299,6 +299,30 @@ export const fetchBetting = async (bettingAddress, chainId) => {
     bettingEvents,
     oracle: oracle.result,
   }
+}
+
+export const getFreeTokenBalances = async (userAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const balances = await Promise.all(
+    ['FRET', 'FTT', 'FHT', 'FFT', 'FBT', 'FLOT', 'FSTT', 'FABT', 'FET', 'FMT', 'FECT', 'FNT'].map(async (symbol) => {
+      const [balance] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: getVeFromWorkspace(symbol),
+            abi: erc20ABI,
+            functionName: 'balanceOf',
+            args: [userAddress],
+          },
+        ],
+      })
+      return {
+        symbol,
+        value: balance.result.toString(),
+      }
+    }),
+  )
+  return balances
 }
 
 export const fetchBettings = async ({ fromBetting, chainId }) => {
