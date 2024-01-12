@@ -1,23 +1,11 @@
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Loading,
-} from '@pancakeswap/uikit'
+import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
+import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/contributors/hooks'
+import { usePoolsPageFetch, usePoolsWithFilterSelector, useFilters } from 'state/contributors/hooks'
 import Page from 'components/Layout/Page'
+import { useGetTags } from 'state/cancan/hooks'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import { useCurrency } from 'hooks/Tokens'
-import { useCallback, useState } from 'react'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
@@ -26,7 +14,6 @@ import Filters from './Filters'
 
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -36,9 +23,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { pools, userDataLoaded } = usePoolsWithFilterSelector()
   console.log('pools=============>', pools)
-  const inputCurency = useCurrency(DEFAULT_TFIAT)
-  const [currency, setCurrency] = useState(inputCurency)
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateContributorsModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
@@ -46,7 +30,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   usePoolsPageFetch()

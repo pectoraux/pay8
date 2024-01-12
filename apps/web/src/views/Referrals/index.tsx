@@ -1,20 +1,10 @@
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Loading,
-} from '@pancakeswap/uikit'
+import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
-import { useFilters, useGetTags, usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/referrals/hooks'
+import { useFilters, usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/referrals/hooks'
 import Page from 'components/Layout/Page'
+import { useGetTags } from 'state/cancan/hooks'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 
 import PoolControls from './components/PoolControls'
@@ -39,7 +29,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   usePoolsPageFetch()

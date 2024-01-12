@@ -3,7 +3,6 @@ import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { createSelector } from '@reduxjs/toolkit'
 import { State, VaultKey } from '../types'
 // import { transformPool, transformVault } from './helpers'
-import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
 const selectPoolsData = (state: State) => state.contributors?.data
 const selectPoolData = (sousId) => (state: State) => state.contributors?.data.find((p) => p.sousId === sousId)
@@ -23,16 +22,16 @@ const selectFilteredData = (state: State) => {
       (!state.contributors.filters.country ||
         state.contributors.filters.country.includes('All') ||
         state.contributors.filters.country.filter((value) =>
-          contributor?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          contributor?.collection?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length) &&
       (!state.contributors.filters.city ||
         state.contributors.filters.city.includes('All') ||
         state.contributors.filters.city.filter((value) =>
-          contributor?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          contributor?.collection?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.contributors.filters.product ||
         state.contributors.filters.product.filter((value) =>
-          contributor?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          contributor?.collection?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)
     )
   })

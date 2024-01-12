@@ -14,16 +14,16 @@ const selectFilteredData = (state: State) => {
       (!state.accelerator.filters.country ||
         state.accelerator.filters.country.includes('All') ||
         state.accelerator.filters.country.filter((value) =>
-          acc?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          acc?.collection?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length) &&
       (!state.accelerator.filters.city ||
         state.accelerator.filters.city.includes('All') ||
         state.accelerator.filters.city.filter((value) =>
-          acc?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          acc?.collection?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.accelerator.filters.product ||
         state.accelerator.filters.product.filter((value) =>
-          acc?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          acc?.collection?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)
     )
   })

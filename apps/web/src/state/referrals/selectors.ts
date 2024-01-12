@@ -3,7 +3,6 @@ import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { createSelector } from '@reduxjs/toolkit'
 import { State, VaultKey } from '../types'
 // import { transformPool, transformVault } from './helpers'
-import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
 const selectPoolsData = (state: State) => state.referrals?.data
 const selectPoolData = (sousId) => (state: State) => state.referrals?.data.find((p) => p.sousId === sousId)
@@ -23,16 +22,16 @@ const selectFilteredData = (state: State) => {
       (!state.referrals.filters.country ||
         state.referrals.filters.country.includes('All') ||
         state.referrals.filters.country.filter((value) =>
-          referral?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          referral?.collection?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length) &&
       (!state.referrals.filters.city ||
         state.referrals.filters.city.includes('All') ||
         state.referrals.filters.city.filter((value) =>
-          referral?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          referral?.collection?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.referrals.filters.product ||
         state.referrals.filters.product.filter((value) =>
-          referral?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          referral?.collection?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)
     )
   })

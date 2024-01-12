@@ -18,21 +18,21 @@ const selectCurrBribe = (state: State) => state.businesses?.currBribe
 const selectCurrPool = (state: State) => state.businesses?.currPool
 const selectFilters = (state: State) => state.businesses?.filters
 const selectFilteredData = (state: State) => {
-  return state.businesses?.data.filter((businesse) => {
+  return state.businesses?.data.filter((business) => {
     return (
       (!state.businesses.filters.country ||
         state.businesses.filters.country.includes('All') ||
         state.businesses.filters.country.filter((value) =>
-          businesse?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          business?.collection?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length) &&
       (!state.businesses.filters.city ||
         state.businesses.filters.city.includes('All') ||
         state.businesses.filters.city.filter((value) =>
-          businesse?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          business?.collection?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0) &&
       (!state.businesses.filters.product ||
         state.businesses.filters.product.filter((value) =>
-          businesse?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          business?.collection?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
         )?.length > 0)
     )
   })
