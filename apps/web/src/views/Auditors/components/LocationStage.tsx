@@ -8,12 +8,19 @@ interface RemoveStageProps {
   addLocation: () => void
 }
 
-const LocationStage: React.FC<any> = ({ state, nftFilters, setNftFilters, handleChange, continueToNextStage }) => {
+const LocationStage: React.FC<any> = ({
+  state,
+  pool,
+  nftFilters,
+  setNftFilters,
+  handleChange,
+  continueToNextStage,
+}) => {
   const { t } = useTranslation()
   return (
     <>
       <GreyedOutContainer>
-        <Filters collection={nftFilters} workspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
+        <Filters collection={pool} workspace={false} nftFilters={nftFilters} setNftFilters={setNftFilters} />
       </GreyedOutContainer>
       <GreyedOutContainer style={{ paddingTop: '18px' }}>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

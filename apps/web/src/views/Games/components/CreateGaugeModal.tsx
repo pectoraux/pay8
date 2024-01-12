@@ -1148,6 +1148,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       )}
       {stage === LockStage.UPDATE_LOCATION && (
         <LocationStage
+          pool={pool}
           state={state}
           nftFilters={nftFilters}
           setNftFilters={setNftFilters}
