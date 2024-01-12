@@ -660,7 +660,7 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
         const customTags = state.customTags?.split(',')
         const args = [
-          '0',
+          '1',
           '0',
           nftFilters?.country?.toString(),
           nftFilters?.city?.toString(),
