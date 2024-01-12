@@ -34,7 +34,10 @@ const CheckPrizesSection = ({ currentTokenId }) => {
   const [hasRewardsToClaim, setHasRewardsToClaim] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const prizeAddress = useMemo(
-    () => (nftPrizes?.length >= currentTokenId ? nftPrizes[currentTokenId]?.tokenAddress : nftPrizes[0]?.tokenAddress),
+    () =>
+      nftPrizes?.length >= currentTokenId
+        ? nftPrizes[currentTokenId]?.tokenAddress
+        : nftPrizes?.length && nftPrizes[0]?.tokenAddress,
     [nftPrizes, currentTokenId],
   )
   const { fetchAllRewards, unclaimedRewards, fetchStatus } = useGetUnclaimedRewards({
