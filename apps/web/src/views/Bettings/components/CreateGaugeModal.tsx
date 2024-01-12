@@ -24,7 +24,6 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { combineDateAndTime } from 'views/ReferralsVoting/CreateProposal/helpers'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 import { useGetTokenForCredit } from 'state/bettings/hooks'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
@@ -53,6 +52,7 @@ import DeleteBettingEventStage from './DeleteBettingEventStage'
 import SetBettingResultStage from './SetBettingResultStage'
 import ClaimTicketStage from './ClaimTicketStage'
 import CloseBettingStage from './CloseBettingStage'
+import LocationStage from './LocationStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -78,6 +78,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_EXCLUDED_CONTENT]: t('Update Excluded Content'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.INJECT_FUNDS]: t('Inject Funds'),
+  [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.REGISTER_TAG]: t('Register To Tag'),
   [LockStage.UPDATE_URI_GENERATOR]: t('Update URI Generator'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Protocol'),
@@ -86,6 +87,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_BURN_FOR_CREDIT]: t('Back'),
   [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
   [LockStage.CONFIRM_SET_BETTING_RESULTS]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_CLOSE_BETTING]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PROTOCOL]: t('Back'),
   [LockStage.CONFIRM_USER_WITHDRAW]: t('Back'),
@@ -184,6 +186,11 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     decimals: currency?.decimals,
     // owner: currAccount?.owner || account
   }))
+  const [nftFilters, setNftFilters] = useState<any>({
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
+  })
   const { data: burnForCreditTokens } = useGetTokenForCredit(pool?.id) as any
   const burnForCreditToken = useMemo(
     () => burnForCreditTokens?.length > state.position && burnForCreditTokens[state.position],
@@ -351,6 +358,12 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.SETTINGS)
         break
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_LOCATION:
+        setStage(LockStage.UPDATE_LOCATION)
+        break
       default:
         break
     }
@@ -358,6 +371,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
 
   const continueToNextStage = () => {
     switch (stage) {
+      case LockStage.UPDATE_LOCATION:
+        setStage(LockStage.CONFIRM_UPDATE_LOCATION)
+        break
       case LockStage.BURN:
         setStage(LockStage.CONFIRM_BURN)
         break
@@ -454,6 +470,23 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
+      if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
+        const customTags = state.customTags?.split(',')
+        const args = [
+          '1',
+          '0',
+          nftFilters?.country?.toString(),
+          nftFilters?.city?.toString(),
+          '0',
+          '0',
+          pool?.id,
+          nftFilters?.product?.length ? nftFilters?.product[0] : customTags?.length && customTags[0],
+        ]
+        console.log('CONFIRM_UPDATE_LOCATION===============>', args)
+        return callWithGasPrice(bettingHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_LOCATION===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_SET_BETTING_RESULTS) {
         const args = [
           state.bettingId,
@@ -788,6 +821,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button variant="subtle" mb="8px" onClick={() => setStage(LockStage.UPDATE_PARTNER_EVENT)}>
             {t('UPDATE PARTNER EVENT')}
           </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+            {t('UPDATE LOCATION')}
+          </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CLOSE_BETTING)}>
             {t('CLOSE BETTING')}
           </Button>
@@ -946,6 +982,16 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           state={state}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.UPDATE_LOCATION && (
+        <LocationStage
+          pool={pool}
+          state={state}
+          nftFilters={nftFilters}
+          setNftFilters={setNftFilters}
+          handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />
       )}

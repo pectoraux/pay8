@@ -47,6 +47,8 @@ export const bettingFields = `
   active
   createdAt
   updatedAt
+  countries
+  cities
   bettingEvents {
     ${bettingEventFields}
   }
