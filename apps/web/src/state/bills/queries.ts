@@ -13,6 +13,8 @@ export const billFields = `
   active
   likes
   dislikes
+  countries
+  cities
   profileId
   applicationLink
   votes {
