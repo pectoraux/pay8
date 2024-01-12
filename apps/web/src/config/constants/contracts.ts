@@ -294,15 +294,15 @@ export default {
   },
   lottery: {
     56: '0x',
-    4002: '0xa37C0EF1b5c6D6bA6e74f9c75f6D9E3C2E0C6540',
+    4002: '0xD05625AEfAEdcB3c3684066D2f357b415C224349',
   },
   lotteryHelper: {
     56: '0x',
-    4002: '0xbE41b94a1E55dDD080E60c53a384D45285a4E530',
+    4002: '0x65128Aaade4a02b3663E41469AFfebd0BD455Bd0',
   },
   lotteryRandomNumberGenerator: {
     56: '0x',
-    4002: '0x81c970C3fc1b7623064FD6AF18126B37C7620cc8',
+    4002: '0x1626068C0724a4cBF525E388E9044003DA143148',
   },
   randomNumberGenerator: {
     56: '0x',
