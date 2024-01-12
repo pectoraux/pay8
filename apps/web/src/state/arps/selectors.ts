@@ -3,7 +3,6 @@ import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { createSelector } from '@reduxjs/toolkit'
 import { State, VaultKey } from '../types'
 // import { transformPool, transformVault } from './helpers'
-import { getVaultPosition, VaultPosition } from '../../utils/cakePool'
 
 const selectPoolsData = (state: State) => state.arps?.data
 const selectPoolData = (sousId) => (state: State) => state.arps?.data.find((p) => p.sousId === sousId)

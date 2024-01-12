@@ -486,7 +486,7 @@ export const fetchBill = async (billAddress, chainId) => {
       }
     }),
   )
-  const products = await getTagFromBill(billAddress)
+  const products = await getTagFromBill(billAddress?.toLowerCase())
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...bill,

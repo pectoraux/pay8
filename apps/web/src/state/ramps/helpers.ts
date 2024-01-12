@@ -479,7 +479,7 @@ export const fetchRamp = async (address, chainId) => {
       console.log('err=============>', err)
     }
     const collection = await getCollection(gauge.collectionId)
-    const _products = await getTagFromRamp(rampAddress)
+    const _products = await getTagFromRamp(rampAddress?.toLowerCase())
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
       ...gauge,

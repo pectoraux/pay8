@@ -341,7 +341,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
       }),
   )
   const percentile = parseInt(percentiles.result?.toString())
-  const products = await getTagFromAuditor(auditorAddress)
+  const products = await getTagFromAuditor(auditorAddress?.toLowerCase())
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...auditor,

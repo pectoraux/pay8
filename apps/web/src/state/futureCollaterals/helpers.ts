@@ -1,11 +1,11 @@
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_COLLATERALS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-import { futureCollateralFields } from './queries'
 import { getFutureCollateralsAddress } from 'utils/addressHelpers'
 import { futureCollateralsABI } from 'config/abi/futureCollaterals'
 import { publicClient } from 'utils/wagmi'
 import { erc20ABI } from 'wagmi'
+import { futureCollateralFields } from './queries'
 
 export const getTag = async () => {
   try {

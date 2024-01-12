@@ -480,7 +480,7 @@ export const fetchValuepool = async (valuepoolContract, chainId) => {
     const _maxWithdrawable = new BigNumber(100)
       .minus(new BigNumber(maxWithdrawable.result.toString()).div(100))
       .toJSON()
-    const products = await getTagFromValuepool(tokenAddress.result)
+    const products = await getTagFromValuepool(tokenAddress.result?.toLowerCase())
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
       _va: _va.result,

@@ -3,9 +3,6 @@ import { publicClient } from 'utils/wagmi'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_CARDS } from 'config/constants/endpoints'
 
-import { getCardAddress } from 'utils/addressHelpers'
-import { cardABI } from 'config/abi/card'
-
 import { cardFields, tokenBalanceFields } from './queries'
 
 export const getCard = async (cardId) => {

@@ -360,7 +360,7 @@ export const fetchWorld = async (worldAddress, chainId) => {
         }
       }),
   )
-  const products = await getTagFromWorld(worldAddress)
+  const products = await getTagFromWorld(worldAddress?.toLowerCase())
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     worldAddress,

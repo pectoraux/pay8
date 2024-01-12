@@ -271,7 +271,7 @@ export const fetchSponsor = async (sponsorAddress, chainId) => {
         }
       }),
   )
-  const products = await getTagFromSponsor(sponsorAddress)
+  const products = await getTagFromSponsor(sponsorAddress?.toLowerCase())
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...sponsor,

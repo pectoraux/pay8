@@ -470,7 +470,7 @@ export const fetchArp = async (arpAddress, chainId) => {
       }
     }),
   )
-  const products = await getTagFromARP(arpAddress)
+  const products = await getTagFromARP(arpAddress?.toLowerCase())
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...arp,
