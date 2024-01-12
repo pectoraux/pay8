@@ -24,7 +24,6 @@ import { useRouter } from 'next/router'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 import { differenceInSeconds } from 'date-fns'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -675,7 +674,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_APPLICATION) {
-        const args = ['0', '0', state.contactChannels, state.contacts, '0', '0', ADDRESS_ZERO, state.applicationLink]
+        const args = ['0', '0', '', '', '0', '0', pool?.id, state.applicationLink]
         console.log('CONFIRM_UPDATE_APPLICATION===============>', args)
         return callWithGasPrice(arpHelperContract, 'emitUpdateMiscellaneous', args).catch((err) =>
           console.log('CONFIRM_UPDATE_APPLICATION===============>', err),
