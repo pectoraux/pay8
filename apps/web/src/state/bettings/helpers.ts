@@ -260,7 +260,6 @@ export const fetchBetting = async (bettingAddress, chainId) => {
       })
       const currPeriod = Math.min(parseInt(bettingEvent.currPeriod), parseInt(numberOfPeriods.toString()) - 1)
       const currStart = parseInt(bettingEvent.startTime || 0) + currPeriod * parseInt(bettingEvent.bracketDuration || 0)
-      const products = await getTagFromBetting(bettingAddress?.toLowerCase())
       return {
         id: bettingAddress,
         ...bettingEvent,
@@ -279,7 +278,6 @@ export const fetchBetting = async (bettingAddress, chainId) => {
         currPeriod,
         currStart,
         currEnd: currStart + parseInt(bettingEvent.bracketDuration),
-        products,
         token: new Token(
           chainId,
           _token,
@@ -291,6 +289,7 @@ export const fetchBetting = async (bettingAddress, chainId) => {
       }
     }),
   )
+  const products = await getTagFromBetting(bettingAddress?.toLowerCase())
   return {
     ...bettingFromSg,
     collection,
@@ -298,6 +297,7 @@ export const fetchBetting = async (bettingAddress, chainId) => {
     collectionId: collectionId.result.toString(),
     bettingEvents,
     oracle: oracle.result,
+    products,
   }
 }
 

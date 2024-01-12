@@ -199,7 +199,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
             )}
           </Flex>
         ) : null}
-        {wBNBBalance.gt(0) && (
+        {/* {wBNBBalance.gt(0) && (
           <Flex alignItems="center" justifyContent="space-between">
             <Text color="textSubtle">WBNB {t('Balance')}</Text>
             {wBNBFetchStatus !== FetchStatus.Fetched ? (
@@ -208,7 +208,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
               <Text>{getFullDisplayBalance(wBNBBalance, wBNBToken.decimals, 6)}</Text>
             )}
           </Flex>
-        )}
+        )} */}
         {balances?.map((balance) => (
           <Flex alignItems="center" justifyContent="space-between">
             <Text color="textSubtle">{t('%symb% Balance', { symb: balance?.symbol })}</Text>
