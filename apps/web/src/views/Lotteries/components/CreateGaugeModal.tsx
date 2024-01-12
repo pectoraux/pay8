@@ -385,7 +385,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           '0',
           '0',
           ADDRESS_ZERO,
-          nftFilters?.product?.length ? nftFilters?.product : customTags?.length && customTags[0],
+          nftFilters?.product?.length ? nftFilters?.product[0] : customTags?.length && customTags[0],
         ]
         console.log('CONFIRM_UPDATE_LOCATION===============>', args)
         return callWithGasPrice(lotteryContract, 'emitUpdateMiscellaneous', args).catch((err) =>
