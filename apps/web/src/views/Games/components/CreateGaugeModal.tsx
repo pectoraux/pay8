@@ -204,9 +204,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   }))
 
   const [nftFilters, setNftFilters] = useState<any>({
-    countries: pool?.countries,
-    cities: pool?.cities,
-    products: pool?.products,
+    country: pool?.countries,
+    city: pool?.cities,
+    product: pool?.products,
   })
 
   const updateValue = (key: any, value: any) => {
