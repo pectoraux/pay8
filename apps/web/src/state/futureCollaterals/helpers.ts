@@ -76,7 +76,7 @@ export const getCollaterals = async (first = 5, skip = 0, where) => {
 
 export const fetchCollateral = async (ownerAddress, chainId) => {
   const collateral = await getCollateral(ownerAddress.toLowerCase())
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [tokenAddress] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -122,7 +122,7 @@ export const fetchCollateral = async (ownerAddress, chainId) => {
 
 export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) => {
   const fromGraph = await getCollaterals(0, 0, {})
-  const bscClient = publicClient({ chainId: chainId })
+  const bscClient = publicClient({ chainId })
   const [tokenAddress] = await bscClient.multicall({
     allowFailure: true,
     contracts: [

@@ -144,4 +144,5 @@ export const fetchCards = async ({ fromCard, chainId }) => {
   } catch (err) {
     console.log('fetchCards err========================>', err)
   }
+  return null
 }
