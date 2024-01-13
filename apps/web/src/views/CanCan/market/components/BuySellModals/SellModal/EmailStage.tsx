@@ -10,10 +10,9 @@ interface RemoveStageProps {
 const EmailStage: React.FC<any> = ({ collection }) => {
   const { t } = useTranslation()
   const { profile } = useProfileFromSSI(`0x${process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS}`)
-  const { data: emailList } = useGetEmailList(
-    [...collection?.registrations, ...collection?.acountShares] ?? [],
-    profile,
-  )
+  const accountShares = collection?.acountShares?.map((acct) => acct?.id)
+  console.log('accountShares=============>', accountShares)
+  const { data: emailList } = useGetEmailList([...collection?.registrations, ...accountShares] ?? [], profile)
   const csvContent = `data:text/csv;charset=utf-8,${emailList?.join('\n')}`
   const encodedUri = encodeURI(csvContent)
   return (
