@@ -1,8 +1,9 @@
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 import { Flex, CogIcon, Button, Text, useModal } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
-import { useGetCollection, useGetPaywallARP, useGetSubscriptionStatus } from 'state/cancan/hooks'
+import { useGetCollection } from 'state/cancan/hooks'
 import PageLoader from 'components/Loader/PageLoader'
 import { useWorkspaceCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
@@ -38,6 +39,7 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
   const { combinedNft, isProfilePic, refetch } = useCompleteNft(collectionAddress, tokenId, isPaywall)
   const nft = combinedNft as any
   const { account } = useWeb3React()
+  const router = useRouter()
   const isOwnNft = account ? nft?.currentSeller?.toLowerCase() === account.toLowerCase() : false
   const { t } = useTranslation()
   const { mainCurrency } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
@@ -105,6 +107,14 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
         <hr />
         <Button width="100%" onClick={onPresentRegister} variant="secondary">
           {t('Register')}
+        </Button>
+        <hr />
+        <Button
+          width="100%"
+          onClick={() => router.push(`/ssi/proposal/createAutomaticData?collectionId=${collection?.id}`)}
+          variant="secondary"
+        >
+          {t('Share My Email')}
         </Button>
       </Flex>
     </Flex>

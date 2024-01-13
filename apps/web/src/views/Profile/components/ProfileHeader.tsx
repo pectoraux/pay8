@@ -12,7 +12,6 @@ import {
   VisibilityOff,
   VisibilityOn,
   Text,
-  ArrowForwardIcon,
   NextLinkFromReactRouter as ReactRouterLink,
 } from '@pancakeswap/uikit'
 import { useCurrency } from 'hooks/Tokens'
@@ -54,7 +53,6 @@ const ProfileHeader: React.FC<any> = ({
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const [showUsername, setShowUsername] = useState(false)
-  const { sharedEmail } = useGetSharedEmail(account)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const p = useProfile() as any
@@ -62,7 +60,7 @@ const ProfileHeader: React.FC<any> = ({
   const [openPresentCreateProfile] = useModal(
     <CreateGaugeModal variant="create" profile={profile} onSuccess={onSuccess} />,
   )
-  const [openPresentAddAccount] = useModal(<CreateGaugeModal variant="add" profile={profile} onSuccess={onSuccess} />)
+  // const [openPresentAddAccount] = useModal(<CreateGaugeModal variant="add" profile={profile} onSuccess={onSuccess} />)
   console.log('profileprofile==============================>', profile, p)
 
   const isConnectedAccount = isAddress(account) === isAddress(accountPath)
@@ -224,7 +222,20 @@ const ProfileHeader: React.FC<any> = ({
         {accountPath && isConnectedAccount && (!profile || !profile?.nft) && getActivateButton()}
       </Flex>
     )
-  }, [accountPath, isConnectedAccount, sharedEmail, openPresentCreateProfile, openPresentAddAccount, profile, t])
+  }, [
+    accountPath,
+    profile,
+    isConnectedAccount,
+    isProfileLoading,
+    isValidating,
+    onPresentTrustBounties,
+    t,
+    currency,
+    inputCurency,
+    handleInputSelect,
+    hasProfile,
+    openPresentCreateProfile,
+  ])
   const imagePath = '/images/teams'
   return (
     <>

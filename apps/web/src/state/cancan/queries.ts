@@ -533,4 +533,7 @@ valuepools {
 dayData {
   ${dayDataFields}
 }
+accountShares {
+  id
+}
 `

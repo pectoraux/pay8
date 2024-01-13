@@ -32,7 +32,9 @@ import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { useSSIContract } from 'hooks/useContract'
+import { useRouter } from 'next/router'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useMarketEventsContract } from 'hooks/useContract'
 import EncryptRsa from 'encrypt-rsa'
 import axios from 'axios'
 import { useProfileFromSSI } from 'state/ssi/hooks'
@@ -60,6 +62,7 @@ const CreateProposal = () => {
     auditorProfileId: '',
     searchable: false,
   }))
+  const { query } = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [isLoading2, setIsLoading2] = useState(false)
   const [codeSent, setCodeSent] = useState('')
@@ -67,9 +70,8 @@ const CreateProposal = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
-  const { fetchWithCatchTxError } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const ssiContract = useSSIContract()
+  const marketEventsContract = useMarketEventsContract()
   const { toastSuccess, toastError } = useToast()
   const { profile: payswapProfile } = useProfileFromSSI(`0x${process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS}`)
   const { profile: userProfile } = useProfileFromSSI(account)
@@ -137,7 +139,11 @@ const CreateProposal = () => {
         functionName: 'shareEmail',
         args: [account],
       })
-
+      if (parseInt(query.collectionId?.toString())) {
+        const args = [12, query.collectionId, '', '', 0, 0, ADDRESS_ZERO, '']
+        console.log('FOLLOW===================>', args)
+        await callWithGasPrice(marketEventsContract, 'emitUpdateMiscellaneous', args)
+      }
       return walletClient
         .writeContract(request)
         .then((res) => {
@@ -154,7 +160,7 @@ const CreateProposal = () => {
       setIsLoading(false)
       console.log('try err====================>', err)
     }
-  }, [t, profile, state, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
+  }, [account, client, acct, walletClient, toastSuccess, t])
 
   // eslint-disable-next-line consistent-return
   const handleCreateData2 = useCallback(async () => {
@@ -216,7 +222,18 @@ const CreateProposal = () => {
       setIsLoading2(false)
       console.log('try err====================>', err)
     }
-  }, [t, profile, state, account, ssiContract, toastSuccess, callWithGasPrice, fetchWithCatchTxError])
+  }, [
+    profile?.publicKey,
+    profile?.id,
+    state.name,
+    payswapProfile?.id,
+    account,
+    client,
+    acct,
+    walletClient,
+    toastSuccess,
+    t,
+  ])
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({

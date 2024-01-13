@@ -1,13 +1,6 @@
 import { Flex, Box, Text, Button, ErrorIcon, Grid } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledIframe } from 'components/FiatOnRampModal/FiatOnRampModal'
-import { useTheme } from 'styled-components'
-import axios from 'axios'
 import { useGetEmailList, useProfileFromSSI } from 'state/ssi/hooks'
-import Iframe from 'react-iframe'
-import { getEmailList } from 'state/ssi/helpers'
-import { decryptWithAES } from 'views/SSI/Proposal/Overview'
-import NodeRSA from 'encrypt-rsa'
 import { Divider } from '../shared/styles'
 
 interface RemoveStageProps {
@@ -17,9 +10,12 @@ interface RemoveStageProps {
 const EmailStage: React.FC<any> = ({ collection }) => {
   const { t } = useTranslation()
   const { profile } = useProfileFromSSI(`0x${process.env.NEXT_PUBLIC_PAYSWAP_ADDRESS}`)
-  const { data: emailList } = useGetEmailList(collection?.registrations ?? [], profile)
-  let csvContent = 'data:text/csv;charset=utf-8,' + emailList?.join('\n')
-  var encodedUri = encodeURI(csvContent)
+  const { data: emailList } = useGetEmailList(
+    [...collection?.registrations, ...collection?.acountShares] ?? [],
+    profile,
+  )
+  const csvContent = `data:text/csv;charset=utf-8,${emailList?.join('\n')}`
+  const encodedUri = encodeURI(csvContent)
   return (
     <>
       <Box p="16px" maxWidth="360px">
