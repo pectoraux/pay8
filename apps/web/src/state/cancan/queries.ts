@@ -535,5 +535,6 @@ dayData {
 }
 accountShares {
   id
+  email
 }
 `
