@@ -111,7 +111,7 @@ const IndividualNFTPage: React.FC<any> = ({ collectionAddress, tokenId, isPaywal
         <hr />
         <Button
           width="100%"
-          onClick={() => router.push(`/ssi/proposal/createAutomaticData?collectionId=${collection?.id}`)}
+          onClick={() => router.push(`/ssi/proposal/createAutomaticData?collectionId=${collectionAddress}`)}
           variant="secondary"
         >
           {t('Share My Email')}
