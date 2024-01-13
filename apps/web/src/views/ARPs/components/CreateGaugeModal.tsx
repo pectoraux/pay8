@@ -220,6 +220,7 @@ const CreateGaugeModal: React.FC<any> = ({
     tag: '',
     uriGenerator: '',
     autoCharge: 0,
+    accounts: currAccount?.protocolId ?? '',
     like: 0,
     bountyRequired: parseInt(pool?.bountyRequired) / 100,
     ve: pool?._ve,
