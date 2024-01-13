@@ -45,7 +45,7 @@ import { fantomTestnet } from 'viem/chains'
 import { getProfileAddress, getSSIAddress } from 'utils/addressHelpers'
 import { profileABI } from 'config/abi/profile'
 import { ssiABI } from 'config/abi/ssi'
-
+import ProgressSteps from 'views/Nft/market/components/ProgressSteps'
 import { SecondaryLabel } from './styles'
 import Layout from '../components/Layout'
 
@@ -65,6 +65,8 @@ const CreateProposal = () => {
   const { query } = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [isLoading2, setIsLoading2] = useState(false)
+  const [isShared, setIsShared] = useState(false)
+  const [isPublished, setIsPublished] = useState(false)
   const [codeSent, setCodeSent] = useState('')
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
@@ -148,6 +150,7 @@ const CreateProposal = () => {
         .writeContract(request)
         .then((res) => {
           setIsLoading(false)
+          setIsShared(true)
           toastSuccess(
             t('Email successfully shared'),
             <ToastDescriptionWithTx txHash={res}>
@@ -210,6 +213,7 @@ const CreateProposal = () => {
         .writeContract(request)
         .then((res) => {
           setIsLoading2(false)
+          setIsPublished(true)
           toastSuccess(
             t('Data successfully published'),
             <ToastDescriptionWithTx txHash={res}>
@@ -357,6 +361,7 @@ const CreateProposal = () => {
                     </Button>
                   ) : (
                     <Flex>
+                      <ProgressSteps steps={[isShared, isPublished]} />
                       <Button
                         type="submit"
                         width="100%"

@@ -271,7 +271,7 @@ export const getEmailData = async (followers) => {
       `,
       { followers, owner },
     )
-    console.log('res.userDatas=======================>', res.userDatas)
+    console.log('res.userDatas=======================>', res.userDatas, followers)
     return res.userDatas
   } catch (error) {
     console.error('Failed to fetch email list==========>', error, followers)
