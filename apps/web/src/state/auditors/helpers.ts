@@ -4,7 +4,7 @@ import request, { gql } from 'graphql-request'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { publicClient } from 'utils/wagmi'
 import { auditorABI } from 'config/abi/auditor'
-import { erc20ABI } from 'wagmi'
+import { erc20ABI, erc721ABI } from 'wagmi'
 import { getAuditorHelper2Address, getAuditorHelperAddress, getAuditorNoteAddress } from 'utils/addressHelpers'
 import { auditorHelper2ABI } from 'config/abi/auditorHelper2'
 import { auditorNoteABI } from 'config/abi/auditorNote'
@@ -276,44 +276,51 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
         const esgRating = protocolInfo.result[6]
         const optionId = protocolInfo.result[7]
 
-        const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable] = await bscClient.multicall({
-          allowFailure: true,
-          contracts: [
-            {
-              address: auditorAddress,
-              abi: auditorABI,
-              functionName: 'adminBountyIds',
-              args: [_token],
-            },
-            {
-              address: _token,
-              abi: erc20ABI,
-              functionName: 'name',
-            },
-            {
-              address: _token,
-              abi: erc20ABI,
-              functionName: 'symbol',
-            },
-            {
-              address: _token,
-              abi: erc20ABI,
-              functionName: 'decimals',
-            },
-            {
-              address: _token,
-              abi: erc20ABI,
-              functionName: 'balanceOf',
-              args: [auditorAddress],
-            },
-            {
-              address: getAuditorHelper2Address(),
-              abi: auditorHelper2ABI,
-              functionName: 'getDueReceivable',
-              args: [auditorAddress, BigInt(protocolId), BigInt(0)],
-            },
-          ],
-        })
+        const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable, metadataUrl] =
+          await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: auditorAddress,
+                abi: auditorABI,
+                functionName: 'adminBountyIds',
+                args: [_token],
+              },
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'name',
+              },
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'symbol',
+              },
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'decimals',
+              },
+              {
+                address: _token,
+                abi: erc20ABI,
+                functionName: 'balanceOf',
+                args: [auditorAddress],
+              },
+              {
+                address: getAuditorHelper2Address(),
+                abi: auditorHelper2ABI,
+                functionName: 'getDueReceivable',
+                args: [auditorAddress, BigInt(protocolId), BigInt(0)],
+              },
+              {
+                address: getAuditorHelperAddress(),
+                abi: erc721ABI,
+                functionName: 'tokenURI',
+                args: [BigInt(protocolId)],
+              },
+            ],
+          })
         return {
           ...protocol,
           protocolId,
@@ -328,6 +335,7 @@ export const fetchAuditor = async (auditorAddress, chainId) => {
           startReceivable: startReceivable.toString(),
           totalLiquidity: totalLiquidity.result.toString(),
           nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
+          metadataUrl: metadataUrl.result,
           token: new Token(
             chainId,
             _token,

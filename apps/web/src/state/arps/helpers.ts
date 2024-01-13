@@ -336,7 +336,7 @@ export const fetchArp = async (arpAddress, chainId) => {
         const startPayable = protocolInfo.result[10]
         const startReceivable = protocolInfo.result[11]
 
-        const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable, nextDuePayable] =
+        const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable, nextDuePayable, metadataUrl] =
           await bscClient.multicall({
             allowFailure: true,
             contracts: [
@@ -378,6 +378,12 @@ export const fetchArp = async (arpAddress, chainId) => {
                 abi: arpNoteABI,
                 functionName: 'getDuePayable',
                 args: [arpAddress, BigInt(protocolId), BigInt(0)],
+              },
+              {
+                address: getARPHelperAddress(),
+                abi: erc721ABI,
+                functionName: 'tokenURI',
+                args: [BigInt(protocolId)],
               },
             ],
           })
@@ -431,6 +437,7 @@ export const fetchArp = async (arpAddress, chainId) => {
           amountDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[0].toString() : BIG_ZERO,
           nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
           nextDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[1].toString() : BIG_ZERO,
+          metadataUrl: metadataUrl.result,
           token: new Token(
             chainId,
             _token,

@@ -3,7 +3,7 @@ import { GRAPH_API_BILLS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { publicClient } from 'utils/wagmi'
 import { billABI } from 'config/abi/bill'
-import { erc20ABI } from 'wagmi'
+import { erc20ABI, erc721ABI } from 'wagmi'
 import { getBILLMinterAddress, getBILLNoteAddress } from 'utils/addressHelpers'
 import { billNoteABI } from 'config/abi/billNote'
 import { billMinterABI } from 'config/abi/billMinter'
@@ -264,7 +264,7 @@ export const fetchBill = async (billAddress, chainId) => {
       ?.filter((protocol) => protocol.active)
       ?.map(async (protocol) => {
         const protocolId = protocol.id.split('_')[0]
-        const [protocolInfo, optionId, isAutoChargeable, heir] = await bscClient.multicall({
+        const [protocolInfo, optionId, isAutoChargeable, heir, metadataUrl] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -289,6 +289,12 @@ export const fetchBill = async (billAddress, chainId) => {
               address: billAddress,
               abi: billABI,
               functionName: 'heir',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: getBILLMinterAddress(),
+              abi: erc721ABI,
+              functionName: 'tokenURI',
               args: [BigInt(protocolId)],
             },
           ],
@@ -447,6 +453,7 @@ export const fetchBill = async (billAddress, chainId) => {
           description: description.result?.toString(),
           userBountyRequired: userBountyRequired.result?.toString(),
           taxContract: taxContract.result?.toString(),
+          metadataUrl: metadataUrl.result,
           token: new Token(
             chainId,
             _token,
