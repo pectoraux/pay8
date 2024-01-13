@@ -360,31 +360,33 @@ const CreateProposal = () => {
                       {t('Send')}
                     </Button>
                   ) : (
-                    <Flex>
-                      <ProgressSteps steps={[isShared, isPublished]} />
-                      <Button
-                        type="submit"
-                        width="100%"
-                        mr="10px"
-                        isLoading={isLoading}
-                        onClick={handleCreateData}
-                        endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
-                        disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
-                        mb="16px"
-                      >
-                        {t('Share Email')}
-                      </Button>
-                      <Button
-                        type="submit"
-                        width="100%"
-                        isLoading={isLoading2}
-                        onClick={handleCreateData2}
-                        endIcon={isLoading2 ? <AutoRenewIcon spin color="currentColor" /> : null}
-                        disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
-                        mb="16px"
-                      >
-                        {t('Publish Email')}
-                      </Button>
+                    <Flex flexDirection="row">
+                      <ProgressSteps steps={[isShared]} />
+                      <Flex flexDirection="column" width="100%" px="16px" pb="16px">
+                        <Button
+                          type="submit"
+                          width="100%"
+                          mr="10px"
+                          isLoading={isLoading}
+                          onClick={handleCreateData}
+                          endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
+                          disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
+                          mb="16px"
+                        >
+                          {t('Share Email')}
+                        </Button>
+                        <Button
+                          type="submit"
+                          width="100%"
+                          isLoading={isLoading2}
+                          onClick={handleCreateData2}
+                          endIcon={isLoading2 ? <AutoRenewIcon spin color="currentColor" /> : null}
+                          disabled={(!state.name && !codeSent) || (codeSent && state.code !== codeSent)}
+                          mb="16px"
+                        >
+                          {t('Publish Email')}
+                        </Button>
+                      </Flex>
                     </Flex>
                   )}
                 </>
