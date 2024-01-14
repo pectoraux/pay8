@@ -449,12 +449,12 @@ export const fetchArp = async (arpAddress, chainId) => {
           startReceivable: startReceivable?.toString(),
           totalLiquidity: totalLiquidity.result?.toString(),
           amountDueReceivable: automatic.result
-            ? userPercentile
+            ? userPercentile.result
             : nextDueReceivable.result?.length
             ? nextDueReceivable.result[0].toString()
             : BIG_ZERO,
           amountDuePayable: automatic.result
-            ? userPercentile
+            ? userPercentile.result
             : nextDuePayable.result?.length
             ? nextDuePayable.result[0].toString()
             : BIG_ZERO,
