@@ -1,21 +1,9 @@
 import axios from 'axios'
-import { useState } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  Input,
-  ErrorIcon,
-  useTooltip,
-  HelpIcon,
-  AutoRenewIcon,
-} from '@pancakeswap/uikit'
+import { useRef, useState } from 'react'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGetCardId } from 'state/ramps/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 
 import { GreyedOutContainer, Divider } from './styles'
@@ -40,23 +28,26 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const { callWithGasPrice } = useCallWithGasPrice()
-  const { account } = useWeb3React()
-  const { data: vc } = useGetCardId(state.rampAddress, account)
-  console.log('cardId=================>', vc)
 
   async function onAttemptToCreateVC() {
     setIsLoading(true)
-    const { data } = await axios.post('/api/burnToVC', {
-      cardId: vc?.id, // : "ic_1OYT5eAkPdhgtN6ISV6Dz0LB",
-      price: state.amountReceivable,
-      cardholderId: state.cardholderId,
-      symbol: state.symbol,
+    const { data } = await axios.post('/api/createVCHolder', {
+      name: state.name,
+      email: state.email,
+      phone: state.phone_number,
+      first: state.name,
+      last: state.name,
+      line1: state.line1,
+      city: state.city,
+      state: state.state,
+      postal: state.postal_code,
+      country: state.country,
       sk: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
     })
     if (data.error) {
       console.log('data.error=====================>', data.error)
     }
-    const args = ['3', '0', data.cardId, state.symbol, '0', '0', state.rampAddress, '']
+    const args = ['2', '0', data.cardholderId, '', '0', '0', state.rampAddress, '']
     console.log('data.success==================>', args)
     return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
       .then(() => setIsLoading(false))
@@ -96,32 +87,106 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
   return (
     <>
       <GreyedOutContainer>
-        <Flex ref={targetRef}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount')}
-          </Text>
-          {tooltipVisible && tooltip}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Name')}
+        </Text>
         <Input
           type="text"
           scale="sm"
-          name="amountReceivable"
-          value={state.amountReceivable}
-          placeholder={t('input amount to amountReceivable')}
+          name="name"
+          value={state.name}
+          placeholder={t('input name to associate to card')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Symbol')}
+          {t('Email')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="symbol"
-          value={state.symbol}
-          placeholder={t('input currency symbol')}
+          name="email"
+          value={state.email}
+          placeholder={t('input email to associate to card')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Phone Number')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="phone_number"
+          value={state.phone_number}
+          placeholder={t('input phone number to associate to card')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Address Line 1')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="line1"
+          value={state.line1}
+          placeholder={t('input line 1 of your address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('City')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="city"
+          value={state.city}
+          placeholder={t('input city to associate to card')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Country')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="country"
+          value={state.country}
+          placeholder={t('input country to associate to card')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Postal Code')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="postal_code"
+          value={state.postal_code}
+          placeholder={t('input postal code to associate to card')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('State')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="state"
+          value={state.state}
+          placeholder={t('input state to associate to card')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -141,11 +206,10 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button
           mb="8px"
-          variant="danger"
           onClick={onAttemptToCreateVC}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
         >
-          {t('Burn')}
+          {t('Create')}
         </Button>
       </Flex>
     </>

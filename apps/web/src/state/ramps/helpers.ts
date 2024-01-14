@@ -17,6 +17,30 @@ export const fetchRampData = async (rampAddress) => {
   return (await firestore.collection('ramps').doc(rampAddress).get()).data()
 }
 
+export const getCardId = async (vcId) => {
+  try {
+    const res = await request(
+      GRAPH_API_RAMPS,
+      gql`
+        {
+          virtualCard(id: $vcId) {
+            id
+            symbol
+            owner
+          }
+        }
+      `,
+      { vcId },
+    )
+
+    console.log('getCardId===========>', res, vcId)
+    return res
+  } catch (error) {
+    console.error('Failed to fetch vcs=============>', error)
+    return null
+  }
+}
+
 export const getTag = async () => {
   try {
     const res = await request(

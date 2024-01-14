@@ -19,10 +19,10 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
-
-import { GreyedOutContainer, Divider } from './styles'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { getRampHelperAddress } from 'utils/addressHelpers'
+
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   nftToSell?: any

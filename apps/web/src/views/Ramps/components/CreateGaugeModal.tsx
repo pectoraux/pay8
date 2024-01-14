@@ -54,6 +54,8 @@ import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import LocationStage from './LocationStage'
+import BurnToVCStage from './BurnToVCStage'
+import CreateVCHolderStage from './CreateVCHolderStage'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -88,6 +90,10 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
+  [LockStage.BURN_TO_VC]: t('Burn To VC Card'),
+  [LockStage.CREATE_HOLDER]: t('Create VC Holder'),
+  [LockStage.CONFIRM_CREATE_HOLDER]: t('Back'),
+  [LockStage.CONFIRM_BURN_TO_VC]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
@@ -227,8 +233,6 @@ const CreateGaugeModal: React.FC<any> = ({
     profileRequired: pool?.profileRequired,
     bountyRequired: pool?.bountyRequired,
     paidDays: '',
-    cosignEnabled: pool?.cosignEnabled,
-    minCosigners: pool?.minCosigners || '',
     requests: adminARP?.userData?.requests?.length || [],
     amounts: adminARP?.userData?.amounts?.length || [],
     token: session ? session?.token?.address : stakingTokenContract?.address || rampAccount?.token?.address,
@@ -244,7 +248,17 @@ const CreateGaugeModal: React.FC<any> = ({
     burnFee: parseInt(pool?.burnFee ?? '0') / 100,
     title: '',
     content: '',
+    cardId: '',
     sessionId: session?.id || sessionId || '',
+    phone_number: '',
+    email: '',
+    line1: '',
+    city: '',
+    state: '',
+    postal_code: '',
+    country: '',
+    rampAddress: pool?.id,
+    cardholderId: pool?.cardholderId,
   }))
 
   const [nftFilters, setNftFilters] = useState<any>({
@@ -342,6 +356,18 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_BURN_TO_VC:
+        setStage(LockStage.BURN_TO_VC)
+        break
+      case LockStage.BURN_TO_VC:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_CREATE_HOLDER:
+        setStage(LockStage.CREATE_HOLDER)
+        break
+      case LockStage.CREATE_HOLDER:
+        setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -496,6 +522,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_SPONSOR_MEDIA:
         setStage(LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA)
+        break
+      case LockStage.BURN_TO_VC:
+        setStage(LockStage.CONFIRM_BURN_TO_VC)
+        break
+      case LockStage.CREATE_HOLDER:
+        setStage(LockStage.CONFIRM_CREATE_HOLDER)
         break
       case LockStage.UPDATE_DEV_TOKEN_ID:
         setStage(LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID)
@@ -974,6 +1006,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.PARTNER)}>
             {t('PARTNER')}
           </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.BURN_TO_VC)}>
+            {t('BURN TO VC')}
+          </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.SPONSOR_TAG)}>
             {t('SPONSOR TAG')}
           </Button>
@@ -1061,6 +1096,9 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button> */}
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE)}>
             {t('CLAIM REVENUE FROM SPONSORS')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CREATE_HOLDER)}>
+            {t('CREATE VC HOLDER')}
           </Button>
           <Button mb="8px" variant="tertiary" onClick={() => setStage(LockStage.UNLOCK_BOUNTY)}>
             {t('UNLOCK BOUNTY')}
@@ -1243,6 +1281,12 @@ const CreateGaugeModal: React.FC<any> = ({
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.BURN_TO_VC && (
+        <BurnToVCStage state={state} handleChange={handleChange} rampHelperContract={rampHelperContract} />
+      )}
+      {stage === LockStage.CREATE_HOLDER && (
+        <CreateVCHolderStage state={state} handleChange={handleChange} rampHelperContract={rampHelperContract} />
       )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
       {stage === LockStage.DELETE_RAMP && <DeleteRampStage continueToNextStage={continueToNextStage} />}

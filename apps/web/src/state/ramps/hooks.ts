@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import { FAST_INTERVAL } from 'config/constants'
 import useSWRImmutable from 'swr/immutable'
 import axios from 'axios'
@@ -27,7 +27,7 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
 } from './selectors'
-import { getAccountSg, getRampSg, getSession, getTag, getTokenData } from './helpers'
+import { getAccountSg, getCardId, getRampSg, getSession, getTag, getTokenData } from './helpers'
 
 export const useRampsConfigInitialize = () => {
   const { chainId } = useActiveChainId()
@@ -148,6 +148,15 @@ export const useGetAccountSg = (accountAddress, channel) => {
     status,
     mutate: refetch,
   } = useSWR(['account-data', accountAddress, channel], async () => getAccountSg(accountAddress, channel))
+  return { data, refetch, status }
+}
+
+export const useGetCardId = (rampAddress, userAddress) => {
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetCardId', rampAddress, userAddress], async () => getCardId(`${rampAddress}-${userAddress}`))
   return { data, refetch, status }
 }
 

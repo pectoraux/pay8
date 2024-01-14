@@ -89,6 +89,7 @@ cities
 products
 likes
 dislikes
+cardholderId
 sessions {
     ${sessionFields}
 }
