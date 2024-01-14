@@ -11,12 +11,16 @@ import {
   useTooltip,
   HelpIcon,
   AutoRenewIcon,
+  useToast,
+  ButtonMenu,
+  ButtonMenuItem,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGetCardId } from 'state/ramps/hooks'
+import { useGetCardFromStripe, useGetCardId } from 'state/ramps/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -42,12 +46,14 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
   const { callWithGasPrice } = useCallWithGasPrice()
   const { account } = useWeb3React()
   const { data: vc } = useGetCardId(state.rampAddress, account)
-  console.log('cardId=================>', vc)
+  const { data: cardInfo } = useGetCardFromStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY, vc?.cardId)
+  const { toastSuccess, toastError } = useToast()
+  console.log('cardId=================>', vc, cardInfo)
 
   async function onAttemptToCreateVC() {
     setIsLoading(true)
     const { data } = await axios.post('/api/burnToVC', {
-      cardId: vc?.id, // : "ic_1OYT5eAkPdhgtN6ISV6Dz0LB",
+      cardId: vc?.cardId, // : "ic_1OYT5eAkPdhgtN6ISV6Dz0LB",
       price: state.amountReceivable,
       cardholderId: state.cardholderId,
       symbol: state.symbol,
@@ -55,15 +61,23 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
     })
     if (data.error) {
       console.log('data.error=====================>', data.error)
+      setIsLoading(false)
+      toastError(t('Issue storing cardholder: %val%', { val: data.error.raw?.message }))
+    } else {
+      const args = ['3', '0', data.cardId, state.symbol, '0', '0', state.rampAddress, '']
+      console.log('data.success==================>', args)
+      return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
+        .then((res: any) => {
+          setIsLoading(false)
+          toastSuccess(t('Amount successfully burnt to card: %hash%', { hash: res?.hash }))
+        })
+        .catch((err) => {
+          setIsLoading(false)
+          toastError(t('Issue burning to card: %err%', { err }))
+          console.log('err0=================>', err)
+        })
     }
-    const args = ['3', '0', data.cardId, state.symbol, '0', '0', state.rampAddress, '']
-    console.log('data.success==================>', args)
-    return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
-      .then(() => setIsLoading(false))
-      .catch((err) => {
-        setIsLoading(false)
-        console.log('err0=================>', err)
-      })
+    return null
   }
 
   const TooltipComponent = () => (
@@ -92,7 +106,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
-
+  const [activeButtonIndex, setActiveButtonIndex] = useState(0)
   return (
     <>
       <GreyedOutContainer>
@@ -125,6 +139,36 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
           onChange={handleChange}
         />
       </GreyedOutContainer>
+      {cardInfo?.data?.cardNumber?.length ? (
+        <GreyedOutContainer>
+          <StyledItemRow>
+            <Text bold px="16px">
+              {t('Reveal Card Info')}
+            </Text>
+            <ButtonMenu scale="xs" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
+              <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+              {/* <ButtonMenuItem>NFTickets</ButtonMenuItem> */}
+            </ButtonMenu>
+          </StyledItemRow>
+        </GreyedOutContainer>
+      ) : null}
+      {activeButtonIndex ? (
+        <Flex flexDirection="column" justifyContent="center" alignItems="center">
+          <Text small bold color="textSubtle">
+            {t(`Card Number: ${cardInfo?.data?.cardNumber}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`CVV: ${cardInfo?.data?.cvc}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Expiration: ${cardInfo?.data?.exp_month}/${cardInfo?.data?.exp_year}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Total Burnt To Card: ${cardInfo?.data?.amount} ${cardInfo?.data?.symbol?.toUpperCase()}`)}
+          </Text>
+        </Flex>
+      ) : null}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

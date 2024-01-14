@@ -25,14 +25,16 @@ const handler = async (req, res) => {
         },
       },
     })
+    console.log('cardholder===============>', cardholder)
     res.send({
       cardholderId: cardholder.id,
-      err: null,
+      error: null,
     })
-  } catch (err) {
+  } catch (error) {
+    console.log('1cardholder===============>', error)
     res.send({
       cardholderId: null,
-      err,
+      error,
     })
   }
 }

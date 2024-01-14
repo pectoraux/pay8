@@ -1,10 +1,20 @@
 import axios from 'axios'
-import { useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, AutoRenewIcon } from '@pancakeswap/uikit'
+import { useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  Input,
+  ErrorIcon,
+  useTooltip,
+  AutoRenewIcon,
+  useToast,
+} from '@pancakeswap/uikit'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -28,6 +38,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const { callWithGasPrice } = useCallWithGasPrice()
+  const { toastSuccess, toastError } = useToast()
 
   async function onAttemptToCreateVC() {
     setIsLoading(true)
@@ -46,15 +57,23 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
     })
     if (data.error) {
       console.log('data.error=====================>', data.error)
+      toastError(t('Issue storing cardholder: %val%', { val: data.error.raw?.message }))
+      setIsLoading(false)
+    } else {
+      const args = ['2', '0', data.cardholderId, '', '0', '0', state.rampAddress, '']
+      console.log('data.success==================>', args, data)
+      return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
+        .then((res: any) => {
+          setIsLoading(false)
+          toastSuccess(t('Cardholder successfully created: %hash%', { hash: res?.hash }))
+        })
+        .catch((err) => {
+          setIsLoading(false)
+          toastError(t('Issue creating storing cardholder: %err%', { err }))
+          console.log('err0=================>', err)
+        })
     }
-    const args = ['2', '0', data.cardId, '', '0', '0', state.rampAddress, '']
-    console.log('data.success==================>', args, data)
-    return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
-      .then(() => setIsLoading(false))
-      .catch((err) => {
-        setIsLoading(false)
-        console.log('err0=================>', err)
-      })
+    return null
   }
 
   const TooltipComponent = () => (

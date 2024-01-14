@@ -22,11 +22,12 @@ export const getCardId = async (vcId) => {
     const res = await request(
       GRAPH_API_RAMPS,
       gql`
-        {
+        query getCardId($vcId: String) {
           virtualCard(id: $vcId) {
             id
             symbol
             owner
+            cardId
           }
         }
       `,
@@ -34,7 +35,7 @@ export const getCardId = async (vcId) => {
     )
 
     console.log('getCardId===========>', res, vcId)
-    return res
+    return res.virtualCard
   } catch (error) {
     console.error('Failed to fetch vcs=============>', error)
     return null

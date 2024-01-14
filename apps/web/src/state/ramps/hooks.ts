@@ -156,7 +156,18 @@ export const useGetCardId = (rampAddress, userAddress) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetCardId', rampAddress, userAddress], async () => getCardId(`${rampAddress}-${userAddress}`))
+  } = useSWR(['useGetCardId3', rampAddress, userAddress], async () =>
+    getCardId(`${rampAddress}-${userAddress}`?.toLowerCase()),
+  )
+  return { data, refetch, status }
+}
+
+export const useGetCardFromStripe = (sk, cardId) => {
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetCardFromStripe', cardId], async () => axios.post('/api/getCard', { sk, cardId }))
   return { data, refetch, status }
 }
 

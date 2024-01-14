@@ -4,7 +4,6 @@ import Stripe from 'stripe'
 const handler = async (req, res) => {
   const { cardId, price, cardholderId, symbol, sk } = req.body
   const stripe = new Stripe(sk, { apiVersion: '2020-08-27' })
-  console.log('card=================>', cardId, price, cardholderId, symbol)
   try {
     let _cardId = cardId
     if (!cardId) {
@@ -19,27 +18,26 @@ const handler = async (req, res) => {
     const card = await stripe.issuing.cards.retrieve(_cardId, {
       expand: ['cvc', 'number'],
     })
-    // const cardId = "ic_1OYT5eAkPdhgtN6ISV6Dz0LB"
-
-    await stripe.issuing.cards.update(cardId, {
+    await stripe.issuing.cards.update(_cardId, {
       spending_controls: {
         spending_limits: [
           {
-            amount: price * 100 + card.spending_controls.spending_limits[0].amount,
+            amount: !cardId ? price * 100 : price * 100 + card.spending_controls.spending_limits[0].amount,
             interval: 'all_time',
           },
         ],
       },
     })
+    console.log('2card==============>', _cardId, card.spending_controls.spending_limits[0].amount)
 
     res.send({
       cardId: _cardId,
-      err: null,
+      error: null,
     })
-  } catch (err) {
+  } catch (error) {
     res.send({
       cardId: null,
-      err,
+      error,
     })
   }
 }
