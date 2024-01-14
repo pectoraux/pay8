@@ -47,8 +47,8 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
     if (data.error) {
       console.log('data.error=====================>', data.error)
     }
-    const args = ['2', '0', data.cardholderId, '', '0', '0', state.rampAddress, '']
-    console.log('data.success==================>', args)
+    const args = ['2', '0', data.cardId, '', '0', '0', state.rampAddress, '']
+    console.log('data.success==================>', args, data)
     return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
       .then(() => setIsLoading(false))
       .catch((err) => {
