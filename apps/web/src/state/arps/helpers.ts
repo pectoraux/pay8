@@ -336,57 +336,72 @@ export const fetchArp = async (arpAddress, chainId) => {
         const startPayable = protocolInfo.result[10]
         const startReceivable = protocolInfo.result[11]
 
-        const [adminBountyId, name, symbol, decimals, totalLiquidity, nextDueReceivable, nextDuePayable, metadataUrl] =
-          await bscClient.multicall({
-            allowFailure: true,
-            contracts: [
-              {
-                address: arpAddress,
-                abi: arpABI,
-                functionName: 'adminBountyId',
-                args: [_token],
-              },
-              {
-                address: _token,
-                abi: erc20ABI,
-                functionName: 'name',
-              },
-              {
-                address: _token,
-                abi: erc20ABI,
-                functionName: 'symbol',
-              },
-              {
-                address: _token,
-                abi: erc20ABI,
-                functionName: 'decimals',
-              },
-              {
-                address: _token,
-                abi: erc20ABI,
-                functionName: 'balanceOf',
-                args: [arpAddress],
-              },
-              {
-                address: getARPNoteAddress(),
-                abi: arpNoteABI,
-                functionName: 'getDueReceivable',
-                args: [arpAddress, BigInt(protocolId), BigInt(0)],
-              },
-              {
-                address: getARPNoteAddress(),
-                abi: arpNoteABI,
-                functionName: 'getDuePayable',
-                args: [arpAddress, BigInt(protocolId), BigInt(0)],
-              },
-              {
-                address: getARPHelperAddress(),
-                abi: erc721ABI,
-                functionName: 'tokenURI',
-                args: [BigInt(protocolId)],
-              },
-            ],
-          })
+        const [
+          adminBountyId,
+          name,
+          symbol,
+          decimals,
+          totalLiquidity,
+          nextDueReceivable,
+          nextDuePayable,
+          metadataUrl,
+          userPercentile,
+        ] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: arpAddress,
+              abi: arpABI,
+              functionName: 'adminBountyId',
+              args: [_token],
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'name',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'symbol',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'decimals',
+            },
+            {
+              address: _token,
+              abi: erc20ABI,
+              functionName: 'balanceOf',
+              args: [arpAddress],
+            },
+            {
+              address: getARPNoteAddress(),
+              abi: arpNoteABI,
+              functionName: 'getDueReceivable',
+              args: [arpAddress, BigInt(protocolId), BigInt(0)],
+            },
+            {
+              address: getARPNoteAddress(),
+              abi: arpNoteABI,
+              functionName: 'getDuePayable',
+              args: [arpAddress, BigInt(protocolId), BigInt(0)],
+            },
+            {
+              address: getARPHelperAddress(),
+              abi: erc721ABI,
+              functionName: 'tokenURI',
+              args: [BigInt(protocolId)],
+            },
+            {
+              address: arpAddress,
+              abi: arpABI,
+              functionName: 'getUserPercentile',
+              args: [_token, BigInt(tokenId)],
+            },
+          ],
+        })
         payableNotes = await Promise.all(
           protocol?.notes?.map(async (note) => {
             const [owner, metadatUrl] = await bscClient.multicall({
@@ -433,8 +448,16 @@ export const fetchArp = async (arpAddress, chainId) => {
           startPayable: startPayable?.toString(),
           startReceivable: startReceivable?.toString(),
           totalLiquidity: totalLiquidity.result?.toString(),
-          amountDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[0].toString() : BIG_ZERO,
-          amountDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[0].toString() : BIG_ZERO,
+          amountDueReceivable: automatic.result
+            ? userPercentile
+            : nextDueReceivable.result?.length
+            ? nextDueReceivable.result[0].toString()
+            : BIG_ZERO,
+          amountDuePayable: automatic.result
+            ? userPercentile
+            : nextDuePayable.result?.length
+            ? nextDuePayable.result[0].toString()
+            : BIG_ZERO,
           nextDueReceivable: nextDueReceivable.result?.length ? nextDueReceivable.result[1].toString() : BIG_ZERO,
           nextDuePayable: nextDuePayable.result?.length ? nextDuePayable.result[1].toString() : BIG_ZERO,
           metadataUrl: metadataUrl.result,
