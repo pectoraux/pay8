@@ -84,6 +84,7 @@ const DataCard = ({ idx, session, pool }) => {
   const currency = useCurrency(address)
   const { callWithGasPrice } = useCallWithGasPrice()
   const rampHelperContract = useRampHelper()
+  const [burntToVC, setBurntToVC] = useState(false)
   const variant = !session?.mintSession ? 'transfer' : session?.ppDataFound ? 'mint' : 'charge'
   console.log('variant=============>', variant, accountData)
   const [openPresentControlPanel] = useModal(
@@ -91,7 +92,14 @@ const DataCard = ({ idx, session, pool }) => {
   )
 
   const [openPresentBurnToVC] = useModal(
-    <CreateGaugeModal variant="burnToVC" session={session} location="staked" pool={pool} currency={currency} />,
+    <CreateGaugeModal
+      variant="burnToVC"
+      session={session}
+      setBurntToVC={setBurntToVC}
+      location="staked"
+      pool={pool}
+      currency={currency}
+    />,
   )
 
   const processCharge = async () => {
@@ -227,6 +235,7 @@ const DataCard = ({ idx, session, pool }) => {
                 mt="10px"
                 variant="secondary"
                 disabled={
+                  burntToVC ||
                   parseInt(session.amount ?? '0') < 1 ||
                   !session?.active ||
                   session.user?.toLowerCase() !== account?.toLowerCase() ||

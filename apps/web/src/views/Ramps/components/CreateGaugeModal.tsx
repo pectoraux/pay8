@@ -140,6 +140,7 @@ const CreateGaugeModal: React.FC<any> = ({
   pool,
   currency,
   rampAccount,
+  setBurntToVC,
   onDismiss,
 }) => {
   const [stage, setStage] = useState(
@@ -1287,6 +1288,7 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.BURN_TO_VC && (
         <BurnToVCStage
           state={state}
+          setBurntToVC={setBurntToVC}
           handleChange={handleChange}
           rampHelperContract={rampHelperContract}
           onDismiss={onDismiss}

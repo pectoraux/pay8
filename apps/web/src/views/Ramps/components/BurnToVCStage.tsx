@@ -40,7 +40,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract, onDismiss }) => {
+const BurnStage: React.FC<any> = ({ state, setBurntToVC, rampHelperContract, onDismiss }) => {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -72,7 +72,9 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract, onD
         .then((res) => {
           setIsLoading(false)
           setIsSuccess(true)
+          setBurntToVC(true)
           toastSuccess(t('Amount successfully burnt to card: %hash%', { hash: res?.hash }))
+          onDismiss()
         })
         .catch((err) => {
           setIsLoading(false)
@@ -80,7 +82,6 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract, onD
           console.log('err0=================>', err)
         })
     }
-    onDismiss()
     return null
   }
 
