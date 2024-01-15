@@ -29,6 +29,7 @@ import { useCurrPool } from 'state/ramps/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/ramps'
+import { getRampHelperAddress } from 'utils/addressHelpers'
 
 import WebPagesModal from './WebPagesModal'
 
@@ -178,6 +179,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           </ScanLink>
         </Flex>
       )}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <ScanLink href={getBlockExploreLink(getRampHelperAddress(), 'address', chainId)} bold={false} small>
+          {t('View Ramp Helper Contract')}
+        </ScanLink>
+      </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
           {t('See Admin Channel')}
