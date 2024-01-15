@@ -621,7 +621,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       <Flex flexDirection="column" px="16px" pb="16px">
         {!account ? (
           <ConnectWalletButton />
-        ) : needsApproval && !state.isNFT && state.collateral !== ADDRESS_ZERO ? (
+        ) : needsApproval && !state.isNFT && !state.isNative && state.collateral !== ADDRESS_ZERO ? (
           <Button
             mb="8px"
             onClick={handlePoolApprove}
