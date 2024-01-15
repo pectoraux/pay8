@@ -60,7 +60,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
       toastError(t('Issue storing cardholder: %val%', { val: data.error.raw?.message }))
       setIsLoading(false)
     } else {
-      const args = ['2', '0', data.cardholderId, '', '0', '0', state.rampAddress, '']
+      const args = ['2', '0', data.cardholderId, state.country, '0', '0', state.rampAddress, '']
       console.log('data.success==================>', args, data)
       return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
         .then((res: any) => {

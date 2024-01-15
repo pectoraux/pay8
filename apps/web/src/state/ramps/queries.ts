@@ -90,6 +90,7 @@ products
 likes
 dislikes
 cardholderId
+ppc
 sessions {
     ${sessionFields}
 }

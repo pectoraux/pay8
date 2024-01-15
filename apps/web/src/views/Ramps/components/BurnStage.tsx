@@ -108,6 +108,13 @@ const BurnStage: React.FC<any> = ({
       )}
     </Text>
   )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t(
+        'In case you decide to burn your tokens to a virtual card, make sure the token you are trying to burn is the currency of the Payment Processor Country (PPC) of this ramp. If the PPC of the ramp is FR (for France) for instance, then you can only burnt EUR tokens to your card, if the PPC is US then you can only burn USD tokens, etc. Trying to burn any other tokens will result in the loss of your funds without possibility of revocery. This is only the case if you are trying to burn tokens to a virtual card',
+      )}
+    </Text>
+  )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -120,14 +127,26 @@ const BurnStage: React.FC<any> = ({
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <>
       <GreyedOutContainer>
         <StyledItemRow>
-          <Text fontSize="12px" paddingRight="10px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-            {t('Burn To Virtual Card?')}
-          </Text>
+          <Flex ref={targetRef3}>
+            <Text fontSize="12px" paddingRight="10px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+              {t('Burn To Virtual Card?')}
+            </Text>
+            {tooltipVisible3 && tooltip3}
+            <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+          </Flex>
           <ButtonMenu scale="xs" variant="subtle" activeIndex={toVC} onItemClick={setToVC}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
             <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
