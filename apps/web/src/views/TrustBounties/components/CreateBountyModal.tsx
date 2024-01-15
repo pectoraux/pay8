@@ -67,6 +67,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     minToClaim: '',
     endTime: '',
     isNFT: 0,
+    isNative: 0,
     recurring: 0,
     bountySource: '',
     token: '',
@@ -89,7 +90,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const handleTypeChange = (bountySource: string) => {
     updateValue('bountySource', bountySource)
   }
-  const currencyAddress = useMemo(() => state.collateral, [state.collateral, handleChange]) as any
+  const currencyAddress = useMemo(() => state.collateral, [state.collateral]) as any
   const stakingTokenContract = useERC20(currencyAddress || '')
   const [nftFilters, setNftFilters] = useState<any>({})
   const router = useRouter()
@@ -115,7 +116,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
 
   useEffect(() => {
     refetch()
-  }, [state.collateral, stakingTokenContract])
+  }, [state.collateral, stakingTokenContract, refetch])
 
   const handleCreateGauge = useCallback(async () => {
     console.log('handleCreateGauge==================>')
@@ -146,7 +147,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       const ve = getVeFromWorkspace(nftFilters?.workspace?.value?.toLowerCase(), chainId)
       const args = [
         account,
-        state.collateral,
+        state.isNative ? ADDRESS_ZERO : state.collateral,
         ve,
         state.claimableBy,
         state.parentBountyId,
@@ -376,6 +377,24 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
           </ButtonMenu>
         </StyledItemRow>
       </GreyedOutContainer>
+      {state.isNFT ? null : (
+        <GreyedOutContainer style={{ paddingTop: '50px' }}>
+          <StyledItemRow>
+            <Text fontSize="12px" color="secondary" paddingRight="50px" textTransform="uppercase" paddingTop="3px" bold>
+              {t('Is Native Coin?')}
+            </Text>
+            <ButtonMenu
+              scale="xs"
+              variant="subtle"
+              activeIndex={state.isNative}
+              onItemClick={handleRawValueChange('isNative')}
+            >
+              <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+            </ButtonMenu>
+          </StyledItemRow>
+        </GreyedOutContainer>
+      )}
       <GreyedOutContainer>
         <Flex ref={targetRef8}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -393,7 +412,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      {!needsApproval || state.isNFT || state.collateral === ADDRESS_ZERO ? (
+      {!needsApproval || state.isNFT || state.isNative || state.collateral === ADDRESS_ZERO ? (
         <>
           <Flex alignSelf="center" mt={20}>
             <Flex ref={targetRef}>
