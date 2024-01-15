@@ -132,7 +132,10 @@ const DataCard = ({ idx, session, pool }) => {
         const stripe = await loadStripe(pool?.publishableKeys?.length && pool?.publishableKeys[0])
         await stripe.redirectToCheckout({ sessionId: data?.id })
       } else {
-        await callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => setIsLoading(false))
+        await callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => {
+          setIsLoading(false)
+          setBurntToVC(true)
+        })
         const { data } = await axios.post(route, args)
         if (data.error || data.amount === undefined) {
           setIsLoading(false)
@@ -218,6 +221,7 @@ const DataCard = ({ idx, session, pool }) => {
                 scale="sm"
                 variant="secondary"
                 disabled={
+                  burntToVC ||
                   parseInt(session.amount ?? '0') < 1 ||
                   !session?.active ||
                   session.user?.toLowerCase() !== account?.toLowerCase() ||
