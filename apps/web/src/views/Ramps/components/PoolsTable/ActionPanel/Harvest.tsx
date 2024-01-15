@@ -1,16 +1,22 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
+import { Button, Text, Flex, Box, Balance, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
+import { useState } from 'react'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
+import { useGetCardFromStripe, useGetCardId } from 'state/ramps/hooks'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
+  const { data: vc } = useGetCardId(pool.rampAddress, account)
+  const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
+  const [activeButtonIndex, setActiveButtonIndex] = useState(0)
 
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
@@ -235,6 +241,33 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
           <CopyAddress title={truncateHash(pool?._ve)} account={pool?._ve} />
         </Flex>
       </ActionContent>
+      {cardInfo?.data?.cardNumber?.length ? (
+        <StyledItemRow>
+          <Text fontSize="12px" pt="1px" pr="3px" bold as="span">
+            {t('Reveal Card ?')}
+          </Text>
+          <ButtonMenu scale="xs" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
+      ) : null}
+      {activeButtonIndex ? (
+        <Flex flexDirection="column" mt="10px" justifyContent="center" alignItems="center">
+          <Text small bold color="textSubtle">
+            {t(`Card Number: ${cardInfo?.data?.cardNumber}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`CVV: ${cardInfo?.data?.cvc}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Expiration: ${cardInfo?.data?.exp_month}/${cardInfo?.data?.exp_year}`)}
+          </Text>
+          <Text small bold color="textSubtle">
+            {t(`Total Burnt To Card: ${cardInfo?.data?.amount} ${cardInfo?.data?.symbol?.toUpperCase()}`)}
+          </Text>
+        </Flex>
+      ) : null}
     </ActionContainer>
   )
 }

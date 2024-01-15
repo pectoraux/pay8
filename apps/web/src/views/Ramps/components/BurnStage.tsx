@@ -2,11 +2,25 @@ import axios from 'axios'
 import Dots from 'components/Loader/Dots'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useToast, useTooltip, HelpIcon } from '@pancakeswap/uikit'
+import {
+  Flex,
+  ButtonMenu,
+  ButtonMenuItem,
+  Grid,
+  Box,
+  Text,
+  Button,
+  Input,
+  ErrorIcon,
+  useToast,
+  useTooltip,
+  HelpIcon,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useGetAccountSg } from 'state/ramps/hooks'
+import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -42,13 +56,14 @@ const BurnStage: React.FC<any> = ({
   const { data: accountData, refetch } = useGetAccountSg(account, 'stripe')
   const [linking, setLinking] = useState<boolean>(false)
   const [linked, setLinked] = useState<boolean>(accountData?.active && accountData?.id)
+  const [toVC, setToVC] = useState(0)
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
     }
     setLinked(accountData?.id && accountData?.active)
-  }, [inputRef])
+  }, [accountData?.active, accountData?.id, inputRef])
 
   async function onAttemptToCreateLink() {
     setLinking(true)
@@ -106,69 +121,89 @@ const BurnStage: React.FC<any> = ({
     tooltipOffset: [20, 10],
   })
 
-  return !(accountData?.id && accountData?.active) && state.automatic ? (
-    <>
-      <Divider />
-      <Flex flexDirection="column">
-        <Button variant={linked ? 'success' : 'primary'} onClick={onAttemptToCreateLink}>
-          {linking ? <Dots>{t('Linking')}</Dots> : linked ? t('Linked') : t('Link')}
-        </Button>
-      </Flex>
-    </>
-  ) : (
+  return (
     <>
       <GreyedOutContainer>
-        <Flex ref={targetRef2}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Amount')}
+        <StyledItemRow>
+          <Text fontSize="12px" paddingRight="10px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+            {t('Burn To Virtual Card?')}
           </Text>
-          {tooltipVisible2 && tooltip2}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="amountReceivable"
-          value={state.amountReceivable}
-          placeholder={t('input of amount to burn')}
-          onChange={handleChange}
-        />
+          <ButtonMenu scale="xs" variant="subtle" activeIndex={toVC} onItemClick={setToVC}>
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
       </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Flex ref={targetRef}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Identity Token ID')}
-          </Text>
-          {tooltipVisible && tooltip}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="identityTokenId"
-          value={state.identityTokenId}
-          placeholder={t('input your identity token id')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
-        <Flex alignSelf="flex-start">
-          <ErrorIcon width={24} height={24} color="textSubtle" />
-        </Flex>
-        <Box>
-          <Text small color="textSubtle">
-            {t(
-              "This will burn the specified amount of the selected token from your wallet and send you the equivalent amount of the corresponding FIAT currency. To burn a token on an automatic ramp, the ramp contract retreives the requested amount of tokens from the burner's wallet on the blockchain minus the ramp's burning fee then the platform uses a payment processor like Stripe to send the requested amount in the equivalent FIAT currency to the burner's payment processor account. To burn tokens on a manual ramp, the burner would have to send a request for burn through PayChat to the admin of the ramp who will then manually run the burn function through this form and then send the necessary payment to the burner. Manual ramps will list all payment methods they accept and will have guidelines in their descriptions (available at the top left of their ramp's panel) about how to proceed. With manual ramps, you should be able to find a ramp that accepts your payment method no matter what it is: cash, mobile money, etc.",
-            )}
-          </Text>
-        </Box>
-      </Grid>
-      <Divider />
-      <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" variant="danger" onClick={continueToNextStage} disabled={Number(state.amountReceivable) < 2}>
-          {t('Burn')}
-        </Button>
-      </Flex>
+      {!(accountData?.id && accountData?.active) && state.automatic && !toVC ? (
+        <>
+          <Divider />
+          <Flex flexDirection="column">
+            <Button variant={linked ? 'success' : 'primary'} onClick={onAttemptToCreateLink}>
+              {linking ? <Dots>{t('Linking')}</Dots> : linked ? t('Linked') : t('Link')}
+            </Button>
+          </Flex>
+        </>
+      ) : (
+        <>
+          <GreyedOutContainer>
+            <Flex ref={targetRef2}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Amount')}
+              </Text>
+              {tooltipVisible2 && tooltip2}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
+            <Input
+              type="text"
+              scale="sm"
+              name="amountReceivable"
+              value={state.amountReceivable}
+              placeholder={t('input of amount to burn')}
+              onChange={handleChange}
+            />
+          </GreyedOutContainer>
+          <GreyedOutContainer>
+            <Flex ref={targetRef}>
+              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+                {t('Identity Token ID')}
+              </Text>
+              {tooltipVisible && tooltip}
+              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+            </Flex>
+            <Input
+              type="text"
+              scale="sm"
+              name="identityTokenId"
+              value={state.identityTokenId}
+              placeholder={t('input your identity token id')}
+              onChange={handleChange}
+            />
+          </GreyedOutContainer>
+          <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+            <Flex alignSelf="flex-start">
+              <ErrorIcon width={24} height={24} color="textSubtle" />
+            </Flex>
+            <Box>
+              <Text small color="textSubtle">
+                {t(
+                  "This will burn the specified amount of the selected token from your wallet and send you the equivalent amount of the corresponding FIAT currency. To burn a token on an automatic ramp, the ramp contract retreives the requested amount of tokens from the burner's wallet on the blockchain minus the ramp's burning fee then the platform uses a payment processor like Stripe to send the requested amount in the equivalent FIAT currency to the burner's payment processor account. To burn tokens on a manual ramp, the burner would have to send a request for burn through PayChat to the admin of the ramp who will then manually run the burn function through this form and then send the necessary payment to the burner. Manual ramps will list all payment methods they accept and will have guidelines in their descriptions (available at the top left of their ramp's panel) about how to proceed. With manual ramps, you should be able to find a ramp that accepts your payment method no matter what it is: cash, mobile money, etc.",
+                )}
+              </Text>
+            </Box>
+          </Grid>
+          <Divider />
+          <Flex flexDirection="column" px="16px" pb="16px">
+            <Button
+              mb="8px"
+              variant="danger"
+              onClick={continueToNextStage}
+              disabled={Number(state.amountReceivable) < 2}
+            >
+              {t('Burn')}
+            </Button>
+          </Flex>
+        </>
+      )}
     </>
   )
 }

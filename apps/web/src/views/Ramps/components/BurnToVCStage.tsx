@@ -40,24 +40,25 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) => {
+const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract, onDismiss }) => {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const { callWithGasPrice } = useCallWithGasPrice()
   const { account } = useWeb3React()
   const { data: vc } = useGetCardId(state.rampAddress, account)
-  const { data: cardInfo } = useGetCardFromStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY, vc?.cardId)
+  const { data: cardInfo } = useGetCardFromStripe(state.sk, vc?.cardId)
+  const [activeButtonIndex, setActiveButtonIndex] = useState(0)
   const { toastSuccess, toastError } = useToast()
-  console.log('cardId=================>', vc, cardInfo)
 
   async function onAttemptToCreateVC() {
     setIsLoading(true)
     const { data } = await axios.post('/api/burnToVC', {
-      cardId: vc?.cardId, // : "ic_1OYT5eAkPdhgtN6ISV6Dz0LB",
+      cardId: vc?.cardId,
       price: state.amountReceivable,
       cardholderId: state.cardholderId,
       symbol: state.symbol,
-      sk: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
+      sk: state.sk,
     })
     if (data.error) {
       console.log('data.error=====================>', data.error)
@@ -65,10 +66,12 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
       toastError(t('Issue storing cardholder: %val%', { val: data.error.raw?.message }))
     } else {
       const args = ['3', '0', data.cardId, state.symbol, '0', '0', state.rampAddress, '']
-      console.log('data.success==================>', args)
+      console.log('data.success==================>', args, data)
       return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
-        .then((res: any) => {
+        .then(() => callWithGasPrice(rampHelperContract, 'postMint', [state.sessionId]))
+        .then((res) => {
           setIsLoading(false)
+          setIsSuccess(true)
           toastSuccess(t('Amount successfully burnt to card: %hash%', { hash: res?.hash }))
         })
         .catch((err) => {
@@ -77,6 +80,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
           console.log('err0=================>', err)
         })
     }
+    onDismiss()
     return null
   }
 
@@ -106,7 +110,6 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
-  const [activeButtonIndex, setActiveButtonIndex] = useState(0)
   return (
     <>
       <GreyedOutContainer>
@@ -123,7 +126,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
           name="amountReceivable"
           value={state.amountReceivable}
           placeholder={t('input amount to amountReceivable')}
-          onChange={handleChange}
+          // onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
@@ -136,7 +139,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
           name="symbol"
           value={state.symbol}
           placeholder={t('input currency symbol')}
-          onChange={handleChange}
+          // onChange={handleChange}
         />
       </GreyedOutContainer>
       {cardInfo?.data?.cardNumber?.length ? (
@@ -148,7 +151,6 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
             <ButtonMenu scale="xs" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
               <ButtonMenuItem>{t('No')}</ButtonMenuItem>
               <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-              {/* <ButtonMenuItem>NFTickets</ButtonMenuItem> */}
             </ButtonMenu>
           </StyledItemRow>
         </GreyedOutContainer>
@@ -186,6 +188,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
         <Button
           mb="8px"
           variant="danger"
+          disabled={isSuccess}
           onClick={onAttemptToCreateVC}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
         >

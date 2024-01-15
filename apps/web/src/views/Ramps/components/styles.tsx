@@ -52,7 +52,6 @@ export const stagesWithConfirmButton = [
 export const stagesWithBackButton = [
   LockStage.CREATE_HOLDER,
   LockStage.CONFIRM_CREATE_HOLDER,
-  LockStage.BURN_TO_VC,
   LockStage.CONFIRM_BURN_TO_VC,
   LockStage.UPDATE_CONTACT_CHANNELS,
   LockStage.CONFIRM_UPDATE_CONTACT_CHANNELS,

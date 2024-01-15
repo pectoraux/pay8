@@ -90,7 +90,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
-  [LockStage.BURN_TO_VC]: t('Burn To VC Card'),
+  [LockStage.BURN_TO_VC]: t('Burn To Virtual Card (VC)'),
   [LockStage.CREATE_HOLDER]: t('Create VC Holder'),
   [LockStage.CONFIRM_CREATE_HOLDER]: t('Back'),
   [LockStage.CONFIRM_BURN_TO_VC]: t('Back'),
@@ -143,7 +143,9 @@ const CreateGaugeModal: React.FC<any> = ({
   onDismiss,
 }) => {
   const [stage, setStage] = useState(
-    variant === 'mint'
+    variant === 'burnToVC'
+      ? LockStage.BURN_TO_VC
+      : variant === 'mint'
       ? LockStage.CONFIRM_MINT
       : sessionId
       ? LockStage.PRE_MINT
@@ -208,7 +210,7 @@ const CreateGaugeModal: React.FC<any> = ({
     channels: pool?.channels?.toString() || '',
     moreInfo: '',
     amountPayable: session ? session.amount : '',
-    amountReceivable: '',
+    amountReceivable: session?.amount ?? '',
     paidPayable: '',
     add: 0,
     paidReceivable: '',
@@ -218,7 +220,7 @@ const CreateGaugeModal: React.FC<any> = ({
     startReceivable: '',
     numPeriods: '',
     name: '',
-    symbol: '',
+    symbol: session?.token?.symbol?.toLowerCase() ?? '',
     startProtocolId: '',
     endProtocolId: '',
     requestAddress: '',
@@ -1006,9 +1008,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.PARTNER)}>
             {t('PARTNER')}
           </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.BURN_TO_VC)}>
+          {/* <Button mb="8px" variant="light" onClick={() => setStage(LockStage.BURN_TO_VC)}>
             {t('BURN TO VC')}
-          </Button>
+          </Button> */}
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.SPONSOR_TAG)}>
             {t('SPONSOR TAG')}
           </Button>
@@ -1283,7 +1285,12 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.BURN_TO_VC && (
-        <BurnToVCStage state={state} handleChange={handleChange} rampHelperContract={rampHelperContract} />
+        <BurnToVCStage
+          state={state}
+          handleChange={handleChange}
+          rampHelperContract={rampHelperContract}
+          onDismiss={onDismiss}
+        />
       )}
       {stage === LockStage.CREATE_HOLDER && (
         <CreateVCHolderStage state={state} handleChange={handleChange} rampHelperContract={rampHelperContract} />

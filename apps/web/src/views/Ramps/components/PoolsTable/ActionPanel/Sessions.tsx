@@ -9,8 +9,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 import { useRampHelper } from 'hooks/useContract'
 import { useGetAccountSg } from 'state/ramps/hooks'
-import CreateGaugeModal from '../../CreateGaugeModal'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import CreateGaugeModal from '../../CreateGaugeModal'
 
 const CardWrapper = styled(Card)`
   display: inline-block;
@@ -90,6 +90,10 @@ const DataCard = ({ idx, session, pool }) => {
     <CreateGaugeModal variant={variant} session={session} location="staked" pool={pool} currency={currency} />,
   )
 
+  const [openPresentBurnToVC] = useModal(
+    <CreateGaugeModal variant="burnToVC" session={session} location="staked" pool={pool} currency={currency} />,
+  )
+
   const processCharge = async () => {
     setIsLoading(true)
     const route = variant === 'charge' ? '/api/charge' : '/api/transfer'
@@ -130,6 +134,7 @@ const DataCard = ({ idx, session, pool }) => {
     } else {
       return callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => setIsLoading(false))
     }
+    return null
   } // acct_1MRgIdAcbvYb7YlN
   return (
     <CardWrapper>
@@ -200,22 +205,40 @@ const DataCard = ({ idx, session, pool }) => {
         </Flex>
         <Flex alignItems="center" justifyContent="center">
           {variant === 'transfer' ? (
-            <Button
-              scale="sm"
-              variant="secondary"
-              disabled={
-                parseInt(session.amount ?? '0') < 1 ||
-                !session?.active ||
-                session.user?.toLowerCase() !== account?.toLowerCase() ||
-                !(pool?.secretKeys?.length && pool?.secretKeys[0]) ||
-                !session?.token?.symbol ||
-                !session?.amount
-              }
-              endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-              onClick={processCharge}
-            >
-              {t('Process Burn')}
-            </Button>
+            <Flex flexDirection="column">
+              <Button
+                scale="sm"
+                variant="secondary"
+                disabled={
+                  parseInt(session.amount ?? '0') < 1 ||
+                  !session?.active ||
+                  session.user?.toLowerCase() !== account?.toLowerCase() ||
+                  !(pool?.secretKeys?.length && pool?.secretKeys[0]) ||
+                  !session?.token?.symbol ||
+                  !session?.amount
+                }
+                endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
+                onClick={processCharge}
+              >
+                {t('Process Burn')}
+              </Button>
+              <Button
+                scale="sm"
+                mt="10px"
+                variant="secondary"
+                disabled={
+                  parseInt(session.amount ?? '0') < 1 ||
+                  !session?.active ||
+                  session.user?.toLowerCase() !== account?.toLowerCase() ||
+                  !(pool?.secretKeys?.length && pool?.secretKeys[0]) ||
+                  !session?.token?.symbol ||
+                  !session?.amount
+                }
+                onClick={openPresentBurnToVC}
+              >
+                {t('Burn To Card')}
+              </Button>
+            </Flex>
           ) : (
             <Button
               scale="sm"

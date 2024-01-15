@@ -53,7 +53,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
       state: state.state,
       postal: state.postal_code,
       country: state.country,
-      sk: process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY,
+      sk: state.sk,
     })
     if (data.error) {
       console.log('data.error=====================>', data.error)
