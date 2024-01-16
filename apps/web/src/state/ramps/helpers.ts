@@ -10,6 +10,7 @@ import { erc20ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
 import { getRampAdsAddress } from 'utils/addressHelpers'
 import { getCollection } from 'state/cancan/helpers'
+import { veABI } from 'config/abi/ve'
 
 import { rampFields, accountFields, sessionFields } from './queries'
 
@@ -274,6 +275,7 @@ export const fetchRamp = async (address, chainId) => {
         },
       ],
     })
+
     const rampBadgeId = params.result[0]
     const rampTokenId = params.result[1]
     const mintFee = params.result[2]
@@ -282,6 +284,22 @@ export const fetchRamp = async (address, chainId) => {
     const soldAccounts = params.result[5]
     const automatic = params.result[6]
     const _ve = params.result[7]
+
+    const [saleTokenAddress, saleTokenSymbol] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
+        {
+          address: _ve,
+          abi: veABI,
+          functionName: 'token',
+        },
+        {
+          address: _ve,
+          abi: veABI,
+          functionName: 'symbol',
+        },
+      ],
+    })
 
     const sessions = gauge?.sessions
     const clientIds = gauge?.clientIds
@@ -530,6 +548,8 @@ export const fetchRamp = async (address, chainId) => {
       soldAccounts: soldAccounts.toString(),
       collection,
       products: _products,
+      saleTokenAddress: saleTokenAddress.result,
+      saleTokenSymbol: saleTokenSymbol.result,
       pricePerAttachMinutes: pricePerAttachMinutes.result.toString(),
     }
   } catch (err) {

@@ -185,20 +185,9 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            {parseInt(rampAccount?.partnerBounties) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={rampAccount?.partnerBounties}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
+            <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+              {rampAccount?.partnerBounties?.toString()}
+            </Text>
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Partner Bounty IDs')}
             </Text>

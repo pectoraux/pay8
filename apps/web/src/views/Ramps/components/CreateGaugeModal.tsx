@@ -9,7 +9,7 @@ import { useERC20, useRampContract, useRampHelper, useRampAds } from 'hooks/useC
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
@@ -174,6 +174,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(
     currency?.address || rampAccount?.token?.address || router.query?.userCurrency || '',
   )
+  const saleTokenContract = useERC20(pool?.saleTokenAddress || '')
   const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '')
   const rampHelperContract = useRampHelper()
   const rampAdsContract = useRampAds()
@@ -244,7 +245,7 @@ const CreateGaugeModal: React.FC<any> = ({
     token: session ? session?.token?.address : stakingTokenContract?.address || rampAccount?.token?.address,
     close: false,
     cap: pool?.cap || 0,
-    salePrice: pool?.rampSalePrice || 0,
+    salePrice: getBalanceNumber(pool?.rampSalePrice || 0),
     maxPartners: pool?.maxPartners || 0,
     partnerBountyId: 0,
     bountyIds: [],
@@ -674,8 +675,8 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PROTOCOL) {
-        const amount = getDecimalAmount(state.salePrice, 18)
-        const cap = getDecimalAmount(state.cap, 18)
+        const amount = getDecimalAmount(state.salePrice)
+        const cap = getDecimalAmount(state.cap)
         const args = [state.token, state.close, cap.toString(), amount.toString(), state.maxPartners]
         console.log('CONFIRM_UPDATE_PROTOCOL===============>', args)
         return callWithGasPrice(rampContract, 'updateProtocol', args).catch((err) =>
@@ -683,8 +684,8 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL) {
-        const amount = getDecimalAmount(state.salePrice, 18)
-        const cap = getDecimalAmount(state.cap, 18)
+        const amount = getDecimalAmount(state.salePrice)
+        const cap = getDecimalAmount(state.cap)
         const args = [state.token, state.close, cap.toString(), amount.toString(), state.maxPartners]
         console.log('CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL===============>', args)
         return callWithGasPrice(rampContract, 'updateIndividualProtocol', args).catch((err) =>
@@ -702,9 +703,9 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_BUY_ACCOUNT) {
         const args = [state.token, state.tokenId, state.bountyId]
         console.log('CONFIRM_BUY_ACCOUNT===============>', args)
-        return callWithGasPrice(rampContract, 'buyAccount', args).catch((err) =>
-          console.log('CONFIRM_BUY_ACCOUNT===============>', err),
-        )
+        return callWithGasPrice(saleTokenContract, 'approve', [rampContract.address, MaxUint256])
+          .then(() => callWithGasPrice(rampContract, 'buyAccount', args))
+          .catch((err) => console.log('CONFIRM_BUY_ACCOUNT===============>', err))
       }
       if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
         const amount = getDecimalAmount(state.amountReceivable, 18)

@@ -169,6 +169,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('Price Per Attached Minutes')} {`->`} {getBalanceNumber(pool?.pricePerAttachMinutes ?? '0')} USD
         </Text>
       </Flex>
+      {pool?.saleTokenSymbol && pool?.saleTokenSymbol?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <Text color="primary" fontSize="14px">
+            {t('Ramp Price')} {`->`} {getBalanceNumber(pool?.rampSalePrice ?? '0')} {pool?.saleTokenSymbol}
+          </Text>
+        </Flex>
+      ) : null}
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
