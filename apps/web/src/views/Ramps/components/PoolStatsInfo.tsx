@@ -158,6 +158,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('Payment Processor Country (PPC)')} {`->`} {pool?.ppc ?? 'N/A'}
         </Text>
       </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('PPC Symbol')} {`->`} {pool?.symbol ?? 'N/A'}
+        </Text>
+      </Flex>
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>

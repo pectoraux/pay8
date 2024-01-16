@@ -55,6 +55,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('Payment Processor Country (PPC)')} {`->`} {pool?.ppc ?? 'N/A'}
         </Text>
       </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('PPC Symbol')} {`->`} {pool?.symbol ?? 'N/A'}
+        </Text>
+      </Flex>
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
