@@ -211,14 +211,14 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('State')}
+          {t('Symbol')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="state"
+          name="symbol"
           value={state.symbol}
-          placeholder={t('input state to associate to card')}
+          placeholder={t('input currency of stripe account')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
