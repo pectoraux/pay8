@@ -6,6 +6,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useTranslation } from '@pancakeswap/localization'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
@@ -58,6 +59,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
           {t('PPC Symbol')} {`->`} {pool?.symbol ?? 'N/A'}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Price Per Attached Minutes')} {`->`} {getBalanceNumber(pool?.pricePerAttachMinutes ?? '0')} USD
         </Text>
       </Flex>
       {account && tokenAddress && (

@@ -166,7 +166,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Price Per Attached Minutes')} {`->`} {getBalanceNumber(pool?.pricePerAttachMinutes ?? '0')}
+          {t('Price Per Attached Minutes')} {`->`} {getBalanceNumber(pool?.pricePerAttachMinutes ?? '0')} USD
         </Text>
       </Flex>
       {pool?.owner && (

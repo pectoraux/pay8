@@ -65,6 +65,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Account Type')}
           </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {pool?.isOverCollateralised ? t('Yes') : t('No')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Over-Collateralized ?')}
+          </Text>
           <Box mr="8px" height="32px">
             <Balance
               lineHeight="1"
