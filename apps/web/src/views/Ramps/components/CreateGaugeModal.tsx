@@ -195,7 +195,7 @@ const CreateGaugeModal: React.FC<any> = ({
     pk: pool?.publishableKeys && pool?.publishableKeys[0],
     owner: pool?.owner,
     sponsor: '',
-    tag: '',
+    tag: session ? session?.token?.address : stakingTokenContract?.address || rampAccount?.token?.address,
     message: '',
     customTags: '',
     bountyId: pool?.bountyId,

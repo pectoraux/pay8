@@ -248,7 +248,7 @@ export const fetchRamp = async (address, chainId) => {
   try {
     // const serializedTokens = serializeTokens()
     const bscClient = publicClient({ chainId })
-    const [devaddr_, tokens, params] = await bscClient.multicall({
+    const [devaddr_, tokens, params, pricePerAttachMinutes] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
         {
@@ -266,6 +266,11 @@ export const fetchRamp = async (address, chainId) => {
           address: rampAddress,
           abi: rampABI,
           functionName: 'getParams',
+        },
+        {
+          address: getRampAdsAddress(),
+          abi: rampAdsABI,
+          functionName: 'pricePerAttachMinutes',
         },
       ],
     })
@@ -525,6 +530,7 @@ export const fetchRamp = async (address, chainId) => {
       soldAccounts: soldAccounts.toString(),
       collection,
       products: _products,
+      pricePerAttachMinutes: pricePerAttachMinutes.result.toString(),
     }
   } catch (err) {
     console.log('fetchRamp err================>', err)

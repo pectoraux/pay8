@@ -13,6 +13,7 @@ export const stagesWithApproveButton = [
   LockStage.CONFIRM_BUY_ACCOUNT,
   LockStage.CONFIRM_BURN,
   LockStage.CONFIRM_BURN2,
+  LockStage.CONFIRM_SPONSOR_TAG,
 ]
 
 export const stagesWithConfirmButton = [
@@ -47,7 +48,6 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_ADD_EXTRA_TOKEN,
   LockStage.CONFIRM_REMOVE_EXTRA_TOKEN,
   LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE,
-  LockStage.CONFIRM_SPONSOR_TAG,
   LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA,
 ]
 

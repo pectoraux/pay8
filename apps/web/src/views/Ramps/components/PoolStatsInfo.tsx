@@ -30,6 +30,7 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/ramps'
 import { getRampHelperAddress } from 'utils/addressHelpers'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import WebPagesModal from './WebPagesModal'
 
@@ -161,6 +162,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
           {t('PPC Symbol')} {`->`} {pool?.symbol ?? 'N/A'}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Price Per Attached Minutes')} {`->`} {getBalanceNumber(pool?.pricePerAttachMinutes ?? '0')}
         </Text>
       </Flex>
       {pool?.owner && (
