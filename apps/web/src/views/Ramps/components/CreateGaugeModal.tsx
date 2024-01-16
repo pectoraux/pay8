@@ -1108,11 +1108,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
           </Button>
-          {location !== 'header' ? (
-            <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
-              {t('UPDATE TOKEN MARKET')}
-            </Button>
-          ) : null}
+          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
+            {t('UPDATE TOKEN MARKET')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
             {t('ADD EXTRA TOKEN')}
           </Button>

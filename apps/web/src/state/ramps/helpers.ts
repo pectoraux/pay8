@@ -285,7 +285,7 @@ export const fetchRamp = async (address, chainId) => {
     const automatic = params.result[6]
     const _ve = params.result[7]
 
-    const [saleTokenAddress, saleTokenSymbol] = await bscClient.multicall({
+    const [saleTokenAddress] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
         {
@@ -293,9 +293,15 @@ export const fetchRamp = async (address, chainId) => {
           abi: veABI,
           functionName: 'token',
         },
+      ],
+    })
+
+    const [saleTokenSymbol] = await bscClient.multicall({
+      allowFailure: true,
+      contracts: [
         {
-          address: _ve,
-          abi: veABI,
+          address: saleTokenAddress.result,
+          abi: erc20ABI,
           functionName: 'symbol',
         },
       ],
@@ -364,7 +370,7 @@ export const fetchRamp = async (address, chainId) => {
         !_tokens?.length
           ? []
           : _tokens.map(async (token, index) => {
-              const [protocolInfo, mintAvailable, partnerBounties] = await bscClient.multicall({
+              const [protocolInfo, mintAvailable, partnerBounties, totalRevenue] = await bscClient.multicall({
                 allowFailure: true,
                 contracts: [
                   {
@@ -385,9 +391,34 @@ export const fetchRamp = async (address, chainId) => {
                     functionName: 'getAllPartnerBounties',
                     args: [token, BigInt(0)],
                   },
+                  {
+                    address: rampAddress,
+                    abi: rampABI,
+                    functionName: 'totalRevenue',
+                    args: [token],
+                  },
                 ],
               })
-              console.log('partnerBounties===========>', partnerBounties)
+              const paidToPartners = await Promise.all(
+                partnerBounties.result?.map(async (pbounty) => {
+                  const [paidRevenue] = await bscClient.multicall({
+                    allowFailure: true,
+                    contracts: [
+                      {
+                        address: rampAddress,
+                        abi: rampABI,
+                        functionName: 'paidRevenue',
+                        args: [token, pbounty],
+                      },
+                    ],
+                  })
+                  return {
+                    paidRevenue: paidRevenue.result,
+                    partnerBounty: pbounty,
+                  }
+                }),
+              )
+              console.log('partnerBounties===========>', partnerBounties, paidToPartners)
               const { name, symbol, decimals } = await getTokenData(token, chainId)
               return {
                 sousId: index,
@@ -404,6 +435,8 @@ export const fetchRamp = async (address, chainId) => {
                 salePrice: protocolInfo.result[7]?.toString(),
                 maxPartners: protocolInfo.result[8]?.toString(),
                 partnerBounties: partnerBounties.result?.toString(),
+                totalRevenue: totalRevenue.result?.toString(),
+                paidToPartners,
                 cap: protocolInfo.result[9]?.toString(),
                 token: new Token(chainId, token, decimals ?? 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),

@@ -186,7 +186,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
           </Box>
           {rampAccount?.partnerBounties && rampAccount?.partnerBounties?.length ? (
             <Box mr="8px" height="32px">
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+              <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
                 {rampAccount?.partnerBounties?.toString()}
               </Text>
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -194,6 +194,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               </Text>
             </Box>
           ) : null}
+          {rampAccount?.paidToPartners?.map((pp) => (
+            <Box mr="8px" height="32px">
+              <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+                {pp?.partnerBounty} {'=>'} {getBalanceNumber(pp.paidRevenue)}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Paid To Partner')}
+              </Text>
+            </Box>
+          ))}
           <Box mr="8px" height="32px">
             {parseInt(rampAccount?.profileId) ? (
               <Balance
