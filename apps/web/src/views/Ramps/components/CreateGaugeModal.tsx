@@ -98,6 +98,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
   [LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE]: t('Back'),
+  [LockStage.CONFIRM_CLAIM_VP_REVENUE]: t('Back'),
   [LockStage.CONFIRM_REMOVE_EXTRA_TOKEN]: t('Back'),
   [LockStage.CONFIRM_ADD_EXTRA_TOKEN]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BLACKLIST]: t('Back'),
@@ -116,6 +117,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_TOKEN_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID]: t('Back'),
   [LockStage.CONFIRM_UNLOCK_BOUNTY]: t('Back'),
+  [LockStage.CONFIRM_MINT_NFT]: t('Back'),
   [LockStage.CONFIRM_BUY_RAMP]: t('Back'),
   [LockStage.CONFIRM_BUY_ACCOUNT]: t('Back'),
   [LockStage.CONFIRM_PARTNER]: t('Back'),
@@ -337,6 +339,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_REMOVE_EXTRA_TOKEN:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
+      case LockStage.CONFIRM_CLAIM_VP_REVENUE:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
       case LockStage.CONFIRM_UPDATE_BADGE_ID:
         setStage(LockStage.UPDATE_BADGE_ID)
         break
@@ -413,6 +418,9 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.UNLOCK_BOUNTY)
         break
       case LockStage.UNLOCK_BOUNTY:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_MINT_NFT:
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.ADMIN_WITHDRAW:
@@ -884,17 +892,32 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_CLAIM) {
-        const amount = getDecimalAmount(state.amountPayable, 18)
-        const args = [rampContract.address, state.token, amount.toString(), !!state.add, state.title, state.content]
+        const amount = getDecimalAmount(state.amountPayable)
+        const args = [
+          rampContract.address,
+          state.token,
+          amount.toString(),
+          state.bountyId,
+          !!state.add,
+          state.title,
+          state.content,
+          state.tags,
+        ]
         console.log('CONFIRM_CLAIM===============>', args)
         return callWithGasPrice(rampHelperContract, 'createClaim', args).catch((err) =>
           console.log('CONFIRM_CLAIM===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE) {
-        console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', [pool?.rampAddress])
-        return callWithGasPrice(rampAdsContract, 'claimPendingRevenueFromSponsors', [pool?.rampAddress]).catch((err) =>
+        console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', [state.token])
+        return callWithGasPrice(rampAdsContract, 'claimLotteryRevenue', [state.token]).catch((err) =>
           console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_CLAIM_VP_REVENUE) {
+        console.log('CONFIRM_CLAIM_VP_REVENUE===============>', [state.token])
+        return callWithGasPrice(rampAdsContract, 'claimValuepoolRevenue', [state.token]).catch((err) =>
+          console.log('CONFIRM_CLAIM_VP_REVENUE===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_TOKEN_ID) {
@@ -905,8 +928,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_SPONSOR_TAG) {
-        const amount = getDecimalAmount(state.amountPayable, 18)
-        const args = [state.sponsor, amount?.toString(), state.tag, state.message]
+        const args = [state.sponsor, state.tag, state.amountPayable, state.message]
         console.log('CONFIRM_SPONSOR_TAG===============>', args)
         return callWithGasPrice(rampAdsContract, 'sponsorTag', args).catch((err) =>
           console.log('CONFIRM_SPONSOR_TAG===============>', err),
@@ -939,6 +961,13 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_UNLOCK_BOUNTY===============>', args)
         return callWithGasPrice(rampContract, 'unlockBounty', args).catch((err) =>
           console.log('CONFIRM_UNLOCK_BOUNTY===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_MINT_NFT) {
+        const args = [state.token]
+        console.log('CONFIRM_MINT_NFT===============>', args)
+        return callWithGasPrice(rampAdsContract, 'mint', args).catch((err) =>
+          console.log('CONFIRM_MINT_NFT===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PROFILE_ID) {
@@ -1010,14 +1039,20 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.PARTNER)}>
             {t('PARTNER')}
           </Button>
-          {/* <Button mb="8px" variant="light" onClick={() => setStage(LockStage.BURN_TO_VC)}>
-            {t('BURN TO VC')}
-          </Button> */}
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_MINT_NFT)}>
+            {t('MINT RAMP NFT')}
+          </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.SPONSOR_TAG)}>
             {t('SPONSOR TAG')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_SPONSOR_MEDIA)}>
             {t('UPDATE SPONSOR MEDIA')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE)}>
+            {t('CLAIM LOTTERY REVENUE')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_VP_REVENUE)}>
+            {t('CLAIM VALUEPOOL REVENUE')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.BUY_ACCOUNT)}>
             {t('BUY TOKEN MARKET')}
@@ -1026,7 +1061,7 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE TOKEN MARKET')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM)}>
-            {t('CLAIM')}
+            {t('CREATE CLAIM')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM_REVENUE)}>
             {t('CLAIM REVENUE')}
@@ -1099,7 +1134,10 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE ACCOUNT TOKEN ID')}
           </Button> */}
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE)}>
-            {t('CLAIM REVENUE FROM SPONSORS')}
+            {t('CLAIM LOTTERY REVENUE')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_VP_REVENUE)}>
+            {t('CLAIM VALUEPOOL REVENUE')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CREATE_HOLDER)}>
             {t('CREATE VC HOLDER')}
@@ -1175,6 +1213,9 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.CLAIM_REVENUE && (
         <ClaimRevenueStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.CONFIRM_CLAIM && (
+        <CreateClaimStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.MINT && (
         <MintStage

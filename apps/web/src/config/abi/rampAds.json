@@ -172,48 +172,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "channels",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "message",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "active_period",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_token",
         "type": "address"
       }
     ],
     "name": "claimLotteryRevenue",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_ramp",
-        "type": "address"
-      }
-    ],
-    "name": "claimPendingRevenueFromSponsors",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -237,6 +200,19 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      }
+    ],
+    "name": "claimValuepoolRevenue",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "defaultMintFactor",
     "outputs": [
@@ -244,6 +220,30 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_start",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_tag",
+        "type": "address"
+      }
+    ],
+    "name": "getAllMedia",
+    "outputs": [
+      {
+        "internalType": "string[]",
+        "name": "_media",
+        "type": "string[]"
       }
     ],
     "stateMutability": "view",
@@ -652,6 +652,11 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "active_period",
+        "type": "uint256"
+      },
+      {
         "internalType": "string",
         "name": "message",
         "type": "string"
@@ -705,7 +710,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "_numMinutes",
         "type": "uint256"
       },
       {
@@ -845,6 +850,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_maxNumMedia",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateMaxNumMedia",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_token",
         "type": "address"
@@ -903,6 +921,11 @@
       {
         "internalType": "address",
         "name": "_lotteryAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_valuepoolAddress",
         "type": "address"
       }
     ],

@@ -12,11 +12,10 @@ import {
   useTooltip,
   HelpIcon,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import _toNumber from 'lodash/toNumber'
+import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
-import { useTranslation } from '@pancakeswap/localization'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -132,6 +131,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="token"
+          value={state.token}
+          placeholder={t('input token address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Amount')}
@@ -179,6 +191,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           name="content"
           value={state.content}
           placeholder={t('input claim content')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Tags')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="tags"
+          value={state.tags}
+          placeholder={t('input claim tags')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

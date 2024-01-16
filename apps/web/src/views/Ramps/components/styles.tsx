@@ -16,6 +16,8 @@ export const stagesWithApproveButton = [
 ]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_CLAIM_VP_REVENUE,
+  LockStage.CONFIRM_MINT_NFT,
   LockStage.CONFIRM_CREATE_HOLDER,
   LockStage.CONFIRM_BURN_TO_VC,
   LockStage.CONFIRM_UPDATE_CONTACT_CHANNELS,
@@ -50,6 +52,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.CLAIM_VP_REVENUE,
+  LockStage.CONFIRM_CLAIM_VP_REVENUE,
   LockStage.CREATE_HOLDER,
   LockStage.CONFIRM_CREATE_HOLDER,
   LockStage.CONFIRM_BURN_TO_VC,

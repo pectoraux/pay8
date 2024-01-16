@@ -93,16 +93,16 @@ const SetPriceStage: React.FC<any> = ({
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <BribeField
-          add="pay"
-          stakingAddress={currency?.address}
-          stakingSymbol={currency?.symbol}
-          stakingDecimals={currency?.decimals}
-          lockedAmount={state.amountPayable}
-          usedValueStaked={usdValueStaked}
-          stakingMax={stakingTokenBalance}
-          setLockedAmount={handleRawValueChange('amountPayable')}
-          stakingTokenBalance={stakingTokenBalance}
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Number Of Minutes')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="amountPayable"
+          value={state.amountPayable}
+          placeholder={t('input number of minutes')}
+          onChange={handleChange}
         />
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
