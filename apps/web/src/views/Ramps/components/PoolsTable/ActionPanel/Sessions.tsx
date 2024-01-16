@@ -85,12 +85,16 @@ const DataCard = ({ idx, session, pool }) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const rampHelperContract = useRampHelper()
   const [burntToVC, setBurntToVC] = useState(false)
+  const [isDisabled, setDisabled] = useState(true)
   const variant = !session?.mintSession ? 'transfer' : session?.ppDataFound ? 'mint' : 'charge'
   console.log('variant=============>', variant, accountData)
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal variant={variant} session={session} location="staked" pool={pool} currency={currency} />,
   )
-
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  useEffect(() => {
+    delay(5000).then(() => setDisabled(false))
+  }, [])
   const [openPresentBurnToVC] = useModal(
     <CreateGaugeModal
       variant="burnToVC"
@@ -221,6 +225,7 @@ const DataCard = ({ idx, session, pool }) => {
                 scale="sm"
                 variant="secondary"
                 disabled={
+                  isDisabled ||
                   burntToVC ||
                   parseInt(session.amount ?? '0') < 1 ||
                   !session?.active ||
@@ -229,7 +234,7 @@ const DataCard = ({ idx, session, pool }) => {
                   !session?.token?.symbol ||
                   !session?.amount
                 }
-                endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
+                endIcon={isLoading || isDisabled ? <AutoRenewIcon spin color="currentColor" /> : undefined}
                 onClick={processCharge}
               >
                 {t('Process Burn')}
@@ -239,6 +244,7 @@ const DataCard = ({ idx, session, pool }) => {
                 mt="10px"
                 variant="secondary"
                 disabled={
+                  isDisabled ||
                   burntToVC ||
                   parseInt(session.amount ?? '0') < 1 ||
                   !session?.active ||
@@ -247,6 +253,7 @@ const DataCard = ({ idx, session, pool }) => {
                   !session?.token?.symbol ||
                   !session?.amount
                 }
+                endIcon={isDisabled ? <AutoRenewIcon spin color="currentColor" /> : undefined}
                 onClick={openPresentBurnToVC}
               >
                 {t('Burn To Card')}
@@ -256,8 +263,8 @@ const DataCard = ({ idx, session, pool }) => {
             <Button
               scale="sm"
               variant="secondary"
-              disabled={!session?.active || session.user?.toLowerCase() !== account?.toLowerCase()}
-              endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
+              disabled={isDisabled || !session?.active || session.user?.toLowerCase() !== account?.toLowerCase()}
+              endIcon={isLoading || isDisabled ? <AutoRenewIcon spin color="currentColor" /> : undefined}
               onClick={variant === 'mint' ? openPresentControlPanel : processCharge}
             >
               {variant === 'mint' ? t('Mint') : t('Process Charge')}
