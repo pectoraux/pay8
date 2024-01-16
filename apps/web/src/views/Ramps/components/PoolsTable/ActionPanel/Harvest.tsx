@@ -131,6 +131,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               {t('Sale Price')}
             </Text>
           </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={rampAccount?.token?.decimals ?? 18}
+              value={getBalanceNumber(rampAccount?.totalRevenue)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Total Revenue')}
+            </Text>
+          </Box>
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">
