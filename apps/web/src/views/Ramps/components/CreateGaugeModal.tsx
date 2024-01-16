@@ -1191,6 +1191,7 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.BURN && (
         <BurnStage
           state={state}
+          symbol={currency?.symbol}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
           callWithGasPrice={callWithGasPrice}

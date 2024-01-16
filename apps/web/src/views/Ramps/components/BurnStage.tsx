@@ -42,6 +42,7 @@ interface SetPriceStageProps {
 // Also shown when user wants to adjust the price of already listed NFT
 const BurnStage: React.FC<any> = ({
   state,
+  symbol,
   rampAddress,
   handleChange,
   rampHelperContract,
@@ -218,7 +219,7 @@ const BurnStage: React.FC<any> = ({
               onClick={continueToNextStage}
               disabled={
                 Number(state.amountReceivable) < 2 ||
-                (toVC && state.vcTokenSymbol?.toLowerCase() !== state.symbol?.toLowerCase())
+                (toVC && state.vcTokenSymbol?.toLowerCase() !== symbol?.toLowerCase())
               }
             >
               {t('Burn')}
