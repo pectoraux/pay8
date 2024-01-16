@@ -154,7 +154,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Bounty Id')}
+              {t('Attached Bounty ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
