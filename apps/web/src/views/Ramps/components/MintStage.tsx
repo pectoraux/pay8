@@ -177,7 +177,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
             }
           }}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-          disabled={!state.pk || !state.sk}
+          disabled={!state.pk || !state.sk || state.amountPayable < 2}
         >
           {t('Mint')}
         </Button>
