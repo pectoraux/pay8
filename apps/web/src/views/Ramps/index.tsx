@@ -25,7 +25,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [onPresentCreateGauge] = useModal(<CreateRampModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
-  console.log('pools=============>', pools, tags)
+  console.log('pools=============>', tags)
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {

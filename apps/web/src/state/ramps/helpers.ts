@@ -380,7 +380,7 @@ export const fetchRamp = async (address, chainId) => {
                     args: [rampAddress, token],
                   },
                   {
-                    address: getRampAdsAddress(),
+                    address: rampAddress,
                     abi: rampABI,
                     functionName: 'getAllPartnerBounties',
                     args: [token, BigInt(0)],
