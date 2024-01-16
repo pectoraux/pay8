@@ -1,23 +1,14 @@
+import { Token } from '@pancakeswap/sdk'
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
-import { useERC20 } from 'hooks/useContract'
-import styled from 'styled-components'
-import { Token } from '@pancakeswap/sdk'
 
-import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallback, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import CreateGaugeModal from '../../CreateGaugeModal'
-
-const IconButtonWrapper = styled.div`
-  display: flex;
-`
-const HelpIconWrapper = styled.div`
-  align-self: center;
-`
+import CreateGaugeModal from 'views/Ramps/components/CreateGaugeModal'
+import { ActionContainer, ActionContent, ActionTitles } from './styles'
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>

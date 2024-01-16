@@ -164,6 +164,20 @@ const BurnStage: React.FC<any> = ({
         </>
       ) : (
         <>
+          {toVC ? (
+            <>
+              <Flex alignSelf="flex-start">
+                <ErrorIcon width={24} height={24} color="textSubtle" />
+              </Flex>
+              <Box>
+                <Text small color="textSubtle">
+                  {t(
+                    "Make sure you are burning the currency of this ramp's PPC otherwise your funds will be lost !!! The ramp's PPC is listed in the left section of its panel, if it FR (for France), then you can only burn Euros to card, if it's US, you can only burn USDs, etc.",
+                  )}
+                </Text>
+              </Box>
+            </>
+          ) : null}
           <GreyedOutContainer>
             <Flex ref={targetRef2}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

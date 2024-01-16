@@ -167,11 +167,10 @@ const CreateGaugeModal: React.FC<any> = ({
     transport: custom(window.ethereum),
   })
 
-  console.log('mcurrencyy===============>', currency, pool?.secretKeys, rampContract)
+  console.log('mcurrencyy===============>', currency, rampContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
-  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
   const { data } = useGetSessionInfoSg(sessionId, rampContract?.address?.toLowerCase())
-  const { data: stripeData } = useGetSessionInfo(sessionId, pool?.secretKeys && pool?.secretKeys[0])
+  const { data: stripeData } = useGetSessionInfo(sessionId ?? '', pool?.secretKeys && pool?.secretKeys[0])
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
   // console.log('data=================>', data)
   // console.log('stripeData=================>', stripeData, tokenData)

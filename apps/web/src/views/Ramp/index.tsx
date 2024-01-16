@@ -24,6 +24,7 @@ import { useCurrency } from 'hooks/Tokens'
 import { useEffect, useMemo, useState } from 'react'
 import { useAppDispatch } from 'state'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import CreateGaugeModal2 from 'views/Ramps/components/CreateGaugeModal'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
@@ -46,7 +47,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const rampAddress = ramp as any
   const ogRamp = useMemo(
     () => pools?.find((pool) => pool?.rampAddress?.toLowerCase() === rampAddress?.toLowerCase()),
-    [pools],
+    [pools, rampAddress],
   )
   const isOwner = ogRamp?.devaddr_ === account
   const dispatch = useAppDispatch()
@@ -56,7 +57,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     <CreateGaugeModal variant="buy" pool={ogRamp} currency={currency ?? userCurrency} />,
   )
   const [onPresentAdminSettings] = useModal(
-    <CreateGaugeModal variant="admin" currency={currency ?? userCurrency} location="header" pool={ogRamp} />,
+    <CreateGaugeModal2 variant="admin" currency={currency ?? userCurrency} location="header" pool={ogRamp} />,
   )
   const [onPresentDeleteContract] = useModal(<CreateGaugeModal variant="delete" currency={currency ?? userCurrency} />)
   const [openPresentControlPanel] = useModal(

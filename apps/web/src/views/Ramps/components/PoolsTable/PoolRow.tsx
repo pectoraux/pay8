@@ -18,7 +18,6 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
     () => pool.accounts?.find((acct) => acct.token.address === currState[pool.rampAddress]),
     [pool, currState],
   )
-  console.log('ramppool=================>', pool)
   const tabs = (
     <>
       <NameCell pool={pool} rampAccount={rampAccount} />

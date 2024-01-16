@@ -173,12 +173,17 @@ export const useGetCardFromStripe = (sk, cardId) => {
 
 export const useGetSessionInfo = (sessionId, sk) => {
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-  const sk0 = sk
-    ? nodeRSA.decryptStringWithRsaPrivateKey({
-        text: sk,
-        privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-      })
-    : ''
+  let sk0
+  try {
+    sk0 = sk
+      ? nodeRSA.decryptStringWithRsaPrivateKey({
+          text: sk,
+          privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
+        })
+      : ''
+  } catch (err) {
+    sk0 = sk
+  }
   const {
     data,
     status,

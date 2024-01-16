@@ -185,7 +185,7 @@ const CreateGaugeModal: React.FC<any> = ({
     chain: fantomTestnet,
     transport: custom(window.ethereum),
   })
-  console.log('mcurrencyy1===============>', currency, rampAccount, pool, rampContract)
+  console.log('mcurrencyy1===============>', currency, rampContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   console.log('sessionId===================>', session, sessionId)
   const [state, setState] = useState<any>(() => ({

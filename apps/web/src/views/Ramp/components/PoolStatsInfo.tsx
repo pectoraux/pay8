@@ -1,46 +1,29 @@
-import {
-  Flex,
-  LinkExternal,
-  Pool,
-  ScanLink,
-  Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
-} from '@pancakeswap/uikit'
-import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
-import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { getBlockExploreLink } from 'utils'
-import { useAppDispatch } from 'state'
+import { Flex, Text, ScanLink, LinkExternal } from '@pancakeswap/uikit'
+import { memo } from 'react'
 import { useRouter } from 'next/router'
+import { getBlockExploreLink } from 'utils'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useTranslation } from '@pancakeswap/localization'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
-
-interface ExpandedFooterProps {
-  pool: Pool.DeserializedPool<Token>
-  account: string
-  showTotalStaked?: boolean
-  alignLinksToRight?: boolean
-}
+import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
-  const [pendingTx, setPendingTx] = useState(false)
+  const rampAddress = useRouter().query.ramp as any
   const earningToken = pool?.token
   const tokenAddress = earningToken?.address || ''
-  const dispatch = useAppDispatch()
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
     <>
+      {rampAddress && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(rampAddress, 'address', chainId)} bold={false} small>
+            {t('View Contract')}
+          </ScanLink>
+        </Flex>
+      )}
       {pool?.owner && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
@@ -66,6 +49,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         <LinkExternal href={`/cancan/collections/${pool?.collectionId}`} bold={false} small>
           {t('See Admin Channel')}
         </LinkExternal>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Payment Processor Country (PPC)')} {`->`} {pool?.ppc ?? 'N/A'}
+        </Text>
       </Flex>
       {account && tokenAddress && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
