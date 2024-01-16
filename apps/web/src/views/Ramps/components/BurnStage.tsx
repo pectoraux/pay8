@@ -230,7 +230,10 @@ const BurnStage: React.FC<any> = ({
               mb="8px"
               variant="danger"
               onClick={continueToNextStage}
-              disabled={Number(state.amountReceivable) < 2}
+              disabled={
+                Number(state.amountReceivable) < 2 ||
+                (toVC && state.vcTokenSymbol?.toLowerCase() !== state.symbol?.toLowerCase())
+              }
             >
               {t('Burn')}
             </Button>

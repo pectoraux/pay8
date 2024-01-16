@@ -222,6 +222,7 @@ const CreateGaugeModal: React.FC<any> = ({
     numPeriods: '',
     name: '',
     symbol: session?.token?.symbol?.toLowerCase() ?? '',
+    vcTokenSymbol: pool?.symbol,
     startProtocolId: '',
     endProtocolId: '',
     requestAddress: '',

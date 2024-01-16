@@ -60,7 +60,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
       toastError(t('Issue storing cardholder: %val%', { val: data.error.raw?.message }))
       setIsLoading(false)
     } else {
-      const args = ['2', '0', data.cardholderId, state.country, '0', '0', state.rampAddress, '']
+      const args = ['2', '0', data.cardholderId, state.country, '0', '0', state.rampAddress, state.symbol]
       console.log('data.success==================>', args, data)
       return callWithGasPrice(rampHelperContract, 'emitUpdateMiscellaneous', args)
         .then((res: any) => {
@@ -205,6 +205,19 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
           scale="sm"
           name="state"
           value={state.state}
+          placeholder={t('input state to associate to card')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('State')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="state"
+          value={state.symbol}
           placeholder={t('input state to associate to card')}
           onChange={handleChange}
         />
