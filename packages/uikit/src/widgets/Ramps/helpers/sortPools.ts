@@ -12,6 +12,10 @@ export function sortPools<T>(sortOption: string, poolsToSort: any) {
       return orderBy(poolsToSort, (pool: any) => Number(pool?.burnFee), "desc");
     case "updatedAt":
       return orderBy(poolsToSort, (pool: any) => Number(pool?.updatedAt), "desc");
+    case "maxPartners":
+      return orderBy(poolsToSort, (pool: any) => Number(pool?.maxPartners), "desc");
+    case "maxRevenue":
+      return orderBy(poolsToSort, (pool: any) => Number(pool?.maxRevenue), "desc");
     default:
       return poolsToSort;
   }

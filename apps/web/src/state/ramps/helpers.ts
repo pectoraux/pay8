@@ -251,7 +251,7 @@ export const fetchRamp = async (address, chainId) => {
   try {
     // const serializedTokens = serializeTokens()
     const bscClient = publicClient({ chainId })
-    const [devaddr_, tokens, params, pricePerAttachMinutes] = await bscClient.multicall({
+    const [devaddr_, tokens, params, pricePerAttachMinutes, lotteryFee, adminFee] = await bscClient.multicall({
       allowFailure: true,
       contracts: [
         {
@@ -274,6 +274,16 @@ export const fetchRamp = async (address, chainId) => {
           address: getRampAdsAddress(),
           abi: rampAdsABI,
           functionName: 'pricePerAttachMinutes',
+        },
+        {
+          address: getRampAdsAddress(),
+          abi: rampAdsABI,
+          functionName: 'lotteryShare',
+        },
+        {
+          address: getRampAdsAddress(),
+          abi: rampAdsABI,
+          functionName: 'adminFee',
         },
       ],
     })
@@ -311,7 +321,8 @@ export const fetchRamp = async (address, chainId) => {
       })
       saleTokenSymbol = _saleTokenSymbol
     }
-
+    let _maxPartners
+    let _maxRevenue
     const sessions = gauge?.sessions
     const clientIds = gauge?.clientIds
     const secretKeys = gauge?.secretKeys
@@ -432,6 +443,12 @@ export const fetchRamp = async (address, chainId) => {
               )
               console.log('partnerBounties===========>', partnerBounties, paidToPartners)
               const { name, symbol, decimals } = await getTokenData(token, chainId)
+              if (_maxPartners < parseInt(protocolInfo.result[8]?.toString())) {
+                _maxPartners = parseInt(protocolInfo.result[8]?.toString())
+              }
+              if (_maxRevenue < parseInt(totalRevenue.result?.toString())) {
+                _maxRevenue = parseInt(totalRevenue.result?.toString())
+              }
               return {
                 sousId: index,
                 status: protocolInfo.result[0] === 0 ? 'Sold' : protocolInfo.result[0] === 1 ? 'Open' : 'Close',
@@ -596,6 +613,10 @@ export const fetchRamp = async (address, chainId) => {
       saleTokenAddress: saleTokenAddress.result,
       saleTokenSymbol: saleTokenSymbol?.result,
       pricePerAttachMinutes: pricePerAttachMinutes.result.toString(),
+      lotteryFee: lotteryFee.result.toString(),
+      adminFee: adminFee.result.toString(),
+      maxPartners: _maxPartners,
+      maxRevenue: _maxRevenue,
     }
   } catch (err) {
     console.log('fetchRamp err================>', err)

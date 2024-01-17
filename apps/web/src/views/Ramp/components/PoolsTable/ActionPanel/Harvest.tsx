@@ -165,6 +165,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               {t('Partner Bounty IDs')}
             </Text>
           </Box>
+          <Flex flexDirection="column">
+            {rampAccount?.paidToPartners?.map((pp) => (
+              <Box mr="8px">
+                <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+                  {pp?.partnerBounty.toString()} {'=>'} {getBalanceNumber(pp.paidRevenue)} {'=>'} {pp.share}%
+                </Text>
+              </Box>
+            ))}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Paid To Partner(s)')}
+            </Text>
+          </Flex>
           <Box mr="8px" height="32px">
             {parseInt(rampAccount?.token?.profileId) ? (
               <Balance

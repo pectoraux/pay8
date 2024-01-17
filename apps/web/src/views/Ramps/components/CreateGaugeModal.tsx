@@ -331,7 +331,7 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.CLAIM_REVENUE)
         break
       case LockStage.CLAIM_REVENUE:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_ADD_EXTRA_TOKEN:
         setStage(LockStage.ADD_EXTRA_TOKEN)
@@ -1057,6 +1057,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_VP_REVENUE)}>
             {t('CLAIM VALUEPOOL REVENUE')}
           </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM_REVENUE)}>
+            {t('CLAIM REVENUE')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.BUY_ACCOUNT)}>
             {t('BUY TOKEN MARKET')}
           </Button>
@@ -1065,9 +1068,6 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM)}>
             {t('CREATE CLAIM')}
-          </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM_REVENUE)}>
-            {t('CLAIM REVENUE')}
           </Button>
         </Flex>
       )}
@@ -1139,6 +1139,9 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_VP_REVENUE)}>
             {t('CLAIM VALUEPOOL REVENUE')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM_REVENUE)}>
+            {t('CLAIM REVENUE')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CREATE_HOLDER)}>
             {t('CREATE VC HOLDER')}

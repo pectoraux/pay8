@@ -162,7 +162,7 @@ export function PoolControls<T>({
       return sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 
@@ -210,6 +210,14 @@ export function PoolControls<T>({
                   {
                     label: t("Update Time"),
                     value: "updatedAt",
+                  },
+                  {
+                    label: t("Maximum Partners"),
+                    value: "maxPartners",
+                  },
+                  {
+                    label: t("Total Revenue"),
+                    value: "maxRevenue",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}
