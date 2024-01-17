@@ -210,7 +210,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             {rampAccount?.paidToPartners?.map((pp) => (
               <Box mr="8px">
                 <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
-                  {pp?.partnerBounty.toString()} {'=>'} {getBalanceNumber(pp.paidRevenue)}
+                  {pp?.partnerBounty.toString()} {'=>'} {getBalanceNumber(pp.paidRevenue)} {'=>'} {pp.share}%
                 </Text>
               </Box>
             ))}

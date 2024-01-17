@@ -8,9 +8,10 @@ import { publicClient } from 'utils/wagmi'
 import { rampABI } from 'config/abi/ramp'
 import { erc20ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
-import { getRampAdsAddress } from 'utils/addressHelpers'
+import { getRampAdsAddress, getRampHelperAddress } from 'utils/addressHelpers'
 import { getCollection } from 'state/cancan/helpers'
 import { veABI } from 'config/abi/ve'
+import { rampHelperABI } from 'config/abi/rampHelper'
 
 import { rampFields, accountFields, sessionFields } from './queries'
 
@@ -401,7 +402,7 @@ export const fetchRamp = async (address, chainId) => {
               })
               const paidToPartners = await Promise.all(
                 partnerBounties.result?.map(async (pbounty) => {
-                  const [paidRevenue] = await bscClient.multicall({
+                  const [paidRevenue, share] = await bscClient.multicall({
                     allowFailure: true,
                     contracts: [
                       {
@@ -410,11 +411,18 @@ export const fetchRamp = async (address, chainId) => {
                         functionName: 'paidRevenue',
                         args: [token, pbounty],
                       },
+                      {
+                        address: getRampHelperAddress(),
+                        abi: rampHelperABI,
+                        functionName: 'getPartnerShare',
+                        args: [mintAvailable.result[1], pbounty],
+                      },
                     ],
                   })
                   return {
                     paidRevenue: paidRevenue.result,
                     partnerBounty: pbounty,
+                    share: parseInt(share.result.toString()) / 100,
                   }
                 }),
               )
