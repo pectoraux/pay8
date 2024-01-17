@@ -102,6 +102,7 @@ export function PoolControls<T>({
   const searchQuery = normalizedUrlSearch && !_searchQuery ? normalizedUrlSearch : _searchQuery;
   const [sortOption, setSortOption] = useState("hot");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const [saleOnly, setSaleOnly] = useState(false);
   const [watchlistTokens] = useWatchlistTokens();
   const chosenPoolsLength = useRef(0);
 
@@ -156,13 +157,15 @@ export function PoolControls<T>({
     const sortedPools = sortPools<T>(sortOption, chosenPools)
       .slice(0, numberOfPoolsVisible)
       .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p?.id) : true));
-
+    if (saleOnly) {
+      return sortedPools.filter((p: any) => p?.forSale);
+    }
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
       return sortedPools.filter((pool: any) => latinise(pool?.id?.toLowerCase() || "").includes(lowercaseQuery));
     }
     return sortedPools;
-  }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, numberOfPoolsVisible, saleOnly, searchQuery, favoritesOnly, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 
@@ -179,6 +182,8 @@ export function PoolControls<T>({
           setStakedOnly={setStakedOnly}
           favoritesOnly={favoritesOnly}
           setFavoritesOnly={setFavoritesOnly}
+          saleOnly={saleOnly}
+          setSaleOnly={setSaleOnly}
           viewMode={viewMode}
           setViewMode={setViewMode}
           hideViewMode={hideViewMode}

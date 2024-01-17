@@ -60,7 +60,16 @@ interface PoolTableButtonsPropsType {
   hasStakeInFinishedPools: boolean;
 }
 
-const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavoritesOnly, viewMode, setViewMode }: any) => {
+const PoolTabButtons = ({
+  stakedOnly,
+  setStakedOnly,
+  favoritesOnly,
+  setFavoritesOnly,
+  saleOnly,
+  setSaleOnly,
+  viewMode,
+  setViewMode,
+}: any) => {
   const router = useRouter();
 
   const { t } = useTranslation();
@@ -96,11 +105,19 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
     </ToggleWrapper>
   );
 
+  const saleOnlySwitch = (
+    <ToggleWrapper>
+      <Toggle checked={saleOnly} onChange={() => setSaleOnly(!saleOnly)} scale="sm" />
+      <Text> {t("On Sale")}</Text>
+    </ToggleWrapper>
+  );
+
   return (
     <ViewControls>
       {/* {viewModeToggle} */}
       {stakedOnlySwitch}
       {favoritesOnlySwitch}
+      {saleOnlySwitch}
       {liveOrFinishedSwitch}
     </ViewControls>
   );

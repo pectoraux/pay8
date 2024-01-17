@@ -296,6 +296,7 @@ export const fetchRamp = async (address, chainId) => {
     const soldAccounts = params.result[5]
     const automatic = params.result[6]
     const _ve = params.result[7]
+    let forSale = parseInt(rampSalePrice.toString()) > 0
 
     const [saleTokenAddress] = await bscClient.multicall({
       allowFailure: true,
@@ -445,6 +446,9 @@ export const fetchRamp = async (address, chainId) => {
               const { name, symbol, decimals } = await getTokenData(token, chainId)
               if (_maxPartners < parseInt(protocolInfo.result[8]?.toString())) {
                 _maxPartners = parseInt(protocolInfo.result[8]?.toString())
+              }
+              if (parseInt(protocolInfo.result[7]?.toString()) > 0) {
+                forSale = true
               }
               _totalRevenue += parseInt(totalRevenue.result?.toString())
               return {
@@ -615,6 +619,7 @@ export const fetchRamp = async (address, chainId) => {
       adminFee: adminFee.result.toString(),
       maxPartners: _maxPartners,
       totalRevenue: _totalRevenue,
+      forSale,
     }
   } catch (err) {
     console.log('fetchRamp err================>', err)
