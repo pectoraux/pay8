@@ -138,7 +138,6 @@ const CreateGaugeModal: React.FC<any> = ({
   variant = 'user',
   sessionId,
   session,
-  location = 'ramp',
   pool,
   currency,
   rampAccount,
@@ -146,7 +145,9 @@ const CreateGaugeModal: React.FC<any> = ({
   onDismiss,
 }) => {
   const [stage, setStage] = useState(
-    variant === 'burnToVC'
+    variant === 'update_parameters'
+      ? LockStage.UPDATE_PARAMETERS
+      : variant === 'burnToVC'
       ? LockStage.BURN_TO_VC
       : variant === 'mint'
       ? LockStage.CONFIRM_MINT

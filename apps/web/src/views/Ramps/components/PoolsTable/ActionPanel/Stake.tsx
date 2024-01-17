@@ -34,6 +34,15 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
       rampAccount={rampAccount}
     />,
   )
+  const [openPresentManual] = useModal(
+    <CreateGaugeModal
+      variant="update_parameters"
+      location="staked"
+      pool={pool}
+      currency={currency ?? rampCurrencyInput}
+      rampAccount={rampAccount}
+    />,
+  )
 
   if (!account) {
     return (
@@ -68,6 +77,14 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
             disabled={pool?.owner?.toLowerCase() !== account?.toLowerCase()}
           >
             {t('Initialize Ramp')}
+          </Button>
+          <Button
+            width="100%"
+            onClick={openPresentManual}
+            variant="secondary"
+            disabled={pool?.owner?.toLowerCase() !== account?.toLowerCase()}
+          >
+            {t('Switch To Manual')}
           </Button>
         </ActionContent>
       </ActionContainer>
