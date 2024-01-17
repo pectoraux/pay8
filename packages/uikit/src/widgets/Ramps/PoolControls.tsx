@@ -217,7 +217,7 @@ export function PoolControls<T>({
                   },
                   {
                     label: t("Total Revenue"),
-                    value: "maxRevenue",
+                    value: "totalRevenue",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}

@@ -322,7 +322,7 @@ export const fetchRamp = async (address, chainId) => {
       saleTokenSymbol = _saleTokenSymbol
     }
     let _maxPartners
-    let _maxRevenue
+    let _totalRevenue
     const sessions = gauge?.sessions
     const clientIds = gauge?.clientIds
     const secretKeys = gauge?.secretKeys
@@ -446,9 +446,7 @@ export const fetchRamp = async (address, chainId) => {
               if (_maxPartners < parseInt(protocolInfo.result[8]?.toString())) {
                 _maxPartners = parseInt(protocolInfo.result[8]?.toString())
               }
-              if (_maxRevenue < parseInt(totalRevenue.result?.toString())) {
-                _maxRevenue = parseInt(totalRevenue.result?.toString())
-              }
+              _totalRevenue += parseInt(totalRevenue.result?.toString())
               return {
                 sousId: index,
                 status: protocolInfo.result[0] === 0 ? 'Sold' : protocolInfo.result[0] === 1 ? 'Open' : 'Close',
@@ -616,7 +614,7 @@ export const fetchRamp = async (address, chainId) => {
       lotteryFee: lotteryFee.result.toString(),
       adminFee: adminFee.result.toString(),
       maxPartners: _maxPartners,
-      maxRevenue: _maxRevenue,
+      totalRevenue: _totalRevenue,
     }
   } catch (err) {
     console.log('fetchRamp err================>', err)
