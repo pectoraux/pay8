@@ -215,7 +215,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
             {cakeFetchStatus !== FetchStatus.Fetched ? (
               <Skeleton height="22px" width="60px" />
             ) : (
-              <Text>{getBalanceNumber(new BigNumber(balance?.value))}</Text>
+              <Text>{getFullDisplayBalance(new BigNumber(balance?.value), 18, 6)}</Text>
             )}
           </Flex>
         ))}

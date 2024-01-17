@@ -73,7 +73,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.minted)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -85,7 +85,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.burnt)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -97,7 +97,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.salePrice)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">

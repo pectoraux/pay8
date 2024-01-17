@@ -85,7 +85,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool, rampAddress)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (

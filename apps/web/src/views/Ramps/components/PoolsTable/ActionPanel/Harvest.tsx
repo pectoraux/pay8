@@ -76,7 +76,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.mintable)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -88,7 +88,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.cap)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -100,7 +100,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.minted)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -112,7 +112,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.burnt)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -124,7 +124,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.salePrice)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -136,7 +136,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={rampAccount?.token?.decimals ?? 18}
+              decimals={6}
               value={getBalanceNumber(rampAccount?.totalRevenue)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -202,20 +202,22 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
                 {rampAccount?.partnerBounties?.toString()}
               </Text>
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('Partner Bounty IDs')}
+                {t('Partner Bounty ID(s)')}
               </Text>
             </Box>
           ) : null}
-          {rampAccount?.paidToPartners?.map((pp) => (
-            <Box mr="8px" height="32px">
-              <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
-                {pp?.partnerBounty} {'=>'} {getBalanceNumber(pp.paidRevenue)}
-              </Text>
-              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('Paid To Partner')}
-              </Text>
-            </Box>
-          ))}
+          <Flex flexDirection="column">
+            {rampAccount?.paidToPartners?.map((pp) => (
+              <Box mr="8px">
+                <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+                  {pp?.partnerBounty.toString()} {'=>'} {getBalanceNumber(pp.paidRevenue)}
+                </Text>
+              </Box>
+            ))}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Paid To Partner(s)')}
+            </Text>
+          </Flex>
           <Box mr="8px" height="32px">
             {parseInt(rampAccount?.profileId) ? (
               <Balance
@@ -255,7 +257,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t("Ramp's Leviathan")}
+            {t("Ramp's Leviathan NFT")}
           </Text>
           <CopyAddress title={truncateHash(pool?._ve)} account={pool?._ve} />
         </Flex>
