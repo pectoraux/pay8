@@ -8,14 +8,10 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
   }
 `
 
-export const stagesWithApproveButton = [
-  LockStage.CONFIRM_BUY_RAMP,
-  LockStage.CONFIRM_BURN,
-  LockStage.CONFIRM_BURN2,
-  LockStage.CONFIRM_SPONSOR_TAG,
-]
+export const stagesWithApproveButton = [LockStage.CONFIRM_BURN, LockStage.CONFIRM_BURN2, LockStage.CONFIRM_SPONSOR_TAG]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_BUY_RAMP,
   LockStage.CONFIRM_BUY_ACCOUNT,
   LockStage.CONFIRM_CLAIM_VP_REVENUE,
   LockStage.CONFIRM_MINT_NFT,
@@ -110,6 +106,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_BURN2,
   LockStage.CONFIRM_PARTNER,
   LockStage.CONFIRM_BUY_ACCOUNT,
+  LockStage.BUY_RAMP,
   LockStage.CONFIRM_BUY_RAMP,
   LockStage.CONFIRM_UPDATE_BOUNTY,
   LockStage.CONFIRM_CREATE_PROTOCOL,

@@ -250,7 +250,7 @@ const CreateGaugeModal: React.FC<any> = ({
     salePrice: getBalanceNumber(pool?.rampSalePrice || 0),
     maxPartners: pool?.maxPartners || 0,
     partnerBountyId: 0,
-    bountyIds: [],
+    bountyIds: '',
     badgeId: pool?.rampBadgeId,
     _ve: pool?._ve || stakingTokenContract?.address || rampAccount?.token?.address,
     mintFee: parseInt(pool?.mintFee ?? '0') / 100,
@@ -716,10 +716,10 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_BUY_RAMP) {
-        const args = [state.token, state.tokenId, state.bountyIds]
-        return callWithGasPrice(rampContract, 'buyRamp', args).catch((err) =>
-          console.log('CONFIRM_BUY_RAMP===============>', err),
-        )
+        const args = [state.token, state.tokenId, state.bountyIds?.split(',')]
+        return callWithGasPrice(saleTokenContract, 'approve', [rampContract.address, MaxUint256])
+          .then(() => callWithGasPrice(rampContract, 'buyRamp', args))
+          .catch((err) => console.log('CONFIRM_BUY_RAMP===============>', err))
       }
       if (stage === LockStage.CONFIRM_INIT_RAMP) {
         const encryptRsa = new EncryptRsa()
@@ -1062,6 +1062,9 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.BUY_ACCOUNT)}>
             {t('BUY TOKEN MARKET')}
+          </Button>
+          <Button mb="8px" onClick={() => setStage(LockStage.BUY_RAMP)}>
+            {t('BUY RAMP')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_INDIVIDUAL_PROTOCOL)}>
             {t('UPDATE TOKEN MARKET')}
