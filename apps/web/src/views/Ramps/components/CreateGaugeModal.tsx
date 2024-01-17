@@ -716,7 +716,8 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_BUY_RAMP) {
-        const args = [state.token, state.tokenId, state.bountyIds?.split(',')]
+        const args = [state._ve, state.tokenId, state.bountyIds?.split(',')]
+        console.log('CONFIRM_BUY_RAMP===============>', args)
         return callWithGasPrice(saleTokenContract, 'approve', [rampContract.address, MaxUint256])
           .then(() => callWithGasPrice(rampContract, 'buyRamp', args))
           .catch((err) => console.log('CONFIRM_BUY_RAMP===============>', err))

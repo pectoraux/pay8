@@ -48,6 +48,19 @@ const BuyRampStage: React.FC<any> = ({ state, handleChange, continueToNextStage 
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Leviathan NFT Contract')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="_ve"
+          value={state._ve}
+          placeholder={t('input veNFT address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Token ID')}
         </Text>
         <Input
