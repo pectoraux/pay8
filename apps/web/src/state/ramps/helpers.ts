@@ -431,7 +431,7 @@ export const fetchRamp = async (address, chainId) => {
                         address: getRampHelperAddress(),
                         abi: rampHelperABI,
                         functionName: 'getPartnerShare',
-                        args: [mintAvailable.result[1], pbounty],
+                        args: [mintAvailable.result?.length && mintAvailable.result[1], pbounty],
                       },
                     ],
                   })
@@ -454,9 +454,9 @@ export const fetchRamp = async (address, chainId) => {
               return {
                 sousId: index,
                 status: protocolInfo.result[0] === 0 ? 'Sold' : protocolInfo.result[0] === 1 ? 'Open' : 'Close',
-                isOverCollateralised: mintAvailable.result[2] === 0,
-                backingBalance: mintAvailable.result[1]?.toString(),
-                mintable: mintAvailable.result[0]?.toString(),
+                isOverCollateralised: mintAvailable.result?.length && mintAvailable.result[2] === 0,
+                backingBalance: mintAvailable.result?.length && mintAvailable.result[1]?.toString(),
+                mintable: mintAvailable.result?.length && mintAvailable.result[0]?.toString(),
                 tokenId: protocolInfo.result[1]?.toString(),
                 bountyId: protocolInfo.result[2]?.toString(),
                 profileId: protocolInfo.result[3]?.toString(),

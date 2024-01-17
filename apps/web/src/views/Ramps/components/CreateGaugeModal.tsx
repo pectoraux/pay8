@@ -897,16 +897,7 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_CLAIM) {
         const amount = getDecimalAmount(state.amountPayable)
-        const args = [
-          rampContract.address,
-          state.token,
-          amount.toString(),
-          state.bountyId,
-          !!state.add,
-          state.title,
-          state.content,
-          state.tags,
-        ]
+        const args = [amount.toString(), state.bountyId, !!state.add, state.title, state.content, state.tags]
         console.log('CONFIRM_CLAIM===============>', args)
         return callWithGasPrice(rampHelper2Contract, 'createClaim', args).catch((err) =>
           console.log('CONFIRM_CLAIM===============>', err),
