@@ -40,6 +40,7 @@ import AdminWithdrawStage from './AdminWithdrawStage'
 import CreateProtocolStage from './CreateProtocolStage'
 import UpdateBlacklistStage from './UpdateBlacklistStage'
 import UpdateParametersStage from './UpdateParametersStage'
+import VoteStage from './VoteStage'
 import DeleteStage from './DeleteStage'
 import InitRampStage from './InitRampStage'
 import DeleteRampStage from './DeleteRampStage'
@@ -80,6 +81,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.PARTNER]: t('Partner'),
   [LockStage.BURN]: t('Burn'),
   [LockStage.MINT]: t('Mint'),
+  [LockStage.VOTE]: t('Vote'),
   [LockStage.DELETE]: t('Delete'),
   [LockStage.DELETE_RAMP]: t('Delete Ramp'),
   [LockStage.CREATE_PROTOCOL]: t('Add Token Market'),
@@ -126,6 +128,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_CLAIM_REVENUE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PARAMETERS]: t('Back'),
   [LockStage.CONFIRM_BURN]: t('Back'),
+  [LockStage.CONFIRM_VOTE]: t('Back'),
   [LockStage.CONFIRM_MINT]: t('Back'),
   [LockStage.TX_CONFIRMED]: t('Transaction Confirmed'),
 })
@@ -384,6 +387,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE:
         setStage(LockStage.ADMIN_SETTINGS)
         break
+      case LockStage.VOTE:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_VOTE:
+        setStage(LockStage.VOTE)
+        break
       case LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID:
         setStage(LockStage.UPDATE_DEV_TOKEN_ID)
         break
@@ -495,6 +504,9 @@ const CreateGaugeModal: React.FC<any> = ({
     switch (stage) {
       case LockStage.INIT_RAMP:
         setStage(LockStage.CONFIRM_INIT_RAMP)
+        break
+      case LockStage.VOTE:
+        setStage(LockStage.CONFIRM_VOTE)
         break
       case LockStage.UPDATE_LOCATION:
         setStage(LockStage.CONFIRM_UPDATE_LOCATION)
@@ -716,7 +728,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_BUY_RAMP) {
-        const args = [state._ve, state.tokenId, state.bountyIds?.split(',')]
+        const args = [state.tokenId, state.bountyIds?.split(',')]
         console.log('CONFIRM_BUY_RAMP===============>', args)
         return callWithGasPrice(saleTokenContract, 'approve', [rampContract.address, MaxUint256])
           .then(() => callWithGasPrice(rampContract, 'buyRamp', args))
@@ -909,6 +921,13 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_VOTE) {
+        const args = [rampContract.address, !!state.add]
+        console.log('CONFIRM_VOTE===============>', args)
+        return callWithGasPrice(rampHelper2Contract, 'vote', args).catch((err) =>
+          console.log('CONFIRM_VOTE===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_CLAIM_VP_REVENUE) {
         console.log('CONFIRM_CLAIM_VP_REVENUE===============>', [state.token])
         return callWithGasPrice(rampAdsContract, 'claimValuepoolRevenue', [state.token]).catch((err) =>
@@ -1033,6 +1052,9 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.PARTNER)}>
             {t('PARTNER')}
+          </Button>
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.VOTE)}>
+            {t('VOTE')}
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_MINT_NFT)}>
             {t('MINT RAMP NFT')}
@@ -1161,6 +1183,14 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
         </Flex>
       )}
+      {stage === LockStage.VOTE && (
+        <VoteStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stage === LockStage.UPDATE_PARAMETERS && (
         <UpdateParametersStage
           state={state}
@@ -1212,9 +1242,6 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.CLAIM_REVENUE && (
         <ClaimRevenueStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
-      )}
-      {stage === LockStage.CONFIRM_CLAIM && (
-        <CreateClaimStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.MINT && (
         <MintStage

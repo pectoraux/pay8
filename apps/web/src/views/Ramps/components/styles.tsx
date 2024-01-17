@@ -11,6 +11,7 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
 export const stagesWithApproveButton = [LockStage.CONFIRM_BURN, LockStage.CONFIRM_BURN2, LockStage.CONFIRM_SPONSOR_TAG]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_VOTE,
   LockStage.CONFIRM_BUY_RAMP,
   LockStage.CONFIRM_BUY_ACCOUNT,
   LockStage.CONFIRM_CLAIM_VP_REVENUE,
@@ -48,6 +49,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.VOTE,
+  LockStage.CONFIRM_VOTE,
   LockStage.CLAIM_VP_REVENUE,
   LockStage.CONFIRM_CLAIM_VP_REVENUE,
   LockStage.CREATE_HOLDER,

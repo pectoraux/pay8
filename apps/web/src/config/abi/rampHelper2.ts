@@ -15,8 +15,13 @@ export const rampHelper2ABI = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '_recipient',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
-        name: 'amount',
+        name: '_amount',
         type: 'uint256',
       },
       {
