@@ -155,6 +155,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
+          {t('Ramp Token ID')} {`->`} {pool?.rampTokenId}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
           {t('Payment Processor Country (PPC)')} {`->`} {pool?.ppc ?? 'N/A'}
         </Text>
       </Flex>

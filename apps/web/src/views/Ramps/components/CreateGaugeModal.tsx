@@ -193,7 +193,7 @@ const CreateGaugeModal: React.FC<any> = ({
     chain: fantomTestnet,
     transport: custom(window.ethereum),
   })
-  console.log('mcurrencyy1===============>', currency, rampContract)
+  console.log('mcurrencyy1===============>', rampAccount, currency, rampContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   console.log('sessionId===================>', session, sessionId)
   const [state, setState] = useState<any>(() => ({
@@ -204,7 +204,8 @@ const CreateGaugeModal: React.FC<any> = ({
     tag: session ? session?.token?.address : stakingTokenContract?.address || rampAccount?.token?.address,
     message: '',
     customTags: '',
-    bountyId: pool?.bountyId,
+    recipient: account ?? '',
+    bountyId: rampAccount?.bountyId,
     profileId: pool?.profileId,
     tokenId: pool?.tokenId ?? '0',
     identityTokenId: (session && session?.identityTokenId) || '0',
@@ -235,7 +236,6 @@ const CreateGaugeModal: React.FC<any> = ({
     endProtocolId: '',
     requestAddress: '',
     requestAmount: '',
-    recipient: '',
     splitShares: '',
     adminNote: false,
     period: pool?.period,
@@ -909,7 +909,15 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_CLAIM) {
         const amount = getDecimalAmount(state.amountPayable)
-        const args = [amount.toString(), state.bountyId, !!state.add, state.title, state.content, state.tags]
+        const args = [
+          state.recipient,
+          amount.toString(),
+          state.bountyId,
+          !!state.add,
+          state.title,
+          state.content,
+          state.tags,
+        ]
         console.log('CONFIRM_CLAIM===============>', args)
         return callWithGasPrice(rampHelper2Contract, 'createClaim', args).catch((err) =>
           console.log('CONFIRM_CLAIM===============>', err),

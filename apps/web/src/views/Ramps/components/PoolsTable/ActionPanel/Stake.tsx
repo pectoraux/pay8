@@ -25,7 +25,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
     pool?.clientIds[0].length &&
     pool?.publishableKeys?.length > 0 &&
     pool?.publishableKeys[0].length
-  const variant = !initialized ? 'init' : pool?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
+  const variant = !initialized ? 'init' : pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const currencyId = useMemo(() => rampAccount?.token?.address, [rampAccount])
   const rampCurrencyInput = useCurrency(currencyId)
   const [currency, setCurrency] = useState(rampAccount?.address)
