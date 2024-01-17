@@ -15,16 +15,6 @@ export const rampHelper2ABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_ramp',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_token',
-        type: 'address',
-      },
-      {
         internalType: 'uint256',
         name: 'amount',
         type: 'uint256',
@@ -57,7 +47,7 @@ export const rampHelper2ABI = [
     ],
     name: 'createClaim',
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
