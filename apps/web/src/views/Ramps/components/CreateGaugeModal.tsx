@@ -5,7 +5,7 @@ import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useRampContract, useRampHelper, useRampAds } from 'hooks/useContract'
+import { useERC20, useRampContract, useRampHelper, useRampAds, useRampHelper2 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
@@ -178,6 +178,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const saleTokenContract = useERC20(pool?.saleTokenAddress || '')
   const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '')
   const rampHelperContract = useRampHelper()
+  const rampHelper2Contract = useRampHelper2()
   const rampAdsContract = useRampAds()
   const dispatch = useAppDispatch()
   const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
@@ -906,7 +907,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state.tags,
         ]
         console.log('CONFIRM_CLAIM===============>', args)
-        return callWithGasPrice(rampHelperContract, 'createClaim', args).catch((err) =>
+        return callWithGasPrice(rampHelper2Contract, 'createClaim', args).catch((err) =>
           console.log('CONFIRM_CLAIM===============>', err),
         )
       }

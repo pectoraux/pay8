@@ -12,6 +12,7 @@ import { getRampAdsAddress, getRampHelperAddress } from 'utils/addressHelpers'
 import { getCollection } from 'state/cancan/helpers'
 import { veABI } from 'config/abi/ve'
 import { rampHelperABI } from 'config/abi/rampHelper'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 import { rampFields, accountFields, sessionFields } from './queries'
 
@@ -296,17 +297,20 @@ export const fetchRamp = async (address, chainId) => {
         },
       ],
     })
-
-    const [saleTokenSymbol] = await bscClient.multicall({
-      allowFailure: true,
-      contracts: [
-        {
-          address: saleTokenAddress.result,
-          abi: erc20ABI,
-          functionName: 'symbol',
-        },
-      ],
-    })
+    let saleTokenSymbol
+    if (saleTokenAddress.result?.length && saleTokenAddress.result !== ADDRESS_ZERO) {
+      const [_saleTokenSymbol] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: saleTokenAddress.result,
+            abi: erc20ABI,
+            functionName: 'symbol',
+          },
+        ],
+      })
+      saleTokenSymbol = _saleTokenSymbol
+    }
 
     const sessions = gauge?.sessions
     const clientIds = gauge?.clientIds
@@ -590,7 +594,7 @@ export const fetchRamp = async (address, chainId) => {
       collection,
       products: _products,
       saleTokenAddress: saleTokenAddress.result,
-      saleTokenSymbol: saleTokenSymbol.result,
+      saleTokenSymbol: saleTokenSymbol?.result,
       pricePerAttachMinutes: pricePerAttachMinutes.result.toString(),
     }
   } catch (err) {

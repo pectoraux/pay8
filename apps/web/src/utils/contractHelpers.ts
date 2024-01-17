@@ -17,7 +17,7 @@ import {
   getNftMarketAddress,
   getNftSaleAddress,
   getNonBscVaultAddress,
-  getPancakeProfileAddress,
+  // getPancakeProfileAddress,
   getPancakeSquadAddress,
   getPointCenterIfoAddress,
   getPotteryDrawAddress,
@@ -112,11 +112,12 @@ import {
   getProfileHelperAddress,
   getLotteryAddress,
   getLotteryHelperAddress,
-  getRandomNumberGeneratorAddress,
+  // getRandomNumberGeneratorAddress,
   getLotteryRandomNumberGeneratorAddress,
   getProfileAddress,
   getNFTSVGAddress,
   getBusinessMinterAddress,
+  getRampHelper2Address,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -151,7 +152,7 @@ import { lotteryV2ABI } from 'config/abi/lotteryV2'
 import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
 import { nftMarketABI } from 'config/abi/nftMarket'
-import { pancakeProfileABI } from 'config/abi/pancakeProfile'
+// import { pancakeProfileABI } from 'config/abi/pancakeProfile'
 import { pancakeSquadABI } from 'config/abi/pancakeSquad'
 import { potteryDrawABI } from 'config/abi/potteryDrawAbi'
 import { potteryVaultABI } from 'config/abi/potteryVaultAbi'
@@ -167,13 +168,14 @@ import { getViemClients, viemClients } from 'utils/viem'
 import { Abi, PublicClient, WalletClient, getContract as viemGetContract } from 'viem'
 import { Address, erc20ABI, erc721ABI } from 'wagmi'
 
-import rampAbi from 'config/abi/ramp.json'
-import rampHelperAbi from 'config/abi/rampHelper.json'
-import rampFactoryAbi from 'config/abi/rampFactory.json'
-import rampAdsAbi from 'config/abi/rampAds.json'
+// import rampAbi from 'config/abi/ramp.json'
+// import rampHelperAbi from 'config/abi/rampHelper.json'
+// import rampFactoryAbi from 'config/abi/rampFactory.json'
+// import rampAdsAbi from 'config/abi/rampAds.json'
 
 import { rampABI } from 'config/abi/ramp'
 import { rampHelperABI } from 'config/abi/rampHelper'
+import { rampHelper2ABI } from 'config/abi/rampHelper2'
 import { rampFactoryABI } from 'config/abi/rampFactory'
 import { rampAdsABI } from 'config/abi/rampAds'
 import { trustBountiesHelperABI } from 'config/abi/trustBountiesHelper'
@@ -201,16 +203,16 @@ import { billHelperABI } from 'config/abi/billHelper'
 import { billMinterABI } from 'config/abi/billMinter'
 import { billNoteABI } from 'config/abi/billNote'
 import { bribeABI } from 'config/abi/bribe'
-import { businessBribeFactoryABI } from 'config/abi/businessBribeFactory'
-import { businessGaugeABI } from 'config/abi/businessGauge'
-import { businessGaugeFactoryABI } from 'config/abi/businessGaugeFactory'
+// import { businessBribeFactoryABI } from 'config/abi/businessBribeFactory'
+// import { businessGaugeABI } from 'config/abi/businessGauge'
+// import { businessGaugeFactoryABI } from 'config/abi/businessGaugeFactory'
 import { businessMinterABI } from 'config/abi/businessMinter'
-import { businessBribeABI } from 'config/abi/businessBribe'
+// import { businessBribeABI } from 'config/abi/businessBribe'
 import { businessVoterABI } from 'config/abi/businessVoter'
 import { cardABI } from 'config/abi/card'
 import { contributorsVoterABI } from 'config/abi/contributorsVoter'
-import { extraTokenABI } from 'config/abi/extraToken'
-import { extraTokenFactoryABI } from 'config/abi/extraTokenFactory'
+// import { extraTokenABI } from 'config/abi/extraToken'
+// import { extraTokenFactoryABI } from 'config/abi/extraTokenFactory'
 import { feeToABI } from 'config/abi/feeTo'
 import { futureCollateralsABI } from 'config/abi/futureCollaterals'
 import { gameABI } from 'config/abi/game'
@@ -251,8 +253,8 @@ import { paywallMarketTradesABI } from 'config/abi/paywallMarketTrades'
 import { poolGaugeABI } from 'config/abi/poolGauge'
 import { profileABI } from 'config/abi/profile'
 import { profileHelperABI } from 'config/abi/profileHelper'
-import { referralBribeABI } from 'config/abi/referralBribe'
-import { referralBribeFactoryABI } from 'config/abi/referralBribeFactory'
+// import { referralBribeABI } from 'config/abi/referralBribe'
+// import { referralBribeFactoryABI } from 'config/abi/referralBribeFactory'
 import { referralVoterABI } from 'config/abi/referralVoter'
 import { sponsorABI } from 'config/abi/sponsor'
 import { sponsorFactoryABI } from 'config/abi/sponsorFactory'
@@ -661,6 +663,15 @@ export const getRampHelperContract = (signer?: WalletClient, chainId?: number) =
   return getContract({
     abi: rampHelperABI,
     address: getRampHelperAddress(),
+    signer,
+    chainId,
+  })
+}
+
+export const getRampHelper2Contract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: rampHelper2ABI,
+    address: getRampHelper2Address(),
     signer,
     chainId,
   })

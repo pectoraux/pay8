@@ -149,6 +149,10 @@ export const getRampHelperAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.rampHelper, chainId)
 }
 
+export const getRampHelper2Address = (chainId?: number) => {
+  return getAddressFromMap(addresses.rampHelper2, chainId)
+}
+
 export const getRampFactoryAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.rampFactory, chainId)
 }

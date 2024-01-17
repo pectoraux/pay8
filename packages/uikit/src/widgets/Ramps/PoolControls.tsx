@@ -207,6 +207,10 @@ export function PoolControls<T>({
                     label: t("Burn Fee"),
                     value: "burnFee",
                   },
+                  {
+                    label: t("Update Time"),
+                    value: "updatedAt",
+                  },
                 ]}
                 onOptionChange={handleSortOptionChange}
               />

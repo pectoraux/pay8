@@ -1,4 +1,4 @@
-import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
+import { Button, Text, useModal, Pool, Flex } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -18,7 +18,14 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions, toggleSessions }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const initialized = pool?.secretKeys?.length > 0 && pool?.clientIds?.length > 0 && pool?.publishableKeys?.length > 0
+  const initialized =
+    pool?.secretKeys?.length > 0 &&
+    pool?.secretKeys[0]?.length &&
+    pool?.clientIds?.length > 0 &&
+    pool?.clientIds[0].length &&
+    pool?.publishableKeys?.length > 0 &&
+    pool?.publishableKeys[0].length
+  console.log('poolpool======================>', initialized, pool)
   const variant = !initialized ? 'init' : pool?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const currencyId = useMemo(() => rampAccount?.token?.address, [rampAccount])
   const rampCurrencyInput = useCurrency(currencyId)
@@ -28,7 +35,6 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
       variant={variant}
-      location="staked"
       pool={pool}
       currency={currency ?? rampCurrencyInput}
       rampAccount={rampAccount}
@@ -37,7 +43,6 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
   const [openPresentManual] = useModal(
     <CreateGaugeModal
       variant="update_parameters"
-      location="staked"
       pool={pool}
       currency={currency ?? rampCurrencyInput}
       rampAccount={rampAccount}
@@ -78,6 +83,8 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
           >
             {t('Initialize Ramp')}
           </Button>
+        </ActionContent>
+        <ActionContent>
           <Button
             width="100%"
             onClick={openPresentManual}

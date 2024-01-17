@@ -142,6 +142,7 @@ import {
   getLotteryHelperContract,
   getNFTSVGContract,
   getBusinessMinterContract,
+  getRampHelper2Contract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
@@ -501,6 +502,12 @@ export const useRampHelper = ({ chainId: chainId_ }: { chainId?: ChainId } = {})
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(() => getRampHelperContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
+export const useRampHelper2 = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getRampHelper2Contract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
 }
 
 export const useRampAds = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
