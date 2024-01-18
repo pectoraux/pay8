@@ -16,6 +16,8 @@ export function sortPools<T>(sortOption: string, poolsToSort: any) {
       return orderBy(poolsToSort, (pool: any) => Number(pool?.maxPartners), "desc");
     case "totalRevenue":
       return orderBy(poolsToSort, (pool: any) => Number(pool?.totalRevenue), "desc");
+    case "totalUnderCollateralized":
+      return orderBy(poolsToSort, (pool: any) => Number(pool?.totalUnderCollateralized), "desc");
     default:
       return poolsToSort;
   }

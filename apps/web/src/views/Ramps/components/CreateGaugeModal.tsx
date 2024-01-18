@@ -608,7 +608,7 @@ const CreateGaugeModal: React.FC<any> = ({
     }
   }
 
-  const onSuccessSale = async (onfirmedTxHash) => {
+  const onSuccessSale = async () => {
     switch (stage) {
       case LockStage.CONFIRM_MINT:
         if (pool?.automatic) {
@@ -1023,7 +1023,7 @@ const CreateGaugeModal: React.FC<any> = ({
     onSuccess: async ({ receipt }) => {
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       dispatch(fetchRampsAsync({ chainId }))
-      onSuccessSale(receipt.transactionHash)
+      onSuccessSale()
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)
     },

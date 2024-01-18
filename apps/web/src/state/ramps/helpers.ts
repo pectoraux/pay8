@@ -324,6 +324,7 @@ export const fetchRamp = async (address, chainId) => {
     }
     let _maxPartners
     let _totalRevenue
+    let totalUnderCollateralized
     const sessions = gauge?.sessions
     const clientIds = gauge?.clientIds
     const secretKeys = gauge?.secretKeys
@@ -468,6 +469,9 @@ export const fetchRamp = async (address, chainId) => {
                 forSale = true
               }
               _totalRevenue += parseInt(totalRevenue.result?.toString())
+              if (!(mintAvailable.result?.length && mintAvailable.result[2] === 0)) {
+                totalUnderCollateralized += 1
+              }
               return {
                 sousId: index,
                 status: protocolInfo.result[0] === 0 ? 'Sold' : protocolInfo.result[0] === 1 ? 'Open' : 'Close',
@@ -639,6 +643,7 @@ export const fetchRamp = async (address, chainId) => {
       maxPartners: _maxPartners,
       totalRevenue: _totalRevenue,
       forSale,
+      totalUnderCollateralized,
     }
   } catch (err) {
     console.log('fetchRamp err================>', err)

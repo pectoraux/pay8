@@ -217,12 +217,16 @@ export function PoolControls<T>({
                     value: "updatedAt",
                   },
                   {
-                    label: t("Maximum Partners"),
+                    label: t("Max Partners"),
                     value: "maxPartners",
                   },
                   {
                     label: t("Total Revenue"),
                     value: "totalRevenue",
+                  },
+                  {
+                    label: t("Undercollateralized"),
+                    value: "totalUnderCollateralized",
                   },
                 ]}
                 onOptionChange={handleSortOptionChange}
