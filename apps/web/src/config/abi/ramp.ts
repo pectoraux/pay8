@@ -184,11 +184,6 @@ export const rampABI = [
         name: '_token',
         type: 'address',
       },
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
     ],
     name: 'createProtocol',
     outputs: [],

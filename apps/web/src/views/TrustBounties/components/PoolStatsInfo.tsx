@@ -30,7 +30,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
   const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
-  console.log('onPresentNFTs====================>', pool)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
@@ -39,51 +38,36 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         <Text color="primary" fontSize="14px">
           {pool?.isNFT?.toString() === '0' ? t('FT Bounty') : t('NFT Bounty')}
         </Text>
-        {pool?.claims?.length ? (
-          <Text color="primary" fontSize="14px">
-            {t('Number of claims')} {`->`} {pool?.claims?.length}
-          </Text>
-        ) : null}
-        {pool?.friendlyClaims?.length ? (
-          <Text color="primary" fontSize="14px">
-            {t('Number of friendly claims')} {`->`} {pool?.friendlyClaims?.length}
-          </Text>
-        ) : null}
-        {pool?.minToClaim ? (
-          <Text color="primary" fontSize="14px">
-            {t('Claim Fee')} {`->`} {parseInt(pool?.minToClaim) / 100}%
-          </Text>
-        ) : null}
-        {parseInt(pool?.parentBountyId) ? (
-          <Text color="primary" fontSize="14px">
-            {t('Parent Bounty ID')} {`->`} {pool?.parentBountyId}
-          </Text>
-        ) : null}
-        {pool?.receivedApprovals?.length ? (
-          <Text color="primary" fontSize="14px">
-            {t('Received Approvals')} {`->`} {pool?.receivedApprovals?.length}
-          </Text>
-        ) : null}
-        {pool?.sentApprovals?.length ? (
-          <Text color="primary" fontSize="14px">
-            {t('Sent Approvals')} {`->`} {pool?.sentApprovals?.length}
-          </Text>
-        ) : null}
-        {pool?.collection?.countries ? (
-          <Text color="primary" fontSize="14px">
-            {t('Countries')} {`->`} {pool.collection.countries}
-          </Text>
-        ) : null}
-        {pool?.collection?.cities ? (
-          <Text color="primary" fontSize="14px">
-            {t('Cities')} {`->`} {pool.collection?.cities}
-          </Text>
-        ) : null}
-        {pool?.collection?.products ? (
-          <Text color="primary" fontSize="14px">
-            {t('Tags')} {`->`} {pool.collection?.products}
-          </Text>
-        ) : null}
+        <Text color="primary" fontSize="14px">
+          {t('Number of claims')} {`->`} {pool?.claims?.length}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Number of friendly claims')} {`->`} {pool?.friendlyClaims?.length}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Claim Fee')} {`->`} {parseInt(pool?.minToClaim) / 100}%
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Attachments')} {`->`} #{parseInt(pool?.attachments)}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Parent Bounty ID')} {`->`} {pool?.parentBountyId}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Received Approvals')} {`->`} {pool?.receivedApprovals?.length}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Sent Approvals')} {`->`} {pool?.sentApprovals?.length}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Countries')} {`->`} {pool?.collection?.countries}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Cities')} {`->`} {pool?.collection?.cities}
+        </Text>
+        <Text color="primary" fontSize="14px">
+          {t('Tags')} {`->`} {pool?.collection?.products}
+        </Text>
       </Flex>
       {pool?.tokenAddress && (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

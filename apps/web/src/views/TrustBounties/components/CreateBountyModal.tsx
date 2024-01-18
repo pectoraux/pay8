@@ -18,6 +18,7 @@ import {
 } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
@@ -28,7 +29,7 @@ import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import { useRouter } from 'next/router'
 import { useGetRequiresApproval } from 'state/trustbounties/hooks'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
+import { getRampHelper2Address, getVeFromWorkspace } from 'utils/addressHelpers'
 import { differenceInSeconds } from 'date-fns'
 import { FetchStatus } from 'config/constants/types'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
@@ -36,6 +37,8 @@ import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/st
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { fetchBountiesAsync } from 'state/trustbounties'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+
 import { Divider, GreyedOutContainer } from './styles'
 import { useApprovePool } from '../hooks/useApprove'
 
@@ -618,6 +621,14 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
         </Box>
       </Grid>
       <Divider />
+      <Flex flexDirection="column" alignItems="center" px="16px" pb="16px">
+        <Box>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Ramp Helper 2 Contract Address')}
+          </Text>
+          <CopyAddress title={truncateHash(getRampHelper2Address(), 15, 15)} account={getRampHelper2Address()} />
+        </Box>
+      </Flex>
       <Flex flexDirection="column" px="16px" pb="16px">
         {!account ? (
           <ConnectWalletButton />

@@ -256,7 +256,7 @@ const CreateGaugeModal: React.FC<any> = ({
     cap: pool?.cap || 0,
     salePrice: getBalanceNumber(pool?.rampSalePrice || 0),
     maxPartners: pool?.maxPartners || 0,
-    partnerBountyId: 0,
+    partnerBountyId: rampAccount?.bountyId ?? '',
     bountyIds: '',
     badgeId: pool?.rampBadgeId,
     _ve: pool?._ve || stakingTokenContract?.address || rampAccount?.token?.address,
@@ -636,7 +636,7 @@ const CreateGaugeModal: React.FC<any> = ({
     // eslint-disable-next-line consistent-return
     onConfirm: async () => {
       if (stage === LockStage.CONFIRM_CREATE_PROTOCOL) {
-        const args = [state.token, state.tokenId]
+        const args = [state.token]
         console.log('CONFIRM_CREATE_PROTOCOL===============>', args)
         return callWithGasPrice(rampContract, 'createProtocol', args).catch((err) =>
           console.log('CONFIRM_CREATE_PROTOCOL===============>', err),

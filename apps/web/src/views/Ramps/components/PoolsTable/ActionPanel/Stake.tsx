@@ -1,4 +1,4 @@
-import { Button, Text, useModal, Pool, Flex } from '@pancakeswap/uikit'
+import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -18,13 +18,13 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions, toggleSessions }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const initialized = true
-  // pool?.secretKeys?.length > 0 &&
-  // pool?.secretKeys[0]?.length &&
-  // pool?.clientIds?.length > 0 &&
-  // pool?.clientIds[0].length &&
-  // pool?.publishableKeys?.length > 0 &&
-  // pool?.publishableKeys[0].length
+  const initialized =
+    pool?.secretKeys?.length > 0 &&
+    pool?.secretKeys[0]?.length &&
+    pool?.clientIds?.length > 0 &&
+    pool?.clientIds[0].length &&
+    pool?.publishableKeys?.length > 0 &&
+    pool?.publishableKeys[0].length
   const variant = !initialized ? 'init' : pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const currencyId = useMemo(() => rampAccount?.token?.address, [rampAccount])
   const rampCurrencyInput = useCurrency(currencyId)

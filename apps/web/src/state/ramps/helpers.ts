@@ -416,6 +416,23 @@ export const fetchRamp = async (address, chainId) => {
                   },
                 ],
               })
+              const [rampPaidRevenue, rampShare] = await bscClient.multicall({
+                allowFailure: true,
+                contracts: [
+                  {
+                    address: rampAddress,
+                    abi: rampABI,
+                    functionName: 'paidRevenue',
+                    args: [token, protocolInfo.result[2]],
+                  },
+                  {
+                    address: getRampHelperAddress(),
+                    abi: rampHelperABI,
+                    functionName: 'getPartnerShare',
+                    args: [mintAvailable.result?.length && mintAvailable.result[1], protocolInfo.result[2]],
+                  },
+                ],
+              })
               const paidToPartners = await Promise.all(
                 partnerBounties.result?.map(async (pbounty) => {
                   const [paidRevenue, share] = await bscClient.multicall({
@@ -469,6 +486,8 @@ export const fetchRamp = async (address, chainId) => {
                 totalRevenue: totalRevenue.result?.toString(),
                 paidToPartners,
                 cap: protocolInfo.result[9]?.toString(),
+                rampPaidRevenue: rampPaidRevenue.result?.toString(),
+                rampShare: parseInt(rampShare.result?.toString()) / 100,
                 token: new Token(chainId, token, decimals ?? 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),
               }

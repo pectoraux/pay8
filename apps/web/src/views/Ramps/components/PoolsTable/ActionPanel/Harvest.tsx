@@ -17,7 +17,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { data: vc } = useGetCardId(pool.rampAddress, account)
   const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
   const [activeButtonIndex, setActiveButtonIndex] = useState(0)
-
+  console.log('rampAccountrampAccount==================>', rampAccount)
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
       {rampAccount ? (
@@ -214,10 +214,30 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
                 </Text>
               </Box>
             ))}
+            {!rampAccount?.paidToPartners && !rampAccount?.paidToPartners?.length() ? (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            ) : null}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Paid To Partner(s)')}
             </Text>
           </Flex>
+          <Box mr="8px">
+            {parseInt(rampAccount?.bountyId) ? (
+              <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+                {rampAccount?.bountyId?.toString()} {'=>'} {getBalanceNumber(rampAccount?.rampPaidRevenue)} {'=>'}{' '}
+                {rampAccount?.rampShare}%
+              </Text>
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Paid To Owner')}
+            </Text>
+          </Box>
           <Box mr="8px" height="32px">
             {parseInt(rampAccount?.profileId) ? (
               <Balance
