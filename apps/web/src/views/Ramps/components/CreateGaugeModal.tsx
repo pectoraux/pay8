@@ -611,7 +611,9 @@ const CreateGaugeModal: React.FC<any> = ({
   const onSuccessSale = async (onfirmedTxHash) => {
     switch (stage) {
       case LockStage.CONFIRM_MINT:
-        router.push(`/ramps/${router.query.ramp}`)
+        if (pool?.automatic) {
+          router.push(`/ramps/${router.query.ramp}`)
+        }
         break
       case LockStage.CONFIRM_INIT_RAMP:
         router.push(`/ramps`)
