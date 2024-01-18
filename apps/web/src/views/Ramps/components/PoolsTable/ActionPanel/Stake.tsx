@@ -19,12 +19,13 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const initialized =
-    pool?.secretKeys?.length > 0 &&
-    pool?.secretKeys[0]?.length &&
-    pool?.clientIds?.length > 0 &&
-    pool?.clientIds[0].length &&
-    pool?.publishableKeys?.length > 0 &&
-    pool?.publishableKeys[0].length
+    !pool?.automatic ||
+    (pool?.secretKeys?.length > 0 &&
+      pool?.secretKeys[0]?.length &&
+      pool?.clientIds?.length > 0 &&
+      pool?.clientIds[0].length &&
+      pool?.publishableKeys?.length > 0 &&
+      pool?.publishableKeys[0].length)
   const variant = !initialized ? 'init' : pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const currencyId = useMemo(() => rampAccount?.token?.address, [rampAccount])
   const rampCurrencyInput = useCurrency(currencyId)
