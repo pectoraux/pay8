@@ -81,7 +81,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
             variant="secondary"
             disabled={pool?.owner?.toLowerCase() !== account?.toLowerCase()}
           >
-            {t('Initialize Ramp')}
+            {t('Initialize Automatic Ramp')}
           </Button>
         </ActionContent>
         <ActionContent>
@@ -91,7 +91,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
             variant="secondary"
             disabled={pool?.owner?.toLowerCase() !== account?.toLowerCase()}
           >
-            {t('Switch To Manual')}
+            {t('Switch To Manual Ramp')}
           </Button>
         </ActionContent>
       </ActionContainer>

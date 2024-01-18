@@ -30,6 +30,7 @@ import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithA
 import { LockStage } from './types'
 import MintStage from './MintStage'
 import BurnStage from './BurnStage'
+import BurnStage2 from './BurnStage2'
 import PartnerStage from './PartnerStage'
 import BuyRampStage from './BuyRampStage'
 import UpdateDevStage from './UpdateDevStage'
@@ -678,18 +679,29 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_MINT) {
         const amount = getDecimalAmount(state.amountPayable, currency?.decimals)
-        const args = [state.token, account, amount.toString(), state.identityTokenId, state.sessionId || '']
+        const args = [state.token, state.recipient, amount.toString(), state.identityTokenId, state.sessionId || '']
         console.log('CONFIRM_MINT===============>', args)
-        const { request } = await client.simulateContract({
-          account: adminAccount,
-          address: rampContract.address,
-          abi: rampABI,
-          functionName: 'mint',
-          args: [state.token, account, BigInt(amount.toString()), state.identityTokenId, state.sessionId || ''],
-        })
-        await walletClient.writeContract(request).catch((err) => console.log('1CONFIRM_MINT===============>', err))
-        return callWithGasPrice(rampHelperContract, 'postMint', [state.sessionId || '']).catch((err) =>
-          console.log('2CONFIRM_MINT===============>', err),
+        if (pool?.automatic) {
+          const { request } = await client.simulateContract({
+            account: adminAccount,
+            address: rampContract.address,
+            abi: rampABI,
+            functionName: 'mint',
+            args: [
+              state.token,
+              state.recipient,
+              BigInt(amount.toString()),
+              state.identityTokenId,
+              state.sessionId || '',
+            ],
+          })
+          await walletClient.writeContract(request).catch((err) => console.log('1CONFIRM_MINT===============>', err))
+          return callWithGasPrice(rampHelperContract, 'postMint', [state.sessionId || '']).catch((err) =>
+            console.log('2CONFIRM_MINT===============>', err),
+          )
+        }
+        return callWithGasPrice(rampContract, 'mint', args).catch((err) =>
+          console.log('3CONFIRM_MINT===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_PROTOCOL) {
@@ -1041,8 +1053,11 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button
             mb="8px"
             variant="success"
+            disabled={!pool?.automatic || !rampAccount?.isOverCollateralised}
             onClick={() => {
-              if (pool?.redirect) {
+              if (!pool?.automatic) {
+                setStage(LockStage.MINT)
+              } else if (pool?.redirect) {
                 router.push(pool.redirect)
               } else {
                 setStage(LockStage.MINT)
@@ -1054,8 +1069,11 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button
             mb="8px"
             variant="danger"
+            disabled={!pool?.automatic || !rampAccount?.isOverCollateralised}
             onClick={() => {
-              if (pool?.redirect) {
+              if (!pool?.automatic) {
+                setStage(LockStage.BURN)
+              } else if (pool?.redirect) {
                 router.push(pool.redirect)
               } else {
                 setStage(LockStage.BURN)
@@ -1110,9 +1128,11 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button
             mb="8px"
             variant="success"
-            disabled={!rampAccount?.isOverCollateralised}
+            disabled={pool?.automatic && !rampAccount?.isOverCollateralised}
             onClick={() => {
-              if (pool?.redirect) {
+              if (!pool?.automatic) {
+                setStage(LockStage.MINT)
+              } else if (pool?.redirect) {
                 router.push(pool.redirect)
               } else {
                 setStage(LockStage.MINT)
@@ -1124,9 +1144,11 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button
             mb="8px"
             variant="danger"
-            disabled={!rampAccount?.isOverCollateralised}
+            disabled={pool?.automatic && !rampAccount?.isOverCollateralised}
             onClick={() => {
-              if (pool?.redirect) {
+              if (!pool?.automatic) {
+                setStage(LockStage.BURN)
+              } else if (pool?.redirect) {
                 router.push(pool.redirect)
               } else {
                 setStage(LockStage.BURN)
@@ -1269,7 +1291,7 @@ const CreateGaugeModal: React.FC<any> = ({
           continueToNextStage={continueToNextStage}
         />
       )}
-      {stage === LockStage.BURN && (
+      {stage === LockStage.BURN && pool?.automatic && (
         <BurnStage
           state={state}
           symbol={currency?.symbol}
@@ -1279,6 +1301,9 @@ const CreateGaugeModal: React.FC<any> = ({
           rampHelperContract={rampHelperContract}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.BURN && !pool?.automatic && (
+        <BurnStage2 state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.PARTNER && (
         <PartnerStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

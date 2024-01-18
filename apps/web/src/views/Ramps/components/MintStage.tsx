@@ -120,6 +120,19 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
   return (
     <>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Recipient')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="recipient"
+          value={state.recipient}
+          placeholder={t('input recipient address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Amount')}
@@ -177,7 +190,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
             }
           }}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-          disabled={!state.pk || !state.sk || state.amountPayable < 2}
+          disabled={pool?.automatic && (!state.pk || !state.sk || state.amountPayable < 2)}
         >
           {t('Mint')}
         </Button>
