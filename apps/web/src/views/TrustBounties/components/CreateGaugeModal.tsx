@@ -34,6 +34,7 @@ import CleanUpApprovalStage from './CleanUpApprovalStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import LocationStage from './LocationStage'
+import IncreaseEndTimeStage from './IncreaseEndTimeStage'
 import GetFundsFromApprovalStage from './GetFundsFromApprovalStage'
 import GetFundsFromValuepoolStage from './GetFundsFromValuepoolStage'
 
@@ -49,6 +50,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.GET_FROM_APPROVAL]: t('Get Funds From Approval'),
   [LockStage.GET_FROM_VALUEPOOL]: t('Get Funds From Valuepool'),
   [LockStage.ADD_RECURRING_BALANCE]: t('Add Recurring Balance'),
+  [LockStage.INCREASE_END_TIME]: t('Increase EndTime'),
   [LockStage.CLEAN_UP_APPROVALS]: t('Clean Up Approvals'),
   [LockStage.CLEAN_UP_BALANCES]: t('Clean Up Balances'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
@@ -56,6 +58,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_CLEAN_UP_BALANCES]: t('Back'),
   [LockStage.CONFIRM_CLEAN_UP_APPROVALS]: t('Back'),
   [LockStage.CONFIRM_ADD_RECURRING_BALANCE]: t('Back'),
+  [LockStage.CONFIRM_INCREASE_END_TIME]: t('Back'),
   [LockStage.CONFIRM_UPDATE_OWNER]: t('Back'),
   [LockStage.CONFIRM_UPDATE]: t('Back'),
   [LockStage.CONFIRM_APPLY_RESULTS]: t('Back'),
@@ -118,6 +121,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
     numPeriods: '',
     name: '',
     symbol: '',
+    endDate: '',
     bountyOwner: pool?.owner ?? '',
     startProtocolId: '',
     endProtocolId: '',
@@ -219,6 +223,12 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       case LockStage.CONFIRM_ADD_APPROVAL:
         setStage(LockStage.ADD_APPROVAL)
         break
+      case LockStage.INCREASE_END_TIME:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_INCREASE_END_TIME:
+        setStage(LockStage.INCREASE_END_TIME)
+        break
       case LockStage.GET_FROM_APPROVAL:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
@@ -285,6 +295,9 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         break
       case LockStage.ADD_APPROVAL:
         setStage(LockStage.CONFIRM_ADD_APPROVAL)
+        break
+      case LockStage.INCREASE_END_TIME:
+        setStage(LockStage.CONFIRM_INCREASE_END_TIME)
         break
       case LockStage.GET_FROM_APPROVAL:
         setStage(LockStage.CONFIRM_GET_FROM_APPROVAL)
@@ -442,6 +455,19 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           console.log('CONFIRM_CLEAN_UP_APPROVALS===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_INCREASE_END_TIME) {
+        const endDate = Math.max(
+          differenceInSeconds(new Date(state.endDate || 0), new Date(), {
+            roundingMethod: 'ceil',
+          }),
+          0,
+        )
+        const args = [state.bountyId, endDate?.toString()]
+        console.log('CONFIRM_INCREASE_END_TIME===============>', args)
+        return callWithGasPrice(trustBountiesContract, 'updateBountyEndTime', args).catch((err) =>
+          console.log('CONFIRM_INCREASE_END_TIME===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_ADD_APPROVAL) {
         const amount = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
         const endTime = Math.max(
@@ -506,14 +532,17 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           <Button mb="8px" onClick={() => setStage(LockStage.ADD_BALANCE)}>
             {t('ADD BALANCE')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_OWNER)}>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_OWNER)}>
             {t('UPDATE OWNER')}
           </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_LOCATION)}>
             {t('UPDATE LOCATION')}
           </Button>
           <Button variant="light" mb="8px" onClick={() => setStage(LockStage.APPLY_RESULTS)}>
             {t('APPLY RESULTS')}
+          </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.INCREASE_END_TIME)}>
+            {t('INCREASE BOUNTY END TIME')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_RECURRING_BALANCE)}>
             {t('ADD RECURRING BALANCE')}
@@ -642,6 +671,13 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       )}
       {stage === LockStage.ADD_RECURRING_BALANCE && (
         <AddRecurringBalanceStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.INCREASE_END_TIME && (
+        <IncreaseEndTimeStage
+          state={state}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stagesWithApproveButton.includes(stage) && (
         <ApproveAndConfirmStage

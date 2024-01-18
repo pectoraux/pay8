@@ -17,13 +17,15 @@ import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/Confi
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useRouter } from 'next/router'
-import { getVeFromWorkspace } from 'utils/addressHelpers'
+import { getStakeMarketBribeAddress, getVeFromWorkspace } from 'utils/addressHelpers'
 import { useAppDispatch } from 'state'
 import { fetchRampsAsync } from 'state/ramps'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
 import { rampABI } from 'config/abi/ramp'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import MintStage from './MintStage'
@@ -175,10 +177,12 @@ const CreateGaugeModal: React.FC<any> = ({
   const { toastSuccess } = useToast()
   const adminARP = pool
   const router = useRouter()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   const stakingTokenContract = useERC20(
     currency?.address || rampAccount?.token?.address || router.query?.userCurrency || '',
   )
   const saleTokenContract = useERC20(pool?.saleTokenAddress || '')
+  const defaultTokenContract = useERC20(DEFAULT_TFIAT || '')
   const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '')
   const rampHelperContract = useRampHelper()
   const rampHelper2Contract = useRampHelper2()
@@ -728,9 +732,10 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_BUY_RAMP) {
-        const args = [state.tokenId, state.bountyIds?.split(',')]
+        const args = [state.tokenId, state.bountyIds?.length ? state.bountyIds?.split(',') : []]
         console.log('CONFIRM_BUY_RAMP===============>', args)
         return callWithGasPrice(saleTokenContract, 'approve', [rampContract.address, MaxUint256])
+          .then(() => delay(3000))
           .then(() => callWithGasPrice(rampContract, 'buyRamp', args))
           .catch((err) => console.log('CONFIRM_BUY_RAMP===============>', err))
       }
@@ -919,9 +924,10 @@ const CreateGaugeModal: React.FC<any> = ({
           state.tags,
         ]
         console.log('CONFIRM_CLAIM===============>', args)
-        return callWithGasPrice(rampHelper2Contract, 'createClaim', args).catch((err) =>
-          console.log('CONFIRM_CLAIM===============>', err),
-        )
+        return callWithGasPrice(defaultTokenContract, 'approve', [getStakeMarketBribeAddress(), MaxUint256])
+          .then(() => delay(3000))
+          .then(() => callWithGasPrice(rampHelper2Contract, 'createClaim', args))
+          .catch((err) => console.log('CONFIRM_CLAIM===============>', err))
       }
       if (stage === LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE) {
         console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', [state.token])

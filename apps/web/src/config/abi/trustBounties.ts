@@ -235,6 +235,11 @@ export const trustBountiesABI = [
         type: 'address',
       },
       {
+        internalType: 'address',
+        name: 'recipient',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: 'endTime',
         type: 'uint256',
@@ -392,6 +397,11 @@ export const trustBountiesABI = [
         type: 'address',
       },
       {
+        internalType: 'address',
+        name: '_recipient',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: '_bountyId',
         type: 'uint256',
@@ -432,6 +442,11 @@ export const trustBountiesABI = [
       {
         internalType: 'address',
         name: '_attacker',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_recipient',
         type: 'address',
       },
       {

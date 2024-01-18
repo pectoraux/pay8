@@ -22,9 +22,12 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.CONFIRM_GET_FROM_VALUEPOOL,
   LockStage.CONFIRM_GET_FROM_APPROVAL,
+  LockStage.CONFIRM_INCREASE_END_TIME,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.INCREASE_END_TIME,
+  LockStage.CONFIRM_INCREASE_END_TIME,
   LockStage.UPDATE_LOCATION,
   LockStage.CONFIRM_UPDATE_LOCATION,
   LockStage.UPDATE,

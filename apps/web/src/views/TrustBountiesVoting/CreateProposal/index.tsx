@@ -50,7 +50,6 @@ import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import Layout from '../components/Layout'
-import VoteDetailsModal from '../components/VoteDetailsModal'
 import { ADMINS } from '../config'
 import { makeChoice, MINIMUM_CHOICES } from './Choices'
 import { getFormErrors } from './helpers'
@@ -61,9 +60,11 @@ const EasyMde = dynamic(() => import('components/EasyMde'), {
 })
 
 const CreateProposal = () => {
+  const { account } = useWeb3React()
   const [state, setState] = useState<any>(() => ({
     name: '',
     body: '',
+    recipient: account ?? '',
     choices: times(MINIMUM_CHOICES).map(makeChoice),
     startDate: null,
     startTime: null,
@@ -77,7 +78,6 @@ const CreateProposal = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
-  const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
   const { chainId } = useActiveChainId()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
@@ -119,6 +119,7 @@ const CreateProposal = () => {
         ? [account, bountyId, amount.toString()]
         : [
             account,
+            state.recipient,
             bountyId,
             amount.toString(),
             !!state.lockBounty,
@@ -307,6 +308,18 @@ const CreateProposal = () => {
                   name="amount"
                   value={state.amount}
                   placeholder={t('input amount to claim')}
+                  onChange={handleChange}
+                />
+              </Box>
+
+              <Box mb="24px">
+                <SecondaryLabel>{t('Recipient')}</SecondaryLabel>
+                <Input
+                  type="text"
+                  scale="sm"
+                  name="recipient"
+                  value={state.recipient}
+                  placeholder={t('input recipient address')}
                   onChange={handleChange}
                 />
               </Box>

@@ -234,19 +234,19 @@ export default {
   },
   rampHelper: {
     56: '0x',
-    4002: '0x09a81d1887Edc7E16b46a62B7D5Bf0604C5A716C',
+    4002: '0x758C404fb1802CE9b8e1c2fa30C495C299A09716',
   },
   rampHelper2: {
     56: '0x',
-    4002: '0x093C47D0496e4e5DeE8cf8FCe0F325b2067dC231',
+    4002: '0x5Ca6aeF6b7094e2bAF2B4A46E64dB05621Ba9291',
   },
   rampFactory: {
     56: '0x',
-    4002: '0x0Ac7cdD10Ac975447525c3897fD61F4cB76fc6aE',
+    4002: '0x4ed319C50095311b3377792A8b09A41Ae18d8258',
   },
   rampAds: {
     56: '0x',
-    4002: '0x6dA7644A30C4742FB211fc162a94dA63F7390f16',
+    4002: '0x53b77578AA1F5e51E910964e8FdF5932F94bc3D3',
   },
   extraTokenFactory: {
     56: '0x',
@@ -605,7 +605,7 @@ export default {
     4002: '0x4b81e883C13405D92F8986C06738Ff4Fa10d1573',
   },
   'real estate': {
-    4002: '0xa68a8c8979dEdf77c4A36e05D06c6a6e803Bed33', // '0x0515c86e557cc59bB575A420B69aFdF41EA873b1',
+    4002: '0xa68a8c8979dEdf77c4A36e05D06c6a6e803Bed33',
     56: '0x',
   },
   transportation: {

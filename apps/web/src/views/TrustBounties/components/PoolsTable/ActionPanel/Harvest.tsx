@@ -78,6 +78,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
           {t('Bounty Balance')}
         </Text>
       </Box>
+      <Box mr="8px" mb="8px" height="32px">
+        <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={pool?.attachments} prefix="#" />
+        <Text color="textSubtle" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+          {t('Attachments')}
+        </Text>
+      </Box>
       {pool?.bountyBalances
         ?.filter(
           (bb) =>
@@ -107,10 +113,10 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
             </Box>
           </>
         ))}
-      {claim ? (
+      {claim?.length ? (
         <>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {parseInt(claim[6]) === 0 ? t('At Peace') : t('At War')}
+            {parseInt(claim[7]) === 0 ? t('At Peace') : t('At War')}
           </Text>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Latest Claim Status')}

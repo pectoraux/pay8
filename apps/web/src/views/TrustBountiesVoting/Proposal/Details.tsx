@@ -9,7 +9,6 @@ import {
   LinkExternal,
   Text,
   Button,
-  useToast,
   Farm as FarmUI,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
@@ -18,16 +17,16 @@ import { Proposal } from 'state/types'
 import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
 import { useGetBounty, useGetIsLocked, useGetLatestClaim, useGetTokenData } from 'state/trustbounties/hooks'
-import { useCurrency } from 'hooks/Tokens'
 
-import { IPFS_GATEWAY } from '../config'
-import { ColorTag, ProposalStateTag } from '../components/Proposals/tags'
-import CreateContentModal from './CreateContentModal'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getTrustBountiesHelperAddress } from 'utils/addressHelpers'
 import { Native } from '@pancakeswap/sdk'
+
+import { IPFS_GATEWAY } from '../config'
+import { ColorTag, ProposalStateTag } from '../components/Proposals/tags'
+import CreateContentModal from './CreateContentModal'
 
 interface DetailsProps {
   proposal: Proposal
@@ -54,7 +53,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const { data: tokenData } = useGetTokenData(token ?? '')
 
   const amountClaimed = latestClaim?.length
-    ? getBalanceNumber(new BigNumber(latestClaim[3]?.toString()), tokenData?.decimals)
+    ? getBalanceNumber(new BigNumber(latestClaim[4]?.toString()), tokenData?.decimals)
     : 0
   const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
 

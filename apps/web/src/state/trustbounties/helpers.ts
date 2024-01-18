@@ -13,6 +13,7 @@ import {
 import { Address, erc20ABI } from 'wagmi'
 import { stakeMarketBribeABI } from 'config/abi/stakeMarketBribe'
 import { trustBountiesVoterABI } from 'config/abi/trustBountiesVoter'
+import { trustBountiesHelperABI } from 'config/abi/trustBountiesHelper'
 
 import { bountyField, approvalField } from './queries'
 
@@ -315,7 +316,7 @@ export const fetchBounties = async (
     bountiesFromSg
       .map(async (bounty) => {
         const { id: bountyId } = bounty
-        const [bountyInfo, totalLiquidity] = await bscClient.multicall({
+        const [bountyInfo, totalLiquidity, attachments] = await bscClient.multicall({
           allowFailure: true,
           contracts: [
             {
@@ -328,6 +329,12 @@ export const fetchBounties = async (
               address: getTrustBountiesAddress(),
               abi: trustBountiesABI,
               functionName: 'getBalance',
+              args: [BigInt(bountyId)],
+            },
+            {
+              address: getTrustBountiesHelperAddress(),
+              abi: trustBountiesHelperABI,
+              functionName: 'attachments',
               args: [BigInt(bountyId)],
             },
           ],
@@ -398,6 +405,7 @@ export const fetchBounties = async (
           isNFT,
           totalLiquidity: totalLiquidity.result?.toString(),
           products,
+          attachments: attachments.result.toString(),
         }
       })
       .flat(),
