@@ -120,13 +120,20 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             </Text>
           </Box>
           <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={6}
-              value={getBalanceNumber(rampAccount?.salePrice)}
-            />
+            {pool?.saleTokenSymbol && pool?.saleTokenSymbol?.length ? (
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={6}
+                value={getBalanceNumber(rampAccount?.salePrice)}
+                unit={` ${pool?.saleTokenSymbol}`}
+              />
+            ) : (
+              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                N/A
+              </Text>
+            )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Sale Price')}
             </Text>
