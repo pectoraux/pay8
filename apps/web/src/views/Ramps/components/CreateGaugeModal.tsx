@@ -364,7 +364,7 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_RECOVER_ADMIN:
-        setStage(LockStage.RECOVER_ADMIN)
+        setStage(LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_UPDATE_TOKEN_ID:
         setStage(LockStage.UPDATE_TOKEN_ID)
@@ -1158,6 +1158,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM)}>
             {t('CREATE CLAIM')}
           </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_RECOVER_ADMIN)}>
+            {t('RECOVER ADMIN PRIVILEGES')}
+          </Button>
         </Flex>
       )}
       {stage === LockStage.ADMIN_SETTINGS && (
@@ -1226,9 +1229,6 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
             {t('UPDATE BADGE ID')}
-          </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_RECOVER_ADMIN)}>
-            {t('RECOVER ADMIN PRIVILEGES')}
           </Button>
           {/* <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID)}>
             {t('UPDATE ACCOUNT TOKEN ID')}
