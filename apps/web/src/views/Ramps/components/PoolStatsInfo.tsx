@@ -25,14 +25,15 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrPool } from 'state/ramps/hooks'
+import { useCurrBribe, useCurrPool } from 'state/ramps/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
-import { setCurrPoolData } from 'state/ramps'
+import { setCurrPoolData, setCurrBribeData } from 'state/ramps'
 import { getRampHelperAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import WebPagesModal from './WebPagesModal'
+import WebPagesModal2 from './WebPagesModal2'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -84,7 +85,9 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const tokenAddress = earningToken?.address || ''
   const dispatch = useAppDispatch()
   const currState = useCurrPool()
-  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.nfts} />)
+  const currState2 = useCurrBribe()
+  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.rampNotes} />)
+  const [onPresentNFT] = useModal(<WebPagesModal2 height="500px" pool={pool} />)
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   return (
@@ -248,6 +251,48 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
             {balance.token.symbol}
           </Button>
         ))}
+      </Flex>
+      <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
+        {pool?.rampNotes?.length
+          ? pool?.rampNotes
+              .filter(
+                (protocol) =>
+                  account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
+                  account?.toLowerCase() === pool?.devaddr_?.toLowerCase(),
+              )
+              .map((balance) => (
+                <Button
+                  key={balance.id}
+                  onClick={() => {
+                    const newState = { ...currState2, [pool?.id]: balance.id }
+                    dispatch(setCurrBribeData(newState))
+                    onPresentNFT()
+                  }}
+                  mt="4px"
+                  mr={['2px', '2px', '4px', '4px']}
+                  scale="sm"
+                  variant={currState2[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+                >
+                  {balance.id?.split('_')[0]}
+                </Button>
+              ))
+          : null}
+        {pool?.rampNotes?.length &&
+        pool?.rampNotes.filter(
+          (protocol) =>
+            account?.toLowerCase() === protocol?.owner?.toLowerCase() ||
+            account?.toLowerCase() === pool?.devaddr_?.toLowerCase(),
+        )?.length ? (
+          <Button
+            key="clear-all"
+            variant="text"
+            scale="sm"
+            onClick={() => dispatch(setCurrBribeData({}))}
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            {t('Clear')}
+          </Button>
+        ) : null}
       </Flex>
       <Contacts contactChannels={contactChannels} contacts={contacts} />
     </>

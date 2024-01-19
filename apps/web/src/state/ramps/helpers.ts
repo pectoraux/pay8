@@ -6,7 +6,7 @@ import request, { gql } from 'graphql-request'
 import { GRAPH_API_RAMPS } from 'config/constants/endpoints'
 import { publicClient } from 'utils/wagmi'
 import { rampABI } from 'config/abi/ramp'
-import { erc20ABI } from 'wagmi'
+import { erc20ABI, erc721ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
 import { getRampAdsAddress, getRampHelperAddress } from 'utils/addressHelpers'
 import { getCollection } from 'state/cancan/helpers'
@@ -654,6 +654,33 @@ export const fetchRamp = async (address, chainId) => {
 export const fetchRamps = async ({ chainId }) => {
   const gauges = await getRamps(1000, 0, { active: true })
   const nfts = await getNfts()
+  const bscClient = publicClient({ chainId })
+  const rampNotes = await Promise.all(
+    nfts?.map(async (note) => {
+      const [owner, metadatUrl] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: getRampAdsAddress(),
+            abi: erc721ABI,
+            functionName: 'ownerOf',
+            args: [BigInt(note?.id)],
+          },
+          {
+            address: getRampAdsAddress(),
+            abi: erc721ABI,
+            functionName: 'tokenURI',
+            args: [BigInt(note?.id)],
+          },
+        ],
+      })
+      return {
+        ...note,
+        metadataUrl: metadatUrl.result,
+        owner: owner.result,
+      }
+    }),
+  )
   const ramps = await Promise.all(
     gauges
       .filter((gauge) => !!gauge)
@@ -663,6 +690,7 @@ export const fetchRamps = async ({ chainId }) => {
           sousId: index,
           ...data,
           nfts,
+          rampNotes,
         }
       })
       .flat(),

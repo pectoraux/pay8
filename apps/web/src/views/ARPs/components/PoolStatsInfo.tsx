@@ -33,13 +33,7 @@ interface ExpandedFooterProps {
   alignLinksToRight?: boolean
 }
 
-const PoolStatsInfo: React.FC<any> = ({
-  pool,
-  account,
-  currAccount,
-  hideAccounts = false,
-  alignLinksToRight = true,
-}) => {
+const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const router = useRouter()
