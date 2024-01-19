@@ -34,7 +34,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) => {
+const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract, onDismiss }) => {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -73,6 +73,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract }) =
           console.log('err0=================>', err)
         })
     }
+    onDismiss()
     return null
   }
 

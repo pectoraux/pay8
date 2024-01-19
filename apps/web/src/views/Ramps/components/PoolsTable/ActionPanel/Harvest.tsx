@@ -69,7 +69,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             {rampAccount?.isOverCollateralised ? t('Yes') : t('No')}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Over-Collateralized ?')}
+            {t('Over-Collateralized?')}
           </Text>
           <Box mr="8px" height="32px">
             <Balance
@@ -148,6 +148,19 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Total Revenue')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={0}
+              value={pool?.soldAccounts}
+              prefix="# "
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Number Of Accounts Sold')}
             </Text>
           </Box>
         </Flex>

@@ -736,6 +736,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [state.token, state.tokenId, state.bountyId]
         console.log('CONFIRM_BUY_ACCOUNT===============>', args)
         return callWithGasPrice(saleTokenContract, 'approve', [rampContract.address, MaxUint256])
+          .then(() => delay(3000))
           .then(() => callWithGasPrice(rampContract, 'buyAccount', args))
           .catch((err) => console.log('CONFIRM_BUY_ACCOUNT===============>', err))
       }
@@ -1405,7 +1406,12 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.CREATE_HOLDER && (
-        <CreateVCHolderStage state={state} handleChange={handleChange} rampHelperContract={rampHelperContract} />
+        <CreateVCHolderStage
+          state={state}
+          handleChange={handleChange}
+          rampHelperContract={rampHelperContract}
+          onDismiss={onDismiss}
+        />
       )}
       {stage === LockStage.DELETE && <DeleteStage continueToNextStage={continueToNextStage} />}
       {stage === LockStage.DELETE_RAMP && <DeleteRampStage continueToNextStage={continueToNextStage} />}
