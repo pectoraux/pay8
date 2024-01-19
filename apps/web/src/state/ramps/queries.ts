@@ -74,6 +74,7 @@ transactionHistory {
 export const rampFields = `
 id
 owner
+active
 createdAt
 updatedAt
 collectionId

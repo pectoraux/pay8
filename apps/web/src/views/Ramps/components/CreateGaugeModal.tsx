@@ -459,6 +459,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.DELETE:
         setStage(LockStage.ADMIN_SETTINGS)
         break
+      case LockStage.DELETE_RAMP:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.CONFIRM_DELETE_RAMP:
         setStage(LockStage.DELETE_RAMP)
         break
@@ -1259,6 +1262,9 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
             {t('DELETE PROTOCOL')}
+          </Button>
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_RAMP)}>
+            {t('DELETE RAMP')}
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.ADMIN_WITHDRAW)}>
             {t('WITHDRAW')}

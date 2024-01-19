@@ -95,7 +95,7 @@ export const getRamps = async (first = 5, skip = 0, where = {}) => {
     const res = await request(
       GRAPH_API_RAMPS,
       gql`
-      # query getRamps($first: Int!, $skip: Int!, $where: RAMP_filter) 
+      query getRamps($first: Int!, $skip: Int!, $where: Ramp_filter) 
       {
         ramps(first: $first, skip: $skip, where: $where) {
           ${rampFields}
