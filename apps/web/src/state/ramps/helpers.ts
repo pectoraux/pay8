@@ -652,7 +652,7 @@ export const fetchRamp = async (address, chainId) => {
 }
 
 export const fetchRamps = async ({ chainId }) => {
-  const gauges = await getRamps()
+  const gauges = await getRamps(1000, 0, { active: true })
   const nfts = await getNfts()
   const ramps = await Promise.all(
     gauges

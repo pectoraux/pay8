@@ -52,6 +52,7 @@ import UpdateOwnerStage from './UpdateOwnerStage'
 import UpdateTokenStage from './UpdateTokenStage'
 import UnlockBountyStage from './UnlockBountyStage'
 import UpdateProfileStage from './UpdateProfileStage'
+import UpdateTokenIdFromProfileStage from './UpdateTokenIdFromProfileStage'
 import AddExtraTokenStage from './AddExtraTokenStage'
 import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
@@ -79,6 +80,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_DEV_TOKEN_ID]: t('Update Ramp Leviathan Token'),
   [LockStage.UPDATE_BADGE_ID]: t('Update Attached Badge'),
   [LockStage.UPDATE_PROFILE_ID]: t('Update Attached Profile'),
+  [LockStage.UPDATE_TOKEN_ID_FROM_PROFILE]: t('Update Token ID From Profile'),
   [LockStage.BUY_RAMP]: t('Buy Ramp'),
   [LockStage.BUY_ACCOUNT]: t('Buy Account'),
   [LockStage.PARTNER]: t('Partner'),
@@ -106,6 +108,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_CLAIM_VP_REVENUE]: t('Back'),
   [LockStage.CONFIRM_REMOVE_EXTRA_TOKEN]: t('Back'),
   [LockStage.CONFIRM_ADD_EXTRA_TOKEN]: t('Back'),
+  [LockStage.CONFIRM_RECOVER_ADMIN]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BLACKLIST]: t('Back'),
   [LockStage.CONFIRM_UPDATE_DEV]: t('Back'),
   [LockStage.CONFIRM_UPDATE_ADMIN]: t('Back'),
@@ -118,6 +121,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_DELETE_RAMP]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BOUNTY]: t('Back'),
   [LockStage.CONFIRM_UPDATE_PROFILE_ID]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BADGE_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TOKEN_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID]: t('Back'),
@@ -206,7 +210,7 @@ const CreateGaugeModal: React.FC<any> = ({
     pk: pool?.publishableKeys && pool?.publishableKeys[0],
     owner: pool?.owner,
     sponsor: '',
-    tag: session ? session?.token?.address : stakingTokenContract?.address || rampAccount?.token?.address,
+    tag: session ? session?.token?.address : rampAccount?.token?.address || stakingTokenContract?.address,
     message: '',
     customTags: '',
     recipient: account ?? '',
@@ -274,7 +278,7 @@ const CreateGaugeModal: React.FC<any> = ({
     state: '',
     postal_code: '',
     country: '',
-    rampAddress: pool?.id,
+    rampAddress: pool?.rampAddress,
     cardholderId: pool?.cardholderId,
   }))
 
@@ -359,6 +363,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.UPDATE_BADGE_ID:
         setStage(LockStage.ADMIN_SETTINGS)
         break
+      case LockStage.CONFIRM_RECOVER_ADMIN:
+        setStage(LockStage.RECOVER_ADMIN)
+        break
       case LockStage.CONFIRM_UPDATE_TOKEN_ID:
         setStage(LockStage.UPDATE_TOKEN_ID)
         break
@@ -390,7 +397,7 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.VOTE:
         setStage(LockStage.SETTINGS)
@@ -429,7 +436,13 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.UPDATE_PROFILE_ID)
         break
       case LockStage.UPDATE_PROFILE_ID:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE:
+        setStage(LockStage.UPDATE_TOKEN_ID_FROM_PROFILE)
+        break
+      case LockStage.UPDATE_TOKEN_ID_FROM_PROFILE:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_UNLOCK_BOUNTY:
         setStage(LockStage.UNLOCK_BOUNTY)
@@ -545,6 +558,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_PROFILE_ID:
         setStage(LockStage.CONFIRM_UPDATE_PROFILE_ID)
+        break
+      case LockStage.UPDATE_TOKEN_ID_FROM_PROFILE:
+        setStage(LockStage.CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE)
         break
       case LockStage.UPDATE_TOKEN_ID:
         setStage(LockStage.CONFIRM_UPDATE_TOKEN_ID)
@@ -741,7 +757,8 @@ const CreateGaugeModal: React.FC<any> = ({
           .catch((err) => console.log('CONFIRM_BUY_ACCOUNT===============>', err))
       }
       if (stage === LockStage.CONFIRM_ADMIN_WITHDRAW) {
-        const amount = getDecimalAmount(state.amountReceivable, 18)
+        const amount = getDecimalAmount(state.amountPayable)
+        console.log('CONFIRM_ADMIN_WITHDRAW===============>', [state.token, amount.toString()])
         return callWithGasPrice(rampContract, 'withdraw', [state.token, amount.toString()]).catch((err) =>
           console.log('CONFIRM_ADMIN_WITHDRAW===============>', err),
         )
@@ -945,9 +962,9 @@ const CreateGaugeModal: React.FC<any> = ({
           .catch((err) => console.log('CONFIRM_CLAIM===============>', err))
       }
       if (stage === LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE) {
-        console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', [state.token])
+        console.log('CONFIRM_CLAIM_LOTTERY_REVENUE===============>', [state.token])
         return callWithGasPrice(rampAdsContract, 'claimLotteryRevenue', [state.token]).catch((err) =>
-          console.log('CONFIRM_CLAIM_SPONSOR_REVENUE===============>', err),
+          console.log('CONFIRM_CLAIM_LOTTERY_REVENUE===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_VOTE) {
@@ -973,9 +990,10 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_SPONSOR_TAG) {
         const args = [state.sponsor, state.tag, state.amountPayable, state.message]
         console.log('CONFIRM_SPONSOR_TAG===============>', args)
-        return callWithGasPrice(rampAdsContract, 'sponsorTag', args).catch((err) =>
-          console.log('CONFIRM_SPONSOR_TAG===============>', err),
-        )
+        return callWithGasPrice(defaultTokenContract, 'approve', [rampAdsContract.address, MaxUint256])
+          .then(() => delay(3000))
+          .then(() => callWithGasPrice(rampAdsContract, 'sponsorTag', args))
+          .catch((err) => console.log('CONFIRM_SPONSOR_TAG===============>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA) {
         const args = [state.tag]
@@ -999,6 +1017,12 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_UPDATE_BADGE_ID===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_RECOVER_ADMIN) {
+        console.log('CONFIRM_RECOVER_ADMIN===============>')
+        return callWithGasPrice(rampContract, 'updateDevFromCollectionId', []).catch((err) =>
+          console.log('CONFIRM_RECOVER_ADMIN===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_UNLOCK_BOUNTY) {
         const args = [state.token, state.bountyId]
         console.log('CONFIRM_UNLOCK_BOUNTY===============>', args)
@@ -1018,6 +1042,13 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_UPDATE_PROFILE===============>', args)
         return callWithGasPrice(rampContract, 'updateProfile', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PROFILE===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE) {
+        const args = [state.token, state.tokenId]
+        console.log('CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE===============>', args)
+        return callWithGasPrice(rampContract, 'updateTokenIdFromProfile', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE===============>', err),
         )
       }
     },
@@ -1118,6 +1149,12 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_INDIVIDUAL_PROTOCOL)}>
             {t('UPDATE TOKEN MARKET')}
           </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_PROFILE_ID)}>
+            {t('UPDATE PROFILE ID')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID_FROM_PROFILE)}>
+            {t('UPDATE TOKEN ID FROM PROFILE')}
+          </Button>
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CLAIM)}>
             {t('CREATE CLAIM')}
           </Button>
@@ -1181,13 +1218,19 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_DEV_TOKEN_ID)}>
             {t('UPDATE RAMP LEVIATHAN TOKEN ID')}
           </Button>
-          {/* <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_PROFILE_ID)}>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_PROFILE_ID)}>
             {t('UPDATE PROFILE ID')}
-          </Button> */}
-          {/* <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID_FROM_PROFILE)}>
+            {t('UPDATE TOKEN ID FROM PROFILE')}
+          </Button>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_BADGE_ID)}>
             {t('UPDATE BADGE ID')}
           </Button>
-          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID)}>
+          <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_RECOVER_ADMIN)}>
+            {t('RECOVER ADMIN PRIVILEGES')}
+          </Button>
+          {/* <Button mb="8px" variant="light" onClick={() => setStage(LockStage.UPDATE_TOKEN_ID)}>
             {t('UPDATE ACCOUNT TOKEN ID')}
           </Button> */}
           <Button mb="8px" variant="light" onClick={() => setStage(LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE)}>
@@ -1340,7 +1383,6 @@ const CreateGaugeModal: React.FC<any> = ({
         <AdminWithdrawStage
           state={state}
           currency={currency}
-          pendingRevenue={adminARP?.pendingRevenue}
           continueToNextStage={continueToNextStage}
           handleRawValueChange={handleRawValueChange}
         />
@@ -1362,6 +1404,13 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.UPDATE_PROFILE_ID && (
         <UpdateProfileStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.UPDATE_TOKEN_ID_FROM_PROFILE && (
+        <UpdateTokenIdFromProfileStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.UPDATE_BOUNTY && (
         <UpdateBountyStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Flex, Grid, Box, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
+import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { useCurrencyBalance } from 'state/wallet/hooks'
 
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
@@ -26,17 +27,14 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const AdminWithdrawStage: React.FC<any> = ({
-  state,
-  currency,
-  pendingRevenue,
-  handleRawValueChange,
-  continueToNextStage,
-}) => {
+const AdminWithdrawStage: React.FC<any> = ({ state, currency, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const [lockedAmount, setLockedAmount] = useState('')
-  const stakingTokenBalance = pendingRevenue ? new BigNumber(pendingRevenue) : BIG_ZERO
+  const balance = useCurrencyBalance(state.rampAddress ?? undefined, currency ?? undefined)
+  const stakingTokenBalance = balance
+    ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
+    : BIG_ZERO
   const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   useEffect(() => {

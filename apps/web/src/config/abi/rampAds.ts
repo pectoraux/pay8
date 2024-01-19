@@ -172,48 +172,11 @@ export const rampAdsABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'channels',
-    outputs: [
-      {
-        internalType: 'string',
-        name: 'message',
-        type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'active_period',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
         name: '_token',
         type: 'address',
       },
     ],
     name: 'claimLotteryRevenue',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_ramp',
-        type: 'address',
-      },
-    ],
-    name: 'claimPendingRevenueFromSponsors',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -237,6 +200,19 @@ export const rampAdsABI = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+    ],
+    name: 'claimValuepoolRevenue',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'defaultMintFactor',
     outputs: [
@@ -244,6 +220,30 @@ export const rampAdsABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_start',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_tag',
+        type: 'address',
+      },
+    ],
+    name: 'getAllMedia',
+    outputs: [
+      {
+        internalType: 'string[]',
+        name: '_media',
+        type: 'string[]',
       },
     ],
     stateMutability: 'view',
@@ -344,6 +344,19 @@ export const rampAdsABI = [
         internalType: 'bool',
         name: '',
         type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'lotteryId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -652,6 +665,11 @@ export const rampAdsABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: 'active_period',
+        type: 'uint256',
+      },
+      {
         internalType: 'string',
         name: 'message',
         type: 'string',
@@ -705,7 +723,7 @@ export const rampAdsABI = [
       },
       {
         internalType: 'uint256',
-        name: '_amount',
+        name: '_numMinutes',
         type: 'uint256',
       },
       {
@@ -845,6 +863,19 @@ export const rampAdsABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_maxNumMedia',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateMaxNumMedia',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '_token',
         type: 'address',
@@ -896,13 +927,18 @@ export const rampAdsABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: '_lotteryId',
+        type: 'uint256',
+      },
+      {
         internalType: 'address',
         name: '_uriGenerator',
         type: 'address',
       },
       {
         internalType: 'address',
-        name: '_lotteryAddress',
+        name: '_valuepoolAddress',
         type: 'address',
       },
     ],
@@ -922,6 +958,19 @@ export const rampAdsABI = [
     name: 'updateSponsorMedia',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'valuepoolAddress',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
 ] as const

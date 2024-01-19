@@ -565,14 +565,8 @@ export const rampABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'updateDevFromToken',
+    inputs: [],
+    name: 'updateDevFromCollectionId',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -708,6 +702,24 @@ export const rampABI = [
       },
     ],
     name: 'updateProtocol',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateTokenIdFromProfile',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
