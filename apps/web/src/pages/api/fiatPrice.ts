@@ -23,7 +23,7 @@ const handler = async (req, res) => {
     const response = await axios.request(options)
     console.log(response.data)
     res.send({
-      data: response.data['Realtime Currency Exchange Rate'][5],
+      data: response.data,
       error: null,
     })
   } catch (error) {

@@ -39,6 +39,16 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { data: priceInfo } = useGetFiatPrice('EUR', '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd')
   const { data: priceInfo2 } = useGetNativePrice('BTC', '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd')
   console.log('pools=============>', pools, tags, priceInfo, priceInfo2)
+  console.log(
+    '2pools=============>',
+    priceInfo['Realtime Currency Exchange Rate'],
+    priceInfo2['Realtime Currency Exchange Rate'],
+  )
+  console.log(
+    '3pools=============>',
+    priceInfo['Realtime Currency Exchange Rate']['Exchange Rate'],
+    priceInfo2['Realtime Currency Exchange Rate']['Exchange Rate'],
+  )
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
