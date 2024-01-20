@@ -17,7 +17,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { data: vc } = useGetCardId(pool.rampAddress, account)
   const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
   const [activeButtonIndex, setActiveButtonIndex] = useState(0)
-
+  console.log('rampAccountrampAccount==================>', rampAccount)
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
       {rampAccount ? (

@@ -100,7 +100,7 @@ export const getPrices = async (symbols, key, chainId) => {
           symbol: chain?.nativeCurrency?.symbol,
           key,
         })
-        return parseFloat(nativePrice?.data) / parseFloat(fiatPrice?.data)
+        return ((parseFloat(nativePrice?.data) / parseFloat(fiatPrice?.data)) * 10000).toString()
       }),
     )
     return prices
