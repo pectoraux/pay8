@@ -177,7 +177,7 @@ export const useGetFiatPrice = (symbol, key) => {
     status,
     mutate: refetch,
   } = useSWR(['useGetFiatPrice', symbol, key], async () => axios.post('/api/fiatPrice', { symbol, key }))
-  return { data, refetch, status }
+  return { data: data?.data, refetch, status }
 }
 
 export const useGetNativePrice = (symbol, key) => {
@@ -186,7 +186,7 @@ export const useGetNativePrice = (symbol, key) => {
     status,
     mutate: refetch,
   } = useSWR(['useGetNativePrice', symbol, key], async () => axios.post('/api/nativePrice', { symbol, key }))
-  return { data, refetch, status }
+  return { data: data?.data, refetch, status }
 }
 
 export const useGetSessionInfo = (sessionId, sk) => {
