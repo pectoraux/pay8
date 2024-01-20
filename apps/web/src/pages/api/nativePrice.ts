@@ -9,9 +9,9 @@ const handler = async (req, res) => {
     method: 'GET',
     url: 'https://alpha-vantage.p.rapidapi.com/query',
     params: {
-      to_currency: 'USD',
+      from_currency: 'BTC',
       function: 'CURRENCY_EXCHANGE_RATE',
-      from_currency: 'EUR',
+      to_currency: 'USD',
     },
     headers: {
       'X-RapidAPI-Key': '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd',

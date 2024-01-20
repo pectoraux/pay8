@@ -6,6 +6,7 @@ import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useMod
 import {
   useFilters,
   useGetFiatPrice,
+  useGetNativePrice,
   useGetTags,
   usePoolsPageFetch,
   usePoolsWithFilterSelector,
@@ -23,7 +24,11 @@ import Questions from './components/Questions'
 const DesktopButton = styled(Button)`
   align-self: flex-end;
 `
-
+// factor1 * native_price => usd_price
+// factor2 * usd_price => euro_price
+// factor2 * factor1 * native_price => euro_price
+// factor = factor2 * factor1
+//  factor * native_price => euro_price
 const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
@@ -31,8 +36,9 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [onPresentCreateGauge] = useModal(<CreateRampModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
-  const { data } = useGetFiatPrice('EUR', '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd')
-  console.log('pools=============>', pools, tags, data)
+  const { data: priceInfo } = useGetFiatPrice('EUR', '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd')
+  const { data: priceInfo2 } = useGetNativePrice('BTC', '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd')
+  console.log('pools=============>', pools, tags, priceInfo, priceInfo2)
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
