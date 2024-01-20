@@ -25,14 +25,13 @@ const handler = async (req, res) => {
   try {
     const response = await axios.request(options)
     console.log(response.data)
+    res.send({
+      data: response.data,
+      error: null,
+    })
   } catch (error) {
     res.send({
-      cardNumber: null,
-      cvc: null,
-      exp_month: null,
-      exp_year: null,
-      amount: null,
-      symbol: null,
+      data: null,
       error,
     })
   }
