@@ -195,7 +195,7 @@ export const useGetPrices = (symbols, key) => {
     data,
     status,
     mutate: refetch,
-  } = useSWRImmutable(['useGetPrices6', symbols?.length, key], async () => getPrices(symbols, key, chainId))
+  } = useSWRImmutable(['useGetPrices1', symbols?.length, key], async () => getPrices(symbols, key, chainId))
   return { data, refetch, status }
 }
 

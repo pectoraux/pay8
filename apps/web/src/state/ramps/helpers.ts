@@ -100,7 +100,7 @@ export const getPrices = async (symbols, key, chainId) => {
           symbol: chain?.nativeCurrency?.symbol,
           key,
         })
-        return ((parseFloat(nativePrice?.data) / parseFloat(fiatPrice?.data)) * 10000).toString()
+        return parseFloat(nativePrice?.data) / parseFloat(fiatPrice?.data)
       }),
     )
     return prices
@@ -446,7 +446,7 @@ export const fetchRamp = async (address, chainId) => {
                       address: getRampHelperAddress(),
                       abi: rampHelperABI,
                       functionName: 'convert',
-                      args: [token, BigInt(1)],
+                      args: [token, BigInt(1000000000000000000)],
                     },
                   ],
                 })

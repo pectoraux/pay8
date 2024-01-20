@@ -766,14 +766,15 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_FETCH_API) {
         const symbols = pool?.accounts?.map((acct) => acct?.token?.address)
-        const args = [symbols, prices]
+        const amounts = prices?.map((price) => getDecimalAmount(price)?.toString())
+        const args = [symbols, amounts]
         console.log('CONFIRM_FETCH_API===============>', args)
         const { request } = await client.simulateContract({
           account: adminAccount,
           address: rampHelperContract.address,
           abi: rampHelperABI,
           functionName: 'updateFiatTokenPrices',
-          args: [symbols, prices],
+          args: [symbols, amounts],
         })
         return walletClient
           .writeContract(request)
