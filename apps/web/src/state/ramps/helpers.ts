@@ -4,7 +4,7 @@ import { Token } from '@pancakeswap/sdk'
 import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_RAMPS } from 'config/constants/endpoints'
-import { publicClient } from 'utils/wagmi'
+import { chains, publicClient } from 'utils/wagmi'
 import { rampABI } from 'config/abi/ramp'
 import { erc20ABI, erc721ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
@@ -84,6 +84,26 @@ export const getTagFromRamp = async (rampAddress) => {
     const mtags = res.tags.map((tag) => tag.id)
     console.log('getTag===========>', res, mtags?.toString(), rampAddress)
     return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from ramp=============>', error)
+    return null
+  }
+}
+
+export const getPrices = async (symbols, key, chainId) => {
+  try {
+    const chain = chains.find((c) => c.id === chainId)
+    const prices = await Promise.all(
+      symbols?.map(async (symbol) => {
+        const { data: fiatPrice } = await axios.post('/api/fiatPrice', { symbol, key })
+        const { data: nativePrice } = await axios.post('/api/nativePrice', {
+          symbol: chain?.nativeCurrency?.symbol,
+          key,
+        })
+        return parseFloat(nativePrice?.data) / parseFloat(fiatPrice?.data)
+      }),
+    )
+    return prices
   } catch (error) {
     console.error('Failed to fetch tags from ramp=============>', error)
     return null
@@ -417,6 +437,23 @@ export const fetchRamp = async (address, chainId) => {
                   },
                 ],
               })
+              let nativeToToken = '0'
+              try {
+                const [_nativeToToken] = await bscClient.multicall({
+                  allowFailure: true,
+                  contracts: [
+                    {
+                      address: getRampHelperAddress(),
+                      abi: rampHelperABI,
+                      functionName: 'convert',
+                      args: [token, BigInt(1)],
+                    },
+                  ],
+                })
+                nativeToToken = _nativeToToken.result.toString()
+              } catch (err) {
+                console.log('Failed to fetch token price in native=============>')
+              }
               const [rampPaidRevenue, rampShare] = await bscClient.multicall({
                 allowFailure: true,
                 contracts: [
@@ -492,6 +529,7 @@ export const fetchRamp = async (address, chainId) => {
                 cap: protocolInfo.result[9]?.toString(),
                 rampPaidRevenue: rampPaidRevenue.result?.toString(),
                 rampShare: parseInt(rampShare.result?.toString()) / 100,
+                nativeToToken,
                 token: new Token(chainId, token, decimals ?? 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),
               }
@@ -615,6 +653,7 @@ export const fetchRamp = async (address, chainId) => {
     }
     const collection = await getCollection(gauge.collectionId)
     const _products = await getTagFromRamp(rampAddress?.toLowerCase())
+    const chain = chains.find((c) => c.id === chainId)
     // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
     return {
       ...gauge,
@@ -643,6 +682,7 @@ export const fetchRamp = async (address, chainId) => {
       maxPartners: _maxPartners,
       totalRevenue: _totalRevenue,
       forSale,
+      nativeSymbol: chain?.nativeCurrency?.symbol,
       totalUnderCollateralized,
     }
   } catch (err) {

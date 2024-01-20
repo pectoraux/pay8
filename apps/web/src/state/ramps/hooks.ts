@@ -27,7 +27,7 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
 } from './selectors'
-import { getAccountSg, getCardId, getRampSg, getSession, getTag, getTokenData } from './helpers'
+import { getAccountSg, getCardId, getPrices, getRampSg, getSession, getTag, getTokenData } from './helpers'
 
 export const useRampsConfigInitialize = () => {
   const { chainId } = useActiveChainId()
@@ -176,7 +176,7 @@ export const useGetFiatPrice = (symbol, key) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetFiatPrice', symbol, key], async () => axios.post('/api/fiatPrice', { symbol, key }))
+  } = useSWRImmutable(['useGetFiatPrice', symbol, key], async () => axios.post('/api/fiatPrice', { symbol, key }))
   return { data: data?.data, refetch, status }
 }
 
@@ -185,8 +185,18 @@ export const useGetNativePrice = (symbol, key) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetNativePrice', symbol, key], async () => axios.post('/api/nativePrice', { symbol, key }))
+  } = useSWRImmutable(['useGetNativePrice', symbol, key], async () => axios.post('/api/nativePrice', { symbol, key }))
   return { data: data?.data, refetch, status }
+}
+
+export const useGetPrices = (symbols, key) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWRImmutable(['useGetPrices6', symbols?.length, key], async () => getPrices(symbols, key, chainId))
+  return { data, refetch, status }
 }
 
 export const useGetSessionInfo = (sessionId, sk) => {

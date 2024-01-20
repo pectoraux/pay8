@@ -25,6 +25,7 @@ import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
 import { rampABI } from 'config/abi/ramp'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { rampHelperABI } from 'config/abi/rampHelper'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -57,6 +58,7 @@ import AddExtraTokenStage from './AddExtraTokenStage'
 import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
+import FetchPriceStage from './FetchPriceStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import LocationStage from './LocationStage'
 import BurnToVCStage from './BurnToVCStage'
@@ -82,6 +84,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_PROFILE_ID]: t('Update Attached Profile'),
   [LockStage.UPDATE_TOKEN_ID_FROM_PROFILE]: t('Update Token ID From Profile'),
   [LockStage.BUY_RAMP]: t('Buy Ramp'),
+  [LockStage.FETCH_API]: t('Fetch Price From API'),
   [LockStage.BUY_ACCOUNT]: t('Buy Account'),
   [LockStage.PARTNER]: t('Partner'),
   [LockStage.BURN]: t('Burn'),
@@ -99,6 +102,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
   [LockStage.BURN_TO_VC]: t('Burn To Virtual Card (VC)'),
   [LockStage.CREATE_HOLDER]: t('Create VC Holder'),
+  [LockStage.CONFIRM_FETCH_API]: t('Back'),
   [LockStage.CONFIRM_CREATE_HOLDER]: t('Back'),
   [LockStage.CONFIRM_BURN_TO_VC]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
@@ -281,7 +285,7 @@ const CreateGaugeModal: React.FC<any> = ({
     rampAddress: pool?.rampAddress,
     cardholderId: pool?.cardholderId,
   }))
-
+  const [prices, setPrices] = useState<any>()
   const [nftFilters, setNftFilters] = useState<any>({
     country: pool?.countries,
     city: pool?.cities,
@@ -395,6 +399,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CREATE_HOLDER:
         setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_FETCH_API:
+        setStage(LockStage.FETCH_API)
+        break
+      case LockStage.FETCH_API:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
@@ -580,6 +590,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CREATE_HOLDER:
         setStage(LockStage.CONFIRM_CREATE_HOLDER)
         break
+      case LockStage.FETCH_API:
+        setStage(LockStage.CONFIRM_FETCH_API)
+        break
       case LockStage.UPDATE_DEV_TOKEN_ID:
         setStage(LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID)
         break
@@ -750,6 +763,24 @@ const CreateGaugeModal: React.FC<any> = ({
         return callWithGasPrice(rampContract, 'burn', args).catch((err) =>
           console.log('CONFIRM_BURN===============>', err),
         )
+      }
+      if (stage === LockStage.CONFIRM_FETCH_API) {
+        const symbols = pool?.accounts?.map((acct) => acct?.token?.address)
+        const amounts = symbols?.map((symbol, index) => {
+          return getDecimalAmount(prices[index])?.toString()
+        })
+        const args = [symbols, amounts]
+        console.log('CONFIRM_FETCH_API===============>', args)
+        const { request } = await client.simulateContract({
+          account: adminAccount,
+          address: rampHelperContract.address,
+          abi: rampHelperABI,
+          functionName: 'updateFiatTokenPrices',
+          args: [symbols, amounts],
+        })
+        return walletClient
+          .writeContract(request)
+          .catch((err) => console.log('1CONFIRM_FETCH_API===============>', err))
       }
       if (stage === LockStage.CONFIRM_BUY_ACCOUNT) {
         const args = [state.token, state.tokenId, state.bountyId]
@@ -1087,6 +1118,9 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.FETCH_API)}>
+            {t('FETCH PRICE FROM API')}
+          </Button>
           <Button
             mb="8px"
             variant="success"
@@ -1168,6 +1202,9 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.FETCH_API)}>
+            {t('FETCH PRICE FROM API')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL)}>
             {t('ADD TOKEN MARKET')}
           </Button>
@@ -1378,6 +1415,9 @@ const CreateGaugeModal: React.FC<any> = ({
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.FETCH_API && (
+        <FetchPriceStage state={state} pool={pool} setPrices={setPrices} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.BUY_ACCOUNT && (
         <BuyAccountStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

@@ -3,7 +3,7 @@ export const rampHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_nativeCoin',
+        name: '_contractAddress',
         type: 'address',
       },
       {
@@ -188,6 +188,19 @@ export const rampHelperABI = [
       },
     ],
     name: 'DeleteProtocol',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'ramp',
+        type: 'address',
+      },
+    ],
+    name: 'DeleteRamp',
     type: 'event',
   },
   {
@@ -531,6 +544,19 @@ export const rampHelperABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
+    name: 'attach',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '_token',
         type: 'address',
@@ -562,10 +588,23 @@ export const rampHelperABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'cap',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
-        name: '_ramp',
+        name: '_user',
         type: 'address',
       },
     ],
@@ -595,7 +634,7 @@ export const rampHelperABI = [
     ],
     name: 'checkBounty',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -655,54 +694,6 @@ export const rampHelperABI = [
     inputs: [
       {
         internalType: 'address',
-        name: '_ramp',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: '_token',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_bountyId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: '_lockBounty',
-        type: 'bool',
-      },
-      {
-        internalType: 'string',
-        name: '_title',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: '_content',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: '_tags',
-        type: 'string',
-      },
-    ],
-    name: 'createClaim',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
         name: '_token',
         type: 'address',
       },
@@ -727,6 +718,32 @@ export const rampHelperABI = [
       },
     ],
     name: 'deleteRamp',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+    ],
+    name: 'detach',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_owner',
+        type: 'address',
+      },
+    ],
+    name: 'emitBuyRamp',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1021,8 +1038,18 @@ export const rampHelperABI = [
         type: 'address',
       },
       {
+        internalType: 'bool',
+        name: '_automatic',
+        type: 'bool',
+      },
+      {
         internalType: 'uint256',
         name: '_toMint',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_fee',
         type: 'uint256',
       },
       {
@@ -1041,7 +1068,7 @@ export const rampHelperABI = [
         type: 'string',
       },
     ],
-    name: 'mint',
+    name: 'mintToken',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1148,32 +1175,6 @@ export const rampHelperABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_ramp',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddressAt',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'tradingFee',
     outputs: [
@@ -1247,6 +1248,24 @@ export const rampHelperABI = [
       },
     ],
     name: 'updateExtraOracle',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: '_tokens',
+        type: 'address[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: '_prices',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'updateFiatTokenPrices',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1345,6 +1364,11 @@ export const rampHelperABI = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_cap',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
         name: '_tradingFee',
         type: 'uint256',
       },
@@ -1352,6 +1376,11 @@ export const rampHelperABI = [
         internalType: 'uint256',
         name: '_bufferTime',
         type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: '_check',
+        type: 'bool',
       },
       {
         internalType: 'address',
