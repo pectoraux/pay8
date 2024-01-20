@@ -171,6 +171,15 @@ export const useGetCardFromStripe = (sk, cardId) => {
   return { data, refetch, status }
 }
 
+export const useGetFiatPrice = (symbol, key) => {
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetFiatPrice', symbol, key], async () => axios.post('/api/fiatPrice', { symbol, key }))
+  return { data, refetch, status }
+}
+
 export const useGetSessionInfo = (sessionId, sk) => {
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
   let sk0

@@ -3,7 +3,13 @@ import styled from 'styled-components'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
-import { useFilters, useGetTags, usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
+import {
+  useFilters,
+  useGetFiatPrice,
+  useGetTags,
+  usePoolsPageFetch,
+  usePoolsWithFilterSelector,
+} from 'state/ramps/hooks'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 
 import PoolControls from './components/PoolControls'
@@ -25,7 +31,8 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [onPresentCreateGauge] = useModal(<CreateRampModal />)
   const nftFilters = useFilters()
   const tags = useGetTags()
-  console.log('pools=============>', tags)
+  const { data } = useGetFiatPrice('EUR', '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd')
+  console.log('pools=============>', pools, tags, data)
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
