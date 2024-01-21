@@ -13,7 +13,7 @@ const RemoveStage: React.FC<any> = ({ pool, setPrices, continueToNextStage }) =>
   const { t } = useTranslation()
   const [updated, SetUpdated] = useState(false)
   const symbols = pool?.accounts?.map((account) => account?.token?.symbol)
-  const { data, status } = useGetPrices(symbols, process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO)
+  const { data, status, refetch } = useGetPrices(symbols, process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO)
   console.log('3mprices=================>', data)
   return (
     <>
@@ -22,6 +22,14 @@ const RemoveStage: React.FC<any> = ({ pool, setPrices, continueToNextStage }) =>
           {t('Fetched Prices For This Ramp')}
         </Text>
         <Flex flexDirection="column" alignItems="center">
+          <Button
+            scale="xs"
+            mb="8px"
+            endIcon={status === FetchStatus.Fetching ? <AutoRenewIcon spin color="currentColor" /> : null}
+            onClick={() => refetch()}
+          >
+            {t('Refresh')}
+          </Button>
           <Flex flexDirection="column">
             {data?.length === symbols?.length &&
               symbols?.map((symbol, index) => <Text>{`${symbol} => ${data[index]}`}</Text>)}

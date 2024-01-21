@@ -90,22 +90,24 @@ export const getTagFromRamp = async (rampAddress) => {
   }
 }
 
-export const getPrices = async (symbols, key, chainId) => {
+export const getPrices = async (symbols, key, nativePrice) => {
   try {
-    const chain = chains.find((c) => c.id === chainId)
     const prices = await Promise.all(
       symbols?.map(async (symbol) => {
-        const { data: fiatPrice } = await axios.post('/api/fiatPrice', { symbol, key })
-        const { data: nativePrice } = await axios.post('/api/nativePrice', {
-          symbol: chain?.nativeCurrency?.symbol,
-          key,
-        })
-        return parseFloat(nativePrice?.data) / parseFloat(fiatPrice?.data)
+        try {
+          const { data: fiatPrice } = await axios.post('/api/fiatPrice', { symbol, key })
+          console.log('1mprices===========================>', fiatPrice, nativePrice)
+          return parseFloat(nativePrice) / parseFloat(fiatPrice?.data)
+        } catch (err) {
+          console.log('0mprices=============>', err)
+          return 0
+        }
       }),
     )
+    console.log('2mprices===========================>', prices)
     return prices
   } catch (error) {
-    console.error('Failed to fetch tags from ramp=============>', error)
+    console.error('Failed to fetch tags from ramp=============>', error, symbols)
     return null
   }
 }

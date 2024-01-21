@@ -3,7 +3,7 @@ import axios from 'axios'
 // get fiat prices
 const handler = async (req, res) => {
   const { symbol, key } = req.body
-  console.log('handler================>', symbol)
+  console.log('1handler================>', symbol)
 
   const options = {
     method: 'GET',
@@ -26,6 +26,7 @@ const handler = async (req, res) => {
       error: null,
     })
   } catch (error) {
+    console.log('error=================>', error)
     res.send({
       data: null,
       error,

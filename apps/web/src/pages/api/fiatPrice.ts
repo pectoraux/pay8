@@ -26,7 +26,7 @@ const handler = async (req, res) => {
       error: null,
     })
   } catch (error) {
-    console.log('error==========>', error)
+    console.log('1error==========>', error)
     res.send({
       data: null,
       error,

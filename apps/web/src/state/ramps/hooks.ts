@@ -8,6 +8,7 @@ import { FAST_INTERVAL } from 'config/constants'
 import useSWRImmutable from 'swr/immutable'
 import axios from 'axios'
 import NodeRSA from 'encrypt-rsa'
+import { chains } from 'utils/wagmi'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
@@ -191,11 +192,14 @@ export const useGetNativePrice = (symbol, key) => {
 
 export const useGetPrices = (symbols, key) => {
   const { chainId } = useActiveChainId()
+  const chain = chains.find((c) => c.id === chainId)
+  const { data: nativePrice } = useGetNativePrice(chain?.nativeCurrency?.symbol, key)
+  console.log('00mprices===================>', nativePrice)
   const {
     data,
     status,
     mutate: refetch,
-  } = useSWRImmutable(['useGetPrices1', symbols?.length, key], async () => getPrices(symbols, key, chainId))
+  } = useSWR(['useGetPrices4', symbols?.length, key], async () => getPrices(symbols, key, nativePrice?.data))
   return { data, refetch, status }
 }
 
