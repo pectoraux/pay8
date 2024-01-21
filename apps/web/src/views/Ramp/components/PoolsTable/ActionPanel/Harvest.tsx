@@ -123,19 +123,20 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               {t('Total Revenue')}
             </Text>
           </Box>
-          <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={0}
-              value={pool?.soldAccounts}
-              prefix="# "
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Number Of Accounts Sold')}
-            </Text>
-          </Box>
+          {rampAccount ? (
+            <Box mr="8px" height="32px">
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={6}
+                value={getBalanceNumber(rampAccount?.nativeToToken)}
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('%native% price in %token%', { native: pool?.nativeSymbol, token: rampAccount?.token?.symbol })}
+              </Text>
+            </Box>
+          ) : null}
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">

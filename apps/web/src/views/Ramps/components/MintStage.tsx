@@ -66,7 +66,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
     })
     if (data.error) {
       console.log('data.error=====================>', data.error)
-      setErrorMessage(data.error)
+      setErrorMessage(data.error?.raw?.message)
     } else {
       const stripe = await loadStripe(state.pk)
 
