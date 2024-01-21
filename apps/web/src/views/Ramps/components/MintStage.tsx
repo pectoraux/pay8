@@ -45,6 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
   const client = createPublicClient({
     chain: fantomTestnet,
@@ -65,23 +66,25 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
     })
     if (data.error) {
       console.log('data.error=====================>', data.error)
-    }
-    const stripe = await loadStripe(state.pk)
+      setErrorMessage(data.error)
+    } else {
+      const stripe = await loadStripe(state.pk)
 
-    const { request } = await client.simulateContract({
-      account: acct,
-      address: getRampHelperAddress(),
-      abi: rampHelperABI,
-      functionName: 'preMint',
-      args: [rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id],
-    })
-    await walletClient
-      .writeContract(request)
-      .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
-      .catch((err) => {
-        console.log('createGauge=================>', err)
-        setIsLoading(false)
+      const { request } = await client.simulateContract({
+        account: acct,
+        address: getRampHelperAddress(),
+        abi: rampHelperABI,
+        functionName: 'preMint',
+        args: [rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id],
       })
+      await walletClient
+        .writeContract(request)
+        .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
+        .catch((err) => {
+          console.log('createGauge=================>', err)
+          setIsLoading(false)
+        })
+    }
   }
 
   useEffect(() => {
@@ -180,6 +183,18 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
+        {errorMessage ? (
+          <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+            <Flex alignSelf="flex-start">
+              <ErrorIcon width={24} height={24} color="textSubtle" />
+            </Flex>
+            <Box>
+              <Text small color="textSubtle">
+                {t(errorMessage)}
+              </Text>
+            </Box>
+          </Grid>
+        ) : null}
         <Button
           mb="8px"
           onClick={() => {
