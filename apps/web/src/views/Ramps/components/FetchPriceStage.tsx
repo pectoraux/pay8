@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex, Box, Text, Button, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useGetPrices } from 'state/ramps/hooks'
@@ -12,9 +12,17 @@ interface RemoveStageProps {
 const RemoveStage: React.FC<any> = ({ pool, setPrices, continueToNextStage }) => {
   const { t } = useTranslation()
   const [updated, SetUpdated] = useState(false)
+  const [spin, setSpin] = useState(false)
   const [disabled, setDisabled] = useState(false)
   const symbols = pool?.accounts?.map((account) => account?.token?.symbol)
   const { data, status, refetch } = useGetPrices(symbols, process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  useEffect(() => {
+    if (spin) {
+      delay(60000) // wait 1 min
+        .then(() => setSpin(false))
+    }
+  }, [spin])
   console.log('3mprices=================>', data)
   return (
     <>
@@ -26,9 +34,11 @@ const RemoveStage: React.FC<any> = ({ pool, setPrices, continueToNextStage }) =>
           <Button
             scale="xs"
             mb="8px"
-            endIcon={status === FetchStatus.Fetching ? <AutoRenewIcon spin color="currentColor" /> : null}
+            disabled={spin}
+            endIcon={status === FetchStatus.Fetching || spin ? <AutoRenewIcon spin color="currentColor" /> : null}
             onClick={() => {
               refetch()
+              setSpin(true)
               setDisabled(false)
             }}
           >
