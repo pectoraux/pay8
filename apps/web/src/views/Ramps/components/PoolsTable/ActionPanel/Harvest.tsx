@@ -17,6 +17,23 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { data: vc } = useGetCardId(pool.rampAddress, account)
   const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
   const [activeButtonIndex, setActiveButtonIndex] = useState(0)
+
+  function ccFormat(value) {
+    const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
+    const matches = v.match(/\d{4,16}/g)
+    const match = (matches && matches[0]) || ''
+    const parts = []
+
+    for (let i = 0, len = match.length; i < len; i += 4) {
+      parts.push(match.substring(i, i + 4))
+    }
+
+    if (parts.length) {
+      return parts.join(' ')
+    }
+    return value
+  }
+
   console.log('rampAccountrampAccount==================>', rampAccount)
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
@@ -317,7 +334,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
       {activeButtonIndex ? (
         <Flex flexDirection="column" mt="10px" justifyContent="center" alignItems="center">
           <Text small bold color="textSubtle">
-            {t(`Card Number: ${cardInfo?.data?.cardNumber}`)}
+            {t(`Card Number: ${ccFormat(cardInfo?.data?.cardNumber)}`)}
           </Text>
           <Text small bold color="textSubtle">
             {t(`CVV: ${cardInfo?.data?.cvc}`)}
