@@ -28,7 +28,7 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
 } from './selectors'
-import { getAccountSg, getCardId, getPrices, getRampSg, getSession, getTag, getTokenData } from './helpers'
+import { fetchRamp, getAccountSg, getCardId, getPrices, getRampSg, getSession, getTag, getTokenData } from './helpers'
 
 export const useRampsConfigInitialize = () => {
   const { chainId } = useActiveChainId()
@@ -149,6 +149,16 @@ export const useGetAccountSg = (accountAddress, channel) => {
     status,
     mutate: refetch,
   } = useSWR(['account-data', accountAddress, channel], async () => getAccountSg(accountAddress, channel))
+  return { data, refetch, status }
+}
+
+export const useFetchRamp = (rampAddress) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useFetchRamp', rampAddress], async () => fetchRamp(rampAddress, chainId))
   return { data, refetch, status }
 }
 

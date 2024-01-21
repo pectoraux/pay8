@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Flex,
   Grid,
@@ -15,11 +15,12 @@ import {
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { createPublicClient, http, custom, createWalletClient } from 'viem'
 import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
 import { rampHelperABI } from 'config/abi/rampHelper'
+import { useFetchRamp } from 'state/ramps/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { getCardAddress, getRampHelperAddress } from 'utils/addressHelpers'
 
 import { GreyedOutContainer, Divider } from './styles'
@@ -44,6 +45,12 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const { data: ramp, refetch } = useFetchRamp(state.rampAddress?.toLowerCase())
+  const rampAccount = useMemo(
+    () => ramp?.accounts?.find((acct) => acct.token.address?.toLowerCase() === state?.token?.toLowerCase()),
+    [ramp?.accounts, state?.token],
+  )
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
   const client = createPublicClient({
     chain: fantomTestnet,
@@ -64,41 +71,48 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
       })
       if (data.error) {
         console.log('data.error=====================>', data.error)
-      }
-      console.log('createGauge=================>', [
-        state.rampAddress,
-        getCardAddress(),
-        currency?.address,
-        state.amountPayable,
-        state.identityTokenId,
-        data.id,
-      ])
-      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-      const { request } = await client.simulateContract({
-        account: acct,
-        address: getRampHelperAddress(),
-        abi: rampHelperABI,
-        functionName: 'preMint',
-        args: [
+        setErrorMessage(data.error?.raw?.message)
+        setIsLoading(false)
+      } else {
+        console.log('createGauge=================>', [
           state.rampAddress,
           getCardAddress(),
           currency?.address,
           state.amountPayable,
           state.identityTokenId,
           data.id,
-        ],
-      })
-      await walletClient
-        .writeContract(request)
-        .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
-        .catch((err) => {
-          console.log('createGauge=================>', err)
-          setIsLoading(false)
+        ])
+        const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+        const { request } = await client.simulateContract({
+          account: acct,
+          address: getRampHelperAddress(),
+          abi: rampHelperABI,
+          functionName: 'preMint',
+          args: [
+            state.rampAddress,
+            getCardAddress(),
+            currency?.address,
+            state.amountPayable,
+            state.identityTokenId,
+            data.id,
+          ],
         })
+        await walletClient
+          .writeContract(request)
+          .then(async () => stripe.redirectToCheckout({ sessionId: data?.id }))
+          .catch((err) => {
+            console.log('createGauge=================>', err)
+            setIsLoading(false)
+          })
+      }
     } catch (err) {
       console.log('1createGauge=================>', err)
     }
   }
+
+  useEffect(() => {
+    refetch()
+  }, [refetch, state.rampAddress])
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -182,6 +196,18 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
           onChange={handleChange}
         />
       </GreyedOutContainer> */}
+      {errorMessage ? (
+        <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+          <Flex alignSelf="flex-start">
+            <ErrorIcon width={24} height={24} color="textSubtle" />
+          </Flex>
+          <Box>
+            <Text small color="red">
+              {t(errorMessage)}
+            </Text>
+          </Box>
+        </Grid>
+      ) : null}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="460px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -200,6 +226,10 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, handleChange }) =
           mb="8px"
           onClick={processCharge}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
+          disabled={
+            !ramp?.automatic ||
+            parseInt(getBalanceNumber(rampAccount?.mintable)?.toString()) < parseInt(state.amountPayable)
+          }
         >
           {t('Add Balance')}
         </Button>

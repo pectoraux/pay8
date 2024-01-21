@@ -124,7 +124,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
 
   const [state, setState] = useState<any>(() => ({
-    rampAddress: '0xD97557B53A8221Dd8a7A032852b5E5F6662e76C4',
+    rampAddress: '0x0fc05a2326215763701451a50d558a0a5b6f0003',
     owner: pool?.owner,
     avatar: pool?.collection?.avatar,
     bountyId: pool?.bountyId,

@@ -96,11 +96,11 @@ export const fetchCard = async (ownerAddress, chainId) => {
 }
 
 export const fetchCards = async ({ fromCard, chainId }) => {
-  const fromGraph = await getCards(0, 0, {})
+  const fromGraph = await getCards(1000, 0, {})
   try {
     const cards = await Promise.all(
       fromGraph
-        ?.map(async (card, index) => {
+        ?.map(async (card) => {
           const bscClient = publicClient({ chainId })
           const balances = await Promise.all(
             card?.balances?.map(async (tk) => {

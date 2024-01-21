@@ -1,10 +1,13 @@
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
-import { Heading, Flex, Text, PageHeader, Pool, Button, useModal, Loading } from '@pancakeswap/uikit'
+import { Heading, Flex, Text, PageHeader, Pool, Button, useModal, Loading, ScanLink } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import Page from 'components/Layout/Page'
 import { useCurrency } from 'hooks/Tokens'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { getBlockExploreLink } from 'utils'
+import { getCardAddress } from 'utils/addressHelpers'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useEffect, useMemo, useState } from 'react'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useTranslation } from '@pancakeswap/localization'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
@@ -30,17 +33,17 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const [currency, setCurrency] = useState(inputCurency)
   const { username, session_id: sessionId, state: status, userCurrency } = router.query
   const [openedAlready, setOpenedAlready] = useState(false)
+  const { chainId } = useActiveChainId()
   const [onPresentCreateGauge] = useModal(<CreateCardModal currency={currency} />)
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   const ogPool = useMemo(
     () => pools?.find((pool) => pool?.username?.toLowerCase() === username?.toString()?.toLowerCase()),
-    [pools],
+    [pools, username],
   )
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
@@ -88,6 +91,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         </Flex>
       </PageHeader>
       <Page>
+        <Flex mb="2px" justifyContent="flex-start">
+          <ScanLink href={getBlockExploreLink(getCardAddress(), 'address', chainId)} bold>
+            {t('View PayCard Contract')}
+          </ScanLink>
+        </Flex>
         <PoolControls pools={pools}>
           {({ chosenPools, normalizedUrlSearch }) => (
             <>

@@ -1,34 +1,13 @@
-import {
-  Flex,
-  LinkExternal,
-  AutoRenewIcon,
-  ArrowForwardIcon,
-  Pool,
-  ScanLink,
-  useModal,
-  Button,
-  Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
-} from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Pool, ScanLink, useModal, Button } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
 import { useCurrPool } from 'state/cards/hooks'
 import { useAppDispatch } from 'state'
-import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/cards'
-
-import WebPagesModal from './WebPagesModal'
-import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { getCardAddress } from 'utils/addressHelpers'
 
@@ -47,7 +26,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const earningToken = currProtocol
   const tokenAddress = currProtocol?.tokenAddress || ''
   const dispatch = useAppDispatch()
-  const [onPresentNotes] = useModal(<WebPagesModal height="500px" nfts={pool?.notes} />)
   return (
     <>
       {pool?.owner && (
