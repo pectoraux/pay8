@@ -219,7 +219,7 @@ const SetPriceStage: React.FC<any> = ({
             (!state.pk ||
               !state.sk ||
               state.amountPayable < 2 ||
-              parseInt(mintable.toString()) >= parseInt(state.amountPayable))
+              parseInt(mintable.toString()) < parseInt(state.amountPayable))
           }
         >
           {t('Mint')}
