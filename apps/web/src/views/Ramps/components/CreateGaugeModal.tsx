@@ -777,7 +777,10 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_FETCH_API || stage === LockStage.CONFIRM_FETCH_API2) {
-        const symbols = pool?.accounts?.map((acct) => acct?.token?.address)
+        const symbols =
+          stage === LockStage.CONFIRM_FETCH_API
+            ? pool?.accounts?.map((acct) => acct?.token?.address)
+            : [rampAccount?.token?.address]
         const amounts = prices?.map((price) => getDecimalAmount(price)?.toString())
         const args = [symbols, amounts]
         console.log('CONFIRM_FETCH_API===============>', args)
