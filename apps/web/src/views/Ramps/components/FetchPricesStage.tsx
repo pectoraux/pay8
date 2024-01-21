@@ -19,8 +19,7 @@ const RemoveStage: React.FC<any> = ({ pool, setPrices, continueToNextStage }) =>
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   useEffect(() => {
     if (spin) {
-      delay(60000) // wait 1 min
-        .then(() => setSpin(false))
+      delay(10000).then(() => setSpin(false))
     }
   }, [spin])
   console.log('3mprices=================>', data)

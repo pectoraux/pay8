@@ -67,6 +67,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
     if (data.error) {
       console.log('data.error=====================>', data.error)
       setErrorMessage(data.error?.raw?.message)
+      setIsLoading(false)
     } else {
       const stripe = await loadStripe(state.pk)
 
@@ -169,6 +170,18 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
           onChange={handleChange}
         />
       </GreyedOutContainer>
+      {errorMessage ? (
+        <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
+          <Flex alignSelf="flex-start">
+            <ErrorIcon width={24} height={24} color="textSubtle" />
+          </Flex>
+          <Box>
+            <Text small color="red">
+              {t(errorMessage)}
+            </Text>
+          </Box>
+        </Grid>
+      ) : null}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -183,18 +196,6 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        {errorMessage ? (
-          <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
-            <Flex alignSelf="flex-start">
-              <ErrorIcon width={24} height={24} color="textSubtle" />
-            </Flex>
-            <Box>
-              <Text small color="textSubtle">
-                {t(errorMessage)}
-              </Text>
-            </Box>
-          </Grid>
-        ) : null}
         <Button
           mb="8px"
           onClick={() => {
