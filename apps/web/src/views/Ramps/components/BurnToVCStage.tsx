@@ -23,6 +23,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 
 import { GreyedOutContainer, Divider } from './styles'
+import { ccFormat } from './PoolsTable/ActionPanel/Harvest'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -159,7 +160,7 @@ const BurnStage: React.FC<any> = ({ state, setBurntToVC, rampHelperContract, onD
       {activeButtonIndex ? (
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <Text small bold color="textSubtle">
-            {t(`Card Number: ${cardInfo?.data?.cardNumber}`)}
+            {t(`Card Number: ${ccFormat(cardInfo?.data?.cardNumber)}`)}
           </Text>
           <Text small bold color="textSubtle">
             {t(`CVV: ${cardInfo?.data?.cvc}`)}

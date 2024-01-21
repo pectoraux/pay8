@@ -5,6 +5,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { useGetCardFromStripe, useGetCardId } from 'state/ramps/hooks'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import { ccFormat } from 'views/Ramps/components/PoolsTable/ActionPanel/Harvest'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
@@ -279,7 +280,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
       {activeButtonIndex ? (
         <Flex flexDirection="column" mt="10px" justifyContent="center" alignItems="center">
           <Text small bold color="textSubtle">
-            {t(`Card Number: ${cardInfo?.data?.cardNumber}`)}
+            {t(`Card Number: ${ccFormat(cardInfo?.data?.cardNumber)}`)}
           </Text>
           <Text small bold color="textSubtle">
             {t(`CVV: ${cardInfo?.data?.cvc}`)}
