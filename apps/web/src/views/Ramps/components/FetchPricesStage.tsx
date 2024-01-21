@@ -9,12 +9,12 @@ interface RemoveStageProps {
   continueToNextStage: () => void
 }
 
-const RemoveStage: React.FC<any> = ({ symb, setPrices, continueToNextStage }) => {
+const RemoveStage: React.FC<any> = ({ pool, setPrices, continueToNextStage }) => {
   const { t } = useTranslation()
   const [updated, SetUpdated] = useState(false)
   const [spin, setSpin] = useState(false)
   const [disabled, setDisabled] = useState(false)
-  const symbols = [symb]
+  const symbols = pool?.accounts?.map((account) => account?.token?.symbol)
   const { data, status, refetch } = useGetPrices(symbols, process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO)
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   useEffect(() => {
@@ -28,7 +28,7 @@ const RemoveStage: React.FC<any> = ({ symb, setPrices, continueToNextStage }) =>
     <>
       <Box p="16px" maxWidth="360px">
         <Text fontSize="24px" bold>
-          {t('Fetched Price For This Token')}
+          {t('Fetched Prices For This Ramp')}
         </Text>
         <Flex flexDirection="column" alignItems="center">
           <Button

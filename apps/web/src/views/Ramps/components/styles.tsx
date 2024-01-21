@@ -12,6 +12,7 @@ export const stagesWithApproveButton = [LockStage.CONFIRM_BURN]
 
 export const stagesWithConfirmButton = [
   LockStage.CONFIRM_FETCH_API,
+  LockStage.CONFIRM_FETCH_API2,
   LockStage.CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE,
   LockStage.CONFIRM_SPONSOR_TAG,
   LockStage.CONFIRM_VOTE,
@@ -53,7 +54,9 @@ export const stagesWithConfirmButton = [
 
 export const stagesWithBackButton = [
   LockStage.FETCH_API,
+  LockStage.FETCH_API2,
   LockStage.CONFIRM_FETCH_API,
+  LockStage.CONFIRM_FETCH_API2,
   LockStage.CONFIRM_RECOVER_ADMIN,
   LockStage.UPDATE_TOKEN_ID_FROM_PROFILE,
   LockStage.CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE,

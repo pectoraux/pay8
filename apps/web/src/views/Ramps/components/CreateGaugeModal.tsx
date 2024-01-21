@@ -59,6 +59,7 @@ import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import FetchPriceStage from './FetchPriceStage'
+import FetchPricesStage from './FetchPricesStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import LocationStage from './LocationStage'
 import BurnToVCStage from './BurnToVCStage'
@@ -84,7 +85,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_PROFILE_ID]: t('Update Attached Profile'),
   [LockStage.UPDATE_TOKEN_ID_FROM_PROFILE]: t('Update Token ID From Profile'),
   [LockStage.BUY_RAMP]: t('Buy Ramp'),
-  [LockStage.FETCH_API]: t('Fetch Price From API'),
+  [LockStage.FETCH_API]: t('Fetch Prices From API'),
+  [LockStage.FETCH_API2]: t('Fetch Price From API'),
   [LockStage.BUY_ACCOUNT]: t('Buy Account'),
   [LockStage.PARTNER]: t('Partner'),
   [LockStage.BURN]: t('Burn'),
@@ -103,6 +105,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.BURN_TO_VC]: t('Burn To Virtual Card (VC)'),
   [LockStage.CREATE_HOLDER]: t('Create VC Holder'),
   [LockStage.CONFIRM_FETCH_API]: t('Back'),
+  [LockStage.CONFIRM_FETCH_API2]: t('Back'),
   [LockStage.CONFIRM_CREATE_HOLDER]: t('Back'),
   [LockStage.CONFIRM_BURN_TO_VC]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
@@ -406,6 +409,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.FETCH_API:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
+      case LockStage.CONFIRM_FETCH_API2:
+        setStage(LockStage.FETCH_API2)
+        break
+      case LockStage.FETCH_API2:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
       case LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
@@ -593,6 +602,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.FETCH_API:
         setStage(LockStage.CONFIRM_FETCH_API)
         break
+      case LockStage.FETCH_API2:
+        setStage(LockStage.CONFIRM_FETCH_API2)
+        break
       case LockStage.UPDATE_DEV_TOKEN_ID:
         setStage(LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID)
         break
@@ -764,7 +776,7 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_BURN===============>', err),
         )
       }
-      if (stage === LockStage.CONFIRM_FETCH_API) {
+      if (stage === LockStage.CONFIRM_FETCH_API || stage === LockStage.CONFIRM_FETCH_API2) {
         const symbols = pool?.accounts?.map((acct) => acct?.token?.address)
         const amounts = prices?.map((price) => getDecimalAmount(price)?.toString())
         const args = [symbols, amounts]
@@ -1117,6 +1129,9 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.FETCH_API)}>
+            {t('FETCH ALL PRICES FROM API')}
+          </Button>
+          <Button mb="8px" variant="success" disabled={!rampAccount} onClick={() => setStage(LockStage.FETCH_API2)}>
             {t('FETCH PRICE FROM API')}
           </Button>
           <Button
@@ -1201,6 +1216,9 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.ADMIN_SETTINGS && (
         <Flex flexDirection="column" width="100%" px="16px" pt="16px" pb="16px">
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.FETCH_API)}>
+            {t('FETCH ALL PRICES FROM API')}
+          </Button>
+          <Button mb="8px" variant="success" disabled={!rampAccount} onClick={() => setStage(LockStage.FETCH_API2)}>
             {t('FETCH PRICE FROM API')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL)}>
@@ -1415,7 +1433,15 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.FETCH_API && (
-        <FetchPriceStage state={state} pool={pool} setPrices={setPrices} continueToNextStage={continueToNextStage} />
+        <FetchPricesStage state={state} pool={pool} setPrices={setPrices} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.FETCH_API2 && (
+        <FetchPriceStage
+          state={state}
+          symb={rampAccount?.token?.symbol}
+          setPrices={setPrices}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.BUY_ACCOUNT && (
         <BuyAccountStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
