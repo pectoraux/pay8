@@ -40,7 +40,15 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({
+  state,
+  pool,
+  currency,
+  rampAddress,
+  mintable,
+  handleChange,
+  continueToNextStage,
+}) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -206,7 +214,10 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
             }
           }}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
-          disabled={pool?.automatic && (!state.pk || !state.sk || state.amountPayable < 2)}
+          disabled={
+            pool?.automatic &&
+            (!state.pk || !state.sk || state.amountPayable < 2 || parseInt(mintable.toString()) >= state.amountPayable)
+          }
         >
           {t('Mint')}
         </Button>

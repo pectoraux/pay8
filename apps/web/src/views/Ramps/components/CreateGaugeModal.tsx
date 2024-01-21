@@ -1391,6 +1391,7 @@ const CreateGaugeModal: React.FC<any> = ({
         <MintStage
           state={state}
           pool={pool}
+          mintable={getBalanceNumber(rampAccount?.mintable)}
           currency={currency}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}

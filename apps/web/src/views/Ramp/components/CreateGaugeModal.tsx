@@ -8,7 +8,7 @@ import { useERC20, useRampContract, useRampHelper } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
@@ -831,6 +831,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state={state}
           pool={pool}
           currency={currency}
+          mintable={getBalanceNumber(rampAccount?.mintable)}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
           callWithGasPrice={callWithGasPrice}
