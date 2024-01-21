@@ -216,7 +216,10 @@ const SetPriceStage: React.FC<any> = ({
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
           disabled={
             pool?.automatic &&
-            (!state.pk || !state.sk || state.amountPayable < 2 || parseInt(mintable.toString()) >= state.amountPayable)
+            (!state.pk ||
+              !state.sk ||
+              state.amountPayable < 2 ||
+              parseInt(mintable.toString()) >= parseInt(state.amountPayable))
           }
         >
           {t('Mint')}
