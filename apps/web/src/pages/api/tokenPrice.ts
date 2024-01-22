@@ -41,6 +41,7 @@ const handler = async (req, res) => {
   try {
     const response = await axios.request(options)
     const chunks = response.data?.split(',')?.filter((val) => !Number.isNaN(parseFloat(val)))
+    console.log('chunks==================>', response.data)
     res.send({
       data: chunks?.length && chunks[0],
       // data: Object.values(response.data)[0]['5. Exchange Rate'],

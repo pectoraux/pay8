@@ -91,7 +91,7 @@ const RemoveStage: React.FC<any> = ({ encrypted, symb, setPrices, continueToNext
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" disabled={!updated || disabled} onClick={continueToNextStage}>
-          {t('Continue')}
+          {t('Continues')}
         </Button>
       </Flex>
     </>

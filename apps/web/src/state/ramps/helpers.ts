@@ -8,12 +8,11 @@ import { chains, publicClient } from 'utils/wagmi'
 import { rampABI } from 'config/abi/ramp'
 import { erc20ABI, erc721ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
-import { getExtraTokenFactoryAddress, getRampAdsAddress, getRampHelperAddress } from 'utils/addressHelpers'
+import { getRampAdsAddress, getRampHelperAddress } from 'utils/addressHelpers'
 import { getCollection } from 'state/cancan/helpers'
 import { veABI } from 'config/abi/ve'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { extraTokenFactoryABI } from 'config/abi/extraTokenFactory'
 
 import { rampFields, accountFields, sessionFields } from './queries'
 
@@ -168,7 +167,7 @@ export const getExtraPrices = async (symbols, decrypted, nativePrice) => {
         try {
           const { data: tokenPrice } = await axios.post('/api/tokenPrice', { symbol, decrypted })
           console.log('11mprices===========================>', tokenPrice, nativePrice)
-          return parseFloat(nativePrice) * parseFloat(tokenPrice?.data)
+          return parseFloat(tokenPrice?.data) / parseFloat(nativePrice)
         } catch (err) {
           console.log('0mprices=============>', err)
           return 0
@@ -510,7 +509,6 @@ export const fetchRamp = async (address, chainId) => {
                   },
                 ],
               })
-              let encrypted
               const extraToken = await getExtraTokenCall(token?.toLowerCase())
 
               let nativeToToken = '0'

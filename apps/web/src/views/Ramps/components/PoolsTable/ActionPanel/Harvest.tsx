@@ -323,10 +323,11 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
               {t('ExTra Tokens')}
             </Text>
           ) : null}
-          {extraTokens?.length &&
-            extraTokens?.map((extraToken) => {
-              return <CopyAddress title={truncateHash(extraToken?.id)} account={extraToken?.id} />
-            })}
+          {extraTokens?.length
+            ? extraTokens?.map((extraToken) => {
+                return <CopyAddress title={truncateHash(extraToken?.id)} account={extraToken?.id} />
+              })
+            : null}
         </Flex>
       </ActionContent>
       {cardInfo?.data?.cardNumber?.length ? (
