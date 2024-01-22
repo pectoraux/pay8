@@ -228,7 +228,7 @@ export const useGetPrices = (symbols, key) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetPrices4', symbols?.length, key], async () => getPrices(symbols, key, nativePrice?.data))
+  } = useSWR(['useGetPrices5', symbols?.length, key], async () => getPrices(symbols, key, nativePrice?.data))
   return { data, refetch, status }
 }
 
@@ -251,7 +251,7 @@ export const useGetExtraPrices = (symbols, decrypted, key) => {
     status,
     mutate: refetch,
   } = useSWR(
-    ['useGetExtraPrices23', symbols?.length, key],
+    ['useGetExtraPrices26', symbols?.length, key],
     async () => getExtraPrices(symbols, decrypted, nativePrice?.data),
     {
       keepPreviousData: true,

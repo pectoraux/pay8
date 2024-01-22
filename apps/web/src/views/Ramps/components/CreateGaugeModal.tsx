@@ -713,25 +713,13 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_CREATE_PROTOCOL2) {
         const encryptRsa = new EncryptRsa()
-        // const dico = JSON.stringify({
-        //   method: 'GET',
-        //   url: 'https://alpha-vantage.p.rapidapi.com/query',
-        //   params: {
-        //     to_currency: 'USD',
-        //     function: 'CURRENCY_EXCHANGE_RATE',
-        //     from_currency: '%symbol%',
-        //   },
-        //   headers: {
-        //     'X-RapidAPI-Key': '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd',
-        //     'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com',
-        //   },
-        // })
         const encrypted = encryptRsa.encryptStringWithRsaPublicKey({
-          text: JSON.stringify(state.callObject),
+          text: state.callObject,
           publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
         })
         const args = [state.name, state.symbol, encrypted, account]
-        console.log('CONFIRM_CREATE_PROTOCOL2===============>', args)
+        console.log('CONFIRM_CREATE_PROTOCOL2===============>', args, encrypted)
+        console.log('1CONFIRM_CREATE_PROTOCOL2===============>', JSON.parse(state.callObject))
         return callWithGasPrice(extraTokenFactoryContract, 'mintExtraToken', args).catch((err) =>
           console.log('CONFIRM_CREATE_PROTOCOL2===============>', err),
         )
