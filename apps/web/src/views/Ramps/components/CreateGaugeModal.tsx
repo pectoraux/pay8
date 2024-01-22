@@ -727,7 +727,7 @@ const CreateGaugeModal: React.FC<any> = ({
         //   },
         // })
         const encrypted = encryptRsa.encryptStringWithRsaPublicKey({
-          text: state.callObject,
+          text: JSON.stringify(state.callObject),
           publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
         })
         const args = [state.name, state.symbol, encrypted, account]
