@@ -717,9 +717,9 @@ const CreateGaugeModal: React.FC<any> = ({
           text: JSON.stringify(state.callObject),
           publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
         })
-        const args = [encrypted]
+        const args = [state.name, state.symbol, encrypted, account]
         console.log('CONFIRM_CREATE_PROTOCOL2===============>', args)
-        return callWithGasPrice(extraTokenFactoryContract, 'updateCall', args).catch((err) =>
+        return callWithGasPrice(extraTokenFactoryContract, 'mintExtraToken', args).catch((err) =>
           console.log('CONFIRM_CREATE_PROTOCOL2===============>', err),
         )
       }
