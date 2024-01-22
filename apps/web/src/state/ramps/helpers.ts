@@ -54,7 +54,7 @@ export const getExtraTokenCall = async (extraToken) => {
         query getExtraTokenCall($extraToken: String) {
           extraToken(id: $extraToken) {
             id
-            call
+            callObject
             owner
           }
         }
@@ -78,7 +78,7 @@ export const getExtraTokens = async (accountAddress) => {
         query getExtraTokens($extraToken: String) {
           extraTokens(where: { active: true, owner: $accountAddress }) {
             id
-            call
+            callObject
             owner
           }
         }
