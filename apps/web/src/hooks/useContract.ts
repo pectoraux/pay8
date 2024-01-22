@@ -532,6 +532,12 @@ export const useExtraTokenContract = (extraTokenAddress: Address) => {
   )
 }
 
+export const useExtraTokenFactoryContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(() => getExtraTokenFactoryContract(signer, chainId_ ?? chainId), [signer, chainId_, chainId])
+}
+
 export const useTrustBountiesContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()

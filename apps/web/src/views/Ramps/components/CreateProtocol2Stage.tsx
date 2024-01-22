@@ -26,6 +26,32 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Name')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="name"
+          value={state.name}
+          placeholder={t('input extra token name')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Symbol')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="symbol"
+          value={state.symbol}
+          placeholder={t('input extra token symbol')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Call Object')}
         </Text>
         <Input
@@ -44,7 +70,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add a new extra token market to your ramp. Token markets enable you to process minting and burning operations for various tokens. For instance, the USD token market will enable you to mint/burn USD tokens for users. You can add token markets for most FIAT currencies. All available token markets for this ramp are listed in the bottom left section of the panel as soon as they are created.',
+              'This will deploy a new extra token market that your can later on add to the ramp so it can be minted by users.',
             )}
           </Text>
         </Box>
@@ -52,7 +78,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Add')}
+          {t('Deploy')}
         </Button>
       </Flex>
     </>

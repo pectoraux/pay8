@@ -11,7 +11,7 @@ import {
   useRampHelper,
   useRampAds,
   useRampHelper2,
-  useExtraTokenContract,
+  useExtraTokenFactoryContract,
 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
@@ -301,7 +301,7 @@ const CreateGaugeModal: React.FC<any> = ({
     cardholderId: pool?.cardholderId,
   }))
   const [prices, setPrices] = useState<any>()
-  const extraTokenContract = useExtraTokenContract(state.token)
+  const extraTokenFactoryContract = useExtraTokenFactoryContract()
   const [nftFilters, setNftFilters] = useState<any>({
     country: pool?.countries,
     city: pool?.cities,
@@ -719,7 +719,7 @@ const CreateGaugeModal: React.FC<any> = ({
         })
         const args = [encrypted]
         console.log('CONFIRM_CREATE_PROTOCOL2===============>', args)
-        return callWithGasPrice(extraTokenContract, 'updateCall', args).catch((err) =>
+        return callWithGasPrice(extraTokenFactoryContract, 'updateCall', args).catch((err) =>
           console.log('CONFIRM_CREATE_PROTOCOL2===============>', err),
         )
       }
@@ -1262,6 +1262,9 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('ADD TOKEN MARKET')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL2)}>
+            {t('DEPLOY EXTRA TOKEN MARKET')}
+          </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
             {t('ADD EXTRA TOKEN MARKET')}
           </Button>
           <Button
@@ -1304,9 +1307,6 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_PROTOCOL)}>
             {t('UPDATE TOKEN MARKET')}
-          </Button>
-          <Button mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
-            {t('ADD EXTRA TOKEN')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_BOUNTY)}>
             {t('UPDATE BOUNTY')}

@@ -11,6 +11,31 @@ export const extraTokenFactoryABI = [
     type: 'constructor',
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'callObject',
+        type: 'string',
+      },
+    ],
+    name: 'CreateGauge',
+    type: 'event',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -39,6 +64,11 @@ export const extraTokenFactoryABI = [
       {
         internalType: 'string',
         name: '_symbol',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '_callObject',
         type: 'string',
       },
       {
