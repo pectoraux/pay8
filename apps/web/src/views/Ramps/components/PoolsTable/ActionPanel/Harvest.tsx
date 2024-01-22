@@ -34,7 +34,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
   const [activeButtonIndex, setActiveButtonIndex] = useState(0)
   const { data: extraTokens } = useGetExtraTokens(account)
-  console.log('rampAccountrampAccount==================>', rampAccount)
+  console.log('rampAccountrampAccount==================>', rampAccount, extraTokens)
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
       {rampAccount ? (
@@ -318,12 +318,15 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             {t("Ramp's Leviathan NFT")}
           </Text>
           <CopyAddress title={truncateHash(pool?._ve)} account={pool?._ve} />
-          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t('ExTra Tokens')}
-          </Text>
-          {extraTokens?.map((extraToken) => (
-            <CopyAddress title={truncateHash(extraToken?.id)} account={extraToken?.id} />
-          ))}
+          {extraTokens?.length ? (
+            <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+              {t('ExTra Tokens')}
+            </Text>
+          ) : null}
+          {extraTokens?.length &&
+            extraTokens?.map((extraToken) => {
+              return <CopyAddress title={truncateHash(extraToken?.id)} account={extraToken?.id} />
+            })}
         </Flex>
       </ActionContent>
       {cardInfo?.data?.cardNumber?.length ? (

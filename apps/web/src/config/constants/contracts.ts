@@ -250,7 +250,7 @@ export default {
   },
   extraTokenFactory: {
     56: '0x',
-    4002: '0x65CC1bd8004e54c8324beb4656acD4dD9C166Ca5',
+    4002: '0x51d202ac5dD3327749ceE9333e9381d022707100',
   },
   feeTo: {
     56: '0x',

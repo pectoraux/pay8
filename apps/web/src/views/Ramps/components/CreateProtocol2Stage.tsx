@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, ErrorIcon, Input, LinkExternal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { Divider, GreyedOutContainer } from './styles'
 
@@ -52,17 +52,22 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Call Object')}
+          {t('Stringified Call Object')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="callObject"
           value={state.callObject}
-          placeholder={t('input call object')}
+          placeholder={t('input stringified call object')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
+      <Flex alignItems="center" justifyContent="center" mb="8px">
+        <LinkExternal href="https://jsonformatter.org/json-stringify-online">
+          {t('Stringify Your Call Object Here')}
+        </LinkExternal>
+      </Flex>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

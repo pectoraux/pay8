@@ -1,4 +1,5 @@
 import NodeRSA from 'encrypt-rsa'
+import EncryptRsa from 'encrypt-rsa'
 import { useEffect, useState } from 'react'
 import { Flex, Box, Text, Button, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
@@ -16,24 +17,43 @@ const RemoveStage: React.FC<any> = ({ encrypted, symb, setPrices, continueToNext
   const [spin, setSpin] = useState(false)
   const [disabled, setDisabled] = useState(false)
   const symbols = [symb]
-  // const call = {
-  //   method: 'GET',
-  //   url: 'https://alpha-vantage.p.rapidapi.com/query',
-  //   params: {
-  //     to_currency: 'USD',
-  //     function: 'CURRENCY_EXCHANGE_RATE',
-  //     from_currency: '%symbol%',
-  //   },
-  //   headers: {
-  //     'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO,
-  //     'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com',
-  //   },
-  // }
+  const call = {
+    method: 'GET',
+    url: 'https://alpha-vantage.p.rapidapi.com/query',
+    params: {
+      to_currency: 'USD',
+      function: 'CURRENCY_EXCHANGE_RATE',
+      from_currency: '%symbol%',
+    },
+    headers: {
+      'X-RapidAPI-Key': '',
+      'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com',
+    },
+  }
+  const encryptRsa = new EncryptRsa()
+  const _encrypted = encryptRsa.encryptStringWithRsaPublicKey({
+    text: JSON.stringify(call),
+    publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+  })
   const nodeRSA2 = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-  const decrypted = nodeRSA2.decryptStringWithRsaPrivateKey({
+  const decrypted = nodeRSA2?.decryptStringWithRsaPrivateKey({
     text: encrypted,
     privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
   })
+  // const dico = JSON.stringify({
+  //     method: 'GET',
+  //     url: 'https://alpha-vantage.p.rapidapi.com/query',
+  //     params: {
+  //       to_currency: 'USD',
+  //       function: 'CURRENCY_EXCHANGE_RATE',
+  //       from_currency: '%symbol%',
+  //     },
+  //     headers: {
+  //       'X-RapidAPI-Key': '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd',
+  //       'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com',
+  //     },
+  //   })
+  console.log('4useGetExtraPrices===============>', symbols, decrypted) // JSON?.parse(decrypted)) // , JSON.parse(JSON.stringify(call)), JSON.stringify(call) === decrypted)
   const { data, status, refetch } = useGetExtraPrices(symbols, decrypted, process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO)
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   useEffect(() => {

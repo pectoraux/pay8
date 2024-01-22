@@ -178,7 +178,7 @@ export const useGetCardId = (rampAddress, userAddress) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetCardId3', rampAddress, userAddress], async () =>
+  } = useSWRImmutable(['useGetCardId3', rampAddress, userAddress], async () =>
     getCardId(`${rampAddress}-${userAddress}`?.toLowerCase()),
   )
   return { data, refetch, status }
@@ -189,7 +189,7 @@ export const useGetCardFromStripe = (sk, cardId) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetCardFromStripe', cardId], async () => axios.post('/api/getCard', { sk, cardId }))
+  } = useSWRImmutable(['useGetCardFromStripe', cardId], async () => axios.post('/api/getCard', { sk, cardId }))
   return { data, refetch, status }
 }
 
@@ -207,14 +207,22 @@ export const useGetNativePrice = (symbol, key) => {
     data,
     status,
     mutate: refetch,
-  } = useSWRImmutable(['useGetNativePrice', symbol, key], async () => axios.post('/api/nativePrice', { symbol, key }))
+  } = useSWRImmutable(
+    ['useGetNativePrice1', symbol, key],
+    async () => axios.post('/api/nativePrice', { symbol, key }),
+    {
+      keepPreviousData: true,
+    },
+  )
+  console.log('useGetNativePrice=========>', symbol, key, data)
   return { data: data?.data, refetch, status }
 }
 
 export const useGetPrices = (symbols, key) => {
   const { chainId } = useActiveChainId()
   const chain = chains.find((c) => c.id === chainId)
-  const { data: nativePrice } = useGetNativePrice(chain?.nativeCurrency?.symbol, key)
+  const { data: nativePrice, refetch: refetch2 } = useGetNativePrice(chain?.nativeCurrency?.symbol, key)
+  if (!nativePrice?.data) refetch2()
   console.log('00mprices===================>', nativePrice)
   const {
     data,
@@ -229,7 +237,7 @@ export const useGetExtraTokens = (accountAddress) => {
     data,
     status,
     mutate: refetch,
-  } = useSWRImmutable(['useGetExtraTokens', accountAddress], async () => getExtraTokens(accountAddress?.toLowerCase()))
+  } = useSWRImmutable(['useGetExtraTokens1', accountAddress], async () => getExtraTokens(accountAddress?.toLowerCase()))
   return { data, refetch, status }
 }
 
@@ -242,8 +250,12 @@ export const useGetExtraPrices = (symbols, decrypted, key) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useGetExtraPrices10', symbols?.length, key], async () =>
-    getExtraPrices(symbols, decrypted, nativePrice?.data),
+  } = useSWR(
+    ['useGetExtraPrices23', symbols?.length, key],
+    async () => getExtraPrices(symbols, decrypted, nativePrice?.data),
+    {
+      keepPreviousData: true,
+    },
   )
   return { data, refetch, status }
 }

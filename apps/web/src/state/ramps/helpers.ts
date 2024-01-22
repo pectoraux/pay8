@@ -75,8 +75,8 @@ export const getExtraTokens = async (accountAddress) => {
     const res = await request(
       GRAPH_API_EXTRATOKENS,
       gql`
-        query getExtraTokens($extraToken: String) {
-          extraTokens(where: { active: true, owner: $accountAddress }) {
+        query getExtraTokens($accountAddress: String) {
+          extraTokens(where: { owner: $accountAddress }) {
             id
             callObject
             owner
@@ -87,7 +87,7 @@ export const getExtraTokens = async (accountAddress) => {
     )
 
     console.log('getExtraTokens===========>', res, accountAddress)
-    return res.extraTokens?.length && res.extraTokens[0]
+    return res.extraTokens
   } catch (error) {
     console.error('1Failed to fetch extratoken=============>', error)
     return null
@@ -167,7 +167,7 @@ export const getExtraPrices = async (symbols, decrypted, nativePrice) => {
       symbols?.map(async (symbol) => {
         try {
           const { data: tokenPrice } = await axios.post('/api/tokenPrice', { symbol, decrypted })
-          console.log('1mprices===========================>', tokenPrice, nativePrice)
+          console.log('11mprices===========================>', tokenPrice, nativePrice)
           return parseFloat(nativePrice) / parseFloat(tokenPrice?.data)
         } catch (err) {
           console.log('0mprices=============>', err)
@@ -481,47 +481,37 @@ export const fetchRamp = async (address, chainId) => {
         !_tokens?.length
           ? []
           : _tokens.map(async (token, index) => {
-              const [protocolInfo, mintAvailable, partnerBounties, totalRevenue, isExtraToken] =
-                await bscClient.multicall({
-                  allowFailure: true,
-                  contracts: [
-                    {
-                      address: rampAddress,
-                      abi: rampABI,
-                      functionName: 'protocolInfo',
-                      args: [token],
-                    },
-                    {
-                      address: getRampAdsAddress(),
-                      abi: rampAdsABI,
-                      functionName: 'mintAvailable',
-                      args: [rampAddress, token],
-                    },
-                    {
-                      address: rampAddress,
-                      abi: rampABI,
-                      functionName: 'getAllPartnerBounties',
-                      args: [token, BigInt(0)],
-                    },
-                    {
-                      address: rampAddress,
-                      abi: rampABI,
-                      functionName: 'totalRevenue',
-                      args: [token],
-                    },
-                    {
-                      address: getExtraTokenFactoryAddress(),
-                      abi: extraTokenFactoryABI,
-                      functionName: 'isExtraToken',
-                      args: [token],
-                    },
-                  ],
-                })
+              const [protocolInfo, mintAvailable, partnerBounties, totalRevenue] = await bscClient.multicall({
+                allowFailure: true,
+                contracts: [
+                  {
+                    address: rampAddress,
+                    abi: rampABI,
+                    functionName: 'protocolInfo',
+                    args: [token],
+                  },
+                  {
+                    address: getRampAdsAddress(),
+                    abi: rampAdsABI,
+                    functionName: 'mintAvailable',
+                    args: [rampAddress, token],
+                  },
+                  {
+                    address: rampAddress,
+                    abi: rampABI,
+                    functionName: 'getAllPartnerBounties',
+                    args: [token, BigInt(0)],
+                  },
+                  {
+                    address: rampAddress,
+                    abi: rampABI,
+                    functionName: 'totalRevenue',
+                    args: [token],
+                  },
+                ],
+              })
               let encrypted
-              if (isExtraToken.result) {
-                const extraToken = await getExtraTokenCall(token)
-                encrypted = extraToken?.call
-              }
+              const extraToken = await getExtraTokenCall(token?.toLowerCase())
 
               let nativeToToken = '0'
               try {
@@ -616,8 +606,8 @@ export const fetchRamp = async (address, chainId) => {
                 rampPaidRevenue: rampPaidRevenue.result?.toString(),
                 rampShare: parseInt(rampShare.result?.toString()) / 100,
                 nativeToToken,
-                encrypted,
-                isExtraToken: isExtraToken.result,
+                encrypted: extraToken?.callObject,
+                isExtraToken: !!extraToken?.callObject,
                 token: new Token(chainId, token, decimals ?? 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),
               }

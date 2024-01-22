@@ -713,8 +713,21 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_CREATE_PROTOCOL2) {
         const encryptRsa = new EncryptRsa()
+        // const dico = JSON.stringify({
+        //   method: 'GET',
+        //   url: 'https://alpha-vantage.p.rapidapi.com/query',
+        //   params: {
+        //     to_currency: 'USD',
+        //     function: 'CURRENCY_EXCHANGE_RATE',
+        //     from_currency: '%symbol%',
+        //   },
+        //   headers: {
+        //     'X-RapidAPI-Key': '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd',
+        //     'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com',
+        //   },
+        // })
         const encrypted = encryptRsa.encryptStringWithRsaPublicKey({
-          text: JSON.stringify(state.callObject),
+          text: state.callObject,
           publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
         })
         const args = [state.name, state.symbol, encrypted, account]
@@ -967,7 +980,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_ADD_EXTRA_TOKEN) {
-        const args = [pool?.rampAddress, currency.address, state.identityTokenId]
+        const args = [pool?.rampAddress, state.token, state.identityTokenId]
         console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', args)
         return callWithGasPrice(rampHelperContract, 'addExtratoken', args).catch((err) =>
           console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', err),
@@ -1354,7 +1367,7 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('UPDATE OWNER')}
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
-            {t('DELETE PROTOCOL')}
+            {t('DELETE TOKEN MARKET')}
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_RAMP)}>
             {t('DELETE RAMP')}
