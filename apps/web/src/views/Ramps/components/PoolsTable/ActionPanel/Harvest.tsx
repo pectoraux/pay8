@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { useGetCardFromStripe, useGetCardId } from 'state/ramps/hooks'
+import { useGetCardFromStripe, useGetCardId, useGetExtraTokens } from 'state/ramps/hooks'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
@@ -33,7 +33,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { data: vc } = useGetCardId(pool.rampAddress, account)
   const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
   const [activeButtonIndex, setActiveButtonIndex] = useState(0)
-
+  const { data: extraTokens } = useGetExtraTokens(account)
   console.log('rampAccountrampAccount==================>', rampAccount)
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
@@ -318,6 +318,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
             {t("Ramp's Leviathan NFT")}
           </Text>
           <CopyAddress title={truncateHash(pool?._ve)} account={pool?._ve} />
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('ExTra Tokens')}
+          </Text>
+          {extraTokens?.map((extraToken) => (
+            <CopyAddress title={truncateHash(extraToken?.id)} account={extraToken?.id} />
+          ))}
         </Flex>
       </ActionContent>
       {cardInfo?.data?.cardNumber?.length ? (

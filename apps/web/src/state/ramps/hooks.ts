@@ -33,6 +33,7 @@ import {
   getAccountSg,
   getCardId,
   getExtraPrices,
+  getExtraTokens,
   getPrices,
   getRampSg,
   getSession,
@@ -220,6 +221,15 @@ export const useGetPrices = (symbols, key) => {
     status,
     mutate: refetch,
   } = useSWR(['useGetPrices4', symbols?.length, key], async () => getPrices(symbols, key, nativePrice?.data))
+  return { data, refetch, status }
+}
+
+export const useGetExtraTokens = (accountAddress) => {
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWRImmutable(['useGetExtraTokens', accountAddress], async () => getExtraTokens(accountAddress?.toLowerCase()))
   return { data, refetch, status }
 }
 

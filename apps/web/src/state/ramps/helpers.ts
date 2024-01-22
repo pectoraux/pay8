@@ -70,6 +70,30 @@ export const getExtraTokenCall = async (extraToken) => {
   }
 }
 
+export const getExtraTokens = async (accountAddress) => {
+  try {
+    const res = await request(
+      GRAPH_API_EXTRATOKENS,
+      gql`
+        query getExtraTokens($extraToken: String) {
+          extraTokens(where: { active: true, owner: $accountAddress }) {
+            id
+            call
+            owner
+          }
+        }
+      `,
+      { accountAddress },
+    )
+
+    console.log('getExtraTokens===========>', res, accountAddress)
+    return res.extraTokens?.length && res.extraTokens[0]
+  } catch (error) {
+    console.error('1Failed to fetch extratoken=============>', error)
+    return null
+  }
+}
+
 export const getTag = async () => {
   try {
     const res = await request(
