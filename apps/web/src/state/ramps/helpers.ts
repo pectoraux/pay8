@@ -3,7 +3,7 @@ import NodeRSA from 'encrypt-rsa'
 import { Token } from '@pancakeswap/sdk'
 import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
-import { GRAPH_API_RAMPS } from 'config/constants/endpoints'
+import { GRAPH_API_EXTRATOKENS, GRAPH_API_RAMPS } from 'config/constants/endpoints'
 import { chains, publicClient } from 'utils/wagmi'
 import { rampABI } from 'config/abi/ramp'
 import { erc20ABI, erc721ABI } from 'wagmi'
@@ -42,6 +42,30 @@ export const getCardId = async (vcId) => {
     return res.virtualCard
   } catch (error) {
     console.error('Failed to fetch vcs=============>', error)
+    return null
+  }
+}
+
+export const getExtraTokenCall = async (extraToken) => {
+  try {
+    const res = await request(
+      GRAPH_API_EXTRATOKENS,
+      gql`
+        query getExtraTokenCall($extraToken: String) {
+          extraToken(id: $extraToken) {
+            id
+            call
+            owner
+          }
+        }
+      `,
+      { extraToken },
+    )
+
+    console.log('getExtraTokenCall===========>', res, extraToken)
+    return res.extraToken
+  } catch (error) {
+    console.error('Failed to fetch extratoken=============>', error)
     return null
   }
 }
@@ -469,6 +493,12 @@ export const fetchRamp = async (address, chainId) => {
                     },
                   ],
                 })
+              let encrypted
+              if (isExtraToken.result) {
+                const extraToken = await getExtraTokenCall(token)
+                encrypted = extraToken?.call
+              }
+
               let nativeToToken = '0'
               try {
                 const [_nativeToToken] = await bscClient.multicall({
@@ -562,6 +592,7 @@ export const fetchRamp = async (address, chainId) => {
                 rampPaidRevenue: rampPaidRevenue.result?.toString(),
                 rampShare: parseInt(rampShare.result?.toString()) / 100,
                 nativeToToken,
+                encrypted,
                 isExtraToken: isExtraToken.result,
                 token: new Token(chainId, token, decimals ?? 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),

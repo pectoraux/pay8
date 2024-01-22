@@ -105,6 +105,7 @@ export const GRAPH_API_BILLS = 'https://api.thegraph.com/subgraphs/name/pectorau
 export const GRAPH_API_WILLS = 'https://api.thegraph.com/subgraphs/name/pectoraux/wills'
 export const GRAPH_API_GAMES = 'https://api.thegraph.com/subgraphs/name/pectoraux/games'
 export const GRAPH_API_RAMPS = 'https://api.thegraph.com/subgraphs/name/pectoraux/ramps'
+export const GRAPH_API_EXTRATOKENS = 'https://api.thegraph.com/subgraphs/name/pectoraux/extratokens'
 export const GRAPH_API_TRUSTBOUNTIES = 'https://api.thegraph.com/subgraphs/name/pectoraux/trustbounties'
 export const GRAPH_API_WORLDS = 'https://api.thegraph.com/subgraphs/name/pectoraux/worlds'
 export const GRAPH_API_SPONSORS = 'https://api.thegraph.com/subgraphs/name/pectoraux/sponsors'

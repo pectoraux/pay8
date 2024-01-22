@@ -1262,10 +1262,10 @@ const CreateGaugeModal: React.FC<any> = ({
             {t('ADD TOKEN MARKET')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL2)}>
-            {t('DEPLOY EXTRA TOKEN MARKET')}
+            {t('DEPLOY EXTRA TOKEN')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
-            {t('ADD EXTRA TOKEN MARKET')}
+            {t('ADD EXTRA TOKEN')}
           </Button>
           <Button
             mb="8px"

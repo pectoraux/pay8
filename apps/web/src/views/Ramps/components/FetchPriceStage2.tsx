@@ -41,7 +41,7 @@ const RemoveStage: React.FC<any> = ({ encrypted, symb, setPrices, continueToNext
       delay(10000).then(() => setSpin(false))
     }
   }, [spin])
-  console.log('3mprices=================>', data)
+  console.log('33mprices=================>', encrypted, data)
   return (
     <>
       <Box p="16px" maxWidth="360px">

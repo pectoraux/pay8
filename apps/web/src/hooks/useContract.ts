@@ -144,6 +144,7 @@ import {
   getBusinessMinterContract,
   getRampHelper2Contract,
   getExtraTokenContract,
+  getExtraTokenFactoryContract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
