@@ -143,6 +143,7 @@ import {
   getNFTSVGContract,
   getBusinessMinterContract,
   getRampHelper2Contract,
+  getExtraTokenContract,
 } from 'utils/contractHelpers'
 
 import { ChainId, WNATIVE, pancakePairV2ABI } from '@pancakeswap/sdk'
@@ -520,6 +521,15 @@ export const useRampContract = (rampAddress: Address) => {
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(() => rampAddress && getRampContract(rampAddress, signer, chainId), [rampAddress, signer, chainId])
+}
+
+export const useExtraTokenContract = (extraTokenAddress: Address) => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+  return useMemo(
+    () => extraTokenAddress && getExtraTokenContract(extraTokenAddress, signer, chainId),
+    [extraTokenAddress, signer, chainId],
+  )
 }
 
 export const useTrustBountiesContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {

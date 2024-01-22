@@ -5,7 +5,14 @@ import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useRampContract, useRampHelper, useRampAds, useRampHelper2 } from 'hooks/useContract'
+import {
+  useERC20,
+  useRampContract,
+  useRampHelper,
+  useRampAds,
+  useRampHelper2,
+  useExtraTokenContract,
+} from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
@@ -42,6 +49,7 @@ import UpdateBadgeStage from './UpdateBadgeStage'
 import ClaimRevenueStage from './ClaimRevenueStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import CreateProtocolStage from './CreateProtocolStage'
+import CreateProtocol2Stage from './CreateProtocol2Stage'
 import UpdateBlacklistStage from './UpdateBlacklistStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import VoteStage from './VoteStage'
@@ -59,6 +67,7 @@ import UpdateDevTokenStage from './UpdateDevTokenStage'
 import UpdateBountyStage from './UpdateBountyStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
 import FetchPriceStage from './FetchPriceStage'
+import FetchPriceStage2 from './FetchPriceStage2'
 import FetchPricesStage from './FetchPricesStage'
 import UpdateSponsorMediaStage from './UpdateSponsorMediaStage'
 import LocationStage from './LocationStage'
@@ -95,6 +104,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.DELETE]: t('Delete'),
   [LockStage.DELETE_RAMP]: t('Delete Ramp'),
   [LockStage.CREATE_PROTOCOL]: t('Add Token Market'),
+  [LockStage.CREATE_PROTOCOL2]: t('Add Extra Token Market'),
   [LockStage.UPDATE_ADMIN]: t('Update Ramp Admin'),
   [LockStage.UPDATE_DEV]: t('Update Ramp Owner'),
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
@@ -124,6 +134,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_INDIVIDUAL_PROTOCOL]: t('Back'),
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_CREATE_PROTOCOL]: t('Back'),
+  [LockStage.CONFIRM_CREATE_PROTOCOL2]: t('Back'),
   [LockStage.CONFIRM_DELETE]: t('Back'),
   [LockStage.CONFIRM_DELETE_RAMP]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BOUNTY]: t('Back'),
@@ -265,6 +276,7 @@ const CreateGaugeModal: React.FC<any> = ({
     amounts: adminARP?.userData?.amounts?.length || [],
     token: session ? session?.token?.address : stakingTokenContract?.address || rampAccount?.token?.address,
     close: false,
+    callObject: '',
     cap: pool?.cap || 0,
     salePrice: getBalanceNumber(pool?.rampSalePrice || 0),
     maxPartners: pool?.maxPartners || 0,
@@ -289,6 +301,7 @@ const CreateGaugeModal: React.FC<any> = ({
     cardholderId: pool?.cardholderId,
   }))
   const [prices, setPrices] = useState<any>()
+  const extraTokenContract = useExtraTokenContract(state.token)
   const [nftFilters, setNftFilters] = useState<any>({
     country: pool?.countries,
     city: pool?.cities,
@@ -520,6 +533,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_CREATE_PROTOCOL:
         setStage(LockStage.CREATE_PROTOCOL)
         break
+      case LockStage.CONFIRM_CREATE_PROTOCOL2:
+        setStage(LockStage.CREATE_PROTOCOL2)
+        break
       case LockStage.CONFIRM_UPDATE_BOUNTY:
         setStage(LockStage.UPDATE_BOUNTY)
         break
@@ -533,6 +549,9 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.UPDATE_OWNER)
         break
       case LockStage.CREATE_PROTOCOL:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CREATE_PROTOCOL2:
         setStage(LockStage.ADMIN_SETTINGS)
         break
       default:
@@ -559,6 +578,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CREATE_PROTOCOL:
         setStage(LockStage.CONFIRM_CREATE_PROTOCOL)
+        break
+      case LockStage.CREATE_PROTOCOL2:
+        setStage(LockStage.CONFIRM_CREATE_PROTOCOL2)
         break
       case LockStage.MINT:
         setStage(LockStage.CONFIRM_MINT)
@@ -687,6 +709,18 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_CREATE_PROTOCOL===============>', args)
         return callWithGasPrice(rampContract, 'createProtocol', args).catch((err) =>
           console.log('CONFIRM_CREATE_PROTOCOL===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_CREATE_PROTOCOL2) {
+        const encryptRsa = new EncryptRsa()
+        const encrypted = encryptRsa.encryptStringWithRsaPublicKey({
+          text: JSON.stringify(state.callObject),
+          publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+        })
+        const args = [encrypted]
+        console.log('CONFIRM_CREATE_PROTOCOL2===============>', args)
+        return callWithGasPrice(extraTokenContract, 'updateCall', args).catch((err) =>
+          console.log('CONFIRM_CREATE_PROTOCOL2===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
@@ -1227,6 +1261,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL)}>
             {t('ADD TOKEN MARKET')}
           </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL2)}>
+            {t('ADD EXTRA TOKEN MARKET')}
+          </Button>
           <Button
             mb="8px"
             variant="success"
@@ -1420,6 +1457,9 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.CREATE_PROTOCOL && (
         <CreateProtocolStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
+      {stage === LockStage.CREATE_PROTOCOL2 && (
+        <CreateProtocol2Stage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
       {stage === LockStage.UPDATE_PROTOCOL && (
         <UpdateProtocolStage
           state={state}
@@ -1439,9 +1479,18 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.FETCH_API && (
         <FetchPricesStage state={state} pool={pool} setPrices={setPrices} continueToNextStage={continueToNextStage} />
       )}
-      {stage === LockStage.FETCH_API2 && (
+      {stage === LockStage.FETCH_API2 && !rampAccount?.isExtraToken && (
         <FetchPriceStage
           state={state}
+          symb={rampAccount?.token?.symbol}
+          setPrices={setPrices}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
+      {stage === LockStage.FETCH_API2 && rampAccount?.isExtraToken && (
+        <FetchPriceStage2
+          state={state}
+          encrypted={rampAccount?.encrypted}
           symb={rampAccount?.token?.symbol}
           setPrices={setPrices}
           continueToNextStage={continueToNextStage}

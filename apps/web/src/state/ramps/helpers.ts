@@ -8,11 +8,12 @@ import { chains, publicClient } from 'utils/wagmi'
 import { rampABI } from 'config/abi/ramp'
 import { erc20ABI, erc721ABI } from 'wagmi'
 import { rampAdsABI } from 'config/abi/rampAds'
-import { getRampAdsAddress, getRampHelperAddress } from 'utils/addressHelpers'
+import { getExtraTokenFactoryAddress, getRampAdsAddress, getRampHelperAddress } from 'utils/addressHelpers'
 import { getCollection } from 'state/cancan/helpers'
 import { veABI } from 'config/abi/ve'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { extraTokenFactoryABI } from 'config/abi/extraTokenFactory'
 
 import { rampFields, accountFields, sessionFields } from './queries'
 
@@ -107,7 +108,29 @@ export const getPrices = async (symbols, key, nativePrice) => {
     console.log('2mprices===========================>', prices)
     return prices
   } catch (error) {
-    console.error('Failed to fetch tags from ramp=============>', error, symbols)
+    console.error('Failed to fetch fiat prices from api=============>', error, symbols)
+    return null
+  }
+}
+
+export const getExtraPrices = async (symbols, decrypted, nativePrice) => {
+  try {
+    const prices = await Promise.all(
+      symbols?.map(async (symbol) => {
+        try {
+          const { data: tokenPrice } = await axios.post('/api/tokenPrice', { symbol, decrypted })
+          console.log('1mprices===========================>', tokenPrice, nativePrice)
+          return parseFloat(nativePrice) / parseFloat(tokenPrice?.data)
+        } catch (err) {
+          console.log('0mprices=============>', err)
+          return 0
+        }
+      }),
+    )
+    console.log('2mprices===========================>', prices)
+    return prices
+  } catch (error) {
+    console.error('Failed to fetch extra token from api=============>', error, symbols)
     return null
   }
 }
@@ -410,35 +433,42 @@ export const fetchRamp = async (address, chainId) => {
         !_tokens?.length
           ? []
           : _tokens.map(async (token, index) => {
-              const [protocolInfo, mintAvailable, partnerBounties, totalRevenue] = await bscClient.multicall({
-                allowFailure: true,
-                contracts: [
-                  {
-                    address: rampAddress,
-                    abi: rampABI,
-                    functionName: 'protocolInfo',
-                    args: [token],
-                  },
-                  {
-                    address: getRampAdsAddress(),
-                    abi: rampAdsABI,
-                    functionName: 'mintAvailable',
-                    args: [rampAddress, token],
-                  },
-                  {
-                    address: rampAddress,
-                    abi: rampABI,
-                    functionName: 'getAllPartnerBounties',
-                    args: [token, BigInt(0)],
-                  },
-                  {
-                    address: rampAddress,
-                    abi: rampABI,
-                    functionName: 'totalRevenue',
-                    args: [token],
-                  },
-                ],
-              })
+              const [protocolInfo, mintAvailable, partnerBounties, totalRevenue, isExtraToken] =
+                await bscClient.multicall({
+                  allowFailure: true,
+                  contracts: [
+                    {
+                      address: rampAddress,
+                      abi: rampABI,
+                      functionName: 'protocolInfo',
+                      args: [token],
+                    },
+                    {
+                      address: getRampAdsAddress(),
+                      abi: rampAdsABI,
+                      functionName: 'mintAvailable',
+                      args: [rampAddress, token],
+                    },
+                    {
+                      address: rampAddress,
+                      abi: rampABI,
+                      functionName: 'getAllPartnerBounties',
+                      args: [token, BigInt(0)],
+                    },
+                    {
+                      address: rampAddress,
+                      abi: rampABI,
+                      functionName: 'totalRevenue',
+                      args: [token],
+                    },
+                    {
+                      address: getExtraTokenFactoryAddress(),
+                      abi: extraTokenFactoryABI,
+                      functionName: 'isExtraToken',
+                      args: [token],
+                    },
+                  ],
+                })
               let nativeToToken = '0'
               try {
                 const [_nativeToToken] = await bscClient.multicall({
@@ -532,6 +562,7 @@ export const fetchRamp = async (address, chainId) => {
                 rampPaidRevenue: rampPaidRevenue.result?.toString(),
                 rampShare: parseInt(rampShare.result?.toString()) / 100,
                 nativeToToken,
+                isExtraToken: isExtraToken.result,
                 token: new Token(chainId, token, decimals ?? 18, symbol, name, 'https://www.payswap.org/'),
                 // allTokens.find((tk) => tk.address === token),
               }

@@ -157,6 +157,10 @@ export const getRampFactoryAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.rampFactory, chainId)
 }
 
+export const getExtraTokenFactoryAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.extraTokenFactory, chainId)
+}
+
 export const getTrustBountiesAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.trustbounties, chainId)
 }

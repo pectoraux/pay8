@@ -28,7 +28,17 @@ import {
   currBribeSelector,
   poolsWithFilterSelector,
 } from './selectors'
-import { fetchRamp, getAccountSg, getCardId, getPrices, getRampSg, getSession, getTag, getTokenData } from './helpers'
+import {
+  fetchRamp,
+  getAccountSg,
+  getCardId,
+  getExtraPrices,
+  getPrices,
+  getRampSg,
+  getSession,
+  getTag,
+  getTokenData,
+} from './helpers'
 
 export const useRampsConfigInitialize = () => {
   const { chainId } = useActiveChainId()
@@ -210,6 +220,21 @@ export const useGetPrices = (symbols, key) => {
     status,
     mutate: refetch,
   } = useSWR(['useGetPrices4', symbols?.length, key], async () => getPrices(symbols, key, nativePrice?.data))
+  return { data, refetch, status }
+}
+
+export const useGetExtraPrices = (symbols, decrypted, key) => {
+  const { chainId } = useActiveChainId()
+  const chain = chains.find((c) => c.id === chainId)
+  const { data: nativePrice } = useGetNativePrice(chain?.nativeCurrency?.symbol, key)
+  console.log('00mprices===================>', nativePrice)
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetExtraPrices10', symbols?.length, key], async () =>
+    getExtraPrices(symbols, decrypted, nativePrice?.data),
+  )
   return { data, refetch, status }
 }
 

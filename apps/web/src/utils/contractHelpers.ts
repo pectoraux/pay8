@@ -283,6 +283,7 @@ import { worldHelperABI } from 'config/abi/worldHelper'
 import { worldHelper2ABI } from 'config/abi/worldHelper2'
 import { worldHelper3ABI } from 'config/abi/worldHelper3'
 import { worldNoteABI } from 'config/abi/worldNote'
+import { extraTokenABI } from 'config/abi/extraToken'
 
 export const getContract = <TAbi extends Abi | unknown[], TWalletClient extends WalletClient>({
   abi,
@@ -619,14 +620,21 @@ export const getTrustBountiesVoterContract = (signer?: WalletClient, chainId?: n
   })
 }
 
-/** #########################################################
-    Payswap
-**/
+// Payswap
 
 export const getVeContract = (veAddress: Address, signer?: WalletClient, chainId?: number) => {
   return getContract({
     abi: veABI,
     address: veAddress,
+    signer,
+    chainId,
+  })
+}
+
+export const getExtraTokenContract = (extraTokenAddress: Address, signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: extraTokenABI,
+    address: extraTokenAddress,
     signer,
     chainId,
   })

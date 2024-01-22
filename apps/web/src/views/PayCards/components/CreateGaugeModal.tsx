@@ -25,7 +25,7 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { cardABI } from 'config/abi/card'
 import { getCardAddress } from 'utils/addressHelpers'
 import { usePool } from 'state/cards/hooks'
-import { useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
+import { useGetExtraPrices, useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -38,6 +38,7 @@ import UpdatePassword2Stage from './UpdatePassword2Stage'
 import UpdateProfileStage from './UpdateProfileStage'
 import MintStage from './MintStage'
 import DonateGasFeesStage from './DonateGasFeesStage'
+import { encryptCall } from 'utils/cancan'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -108,9 +109,9 @@ const CreateGaugeModal: React.FC<any> = ({
   console.log('mcurrencyy===============>', amountReceivable, currAccount, currency, pool, cardContract)
 
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
-  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
   let username
   let password
+  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
   if (pool?.password && pool?.username) {
     username = nodeRSA?.decryptStringWithRsaPrivateKey({
       text: pool?.username,

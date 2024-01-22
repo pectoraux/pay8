@@ -82,6 +82,13 @@ function chunkString(str, length) {
   return str.match(new RegExp(`.{1,${length}}`, 'g'))
 }
 
+export const encryptCall = (encryptRsa, call) => {
+  return encryptRsa.encryptStringWithRsaPublicKey({
+    text: call,
+    publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+  })
+}
+
 export const encryptArticle = (encryptRsa, str) => {
   const chks = chunkString(str, 400)
   // eslint-disable-next-line array-callback-return
@@ -95,6 +102,7 @@ export const encryptArticle = (encryptRsa, str) => {
         : ''
     } catch (err) {
       console.log('encryptArticle============>', err, chk?.length, index)
+      return ''
     }
   })
   return encryptedChks?.join(',')
