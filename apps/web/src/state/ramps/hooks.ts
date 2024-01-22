@@ -251,7 +251,7 @@ export const useGetExtraPrices = (symbols, decrypted, key) => {
     status,
     mutate: refetch,
   } = useSWR(
-    ['useGetExtraPrices26', symbols?.length, key],
+    ['useGetExtraPrices29', symbols?.length, key],
     async () => getExtraPrices(symbols, decrypted, nativePrice?.data),
     {
       keepPreviousData: true,

@@ -168,7 +168,7 @@ export const getExtraPrices = async (symbols, decrypted, nativePrice) => {
         try {
           const { data: tokenPrice } = await axios.post('/api/tokenPrice', { symbol, decrypted })
           console.log('11mprices===========================>', tokenPrice, nativePrice)
-          return parseFloat(nativePrice) / parseFloat(tokenPrice?.data)
+          return parseFloat(nativePrice) * parseFloat(tokenPrice?.data)
         } catch (err) {
           console.log('0mprices=============>', err)
           return 0
