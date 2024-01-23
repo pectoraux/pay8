@@ -57,7 +57,6 @@ const SetPriceStage: React.FC<any> = ({
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const inputCurrency = useCurrency(DEFAULT_TFIAT)
   const mintable = getBalanceNumber(rampAccount?.mintable)
   const nativeToToken = getBalanceNumber(rampAccount?.nativeToToken)
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
@@ -76,7 +75,13 @@ const SetPriceStage: React.FC<any> = ({
       price: rampAccount?.isExtraToken
         ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
         : state.amountPayable,
-      currency: rampAccount?.isExtraToken ? inputCurrency : currency,
+      currency: rampAccount?.isExtraToken
+        ? {
+            name: rampAccount?.token?.name,
+            symbol: 'usd',
+            address: rampAccount?.token?.address,
+          }
+        : currency,
       rampAddress,
       sk: state.sk,
     }
