@@ -32,6 +32,7 @@ import {
   useGetSessionInfoSg,
   useGetIsExtraToken,
   useGetExtraUSDPrices,
+  useFetchRamp,
 } from 'state/ramps/hooks'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -155,7 +156,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const { toastSuccess } = useToast()
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const { data: adminARP } = useGetRamp(router.query.ramp)
+  const { data: adminARP } = useFetchRamp(router.query.ramp)
   if (!pool) {
     // eslint-disable-next-line no-param-reassign
     pool = adminARP
@@ -184,9 +185,9 @@ const CreateGaugeModal: React.FC<any> = ({
     [pool?.accounts, data?.tokenAddress],
   )
   const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
-  console.log('nativeToToken=================>', usdPrice)
+  console.log('nativeToToken=================>', rampAccount, usdPrice)
   // console.log('data=================>', data)
-  // console.log('stripeData=================>', stripeData, tokenData)
+  console.log('stripeData=================>', stripeData, tokenData)
 
   const [state, setState] = useState<any>(() => ({
     sk: pool?.secretKeys && pool?.secretKeys[0],
@@ -513,7 +514,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_MINT) {
-        const native = getBalanceNumber(new BigNumber(usdPrice?.length && usdPrice[0]))
+        const native = usdPrice?.length && usdPrice[0]
         console.log(
           '2CONFIRM_MINT===============>',
           stripeData?.amount,

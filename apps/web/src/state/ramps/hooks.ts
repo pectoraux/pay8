@@ -181,7 +181,7 @@ export const useFetchRamp = (rampAddress) => {
     data,
     status,
     mutate: refetch,
-  } = useSWR(['useFetchRamp', rampAddress], async () => fetchRamp(rampAddress, chainId))
+  } = useSWR(['useFetchRamp', rampAddress], async () => fetchRamp(rampAddress?.toLowerCase(), chainId))
   return { data, refetch, status }
 }
 
@@ -286,10 +286,12 @@ export const useGetExtraPrices = (symbols, decrypted, key) => {
 
 export const useGetExtraUSDPrices = (symbols, encrypted) => {
   const nodeRSA2 = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-  const decrypted = nodeRSA2?.decryptStringWithRsaPrivateKey({
-    text: encrypted,
-    privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
-  })
+  const decrypted = encrypted
+    ? nodeRSA2?.decryptStringWithRsaPrivateKey({
+        text: encrypted,
+        privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+      })
+    : ''
   const {
     data,
     status,

@@ -71,14 +71,14 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     />,
   )
 
+  usePoolsPageFetch()
+
   useEffect(() => {
     if (sessionId && status === 'success' && !openedAlready) {
       openPresentControlPanel()
       setOpenedAlready(true)
     }
   }, [status, sessionId, router.query, openedAlready, openPresentControlPanel])
-
-  usePoolsPageFetch()
 
   useEffect(() => {
     fetchPoolsDataWithFarms2(router.query.ramp, chainId, dispatch)
