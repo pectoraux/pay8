@@ -73,7 +73,7 @@ const SetPriceStage: React.FC<any> = ({
       price: rampAccount?.isExtraToken
         ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
         : state.amountPayable,
-      currency: rampAccount?.isExtraToken ? 'USD' : currency,
+      currency,
       rampAddress,
       sk: state.sk,
     }
