@@ -58,6 +58,11 @@ const SetPriceStage: React.FC<any> = ({
   const [errorMessage, setErrorMessage] = useState('')
   const mintable = getBalanceNumber(rampAccount?.mintable)
   const nativeToToken = getBalanceNumber(rampAccount?.nativeToToken)
+  const defaultCurrency = {
+    name: rampAccount?.token?.name,
+    symbol: 'usd',
+    address: DEFAULT_TFIAT, // rampAccount?.token?.address,
+  }
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
   const client = createPublicClient({
     chain: fantomTestnet,
@@ -75,13 +80,7 @@ const SetPriceStage: React.FC<any> = ({
         ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
         : state.amountPayable,
       amountPayable: state.amountPayable,
-      currency: rampAccount?.isExtraToken
-        ? {
-            name: rampAccount?.token?.name,
-            symbol: 'usd',
-            address: DEFAULT_TFIAT, // rampAccount?.token?.address,
-          }
-        : currency,
+      currency: rampAccount?.isExtraToken ? defaultCurrency : currency,
       rampAddress,
       sk: state.sk,
     }
@@ -99,7 +98,14 @@ const SetPriceStage: React.FC<any> = ({
         address: getRampHelperAddress(),
         abi: rampHelperABI,
         functionName: 'preMint',
-        args: [rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id],
+        args: [
+          rampAddress,
+          account,
+          rampAccount?.isExtraToken ? DEFAULT_TFIAT : currency?.address,
+          state.amountPayable,
+          state.identityTokenId,
+          data.id,
+        ],
       })
       await walletClient
         .writeContract(request)
