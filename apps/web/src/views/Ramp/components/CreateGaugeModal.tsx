@@ -523,7 +523,7 @@ const CreateGaugeModal: React.FC<any> = ({
           args: [
             data?.tokenAddress,
             account,
-            parseFloat(amount.toString()) * parseFloat(rampAccount?.nativeToToken?.toString()),
+            BigInt((parseFloat(amount.toString()) * parseFloat(rampAccount?.nativeToToken?.toString()))?.toString()),
             state.identityTokenId,
             state.sessionId,
           ],
