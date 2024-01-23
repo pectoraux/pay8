@@ -113,9 +113,13 @@ const DataCard = ({ idx, session, pool }) => {
   const usdPrice = rampAccount?.isExtraToken
     ? _usdPrice?.length && _usdPrice[0]
     : rampAccount?.token?.symbol?.toLowerCase() !== pool?.symbol?.toLowerCase()
-    ? fiatUsdPrice
+    ? fiatUsdPrice?.data
     : 1
-  console.log('usdPrice=================>', parseFloat(session.amount) * parseFloat(usdPrice))
+  const symbol =
+    rampAccount?.isExtraToken || rampAccount?.token?.symbol?.toLowerCase() !== pool?.symbol?.toLowerCase()
+      ? 'USD'
+      : session?.token?.symbol
+  console.log('usdPrice=================>', fiatUsdPrice?.data, parseFloat(session.amount) * parseFloat(usdPrice))
   console.log(
     '13variant=============>',
     session,
@@ -163,7 +167,7 @@ const DataCard = ({ idx, session, pool }) => {
           }
         : {
             amount: parseFloat(session.amount) * parseFloat(usdPrice),
-            symbol: rampAccount?.isExtraToken ? 'USD' : session?.token?.symbol,
+            symbol,
             accountId: accountData?.id,
             sk: pool?.secretKeys?.length && pool?.secretKeys[0],
           }

@@ -7,20 +7,20 @@ const handler = async (req, res) => {
   const stripe = new Stripe(sk, { apiVersion: '2020-08-27' })
   try {
     const transfer = await stripe.transfers.create({
-      amount: parseInt(amount) * 100,
+      amount: parseInt((parseFloat(amount) * 100)?.toString()),
       currency: symbol?.toLowerCase(),
       destination: accountId,
     })
     // Retrieve the URL from the response and redirect the user to Stripe
     res.send({
       amount: transfer.amount / 100,
-      err: '',
+      error: '',
     })
-  } catch (err) {
-    console.log('The Stripe onboarding process has not succeeded.', err)
+  } catch (error) {
+    console.log('The Stripe onboarding process has not succeeded.', error)
     res.send({
       amount: undefined,
-      err,
+      error,
     })
   }
 }
