@@ -68,6 +68,16 @@ const SetPriceStage: React.FC<any> = ({
   })
   const processCharge = async () => {
     setIsLoading(true)
+    const args = {
+      account,
+      price: rampAccount?.isExtraToken
+        ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
+        : state.amountPayable,
+      currency: rampAccount?.isExtraToken ? 'USD' : currency,
+      rampAddress,
+      sk: state.sk,
+    }
+    console.log('11data=====================>', args)
     const { data } = await axios.post('/api/charge', {
       account,
       price: rampAccount?.isExtraToken
