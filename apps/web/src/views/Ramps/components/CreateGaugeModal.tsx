@@ -12,6 +12,7 @@ import {
   useRampAds,
   useRampHelper2,
   useExtraTokenFactoryContract,
+  useExtraTokenContract,
 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
@@ -207,6 +208,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(
     currency?.address || rampAccount?.token?.address || router.query?.userCurrency || '',
   )
+  const extraTokenContract = useExtraTokenContract(currency?.address)
   const saleTokenContract = useERC20(pool?.saleTokenAddress || '')
   const defaultTokenContract = useERC20(DEFAULT_TFIAT || '')
   const rampContract = useRampContract(pool?.rampAddress || router.query.ramp || '')
@@ -995,9 +997,10 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_ADD_EXTRA_TOKEN) {
         const args = [pool?.rampAddress, state.token, state.identityTokenId]
         console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', args)
-        return callWithGasPrice(rampHelperContract, 'addExtratoken', args).catch((err) =>
-          console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', err),
-        )
+        return callWithGasPrice(extraTokenContract, 'updateMinter', [rampHelperContract.address])
+          .then(() => delay(3000))
+          .then(() => callWithGasPrice(rampHelperContract, 'addExtratoken', args))
+          .catch((err) => console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', err))
       }
       if (stage === LockStage.CONFIRM_REMOVE_EXTRA_TOKEN) {
         const args = [pool?.rampAddress, currency.address]
@@ -1471,6 +1474,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state={state}
           symbol={currency?.symbol}
           handleChange={handleChange}
+          rampAccount={rampAccount}
           rampAddress={pool?.rampAddress}
           callWithGasPrice={callWithGasPrice}
           rampHelperContract={rampHelperContract}

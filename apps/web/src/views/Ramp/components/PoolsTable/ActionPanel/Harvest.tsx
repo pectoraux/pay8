@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi'
 import { Button, Text, Flex, Box, Balance, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { useGetCardFromStripe, useGetCardId } from 'state/ramps/hooks'
+import { useGetAccountSg, useGetCardFromStripe, useGetCardId } from 'state/ramps/hooks'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { ccFormat } from 'views/Ramps/components/PoolsTable/ActionPanel/Harvest'
 
@@ -14,6 +14,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
   const { address: account } = useAccount()
   const { data: vc } = useGetCardId(pool.rampAddress, account)
   const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
+  const { data: accountData } = useGetAccountSg(account, 'stripe')
   const [activeButtonIndex, setActiveButtonIndex] = useState(0)
 
   const actionTitle = (
@@ -134,7 +135,17 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
                 value={getBalanceNumber(rampAccount?.nativeToToken)}
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('%native% price in %token%', { native: pool?.nativeSymbol, token: rampAccount?.token?.symbol })}
+                {t('%token% price in %native%', { native: pool?.nativeSymbol, token: rampAccount?.token?.symbol })}
+              </Text>
+            </Box>
+          ) : null}
+          {accountData?.active && accountData?.id ? (
+            <Box mr="8px" height="32px">
+              <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+                {accountData?.id}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Linked Account')}
               </Text>
             </Box>
           ) : null}

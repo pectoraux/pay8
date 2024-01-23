@@ -35,6 +35,8 @@ import {
   getExtraPrices,
   getExtraTokenCall,
   getExtraTokens,
+  getExtraUSDPrices,
+  getNativeToToken,
   getPrices,
   getRampSg,
   getSession,
@@ -251,6 +253,18 @@ export const useGetExtraTokens = (accountAddress) => {
   return { data, refetch, status }
 }
 
+export const useGetNativeToToken = (tokenAddress) => {
+  const { chainId } = useActiveChainId()
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWRImmutable(['useGetNativeToToken', tokenAddress, chainId], async () =>
+    getNativeToToken(tokenAddress?.toLowerCase(), chainId),
+  )
+  return { data, refetch, status }
+}
+
 export const useGetExtraPrices = (symbols, decrypted, key) => {
   const { chainId } = useActiveChainId()
   const chain = chains.find((c) => c.id === chainId)
@@ -267,6 +281,22 @@ export const useGetExtraPrices = (symbols, decrypted, key) => {
       keepPreviousData: true,
     },
   )
+  return { data, refetch, status }
+}
+
+export const useGetExtraUSDPrices = (symbols, encrypted) => {
+  const nodeRSA2 = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
+  const decrypted = nodeRSA2?.decryptStringWithRsaPrivateKey({
+    text: encrypted,
+    privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY_4096,
+  })
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetExtraUSDPrices', symbols?.length, encrypted], async () => getExtraUSDPrices(symbols, decrypted), {
+    keepPreviousData: true,
+  })
   return { data, refetch, status }
 }
 

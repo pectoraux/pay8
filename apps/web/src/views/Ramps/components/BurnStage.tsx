@@ -19,8 +19,10 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGetAccountSg } from 'state/ramps/hooks'
+import { useGetAccountSg, useGetExtraUSDPrices } from 'state/ramps/hooks'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import BigNumber from 'bignumber.js'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -44,6 +46,7 @@ const BurnStage: React.FC<any> = ({
   state,
   symbol,
   rampAddress,
+  rampAccount,
   handleChange,
   rampHelperContract,
   callWithGasPrice,
@@ -58,7 +61,14 @@ const BurnStage: React.FC<any> = ({
   const [linking, setLinking] = useState<boolean>(false)
   const [linked, setLinked] = useState<boolean>(accountData?.active && accountData?.id)
   const [toVC, setToVC] = useState(0)
-
+  const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
+  const nativeToToken = usdPrice?.length && usdPrice[0]
+  console.log(
+    'burn================>',
+    rampAccount?.isExtraToken,
+    nativeToToken?.toString(),
+    parseFloat(state.amountReceivable) * parseFloat(nativeToToken?.toString()),
+  )
   useEffect(() => {
     if (inputRef && inputRef.current) {
       inputRef.current.focus()
@@ -218,7 +228,11 @@ const BurnStage: React.FC<any> = ({
               variant="danger"
               onClick={continueToNextStage}
               disabled={
-                Number(state.amountReceivable) < 2 ||
+                !state.amountReceivable ||
+                Number.isNaN(state.amountReceivable) ||
+                (rampAccount?.isExtraToken
+                  ? parseFloat(state.amountReceivable) * parseFloat(nativeToToken?.toString()) < 2
+                  : Number(state.amountReceivable) < 2) ||
                 (toVC && state.vcTokenSymbol?.toLowerCase() !== symbol?.toLowerCase())
               }
             >

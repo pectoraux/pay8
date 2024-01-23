@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useRouter } from 'next/router'
 import { loadStripe } from '@stripe/stripe-js'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRef, useEffect, useState, useMemo } from 'react'
@@ -8,7 +9,7 @@ import { Text, Flex, Balance, Button, Box, Card, Toggle, CopyButton, useModal, A
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 import { useRampHelper } from 'hooks/useContract'
-import { useCurrPool, useGetAccountSg } from 'state/ramps/hooks'
+import { useCurrPool, useGetAccountSg, useGetExtraUSDPrices } from 'state/ramps/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
@@ -89,12 +90,24 @@ const DataCard = ({ idx, session, pool }) => {
   const [burntToVC, setBurntToVC] = useState(false)
   const [isDisabled, setDisabled] = useState(true)
   const variant = !session?.mintSession ? 'transfer' : session?.ppDataFound ? 'mint' : 'charge'
-  const currState = useCurrPool()
   const rampAccount = useMemo(
-    () => pool.accounts?.find((acct) => acct.token.address === currState[pool?.rampAddress]),
-    [pool, currState],
+    () => pool.accounts?.find((acct) => acct.token.address?.toLowerCase() === session?.token?.address?.toLowerCase()),
+    [pool.accounts, session?.token?.address],
   )
-  console.log('variant=============>', variant, accountData, rampAccount)
+  const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
+  console.log('usdPrice=================>', parseFloat(session.amount) * parseFloat(usdPrice?.length && usdPrice[0]))
+  console.log(
+    '13variant=============>',
+    session,
+    variant,
+    accountData,
+    rampAccount,
+    pool,
+    rampAccount?.isExtraToken
+      ? parseFloat(session.amount) * parseFloat(usdPrice?.length && usdPrice[0])
+      : session.amount,
+  )
+
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal variant={variant} session={session} location="staked" pool={pool} currency={currency} />,
   )
@@ -116,7 +129,6 @@ const DataCard = ({ idx, session, pool }) => {
   const processCharge = async () => {
     setIsLoading(true)
     const route = variant === 'charge' ? '/api/charge' : '/api/transfer'
-    const nativeToToken = getBalanceNumber(rampAccount?.nativeToToken)
     const args =
       variant === 'charge'
         ? {
@@ -128,7 +140,7 @@ const DataCard = ({ idx, session, pool }) => {
           }
         : {
             amount: rampAccount?.isExtraToken
-              ? parseFloat(session.amount) * parseFloat(nativeToToken?.toString())
+              ? parseFloat(session.amount) * parseFloat(usdPrice?.length && usdPrice[0])
               : session.amount,
             symbol: rampAccount?.isExtraToken ? 'USD' : session?.token?.symbol,
             accountId: accountData?.id,
@@ -237,7 +249,7 @@ const DataCard = ({ idx, session, pool }) => {
                 disabled={
                   isDisabled ||
                   burntToVC ||
-                  parseInt(session.amount ?? '0') < 1 ||
+                  (!rampAccount?.isExtraToken && parseInt(session.amount ?? '0') < 1) ||
                   !session?.active ||
                   session.user?.toLowerCase() !== account?.toLowerCase() ||
                   !(pool?.secretKeys?.length && pool?.secretKeys[0]) ||
@@ -256,7 +268,7 @@ const DataCard = ({ idx, session, pool }) => {
                 disabled={
                   isDisabled ||
                   burntToVC ||
-                  parseInt(session.amount ?? '0') < 1 ||
+                  (!rampAccount?.isExtraToken && parseInt(session.amount ?? '0') < 1) ||
                   !session?.active ||
                   session.user?.toLowerCase() !== account?.toLowerCase() ||
                   !(pool?.secretKeys?.length && pool?.secretKeys[0]) ||

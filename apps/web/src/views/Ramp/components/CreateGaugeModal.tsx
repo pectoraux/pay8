@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
@@ -6,7 +7,7 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useERC20, useRampContract, useRampHelper } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
@@ -30,6 +31,7 @@ import {
   useGetSessionInfo,
   useGetSessionInfoSg,
   useGetIsExtraToken,
+  useGetExtraUSDPrices,
 } from 'state/ramps/hooks'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -129,7 +131,6 @@ const CreateGaugeModal: React.FC<any> = ({
   location = 'ramp',
   pool,
   currency,
-  rampAccount,
   onDismiss,
 }) => {
   const [stage, setStage] = useState(
@@ -172,13 +173,18 @@ const CreateGaugeModal: React.FC<any> = ({
     chain: fantomTestnet,
     transport: custom(window.ethereum),
   })
-
-  console.log('mcurrencyy===============>', currency, rampContract)
+  console.log('1mcurrencyy===============>', pool, currency, rampContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const { data } = useGetSessionInfoSg(sessionId, rampContract?.address?.toLowerCase())
   const { data: stripeData } = useGetSessionInfo(sessionId ?? '', pool?.secretKeys && pool?.secretKeys[0])
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
   const { data: isExtraToken } = useGetIsExtraToken(data?.tokenAddress)
+  const rampAccount = useMemo(
+    () => pool.accounts?.find((acct) => acct.token.address?.toLowerCase() === data?.tokenAddress),
+    [pool.accounts, data?.tokenAddress],
+  )
+  const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
+  console.log('nativeToToken=================>', usdPrice)
   // console.log('data=================>', data)
   // console.log('stripeData=================>', stripeData, tokenData)
 
@@ -507,14 +513,24 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_MINT) {
-        const amount = getDecimalAmount(stripeData?.amount, 18)
-        console.log('CONFIRM_MINT===============>', [
-          data?.tokenAddress,
-          account,
-          parseFloat(amount.toString()) * parseFloat(rampAccount?.nativeToToken?.toString()),
-          state.identityTokenId,
-          state.sessionId,
-        ])
+        const native = getBalanceNumber(new BigNumber(usdPrice?.length && usdPrice[0]))
+        console.log(
+          '2CONFIRM_MINT===============>',
+          stripeData?.amount,
+          native,
+          parseFloat(stripeData?.amount) / parseFloat(native?.toString()),
+          [
+            data?.tokenAddress,
+            account,
+            BigInt(
+              getDecimalAmount(
+                new BigNumber(parseFloat(stripeData?.amount) / parseFloat(native?.toString())),
+              )?.toString(),
+            ),
+            state.identityTokenId,
+            state.sessionId,
+          ],
+        )
         const { request } = await client.simulateContract({
           account: adminAccount,
           address: rampContract.address,
@@ -523,7 +539,11 @@ const CreateGaugeModal: React.FC<any> = ({
           args: [
             data?.tokenAddress,
             account,
-            BigInt((parseFloat(amount.toString()) * parseFloat(rampAccount?.nativeToToken?.toString()))?.toString()),
+            BigInt(
+              getDecimalAmount(
+                new BigNumber(parseFloat(stripeData?.amount) / parseFloat(native?.toString())),
+              )?.toString(),
+            ),
             state.identityTokenId,
             state.sessionId,
           ],
@@ -857,6 +877,8 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.BURN && (
         <BurnStage
           state={state}
+          isExtraToken={isExtraToken}
+          rampAccount={rampAccount}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
           rampHelperContract={rampHelperContract}

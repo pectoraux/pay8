@@ -182,6 +182,27 @@ export const getExtraPrices = async (symbols, decrypted, nativePrice) => {
   }
 }
 
+export const getExtraUSDPrices = async (symbols, decrypted) => {
+  try {
+    const prices = await Promise.all(
+      symbols?.map(async (symbol) => {
+        try {
+          const { data: tokenPrice } = await axios.post('/api/tokenPrice', { symbol, decrypted })
+          return parseFloat(tokenPrice?.data)
+        } catch (err) {
+          console.log('0mprices=============>', err)
+          return 0
+        }
+      }),
+    )
+    console.log('2mprices===========================>', prices)
+    return prices
+  } catch (error) {
+    console.error('Failed to fetch extra usd from api=============>', error, symbols)
+    return null
+  }
+}
+
 export const getRamps = async (first = 5, skip = 0, where = {}) => {
   try {
     const res = await request(
@@ -309,6 +330,22 @@ export const getAccountSg = async (address: string, channel: string) => {
     console.error('Failed to fetch account=============>', error)
     return null
   }
+}
+
+export const getNativeToToken = async (tokenAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [_nativeToToken] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getRampHelperAddress(),
+        abi: rampHelperABI,
+        functionName: 'convert',
+        args: [tokenAddress, BigInt(1000000000000000000)],
+      },
+    ],
+  })
+  return _nativeToToken.result.toString()
 }
 
 export const getTokenData = async (tokenAddress, chainId) => {

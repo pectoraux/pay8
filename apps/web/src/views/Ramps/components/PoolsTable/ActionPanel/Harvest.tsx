@@ -178,7 +178,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId, rampAccount }) =>
                 value={getBalanceNumber(rampAccount?.nativeToToken)}
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('%native% price in %token%', { native: pool?.nativeSymbol, token: rampAccount?.token?.symbol })}
+                {t('%token% price in %native%', { native: pool?.nativeSymbol, token: rampAccount?.token?.symbol })}
               </Text>
             </Box>
           ) : null}

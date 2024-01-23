@@ -1,3 +1,4 @@
+import NodeRSA from 'encrypt-rsa'
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
 import { useEffect, useRef, useState } from 'react'
@@ -23,6 +24,7 @@ import { rampHelperABI } from 'config/abi/rampHelper'
 import { getRampHelperAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useGetExtraUSDPrices } from 'state/ramps/hooks'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -57,7 +59,7 @@ const SetPriceStage: React.FC<any> = ({
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const mintable = getBalanceNumber(rampAccount?.mintable)
-  const nativeToToken = getBalanceNumber(rampAccount?.nativeToToken)
+  const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
   const defaultCurrency = {
     name: rampAccount?.token?.name,
     symbol: 'usd',
@@ -77,7 +79,7 @@ const SetPriceStage: React.FC<any> = ({
     const args = {
       account,
       price: rampAccount?.isExtraToken
-        ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
+        ? parseFloat(state.amountPayable) * parseFloat(usdPrice?.length && usdPrice[0])
         : state.amountPayable,
       amountPayable: state.amountPayable,
       currency: rampAccount?.isExtraToken ? defaultCurrency : currency,
@@ -232,7 +234,9 @@ const SetPriceStage: React.FC<any> = ({
             pool?.automatic &&
             (!state.pk ||
               !state.sk ||
-              state.amountPayable < 2 ||
+              (rampAccount?.isExtraToken
+                ? parseFloat(state.amountPayable) * parseFloat(usdPrice?.length && usdPrice[0]) < 2
+                : state.amountPayable < 2) ||
               parseInt(mintable.toString()) < parseInt(state.amountPayable))
           }
         >
