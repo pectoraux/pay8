@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { useGetCardFromStripe, useGetCardId, useGetExtraTokens, usePool } from 'state/ramps/hooks'
+import { useGetAccountSg, useGetCardFromStripe, useGetCardId, useGetExtraTokens, usePool } from 'state/ramps/hooks'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
@@ -35,6 +35,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId, rampAccount }) =>
   const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
   const [activeButtonIndex, setActiveButtonIndex] = useState(0)
   const { data: extraTokens } = useGetExtraTokens(account)
+  const { data: accountData } = useGetAccountSg(account, 'stripe')
   console.log('rampAccountrampAccount==================>', rampAccount, extraTokens)
   const actionTitle = (
     <Flex flex="1" flexDirection="row" alignSelf="flex-center">
@@ -179,6 +180,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId, rampAccount }) =>
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                 {t('%token% price in %native%', { native: pool?.nativeSymbol, token: rampAccount?.token?.symbol })}
+              </Text>
+            </Box>
+          ) : null}
+          {accountData?.active && accountData?.id ? (
+            <Box mr="8px" height="32px">
+              <Text lineHeight="1" color="textSubtle" fontSize="12px" textTransform="uppercase">
+                {accountData?.id}
+              </Text>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Linked Account')}
               </Text>
             </Box>
           ) : null}

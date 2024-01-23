@@ -21,7 +21,7 @@ import {
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 import { useRampHelper } from 'hooks/useContract'
-import { useGetAccountSg, useGetExtraUSDPrices } from 'state/ramps/hooks'
+import { useGetAccountSg, useGetExtraUSDPrices, useGetFiatPrice } from 'state/ramps/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
@@ -105,8 +105,17 @@ const DataCard = ({ idx, session, pool }) => {
     () => pool.accounts?.find((acct) => acct.token.address?.toLowerCase() === session?.token?.address?.toLowerCase()),
     [pool.accounts, session?.token?.address],
   )
-  const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
-  console.log('usdPrice=================>', parseFloat(session.amount) * parseFloat(usdPrice?.length && usdPrice[0]))
+  const { data: _usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
+  const { data: fiatUsdPrice } = useGetFiatPrice(
+    rampAccount?.token?.symbol,
+    process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO,
+  )
+  const usdPrice = rampAccount?.isExtraToken
+    ? _usdPrice?.length && _usdPrice[0]
+    : rampAccount?.token?.symbol?.toLowerCase() !== pool?.symbol?.toLowerCase()
+    ? fiatUsdPrice
+    : 1
+  console.log('usdPrice=================>', parseFloat(session.amount) * parseFloat(usdPrice))
   console.log(
     '13variant=============>',
     session,
@@ -114,9 +123,7 @@ const DataCard = ({ idx, session, pool }) => {
     accountData,
     rampAccount,
     pool,
-    rampAccount?.isExtraToken
-      ? parseFloat(session.amount) * parseFloat(usdPrice?.length && usdPrice[0])
-      : session.amount,
+    parseFloat(session.amount) * parseFloat(usdPrice),
   )
 
   const [openPresentControlPanel] = useModal(
@@ -155,9 +162,7 @@ const DataCard = ({ idx, session, pool }) => {
             sk: pool?.secretKeys?.length && pool?.secretKeys[0],
           }
         : {
-            amount: rampAccount?.isExtraToken
-              ? parseFloat(session.amount) * parseFloat(usdPrice?.length && usdPrice[0])
-              : session.amount,
+            amount: parseFloat(session.amount) * parseFloat(usdPrice),
             symbol: rampAccount?.isExtraToken ? 'USD' : session?.token?.symbol,
             accountId: accountData?.id,
             sk: pool?.secretKeys?.length && pool?.secretKeys[0],
