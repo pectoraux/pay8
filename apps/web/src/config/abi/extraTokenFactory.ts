@@ -46,9 +46,9 @@ export const extraTokenFactoryABI = [
     name: 'isExtraToken',
     outputs: [
       {
-        internalType: 'bool',
+        internalType: 'address',
         name: '',
-        type: 'bool',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -70,6 +70,11 @@ export const extraTokenFactoryABI = [
         internalType: 'string',
         name: '_callObject',
         type: 'string',
+      },
+      {
+        internalType: 'bool',
+        name: '_update',
+        type: 'bool',
       },
       {
         internalType: 'address',

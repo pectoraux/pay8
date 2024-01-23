@@ -26,32 +26,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token Name')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="name"
-          value={state.name}
-          placeholder={t('input extra token name')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Token Symbol')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="symbol"
-          value={state.symbol}
-          placeholder={t('input extra token symbol')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer>
-      <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Stringified Call Object')}
         </Text>
         <Input
@@ -69,16 +43,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t(
-              'This will deploy a new extra token that your can later on add to the ramp so it can be minted by users.',
-            )}
+            {t('This will update a previously deployed extra token.')}
           </Text>
         </Box>
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Deploy')}
+          {t('Update')}
         </Button>
       </Flex>
     </>

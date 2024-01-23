@@ -50,6 +50,7 @@ import ClaimRevenueStage from './ClaimRevenueStage'
 import AdminWithdrawStage from './AdminWithdrawStage'
 import CreateProtocolStage from './CreateProtocolStage'
 import CreateProtocol2Stage from './CreateProtocol2Stage'
+import CreateProtocol3Stage from './CreateProtocol3Stage'
 import UpdateBlacklistStage from './UpdateBlacklistStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import VoteStage from './VoteStage'
@@ -104,7 +105,8 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.DELETE]: t('Delete'),
   [LockStage.DELETE_RAMP]: t('Delete Ramp'),
   [LockStage.CREATE_PROTOCOL]: t('Add Token Market'),
-  [LockStage.CREATE_PROTOCOL2]: t('Add Extra Token Market'),
+  [LockStage.CREATE_PROTOCOL2]: t('Add Extra Token'),
+  [LockStage.CREATE_PROTOCOL3]: t('Update Extra Token'),
   [LockStage.UPDATE_ADMIN]: t('Update Ramp Admin'),
   [LockStage.UPDATE_DEV]: t('Update Ramp Owner'),
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
@@ -135,6 +137,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_ADMIN_WITHDRAW]: t('Back'),
   [LockStage.CONFIRM_CREATE_PROTOCOL]: t('Back'),
   [LockStage.CONFIRM_CREATE_PROTOCOL2]: t('Back'),
+  [LockStage.CONFIRM_CREATE_PROTOCOL3]: t('Back'),
   [LockStage.CONFIRM_DELETE]: t('Back'),
   [LockStage.CONFIRM_DELETE_RAMP]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BOUNTY]: t('Back'),
@@ -536,6 +539,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_CREATE_PROTOCOL2:
         setStage(LockStage.CREATE_PROTOCOL2)
         break
+      case LockStage.CONFIRM_CREATE_PROTOCOL3:
+        setStage(LockStage.CREATE_PROTOCOL3)
+        break
+      case LockStage.CREATE_PROTOCOL3:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
       case LockStage.CONFIRM_UPDATE_BOUNTY:
         setStage(LockStage.UPDATE_BOUNTY)
         break
@@ -581,6 +590,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CREATE_PROTOCOL2:
         setStage(LockStage.CONFIRM_CREATE_PROTOCOL2)
+        break
+      case LockStage.CREATE_PROTOCOL3:
+        setStage(LockStage.CONFIRM_CREATE_PROTOCOL3)
         break
       case LockStage.MINT:
         setStage(LockStage.CONFIRM_MINT)
@@ -717,11 +729,24 @@ const CreateGaugeModal: React.FC<any> = ({
           text: state.callObject,
           publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
         })
-        const args = [state.name, state.symbol, encrypted, account]
+        const args = [state.name, state.symbol, encrypted, false, account]
         console.log('CONFIRM_CREATE_PROTOCOL2===============>', args, encrypted)
         console.log('1CONFIRM_CREATE_PROTOCOL2===============>', JSON.parse(state.callObject))
         return callWithGasPrice(extraTokenFactoryContract, 'mintExtraToken', args).catch((err) =>
           console.log('CONFIRM_CREATE_PROTOCOL2===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_CREATE_PROTOCOL3) {
+        const encryptRsa = new EncryptRsa()
+        const encrypted = encryptRsa.encryptStringWithRsaPublicKey({
+          text: state.callObject,
+          publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY_4096,
+        })
+        const args = ['', '', encrypted, true, account]
+        console.log('CONFIRM_CREATE_PROTOCOL3===============>', args, encrypted)
+        console.log('1CONFIRM_CREATE_PROTOCOL3===============>', JSON.parse(state.callObject))
+        return callWithGasPrice(extraTokenFactoryContract, 'mintExtraToken', args).catch((err) =>
+          console.log('CONFIRM_CREATE_PROTOCOL3===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_LOCATION) {
@@ -1262,10 +1287,13 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL)}>
             {t('ADD TOKEN MARKET')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL2)}>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL2)}>
             {t('DEPLOY EXTRA TOKEN')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.CREATE_PROTOCOL3)}>
+            {t('UPDATE EXTRA TOKEN CALL')}
+          </Button>
+          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
             {t('ADD EXTRA TOKEN')}
           </Button>
           <Button
@@ -1460,6 +1488,9 @@ const CreateGaugeModal: React.FC<any> = ({
       )}
       {stage === LockStage.CREATE_PROTOCOL2 && (
         <CreateProtocol2Stage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.CREATE_PROTOCOL3 && (
+        <CreateProtocol3Stage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_PROTOCOL && (
         <UpdateProtocolStage
