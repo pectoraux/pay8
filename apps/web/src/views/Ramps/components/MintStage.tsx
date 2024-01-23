@@ -21,6 +21,7 @@ import { fantomTestnet } from 'viem/chains'
 import { privateKeyToAccount } from 'viem/accounts'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { getRampHelperAddress } from 'utils/addressHelpers'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -45,8 +46,7 @@ const SetPriceStage: React.FC<any> = ({
   pool,
   currency,
   rampAddress,
-  mintable,
-  nativeToToken,
+  rampAccount,
   handleChange,
   continueToNextStage,
 }) => {
@@ -55,6 +55,8 @@ const SetPriceStage: React.FC<any> = ({
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const mintable = getBalanceNumber(rampAccount?.mintable)
+  const nativeToToken = getBalanceNumber(rampAccount?.nativeToToken)
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
   const client = createPublicClient({
     chain: fantomTestnet,
@@ -68,10 +70,10 @@ const SetPriceStage: React.FC<any> = ({
     setIsLoading(true)
     const { data } = await axios.post('/api/charge', {
       account,
-      price: pool?.isExtraToken
+      price: rampAccount?.isExtraToken
         ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
         : state.amountPayable,
-      currency: pool?.isExtraToken ? 'USD' : currency,
+      currency: rampAccount?.isExtraToken ? 'USD' : currency,
       rampAddress,
       sk: state.sk,
     })

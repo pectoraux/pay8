@@ -1429,9 +1429,8 @@ const CreateGaugeModal: React.FC<any> = ({
         <MintStage
           state={state}
           pool={pool}
-          mintable={getBalanceNumber(rampAccount?.mintable)}
           currency={currency}
-          nativeToToken={getBalanceNumber(rampAccount?.nativeToToken)}
+          rampAccount={rampAccount}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
           rampHelperContract={rampHelperContract}
@@ -1574,6 +1573,7 @@ const CreateGaugeModal: React.FC<any> = ({
         <BurnToVCStage
           state={state}
           setBurntToVC={setBurntToVC}
+          rampAccount={rampAccount}
           handleChange={handleChange}
           rampHelperContract={rampHelperContract}
           onDismiss={onDismiss}

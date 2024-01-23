@@ -1,16 +1,17 @@
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { Text, Flex, Balance, Button, Box, Card, Toggle, CopyButton, useModal, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 import { useRampHelper } from 'hooks/useContract'
-import { useGetAccountSg } from 'state/ramps/hooks'
+import { useCurrPool, useGetAccountSg } from 'state/ramps/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import CreateGaugeModal from '../../CreateGaugeModal'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 const CardWrapper = styled(Card)`
   display: inline-block;
@@ -87,7 +88,12 @@ const DataCard = ({ idx, session, pool }) => {
   const [burntToVC, setBurntToVC] = useState(false)
   const [isDisabled, setDisabled] = useState(true)
   const variant = !session?.mintSession ? 'transfer' : session?.ppDataFound ? 'mint' : 'charge'
-  console.log('variant=============>', variant, accountData)
+  const currState = useCurrPool()
+  const rampAccount = useMemo(
+    () => pool.accounts?.find((acct) => acct.token.address === currState[pool?.rampAddress]),
+    [pool, currState],
+  )
+  console.log('variant=============>', variant, accountData, rampAccount)
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal variant={variant} session={session} location="staked" pool={pool} currency={currency} />,
   )
@@ -109,6 +115,7 @@ const DataCard = ({ idx, session, pool }) => {
   const processCharge = async () => {
     setIsLoading(true)
     const route = variant === 'charge' ? '/api/charge' : '/api/transfer'
+    const nativeToToken = getBalanceNumber(rampAccount?.nativeToToken)
     const args =
       variant === 'charge'
         ? {
@@ -119,8 +126,10 @@ const DataCard = ({ idx, session, pool }) => {
             sk: pool?.secretKeys?.length && pool?.secretKeys[0],
           }
         : {
-            amount: session.amount,
-            symbol: session?.token?.symbol,
+            amount: rampAccount?.isExtraToken
+              ? parseFloat(session.amount) * parseFloat(nativeToToken?.toString())
+              : session.amount,
+            symbol: rampAccount?.isExtraToken ? 'USD' : session?.token?.symbol,
             accountId: accountData?.id,
             sk: pool?.secretKeys?.length && pool?.secretKeys[0],
           }
