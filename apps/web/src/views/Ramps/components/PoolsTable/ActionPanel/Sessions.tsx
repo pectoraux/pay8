@@ -25,7 +25,6 @@ import { useGetAccountSg, useGetExtraUSDPrices } from 'state/ramps/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
-import { AtomBox } from '@pancakeswap/ui'
 
 const CardWrapper = styled(Card)`
   display: inline-block;
