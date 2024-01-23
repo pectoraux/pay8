@@ -22,6 +22,8 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { getRampHelperAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { useCurrency } from 'hooks/Tokens'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -55,6 +57,7 @@ const SetPriceStage: React.FC<any> = ({
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const inputCurrency = useCurrency(DEFAULT_TFIAT)
   const mintable = getBalanceNumber(rampAccount?.mintable)
   const nativeToToken = getBalanceNumber(rampAccount?.nativeToToken)
   const acct = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
@@ -73,20 +76,12 @@ const SetPriceStage: React.FC<any> = ({
       price: rampAccount?.isExtraToken
         ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
         : state.amountPayable,
-      currency,
+      currency: rampAccount?.isExtraToken ? inputCurrency : currency,
       rampAddress,
       sk: state.sk,
     }
     console.log('11data=====================>', args)
-    const { data } = await axios.post('/api/charge', {
-      account,
-      price: rampAccount?.isExtraToken
-        ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
-        : state.amountPayable,
-      currency: rampAccount?.isExtraToken ? 'USD' : currency,
-      rampAddress,
-      sk: state.sk,
-    })
+    const { data } = await axios.post('/api/charge', args)
     if (data.error) {
       console.log('data.error=====================>', data.error)
       setErrorMessage(data.error?.raw?.message)

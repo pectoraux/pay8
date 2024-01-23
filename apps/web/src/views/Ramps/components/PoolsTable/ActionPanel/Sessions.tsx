@@ -10,8 +10,9 @@ import { useCurrency } from 'hooks/Tokens'
 import { useRampHelper } from 'hooks/useContract'
 import { useCurrPool, useGetAccountSg } from 'state/ramps/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import CreateGaugeModal from '../../CreateGaugeModal'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+
+import CreateGaugeModal from '../../CreateGaugeModal'
 
 const CardWrapper = styled(Card)`
   display: inline-block;

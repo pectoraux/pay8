@@ -1429,7 +1429,7 @@ const CreateGaugeModal: React.FC<any> = ({
         <MintStage
           state={state}
           pool={pool}
-          currency={rampAccount?.isExtraToken ? defaultTokenContract : currency}
+          currency={currency}
           rampAccount={rampAccount}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
