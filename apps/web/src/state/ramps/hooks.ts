@@ -33,6 +33,7 @@ import {
   getAccountSg,
   getCardId,
   getExtraPrices,
+  getExtraTokenCall,
   getExtraTokens,
   getPrices,
   getRampSg,
@@ -141,6 +142,15 @@ export const useGetSessionInfoSg = (sessionId, rampAddress) => {
     status,
     mutate: refetch,
   } = useSWR(['ramp-session-info', sessionId ?? '0', rampAddress], async () => getSession(sessionId, rampAddress))
+  return { data, refetch, status }
+}
+
+export const useGetIsExtraToken = (tokenAddress) => {
+  const {
+    data,
+    status,
+    mutate: refetch,
+  } = useSWR(['useGetIsExtraToken', tokenAddress], async () => getExtraTokenCall(tokenAddress?.toLowerCase()))
   return { data, refetch, status }
 }
 

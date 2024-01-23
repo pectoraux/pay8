@@ -98,14 +98,7 @@ const SetPriceStage: React.FC<any> = ({
         address: getRampHelperAddress(),
         abi: rampHelperABI,
         functionName: 'preMint',
-        args: [
-          rampAddress,
-          account,
-          rampAccount?.isExtraToken ? DEFAULT_TFIAT : currency?.address,
-          state.amountPayable,
-          state.identityTokenId,
-          data.id,
-        ],
+        args: [rampAddress, account, currency?.address, state.amountPayable, state.identityTokenId, data.id],
       })
       await walletClient
         .writeContract(request)

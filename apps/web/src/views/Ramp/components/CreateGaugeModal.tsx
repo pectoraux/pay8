@@ -24,7 +24,13 @@ import { useAppDispatch } from 'state'
 import { fetchRampsAsync } from 'state/ramps'
 import MintStage from 'views/Ramps/components/MintStage'
 import BurnStage from 'views/Ramps/components/BurnStage'
-import { useGetRamp, useGetTokenData, useGetSessionInfo, useGetSessionInfoSg } from 'state/ramps/hooks'
+import {
+  useGetRamp,
+  useGetTokenData,
+  useGetSessionInfo,
+  useGetSessionInfoSg,
+  useGetIsExtraToken,
+} from 'state/ramps/hooks'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import PartnerStage from './PartnerStage'
@@ -172,6 +178,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const { data } = useGetSessionInfoSg(sessionId, rampContract?.address?.toLowerCase())
   const { data: stripeData } = useGetSessionInfo(sessionId ?? '', pool?.secretKeys && pool?.secretKeys[0])
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
+  const { data: isExtraToken } = useGetIsExtraToken(data?.tokenAddress)
   console.log('data=================>', data)
   console.log('stripeData=================>', stripeData, tokenData)
 
@@ -233,7 +240,6 @@ const CreateGaugeModal: React.FC<any> = ({
     burnFee: 0,
     sessionId: '',
   }))
-
   useEffect(() => {
     if (data) {
       if (data?.user?.toLowerCase() !== account?.toLowerCase() || !data?.active) {
@@ -672,7 +678,10 @@ const CreateGaugeModal: React.FC<any> = ({
               mb="8px"
               variant="success"
               onClick={() => setStage(LockStage.CONFIRM_MINT)}
-              disabled={!tokenData || stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase()}
+              disabled={
+                !tokenData ||
+                (!isExtraToken && stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase())
+              }
             >
               {t('CONFIRM MINT')}
             </Button>
