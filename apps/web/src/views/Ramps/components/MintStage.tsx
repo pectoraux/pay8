@@ -22,8 +22,6 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { getRampHelperAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
-import { useCurrency } from 'hooks/Tokens'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -75,6 +73,7 @@ const SetPriceStage: React.FC<any> = ({
       price: rampAccount?.isExtraToken
         ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
         : state.amountPayable,
+      amountPayable: state.amountPayable,
       currency: rampAccount?.isExtraToken
         ? {
             name: rampAccount?.token?.name,
