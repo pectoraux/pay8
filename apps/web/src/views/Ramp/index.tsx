@@ -49,10 +49,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     () => pools?.find((pool) => pool?.rampAddress?.toLowerCase() === rampAddress?.toLowerCase()),
     [pools, rampAddress],
   )
-  const isOwner = ogRamp?.devaddr_ === account
+  const isOwner = ogRamp?.devaddr_?.toLowerCase() === account?.toLowerCase()
   const dispatch = useAppDispatch()
   const [openedAlready, setOpenedAlready] = useState(false)
   const currency = useCurrency((userCurrency ?? undefined)?.toString())
+  console.log('ogRamp=====================>', ogRamp, pools)
   const [onPresentCreateGauge] = useModal(
     <CreateGaugeModal variant="buy" pool={ogRamp} currency={currency ?? userCurrency} />,
   )
