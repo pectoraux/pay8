@@ -180,8 +180,8 @@ const CreateGaugeModal: React.FC<any> = ({
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
   const { data: isExtraToken } = useGetIsExtraToken(data?.tokenAddress)
   const rampAccount = useMemo(
-    () => pool.accounts?.find((acct) => acct.token.address?.toLowerCase() === data?.tokenAddress),
-    [pool.accounts, data?.tokenAddress],
+    () => pool?.accounts?.find((acct) => acct.token.address?.toLowerCase() === data?.tokenAddress),
+    [pool?.accounts, data?.tokenAddress],
   )
   const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
   console.log('nativeToToken=================>', usdPrice)

@@ -339,7 +339,7 @@ export const useGetRamp = (rampAddress) => {
     data,
     status,
     mutate: refetch,
-  } = useSWRImmutable(['ramp-info', rampAddress], async () => getRampSg(rampAddress))
+  } = useSWRImmutable(['ramp-info', rampAddress], async () => getRampSg(rampAddress?.toLowerCase()))
   return { data, refetch, status }
 }
 

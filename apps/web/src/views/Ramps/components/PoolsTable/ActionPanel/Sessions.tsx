@@ -172,7 +172,7 @@ const DataCard = ({ idx, session, pool }) => {
       return callWithGasPrice(rampHelperContract, 'postMint', [session?.id]).then(() => setIsLoading(false))
     }
     return null
-  } // acct_1MRgIdAcbvYb7YlN
+  }
   return (
     <CardWrapper>
       <TopMoverCard>
