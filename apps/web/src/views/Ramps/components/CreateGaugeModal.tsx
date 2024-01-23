@@ -1431,6 +1431,7 @@ const CreateGaugeModal: React.FC<any> = ({
           pool={pool}
           mintable={getBalanceNumber(rampAccount?.mintable)}
           currency={currency}
+          nativeToToken={getBalanceNumber(rampAccount?.nativeToToken)}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}
           rampHelperContract={rampHelperContract}

@@ -46,6 +46,7 @@ const SetPriceStage: React.FC<any> = ({
   currency,
   rampAddress,
   mintable,
+  nativeToToken,
   handleChange,
   continueToNextStage,
 }) => {
@@ -67,8 +68,10 @@ const SetPriceStage: React.FC<any> = ({
     setIsLoading(true)
     const { data } = await axios.post('/api/charge', {
       account,
-      price: state.amountPayable,
-      currency,
+      price: pool?.isExtraToken
+        ? parseFloat(state.amountPayable) * parseFloat(nativeToToken?.toString())
+        : state.amountPayable,
+      currency: pool?.isExtraToken ? 'USD' : currency,
       rampAddress,
       sk: state.sk,
     })
