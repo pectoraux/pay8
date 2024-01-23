@@ -22,6 +22,7 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { rampHelperABI } from 'config/abi/rampHelper'
 import { getRampHelperAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -78,7 +79,7 @@ const SetPriceStage: React.FC<any> = ({
         ? {
             name: rampAccount?.token?.name,
             symbol: 'usd',
-            address: rampAccount?.token?.address,
+            address: DEFAULT_TFIAT, // rampAccount?.token?.address,
           }
         : currency,
       rampAddress,
