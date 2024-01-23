@@ -179,8 +179,8 @@ const CreateGaugeModal: React.FC<any> = ({
   const { data: stripeData } = useGetSessionInfo(sessionId ?? '', pool?.secretKeys && pool?.secretKeys[0])
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
   const { data: isExtraToken } = useGetIsExtraToken(data?.tokenAddress)
-  console.log('data=================>', data)
-  console.log('stripeData=================>', stripeData, tokenData)
+  // console.log('data=================>', data)
+  // console.log('stripeData=================>', stripeData, tokenData)
 
   const [state, setState] = useState<any>(() => ({
     sk: pool?.secretKeys && pool?.secretKeys[0],
@@ -511,7 +511,7 @@ const CreateGaugeModal: React.FC<any> = ({
         console.log('CONFIRM_MINT===============>', [
           data?.tokenAddress,
           account,
-          amount.toString(),
+          parseFloat(amount.toString()) * parseFloat(rampAccount?.nativeToToken?.toString()),
           state.identityTokenId,
           state.sessionId,
         ])
@@ -520,7 +520,13 @@ const CreateGaugeModal: React.FC<any> = ({
           address: rampContract.address,
           abi: rampABI,
           functionName: 'mint',
-          args: [data?.tokenAddress, account, BigInt(amount.toString()), state.identityTokenId, state.sessionId],
+          args: [
+            data?.tokenAddress,
+            account,
+            parseFloat(amount.toString()) * parseFloat(rampAccount?.nativeToToken?.toString()),
+            state.identityTokenId,
+            state.sessionId,
+          ],
         })
         await walletClient.writeContract(request).catch((err) => console.log('CONFIRM_MINT===============>', err))
         return callWithGasPrice(rampHelperContract, 'postMint', [state.sessionId || '']).catch((err) =>

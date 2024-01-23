@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { useGetCardFromStripe, useGetCardId, useGetExtraTokens } from 'state/ramps/hooks'
+import { useGetCardFromStripe, useGetCardId, useGetExtraTokens, usePool } from 'state/ramps/hooks'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
@@ -27,8 +27,9 @@ export function ccFormat(value) {
   return value
 }
 
-const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ sousId, rampAccount }) => {
   const { t } = useTranslation()
+  const { pool } = usePool(sousId)
   const { address: account } = useAccount()
   const { data: vc } = useGetCardId(pool.rampAddress, account)
   const { data: cardInfo } = useGetCardFromStripe(pool?.secretKeys && pool?.secretKeys[0], vc?.cardId)
