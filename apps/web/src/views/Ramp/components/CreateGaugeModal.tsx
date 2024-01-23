@@ -514,7 +514,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_MINT) {
-        const native = usdPrice?.length && usdPrice[0]
+        const native = isExtraToken ? usdPrice?.length && usdPrice[0] : 1
         console.log(
           '2CONFIRM_MINT===============>',
           stripeData?.amount,
