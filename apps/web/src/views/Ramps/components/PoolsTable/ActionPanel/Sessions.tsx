@@ -1,19 +1,31 @@
 import axios from 'axios'
-import { useRouter } from 'next/router'
 import { loadStripe } from '@stripe/stripe-js'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useRef, useEffect, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { Text, Flex, Balance, Button, Box, Card, Toggle, CopyButton, useModal, AutoRenewIcon } from '@pancakeswap/uikit'
+import {
+  Text,
+  Flex,
+  Balance,
+  Button,
+  Box,
+  Card,
+  Toggle,
+  CopyButton,
+  useModal,
+  AutoRenewIcon,
+  CloseIcon,
+  IconButton,
+} from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrency } from 'hooks/Tokens'
 import { useRampHelper } from 'hooks/useContract'
-import { useCurrPool, useGetAccountSg, useGetExtraUSDPrices } from 'state/ramps/hooks'
+import { useGetAccountSg, useGetExtraUSDPrices } from 'state/ramps/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
+import { AtomBox } from '@pancakeswap/ui'
 
 const CardWrapper = styled(Card)`
   display: inline-block;
@@ -126,6 +138,11 @@ const DataCard = ({ idx, session, pool }) => {
     />,
   )
 
+  const closeSession = async () => {
+    console.log('closeSession================>', [session?.id])
+    return callWithGasPrice(rampHelperContract, 'postMint', [session?.id])
+  }
+
   const processCharge = async () => {
     setIsLoading(true)
     const route = variant === 'charge' ? '/api/charge' : '/api/transfer'
@@ -176,6 +193,10 @@ const DataCard = ({ idx, session, pool }) => {
   return (
     <CardWrapper>
       <TopMoverCard>
+        <IconButton variant="text" onClick={closeSession}>
+          {' '}
+          <CloseIcon color="red" />
+        </IconButton>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center" mb="8px">
           <Text lineHeight="1" fontSize="14px" color="textSubtle" as="span">
             {`${idx})`} {csId}
