@@ -17,12 +17,12 @@ import RichTextEditor from 'components/RichText'
 import { useTranslation } from '@pancakeswap/localization'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import { TimePicker } from 'views/ValuePoolVoting/components/DatePicker'
 import Options from './Options'
 import { EnlistFormState } from './types'
 import { Divider } from '../shared/styles'
 import { GreyedOutContainer } from './styles'
 import Filters from './Filters'
-import { TimePicker } from 'views/ValuePoolVoting/components/DatePicker'
 
 interface SetPriceStageProps {
   state: EnlistFormState

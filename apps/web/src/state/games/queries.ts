@@ -18,6 +18,7 @@ export const gameFields = `
   tokenId
   gameName
   gameLink
+  gameAPI
   pricePerMinutes
   creatorShare
   referrerFee

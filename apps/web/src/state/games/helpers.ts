@@ -13,12 +13,10 @@ import { gameMinterABI } from 'config/abi/gameMinter'
 
 import { gameFields, protocolFields } from './queries'
 
-export const fetchGameData = async (gameName, tokenId) => {
-  // return (await firestore.collection(gameName).doc(tokenId).get()).data()
-  const { data } = await axios.post('/api/fiatPrice', {
-    url: 'https://firestore.googleapis.com/v1/projects/tiktok-a2bdb/databases/(default)/documents/c4/1',
-  })
+export const fetchGameData = async (url, tokenId) => {
+  const { data } = await axios.post('/api/fireData', { url: `${url}${tokenId ?? 0}` })
   console.log('fetchGameData====================>', data)
+  return data
 }
 
 export const getTag = async () => {

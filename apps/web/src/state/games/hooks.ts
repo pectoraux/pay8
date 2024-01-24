@@ -22,8 +22,8 @@ export const useGetTags = () => {
   return data ?? ''
 }
 
-export const useGetGame = (gameName: string, tokenId: string) => {
-  const { data } = useSWRImmutable(['fb-score', gameName, tokenId], async () => fetchGameData(gameName, tokenId))
+export const useGetGame = (url, tokenId) => {
+  const { data } = useSWRImmutable(['useGetGame', url, tokenId], async () => fetchGameData(url, tokenId))
   return data
 }
 

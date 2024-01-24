@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -13,7 +12,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const UpdateInfoStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
+const UpdateInfoStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -51,6 +50,19 @@ const UpdateInfoStage: React.FC<any> = ({ state, handleChange, handleRawValueCha
           onChange={handleChange}
         />
       </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Game API Link')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="gameAPI"
+          value={state.gameAPI}
+          placeholder={t('input game api link')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -58,7 +70,7 @@ const UpdateInfoStage: React.FC<any> = ({ state, handleChange, handleRawValueCha
         <Box>
           <Text small color="textSubtle">
             {t(
-              "This will update the game's name as well as the link to the game so users can load and play the game. Please read the documentation for more information on each parameter",
+              "This will update the game's name, the link to the game so users can load and play the game, as well as the api link from where the game contract can fetch users' score to write on the blockchain. Please read the documentation for more information on each parameter",
             )}
           </Text>
         </Box>

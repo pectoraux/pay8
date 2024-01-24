@@ -150,7 +150,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   const gameMinterContract = useGameMinter()
   const gameHelperContract = useGameHelper()
   const gameHelper2Contract = useGameHelper2()
-  const gameData = useGetGame(pool?.gameName?.toLowerCase(), currAccount?.id ?? '0') as any
+  const gameData = useGetGame(pool?.gameAPI, currAccount?.id ?? '0') as any
+  // const gameData = useGetGame(`https://firestore.googleapis.com/v1/projects/tiktok-a2bdb/databases/(default)/documents/c4/${currAccount?.id ?? '0'}`) as any
   console.log('gameMinterContractWithPayswapSigner==========>', gameData, gameMinterContract)
   console.log('mcurrencyy===============>', currAccount, currency, pool, gameContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
@@ -200,6 +201,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     owner: pool?.owner || '',
     gameName: '',
     gameLink: '',
+    gameAPI: '',
     customTags: '',
   }))
 
@@ -568,15 +570,19 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       if (stage === LockStage.CONFIRM_PROCESS_SCORE) {
         console.log('CONFIRM_PROCESS_SCORE===============>', [
           currAccount?.id,
-          BigInt(parseInt(gameData?.score)),
-          BigInt(parseInt(gameData?.deadline)),
+          BigInt(Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()),
+          BigInt(parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0')),
         ])
         const { request } = await client.simulateContract({
           account: adminAccount,
           address: getGameMinterAddress(),
           abi: gameMinterABI,
           functionName: 'updateScoreNDeadline',
-          args: [BigInt(currAccount?.id), BigInt(parseInt(gameData?.score)), BigInt(parseInt(gameData?.deadline))],
+          args: [
+            BigInt(currAccount?.id),
+            BigInt(Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()),
+            BigInt(parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0')),
+          ],
         })
         return walletClient
           .writeContract(request)
@@ -669,7 +675,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_INFO) {
-        const args = ['0', pool?.collection?.id, state.gameLink, state.gameName, '0', '0', ADDRESS_ZERO, '']
+        const args = ['0', pool?.collection?.id, state.gameLink, state.gameName, '0', '0', ADDRESS_ZERO, state.gameAPI]
         console.log('CONFIRM_UPDATE_INFO===============>', args)
         return callWithGasPrice(gameFactoryContract, 'emitUpdateMiscellaneous', args).catch((err) =>
           console.log('CONFIRM_UPDATE_INFO===============>', err),
@@ -949,8 +955,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       {stage === LockStage.PROCESS_SCORE && (
         <ProcessScoreStage2
           tokenId={currAccount?.id}
-          score={gameData?.score}
-          deadline={gameData?.deadline}
+          score={Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()}
+          deadline={parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0')}
           continueToNextStage={continueToNextStage}
         />
       )}
@@ -958,7 +964,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         <AdminWithdrawStage
           state={state}
           pool={pool}
-          score={gameData?.score}
+          score={Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />

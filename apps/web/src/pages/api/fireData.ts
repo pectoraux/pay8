@@ -3,7 +3,7 @@ import axios from 'axios'
 // get fiat prices
 const handler = async (req, res) => {
   const { url } = req.body
-  console.log('handler================>', url)
+  console.log('1handler================>', url)
   // const options = {
   //   method: 'GET',
   //   url: 'https://alpha-vantage.p.rapidapi.com/query',
@@ -23,7 +23,7 @@ const handler = async (req, res) => {
     const response = await axios.request(url)
     console.log('response==================>', response.data)
     res.send({
-      data: response.data,
+      data: response.data?.fields ?? response.data,
       error: null,
     })
   } catch (error) {

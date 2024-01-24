@@ -13,14 +13,8 @@ import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
-  // const { days, hours, minutes } = getTimePeriods(Number(currAccount?.deadline ?? '0'))
-  // const {
-  //   days: daysReceivable,
-  //   hours: hoursReceivable,
-  //   minutes: minutesReceivable,
-  // } = getTimePeriods(Number(currAccount?.gameMinutes ?? '0'))
   const objectNames = pool?.objectNames?.map((objectName) => objectName?.name)
-  const gameData = useGetGame(pool?.gameName?.toLowerCase(), currAccount?.id ?? '0')
+  const gameData = useGetGame(pool?.gameAPI, currAccount?.id ?? '0') as any
   const { data: resources } = useGetAllResources(currAccount?.id)
   console.log('gamepool1====>', gameData, currAccount)
 
@@ -276,25 +270,25 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             </>
           ) : null}
-          {gameData &&
-            Object.keys(gameData)?.map((elt) => (
-              <>
-                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                  {gameData[elt]?.toString()}
-                </Text>
-                <Text
-                  color="primary"
-                  mb="3px"
-                  fontSize="12px"
-                  display="inline"
-                  bold
-                  as="span"
-                  textTransform="uppercase"
-                >
-                  {elt ?? ''}
-                </Text>
-              </>
-            ))}
+          {gameData && !gameData?.error ? (
+            <>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {format(
+                  new Date(parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0') * 1000),
+                  'yyyy-MM-dd HH:mm',
+                )}
+              </Text>
+              <Text color="primary" mb="3px" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Deadline')}
+              </Text>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()}
+              </Text>
+              <Text color="primary" mb="3px" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Score')}
+              </Text>
+            </>
+          ) : null}
         </Flex>
       </ActionContent>
     </ActionContainer>
