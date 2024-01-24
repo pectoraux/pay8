@@ -7,8 +7,10 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallback, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import CreateGaugeModal from '../../CreateGaugeModal'
+import { useERC20 } from 'hooks/useContract'
+import { useApprovePool } from 'views/Ramps/hooks/useApprove'
 
+import CreateGaugeModal from '../../CreateGaugeModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 
 interface StackedActionProps {
@@ -31,7 +33,9 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
   const rampCurrencyInput = useCurrency(currencyId)
   const [currency, setCurrency] = useState(rampAccount?.address)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  const stakingTokenContract = useERC20(currency?.address || rampAccount?.address || '')
 
+  const { handleApprove } = useApprovePool(stakingTokenContract, pool?.id, currency?.symbol)
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
       variant={variant}
@@ -123,12 +127,15 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
           </Button>
         </ActionContent>
         <ActionContent>
-          <Button
+          {/* <Button
             width="100%"
             // onClick={onPresentPreviousTx}
             variant="secondary"
           >
             {t('Transaction History')}
+          </Button> */}
+          <Button width="100%" onClick={handleApprove} variant="secondary">
+            {t('Increase Allowance')}
           </Button>
           {tokenSessions?.length ? (
             <>

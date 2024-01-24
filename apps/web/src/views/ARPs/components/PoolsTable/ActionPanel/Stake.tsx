@@ -2,22 +2,14 @@ import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { useERC20 } from 'hooks/useContract'
-import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { useCallback } from 'react'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useApprovePool } from 'views/ARPs/hooks/useApprove'
 
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import { useCallback, useMemo, useState } from 'react'
-import { useCurrency } from 'hooks/Tokens'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateGaugeModal from '../../CreateGaugeModal'
-
-const IconButtonWrapper = styled.div`
-  display: flex;
-`
-const HelpIconWrapper = styled.div`
-  align-self: center;
-`
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
@@ -27,6 +19,9 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currency, set
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const variant = pool?.devaddr_?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
+  const stakingTokenContract = useERC20(currency?.address || '')
+
+  const { handleApprove } = useApprovePool(stakingTokenContract, pool?.id, currency?.symbol)
 
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
@@ -75,12 +70,15 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currency, set
         {/* <Flex mb="40px"><NotificationDot show={userData?.requests?.length} /></Flex> */}
       </ActionContent>
       <ActionContent>
-        <Button
+        {/* <Button
           width="100%"
           // onClick={onPresentPreviousTx}
           variant="secondary"
         >
           {t('Transaction History')}
+        </Button> */}
+        <Button width="100%" onClick={handleApprove} variant="secondary">
+          {t('Increase Allowance')}
         </Button>
       </ActionContent>
     </ActionContainer>

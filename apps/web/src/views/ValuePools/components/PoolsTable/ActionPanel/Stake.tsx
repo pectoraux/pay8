@@ -1,8 +1,7 @@
-import { Button, Text, useModal, Pool, Flex } from '@pancakeswap/uikit'
+import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { useERC20 } from 'hooks/useContract'
-import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -17,13 +16,6 @@ import CreateGaugeModal from '../../CreateGaugeModal'
 import InitVaModal from '../../InitVaModal'
 import InitValuepoolModal from '../../InitValuepoolModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-
-const IconButtonWrapper = styled.div`
-  display: flex;
-`
-const HelpIconWrapper = styled.div`
-  align-self: center;
-`
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>

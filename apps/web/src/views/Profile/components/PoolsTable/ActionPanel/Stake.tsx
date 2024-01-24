@@ -4,9 +4,7 @@ import { useCallback, useState } from 'react'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { Token } from '@pancakeswap/sdk'
 import { useCurrency } from 'hooks/Tokens'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 
 import { ActionContainer, ActionContent, ActionTitles } from './styles'

@@ -1,9 +1,9 @@
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
-import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
-
+import { useERC20 } from 'hooks/useContract'
+import { useApprovePool } from 'views/Bettings/hooks/useApprove'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallback, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
@@ -12,13 +12,6 @@ import { useGetAmountCollected } from 'state/bettings/hooks'
 
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import CreateGaugeModal from '../../CreateGaugeModal'
-
-const IconButtonWrapper = styled.div`
-  display: flex;
-`
-const HelpIconWrapper = styled.div`
-  align-self: center;
-`
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
@@ -36,6 +29,9 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
     currAccount?.bettingId,
     currAccount?.periods?.length > 0 ? currAccount.periods.length - 1 : 0,
   )
+  const stakingTokenContract = useERC20(currAccount?.token?.address || '')
+
+  const { handleApprove } = useApprovePool(stakingTokenContract, pool?.id, currency?.symbol)
   const [openPresentControlPanel] = useModal(
     <CreateGaugeModal
       variant={variant}
@@ -84,12 +80,16 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
         {/* <Flex mb="40px"><NotificationDot show={userData?.requests?.length} /></Flex> */}
       </ActionContent>
       <ActionContent>
-        <Button
+        {/* <Button
           width="100%"
           // onClick={onPresentPreviousTx}
           variant="secondary"
         >
           {t('Transaction History')}
+        </Button> */}
+
+        <Button width="100%" onClick={handleApprove} variant="secondary">
+          {t('Increase Allowance')}
         </Button>
       </ActionContent>
     </ActionContainer>

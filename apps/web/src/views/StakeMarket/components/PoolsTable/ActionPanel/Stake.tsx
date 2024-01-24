@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCurrency } from 'hooks/Tokens'
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
@@ -6,25 +6,16 @@ import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { useERC20 } from 'hooks/useContract'
-import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import { useGetRequiresApproval } from 'state/stakemarket/hooks'
 import { getStakeMarketAddress } from 'utils/addressHelpers'
 
-import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import CreateGaugeModal from '../../CreateGaugeModal'
-import EnableButton from 'views/Game/components/Pot/Deposit/EnableButton'
-import { noop } from 'lodash'
 import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 
-const IconButtonWrapper = styled.div`
-  display: flex;
-`
-const HelpIconWrapper = styled.div`
-  align-self: center;
-`
+import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import CreateGaugeModal from '../../CreateGaugeModal'
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
@@ -40,6 +31,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
   const { needsApproval, refetch } = useGetRequiresApproval(stakingTokenContract, account, stakemarketAddress)
   const currencyA = token
   const [currency, setCurrency] = useState(currencyA)
+
   const handleInputSelect = useCallback((currencyInput) => {
     setCurrency(currencyInput)
   }, [])
@@ -49,7 +41,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
   )
   useEffect(() => {
     refetch()
-  }, [account, chainId])
+  }, [account, chainId, refetch])
 
   const { handleApprove, pendingTx } = useApprovePool(
     stakingTokenContract,
@@ -112,12 +104,15 @@ const Staked: React.FunctionComponent<any> = ({ pool, currPool, toggleApplicatio
         {/* <Flex mb="40px"><NotificationDot show={userData?.requests?.length} /></Flex> */}
       </ActionContent>
       <ActionContent>
-        <Button
+        {/* <Button
           width="100%"
           // onClick={onPresentPreviousTx}
           variant="secondary"
         >
           {t('Transaction History')}
+        </Button> */}
+        <Button width="100%" onClick={handleApprove} variant="secondary">
+          {t('Increase Allowance')}
         </Button>
         {pool?.applications?.length && !parseInt(pool?.partnerStakeId) ? (
           <Button width="100%" onClick={toggleApplications} variant="secondary">

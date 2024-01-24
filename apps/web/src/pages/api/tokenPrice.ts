@@ -17,7 +17,7 @@ const handler = async (req, res) => {
   //     datatype: 'csv'
   //   },
   //   headers: {
-  //     'X-RapidAPI-Key': '2601b11ce6msha2179cbbc81731ep1412dbjsn65af7e46f8cd',
+  //     'X-RapidAPI-Key': '3904sdlksdjofere23lsdspdosdpodjakjsasdiaspasopad45',
   //     'X-RapidAPI-Host': 'alpha-vantage.p.rapidapi.com'
   //   }
   // };

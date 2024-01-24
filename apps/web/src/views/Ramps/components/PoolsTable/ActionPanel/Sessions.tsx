@@ -112,7 +112,8 @@ const DataCard = ({ idx, session, pool }) => {
   )
   const usdPrice = rampAccount?.isExtraToken
     ? _usdPrice?.length && _usdPrice[0]
-    : rampAccount?.token?.symbol?.toLowerCase() !== pool?.symbol?.toLowerCase()
+    : rampAccount?.token?.symbol?.toLowerCase() !== pool?.symbol?.toLowerCase() &&
+      rampAccount?.token?.symbol?.toLowerCase() !== 'usd'
     ? fiatUsdPrice?.data
     : 1
   const symbol =

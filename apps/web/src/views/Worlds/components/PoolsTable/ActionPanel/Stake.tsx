@@ -1,28 +1,18 @@
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
-import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import { useGetRequiresApproval } from 'state/valuepools/hooks'
 import { useERC20 } from 'hooks/useContract'
 import { getWorldHelperAddress } from 'utils/addressHelpers'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useApprovePool } from 'views/ValuePools/hooks/useApprove'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-
-const IconButtonWrapper = styled.div`
-  display: flex;
-`
-const HelpIconWrapper = styled.div`
-  align-self: center;
-`
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
@@ -94,12 +84,15 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount }) => {
         </Button>
       </ActionContent>
       <ActionContent>
-        <Button
+        {/* <Button
           width="100%"
           // onClick={onPresentPreviousTx}
           variant="secondary"
         >
           {t('Transaction History')}
+        </Button> */}
+        <Button width="100%" onClick={handleApprove} variant="secondary">
+          {t('Increase Allowance')}
         </Button>
       </ActionContent>
     </ActionContainer>

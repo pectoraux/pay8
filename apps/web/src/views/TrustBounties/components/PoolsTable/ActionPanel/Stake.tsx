@@ -1,7 +1,6 @@
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
-import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -11,11 +10,11 @@ import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useGetRequiresApproval } from 'state/trustbounties/hooks'
 import { getTrustBountiesHelperAddress } from 'utils/addressHelpers'
 import { useApprovePool } from 'views/TrustBounties/hooks/useApprove'
+import { useERC20 } from 'hooks/useContract'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import { useERC20 } from 'hooks/useContract'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>
@@ -34,7 +33,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
   )
   useEffect(() => {
     refetch()
-  }, [account, chainId])
+  }, [account, chainId, refetch])
 
   console.log('stakemarketAddress====================>', pool, stakingTokenContract, needsApproval)
   const currencyA = token
@@ -107,13 +106,16 @@ const Staked: React.FunctionComponent<any> = ({ pool, toggleApplications }) => {
         {/* <Flex mb="40px"><NotificationDot show={userData?.requests?.length} /></Flex> */}
       </ActionContent>
       <ActionContent>
-        <Button
+        {/* <Button
           width="100%"
           disabled
           // onClick={onPresentPreviousTx}
           variant="secondary"
         >
           {t('Transaction History')}
+        </Button> */}
+        <Button width="100%" onClick={handleApprove} variant="secondary">
+          {t('Increase Allowance')}
         </Button>
         {pool?.friendlyClaims?.length ? (
           <Button width="100%" onClick={toggleApplications} variant="secondary">

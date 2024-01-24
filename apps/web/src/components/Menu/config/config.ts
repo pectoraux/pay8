@@ -11,20 +11,13 @@ import {
   NftFillIcon,
   MoreIcon,
   DropdownMenuItems,
-  ResourcesIcon,
-  RocketIcon,
-  SafePalIcon,
-  SellIcon,
   WalletIcon,
   WalletFilledIcon,
 } from '@pancakeswap/uikit'
 import { ContextApi } from '@pancakeswap/localization'
-import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
 import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { cancanBaseUrl } from 'views/CanCan/market/constants'
-import { getPerpetualUrl } from 'utils/getPerpetualUrl'
-import { SUPPORT_FARMS, SUPPORT_ONLY_BSC, SUPPORT_ONLY_FANTOM_TESTNET } from 'config/constants/supportChains'
-import { NewIconButton } from 'views/BuyCrypto/components/NewIcon'
+import { SUPPORT_ONLY_FANTOM_TESTNET } from 'config/constants/supportChains'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: boolean; image?: string } & {
@@ -302,7 +295,7 @@ const config: (
         },
         {
           label: t('PayChat'),
-          href: 'https://paychat.payswap.org',
+          href: 'https://paychat.payswap.org/#/room/%23paycom%3Amatrix.org?via=matrix.org',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
         {
@@ -310,7 +303,7 @@ const config: (
         },
         {
           label: t('Blog'),
-          href: '/cancan/collections/2',
+          href: '/cancan/collections/1',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
         {
