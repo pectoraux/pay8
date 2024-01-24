@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { firestore } from 'utils/firebase'
+import axios from 'axios'
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_GAMES } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
@@ -14,7 +14,11 @@ import { gameMinterABI } from 'config/abi/gameMinter'
 import { gameFields, protocolFields } from './queries'
 
 export const fetchGameData = async (gameName, tokenId) => {
-  return (await firestore.collection(gameName).doc(tokenId).get()).data()
+  // return (await firestore.collection(gameName).doc(tokenId).get()).data()
+  const { data } = await axios.post('/api/fiatPrice', {
+    url: 'https://firestore.googleapis.com/v1/projects/tiktok-a2bdb/databases/(default)/documents/c4/1',
+  })
+  console.log('fetchGameData====================>', data)
 }
 
 export const getTag = async () => {
