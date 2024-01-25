@@ -6,6 +6,9 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import CopyAddress from './CopyAddress'
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const table = require('table')
+
 const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { t } = useTranslation()
   const actionTitle = (
@@ -24,7 +27,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
 
     return chunks
   }
-  const table = require('table')
 
   const data = chunk(pool?.table, 4)
 
@@ -48,12 +50,24 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
             <Balance
               lineHeight="1"
               color="textSubtle"
-              decimals={pool?.token?.decimals ?? 18}
+              decimals={5}
               fontSize="12px"
               value={getBalanceNumber(pool?.fund, pool?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Channel Fund')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              decimals={5}
+              fontSize="12px"
+              value={getBalanceNumber(pool?.currentPrice, pool?.token?.decimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Current Price')}
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
