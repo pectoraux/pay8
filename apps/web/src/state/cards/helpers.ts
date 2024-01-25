@@ -2,6 +2,8 @@ import { erc20ABI } from 'wagmi'
 import { publicClient } from 'utils/wagmi'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_CARDS } from 'config/constants/endpoints'
+import { cardABI } from 'config/abi/card'
+import { getCardAddress } from 'utils/addressHelpers'
 
 import { cardFields, tokenBalanceFields } from './queries'
 
@@ -102,6 +104,22 @@ export const fetchCards = async ({ fromCard, chainId }) => {
       fromGraph
         ?.map(async (card) => {
           const bscClient = publicClient({ chainId })
+          const [profileId, adminFee] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getCardAddress(),
+                abi: cardABI,
+                functionName: 'profileId',
+                args: [card?.username],
+              },
+              {
+                address: getCardAddress(),
+                abi: cardABI,
+                functionName: 'adminFee',
+              },
+            ],
+          })
           const balances = await Promise.all(
             card?.balances?.map(async (tk) => {
               const [name, decimals, symbol] = await bscClient.multicall({
@@ -136,6 +154,8 @@ export const fetchCards = async ({ fromCard, chainId }) => {
             sousId: card?.id,
             ...card,
             balances,
+            profileId: profileId.result?.toString(),
+            adminFee: adminFee.result?.toString(),
           }
         })
         .flat(),

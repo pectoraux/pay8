@@ -1,4 +1,4 @@
-import { Flex, LinkExternal, Pool, ScanLink, useModal, Button } from '@pancakeswap/uikit'
+import { Flex, Pool, ScanLink, Button, Text } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -8,7 +8,6 @@ import { getBlockExploreLink } from 'utils'
 import { useCurrPool } from 'state/cards/hooks'
 import { useAppDispatch } from 'state'
 import { setCurrPoolData } from 'state/cards'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { getCardAddress } from 'utils/addressHelpers'
 
 interface ExpandedFooterProps {
@@ -28,20 +27,16 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const dispatch = useAppDispatch()
   return (
     <>
-      {pool?.owner && (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <ScanLink href={getBlockExploreLink(pool?.owner, 'address', chainId)} bold={false} small>
-            {t('View Owner Info')}
-          </ScanLink>
-        </Flex>
-      )}
-      {pool?.owner && pool?.owner !== ADDRESS_ZERO ? (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <LinkExternal href={`/profile/${pool?.owner}`} bold={false} small>
-            {t('Open Profile Page')}
-          </LinkExternal>
-        </Flex>
-      ) : null}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Admin Fee')} {`->`} {parseInt(pool?.adminFee ?? '0') / 100}%
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Profile ID')} {`->`} {pool?.profileId}
+        </Text>
+      </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <ScanLink href={getBlockExploreLink(getCardAddress(), 'address', chainId)} bold={false} small>
           {t('View PayCard Contract')}
