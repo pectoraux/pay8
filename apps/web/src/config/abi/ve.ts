@@ -23,19 +23,6 @@ export const veABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'abstain',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'bool',
         name: '_toVava',
         type: 'bool',
@@ -60,6 +47,24 @@ export const veABI = [
       },
     ],
     name: 'approve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_period',
+        type: 'uint256',
+      },
+    ],
+    name: 'attach',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -268,6 +273,11 @@ export const veABI = [
     inputs: [],
     name: 'getParams',
     outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
       {
         internalType: 'uint256',
         name: '',
@@ -630,6 +640,11 @@ export const veABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: '_maxTime',
+        type: 'uint256',
+      },
+      {
         internalType: 'bool',
         name: '_withdrawable',
         type: 'bool',
@@ -888,19 +903,6 @@ export const veABI = [
         type: 'uint256',
       },
     ],
-    name: 'voting',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
     name: 'withdraw',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -908,11 +910,6 @@ export const veABI = [
   },
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: '_owner',
-        type: 'address',
-      },
       {
         internalType: 'uint256',
         name: '_tokenId',

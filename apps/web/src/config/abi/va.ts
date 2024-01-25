@@ -23,19 +23,6 @@ export const vaABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'abstain',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'bool',
         name: '_toVava',
         type: 'bool',
@@ -60,6 +47,24 @@ export const vaABI = [
       },
     ],
     name: 'approve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_tokenId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_period',
+        type: 'uint256',
+      },
+    ],
+    name: 'attach',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -268,6 +273,11 @@ export const vaABI = [
     inputs: [],
     name: 'getParams',
     outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
       {
         internalType: 'uint256',
         name: '',
@@ -630,6 +640,11 @@ export const vaABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: '_maxTime',
+        type: 'uint256',
+      },
+      {
         internalType: 'bool',
         name: '_withdrawable',
         type: 'bool',
@@ -700,6 +715,19 @@ export const vaABI = [
         internalType: 'address',
         name: '',
         type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'tokenId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -875,19 +903,6 @@ export const vaABI = [
         type: 'uint256',
       },
     ],
-    name: 'voting',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
     name: 'withdraw',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -895,11 +910,6 @@ export const vaABI = [
   },
   {
     inputs: [
-      {
-        internalType: 'address',
-        name: '_owner',
-        type: 'address',
-      },
       {
         internalType: 'uint256',
         name: '_tokenId',

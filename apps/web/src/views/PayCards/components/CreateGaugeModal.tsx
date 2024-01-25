@@ -25,7 +25,7 @@ import { privateKeyToAccount } from 'viem/accounts'
 import { cardABI } from 'config/abi/card'
 import { getCardAddress } from 'utils/addressHelpers'
 import { usePool } from 'state/cards/hooks'
-import { useGetExtraPrices, useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
+import { useGetSessionInfo2, useGetSessionInfoSg, useGetTokenData } from 'state/ramps/hooks'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -38,7 +38,6 @@ import UpdatePassword2Stage from './UpdatePassword2Stage'
 import UpdateProfileStage from './UpdateProfileStage'
 import MintStage from './MintStage'
 import DonateGasFeesStage from './DonateGasFeesStage'
-import { encryptCall } from 'utils/cancan'
 
 const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
@@ -376,7 +375,7 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_TRANSFER_BALANCE) {
         if (username && password && username === state.username && password === state.password) {
           const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
-          const args = [username, password, state.recipient, currency?.address, amount?.toString()]
+          const args = [username, password, state.recipient, currency?.address, BigInt(amount?.toString())]
           const { request } = await client.simulateContract({
             account: adminAccount,
             address: getCardAddress(),
@@ -384,14 +383,8 @@ const CreateGaugeModal: React.FC<any> = ({
             functionName: 'transferBalance',
             args: [pool?.username, pool?.password, state.recipient, currency?.address, BigInt(amount?.toString())],
           })
-          console.log('CONFIRM_TRANSFER_BALANCE===============>', [
-            pool?.username,
-            pool?.password,
-            currency?.address,
-            state.recipient,
-            amount?.toString(),
-          ])
-          await walletClient
+          console.log('CONFIRM_TRANSFER_BALANCE===============>', args)
+          return walletClient
             .writeContract(request)
             .catch((err) => console.log('CONFIRM_TRANSFER_BALANCE===============>', err))
         }

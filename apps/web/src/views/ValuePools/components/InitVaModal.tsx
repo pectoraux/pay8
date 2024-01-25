@@ -56,6 +56,7 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
     estimatedSize: 0,
     minTicketPrice: 0,
     withdrawable: 0,
+    maxTime: 0,
   }))
 
   const updateValue = (key: any, value: any) => {
@@ -88,6 +89,7 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
         _maxSupply,
         _estimatedSize?.toString(),
         _minTicketPrice?.toString(),
+        state.maxTime,
         !!state.withdrawable,
       ]
       console.log('ress===============>', vaContract, args)
@@ -170,6 +172,13 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
       )}
     </Text>
   )
+  const TooltipComponent9 = () => (
+    <Text>
+      {t(
+        'Set this parameter only if you want to change the default locking period of 4 years, otherwise leave it at 0',
+      )}
+    </Text>
+  )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -227,6 +236,14 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
     tooltip: tooltip8,
     tooltipVisible: tooltipVisible8,
   } = useTooltip(<TooltipComponent8 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef9,
+    tooltip: tooltip9,
+    tooltipVisible: tooltipVisible9,
+  } = useTooltip(<TooltipComponent9 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
@@ -349,6 +366,23 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
           name="minTicketPrice"
           value={state.minTicketPrice}
           placeholder={t('input min ticket price')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex ref={targetRef9}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Max Time')}
+          </Text>
+          {tooltipVisible9 && tooltip9}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="maxTime"
+          value={state.maxTime}
+          placeholder={t('input va maxTime')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
