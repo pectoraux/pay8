@@ -3,12 +3,12 @@ export const futureCollateralsABI = [
     inputs: [
       {
         internalType: 'string',
-        name: '_name',
+        name: 'name_',
         type: 'string',
       },
       {
         internalType: 'string',
-        name: '_symbol',
+        name: 'symbol_',
         type: 'string',
       },
       {
@@ -99,9 +99,9 @@ export const futureCollateralsABI = [
     inputs: [
       {
         indexed: false,
-        internalType: 'address',
-        name: 'from',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'profileId',
+        type: 'uint256',
       },
     ],
     name: 'Burn',
@@ -112,9 +112,9 @@ export const futureCollateralsABI = [
     inputs: [
       {
         indexed: false,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'profileId',
+        type: 'uint256',
       },
     ],
     name: 'EraseDebt',
@@ -174,22 +174,9 @@ export const futureCollateralsABI = [
     inputs: [
       {
         indexed: false,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'Paused',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'from',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'profileId',
+        type: 'uint256',
       },
     ],
     name: 'SellCollateral',
@@ -225,19 +212,6 @@ export const futureCollateralsABI = [
     inputs: [
       {
         indexed: false,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'Unpaused',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
         internalType: 'uint256',
         name: 'channel',
         type: 'uint256',
@@ -253,23 +227,41 @@ export const futureCollateralsABI = [
     type: 'event',
   },
   {
-    anonymous: false,
     inputs: [
       {
-        indexed: false,
         internalType: 'uint256',
-        name: 'channel',
+        name: '_channel',
         type: 'uint256',
       },
       {
-        indexed: false,
-        internalType: 'bool',
-        name: 'add',
-        type: 'bool',
+        internalType: 'uint256',
+        name: '_time',
+        type: 'uint256',
       },
     ],
-    name: 'UpdateValidChannel',
-    type: 'event',
+    name: '_getPriceAt',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '_price',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_userBountyId',
+        type: 'uint256',
+      },
+    ],
+    name: 'addBalance',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
   {
     inputs: [
@@ -298,7 +290,7 @@ export const futureCollateralsABI = [
       },
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
     ],
@@ -379,6 +371,25 @@ export const futureCollateralsABI = [
         type: 'uint256',
       },
     ],
+    name: 'channelStartTime',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     name: 'channelToValuepool',
     outputs: [
       {
@@ -427,6 +438,24 @@ export const futureCollateralsABI = [
       {
         internalType: 'uint256',
         name: 'startTime',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'credit_divisor',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
         type: 'uint256',
       },
     ],
@@ -493,7 +522,7 @@ export const futureCollateralsABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
     ],
@@ -503,25 +532,6 @@ export const futureCollateralsABI = [
         internalType: 'address',
         name: '',
         type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-    ],
-    name: 'getCurrentPrice',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '_price',
-        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -633,25 +643,6 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'isValidChannel',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [],
     name: 'minBountyPercent',
     outputs: [
@@ -729,6 +720,19 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'nextChannelId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -784,7 +788,7 @@ export const futureCollateralsABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
     ],
@@ -800,27 +804,14 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'paused',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
-        internalType: 'uint256',
+        internalType: 'address',
         name: '',
-        type: 'uint256',
+        type: 'address',
       },
     ],
-    name: 'profileIdToTokenId',
+    name: 'paymentCredits',
     outputs: [
       {
         internalType: 'uint256',
@@ -845,7 +836,7 @@ export const futureCollateralsABI = [
       },
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
     ],
@@ -868,7 +859,7 @@ export const futureCollateralsABI = [
       },
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
       {
@@ -909,19 +900,6 @@ export const futureCollateralsABI = [
       },
     ],
     name: 'setApprovalForAll',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -975,7 +953,7 @@ export const futureCollateralsABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
     ],
@@ -983,7 +961,7 @@ export const futureCollateralsABI = [
     outputs: [
       {
         internalType: 'string',
-        name: '',
+        name: 'output',
         type: 'string',
       },
     ],
@@ -1004,7 +982,7 @@ export const futureCollateralsABI = [
       },
       {
         internalType: 'uint256',
-        name: 'tokenId',
+        name: '_tokenId',
         type: 'uint256',
       },
     ],
@@ -1079,9 +1057,17 @@ export const futureCollateralsABI = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_channel',
+        name: '_credit_divisor',
         type: 'uint256',
       },
+    ],
+    name: 'updateDivisor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
       {
         internalType: 'uint256[52]',
         name: '_table',
@@ -1127,42 +1113,6 @@ export const futureCollateralsABI = [
       },
     ],
     name: 'updateParams',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_channel',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: '_add',
-        type: 'bool',
-      },
-    ],
-    name: 'updateValidChannel',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_vava',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_channel',
-        type: 'uint256',
-      },
-    ],
-    name: 'updateValuePool',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

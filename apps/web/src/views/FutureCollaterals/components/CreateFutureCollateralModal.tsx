@@ -95,7 +95,6 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchFutureCollateralsAsync({ fromFutureCollateral: true, chainId }))
-      delay(3000).then(() => reload())
     }
     onDismiss()
   }, [
@@ -110,7 +109,6 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
     toastSuccess,
     dispatch,
     chainId,
-    reload,
   ])
 
   useEffect(() => {

@@ -71,8 +71,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
           lineHeight="1"
           color="textSubtle"
           fontSize="12px"
-          decimals={pool?.token?.decimals}
-          value={getBalanceNumber(new BigNumber(balance?.length ? balance[1]?.toString() : '0'), pool?.token?.decimals)}
+          decimals={pool?.isNFT > 0 ? 0 : pool?.token?.decimals}
+          value={
+            pool?.isNFT > 0
+              ? parseInt(balance?.length ? balance[1]?.toString() : '0')
+              : getBalanceNumber(new BigNumber(balance?.length ? balance[1]?.toString() : '0'), pool?.token?.decimals)
+          }
         />
         <Text color="textSubtle" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
           {t('Bounty Balance')}
@@ -93,8 +97,10 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
-                decimals={pool?.token?.decimals}
-                value={getBalanceNumber(new BigNumber(bb?.amount), pool?.token?.decimals)}
+                decimals={pool?.isNFT > 0 ? 0 : pool?.token?.decimals}
+                value={
+                  pool?.isNFT > 0 ? bb?.amount : getBalanceNumber(new BigNumber(bb?.amount), pool?.token?.decimals)
+                }
               />
               <Text color="textSubtle" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                 {t('Bounty Balance')}
