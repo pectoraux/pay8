@@ -188,9 +188,9 @@ const CreateGaugeModal: React.FC<any> = ({
   const { data } = useGetSessionInfoSg(sessionId, state.rampAddress.toLowerCase())
   const { data: stripeData } = useGetSessionInfo2(sessionId, process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY)
   const { data: tokenData } = useGetTokenData(data?.tokenAddress)
-  console.log('data=================>', data)
-  console.log('ogPool=================>', ogPool, accountId)
-  console.log('stripeData=================>', stripeData, tokenData)
+  // console.log('data=================>', data)
+  // console.log('ogPool=================>', ogPool, accountId)
+  // console.log('stripeData=================>', stripeData, tokenData)
 
   const client = createPublicClient({
     chain: fantomTestnet,
