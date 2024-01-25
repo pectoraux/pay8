@@ -122,7 +122,7 @@ export const fetchCards = async ({ fromCard, chainId }) => {
           })
           const balances = await Promise.all(
             card?.balances?.map(async (tk) => {
-              const [name, decimals, symbol] = await bscClient.multicall({
+              const [name, decimals, symbol, balance] = await bscClient.multicall({
                 allowFailure: true,
                 contracts: [
                   {
@@ -140,6 +140,12 @@ export const fetchCards = async ({ fromCard, chainId }) => {
                     abi: erc20ABI,
                     functionName: 'symbol',
                   },
+                  {
+                    address: getCardAddress(),
+                    abi: cardABI,
+                    functionName: 'balance',
+                    args: [card?.username, tk.tokenAddress],
+                  },
                 ],
               })
               return {
@@ -147,6 +153,7 @@ export const fetchCards = async ({ fromCard, chainId }) => {
                 name: name?.result?.toString(),
                 symbol: symbol?.result?.toString()?.toUpperCase(),
                 decimals: decimals.result,
+                balance: balance.result?.toString(),
               }
             }),
           )
