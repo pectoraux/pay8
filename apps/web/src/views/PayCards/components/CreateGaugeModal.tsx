@@ -377,14 +377,14 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_TRANSFER_BALANCE) {
         if (username && password && username === state.username && password === state.password) {
           const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
-          const args = [pool?.username, pool?.password, state.recipient, currency?.address, BigInt(amount?.toString())]
+          const args = [pool?.username, pool?.password, currency?.address, state.recipient, BigInt(amount?.toString())]
           console.log('CONFIRM_TRANSFER_BALANCE===============>', args)
           const { request } = await client.simulateContract({
             account: adminAccount,
             address: getCardAddress(),
             abi: cardABI,
             functionName: 'transferBalance',
-            args: [pool?.username, pool?.password, state.recipient, currency?.address, BigInt(amount?.toString())],
+            args: [pool?.username, pool?.password, currency?.address, state.recipient, BigInt(amount?.toString())],
           })
           return walletClient
             .writeContract(request)
