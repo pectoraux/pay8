@@ -586,7 +586,7 @@ export default {
   },
   card: {
     56: '0x',
-    4002: '0x1E302Bf2215474089e54411732A49AA414b64A13',
+    4002: '0x19ad7453898E6E12b7F3bc9956725964596141FD',
   },
   futureCollaterals: {
     56: '0x',
