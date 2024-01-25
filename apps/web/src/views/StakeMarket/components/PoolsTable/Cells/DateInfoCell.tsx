@@ -58,13 +58,13 @@ const DateInfoCell: React.FC<any> = ({ labelText, sousId, t }) => {
           ) : !parseFloat(pool?.waitingDuration) ? (
             <Box mr="8px" height="32px">
               <Text mt="4px" fontSize="14px" color="primary" bold>
-                {parseInt(pool?.nextDueReceivable)
-                  ? format(convertTimeToSeconds(pool?.nextDueReceivable), 'MMM do, yyyy HH:mm')
+                {parseInt(pool?.nextDuePayable)
+                  ? format(convertTimeToSeconds(pool?.nextDuePayable), 'MMM do, yyyy HH:mm')
                   : '-'}
               </Text>
               <Text mt="4px" fontSize="14px" color="textSubtle">
-                {parseInt(pool?.nextDuePayable)
-                  ? format(convertTimeToSeconds(pool?.nextDuePayable), 'MMM do, yyyy HH:mm')
+                {parseInt(pool?.nextDueReceivable)
+                  ? format(convertTimeToSeconds(pool?.nextDueReceivable), 'MMM do, yyyy HH:mm')
                   : '-'}
               </Text>
             </Box>

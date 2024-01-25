@@ -107,7 +107,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currPool?.paidPayable, token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -119,7 +119,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currPool?.paidReceivable, token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -131,7 +131,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currPool?.amountPayable, token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -143,7 +143,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currPool?.amountReceivable, token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -188,7 +188,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currPool?.duePayable, token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -200,7 +200,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currPool?.dueReceivable, token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
