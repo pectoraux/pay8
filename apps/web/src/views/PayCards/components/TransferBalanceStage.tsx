@@ -80,14 +80,14 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Recipient Address')}
+          {t('Recipient Username')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="toAddress"
-          value={state.toAddress}
-          placeholder={t('input your recipient address')}
+          name="recipient"
+          value={state.recipient}
+          placeholder={t('input your recipient username')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
