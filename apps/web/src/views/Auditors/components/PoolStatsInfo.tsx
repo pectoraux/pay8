@@ -93,6 +93,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           </ScanLink>
         </Flex>
       )}
+      {pool?.id && (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <ScanLink href={getBlockExploreLink(pool?.id, 'address', chainId)} bold={false} small>
+            {t('View Auditor Contract')}
+          </ScanLink>
+        </Flex>
+      )}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <LinkExternal href={`/cancan/collections/${pool?.collection?.id}`} bold={false} small>
           {t('See Admin Channel')}
