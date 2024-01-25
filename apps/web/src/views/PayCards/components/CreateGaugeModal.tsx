@@ -376,6 +376,7 @@ const CreateGaugeModal: React.FC<any> = ({
         if (username && password && username === state.username && password === state.password) {
           const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
           const args = [username, password, state.recipient, currency?.address, BigInt(amount?.toString())]
+          console.log('CONFIRM_TRANSFER_BALANCE===============>', args)
           const { request } = await client.simulateContract({
             account: adminAccount,
             address: getCardAddress(),
@@ -383,7 +384,6 @@ const CreateGaugeModal: React.FC<any> = ({
             functionName: 'transferBalance',
             args: [pool?.username, pool?.password, state.recipient, currency?.address, BigInt(amount?.toString())],
           })
-          console.log('CONFIRM_TRANSFER_BALANCE===============>', args)
           return walletClient
             .writeContract(request)
             .catch((err) => console.log('CONFIRM_TRANSFER_BALANCE===============>', err))

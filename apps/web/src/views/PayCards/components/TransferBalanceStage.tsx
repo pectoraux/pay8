@@ -83,7 +83,7 @@ const SetPriceStage: React.FC<any> = ({
           {t('Recipient Username')}
         </Text>
         <Input
-          type="text"
+          type="password"
           scale="sm"
           name="recipient"
           value={state.recipient}
