@@ -1,4 +1,6 @@
+// eslint-disable-next-line import/no-duplicates
 import EncryptRsa from 'encrypt-rsa'
+// eslint-disable-next-line import/no-duplicates
 import NodeRSA from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
@@ -375,7 +377,7 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_TRANSFER_BALANCE) {
         if (username && password && username === state.username && password === state.password) {
           const amount = getDecimalAmount(state.amountReceivable ?? 0, currency.decimals ?? 18)
-          const args = [username, password, state.recipient, currency?.address, BigInt(amount?.toString())]
+          const args = [pool?.username, pool?.password, state.recipient, currency?.address, BigInt(amount?.toString())]
           console.log('CONFIRM_TRANSFER_BALANCE===============>', args)
           const { request } = await client.simulateContract({
             account: adminAccount,

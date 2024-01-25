@@ -699,14 +699,14 @@ export const cardABI = [
         type: 'string',
       },
       {
-        internalType: 'string',
-        name: '_recipientUsername',
-        type: 'string',
-      },
-      {
         internalType: 'address',
         name: '_token',
         type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_recipientAccountId',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',
@@ -800,6 +800,25 @@ export const cardABI = [
     name: 'updateProfileId',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'usernames',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
