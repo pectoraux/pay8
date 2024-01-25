@@ -1,20 +1,4 @@
-import {
-  Flex,
-  LinkExternal,
-  Pool,
-  ScanLink,
-  useModal,
-  Button,
-  Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
-  Text,
-} from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Pool, ScanLink, useModal, Button, Text } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -25,8 +9,8 @@ import { useCurrPool } from 'state/futureCollaterals/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/futureCollaterals'
-import WebPagesModal from './WebPagesModal'
 import { getFutureCollateralsAddress } from 'utils/addressHelpers'
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -38,10 +22,7 @@ interface ExpandedFooterProps {
 const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
-  const [pendingTx, setPendingTx] = useState(false)
   const currState = useCurrPool()
-  const currProtocol = pool?.accounts?.find((acct) => acct?.id === currState[pool?.id])
   const tokenAddress = pool?.token?.address || ''
   const dispatch = useAppDispatch()
   const [onPresentNFT] = useModal(<WebPagesModal height="500px" tokenId={pool.id} metadataUrl={pool?.metadataUrl} />)
@@ -68,7 +49,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       ) : null}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Treasury Fee')} {`->`} {parseInt(pool?.treasuryFee?.toString()) / 100}
+          {t('Treasury Fee')} {`->`} {parseInt(pool?.treasuryFee?.toString()) / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
