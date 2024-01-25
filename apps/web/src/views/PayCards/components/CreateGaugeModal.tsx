@@ -447,7 +447,7 @@ const CreateGaugeModal: React.FC<any> = ({
             state.recipient,
             amount?.toString(),
           ])
-          await walletClient
+          return walletClient
             .writeContract(request)
             .catch((err) => console.log('CONFIRM_REMOVE_BALANCE===============>', err))
         }
