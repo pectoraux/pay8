@@ -29,7 +29,10 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
   const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
-  const [onPresentCreateGauge] = useModal(<CreateFutureCollateralModal currency={currency} />)
+  const [onPresentCreateGauge] = useModal(<CreateFutureCollateralModal currency={currency} stageName="PICK_CHANNEL" />)
+  const [onPresentCreateGauge2] = useModal(
+    <CreateFutureCollateralModal currency={currency} stageName="MINT_COLLATERAL" />,
+  )
   const handleClick = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
@@ -58,20 +61,18 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Flex>
               <Button p="0" variant="text">
                 <Text color="primary" onClick={onPresentCreateGauge} bold fontSize="16px" mr="4px">
-                  {t('Mint Collateral')}{' '}
+                  {t('Pick Channel')}{' '}
                 </Text>
-                <CurrencyInputPanel
-                  id="collaterals-currency"
-                  showUSDPrice
-                  showMaxButton
-                  showCommonBases
-                  showInput={false}
-                  showQuickInputButton
-                  currency={currency ?? inputCurency}
-                  onCurrencySelect={handleInputSelect}
-                />
               </Button>
               <ArrowForwardIcon onClick={onPresentCreateGauge} color="primary" />
+            </Flex>
+            <Flex>
+              <Button p="0" variant="text">
+                <Text color="primary" onClick={onPresentCreateGauge2} bold fontSize="16px" mr="4px">
+                  {t('Mint Collateral')}{' '}
+                </Text>
+              </Button>
+              <ArrowForwardIcon onClick={onPresentCreateGauge2} color="primary" />
             </Flex>
           </Flex>
           <DesktopButton onClick={handleClick} variant="subtle">

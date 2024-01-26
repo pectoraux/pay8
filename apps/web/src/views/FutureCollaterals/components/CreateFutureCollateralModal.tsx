@@ -34,9 +34,8 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => {
+const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDismiss }) => {
   const { t } = useTranslation()
-  const { reload } = useRouter()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
@@ -45,7 +44,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
-  const [stage, setStage] = useState('PICK_CHANNEL')
+  const [stage, setStage] = useState(stageName)
   const { toastSuccess, toastError } = useToast()
   const [state, setState] = useState<any>(() => ({
     auditor: '',
@@ -68,7 +67,6 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
     updateValue(inputName, value)
   }
   const [openPresentControlPanel] = useModal(<CreateGaugeModal variant="add" state2={state} currency={currency} />)
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const handleCreateGauge = useCallback(async () => {
     setPendingFb(true)
@@ -206,7 +204,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
 
   return (
     <Modal title={t('Mint Future Collateral')} onDismiss={onDismiss}>
-      <Button variant="secondary" mb="8px" disabled={stage === 'PICK_CHANNEL'} onClick={() => setStage('PICK_CHANNEL')}>
+      {/* <Button variant="secondary" mb="8px" disabled={stage === 'PICK_CHANNEL'} onClick={() => setStage('PICK_CHANNEL')}>
         {t('1) PICK A CHANNEL')}
       </Button>
       <Button
@@ -216,7 +214,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
         onClick={() => setStage('MINT_COLLATERAL')}
       >
         {t('2) MINT COLLATERAL')}
-      </Button>
+      </Button> */}
 
       {stage === 'PICK_CHANNEL' ? (
         <GreyedOutContainer>
@@ -340,14 +338,16 @@ const CreateFutureCollateralModal: React.FC<any> = ({ currency, onDismiss }) => 
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         {account ? (
-          <Button
-            mb="8px"
-            onClick={stage === 'PICK_CHANNEL' ? handleCreateGauge : openPresentControlPanel}
-            endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
-            isLoading={pendingTx || pendingFb}
-          >
-            {stage === 'PICK_CHANNEL' ? t('Pick Channel') : t('Mint Future Collateral')}
-          </Button>
+          <>
+            <Button
+              mb="8px"
+              onClick={stage === 'PICK_CHANNEL' ? handleCreateGauge : openPresentControlPanel}
+              endIcon={pendingTx || pendingFb ? <AutoRenewIcon spin color="currentColor" /> : null}
+              isLoading={pendingTx || pendingFb}
+            >
+              {stage === 'PICK_CHANNEL' ? t('Pick Channel') : t('Mint Future Collateral')}
+            </Button>
+          </>
         ) : (
           <ConnectWalletButton />
         )}
