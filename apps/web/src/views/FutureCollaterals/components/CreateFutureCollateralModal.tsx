@@ -30,6 +30,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useGetPrice } from 'state/futureCollaterals/hooks'
 import { Divider, GreyedOutContainer } from './styles'
 import CreateGaugeModal from './CreateGaugeModal'
+import { chunk } from './PoolsTable/ActionPanel/Harvest'
 
 interface SetPriceStageProps {
   currency?: any
@@ -206,6 +207,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
     tooltipOffset: [20, 10],
   })
 
+  const table = chunk(data?.table, 4)
   return (
     <Modal title={t('Mint Future Collateral')} onDismiss={onDismiss}>
       {/* <Button variant="secondary" mb="8px" disabled={stage === 'PICK_CHANNEL'} onClick={() => setStage('PICK_CHANNEL')}>
@@ -253,8 +255,17 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
             </Text>
           </GreyedOutContainer>
           <GreyedOutContainer>
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {data?.table?.map((val) => getBalanceNumber(val))?.toString()}
+            <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+              {table?.length && table[0]?.map((val) => getBalanceNumber(val))?.toString()}
+            </Text>
+            <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+              {table?.length && table[1]?.map((val) => getBalanceNumber(val))?.toString()}
+            </Text>
+            <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+              {table?.length && table[2]?.map((val) => getBalanceNumber(val))?.toString()}
+            </Text>
+            <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+              {table?.length && table[3]?.map((val) => getBalanceNumber(val))?.toString()}
             </Text>
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Table')}

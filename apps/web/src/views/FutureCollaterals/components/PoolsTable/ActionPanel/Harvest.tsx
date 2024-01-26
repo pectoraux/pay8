@@ -6,6 +6,18 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import CopyAddress from './CopyAddress'
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
+export function chunk(items, size) {
+  const chunks = []
+  // eslint-disable-next-line no-param-reassign
+  items = [].concat(...items)
+
+  while (items.length) {
+    chunks.push(items.splice(0, size))
+  }
+
+  return chunks
+}
+
 const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { t } = useTranslation()
   const actionTitle = (
@@ -13,6 +25,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
       {t('Future Collateral Info')}{' '}
     </Text>
   )
+  const table = chunk(pool?.table, 4)
   return (
     <ActionContainer>
       <ActionTitles>{actionTitle}</ActionTitles>
@@ -47,7 +60,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {pool?.table?.map((val) => getBalanceNumber(val))?.toString()}
+            {table?.length && table[0]?.map((val) => getBalanceNumber(val))?.toString()}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {table?.length && table[1]?.map((val) => getBalanceNumber(val))?.toString()}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {table?.length && table[2]?.map((val) => getBalanceNumber(val))?.toString()}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {table?.length && table[3]?.map((val) => getBalanceNumber(val))?.toString()}
           </Text>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Estimation Table')}

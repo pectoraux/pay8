@@ -20,6 +20,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 
 import { GreyedOutContainer, Divider } from './styles'
+import { chunk } from './PoolsTable/ActionPanel/Harvest'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -43,6 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
   const data = useGetPrice(account) as any
+  const table = chunk(data?.table, 4)
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -138,9 +140,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Text>
       </GreyedOutContainer>
       <GreyedOutContainer>
-        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-          {data?.table?.map((val) => getBalanceNumber(val))?.toString()}
+        <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+          {table?.length && table[0]?.map((val) => getBalanceNumber(val))?.toString()}
         </Text>
+        <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+          {table?.length && table[1]?.map((val) => getBalanceNumber(val))?.toString()}
+        </Text>
+        <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+          {table?.length && table[2]?.map((val) => getBalanceNumber(val))?.toString()}
+        </Text>
+        <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+          {table?.length && table[3]?.map((val) => getBalanceNumber(val))?.toString()}
+        </Text>
+        <br />
         <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
           {t('Table')}
         </Text>
