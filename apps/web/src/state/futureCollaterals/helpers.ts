@@ -4,7 +4,7 @@ import request, { gql } from 'graphql-request'
 import { getFutureCollateralsAddress, getProfileAddress } from 'utils/addressHelpers'
 import { futureCollateralsABI } from 'config/abi/futureCollaterals'
 import { publicClient } from 'utils/wagmi'
-import { erc20ABI } from 'wagmi'
+import { erc20ABI, erc721ABI } from 'wagmi'
 import { profileABI } from 'config/abi/profile'
 import { futureCollateralFields } from './queries'
 
@@ -133,10 +133,22 @@ export const getPrice = async (ownerAddress, chainId) => {
       return value.result?.toString()
     }),
   )
+  const [metadatUrl] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getFutureCollateralsAddress(),
+        abi: erc721ABI,
+        functionName: 'tokenURI',
+        args: [BigInt(tokenId.result)],
+      },
+    ],
+  })
   return {
     table,
     price: price.result?.toString(),
     tokenId: tokenId.result?.toString(),
+    metadataUrl: metadatUrl.result,
   }
 }
 

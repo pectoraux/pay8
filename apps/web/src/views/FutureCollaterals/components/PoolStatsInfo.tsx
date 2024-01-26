@@ -2,12 +2,11 @@ import { Flex, LinkExternal, Pool, ScanLink, useModal, Button, Text } from '@pan
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrPool } from 'state/futureCollaterals/hooks'
+import { useCurrPool, useGetPrice } from 'state/futureCollaterals/hooks'
 import { useAppDispatch } from 'state'
-import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/futureCollaterals'
 import { getFutureCollateralsAddress } from 'utils/addressHelpers'
 import WebPagesModal from './WebPagesModal'
@@ -25,7 +24,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
   const currState = useCurrPool()
   const tokenAddress = pool?.token?.address || ''
   const dispatch = useAppDispatch()
-  const [onPresentNFT] = useModal(<WebPagesModal height="500px" tokenId={pool.id} metadataUrl={pool?.metadataUrl} />)
+  const data = useGetPrice(account) as any
+  const [onPresentNFT] = useModal(
+    <WebPagesModal height="500px" tokenId={pool.id} metadataUrl={data?.metadataUrl ?? pool?.metadataUrl} />,
+  )
   return (
     <>
       {pool?.owner && (

@@ -289,19 +289,15 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
             />
           </GreyedOutContainer>
           {/* <GreyedOutContainer>
-            <Flex ref={targetRef3}>
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-                {t('Stake ID')}
-              </Text>
-              {tooltipVisible3 && tooltip3}
-              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-            </Flex>
+            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+              {t('Recipient')}
+            </Text>
             <Input
               type="text"
               scale="sm"
-              name="stakeId"
-              value={state.stakeId}
-              placeholder={t('input stake id')}
+              name="recipient"
+              value={state.recipient}
+              placeholder={t('input recipient address')}
               onChange={handleChange}
             />
           </GreyedOutContainer> */}
