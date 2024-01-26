@@ -99,14 +99,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     tooltipOffset: [20, 10],
   })
   const {
-    targetRef: targetRef3,
-    tooltip: tooltip3,
-    tooltipVisible: tooltipVisible3,
-  } = useTooltip(<TooltipComponent3 />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
     targetRef: targetRef4,
     tooltip: tooltip4,
     tooltipVisible: tooltipVisible4,
@@ -179,23 +171,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      {/* <GreyedOutContainer>
-        <Flex ref={targetRef3}>
-          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Stake ID')}
-          </Text>
-          {tooltipVisible3 && tooltip3}
-          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-        </Flex>
-        <Input
-          type="text"
-          scale="sm"
-          name="stakeId"
-          value={state.stakeId}
-          placeholder={t('input your stake id')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer> */}
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
