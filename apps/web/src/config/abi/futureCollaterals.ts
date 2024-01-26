@@ -295,13 +295,20 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
-    inputs: [
+    inputs: [],
+    name: 'bufferTime',
+    outputs: [
       {
-        internalType: 'address',
-        name: '_from',
-        type: 'address',
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'burn',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -612,6 +619,19 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'minToBlacklist',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -831,13 +851,7 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_from',
-        type: 'address',
-      },
-    ],
+    inputs: [],
     name: 'sellCollateral',
     outputs: [],
     stateMutability: 'nonpayable',

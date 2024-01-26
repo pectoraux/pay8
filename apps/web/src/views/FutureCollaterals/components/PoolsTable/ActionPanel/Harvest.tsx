@@ -59,27 +59,33 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
               {t('Current Price')}
             </Text>
           </Box>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {table?.length && table[0]?.map((val) => getBalanceNumber(val))?.toString()}
-          </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {table?.length && table[1]?.map((val) => getBalanceNumber(val))?.toString()}
-          </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {table?.length && table[2]?.map((val) => getBalanceNumber(val))?.toString()}
-          </Text>
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {table?.length && table[3]?.map((val) => getBalanceNumber(val))?.toString()}
-          </Text>
-          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-            {t('Estimation Table')}
-          </Text>
         </Flex>
         <Flex flexDirection="column" alignSelf="flex-center">
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Owner')}
           </Text>
           <CopyAddress title={truncateHash(pool?.owner)} account={pool?.owner} />
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {table?.length && table[0]?.map((val) => `${getBalanceNumber(val)?.toString()}  =>  `)}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {table?.length && table[1]?.map((val) => `${getBalanceNumber(val)?.toString()}  =>  `)}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {table?.length && table[2]?.map((val) => `${getBalanceNumber(val)?.toString()}  =>  `)}
+          </Text>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {table?.length &&
+              table[3]?.map((val, index) => {
+                if (index === table[3]?.length - 1) {
+                  return getBalanceNumber(val)?.toString()
+                }
+                return `${getBalanceNumber(val)?.toString()}  =>  `
+              })}
+          </Text>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Estimation Table')}
+          </Text>
         </Flex>
       </ActionContent>
     </ActionContainer>

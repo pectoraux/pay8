@@ -147,10 +147,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
     accounts: [],
     table: '',
     channel: state2?.channel ?? '',
-    treasuryFee: '',
+    treasuryFee: parseInt(pool?.treasuryFee?.toString()) / 100 ?? '',
     bufferTime: '',
     minToBlacklist: '',
-    minBountyPercent: '',
+    minBountyPercent: parseInt(pool?.minBountyPercent?.toString()) / 100 ?? '',
     updateColor: 3,
     minColor: 0,
     userBountyId: state2?.userBountyId ?? '',
@@ -354,9 +354,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
         )
       }
       if (stage === LockStage.CONFIRM_SELL_COLLATERAL) {
-        const args = [state.owner]
-        console.log('CONFIRM_SELL_COLLATERAL===============>', args)
-        return callWithGasPrice(collateralContract, 'sellCollateral', args).catch((err) =>
+        console.log('CONFIRM_SELL_COLLATERAL===============>')
+        return callWithGasPrice(collateralContract, 'sellCollateral', []).catch((err) =>
           console.log('CONFIRM_SELL_COLLATERAL===============>', err),
         )
       }
@@ -389,9 +388,8 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
         )
       }
       if (stage === LockStage.CONFIRM_BURN) {
-        const args = [state.owner]
-        console.log('CONFIRM_BURN===============>', args)
-        return callWithGasPrice(collateralContract, 'burn', args).catch((err) =>
+        console.log('CONFIRM_BURN===============>')
+        return callWithGasPrice(collateralContract, 'burn', []).catch((err) =>
           console.log('CONFIRM_BURN===============>', err),
         )
       }
@@ -421,6 +419,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
           <Button mb="8px" variant="success" onClick={() => setStage(LockStage.ADD_TO_CHANNEL)}>
             {t('ADD TO CHANNEL')}
           </Button>
+
+          <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.NOTIFY_REWARD)}>
+            {t('DONATE TO FUND')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_BLACKLIST)}>
             {t('UPDATE BLACKLIST')}
           </Button>
@@ -438,9 +440,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_ADMIN)}>
             {t('UPDATE ADMIN')}
-          </Button>
-          <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.NOTIFY_REWARD)}>
-            {t('DONATE TO FUND')}
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.BURN)}>
             {t('BURN')}

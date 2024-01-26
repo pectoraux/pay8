@@ -256,17 +256,27 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
           </GreyedOutContainer>
           <GreyedOutContainer>
             <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-              {table?.length && table[0]?.map((val) => getBalanceNumber(val))?.toString()}
+              {table?.length && table[0]?.map((val) => `${getBalanceNumber(val)?.toString()}  =>  `)}
             </Text>
+            <br />
             <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-              {table?.length && table[1]?.map((val) => getBalanceNumber(val))?.toString()}
+              {table?.length && table[1]?.map((val) => `${getBalanceNumber(val)?.toString()}  =>  `)}
             </Text>
+            <br />
             <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-              {table?.length && table[2]?.map((val) => getBalanceNumber(val))?.toString()}
+              {table?.length && table[2]?.map((val) => `${getBalanceNumber(val)?.toString()}  =>  `)}
             </Text>
+            <br />
             <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-              {table?.length && table[3]?.map((val) => getBalanceNumber(val))?.toString()}
+              {table?.length &&
+                table[3]?.map((val, index) => {
+                  if (index === table[3]?.length - 1) {
+                    return getBalanceNumber(val)?.toString()
+                  }
+                  return `${getBalanceNumber(val)?.toString()}  =>  `
+                })}
             </Text>
+            <br />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Table')}
             </Text>

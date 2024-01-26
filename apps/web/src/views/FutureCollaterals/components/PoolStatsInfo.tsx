@@ -9,6 +9,7 @@ import { useCurrPool, useGetPrice } from 'state/futureCollaterals/hooks'
 import { useAppDispatch } from 'state'
 import { setCurrPoolData } from 'state/futureCollaterals'
 import { getFutureCollateralsAddress } from 'utils/addressHelpers'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
@@ -56,22 +57,22 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Treasury Balance')} {`->`} {pool?.treasury?.toString()}
+          {t('Treasury Balance')} {`->`} {getBalanceNumber(pool?.treasury?.toString())} USD
         </Text>
       </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
           {t('Buffer Time')} {`->`} {parseInt(pool?.bufferTime ?? '0') / 60} {t('minutes')}
         </Text>
-      </Flex>
-      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+      </Flex> */}
+      {/* <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
           {t('Min. #auditors to blacklist profile')} {`->`} {parseInt(pool?.minToBlacklist ?? '0')}
         </Text>
-      </Flex>
+      </Flex> */}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
-          {t('Min. Bounty as % of collateral price')} {`->`} {parseInt(pool?.minBountyPercent ?? '0') / 100}%
+          {t('Min. Bounty as % of NFT price')} {`->`} {parseInt(pool?.minBountyPercent ?? '0') / 100}%
         </Text>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
