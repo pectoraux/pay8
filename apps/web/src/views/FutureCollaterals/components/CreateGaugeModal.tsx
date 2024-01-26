@@ -460,6 +460,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
       {stage === LockStage.ADD_TO_CHANNEL && (
         <AddToChannelStage
           state={state}
+          estimationTable={estimationTable}
           handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}

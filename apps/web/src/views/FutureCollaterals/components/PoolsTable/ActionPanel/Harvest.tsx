@@ -6,9 +6,6 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import CopyAddress from './CopyAddress'
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const table = require('table')
-
 const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { t } = useTranslation()
   const actionTitle = (
@@ -16,27 +13,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
       {t('Future Collateral Info')}{' '}
     </Text>
   )
-  function chunk(items, size) {
-    const chunks = []
-    // eslint-disable-next-line no-param-reassign
-    items = [].concat(...items)
-
-    while (items.length) {
-      chunks.push(items.splice(0, size))
-    }
-
-    return chunks
-  }
-
-  const data = chunk(pool?.table, 4)
-
-  const config = {
-    // Predefined styles of table
-    border: table.getBorderCharacters('ramac'),
-  }
-
-  const estimationTable = table.table(data, config)
-
   return (
     <ActionContainer>
       <ActionTitles>{actionTitle}</ActionTitles>
@@ -71,7 +47,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {estimationTable}
+            {pool?.table}
           </Text>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Estimation Table')}

@@ -590,7 +590,7 @@ export default {
   },
   futureCollaterals: {
     56: '0x',
-    4002: '0x41071d8d4783b0BB1023aD4d171058ccEfCE212C',
+    4002: '0xcC739c556f429F0E5489B6982744a7DEf7727b55',
   },
   profile: {
     56: '0x',
