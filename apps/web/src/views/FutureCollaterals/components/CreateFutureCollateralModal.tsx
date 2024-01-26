@@ -251,7 +251,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
               value={getBalanceNumber(new BigNumber(data?.price?.toString()))}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Pending Revenue')}
+              {t('Current Price')}
             </Text>
           </GreyedOutContainer>
           <GreyedOutContainer>

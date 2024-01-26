@@ -136,7 +136,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           value={getBalanceNumber(new BigNumber(data?.price?.toString()))}
         />
         <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-          {t('Pending Revenue')}
+          {t('Current Price')}
         </Text>
       </GreyedOutContainer>
       <GreyedOutContainer>
