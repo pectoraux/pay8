@@ -99,7 +99,7 @@ export const getPrice = async (ownerAddress, chainId) => {
       },
     ],
   })
-  const [price] = await bscClient.multicall({
+  const [price, tokenId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
       {
@@ -107,6 +107,12 @@ export const getPrice = async (ownerAddress, chainId) => {
         abi: futureCollateralsABI,
         functionName: 'getChannelPriceAt',
         args: [channel.result, BigInt('0')],
+      },
+      {
+        address: getFutureCollateralsAddress(),
+        abi: futureCollateralsABI,
+        functionName: 'profileIdToTokenId',
+        args: [BigInt(profileId.result)],
       },
     ],
   })
@@ -128,8 +134,9 @@ export const getPrice = async (ownerAddress, chainId) => {
     }),
   )
   return {
-    price: price.result?.toString(),
     table,
+    price: price.result?.toString(),
+    tokenId: tokenId.result?.toString(),
   }
 }
 
