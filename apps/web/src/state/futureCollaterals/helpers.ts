@@ -124,7 +124,7 @@ export const getPrice = async (ownerAddress, chainId) => {
           },
         ],
       })
-      return value.result
+      return value.result?.toString()
     }),
   )
   return {
@@ -271,7 +271,7 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
                 },
               ],
             })
-            return value.result
+            return value.result?.toString()
           }),
         )
         return {

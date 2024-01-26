@@ -254,7 +254,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
           </GreyedOutContainer>
           <GreyedOutContainer>
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {data?.table}
+              {data?.table?.map((val) => getBalanceNumber(val))?.toString()}
             </Text>
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Table')}

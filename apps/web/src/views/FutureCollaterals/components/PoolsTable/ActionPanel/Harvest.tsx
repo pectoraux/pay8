@@ -47,7 +47,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {pool?.table}
+            {pool?.table?.map((val) => getBalanceNumber(val))?.toString()}
           </Text>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Estimation Table')}
