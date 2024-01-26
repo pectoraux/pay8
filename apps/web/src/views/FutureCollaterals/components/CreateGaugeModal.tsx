@@ -72,9 +72,17 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
   const stakingTokenContract = useERC20(pool?.token?.address || currency?.address || '')
-  const cardContract = useFutureCollateralContract()
+  const collateralContract = useFutureCollateralContract()
   const trustBountiesContract = useTrustBountiesContract()
-  console.log('mcurrencyy===============>', trustBountiesContract, state2, currAccount, currency, pool, cardContract)
+  console.log(
+    'mcurrencyy===============>',
+    trustBountiesContract,
+    state2,
+    currAccount,
+    currency,
+    pool,
+    collateralContract,
+  )
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
   let password
@@ -277,7 +285,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
     onRequiresApproval: async () => {
       try {
         return (
-          requiresApproval(stakingTokenContract, account, cardContract.address) &&
+          requiresApproval(stakingTokenContract, account, collateralContract.address) &&
           requiresApproval(stakingTokenContract, account, trustBountiesContract.address)
         )
       } catch (error) {
@@ -288,10 +296,10 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
       console.log(
         'handleApprove====================>',
         stakingTokenContract,
-        cardContract.address,
+        collateralContract.address,
         trustBountiesContract.address,
       )
-      return callWithGasPrice(stakingTokenContract, 'approve', [cardContract.address, MaxUint256]).then(() =>
+      return callWithGasPrice(stakingTokenContract, 'approve', [collateralContract.address, MaxUint256]).then(() =>
         callWithGasPrice(stakingTokenContract, 'approve', [trustBountiesContract.address, MaxUint256]),
       )
     },
@@ -306,28 +314,28 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
       if (stage === LockStage.CONFIRM_UPDATE_ESTIMATION_TABLE) {
         const args = [state.channel, state.table?.split(',')]
         console.log('CONFIRM_UPDATE_ESTIMATION_TABLE===============>', args)
-        return callWithGasPrice(cardContract, 'updateEstimationTable', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'updateEstimationTable', args).catch((err) =>
           console.log('CONFIRM_UPDATE_ESTIMATION_TABLE===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_ADD_TO_CHANNEL) {
         const args = [state.profileId, state.channel]
         console.log('CONFIRM_ADD_TO_CHANNEL===============>', args)
-        return callWithGasPrice(cardContract, 'addToChannel', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'addToChannel', args).catch((err) =>
           console.log('CONFIRM_ADD_TO_CHANNEL===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_BLACKLIST) {
         const args = [state.profileId, !!state.add]
         console.log('CONFIRM_UPDATE_BLACKLIST===============>', args)
-        return callWithGasPrice(cardContract, 'updateBlacklist', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'updateBlacklist', args).catch((err) =>
           console.log('CONFIRM_UPDATE_BLACKLIST===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_ADMIN) {
         const args = [state.owner, !!state.add]
         console.log('CONFIRM_UPDATE_ADMIN===============>', args)
-        return callWithGasPrice(cardContract, 'updateDev', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'updateDev', args).catch((err) =>
           console.log('CONFIRM_UPDATE_ADMIN===============>', err),
         )
       }
@@ -341,27 +349,27 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
           state.minColor,
         ]
         console.log('CONFIRM_UPDATE_PARAMETERS===============>', args)
-        return callWithGasPrice(cardContract, 'updateParams', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'updateParams', args).catch((err) =>
           console.log('CONFIRM_UPDATE_PARAMETERS===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_SELL_COLLATERAL) {
         const args = [state.owner]
         console.log('CONFIRM_SELL_COLLATERAL===============>', args)
-        return callWithGasPrice(cardContract, 'sellCollateral', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'sellCollateral', args).catch((err) =>
           console.log('CONFIRM_SELL_COLLATERAL===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_WITHDRAW_TREASURY) {
         console.log('CONFIRM_WITHDRAW_TREASURY===============>')
-        return callWithGasPrice(cardContract, 'withdrawTreasury', []).catch((err) =>
+        return callWithGasPrice(collateralContract, 'withdrawTreasury', []).catch((err) =>
           console.log('CONFIRM_WITHDRAW_TREASURY===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_MINT) {
         const args = [state.auditor, state.owner, state.userBountyId, state.auditorBountyId, state.channel]
         console.log('CONFIRM_MINT===============>', args)
-        return callWithGasPrice(cardContract, 'mint', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'mint', args).catch((err) =>
           console.log('CONFIRM_MINT===============>', err),
         )
       }
@@ -369,21 +377,21 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
         const args = [state.channel, amountReceivable?.toString()]
         console.log('CONFIRM_NOTIFY_REWARD===============>', args)
-        return callWithGasPrice(cardContract, 'notifyReward', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'notifyReward', args).catch((err) =>
           console.log('CONFIRM_NOTIFY_REWARD===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_ERASE_DEBT) {
         const args = [state.owner]
         console.log('CONFIRM_ERASE_DEBT===============>', args)
-        return callWithGasPrice(cardContract, 'eraseDebt', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'eraseDebt', args).catch((err) =>
           console.log('CONFIRM_ERASE_DEBT===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_BURN) {
         const args = [state.owner]
         console.log('CONFIRM_BURN===============>', args)
-        return callWithGasPrice(cardContract, 'burn', args).catch((err) =>
+        return callWithGasPrice(collateralContract, 'burn', args).catch((err) =>
           console.log('CONFIRM_BURN===============>', err),
         )
       }

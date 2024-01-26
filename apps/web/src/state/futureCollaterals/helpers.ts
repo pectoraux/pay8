@@ -110,7 +110,27 @@ export const getPrice = async (ownerAddress, chainId) => {
       },
     ],
   })
-  return price.result?.toString()
+  const arr2 = Array.from({ length: 52 }, (v, i) => i)
+  const table = await Promise.all(
+    arr2?.map(async (idx) => {
+      const [value] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: getFutureCollateralsAddress(),
+            abi: futureCollateralsABI,
+            functionName: 'estimationTable',
+            args: [BigInt(channel.result), BigInt(idx)],
+          },
+        ],
+      })
+      return value.result
+    }),
+  )
+  return {
+    price: price.result?.toString(),
+    table,
+  }
 }
 
 export const fetchCollateral = async (ownerAddress, chainId) => {

@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import { useEffect, useRef, useState, useCallback, ChangeEvent } from 'react'
 import {
   Flex,
@@ -13,6 +14,7 @@ import {
   useModal,
   HelpIcon,
   useTooltip,
+  Balance,
 } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -24,7 +26,8 @@ import { useWeb3React } from '@pancakeswap/wagmi'
 import { useFutureCollateralContract } from 'hooks/useContract'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useRouter } from 'next/router'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useGetPrice } from 'state/futureCollaterals/hooks'
 import { Divider, GreyedOutContainer } from './styles'
 import CreateGaugeModal from './CreateGaugeModal'
 
@@ -39,6 +42,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  const data = useGetPrice(account) as any
   const { chainId } = useActiveChainId()
   const futureCollateralContract = useFutureCollateralContract()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
@@ -237,6 +241,26 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
       ) : (
         <>
           <GreyedOutContainer>
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={18}
+              value={getBalanceNumber(new BigNumber(data?.price?.toString()))}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Pending Revenue')}
+            </Text>
+          </GreyedOutContainer>
+          <GreyedOutContainer>
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {data?.table}
+            </Text>
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Table')}
+            </Text>
+          </GreyedOutContainer>
+          <GreyedOutContainer>
             <Flex ref={targetRef2}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
                 {t('Auditor')}
@@ -253,7 +277,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
               onChange={handleChange}
             />
           </GreyedOutContainer>
-          <GreyedOutContainer>
+          {/* <GreyedOutContainer>
             <Flex ref={targetRef3}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
                 {t('Stake ID')}
@@ -269,7 +293,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
               placeholder={t('input stake id')}
               onChange={handleChange}
             />
-          </GreyedOutContainer>
+          </GreyedOutContainer> */}
           <GreyedOutContainer>
             <Flex ref={targetRef4}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

@@ -42,7 +42,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
-  const data = useGetPrice(account)
+  const data = useGetPrice(account) as any
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -131,10 +131,18 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           color="textSubtle"
           fontSize="12px"
           decimals={18}
-          value={getBalanceNumber(new BigNumber(data?.toString()))}
+          value={getBalanceNumber(new BigNumber(data?.price?.toString()))}
         />
         <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
           {t('Pending Revenue')}
+        </Text>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+          {data?.table}
+        </Text>
+        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+          {t('Table')}
         </Text>
       </GreyedOutContainer>
       <GreyedOutContainer>
