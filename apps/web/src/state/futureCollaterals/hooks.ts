@@ -4,7 +4,7 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import useSWRImmutable from 'swr/immutable'
 import { fetchFutureCollateralsAsync, fetchFutureCollateralSgAsync } from '.'
 import {
   currPoolSelector,
@@ -13,7 +13,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getPrice, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('fc-tags', async () => getTag())
@@ -88,4 +88,12 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetPrice = (accountAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWRImmutable(['useGetPrice', accountAddress, chainId], async () =>
+    getPrice(accountAddress, chainId),
+  )
+  return data
 }

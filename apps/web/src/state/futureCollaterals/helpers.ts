@@ -1,10 +1,11 @@
 import { Token } from '@pancakeswap/sdk'
 import { GRAPH_API_COLLATERALS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
-import { getFutureCollateralsAddress } from 'utils/addressHelpers'
+import { getFutureCollateralsAddress, getProfileAddress } from 'utils/addressHelpers'
 import { futureCollateralsABI } from 'config/abi/futureCollaterals'
 import { publicClient } from 'utils/wagmi'
 import { erc20ABI } from 'wagmi'
+import { profileABI } from 'config/abi/profile'
 import { futureCollateralFields } from './queries'
 
 export const getTag = async () => {
@@ -72,6 +73,44 @@ export const getCollaterals = async (first = 5, skip = 0, where) => {
     console.error('Failed to fetch collaterals=============>', where, error)
     return null
   }
+}
+
+export const getPrice = async (ownerAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [profileId] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getProfileAddress(),
+        abi: profileABI,
+        functionName: 'addressToProfileId',
+        args: [ownerAddress],
+      },
+    ],
+  })
+  const [channel] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getFutureCollateralsAddress(),
+        abi: futureCollateralsABI,
+        functionName: 'channels',
+        args: [BigInt(profileId.result)],
+      },
+    ],
+  })
+  const [price] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: getFutureCollateralsAddress(),
+        abi: futureCollateralsABI,
+        functionName: 'getChannelPriceAt',
+        args: [channel.result, BigInt('0')],
+      },
+    ],
+  })
+  return price.result?.toString()
 }
 
 export const fetchCollateral = async (ownerAddress, chainId) => {
@@ -156,49 +195,48 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
   const collaterals = await Promise.all(
     fromGraph
       .map(async (collateral, index) => {
-        const [fund, minToBlacklist, minBountyPercent, bufferTime, treasuryFee, treasury, currentPrice] =
-          await bscClient.multicall({
-            allowFailure: true,
-            contracts: [
-              {
-                address: getFutureCollateralsAddress(),
-                abi: futureCollateralsABI,
-                functionName: 'fund',
-                args: [BigInt(collateral.channel)],
-              },
-              {
-                address: getFutureCollateralsAddress(),
-                abi: futureCollateralsABI,
-                functionName: 'minToBlacklist',
-              },
-              {
-                address: getFutureCollateralsAddress(),
-                abi: futureCollateralsABI,
-                functionName: 'minBountyPercent',
-              },
-              {
-                address: getFutureCollateralsAddress(),
-                abi: futureCollateralsABI,
-                functionName: 'bufferTime',
-              },
-              {
-                address: getFutureCollateralsAddress(),
-                abi: futureCollateralsABI,
-                functionName: 'treasuryFee',
-              },
-              {
-                address: getFutureCollateralsAddress(),
-                abi: futureCollateralsABI,
-                functionName: 'treasury',
-              },
-              {
-                address: getFutureCollateralsAddress(),
-                abi: futureCollateralsABI,
-                functionName: 'getPriceAt',
-                args: [collateral.id, BigInt('0')],
-              },
-            ],
-          })
+        const [fund, minBountyPercent, treasuryFee, treasury, currentPrice] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'fund',
+              args: [BigInt(collateral.channel)],
+            },
+            // {
+            //   address: getFutureCollateralsAddress(),
+            //   abi: futureCollateralsABI,
+            //   functionName: 'minToBlacklist',
+            // },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'minBountyPercent',
+            },
+            // {
+            //   address: getFutureCollateralsAddress(),
+            //   abi: futureCollateralsABI,
+            //   functionName: 'bufferTime',
+            // },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'treasuryFee',
+            },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'treasury',
+            },
+            {
+              address: getFutureCollateralsAddress(),
+              abi: futureCollateralsABI,
+              functionName: 'getPriceAt',
+              args: [collateral.id, BigInt('0')],
+            },
+          ],
+        })
         const arr2 = Array.from({ length: 52 }, (v, i) => i)
         const table = await Promise.all(
           arr2?.map(async (idx) => {
@@ -220,9 +258,9 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
           sousId: index,
           ...collateral,
           table,
-          minToBlacklist: minToBlacklist.result,
+          // minToBlacklist: minToBlacklist.result,
           minBountyPercent: minBountyPercent.result,
-          bufferTime: bufferTime.result,
+          // bufferTime: bufferTime.result,
           treasuryFee: treasuryFee.result,
           treasury: treasury.result,
           fund: fund.result.toString(),

@@ -1,6 +1,3 @@
-import axios from 'axios'
-import { firestore } from 'utils/firebase'
-import { loadStripe } from '@stripe/stripe-js'
 import { useEffect, useRef, useState } from 'react'
 import {
   Flex,
@@ -13,11 +10,14 @@ import {
   ErrorIcon,
   useTooltip,
   HelpIcon,
+  Balance,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
+import { useGetPrice } from 'state/futureCollaterals/hooks'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -37,11 +37,12 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const [isLoading, setIsLoading] = useState(false)
+  const data = useGetPrice(account)
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -133,6 +134,18 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
   return (
     <>
       <GreyedOutContainer>
+        <Balance
+          lineHeight="1"
+          color="textSubtle"
+          fontSize="12px"
+          decimals={18}
+          value={getBalanceNumber(new BigNumber(data?.toString()))}
+        />
+        <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+          {t('Pending Revenue')}
+        </Text>
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Auditor')}
@@ -166,7 +179,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
           onChange={handleChange}
         />
       </GreyedOutContainer>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Flex ref={targetRef3}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Stake ID')}
@@ -182,7 +195,7 @@ const SetPriceStage: React.FC<any> = ({ state, pool, currency, rampAddress, hand
           placeholder={t('input your stake id')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
