@@ -359,14 +359,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
         )
       }
       if (stage === LockStage.CONFIRM_MINT) {
-        const args = [
-          state.auditor,
-          state.owner,
-          state.stakeId,
-          state.userBountyId,
-          state.auditorBountyId,
-          state.channel,
-        ]
+        const args = [state.auditor, state.owner, state.userBountyId, state.auditorBountyId, state.channel]
         console.log('CONFIRM_MINT===============>', args)
         return callWithGasPrice(cardContract, 'mint', args).catch((err) =>
           console.log('CONFIRM_MINT===============>', err),
