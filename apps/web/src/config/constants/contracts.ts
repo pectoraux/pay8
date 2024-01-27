@@ -449,11 +449,11 @@ export default {
     56: '0x',
   },
   trustbounties: {
-    4002: '0x148177b496b142a13106fB2a8f35f5D3e610Bb40',
+    4002: '0x83525E07117e996f4336C9c5ad2Ee1c341AE7528',
     56: '0x',
   },
   trustbountiesHelper: {
-    4002: '0xe5A348E175615d207fab6C093B096Aa3Effd67E6',
+    4002: '0x8bb6f773529974f8bfBB96334E3ddbDf5864Cf8D',
     56: '0x',
   },
   trustbountiesvoter: {
@@ -590,7 +590,7 @@ export default {
   },
   futureCollaterals: {
     56: '0x',
-    4002: '0x88471db399F7308BbA13F15704e439a744c450c5',
+    4002: '0xe8709947b1e52e289245fa1b9fDcA62c1DBbd78b',
   },
   profile: {
     56: '0x',
