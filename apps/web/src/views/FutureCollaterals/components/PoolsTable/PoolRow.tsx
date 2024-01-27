@@ -1,7 +1,8 @@
 import { memo, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { usePool, useCurrPool, useGetPrice } from 'state/futureCollaterals/hooks'
+import { usePool, useCurrPool } from 'state/futureCollaterals/hooks'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
@@ -12,16 +13,15 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { t } = useTranslation()
   const currState = useCurrPool()
   const { isMobile } = useMatchBreakpoints()
-  const data = useGetPrice(account) as any
   const currAccount = useMemo(() => pool?.accounts?.find((n) => n.id === currState[pool?.id]), [pool, currState])
-  console.log('futureCollateralpool1====>', pool, currAccount, currState, data)
+  console.log('futureCollateralpool1====>', pool, currAccount, currState)
   const tabs = (
     <>
       <NameCell pool={pool} />
       <TotalValueCell labelText={t('Auditor Bounty ID')} amount={pool?.auditorBountyId} />
       <TotalValueCell labelText={t('User Bounty ID')} amount={pool?.bountyId} />
       <TotalValueCell labelText={t('Channel')} amount={pool?.channel} />
-      <TotalValueCell labelText={t('Token ID')} amount={data?.tokenId} />
+      <TotalValueCell labelText={t('To Borrow')} amount={getBalanceNumber(pool?.toBorrow)} />
     </>
   )
   return (

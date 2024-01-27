@@ -1,5 +1,4 @@
 import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import { useGetAllResources, useGetGame } from 'state/games/hooks'

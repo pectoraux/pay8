@@ -1,11 +1,9 @@
 import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-
-import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()

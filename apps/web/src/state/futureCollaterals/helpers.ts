@@ -234,48 +234,55 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
   const collaterals = await Promise.all(
     fromGraph
       .map(async (collateral, index) => {
-        const [fund, minBountyPercent, treasuryFee, treasury, currentPrice] = await bscClient.multicall({
-          allowFailure: true,
-          contracts: [
-            {
-              address: getFutureCollateralsAddress(),
-              abi: futureCollateralsABI,
-              functionName: 'fund',
-              args: [BigInt(collateral.channel)],
-            },
-            // {
-            //   address: getFutureCollateralsAddress(),
-            //   abi: futureCollateralsABI,
-            //   functionName: 'minToBlacklist',
-            // },
-            {
-              address: getFutureCollateralsAddress(),
-              abi: futureCollateralsABI,
-              functionName: 'minBountyPercent',
-            },
-            // {
-            //   address: getFutureCollateralsAddress(),
-            //   abi: futureCollateralsABI,
-            //   functionName: 'bufferTime',
-            // },
-            {
-              address: getFutureCollateralsAddress(),
-              abi: futureCollateralsABI,
-              functionName: 'treasuryFee',
-            },
-            {
-              address: getFutureCollateralsAddress(),
-              abi: futureCollateralsABI,
-              functionName: 'treasury',
-            },
-            {
-              address: getFutureCollateralsAddress(),
-              abi: futureCollateralsABI,
-              functionName: 'getPriceAt',
-              args: [collateral.id, BigInt('0')],
-            },
-          ],
-        })
+        const [fund, minToBlacklist, minBountyPercent, bufferTime, treasuryFee, treasury, currentPrice, _collateral] =
+          await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'fund',
+                args: [BigInt(collateral.channel)],
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'minToBlacklist',
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'minBountyPercent',
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'bufferTime',
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'treasuryFee',
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'treasury',
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'getPriceAt',
+                args: [collateral.id, BigInt('0')],
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'collateral',
+                args: [collateral.id],
+              },
+            ],
+          })
         const arr2 = Array.from({ length: 52 }, (v, i) => i)
         const table = await Promise.all(
           arr2?.map(async (idx) => {
@@ -293,14 +300,22 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
             return value.result?.toString()
           }),
         )
+        const channel = _collateral.result[0]
+        const startTime = _collateral.result[1]
+        const toBorrow = _collateral.result[2]
+        const owner = _collateral.result[3]
         return {
           sousId: index,
           ...collateral,
           table,
-          // minToBlacklist: minToBlacklist.result,
+          minToBlacklist: minToBlacklist.result,
           minBountyPercent: minBountyPercent.result,
-          // bufferTime: bufferTime.result,
+          bufferTime: bufferTime.result,
           treasuryFee: treasuryFee.result,
+          channel,
+          startTime,
+          toBorrow,
+          owner,
           treasury: treasury.result,
           fund: fund.result.toString(),
           currentPrice: currentPrice.result?.toString(),

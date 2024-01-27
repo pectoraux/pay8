@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
@@ -59,6 +60,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
               {t('Current Price')}
             </Text>
           </Box>
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {format(new Date(parseInt(Object.values(pool?.startTime)?.toString() || '0') * 1000), 'yyyy-MM-dd HH:mm')}
+          </Text>
+          <Text color="primary" mb="3px" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Mint Date')}
+          </Text>
         </Flex>
         <Flex flexDirection="column" alignSelf="flex-center">
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
