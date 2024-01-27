@@ -51,10 +51,12 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const isNativeCoin = tokenAddress?.toLowerCase() === getTrustBountiesHelperAddress()?.toLowerCase()
   const token = isNativeCoin ? Native.onChain(chainId) : tokenAddress
   const { data: tokenData } = useGetTokenData(token ?? '')
-
+  const isNFT = bountyInfo?.length && bountyInfo[8]
   const amountClaimed =
-    latestClaim?.length && bountyInfo[8]
+    latestClaim?.length && !isNFT
       ? getBalanceNumber(new BigNumber(latestClaim[4]?.toString()), tokenData?.decimals)
+      : isNFT
+      ? latestClaim[4]?.toString()
       : 0
   const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
 
@@ -95,12 +97,12 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
         </Flex>
         <Flex alignItems="center" mb="16px">
           <Text color="textSubtle" bold mr="8px">
-            {t('%val% being claimed', { val: bountyInfo[8] ? 'Token' : 'Amount' })}
+            {t('%val% being claimed', { val: isNFT ? 'Token' : 'Amount' })}
           </Text>
           {'->'}
           <Text color="primary" ml="8px">
-            {bountyInfo[8] ? `${tokenData?.symbol?.toUpperCase()} #` : ''} {amountClaimed}{' '}
-            {bountyInfo[8] ? '' : tokenData?.symbol?.toUpperCase()}
+            {isNFT ? `${tokenData?.symbol?.toUpperCase()} #` : ''} {amountClaimed}{' '}
+            {isNFT ? '' : tokenData?.symbol?.toUpperCase()}
           </Text>
         </Flex>
         <DetailBox p="16px">
