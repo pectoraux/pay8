@@ -52,9 +52,10 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const token = isNativeCoin ? Native.onChain(chainId) : tokenAddress
   const { data: tokenData } = useGetTokenData(token ?? '')
 
-  const amountClaimed = latestClaim?.length
-    ? getBalanceNumber(new BigNumber(latestClaim[4]?.toString()), tokenData?.decimals)
-    : 0
+  const amountClaimed =
+    latestClaim?.length && bountyInfo[8]
+      ? getBalanceNumber(new BigNumber(latestClaim[4]?.toString()), tokenData?.decimals)
+      : 0
   const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
 
   return (
@@ -94,11 +95,12 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
         </Flex>
         <Flex alignItems="center" mb="16px">
           <Text color="textSubtle" bold mr="8px">
-            {t('Amount being claimed')}
+            {t('%val% being claimed', { val: bountyInfo[8] ? 'Token' : 'Amount' })}
           </Text>
           {'->'}
           <Text color="primary" ml="8px">
-            {amountClaimed} {tokenData?.symbol?.toUpperCase()}
+            {bountyInfo[8] ? `${tokenData?.symbol?.toUpperCase()} #` : ''} {amountClaimed}{' '}
+            {bountyInfo[8] ? '' : tokenData?.symbol?.toUpperCase()}
           </Text>
         </Flex>
         <DetailBox p="16px">

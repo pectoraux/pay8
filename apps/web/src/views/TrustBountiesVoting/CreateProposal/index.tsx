@@ -361,10 +361,6 @@ const CreateProposal = () => {
                 </StyledItemRow>
               </Box>
               <Box mb="24px">
-                <Flex ref={targetRef3}>
-                  {tooltipVisible3 && tooltip3}
-                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-                </Flex>
                 <SecondaryLabel>{t('NFT Type')}</SecondaryLabel>
                 <StyledItemRow>
                   <ButtonMenu
