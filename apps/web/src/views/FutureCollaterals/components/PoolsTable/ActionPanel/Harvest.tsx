@@ -23,7 +23,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
   const { t } = useTranslation()
   const actionTitle = (
     <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-      {t('Future Collateral Info')}{' '}
+      {t('Future Collateral Uses USD')}{' '}
     </Text>
   )
   const table = chunk(pool?.table, 4)
@@ -61,7 +61,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {format(new Date(parseInt(Object.values(pool?.startTime)?.toString() || '0') * 1000), 'yyyy-MM-dd HH:mm')}
+            {format(new Date(parseInt(pool?.startTime || '0') * 1000), 'yyyy-MM-dd HH:mm')}
           </Text>
           <Text color="primary" mb="3px" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Mint Date')}

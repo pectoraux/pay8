@@ -74,6 +74,7 @@ const CreateProposal = () => {
     amount: '',
     friendly: 0,
     lockBounty: 0,
+    isNFT: 0,
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
@@ -100,7 +101,7 @@ const CreateProposal = () => {
   )
   useEffect(() => {
     refetch()
-  }, [account, chainId])
+  }, [account, chainId, refetch])
 
   const { handleApprove: handlePoolApprove } = useApprovePool(
     stakingTokenContract,
@@ -121,7 +122,7 @@ const CreateProposal = () => {
             account,
             state.recipient,
             bountyId,
-            amount.toString(),
+            state.isNFT ? state.amount : amount.toString(),
             !!state.lockBounty,
             state.name,
             state.body,
@@ -356,6 +357,24 @@ const CreateProposal = () => {
                   >
                     <ButtonMenuItem>{t('No')}</ButtonMenuItem>
                     <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+                  </ButtonMenu>
+                </StyledItemRow>
+              </Box>
+              <Box mb="24px">
+                <Flex ref={targetRef3}>
+                  {tooltipVisible3 && tooltip3}
+                  <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+                </Flex>
+                <SecondaryLabel>{t('NFT Type')}</SecondaryLabel>
+                <StyledItemRow>
+                  <ButtonMenu
+                    scale="xs"
+                    variant="subtle"
+                    activeIndex={state.isNFT}
+                    onItemClick={handleRawValueChange('isNFT')}
+                  >
+                    <ButtonMenuItem>{t('FT Bounty')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('NFT Bounty')}</ButtonMenuItem>
                   </ButtonMenu>
                 </StyledItemRow>
               </Box>

@@ -597,7 +597,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
             <LinkExternal
               color="failure"
               href={`/trustbounties/voting/create?bountyId=${pool?.id}&tokenAddress=${
-                pool?.isNativeCoin ? DEFAULT_TFIAT : pool?.token?.address
+                pool?.isNFT || pool?.isNativeCoin ? DEFAULT_TFIAT : pool?.token?.address
               }&decimals=${pool?.isNativeCoin ? 18 : pool?.token?.decimals}`}
               bold
             >

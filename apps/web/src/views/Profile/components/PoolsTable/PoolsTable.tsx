@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { Token } from '@pancakeswap/sdk'
-import { Pool, Image, Flex, Loading, ScrollToTopButtonV2 } from '@pancakeswap/uikit'
+import { Pool, Flex, Loading, ScrollToTopButtonV2 } from '@pancakeswap/uikit'
 import { useRef } from 'react'
 import styled from 'styled-components'
 import { usePoolsWithFilterSelector } from 'state/profile/hooks'

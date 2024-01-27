@@ -29,7 +29,6 @@ import { PageMeta } from 'components/Layout/Page'
 import Link from 'next/link'
 import { getBlockExploreLink } from 'utils'
 import { DatePickerPortal } from 'views/Voting/components/DatePicker'
-import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useRouter } from 'next/router'
@@ -163,7 +162,7 @@ const CreateProposal = () => {
       setIsLoading(false)
       console.log('try err====================>', err)
     }
-  }, [account, client, acct, walletClient, toastSuccess, t])
+  }, [account, client, acct, query.collectionId, walletClient, callWithGasPrice, marketEventsContract, toastSuccess, t])
 
   // eslint-disable-next-line consistent-return
   const handleCreateData2 = useCallback(async () => {

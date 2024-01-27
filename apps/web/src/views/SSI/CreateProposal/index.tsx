@@ -43,6 +43,9 @@ import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
 import Layout from '../components/Layout'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const crypto = require('crypto')
+
 const CreateProposal = () => {
   const [state, setState] = useState<any>(() => ({
     dataType: null,
@@ -61,7 +64,7 @@ const CreateProposal = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
-  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { fetchWithCatchTxError } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const ssiContract = useSSIContract()
   const { toastSuccess } = useToast()
@@ -69,7 +72,6 @@ const CreateProposal = () => {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   const { name, choices } = state
   const formErrors = getFormErrors(state, t)
-  const crypto = require('crypto')
 
   const handleCreateData = useCallback(async () => {
     console.log('datadata===========================>', data)

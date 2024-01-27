@@ -300,23 +300,23 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
             return value.result?.toString()
           }),
         )
-        const channel = _collateral.result[0]
-        const startTime = _collateral.result[1]
-        const toBorrow = _collateral.result[2]
+        const channel = _collateral.result[0]?.toString()
+        const startTime = _collateral.result[1]?.toString()
+        const toBorrow = _collateral.result[2]?.toString()
         const owner = _collateral.result[3]
         return {
           sousId: index,
           ...collateral,
           table,
-          minToBlacklist: minToBlacklist.result,
-          minBountyPercent: minBountyPercent.result,
-          bufferTime: bufferTime.result,
-          treasuryFee: treasuryFee.result,
+          minToBlacklist: minToBlacklist.result?.toString(),
+          minBountyPercent: minBountyPercent.result?.toString(),
+          bufferTime: bufferTime.result?.toString(),
+          treasuryFee: treasuryFee.result?.toString(),
           channel,
           startTime,
           toBorrow,
           owner,
-          treasury: treasury.result,
+          treasury: treasury.result?.toString(),
           fund: fund.result.toString(),
           currentPrice: currentPrice.result?.toString(),
           token: new Token(

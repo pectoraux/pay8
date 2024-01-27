@@ -72,6 +72,7 @@ const ProfileHeader: React.FC<any> = ({
   const toggleUsername = () => setShowUsername(!showUsername)
   const profileUsername = showUsername ? profile?.name : null
   const hasProfile = profile?.name?.length > 0
+  const { sharedEmail } = useGetSharedEmail(account)
 
   const Icon = !showUsername ? VisibilityOff : VisibilityOn
   const isBounties = useRouter().asPath.includes('bounties')
@@ -198,10 +199,7 @@ const ProfileHeader: React.FC<any> = ({
             />
           </Button>
           <ReactRouterLink to="/ssi/proposal/createAutomaticData">
-            <Button
-              // disabled={!isProfileLoading && !isValidating}
-              mt="16px"
-            >
+            <Button disabled={sharedEmail} mt="16px">
               {t('Verify Your Email')}
             </Button>
           </ReactRouterLink>

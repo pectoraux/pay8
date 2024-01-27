@@ -1,35 +1,17 @@
-import {
-  Flex,
-  LinkExternal,
-  Pool,
-  ScanLink,
-  Link,
-  FlexGap,
-  IconButton,
-  LanguageIcon,
-  TwitterIcon,
-  TelegramIcon,
-  ProposalIcon,
-  SmartContractIcon,
-  useModal,
-  Text,
-  Button,
-} from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Pool, useModal, Text, Button } from '@pancakeswap/uikit'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
 import { memo } from 'react'
 import { useDispatch } from 'react-redux'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { getBlockExploreLink } from 'utils'
 import { setCurrPoolData } from 'state/profile'
-import { useCurrPool, useGetIsUnique } from 'state/profile/hooks'
-import { useToken } from 'hooks/Tokens'
+import { useCurrPool, useGetIsUnique, useGetSharedEmail } from 'state/profile/hooks'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 import WebPagesModal from './WebPagesModal'
 import ClearAllButton from './ClearAllButton'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -40,7 +22,6 @@ interface ExpandedFooterProps {
 
 const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksToRight = true }) => {
   const { t } = useTranslation()
-  const { chainId } = useActiveChainId()
   const dispatch = useDispatch()
   const currState = useCurrPool()
   const tokenAddress = pool?.id || ''
@@ -49,7 +30,9 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   const { isUnique } = useGetIsUnique(pool?.id)
-  console.log('firstAccount============>', firstAccount, pool?.accounts[0]?.ownerAddress)
+  const { sharedEmail } = useGetSharedEmail(account)
+
+  console.log('firstAccount============>', firstAccount, pool?.accounts[0]?.ownerAddress, sharedEmail)
   return (
     <>
       {/* {pool?.owner && (
@@ -88,6 +71,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
           {t('Is Unique')} {`->`} {isUnique ? t('Yes') : t('No')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('Shared Email')} {`->`} {sharedEmail ? t('Yes') : t('No')}
         </Text>
       </Flex>
       {account && currAccount?.tokenAddress && (

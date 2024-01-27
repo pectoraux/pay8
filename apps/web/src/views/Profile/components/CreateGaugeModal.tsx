@@ -489,10 +489,10 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       }
       if (stage === LockStage.CONFIRM_UPDATE_SSID) {
         console.log('CONFIRM_UPDATE_SSID=======================>', [state.profileId, state.identityTokenId])
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
         return callWithGasPrice(getSSIContract(), 'updateSSID', [state.profileId, state.identityTokenId])
-          .then(() => {
-            return callWithGasPrice(profileContract, 'updateSSID', [])
-          })
+          .then(() => delay(3000))
+          .then(() => callWithGasPrice(profileContract, 'updateSSID', []))
           .catch((err) => console.log('1CONFIRM_UPDATE_SSID==================>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_BADGE_ID) {

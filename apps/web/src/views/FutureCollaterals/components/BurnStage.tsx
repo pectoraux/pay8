@@ -25,7 +25,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
 
   return (
     <>
-      <GreyedOutContainer>
+      {/* <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Owner Address')}
         </Text>
@@ -37,7 +37,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           placeholder={t('input owner address')}
           onChange={handleChange}
         />
-      </GreyedOutContainer>
+      </GreyedOutContainer> */}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
@@ -52,7 +52,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </Grid>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
-        <Button mb="8px" variant="danger" onClick={continueToNextStage}>
+        <Button mb="8px" onClick={continueToNextStage}>
           {t('Burn')}
         </Button>
       </Flex>
