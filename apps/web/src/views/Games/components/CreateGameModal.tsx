@@ -89,7 +89,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchGamesAsync({ fromGame: true, chainId }))
-      delay(3000).then(() => reload())
+      delay(5000).then(() => reload())
     }
     onDismiss()
   }, [

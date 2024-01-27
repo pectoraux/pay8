@@ -392,6 +392,11 @@ export const futureCollateralsABI = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: 'toBorrow',
+        type: 'uint256',
+      },
+      {
         internalType: 'address',
         name: 'owner',
         type: 'address',
@@ -658,6 +663,11 @@ export const futureCollateralsABI = [
         name: '_channel',
         type: 'uint256',
       },
+      {
+        internalType: 'uint256',
+        name: '_toBorrow',
+        type: 'uint256',
+      },
     ],
     name: 'mint',
     outputs: [],
@@ -851,7 +861,23 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_borrower',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_claimId',
+        type: 'uint256',
+      },
+    ],
     name: 'sellCollateral',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -1071,6 +1097,11 @@ export const futureCollateralsABI = [
         internalType: 'uint256',
         name: '_minBountyPercent',
         type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_valuepool',
+        type: 'address',
       },
       {
         internalType: 'enum COLOR',

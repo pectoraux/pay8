@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex } from '@pancakeswap/uikit'
@@ -14,7 +15,6 @@ import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/sh
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import NodeRSA from 'encrypt-rsa'
 import { convertTimeToSeconds } from 'utils/timeHelper'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
@@ -71,6 +71,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
+  const { reload } = useRouter()
   const stakingTokenContract = useERC20(pool?.token?.address || currency?.address || '')
   const collateralContract = useFutureCollateralContract()
   const trustBountiesContract = useTrustBountiesContract()
@@ -84,14 +85,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
     collateralContract,
   )
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
-  const nodeRSA = new NodeRSA(process.env.NEXT_PUBLIC_PUBLIC_KEY, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-  let password
-  if (pool?.password) {
-    password = nodeRSA?.decryptStringWithRsaPrivateKey({
-      text: pool?.password,
-      privateKey: process.env.NEXT_PUBLIC_PRIVATE_KEY,
-    })
-  }
   const [state, setState] = useState<any>(() => ({
     owner: account ?? '',
     avatar: pool?.collection?.avatar,
@@ -105,7 +98,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
     factor: '',
     period: '',
     maxNotesPerProtocol: pool?.maxNotesPerProtocol,
-    amountPayable: '',
+    amountPayable: state2?.amountPayable ?? '',
     pricePerMinute: '',
     contractAddress: '',
     card: pool?.cardAddress ?? '',
@@ -120,7 +113,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
     identityTokenId: '0',
     message: '',
     tag: '',
-    password: '',
     protocolId: currAccount?.protocolId ?? '0',
     toAddress: '',
     uriGenerator: '',
@@ -285,7 +277,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
     onRequiresApproval: async () => {
       try {
         return (
-          requiresApproval(stakingTokenContract, account, collateralContract.address) &&
+          requiresApproval(stakingTokenContract, account, collateralContract.address) ||
           requiresApproval(stakingTokenContract, account, trustBountiesContract.address)
         )
       } catch (error) {
@@ -366,7 +358,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
         )
       }
       if (stage === LockStage.CONFIRM_MINT) {
-        const args = [state.auditor, state.owner, state.userBountyId, state.auditorBountyId, state.channel]
+        const amount = getDecimalAmount(state.amountPayable ?? 0)
+        const args = [
+          state.auditor,
+          state.owner,
+          state.userBountyId,
+          state.auditorBountyId,
+          state.channel,
+          amount?.toString(),
+        ]
         console.log('CONFIRM_MINT===============>', args)
         return callWithGasPrice(collateralContract, 'mint', args).catch((err) =>
           console.log('CONFIRM_MINT===============>', err),
@@ -395,6 +395,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
       }
     },
     onSuccess: async ({ receipt }) => {
+      if (stage === LockStage.CONFIRM_MINT) reload()
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)

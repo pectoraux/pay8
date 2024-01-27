@@ -4,7 +4,6 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import useSWRImmutable from 'swr/immutable'
 import { fetchFutureCollateralsAsync, fetchFutureCollateralSgAsync } from '.'
 import {
   currPoolSelector,
@@ -92,8 +91,6 @@ export const useFilters = () => {
 
 export const useGetPrice = (accountAddress) => {
   const { chainId } = useActiveChainId()
-  const { data } = useSWRImmutable(['useGetPrice', accountAddress, chainId], async () =>
-    getPrice(accountAddress, chainId),
-  )
+  const { data } = useSWR(['useGetPrice', accountAddress, chainId], async () => getPrice(accountAddress, chainId))
   return data
 }

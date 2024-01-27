@@ -57,7 +57,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
     userBountyId: '',
     auditorBountyId: '',
     channel: '',
-
+    amountPayable: '',
     profileId: '',
   }))
 
@@ -298,19 +298,19 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
               onChange={handleChange}
             />
           </GreyedOutContainer>
-          {/* <GreyedOutContainer>
+          <GreyedOutContainer>
             <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Recipient')}
+              {t('Amount To Borrow')}
             </Text>
             <Input
               type="text"
               scale="sm"
-              name="recipient"
-              value={state.recipient}
-              placeholder={t('input recipient address')}
+              name="amountPayable"
+              value={state.amountPayable}
+              placeholder={t('input amount you wish to borrow')}
               onChange={handleChange}
             />
-          </GreyedOutContainer> */}
+          </GreyedOutContainer>
           <GreyedOutContainer>
             <Flex ref={targetRef4}>
               <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

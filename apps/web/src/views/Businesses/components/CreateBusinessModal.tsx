@@ -64,7 +64,7 @@ const CreateBusinessStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchBusinessGaugesAsync({ chainId }))
-      delay(3000).then(() => reload())
+      delay(5000).then(() => reload())
     }
     onDismiss()
   }, [

@@ -29,7 +29,7 @@ import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import { useRouter } from 'next/router'
 import { useGetRequiresApproval } from 'state/trustbounties/hooks'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
-import { getRampHelper2Address, getVeFromWorkspace } from 'utils/addressHelpers'
+import { getFutureCollateralsAddress, getRampHelper2Address, getVeFromWorkspace } from 'utils/addressHelpers'
 import { differenceInSeconds } from 'date-fns'
 import { FetchStatus } from 'config/constants/types'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
@@ -191,7 +191,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
           chainId,
         }),
       )
-      delay(3000).then(() => router.reload())
+      delay(5000).then(() => router.reload())
     }
     onDismiss()
   }, [
@@ -627,6 +627,15 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
             {t('Ramp Helper 2 Contract Address')}
           </Text>
           <CopyAddress title={truncateHash(getRampHelper2Address(), 15, 15)} account={getRampHelper2Address()} />
+        </Box>
+        <Box>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('Future Collateral Contract Address')}
+          </Text>
+          <CopyAddress
+            title={truncateHash(getFutureCollateralsAddress(), 15, 15)}
+            account={getFutureCollateralsAddress()}
+          />
         </Box>
       </Flex>
       <Flex flexDirection="column" px="16px" pb="16px">

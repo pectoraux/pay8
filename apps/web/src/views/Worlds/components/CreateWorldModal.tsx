@@ -60,7 +60,7 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchWorldsAsync({ chainId }))
-      delay(3000).then(() => reload())
+      delay(5000).then(() => reload())
     }
     onDismiss()
   }, [
