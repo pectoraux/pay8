@@ -3,6 +3,7 @@ import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { usePool } from 'state/futureCollaterals/hooks'
 
 import CopyAddress from './CopyAddress'
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
@@ -19,8 +20,9 @@ export function chunk(items = [], size) {
   return chunks
 }
 
-const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ sousId }) => {
   const { t } = useTranslation()
+  const { pool } = usePool(sousId)
   const actionTitle = (
     <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
       {t('Future Collateral Uses USD')}{' '}

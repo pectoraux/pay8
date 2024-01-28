@@ -94,7 +94,7 @@ const ActionPanel: React.FC<any> = ({ account, pool, currAccount, expanded }) =>
       <ActionContainer>
         <Box width="100%">
           <ActionContainer hasBalance>
-            <Harvest pool={pool} />
+            <Harvest sousId={pool?.sousId} />
             <Stake pool={pool} currAccount={currAccount} />
           </ActionContainer>
         </Box>
