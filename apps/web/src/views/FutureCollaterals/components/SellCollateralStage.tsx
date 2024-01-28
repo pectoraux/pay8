@@ -39,8 +39,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Input
           type="text"
           scale="sm"
-          name="owner"
-          value={state.owner}
+          name="borrower"
+          value={state.borrower}
           placeholder={t('input borrower address')}
           onChange={handleChange}
         />

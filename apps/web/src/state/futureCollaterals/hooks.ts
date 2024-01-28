@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { batch, useSelector } from 'react-redux'
+import { FAST_INTERVAL } from 'config/constants'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { fetchFutureCollateralsAsync, fetchFutureCollateralSgAsync } from '.'
 import {
@@ -55,10 +56,12 @@ export const useFetchPublicPoolsData = () => {
       fetchPoolsDataWithFarms()
     },
     {
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,
       revalidateIfStale: true,
-      revalidateOnReconnect: false,
+      revalidateOnReconnect: true,
       revalidateOnMount: true,
+      refreshInterval: FAST_INTERVAL,
+      keepPreviousData: true,
     },
   )
 }

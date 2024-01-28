@@ -191,7 +191,7 @@ export const fetchCollateral = async (ownerAddress, chainId) => {
 }
 
 export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) => {
-  const fromGraph = await getCollaterals(1000, 0, {})
+  const fromGraph = await getCollaterals(1000, 0, { active: true })
   const bscClient = publicClient({ chainId })
 
   const [name, decimals, symbol] = await bscClient.multicall({

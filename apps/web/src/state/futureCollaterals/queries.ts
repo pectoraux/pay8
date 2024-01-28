@@ -4,6 +4,7 @@ export const futureCollateralFields = `
   active
   channel
   bountyId
+  endebted
   auditorBountyId
   auditor
   metadataUrl

@@ -88,6 +88,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const [state, setState] = useState<any>(() => ({
     owner: account ?? '',
+    borrower: pool?.owner ?? '',
     avatar: pool?.collection?.avatar,
     bountyId: pool?.bountyId,
     profileId: pool?.profileId,
@@ -348,7 +349,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
         )
       }
       if (stage === LockStage.CONFIRM_SELL_COLLATERAL) {
-        const args = [state.owner, state.userBountyId, state.claimId]
+        const args = [state.borrower, state.userBountyId, state.claimId]
         console.log('CONFIRM_SELL_COLLATERAL===============>', args)
         return callWithGasPrice(collateralContract, 'sellCollateral', args).catch((err) =>
           console.log('CONFIRM_SELL_COLLATERAL===============>', err),

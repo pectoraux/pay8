@@ -44,7 +44,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId }) => {
               color="textSubtle"
               decimals={5}
               fontSize="12px"
-              value={getBalanceNumber(pool?.fund, pool?.token?.decimals ?? 18)}
+              value={getBalanceNumber(pool?.fund)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Channel Fund')}
@@ -56,10 +56,22 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId }) => {
               color="textSubtle"
               decimals={5}
               fontSize="12px"
-              value={getBalanceNumber(pool?.currentPrice, pool?.token?.decimals ?? 18)}
+              value={getBalanceNumber(pool?.currentPrice)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
               {t('Current Price')}
+            </Text>
+          </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              decimals={5}
+              fontSize="12px"
+              value={pool?.endebted ? getBalanceNumber(pool?.currentPrice) : 0}
+            />
+            <Text color="failure" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Debt Amount')}
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
