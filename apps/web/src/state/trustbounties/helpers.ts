@@ -368,9 +368,9 @@ export const fetchBounties = async (
 
             return {
               ...claim,
-              winner: fromBc.result[5],
-              atPeace: Number(fromBc.result[6]) === 0, // status
-              endTime: fromBc.result[2]?.toString(),
+              winner: fromBc.result?.length && fromBc.result[5],
+              atPeace: Number(fromBc.result?.length && fromBc.result[6]) === 0, // status
+              endTime: fromBc.result?.length && fromBc.result[2]?.toString(),
             }
           }),
         )

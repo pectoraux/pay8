@@ -55,7 +55,7 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
   const amountClaimed =
     latestClaim?.length && !isNFT
       ? getBalanceNumber(new BigNumber(latestClaim[4]?.toString()), tokenData?.decimals)
-      : isNFT
+      : latestClaim?.length && isNFT
       ? latestClaim[4]?.toString()
       : 0
   const [presentUpdateTerms] = useModal(<CreateContentModal onSuccess={onSuccess} litigation={proposal} />)
