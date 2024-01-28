@@ -75,6 +75,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
   const stakingTokenContract = useERC20(pool?.token?.address || currency?.address || '')
   const collateralContract = useFutureCollateralContract()
   const trustBountiesContract = useTrustBountiesContract()
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   console.log(
     'mcurrencyy===============>',
     trustBountiesContract,
@@ -397,7 +398,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
       }
     },
     onSuccess: async ({ receipt }) => {
-      if (stage === LockStage.CONFIRM_MINT) reload()
+      if (stage === LockStage.CONFIRM_MINT) delay(5000).then(() => reload())
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       setConfirmedTxHash(receipt.transactionHash)
       setStage(LockStage.TX_CONFIRMED)

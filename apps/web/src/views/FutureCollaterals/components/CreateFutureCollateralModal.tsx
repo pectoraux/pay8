@@ -56,7 +56,7 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
     stakeId: '',
     userBountyId: '',
     auditorBountyId: '',
-    channel: '',
+    channel: data?.channel ?? '',
     amountPayable: '',
     profileId: '',
   }))

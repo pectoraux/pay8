@@ -457,7 +457,7 @@ export default {
     56: '0x',
   },
   trustbountiesvoter: {
-    4002: '0x4Bb8E20BDAb5333ad0b91674CE1A3e3a34A181A8',
+    4002: '0xd2a7a61A47d24845D5929602b3B982d2dD6C48Bd',
     56: '0x',
   },
   invoiceFactory: {
