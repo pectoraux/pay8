@@ -472,6 +472,11 @@ export const trustBountiesABI = [
         name: '_bountyId',
         type: 'uint256',
       },
+      {
+        internalType: 'address',
+        name: '_user',
+        type: 'address',
+      },
     ],
     name: 'deleteBounty',
     outputs: [],
@@ -789,6 +794,11 @@ export const trustBountiesABI = [
   },
   {
     inputs: [
+      {
+        internalType: 'uint256',
+        name: '_bountyId',
+        type: 'uint256',
+      },
       {
         internalType: 'uint256',
         name: '_winnerId',
