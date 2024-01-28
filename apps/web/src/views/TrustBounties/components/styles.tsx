@@ -26,6 +26,7 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.DELETE_BOUNTY,
   LockStage.INCREASE_END_TIME,
   LockStage.CONFIRM_INCREASE_END_TIME,
   LockStage.UPDATE_LOCATION,

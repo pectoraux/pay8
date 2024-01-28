@@ -25,6 +25,7 @@ import { DEFAULT_NATIVE_CURRENCY, DEFAULT_TFIAT } from 'config/constants/exchang
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import AddBalanceStage from './AddBalanceStage'
+import DeleteStage from './DeleteStage'
 import AddApprovalStage from './AddApprovalStage'
 import ApplyResultsStage from './ApplyResultsStage'
 import AddRecurringBalanceStage from './AddRecurringBalanceStage'
@@ -42,6 +43,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.ADMIN_SETTINGS]: t('Admin Settings'),
   [LockStage.SETTINGS]: t('Control Panel'),
   [LockStage.ADD_BALANCE]: t('Add Balance'),
+  [LockStage.DELETE_BOUNTY]: t('Delete Bounty'),
   [LockStage.UPDATE]: t('Update Bounty'),
   [LockStage.APPLY_RESULTS]: t('Apply Vote Results'),
   [LockStage.ADD_APPROVAL]: t('Add Approval'),
@@ -199,6 +201,12 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       case LockStage.CONFIRM_ADD_BALANCE:
         setStage(LockStage.ADD_BALANCE)
         break
+      case LockStage.DELETE_BOUNTY:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_DELETE_BOUNTY:
+        setStage(LockStage.DELETE_BOUNTY)
+        break
       case LockStage.CLEAN_UP_BALANCES:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
@@ -259,9 +267,6 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       case LockStage.CONFIRM_DELETE_APPROVAL:
         setStage(LockStage.DELETE_APPROVAL)
         break
-      case LockStage.CONFIRM_DELETE_BOUNTY:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
       default:
         break
     }
@@ -277,6 +282,9 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         break
       case LockStage.ADD_BALANCE:
         setStage(LockStage.CONFIRM_ADD_BALANCE)
+        break
+      case LockStage.DELETE_BOUNTY:
+        setStage(LockStage.CONFIRM_DELETE_BOUNTY)
         break
       case LockStage.ADD_RECURRING_BALANCE:
         setStage(LockStage.CONFIRM_ADD_RECURRING_BALANCE)
@@ -418,8 +426,8 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
         )
       }
       if (stage === LockStage.CONFIRM_DELETE_BOUNTY) {
-        console.log('CONFIRM_DELETE_BOUNTY===============>', [pool?.id])
-        return callWithGasPrice(trustBountiesContract, 'deleteBounty', [pool?.id]).catch((err) =>
+        console.log('CONFIRM_DELETE_BOUNTY===============>', [pool?.id, state.owner])
+        return callWithGasPrice(trustBountiesContract, 'deleteBounty', [pool?.id, state.owner]).catch((err) =>
           console.log('CONFIRM_DELETE_BOUNTY===============>', err),
         )
       }
@@ -559,7 +567,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.CLEAN_UP_BALANCES)}>
             {t('CLEAN UP BALANCES')}
           </Button>
-          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.CONFIRM_DELETE_BOUNTY)}>
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_BOUNTY)}>
             {t('DELETE BOUNTY')}
           </Button>
         </Flex>
@@ -648,6 +656,9 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.DELETE_BOUNTY && (
+        <DeleteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.ADD_APPROVAL && (
         <AddApprovalStage

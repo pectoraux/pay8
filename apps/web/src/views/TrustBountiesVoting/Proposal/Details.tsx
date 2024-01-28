@@ -10,6 +10,7 @@ import {
   Text,
   Button,
   Farm as FarmUI,
+  ScanLink,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { format } from 'date-fns'
@@ -85,6 +86,15 @@ const Details: React.FC<any> = ({ proposal, onSuccess }) => {
           <LinkExternal href={getBlockExploreLink(proposal.defenderId, 'block', chainId)} ml="8px">
             {proposal.defenderId}
           </LinkExternal>
+        </Flex>
+        <Flex mb="2px" justifyContent="flex-end">
+          <ScanLink
+            href={getBlockExploreLink(latestClaim?.length ? latestClaim[2] : '', 'address', chainId)}
+            bold={false}
+            small
+          >
+            {t('View Recipient Info')}
+          </ScanLink>
         </Flex>
         <Flex alignItems="center" mb="16px">
           <Text color="textSubtle" bold mr="8px">
