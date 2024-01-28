@@ -218,55 +218,42 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
     const collaterals = await Promise.all(
       fromGraph
         .map(async (collateral, index) => {
-          const [fund, minToBlacklist, minBountyPercent, bufferTime, treasuryFee, treasury, currentPrice, _collateral] =
-            await bscClient.multicall({
-              allowFailure: true,
-              contracts: [
-                {
-                  address: getFutureCollateralsAddress(),
-                  abi: futureCollateralsABI,
-                  functionName: 'fund',
-                  args: [BigInt(collateral.channel)],
-                },
-                {
-                  address: getFutureCollateralsAddress(),
-                  abi: futureCollateralsABI,
-                  functionName: 'minToBlacklist',
-                },
-                {
-                  address: getFutureCollateralsAddress(),
-                  abi: futureCollateralsABI,
-                  functionName: 'minBountyPercent',
-                },
-                {
-                  address: getFutureCollateralsAddress(),
-                  abi: futureCollateralsABI,
-                  functionName: 'bufferTime',
-                },
-                {
-                  address: getFutureCollateralsAddress(),
-                  abi: futureCollateralsABI,
-                  functionName: 'treasuryFee',
-                },
-                {
-                  address: getFutureCollateralsAddress(),
-                  abi: futureCollateralsABI,
-                  functionName: 'treasury',
-                },
-                {
-                  address: getFutureCollateralsAddress(),
-                  abi: futureCollateralsABI,
-                  functionName: 'getPriceAt',
-                  args: [collateral.id, BigInt('0')],
-                },
-                {
-                  address: getFutureCollateralsAddress(),
-                  abi: futureCollateralsABI,
-                  functionName: 'collateral',
-                  args: [collateral.id],
-                },
-              ],
-            })
+          const [fund, currentPrice, _collateral, getParams] = await bscClient.multicall({
+            allowFailure: true,
+            contracts: [
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'fund',
+                args: [BigInt(collateral.channel)],
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'getPriceAt',
+                args: [collateral.id, BigInt('0')],
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'collateral',
+                args: [collateral.id],
+              },
+              {
+                address: getFutureCollateralsAddress(),
+                abi: futureCollateralsABI,
+                functionName: 'getParams',
+              },
+            ],
+          })
+          const treasury = getParams.result[0]
+          const treasuryFee = getParams.result[1]
+          const bufferTime = getParams.result[2]
+          const minBountyPercent = getParams.result[3]
+          const minToBlacklist = getParams.result[4]
+          const creditDivisor = getParams.result[5]
+          const valuepool = getParams.result[5]
+
           const arr2 = Array.from({ length: 52 }, (v, i) => i)
           const table = await Promise.all(
             arr2?.map(async (idx) => {
@@ -292,21 +279,23 @@ export const fetchFutureCollaterals = async ({ fromFutureCollateral, chainId }) 
             sousId: index,
             ...collateral,
             table,
-            minToBlacklist: minToBlacklist.result?.toString(),
-            minBountyPercent: minBountyPercent.result?.toString(),
-            bufferTime: bufferTime.result?.toString(),
-            treasuryFee: treasuryFee.result?.toString(),
+            minToBlacklist: minToBlacklist?.toString(),
+            minBountyPercent: minBountyPercent?.toString(),
+            bufferTime: bufferTime?.toString(),
+            treasuryFee: treasuryFee?.toString(),
+            creditDivisor: creditDivisor?.toString(),
+            valuepool,
             channel,
             startTime,
             toBorrow,
             owner,
-            treasury: treasury.result?.toString(),
+            treasury: treasury?.toString(),
             fund: fund.result.toString(),
             currentPrice: currentPrice.result?.toString(),
             token: new Token(
               chainId,
               DEFAULT_TFIAT,
-              decimals.result,
+              18,
               symbol.result?.toString()?.toUpperCase() ?? 'symbol',
               name.result?.toString() ?? 'name',
               'https://www.payswap.org/',

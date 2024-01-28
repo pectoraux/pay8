@@ -100,7 +100,7 @@ export const futureCollateralsABI = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'profileId',
+        name: 'tokenId',
         type: 'uint256',
       },
     ],
@@ -113,7 +113,7 @@ export const futureCollateralsABI = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'profileId',
+        name: 'tokenId',
         type: 'uint256',
       },
     ],
@@ -169,7 +169,7 @@ export const futureCollateralsABI = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'profileId',
+        name: 'tokenId',
         type: 'uint256',
       },
     ],
@@ -259,44 +259,12 @@ export const futureCollateralsABI = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'attachments',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'address',
         name: 'owner',
         type: 'address',
       },
     ],
     name: 'balanceOf',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'bufferTime',
     outputs: [
       {
         internalType: 'uint256',
@@ -328,25 +296,6 @@ export const futureCollateralsABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'channelToValuepool',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -400,19 +349,6 @@ export const futureCollateralsABI = [
         internalType: 'address',
         name: 'owner',
         type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'credit_divisor',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -518,6 +454,49 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'getParams',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -611,32 +590,6 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'minBountyPercent',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'minToBlacklist',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -682,19 +635,6 @@ export const futureCollateralsABI = [
         internalType: 'string',
         name: '',
         type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'nextChannelId',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -934,19 +874,6 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'token',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'uint256',
@@ -989,29 +916,21 @@ export const futureCollateralsABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'treasury',
-    outputs: [
+    inputs: [
       {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
+        internalType: 'address',
+        name: '_devaddr',
+        type: 'address',
+      },
+      {
+        internalType: 'bool',
+        name: '_add',
+        type: 'bool',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'treasuryFee',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
+    name: 'updateAdmin',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -1028,24 +947,6 @@ export const futureCollateralsABI = [
       },
     ],
     name: 'updateBlacklist',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_devaddr',
-        type: 'address',
-      },
-      {
-        internalType: 'bool',
-        name: '_add',
-        type: 'bool',
-      },
-    ],
-    name: 'updateDev',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
