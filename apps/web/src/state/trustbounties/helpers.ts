@@ -133,7 +133,7 @@ export const getLatestClaim = async (bountyId, attackerId, chainId) => {
           address: getTrustBountiesAddress(),
           abi: trustBountiesABI,
           functionName: 'claims',
-          args: [BigInt(bountyId), BigInt(parseInt(attackerId) - 1)],
+          args: [BigInt(bountyId), BigInt(parseInt(attackerId) - parseInt(bountyId) - 1)],
         },
       ],
     })
@@ -164,7 +164,7 @@ export const getLatestClaim2 = async (bountyId, chainId) => {
           address: getTrustBountiesAddress(),
           abi: trustBountiesABI,
           functionName: 'claims',
-          args: [BigInt(bountyId), BigInt(parseInt(latestClaimId.result?.toString()) - 1)],
+          args: [BigInt(bountyId), BigInt(parseInt(latestClaimId.result?.toString()) - parseInt(bountyId) - 1)],
         },
       ],
     })
@@ -361,7 +361,7 @@ export const fetchBounties = async (
                   address: getTrustBountiesAddress(),
                   abi: trustBountiesABI,
                   functionName: 'claims',
-                  args: [BigInt(bountyId), BigInt(parseInt(claim.id) - 1)],
+                  args: [BigInt(bountyId), BigInt(parseInt(claim.id) - parseInt(bountyId) - 1)],
                 },
               ],
             })
