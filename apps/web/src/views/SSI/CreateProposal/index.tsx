@@ -77,72 +77,60 @@ const CreateProposal = () => {
     console.log('datadata===========================>', data)
     try {
       setIsLoading(true)
-      // eslint-disable-next-line consistent-return
-      const receipt = await fetchWithCatchTxError(async () => {
-        const encryptRsa = new EncryptRsa()
-        console.log('1public===================>', encryptRsa, choices)
-        const questions = state.choices.filter((choice, index) => {
-          return index % 2 === 0 ? choice.value : false
-        })
-        state.choices
-          .filter((choice, index) => {
-            return index % 2 !== 0 ? choice.value : false
-          })
-          .map((choice, index) => {
-            const pk = `-----BEGIN PUBLIC KEY-----${data.publicKey?.replace(/\s/g, '')}-----END PUBLIC KEY-----`
-            console.log('1pk===================>', pk)
-            const encryptedAnswer =
-              choice.value && questions[index].value.toLowerCase() === 'ssid'
-                ? crypto.createHash('sha1').update(choice.value).digest('hex')
-                : choice.value
-                ? encryptRsa.encryptStringWithRsaPublicKey({
-                    text: choice.value,
-                    publicKey: pk,
-                  })
-                : ''
-            console.log('2public===================>', data?.publicKey, [
-              state.profileId,
-              state.auditorProfileId,
-              state.name,
-              account,
-              combineDateAndTime(state.startDate, state.startTime)?.toString(),
-              combineDateAndTime(state.endDate, state.endTime)?.toString(),
-              !!state.searchable,
-              questions[index].value.toLowerCase(),
-              state.searchable ? choice.value : encryptedAnswer,
-              state.dataType,
-            ])
-            return callWithGasPrice(ssiContract, 'createData', [
-              state.profileId,
-              state.auditorProfileId,
-              state.name,
-              account,
-              combineDateAndTime(state.startDate, state.startTime)?.toString(),
-              combineDateAndTime(state.endDate, state.endTime)?.toString(),
-              !!state.searchable,
-              questions[index].value.toLowerCase(),
-              state.searchable ? choice.value : encryptedAnswer,
-              state.dataType,
-            ]).catch((err) => console.log('rerr1====================>', choice, err))
-          })
+      const encryptRsa = new EncryptRsa()
+      console.log('1public===================>', encryptRsa, choices)
+      const questions = state.choices.filter((choice, index) => {
+        return index % 2 === 0 ? choice.value : false
       })
-      if (receipt?.status) {
-        setIsLoading(false)
-        toastSuccess(
-          t('Data Created'),
-          <ToastDescriptionWithTx txHash={receipt?.transactionHash || ''}>
-            {t('You can now start sharing this data with different services/users')}
-          </ToastDescriptionWithTx>,
-        )
-      }
+      state.choices
+        .filter((choice, index) => {
+          return index % 2 !== 0 ? choice.value : false
+        })
+        .map((choice, index) => {
+          const pk = `-----BEGIN PUBLIC KEY-----${data.publicKey?.replace(/\s/g, '')}-----END PUBLIC KEY-----`
+          console.log('1pk===================>', pk)
+          const encryptedAnswer =
+            choice.value && questions[index].value.toLowerCase() === 'ssid'
+              ? crypto.createHash('sha1').update(choice.value).digest('hex')
+              : choice.value
+              ? encryptRsa.encryptStringWithRsaPublicKey({
+                  text: choice.value,
+                  publicKey: pk,
+                })
+              : ''
+          const args = [
+            state.profileId,
+            state.auditorProfileId,
+            state.name,
+            account,
+            combineDateAndTime(state.startDate, state.startTime)?.toString(),
+            combineDateAndTime(state.endDate, state.endTime)?.toString(),
+            !!state.searchable,
+            questions[index].value.toLowerCase(),
+            state.searchable ? choice.value : encryptedAnswer,
+            state.dataType,
+          ]
+          console.log('2public===================>', data?.publicKey, args)
+          return callWithGasPrice(ssiContract, 'createData', args)
+            .then((res) => {
+              setIsLoading(false)
+              toastSuccess(
+                t('Data Created'),
+                <ToastDescriptionWithTx txHash={res?.hash || ''}>
+                  {t('You can now start sharing this data with different services/users')}
+                </ToastDescriptionWithTx>,
+              )
+            })
+            .catch((err) => {
+              setIsLoading(false)
+              console.log('rerr1====================>', choice, err)
+            })
+        })
     } catch (err) {
       console.log('try err====================>', err)
-    } finally {
-      setIsLoading(false)
     }
   }, [
     data,
-    fetchWithCatchTxError,
     choices,
     state.choices,
     state.profileId,
@@ -154,7 +142,6 @@ const CreateProposal = () => {
     state.endTime,
     state.searchable,
     state.dataType,
-    crypto,
     account,
     callWithGasPrice,
     ssiContract,

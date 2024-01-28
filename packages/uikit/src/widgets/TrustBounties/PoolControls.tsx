@@ -176,16 +176,16 @@ export function PoolControls<T>({
       return sortedPools.filter(
         (p: any) =>
           latinise(
-            `${p?.devaddr_?.toLowerCase()} ${p?.description?.toLowerCase()} ${p?.owner?.toLowerCase() ?? ""} ${
-              p?.symbol?.toLowerCase() ?? ""
-            } ${p?.countries?.toLowerCase() ?? ""} ${p?.cities?.toLowerCase() ?? ""} ${
-              p?.products?.toLowerCase() ?? ""
-            }` || ""
+            `${p?.devaddr_?.toLowerCase()} ${p?.description?.toLowerCase()} ${p?.veName?.toLowerCase()} ${p?.veSymbol?.toLowerCase()} ${
+              p?.owner?.toLowerCase() ?? ""
+            } ${p?.symbol?.toLowerCase() ?? ""} ${p?.countries?.toLowerCase() ?? ""} ${
+              p?.cities?.toLowerCase() ?? ""
+            } ${p?.products?.toLowerCase() ?? ""}` || ""
           ).includes(lowercaseQuery) || latinise(p?.id || "").includes(lowercaseQuery)
       );
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, numberOfPoolsVisible, searchQuery, favoritesOnly, watchlistTokens, router.asPath]);
 
   chosenPoolsLength.current = chosenPools.length;
 
@@ -193,7 +193,7 @@ export function PoolControls<T>({
     () => ({ chosenPools, stakedOnly, viewMode, normalizedUrlSearch, showFinishedPools }),
     [chosenPools, normalizedUrlSearch, showFinishedPools, stakedOnly, viewMode]
   );
-  let vaOptions = [
+  const vaOptions = [
     {
       label: t("Created At"),
       value: "timestamp",
