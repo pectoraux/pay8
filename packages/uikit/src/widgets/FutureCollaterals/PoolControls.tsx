@@ -101,6 +101,7 @@ export function PoolControls<T>({
   const searchQuery = normalizedUrlSearch && !_searchQuery ? normalizedUrlSearch : _searchQuery;
   const [sortOption, setSortOption] = useState("tokenId");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const [endebtedOnly, setEndebtedOnly] = useState(false);
   const chosenPoolsLength = useRef(0);
   const [watchlistTokens] = useWatchlistTokens();
 
@@ -154,6 +155,9 @@ export function PoolControls<T>({
       .slice(0, numberOfPoolsVisible)
       .filter((p: any) => (favoritesOnly ? watchlistTokens.includes(p.id) : true));
 
+    if (endebtedOnly) {
+      return sortedPools.filter((p: any) => p?.endebted);
+    }
     if (searchQuery) {
       const lowercaseQuery = latinise(searchQuery.toLowerCase());
       return sortedPools.filter(
@@ -163,7 +167,16 @@ export function PoolControls<T>({
       );
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [
+    account,
+    sortOption,
+    chosenPools,
+    favoritesOnly,
+    endebtedOnly,
+    numberOfPoolsVisible,
+    searchQuery,
+    watchlistTokens,
+  ]);
 
   chosenPoolsLength.current = chosenPools.length;
 
@@ -180,6 +193,8 @@ export function PoolControls<T>({
           setStakedOnly={setStakedOnly}
           favoritesOnly={favoritesOnly}
           setFavoritesOnly={setFavoritesOnly}
+          endebtedOnly={endebtedOnly}
+          setEndebtedOnly={setEndebtedOnly}
           hasStakeInFinishedPools={hasStakeInFinishedPools}
           viewMode={viewMode}
           setViewMode={setViewMode}
