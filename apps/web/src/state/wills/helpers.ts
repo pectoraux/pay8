@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/sdk'
+import { Native, Token } from '@pancakeswap/sdk'
 import { GRAPH_API_WILLS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { getCollection } from 'state/cancan/helpers'
@@ -129,6 +129,27 @@ export const fetchWill = async (willAddress, chainId) => {
   const bscClient = publicClient({ chainId })
   const tokens = await Promise.all(
     will?.tokens?.map(async (token) => {
+      if (token.tokenAddress?.toLowerCase() === getWillNoteAddress()?.toLowerCase()) {
+        const _token = Native.onChain(chainId)
+        console.log('_token===================>', _token, _token.wrapped.address)
+        // const [totalLiquidity] = await bscClient.multicall({
+        //   allowFailure: true,
+        //   contracts: [
+        //     {
+        //       address: _token.wrapped.address,
+        //       abi: erc20ABI,
+        //       functionName: 'balanceOf',
+        //       args: [willAddress],
+        //     },
+        //   ],
+        // })
+        return {
+          ...token,
+          ..._token,
+          tokenAddress: _token.wrapped.address,
+          totalLiquidity: token?.value, // totalLiquidity.result?.toString(),
+        }
+      }
       const [name, symbol, decimals, totalLiquidity] = await bscClient.multicall({
         allowFailure: true,
         contracts: [

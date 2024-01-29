@@ -4,7 +4,7 @@ import { InjectedModalProps, useToast, Button, Flex, LinkExternal } from '@panca
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useERC20, useWILLContract, useWILLNote } from 'hooks/useContract'
+import { useERC20, useErc721CollectionContract, useWILLContract, useWILLNote } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
@@ -30,6 +30,7 @@ import DeleteStage from './DeleteStage'
 import DeleteWillStage from './DeleteWillStage'
 import UpdateOwnerStage from './UpdateOwnerStage'
 import RemoveBalanceStage from './RemoveBalanceStage'
+import UpdateNftApprovalStage from './UpdateNftApprovalStage'
 import UpdateActivePeriodStage from './UpdateActivePeriodStage'
 import UpdateTaxContractStage from './UpdateTaxContractStage'
 import StopWithdrawallCountdownStage from './StopWithdrawallCountdownStage'
@@ -50,12 +51,15 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_OWNER]: t('Update Owner'),
   [LockStage.UPDATE_MEDIA]: t('Update Media'),
   [LockStage.ADD_BALANCE]: t('Add Balance'),
+  [LockStage.ADD_BALANCE2]: t('Add Approved Balance'),
   [LockStage.REMOVE_BALANCE]: t('Remove Balance'),
   [LockStage.CLAIM_NOTE]: t('Claim Note'),
   [LockStage.DELETE]: t('Delete'),
   [LockStage.DELETE_PROTOCOL]: t('Delete Heir'),
   [LockStage.UPDATE_ACTIVE_PERIOD]: t('Update Active Period'),
   [LockStage.UPDATE_APPROVAL]: t('Update Approval'),
+  [LockStage.UPDATE_FT_APPROVAL]: t('Update Fungible Token Approval'),
+  [LockStage.UPDATE_NFT_APPROVAL]: t('Update NFT Approval'),
   [LockStage.CREATE_LOCK]: t('Create Lock'),
   [LockStage.STOP_WITHDRAWAL_COUNTDOWN]: t('Stop Withdrawal Countdown'),
   [LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN]: t('Back'),
@@ -64,7 +68,10 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_REMOVE_BALANCE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD]: t('Back'),
   [LockStage.CONFIRM_UPDATE_APPROVAL]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_FT_APPROVAL]: t('Back'),
+  [LockStage.CONFIRM_UPDATE_NFT_APPROVAL]: t('Back'),
   [LockStage.CONFIRM_ADD_BALANCE]: t('Back'),
+  [LockStage.CONFIRM_ADD_BALANCE2]: t('Back'),
   [LockStage.CONFIRM_UPDATE_MEDIA]: t('Back'),
   [LockStage.CONFIRM_PAY]: t('Back'),
   [LockStage.CONFIRM_CREATE_LOCK]: t('Back'),
@@ -169,6 +176,7 @@ const CreateGaugeModal: React.FC<any> = ({
     approve: 0,
     decimals: 18,
   }))
+  const tokenContract = useErc721CollectionContract(state.token)
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -216,6 +224,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.CONFIRM_ADD_BALANCE:
         setStage(LockStage.ADD_BALANCE)
         break
+      case LockStage.ADD_BALANCE2:
+        setStage(LockStage.SETTINGS)
+        break
+      case LockStage.CONFIRM_ADD_BALANCE2:
+        setStage(LockStage.ADD_BALANCE2)
+        break
       case LockStage.UPDATE_ACTIVE_PERIOD:
         setStage(LockStage.ADMIN_SETTINGS)
         break
@@ -227,6 +241,15 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.CONFIRM_UPDATE_APPROVAL:
         setStage(LockStage.UPDATE_APPROVAL)
+        break
+      case LockStage.CONFIRM_UPDATE_FT_APPROVAL:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.UPDATE_NFT_APPROVAL:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_NFT_APPROVAL:
+        setStage(LockStage.UPDATE_NFT_APPROVAL)
         break
       case LockStage.CREATE_LOCK:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -319,6 +342,9 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.ADD_BALANCE:
         setStage(LockStage.CONFIRM_ADD_BALANCE)
         break
+      case LockStage.ADD_BALANCE2:
+        setStage(LockStage.CONFIRM_ADD_BALANCE2)
+        break
       case LockStage.UPDATE_ACTIVE_PERIOD:
         setStage(LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD)
         break
@@ -327,6 +353,12 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_APPROVAL:
         setStage(LockStage.CONFIRM_UPDATE_APPROVAL)
+        break
+      case LockStage.UPDATE_FT_APPROVAL:
+        setStage(LockStage.CONFIRM_UPDATE_FT_APPROVAL)
+        break
+      case LockStage.UPDATE_NFT_APPROVAL:
+        setStage(LockStage.CONFIRM_UPDATE_NFT_APPROVAL)
         break
       case LockStage.REMOVE_BALANCE:
         setStage(LockStage.CONFIRM_REMOVE_BALANCE)
@@ -367,7 +399,7 @@ const CreateGaugeModal: React.FC<any> = ({
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
-      if (stage === LockStage.CONFIRM_ADD_BALANCE) {
+      if (stage === LockStage.CONFIRM_ADD_BALANCE || stage === LockStage.CONFIRM_ADD_BALANCE2) {
         let { amountReceivable } = state
         if (state.nftype === 0) {
           amountReceivable = getDecimalAmount(amountReceivable ?? 0, currency?.decimals)
@@ -424,6 +456,21 @@ const CreateGaugeModal: React.FC<any> = ({
         return callWithGasPrice(willContract, 'updateAllowance', args).catch((err) =>
           console.log('CONFIRM_UPDATE_APPROVAL===============>', err),
         )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_FT_APPROVAL) {
+        const args = [willContract.address, MaxUint256]
+        console.log('CONFIRM_UPDATE_FT_APPROVAL===============>', args)
+        return callWithGasPrice(stakingTokenContract, 'approve', args).catch((err) =>
+          console.log('CONFIRM_UPDATE_FT_APPROVAL===============>', err),
+        )
+      }
+      if (stage === LockStage.CONFIRM_UPDATE_NFT_APPROVAL) {
+        const args = [willContract.address, true]
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+        console.log('CONFIRM_UPDATE_NFT_APPROVAL===============>', args)
+        return delay(3000)
+          .then(() => callWithGasPrice(tokenContract, 'setApprovalForAll', args))
+          .catch((err) => console.log('CONFIRM_UPDATE_NFT_APPROVAL===============>', err))
       }
       if (stage === LockStage.CONFIRM_STOP_WITHDRAWAL_COUNTDOWN) {
         console.log('CONFIRM_STOP_WITHDRAWAL_COUNTDOWN===============>')
@@ -532,6 +579,9 @@ const CreateGaugeModal: React.FC<any> = ({
               {t('APPLY FOR INHERITANCE')}
             </LinkExternal>
           </Flex>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_BALANCE2)}>
+            {t('ADD BALANCE')}
+          </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
             {t('CLAIM INHERITANCE')}
           </Button>
@@ -551,9 +601,12 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
             {t('CLAIM INHERITANCE')}
           </Button>
-          {/* <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_MEDIA)}>
-            {t('UPDATE MEDIA')}
-          </Button> */}
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_FT_APPROVAL)}>
+            {t('UPDATE FT APPROVAL')}
+          </Button>
+          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_NFT_APPROVAL)}>
+            {t('UPDATE NFT APPROVAL')}
+          </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_BALANCE)}>
             {t('ADD BALANCE')}
           </Button>
@@ -609,6 +662,14 @@ const CreateGaugeModal: React.FC<any> = ({
           continueToNextStage={continueToNextStage}
         />
       )}
+      {stage === LockStage.ADD_BALANCE2 && (
+        <AddBalanceStage
+          state={state}
+          handleChange={handleChange}
+          handleRawValueChange={handleRawValueChange}
+          continueToNextStage={continueToNextStage}
+        />
+      )}
       {stage === LockStage.REMOVE_BALANCE && (
         <RemoveBalanceStage
           state={state}
@@ -616,6 +677,9 @@ const CreateGaugeModal: React.FC<any> = ({
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.UPDATE_NFT_APPROVAL && (
+        <UpdateNftApprovalStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_ACTIVE_PERIOD && (
         <UpdateActivePeriodStage

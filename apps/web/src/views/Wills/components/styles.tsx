@@ -27,9 +27,16 @@ export const stagesWithConfirmButton = [
   LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT,
   LockStage.CONFIRM_UPDATE_APPROVAL,
   LockStage.CONFIRM_CREATE_LOCK,
+  LockStage.CONFIRM_UPDATE_FT_APPROVAL,
+  LockStage.CONFIRM_UPDATE_NFT_APPROVAL,
+  LockStage.CONFIRM_ADD_BALANCE2,
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_FT_APPROVAL,
+  LockStage.UPDATE_NFT_APPROVAL,
+  LockStage.CONFIRM_UPDATE_FT_APPROVAL,
+  LockStage.CONFIRM_UPDATE_NFT_APPROVAL,
   LockStage.CREATE_LOCK,
   LockStage.CONFIRM_CREATE_LOCK,
   LockStage.UPDATE_APPROVAL,
@@ -41,6 +48,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_UPDATE_PROTOCOL,
   LockStage.UPDATE_MEDIA,
   LockStage.ADD_BALANCE,
+  LockStage.ADD_BALANCE2,
   LockStage.UPDATE_ACTIVE_PERIOD,
   LockStage.REMOVE_BALANCE,
   LockStage.UPDATE_PARAMETERS,
@@ -56,6 +64,7 @@ export const stagesWithBackButton = [
   LockStage.CONFIRM_TRANSFER_TO_NOTE_PAYABLE,
   LockStage.CONFIRM_UPDATE_MEDIA,
   LockStage.CONFIRM_ADD_BALANCE,
+  LockStage.CONFIRM_ADD_BALANCE2,
   LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD,
   LockStage.CONFIRM_REMOVE_BALANCE,
   LockStage.CONFIRM_UPDATE_PARAMETERS,
