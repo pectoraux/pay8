@@ -52,6 +52,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       ) : null}
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Sender Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="owner"
+          value={state.owner}
+          placeholder={t('input sender address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {parseInt(state.nftype) ? t('Token ID') : t('Amount To Add')}
         </Text>
         <Input
@@ -65,7 +78,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-          {t('Is Native Token')}
+          {t('Is Native Token?')}
         </Text>
         <ButtonMenu
           scale="xs"

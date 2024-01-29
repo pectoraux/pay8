@@ -28,6 +28,11 @@ export const willABI = [
         type: 'address',
       },
       {
+        internalType: 'address',
+        name: '_from',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: '_value',
         type: 'uint256',
@@ -41,6 +46,19 @@ export const willABI = [
     name: 'addBalance',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_from',
+        type: 'address',
+      },
+    ],
+    name: 'addBalanceETH',
+    outputs: [],
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -141,6 +159,19 @@ export const willABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'deposit',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -152,7 +183,7 @@ export const willABI = [
     outputs: [
       {
         internalType: 'address[]',
-        name: 'tokens',
+        name: '_tokens',
         type: 'address[]',
       },
       {
@@ -366,7 +397,7 @@ export const willABI = [
     ],
     name: 'noteWithdraw',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -457,7 +488,7 @@ export const willABI = [
     ],
     name: 'payInvoicePayable',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -550,19 +581,6 @@ export const willABI = [
       },
     ],
     name: 'removeNFTBalance',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

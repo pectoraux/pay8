@@ -102,7 +102,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(currency?.address || currToken?.tokenAddress || '')
   const willContract = useWILLContract(pool?.id || router.query.will || '')
   const willNoteContract = useWILLNote()
-  console.log('mcurrencyy===============>', currAccount, currency, pool, willContract)
+  console.log('mcurrencyy===============>', currAccount, currency, pool, willContract, stakingTokenContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
   const stakingTokenBalance = balance
@@ -112,7 +112,7 @@ const CreateGaugeModal: React.FC<any> = ({
   // console.log("router===================>", router)
   // const { state: status, userAccount, session_id, userCurrency, amount } = router.query
   const [state, setState] = useState<any>(() => ({
-    owner: pool?.owner ?? '',
+    owner: pool?.owner ?? account ?? '',
     avatar: pool?.collection?.avatar,
     bountyId: pool?.bountyId ?? '',
     protocolId: currAccount?.id,
@@ -346,6 +346,9 @@ const CreateGaugeModal: React.FC<any> = ({
 
   const { isApproving, isApproved, isConfirming, handleApprove, handleConfirm } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
+      if (!stakingTokenContract) {
+        return false
+      }
       try {
         return requiresApproval(stakingTokenContract, account, willContract.address)
       } catch (error) {
@@ -368,14 +371,21 @@ const CreateGaugeModal: React.FC<any> = ({
         if (state.nftype === 0) {
           amountReceivable = getDecimalAmount(amountReceivable ?? 0, currency?.decimals)
         }
-        const args = [state.isNative ? willContract.address : state.token, amountReceivable.toString(), state.nftype]
-        console.log('CONFIRM_ADD_BALANCE===============>', args)
-        return callWithGasPrice(willContract, 'addBalance', args).catch((err) =>
+        if (state.isNative) {
+          const args = [state.owner]
+          console.log('CONFIRM_ADD_BALANCE===============>', willContract.address, args, amountReceivable?.toString())
+          return callWithGasPrice(willContract, 'addBalanceETH', args, {
+            value: amountReceivable.toString(),
+          }).catch((err) => console.log('1CONFIRM_ADD_BALANCE===============>', err))
+        }
+        const args2 = [state.token, state.owner, amountReceivable.toString(), state.nftype]
+        console.log('CONFIRM_ADD_BALANCE===============>', args2)
+        return callWithGasPrice(willContract, 'addBalance', args2).catch((err) =>
           console.log('CONFIRM_ADD_BALANCE===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_REMOVE_BALANCE) {
-        let amountPayable = state.amountPayable
+        let { amountPayable } = state
         if (state.nftype === 0) {
           amountPayable = getDecimalAmount(amountPayable ?? 0, currency?.decimals)
         }
