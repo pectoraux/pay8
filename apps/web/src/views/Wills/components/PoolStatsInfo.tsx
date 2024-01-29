@@ -130,13 +130,6 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           {t('Will Withdrawal Period')}
         </Text>
       </Flex>
-      {pool?.contractMedia ? (
-        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-          <Text color="primary" fontSize="14px">
-            {t('Contract Media')} {`->`} {pool.contractMedia}
-          </Text>
-        </Flex>
-      ) : null}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
           {t('Unlocked')} {`->`} {pool.unlocked ? t('Yes') : t('No')}

@@ -164,14 +164,9 @@ export const fetchWill = async (willAddress, chainId) => {
       }
     }),
   )
-  const [contractMedia, getParams, unlocked, collectionId] = await bscClient.multicall({
+  const [getParams, unlocked, collectionId] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
-      {
-        address: willAddress,
-        abi: willABI,
-        functionName: 'media',
-      },
       {
         address: willAddress,
         abi: willABI,
@@ -252,7 +247,6 @@ export const fetchWill = async (willAddress, chainId) => {
               balanceOf,
               totalRemoved,
               tokenType,
-              _adminBountyId,
               totalProcessed,
             ] = await bscClient.multicall({
               allowFailure: true,
@@ -305,12 +299,6 @@ export const fetchWill = async (willAddress, chainId) => {
                 {
                   address: willAddress,
                   abi: willABI,
-                  functionName: 'adminBountyId',
-                  args: [token],
-                },
-                {
-                  address: willAddress,
-                  abi: willABI,
                   functionName: 'totalProcessed',
                   args: [token],
                 },
@@ -320,7 +308,6 @@ export const fetchWill = async (willAddress, chainId) => {
               willActivePeriod: willActivePeriod.result.toString(),
               balanceOf: balanceOf.result.toString(),
               totalRemoved: totalRemoved.result.toString(),
-              adminBountyId: _adminBountyId.result.toString(),
               totalProcessed: totalProcessed.result.toString(),
               totalLiquidity: totalLiquidity.result.toString(),
               tokenType: tokenType.result,
@@ -359,7 +346,6 @@ export const fetchWill = async (willAddress, chainId) => {
     accounts,
     unlocked: unlocked.result,
     collection,
-    contractMedia: contractMedia.result,
     updatePeriod: updatePeriod.toString(),
     activePeriod: activePeriod.toString(),
     minWithdrawableNow: new BigNumber(minWithdrawableNow.toString()).div(100).toJSON(),
