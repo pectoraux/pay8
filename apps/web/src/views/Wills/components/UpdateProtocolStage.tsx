@@ -51,6 +51,13 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       )}
     </Text>
   )
+  const TooltipComponent7 = () => (
+    <Text>
+      {t(
+        "You can leave this field empty if you have already entered a profile id. The ssid is useful in case your heir does not have a profile id yet. You can compute what your heir's ssid is if you know his/her country code and national id number. Please read the documentation to know how the ssid is computed.",
+      )}
+    </Text>
+  )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
@@ -95,6 +102,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
+  const {
+    targetRef: targetRef7,
+    tooltip: tooltip7,
+    tooltipVisible: tooltipVisible7,
+  } = useTooltip(<TooltipComponent7 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <>
@@ -129,6 +144,23 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           name="profileId"
           value={state.profileId}
           placeholder={t('input user profile id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Flex ref={targetRef7}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('SSID')}
+          </Text>
+          {tooltipVisible7 && tooltip7}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
+        <Input
+          type="text"
+          scale="sm"
+          name="ssid"
+          value={state.ssid}
+          placeholder={t('input user ssid')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

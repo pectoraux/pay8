@@ -141,6 +141,7 @@ const CreateGaugeModal: React.FC<any> = ({
     ratings: currAccount?.ratings?.toString() ?? '',
     esgRating: currAccount?.esgRating ?? '',
     media: pool?.media ?? '',
+    ssid: '',
     identityTokenId: '0',
     message: '',
     tag: '',
@@ -395,13 +396,13 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_REMOVE_BALANCE===============>', err),
         )
       }
-      if (stage === LockStage.CONFIRM_UPDATE_MEDIA) {
-        const args = [state.media]
-        console.log('CONFIRM_UPDATE_MEDIA===============>', args)
-        return callWithGasPrice(willContract, 'updateMedia', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_MEDIA===============>', err),
-        )
-      }
+      // if (stage === LockStage.CONFIRM_UPDATE_MEDIA) {
+      //   const args = [state.media]
+      //   console.log('CONFIRM_UPDATE_MEDIA===============>', args)
+      //   return callWithGasPrice(willContract, 'updateMedia', args).catch((err) =>
+      //     console.log('CONFIRM_UPDATE_MEDIA===============>', err),
+      //   )
+      // }
       if (stage === LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD) {
         const args = [currency?.address]
         console.log('CONFIRM_UPDATE_ACTIVE_PERIOD===============>', args)
@@ -458,6 +459,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state.owner,
           state.tokens?.split(','),
           state.percentages?.split(',').map((perct) => parseInt(perct) * 100),
+          state.ssid,
           state.media,
           state.description,
         ]
@@ -549,9 +551,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
             {t('CLAIM INHERITANCE')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_MEDIA)}>
+          {/* <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_MEDIA)}>
             {t('UPDATE MEDIA')}
-          </Button>
+          </Button> */}
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_BALANCE)}>
             {t('ADD BALANCE')}
           </Button>

@@ -69,25 +69,6 @@ export const willABI = [
         type: 'address',
       },
     ],
-    name: 'adminBountyId',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
     name: 'balanceOf',
     outputs: [
       {
@@ -365,19 +346,6 @@ export const willABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'media',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -534,6 +502,11 @@ export const willABI = [
         internalType: 'uint256',
         name: 'updatedAt',
         type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'ssid',
+        type: 'string',
       },
       {
         internalType: 'string',
@@ -756,19 +729,6 @@ export const willABI = [
   {
     inputs: [
       {
-        internalType: 'string',
-        name: '_media',
-        type: 'string',
-      },
-    ],
-    name: 'updateMedia',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'uint256',
         name: '_profileId',
         type: 'uint256',
@@ -851,6 +811,11 @@ export const willABI = [
       },
       {
         internalType: 'string',
+        name: '_ssid',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
         name: '_media',
         type: 'string',
       },
@@ -861,19 +826,6 @@ export const willABI = [
       },
     ],
     name: 'updateProtocol',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_taxContract',
-        type: 'address',
-      },
-    ],
-    name: 'updateTaxContract',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
