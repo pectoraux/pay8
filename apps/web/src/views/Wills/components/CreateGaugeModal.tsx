@@ -156,6 +156,7 @@ const CreateGaugeModal: React.FC<any> = ({
     cosignEnabled: pool?.cosignEnabled,
     minCosigners: pool?.minCosigners || '',
     token: currency?.address,
+    isNative: 0,
     add: 0,
     contentType: '',
     numPeriods: '',
@@ -363,11 +364,11 @@ const CreateGaugeModal: React.FC<any> = ({
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
       if (stage === LockStage.CONFIRM_ADD_BALANCE) {
-        let amountReceivable = state.amountReceivable
+        let { amountReceivable } = state
         if (state.nftype === 0) {
           amountReceivable = getDecimalAmount(amountReceivable ?? 0, currency?.decimals)
         }
-        const args = [state.token, amountReceivable.toString(), state.nftype]
+        const args = [state.isNative ? willContract.address : state.token, amountReceivable.toString(), state.nftype]
         console.log('CONFIRM_ADD_BALANCE===============>', args)
         return callWithGasPrice(willContract, 'addBalance', args).catch((err) =>
           console.log('CONFIRM_ADD_BALANCE===============>', err),

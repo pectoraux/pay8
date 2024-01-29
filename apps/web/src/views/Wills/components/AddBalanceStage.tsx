@@ -63,6 +63,20 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           onChange={handleChange}
         />
       </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          {t('Is Native Token')}
+        </Text>
+        <ButtonMenu
+          scale="xs"
+          variant="subtle"
+          activeIndex={state.isNative}
+          onItemClick={handleRawValueChange('isNative')}
+        >
+          <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+        </ButtonMenu>
+      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />
