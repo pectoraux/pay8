@@ -41,6 +41,14 @@ const workerDeps = Object.keys(smartRouterPkgs.dependencies)
 
 /** @type {import('next').NextConfig} */
 const config = {
+  headers() {
+    return [
+      {
+        source: "/.well-known/apple-developer-merchantid-domain-association",
+        headers: [{ key: "content-type", value: "application/json" }]
+      }
+    ];
+  },
   compiler: {
     styledComponents: true,
   },
