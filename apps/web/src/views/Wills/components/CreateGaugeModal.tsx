@@ -170,6 +170,7 @@ const CreateGaugeModal: React.FC<any> = ({
     numPeriods: '',
     name: pool?.name,
     collectionId: '',
+    updatePeriod: '',
     applicationLink: pool?.applicationLink ?? '',
     willDescription: pool?.willDescription ?? '',
     nftype: 0,

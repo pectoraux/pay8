@@ -8,6 +8,8 @@ import {
   Button,
   AutoRenewIcon,
   ArrowForwardIcon,
+  HelpIcon,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
@@ -15,7 +17,7 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrBribe, useCurrPool } from 'state/wills/hooks'
+import { useCurrBribe } from 'state/wills/hooks'
 import { useAppDispatch } from 'state'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { useRouter } from 'next/router'
@@ -62,8 +64,58 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   } = getTimePeriods(Number(pool?.willWithdrawalPeriod ?? '0'))
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
-  const currState = useCurrPool()
   const dispatch = useAppDispatch()
+
+  const TooltipComponent = () => (
+    <Text>
+      {t(
+        'This sets the minimum laps of time in minutes that must seperate each call to this function. Calling this function before that time elapses will have no effect on any of the parameters except for the profile id.',
+      )}
+    </Text>
+  )
+  const TooltipComponent2 = () => (
+    <Text>{t('When this parameter is not null, then it shows the countdown to the end of the update period.')}</Text>
+  )
+  const TooltipComponent3 = () => (
+    <Text>
+      {t('When this parameter is not null, then it shows the countdown to the end of the will withdrawal period.')}
+    </Text>
+  )
+  const TooltipComponent4 = () => (
+    <Text>
+      {t(
+        'This sets the value in minutes of This will withdrawal countdown period. The countdown can be launched by running the Claim Inheritance function.',
+      )}
+    </Text>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef2,
+    tooltip: tooltip2,
+    tooltipVisible: tooltipVisible2,
+  } = useTooltip(<TooltipComponent2 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef3,
+    tooltip: tooltip3,
+    tooltipVisible: tooltipVisible3,
+  } = useTooltip(<TooltipComponent3 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
+  const {
+    targetRef: targetRef4,
+    tooltip: tooltip4,
+    tooltipVisible: tooltipVisible4,
+  } = useTooltip(<TooltipComponent4 />, {
+    placement: 'bottom-end',
+    tooltipOffset: [20, 10],
+  })
   return (
     <>
       {!hideAccounts ? (
@@ -101,34 +153,50 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
         <Text color="secondary" fontSize="14px">
           {daysActive} {t('days')} {hoursActive} {t('hours')} {minutesActive} {t('minutes')}
         </Text>
-        <Text color="primary" fontSize="14px">
-          {t('Active Period')}
-        </Text>
+        <Flex ref={targetRef2}>
+          <Text color="primary" fontSize="14px">
+            {t('Active Period')}
+          </Text>
+          {tooltipVisible2 && tooltip2}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
       </Flex>
       <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="secondary" fontSize="14px">
           {daysUpdate} {t('days')} {hoursUpdate} {t('hours')} {minutesUpdate} {t('minutes')}
         </Text>
-        <Text color="primary" fontSize="14px">
-          {t('Update Period')}
-        </Text>
+        <Flex ref={targetRef}>
+          <Text color="primary" fontSize="14px">
+            {t('Update Period')}
+          </Text>
+          {tooltipVisible && tooltip}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
       </Flex>
       <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="secondary" fontSize="14px">
           {daysWithdrawalActive} {t('days')} {hoursWithdrawalActive} {t('hours')} {minutesWithdrawalActive}{' '}
           {t('minutes')}
         </Text>
-        <Text color="primary" fontSize="14px">
-          {t('Will Withdrawal Active Period')}
-        </Text>
+        <Flex ref={targetRef3}>
+          <Text color="primary" fontSize="14px">
+            {t('Will Withdrawal Active Period')}
+          </Text>
+          {tooltipVisible3 && tooltip3}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
       </Flex>
       <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="secondary" fontSize="14px">
           {daysWithdrawal} {t('days')} {hoursWithdrawal} {t('hours')} {minutesWithdrawal} {t('minutes')}
         </Text>
-        <Text color="primary" fontSize="14px">
-          {t('Will Withdrawal Period')}
-        </Text>
+        <Flex ref={targetRef4}>
+          <Text color="primary" fontSize="14px">
+            {t('Will Withdrawal Period')}
+          </Text>
+          {tooltipVisible4 && tooltip4}
+          <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+        </Flex>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
