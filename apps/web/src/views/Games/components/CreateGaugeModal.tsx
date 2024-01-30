@@ -15,7 +15,7 @@ import {
 import useTheme from 'hooks/useTheme'
 import { ChangeEvent, useState } from 'react'
 import { NftToken } from 'state/nftMarket/types'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { requiresApproval } from 'utils/requiresApproval'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import ConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ConfirmStage'
@@ -172,7 +172,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     numMinutes: '',
     toAddress: account ?? '',
     collectionId: pool?.collection?.id ?? '',
-    amountReceivable: '',
+    amountReceivable: getBalanceNumber(pool?.pricePerMinutes ?? 0, currency?.decimals),
     nftype: 0,
     position: '',
     objectName: '',
@@ -185,7 +185,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     gameProfileId: '',
     action: 0,
     add: 0,
-    claimable: 0,
+    claimable: pool?.claimable ? 1 : 0,
     clear: 0,
     maxUse: '',
     auditor: '',
@@ -194,21 +194,21 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     item: '',
     checker: '',
     discount: '',
-    referrerFee: '',
-    creatorShare: '',
+    referrerFee: parseInt(pool?.referrerFee ?? '0') / 100 ?? '',
+    creatorShare: parseInt(pool?.creatorShare ?? '0') / 100 ?? '',
     period: '',
-    gameContract: '',
+    gameContract: pool?.gameContract ?? '',
     owner: pool?.owner || '',
-    gameName: '',
-    gameLink: '',
-    gameAPI: '',
+    gameName: pool?.gameName ?? '',
+    gameLink: pool?.gameLink ?? '',
+    gameAPI: pool?.gameAPI ?? '',
     customTags: '',
   }))
 
   const [nftFilters, setNftFilters] = useState<any>({
-    country: pool?.countries,
-    city: pool?.cities,
-    product: pool?.products,
+    country: pool?.collection?.countries,
+    city: pool?.collection?.cities,
+    product: pool?.collection?.products,
   })
 
   const updateValue = (key: any, value: any) => {
