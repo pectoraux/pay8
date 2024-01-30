@@ -956,7 +956,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       {stage === LockStage.PROCESS_SCORE && (
         <ProcessScoreStage2
           tokenId={currAccount?.id}
-          score={Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()}
+          score={Object.values(gameData?.data?.score ?? gameData?.data?.value ?? [])?.toString()}
           deadline={parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0')}
           continueToNextStage={continueToNextStage}
         />
@@ -965,7 +965,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         <AdminWithdrawStage
           state={state}
           pool={pool}
-          score={Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()}
+          score={Object.values(gameData?.data?.score ?? gameData?.data?.value ?? [])?.toString()}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />
