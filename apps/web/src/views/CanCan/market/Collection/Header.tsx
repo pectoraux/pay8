@@ -14,6 +14,9 @@ import dynamic from 'next/dynamic'
 import styled from 'styled-components'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useGetEstimateVotes } from 'state/cancan/hooks'
+import NextStepButton from 'views/ChannelCreation/NextStepButton'
+import { getBlockExploreLink } from 'utils'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import MarketPageHeader from '../components/MarketPageHeader'
 import MarketPageTitle from '../components/MarketPageTitle'
@@ -29,7 +32,6 @@ import RegisterModal from './RegisterModal'
 import TopBar from './TopBar'
 import LowestPriceStatBoxItem from './LowestPriceStatBoxItem'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
-import NextStepButton from 'views/ChannelCreation/NextStepButton'
 
 const Tour = dynamic(() => import('../../../../components/Tour'), { ssr: false })
 
@@ -46,6 +48,7 @@ const Header: React.FC<any> = ({ collection }) => {
   const { numberTokensListed, numberPartnerTokensListed, totalVolumeBNB, large, avatar, owner } = collection
   const { t } = useTranslation()
   const { account } = useWeb3React()
+  const { chainId } = useActiveChainId()
   const isOwner = account?.toLocaleLowerCase() === owner?.toLocaleLowerCase()
   const contactChannels = collection?.contactChannels?.split(',') ?? []
   const contacts = collection?.contacts?.split(',') ?? []
@@ -253,6 +256,9 @@ const Header: React.FC<any> = ({ collection }) => {
             </NextStepButton>
             <LinkExternal href="/lotteries/1" bold={false}>
               {t('See Lottery')}
+            </LinkExternal>
+            <LinkExternal href={getBlockExploreLink(collection?.owner, 'address', chainId)} bold={false}>
+              {t('View Owner Info')}
             </LinkExternal>
           </FlexGap>
         </Flex>
