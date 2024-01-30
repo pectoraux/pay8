@@ -1,7 +1,6 @@
 import useSWR from 'swr'
 import { useMemo, useEffect, useState } from 'react'
 import { firestore } from 'utils/firebase'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
