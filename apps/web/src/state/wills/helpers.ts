@@ -290,10 +290,10 @@ export const fetchWill = async (willAddress, chainId) => {
                   },
                 ],
               })
-              symbol = _symbol
-              decimals = _decimals
-              tokenName = _tokenName
-              totalLiquidity = _totalLiquidity
+              symbol = _symbol.result?.toString()
+              decimals = _decimals.result?.toString()
+              tokenName = _tokenName.result?.toString()
+              totalLiquidity = _totalLiquidity.result?.toString()
             } else {
               const __token = Native.onChain(chainId)
 
@@ -342,14 +342,14 @@ export const fetchWill = async (willAddress, chainId) => {
               balanceOf: balanceOf.result.toString(),
               totalRemoved: totalRemoved.result.toString(),
               totalProcessed: totalProcessed.result.toString(),
-              totalLiquidity: totalLiquidity.result.toString(),
+              totalLiquidity,
               tokenType: tokenType.result,
               token: new Token(
                 chainId,
                 token,
-                decimals.result,
-                symbol.result?.toString(),
-                tokenName.result?.toString(),
+                decimals,
+                symbol,
+                tokenName,
                 `https://tokens.payswap.org/images/${token}.png`,
               ),
             }
