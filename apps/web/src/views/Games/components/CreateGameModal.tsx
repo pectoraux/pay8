@@ -49,7 +49,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
-  const [gameContract, setGameContract] = useState<any>('')
+  const [gameContract, setGameContract] = useState<any>(account ?? '')
   const [pricePerMinutes, setPricePerMinutes] = useState<any>('')
   const [creatorShare, setCreatorShare] = useState<any>(0)
   const [referrerFee, setReferrerFee] = useState<any>(0)
