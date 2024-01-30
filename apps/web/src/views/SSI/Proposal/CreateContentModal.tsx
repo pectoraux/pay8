@@ -18,6 +18,7 @@ import {
   ButtonMenuItem,
   Select,
 } from '@pancakeswap/uikit'
+import { ssiABI } from 'config/abi/ssi'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -28,6 +29,9 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { Divider } from 'views/ARPs/components/styles'
 import { Entry, EntryState } from 'state/types'
 import { useSignMessage } from 'wagmi'
+import { fantomTestnet } from 'viem/chains'
+import { createPublicClient, http, custom, createWalletClient } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
 import { Label, SecondaryLabel } from '../CreateProposal/styles'
@@ -53,53 +57,23 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
   const [activeButtonIndex1, setActiveButtonIndex1] = useState(0)
   const [activeButtonIndex2, setActiveButtonIndex2] = useState(0)
   const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
-  const [recipient, setRecipient] = useState('')
   const [testimony, setTestimony] = useState<any>('')
   const [comparator, setComparator] = useState<any>('eq')
   const [recipientProfileId, setRecipientProfileId] = useState<any>('')
   const [deadlineDate, setDeadlineDate] = useState<any>(null)
   const [deadlineTime, setDeadlineTime] = useState<any>(null)
-  const [userSig, setUserSig] = useState<any>(null)
   const [answer, setAnswer] = useState<any>(unencrypted)
   const ssiContract = useSSIContract()
-  const { signMessageAsync } = useSignMessage()
+  const adminAccount = privateKeyToAccount(`0x${process.env.NEXT_PUBLIC_PAYSWAP_SIGNER}`)
+  const client = createPublicClient({
+    chain: fantomTestnet,
+    transport: http(),
+  })
+  const walletClient = createWalletClient({
+    chain: fantomTestnet,
+    transport: custom(window.ethereum),
+  })
 
-  const encryptWithAES = (text, passPhrase) => {
-    return CryptoJS.AES.encrypt(text, passPhrase).toString()
-  }
-
-  const decryptWithAES1 = (ciphertext) => {
-    try {
-      const bytes = CryptoJS.AES.decrypt(ciphertext, process.env.NEXT_PUBLIC_PRIVATE_KEY)
-      const originalText = bytes.toString(CryptoJS.enc.Utf8)
-      return originalText
-    } catch (err) {
-      console.log('decryptWithAES======>', err)
-      return ''
-    }
-  }
-
-  const decryptWithAES2 = async (ciphertext) => {
-    try {
-      return signMessageAsync({ message: account }).then((key) => {
-        setUserSig(key)
-        const bytes = CryptoJS.AES.decrypt(ciphertext, key)
-        const originalText = bytes.toString(CryptoJS.enc.Utf8)
-        return originalText
-      })
-    } catch (err) {
-      console.log('decryptWithAES======>', err)
-      return ''
-    }
-  }
-
-  const revealData = async () => {
-    if (entry.state === EntryState.PENDING) {
-      setAnswer(decryptWithAES1(entry.answer))
-    } else if (entry.state === EntryState.COMPLETE) {
-      await decryptWithAES2(entry.answer).then((res) => setAnswer(res))
-    }
-  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const generateIdentityProof = () => {
     if (comparator === 'eq' && testimony?.toLowerCase() === answer?.toLowerCase()) {
@@ -188,8 +162,22 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
         entry?.question?.toLowerCase() === 'ssid' ? testimony : identityProof,
       ]
       console.log('handleIdentityProof2===================>', args)
-      return callWithGasPrice(ssiContract, 'generateIdentityProof', args)
-    }).catch((err) => console.log('rerr===================>', err))
+      const { request } = await client.simulateContract({
+        account: adminAccount,
+        address: ssiContract.address,
+        abi: ssiABI,
+        functionName: 'generateIdentityProof',
+        args: [
+          entry.ownerProfileId?.owner,
+          entry.ownerProfileId?.id,
+          entry.auditorProfileId?.id,
+          entry?.endTime,
+          entry?.question,
+          entry?.question?.toLowerCase() === 'ssid' ? testimony : identityProof,
+        ],
+      })
+      return walletClient.writeContract(request).catch((err) => console.log('1rerr===============>', err))
+    })
     if (receipt?.status) {
       toastSuccess(
         t('Identity Proof successfully created'),
@@ -202,14 +190,17 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
   }, [
     fetchWithCatchTxError,
     onDismiss,
+    generateIdentityProof,
     entry.ownerProfileId?.owner,
     entry.ownerProfileId?.id,
     entry.auditorProfileId?.id,
     entry?.endTime,
     entry?.question,
     testimony,
-    callWithGasPrice,
-    ssiContract,
+    client,
+    adminAccount,
+    ssiContract.address,
+    walletClient,
     toastSuccess,
     t,
   ])
@@ -258,7 +249,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
         entry.searchable || entry.question === 'ssid' ? answer : encryptedAnswer,
         'shared',
         // eslint-disable-next-line consistent-return
-      ]).then(() => {
+      ]).then(async () => {
         if (activeButtonIndex) {
           return callWithGasPrice(ssiContract, 'generateShareProof', [
             entry.owner,
@@ -282,18 +273,24 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
     }
     onDismiss()
   }, [
-    t,
-    entry,
-    answer,
-    onDismiss,
-    ssiContract,
-    toastSuccess,
     deadlineDate,
     deadlineTime,
-    callWithGasPrice,
-    recipientProfileId,
-    activeButtonIndex,
     fetchWithCatchTxError,
+    onDismiss,
+    answer,
+    recipientProfileId,
+    entry.auditorProfileId?.id,
+    entry.auditorProfileId?.owner,
+    entry.owner,
+    entry.startTime,
+    entry.searchable,
+    entry.question,
+    entry.ownerProfileId?.id,
+    callWithGasPrice,
+    ssiContract,
+    activeButtonIndex,
+    toastSuccess,
+    t,
   ])
 
   useEffect(() => {
@@ -324,22 +321,17 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
           </ButtonMenu>
         </StyledItemRow>
       </Flex>
+      <Box mb="24px">
+        <Label htmlFor="testimony">{t('Are You The Auditor?')}</Label>
+        <StyledItemRow>
+          <ButtonMenu scale="xs" variant="subtle" activeIndex={activeButtonIndex2} onItemClick={setActiveButtonIndex2}>
+            <ButtonMenuItem>{t('No')}</ButtonMenuItem>
+            <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
+          </ButtonMenu>
+        </StyledItemRow>
+      </Box>
       {!activeButtonIndex1 ? (
         <>
-          <Box mb="24px">
-            <Label htmlFor="testimony">{t('Are You The Auditor?')}</Label>
-            <StyledItemRow>
-              <ButtonMenu
-                scale="xs"
-                variant="subtle"
-                activeIndex={activeButtonIndex2}
-                onItemClick={setActiveButtonIndex2}
-              >
-                <ButtonMenuItem>{t('No')}</ButtonMenuItem>
-                <ButtonMenuItem>{t('Yes')}</ButtonMenuItem>
-              </ButtonMenu>
-            </StyledItemRow>
-          </Box>
           <Box mb="24px">
             <SecondaryLabel>{entry.question}</SecondaryLabel>
             <Select
