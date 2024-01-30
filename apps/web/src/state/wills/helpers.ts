@@ -259,40 +259,52 @@ export const fetchWill = async (willAddress, chainId) => {
         const percentages = protocol?.percentages?.map((percentage) => parseInt(percentage) / 100)
         const tokenData = await Promise.all(
           _tokens?.map(async (token) => {
-            const [
-              totalLiquidity,
-              tokenName,
-              decimals,
-              symbol,
-              willActivePeriod,
-              balanceOf,
-              totalRemoved,
-              tokenType,
-              totalProcessed,
-            ] = await bscClient.multicall({
+            let totalLiquidity
+            let tokenName
+            let decimals
+            let symbol
+            if (token?.toLowerCase() !== getWillNoteAddress()?.toLowerCase()) {
+              const [_totalLiquidity, _tokenName, _decimals, _symbol] = await bscClient.multicall({
+                allowFailure: true,
+                contracts: [
+                  {
+                    address: token,
+                    abi: erc20ABI,
+                    functionName: 'balanceOf',
+                    args: [willAddress],
+                  },
+                  {
+                    address: token,
+                    abi: erc20ABI,
+                    functionName: 'name',
+                  },
+                  {
+                    address: token,
+                    abi: erc20ABI,
+                    functionName: 'decimals',
+                  },
+                  {
+                    address: token,
+                    abi: erc20ABI,
+                    functionName: 'symbol',
+                  },
+                ],
+              })
+              symbol = _symbol
+              decimals = _decimals
+              tokenName = _tokenName
+              totalLiquidity = _totalLiquidity
+            } else {
+              const __token = Native.onChain(chainId)
+
+              symbol = __token?.symbol
+              decimals = __token?.decimals
+              tokenName = __token?.name
+              // totalLiquidity = _totalLiquidity
+            }
+            const [willActivePeriod, balanceOf, totalRemoved, tokenType, totalProcessed] = await bscClient.multicall({
               allowFailure: true,
               contracts: [
-                {
-                  address: token,
-                  abi: erc20ABI,
-                  functionName: 'balanceOf',
-                  args: [willAddress],
-                },
-                {
-                  address: token,
-                  abi: erc20ABI,
-                  functionName: 'name',
-                },
-                {
-                  address: token,
-                  abi: erc20ABI,
-                  functionName: 'decimals',
-                },
-                {
-                  address: token,
-                  abi: erc20ABI,
-                  functionName: 'symbol',
-                },
                 {
                   address: willAddress,
                   abi: willABI,
