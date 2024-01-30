@@ -14,6 +14,8 @@ import {
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -39,7 +41,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "This sets the address of the entity responsible for update the scores in this game which consists of writing users' scores in the games on the blockchain. It can be another smart contract that you've deployed on the blockchain or your wallet address or a game's auditor's wallet address.",
+        "This sets the address of the entity responsible for update the scores in this game which consists of writing users' scores in the games on the blockchain. It can be another smart contract that you've deployed on the blockchain or your wallet address or a game's auditor's wallet address. If you are using an API to update users' score (read the doc to know more about this), you should set this parameter to PaySwap's primaary address which is that of the owner of the CanCan channel ID 1. It is also available below.",
       )}
     </Text>
   )
@@ -234,6 +236,15 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         </Box>
       </Grid>
       <Divider />
+
+      <Flex flexDirection="column" alignItems="center" px="16px" pb="16px">
+        <Box>
+          <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+            {t('PaySwap Primary Wallet Address')}
+          </Text>
+          <CopyAddress title={truncateHash(state.adminAccount, 15, 15)} account={state.adminAccount} />
+        </Box>
+      </Flex>
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
           {t('Update Game Protocol')}
