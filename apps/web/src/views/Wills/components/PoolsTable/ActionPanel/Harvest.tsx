@@ -1,6 +1,8 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
+import { Button, Text, Flex, Box, Balance, ScanLink } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
 import Divider from 'components/Divider'
+import { getBlockExploreLink } from 'utils'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
@@ -10,10 +12,11 @@ import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAccount }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
   const { address: account } = useAccount()
   const { days, hours, minutes } = getTimePeriods(Number(pool?.willWithdrawalPeriod ?? '0'))
   const { days: days2, hours: hours2, minutes: minutes2 } = getTimePeriods(Number(pool?.updatePeriod ?? '0'))
-
+  console.log('currAccount==================>', currAccount)
   const actionTitle = (
     <Flex flexDirection="row">
       <Flex flex="1" flexDirection="column" alignSelf="flex-center">
@@ -59,24 +62,24 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
     )
   }
 
-  if (!currToken) {
-    return (
-      <ActionContainer>
-        <ActionContent>
-          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Pick a token')}
-          </Text>
-        </ActionContent>
-      </ActionContainer>
-    )
-  }
+  // if (!currToken) {
+  //   return (
+  //     <ActionContainer>
+  //       <ActionContent>
+  //         <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+  //           {t('Pick a token')}
+  //         </Text>
+  //       </ActionContent>
+  //     </ActionContainer>
+  //   )
+  // }
 
   return (
     <ActionContainer>
       <ActionTitles>{actionTitle}</ActionTitles>
       <ActionContent>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-          {currToken.id ? (
+          {currToken?.id ? (
             <>
               <CopyAddress title={t('Curr Token Address')} account={account} />
               <Box mr="8px" height="32px">
@@ -136,7 +139,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
               {t('Attached Profile Id')}
             </Text>
           </Box>
-          {currAccount?.tokenData?.map((td) => (
+          {currAccount?.tokenData?.map((td, index) => (
             <>
               <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
                 {td?.tokenType === 0 ? 'Fugible' : td?.tokenType === 1 ? 'NFT - ERC721' : 'NFT - ERC1155'}
@@ -144,12 +147,25 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                 {t('Token Type')}
               </Text>
-              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                {td?.tokenType === '0' ? 'Fugible' : td?.tokenType === '1' ? 'NFT - ERC721' : 'NFT - ERC1155'}
-              </Text>
-              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('Token Type')}
-              </Text>
+              <Box mr="8px" height="32px">
+                {currAccount?.percentages?.length > index ? (
+                  <Balance
+                    lineHeight="1"
+                    color="textSubtle"
+                    fontSize="12px"
+                    decimals={0}
+                    value={currAccount?.percentages[index]}
+                    unit=" %"
+                  />
+                ) : (
+                  <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                    N/A
+                  </Text>
+                )}
+                <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                  {t('Percentage')}
+                </Text>
+              </Box>
               <Box mr="8px" height="32px">
                 {parseInt(currAccount?.adminBountyId) ? (
                   <Balance
@@ -169,6 +185,9 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
                   {t('Admin Bounty Id')}
                 </Text>
               </Box>
+              <ScanLink href={getBlockExploreLink(td?.token?.address, 'address', chainId)} bold={false} small>
+                {t('View %val% Info', { val: td?.token?.symbol })}
+              </ScanLink>
               <Divider />
             </>
           ))}

@@ -1,8 +1,8 @@
+import { keyBy } from 'lodash'
 import { isAddress } from 'utils'
 import { createSlice } from '@reduxjs/toolkit'
 import { fetchWills, getWills } from './helpers'
 import { resetUserState } from '../global/actions'
-import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,

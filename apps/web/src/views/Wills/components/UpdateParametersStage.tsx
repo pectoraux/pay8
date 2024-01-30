@@ -25,7 +25,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        'This sets the minimum laps of time in minutes that must seperate each call to this function. Calling this function before that time elapses will have no effect on any of the parameters except for the profile id.',
+        'This sets the minimum laps of time in minutes that must seperate each call to this function. Calling this function before the update period time elapses will have no effect on any of the parameters except for the profile id.',
       )}
     </Text>
   )
@@ -40,7 +40,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets the value in minutes of This will withdrawal countdown period. The countdown can be launched by running the Claim Inheritance function.',
+        'This sets the value in minutes of the Will withdrawal countdown period. The countdown can be launched by running the Claim Inheritance function.',
       )}
     </Text>
   )

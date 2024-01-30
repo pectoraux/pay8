@@ -17,12 +17,12 @@ import { Token } from '@pancakeswap/sdk'
 import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBlockExploreLink } from 'utils'
-import { useCurrBribe } from 'state/wills/hooks'
+import { useCurrBribe, useCurrPool } from 'state/wills/hooks'
 import { useAppDispatch } from 'state'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { useRouter } from 'next/router'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
-import { setCurrBribeData } from 'state/wills'
+import { setCurrPoolData, setCurrBribeData } from 'state/wills'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -34,6 +34,7 @@ interface ExpandedFooterProps {
 const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, alignLinksToRight = true }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
+  const currState = useCurrPool()
   const currState2 = useCurrBribe()
   const router = useRouter()
   const [pendingTx, setPendingTx] = useState(false)
@@ -69,7 +70,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   const TooltipComponent = () => (
     <Text>
       {t(
-        'This sets the minimum laps of time in minutes that must seperate each call to this function. Calling this function before that time elapses will have no effect on any of the parameters except for the profile id.',
+        'This sets the minimum laps of time in minutes that must seperate each call to the update parameter function from the control panel menu. Calling that function before the update period time elapses will have no effect on any of the parameters except for the profile id.',
       )}
     </Text>
   )
@@ -78,13 +79,13 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   )
   const TooltipComponent3 = () => (
     <Text>
-      {t('When this parameter is not null, then it shows the countdown to the end of the will withdrawal period.')}
+      {t('When this parameter is not null, then it shows the countdown to the end of the Will withdrawal period.')}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets the value in minutes of This will withdrawal countdown period. The countdown can be launched by running the Claim Inheritance function.',
+        'This sets the value in minutes of the Will withdrawal countdown period. The countdown can be launched by running the Claim Inheritance function.',
       )}
     </Text>
   )
@@ -240,6 +241,36 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           />
         </Flex>
       )}
+      <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
+        {pool?.accounts?.length
+          ? pool?.accounts.map((balance) => (
+              <Button
+                key={balance.id}
+                onClick={() => {
+                  const newState = { ...currState, [pool?.id]: balance.id }
+                  dispatch(setCurrPoolData(newState))
+                }}
+                mt="4px"
+                mr={['2px', '2px', '4px', '4px']}
+                scale="sm"
+                variant={currState[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
+              >
+                {balance?.id?.split('_')[0]}
+              </Button>
+            ))
+          : null}
+        {pool?.accounts?.length ? (
+          <Button
+            key="clear-all"
+            variant="text"
+            scale="sm"
+            onClick={() => dispatch(setCurrPoolData({}))}
+            style={{ whiteSpace: 'nowrap' }}
+          >
+            {t('Clear')}
+          </Button>
+        ) : null}
+      </Flex>
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
         {pool?.tokens?.length
           ? pool?.tokens.map((balance) => (

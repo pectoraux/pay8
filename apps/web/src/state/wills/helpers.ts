@@ -263,44 +263,48 @@ export const fetchWill = async (willAddress, chainId) => {
             let tokenName
             let decimals
             let symbol
-            if (token?.toLowerCase() !== getWillNoteAddress()?.toLowerCase()) {
-              const [_totalLiquidity, _tokenName, _decimals, _symbol] = await bscClient.multicall({
-                allowFailure: true,
-                contracts: [
-                  {
-                    address: token,
-                    abi: erc20ABI,
-                    functionName: 'balanceOf',
-                    args: [willAddress],
-                  },
-                  {
-                    address: token,
-                    abi: erc20ABI,
-                    functionName: 'name',
-                  },
-                  {
-                    address: token,
-                    abi: erc20ABI,
-                    functionName: 'decimals',
-                  },
-                  {
-                    address: token,
-                    abi: erc20ABI,
-                    functionName: 'symbol',
-                  },
-                ],
-              })
-              symbol = _symbol.result?.toString()
-              decimals = _decimals.result?.toString()
-              tokenName = _tokenName.result?.toString()
-              totalLiquidity = _totalLiquidity.result?.toString()
-            } else {
-              const __token = Native.onChain(chainId)
+            try {
+              if (token?.toLowerCase() !== getWillNoteAddress()?.toLowerCase()) {
+                const [_totalLiquidity, _tokenName, _decimals, _symbol] = await bscClient.multicall({
+                  allowFailure: true,
+                  contracts: [
+                    {
+                      address: token,
+                      abi: erc20ABI,
+                      functionName: 'balanceOf',
+                      args: [willAddress],
+                    },
+                    {
+                      address: token,
+                      abi: erc20ABI,
+                      functionName: 'name',
+                    },
+                    {
+                      address: token,
+                      abi: erc20ABI,
+                      functionName: 'decimals',
+                    },
+                    {
+                      address: token,
+                      abi: erc20ABI,
+                      functionName: 'symbol',
+                    },
+                  ],
+                })
+                symbol = _symbol.result?.toString()
+                decimals = _decimals.result?.toString()
+                tokenName = _tokenName.result?.toString()
+                totalLiquidity = _totalLiquidity.result?.toString()
+              } else {
+                const __token = Native.onChain(chainId)
 
-              symbol = __token?.symbol
-              decimals = __token?.decimals
-              tokenName = __token?.name
-              // totalLiquidity = _totalLiquidity
+                symbol = __token?.symbol
+                decimals = __token?.decimals
+                tokenName = __token?.name
+                // totalLiquidity = _totalLiquidity
+              }
+            } catch (e) {
+              console.log('e=====================>', e)
             }
             const [willActivePeriod, balanceOf, totalRemoved, tokenType, totalProcessed] = await bscClient.multicall({
               allowFailure: true,
@@ -347,7 +351,7 @@ export const fetchWill = async (willAddress, chainId) => {
               token: new Token(
                 chainId,
                 token,
-                decimals,
+                parseInt(decimals),
                 symbol,
                 tokenName,
                 `https://tokens.payswap.org/images/${token}.png`,
