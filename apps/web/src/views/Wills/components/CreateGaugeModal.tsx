@@ -423,6 +423,11 @@ const CreateGaugeModal: React.FC<any> = ({
           }).catch((err) => console.log('1CONFIRM_ADD_BALANCE===============>', err))
         }
         const args2 = [state.token, state.owner, amountReceivable.toString(), state.nftype]
+        if (state.nftype > 0) {
+          return callWithGasPrice(tokenContract, 'setApprovalForAll', [willContract.address, true])
+            .then(() => callWithGasPrice(willContract, 'addBalance', args2))
+            .catch((err) => console.log('CONFIRM_ADD_BALANCE===============>', err))
+        }
         console.log('CONFIRM_ADD_BALANCE===============>', args2)
         return callWithGasPrice(willContract, 'addBalance', args2).catch((err) =>
           console.log('CONFIRM_ADD_BALANCE===============>', err),
@@ -612,13 +617,13 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
             {t('CLAIM INHERITANCE')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_FT_APPROVAL)}>
+          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CONFIRM_UPDATE_FT_APPROVAL)}>
             {t('UPDATE FT APPROVAL')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_NFT_APPROVAL)}>
+          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.UPDATE_NFT_APPROVAL)}>
             {t('UPDATE NFT APPROVAL')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.ADD_BALANCE)}>
+          <Button mb="8px" onClick={() => setStage(LockStage.ADD_BALANCE)}>
             {t('ADD BALANCE')}
           </Button>
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_ACTIVE_PERIOD)}>
@@ -627,7 +632,7 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button variant="success" mb="8px" onClick={() => setStage(LockStage.CREATE_LOCK)}>
             {t('CREATE LOCK')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_APPROVAL)}>
+          <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.UPDATE_APPROVAL)}>
             {t('UPDATE APPROVAL')}
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.REMOVE_BALANCE)}>

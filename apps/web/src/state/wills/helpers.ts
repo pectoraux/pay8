@@ -132,6 +132,9 @@ export const fetchWill = async (willAddress, chainId) => {
       if (token.tokenAddress?.toLowerCase() === getWillNoteAddress()?.toLowerCase()) {
         const _token = Native.onChain(chainId)
         console.log('_token===================>', _token, _token.wrapped.address)
+        // const balance = await bscClient.getBalance({
+        //   address: '0xA0Cf798816D4b9b9866b5330EEa46a18382f251e',
+        // })
         // const [totalLiquidity] = await bscClient.multicall({
         //   allowFailure: true,
         //   contracts: [
@@ -147,7 +150,7 @@ export const fetchWill = async (willAddress, chainId) => {
           ...token,
           ..._token,
           position: index,
-          tokenAddress: _token.wrapped.address,
+          tokenAddress: _token.symbol,
           totalLiquidity: token?.value, // totalLiquidity.result?.toString(),
         }
       }

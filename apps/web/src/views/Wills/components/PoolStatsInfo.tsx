@@ -235,7 +235,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
       </Flex>
       <Flex flexWrap="wrap" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'} alignItems="center">
         {pool?.tokens?.length
-          ? pool?.tokens.map((balance, index) => (
+          ? pool?.tokens.map((balance) => (
               <Button
                 key={balance.id}
                 onClick={() => {
@@ -247,7 +247,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
                 scale="sm"
                 variant={currState2[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
               >
-                ({index}){balance.symbol}
+                {balance.symbol}
               </Button>
             ))
           : null}

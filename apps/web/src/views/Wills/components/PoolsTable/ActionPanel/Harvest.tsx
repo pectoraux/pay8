@@ -11,7 +11,7 @@ import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPan
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
-const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAccount }) => {
+const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAccount, nativeBalance }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const { address: account } = useAccount()
@@ -88,8 +88,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
                   lineHeight="1"
                   color="textSubtle"
                   fontSize="12px"
-                  decimals={currToken.decimals ?? 18}
-                  value={getBalanceNumber(currToken?.totalLiquidity, currToken.decimals ?? 18)}
+                  decimals={5}
+                  value={
+                    currToken?.isNative
+                      ? nativeBalance
+                      : getBalanceNumber(currToken?.totalLiquidity, currToken.decimals ?? 18)
+                  }
                 />
                 <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                   {t('Total Liquidity')}
@@ -143,90 +147,92 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
             </>
           ) : null}
         </Flex>
-        <Flex flex="1" flexDirection="column" alignSelf="flex-center">
-          <Box mr="8px" height="32px">
-            {parseInt(currAccount?.profileId) ? (
-              <Balance
-                lineHeight="1"
-                color="textSubtle"
-                fontSize="12px"
-                decimals={0}
-                value={currAccount?.profileId}
-                prefix="# "
-              />
-            ) : (
-              <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                N/A
-              </Text>
-            )}
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Attached Profile Id')}
-            </Text>
-          </Box>
-          {currAccount?.tokenData?.map((td, index) => (
-            <>
-              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                {td?.tokenType === 0 ? 'Fugible' : td?.tokenType === 1 ? 'NFT - ERC721' : 'NFT - ERC1155'}
-              </Text>
-              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('Token Type')}
-              </Text>
-              <Box mr="8px" height="32px">
-                {currAccount?.percentages?.length > index ? (
-                  <Balance
-                    lineHeight="1"
-                    color="textSubtle"
-                    fontSize="12px"
-                    decimals={0}
-                    value={currAccount?.percentages[index]}
-                    unit=" %"
-                  />
-                ) : (
-                  <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                    N/A
-                  </Text>
-                )}
-                <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                  {t('Percentage')}
-                </Text>
-              </Box>
-              <Box mr="8px" height="32px">
+        <Flex style={{ overflow: 'hidden' }} maxHeight={150}>
+          <Flex style={{ overflowY: 'scroll' }} flex="1" flexDirection="column" alignSelf="flex-center">
+            <Box mr="8px" height="32px">
+              {parseInt(currAccount?.profileId) ? (
                 <Balance
                   lineHeight="1"
                   color="textSubtle"
                   fontSize="12px"
-                  decimals={5}
-                  value={getBalanceNumber(td?.paidPayable, td?.token?.decimals ?? 18)}
+                  decimals={0}
+                  value={currAccount?.profileId}
+                  prefix="# "
                 />
-                <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                  {t('Paid Payable')}
+              ) : (
+                <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                  N/A
                 </Text>
-              </Box>
-              <Box mr="8px" height="32px">
-                {parseInt(currAccount?.adminBountyId) ? (
+              )}
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Attached Profile Id')}
+              </Text>
+            </Box>
+            {currAccount?.tokenData?.map((td, index) => (
+              <>
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  {td?.tokenType === 0 ? 'Fugible' : td?.tokenType === 1 ? 'NFT - ERC721' : 'NFT - ERC1155'}
+                </Text>
+                <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                  {t('Token Type')}
+                </Text>
+                <Box mr="8px" height="32px">
+                  {currAccount?.percentages?.length > index ? (
+                    <Balance
+                      lineHeight="1"
+                      color="textSubtle"
+                      fontSize="12px"
+                      decimals={0}
+                      value={currAccount?.percentages[index]}
+                      unit=" %"
+                    />
+                  ) : (
+                    <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                      N/A
+                    </Text>
+                  )}
+                  <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                    {t('Percentage')}
+                  </Text>
+                </Box>
+                <Box mr="8px" height="32px">
                   <Balance
                     lineHeight="1"
                     color="textSubtle"
                     fontSize="12px"
-                    decimals={0}
-                    value={currAccount?.adminBountyId}
-                    prefix="# "
+                    decimals={5}
+                    value={getBalanceNumber(td?.paidPayable, td?.token?.decimals ?? 18)}
                   />
-                ) : (
-                  <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
-                    N/A
+                  <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                    {t('Paid Payable')}
                   </Text>
-                )}
-                <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                  {t('Admin Bounty Id')}
-                </Text>
-              </Box>
-              <ScanLink href={getBlockExploreLink(td?.token?.address, 'address', chainId)} bold={false} small>
-                {t('View %val% Info', { val: td?.token?.symbol })}
-              </ScanLink>
-              <Divider />
-            </>
-          ))}
+                </Box>
+                <Box mr="8px" height="32px">
+                  {parseInt(currAccount?.adminBountyId) ? (
+                    <Balance
+                      lineHeight="1"
+                      color="textSubtle"
+                      fontSize="12px"
+                      decimals={0}
+                      value={currAccount?.adminBountyId}
+                      prefix="# "
+                    />
+                  ) : (
+                    <Text lineHeight="1" color="textDisabled" fontSize="12px" textTransform="uppercase">
+                      N/A
+                    </Text>
+                  )}
+                  <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                    {t('Admin Bounty Id')}
+                  </Text>
+                </Box>
+                <ScanLink href={getBlockExploreLink(td?.token?.address, 'address', chainId)} bold={false} small>
+                  {t('View %val% Info', { val: td?.token?.symbol })}
+                </ScanLink>
+                <Divider />
+              </>
+            ))}
+          </Flex>
         </Flex>
       </ActionContent>
     </ActionContainer>

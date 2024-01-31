@@ -83,7 +83,7 @@ const InfoSection = styled(Box)`
   }
 `
 
-const ActionPanel: React.FC<any> = ({ account, pool, currAccount, currToken, expanded }) => {
+const ActionPanel: React.FC<any> = ({ account, pool, currAccount, currToken, nativeBalance, expanded }) => {
   const { isMobile } = useMatchBreakpoints()
   return (
     <StyledActionPanel expanded={expanded}>
@@ -95,7 +95,7 @@ const ActionPanel: React.FC<any> = ({ account, pool, currAccount, currToken, exp
       <ActionContainer>
         <Box width="100%">
           <ActionContainer hasBalance>
-            <Harvest pool={pool} currAccount={currAccount} currToken={currToken} />
+            <Harvest pool={pool} currAccount={currAccount} currToken={currToken} nativeBalance={nativeBalance} />
             <Stake pool={pool} currAccount={currAccount} currToken={currToken} />
           </ActionContainer>
         </Box>

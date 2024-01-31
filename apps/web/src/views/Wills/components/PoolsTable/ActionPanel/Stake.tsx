@@ -4,7 +4,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
 
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useERC20 } from 'hooks/useContract'
@@ -26,6 +26,8 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currToken }) 
   const inputCurrency = useCurrency(currencyId)
   const [currency, setCurrency] = useState(inputCurrency) as any
   const stakingTokenContract = useERC20(currency?.address || '')
+
+  useEffect(() => setCurrency(inputCurrency), [currencyId, inputCurrency])
 
   const { handleApprove } = useApprovePool(stakingTokenContract, pool?.id, currency?.symbol)
   const [openPresentControlPanel] = useModal(

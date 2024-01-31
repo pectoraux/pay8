@@ -3,6 +3,8 @@ import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool, useCurrBribe } from 'state/wills/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useCurrencyBalance, useNativeBalances } from 'state/wallet/hooks'
+import { useCurrency } from 'hooks/Tokens'
 
 import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
@@ -17,7 +19,19 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   const { isMobile } = useMatchBreakpoints()
   const currAccount = useMemo(() => pool?.accounts?.find((n) => n.id === currState[pool?.id]), [pool, currState])
   const currToken = useMemo(() => pool?.tokens?.find((n) => n.id === currState2[pool?.id]), [pool, currState2])
-  console.log('willpool1====>', pool, currAccount, currToken, currState, currState2, currState2[pool?.id])
+  const nb = useNativeBalances([pool?.id])
+  const nativeBalances = Object.values(nb) as any
+  const nativeBalance = nativeBalances?.length && nativeBalances[0]?.toFixed()
+  console.log(
+    'willpool1====>',
+    nativeBalance,
+    pool,
+    currAccount,
+    currToken,
+    currState,
+    currState2,
+    currState2[pool?.id],
+  )
   const tabs = (
     <>
       <NameCell pool={pool} />
@@ -31,6 +45,8 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
         amount={
           parseInt(currToken?.tokenType)
             ? currToken?.value
+            : currToken?.isNative
+            ? nativeBalance
             : getBalanceNumber(currToken?.totalLiquidity ?? '0', currToken?.decimals ?? 18)
         }
         decimals={3}
@@ -48,7 +64,16 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
   return (
     <Pool.ExpandRow
       initialActivity={initialActivity}
-      panel={<ActionPanel account={account} pool={pool} currToken={currToken} currAccount={currAccount} expanded />}
+      panel={
+        <ActionPanel
+          account={account}
+          nativeBalance={nativeBalance}
+          pool={pool}
+          currToken={currToken}
+          currAccount={currAccount}
+          expanded
+        />
+      }
     >
       {isMobile ? (
         <TabMenu>
