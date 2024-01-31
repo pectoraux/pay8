@@ -82,8 +82,8 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Input
           type="text"
           scale="sm"
-          name="profileId"
-          value={state.profileId}
+          name="willProfileId"
+          value={state.willProfileId}
           placeholder={t('input your profile id')}
           onChange={handleChange}
         />

@@ -152,6 +152,7 @@ const CreateGaugeModal: React.FC<any> = ({
     identityTokenId: '0',
     message: '',
     tag: '',
+    willProfileId: pool?.profileId,
     profileId: currAccount?.profileId ?? '0',
     minWithdrawableNow: pool?.minWithdrawableNow ?? '',
     minNFTWithdrawableNow: pool?.minNFTWithdrawableNow ?? '',
@@ -518,7 +519,7 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_UPDATE_PARAMETERS) {
         const args = [
-          state.profileId,
+          state.willProfileId,
           parseInt(state.updatePeriod) * 60,
           parseInt(state.minWithdrawableNow) * 100,
           state.minNFTWithdrawableNow,
