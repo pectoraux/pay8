@@ -520,7 +520,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const args = [
           state.profileId,
           parseInt(state.updatePeriod) * 60,
-          state.minWithdrawableNow,
+          parseInt(state.minWithdrawableNow) * 100,
           state.minNFTWithdrawableNow,
           parseInt(state.willWithdrawalPeriod) * 60,
         ]

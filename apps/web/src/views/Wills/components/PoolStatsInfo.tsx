@@ -119,8 +119,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
       ) : null}
       <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="secondary" fontSize="14px">
-          {Number(pool?.updatePeriod)
-            ? format(new Date(parseInt(pool?.updatePeriod || 0) * 1000), 'yyyy-MM-dd HH:mm')
+          {Number(pool?.activePeriod)
+            ? format(new Date(parseInt(pool?.activePeriod || 0) * 1000), 'yyyy-MM-dd HH:mm')
             : '-'}
         </Text>
         <Text color="primary" fontSize="14px">

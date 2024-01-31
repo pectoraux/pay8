@@ -22,6 +22,7 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
     <>
       <NameCell pool={pool} />
       <TotalUsersCell
+        decimals={0}
         labelText={t('Total Accounts')}
         amount={pool?.protocols?.filter((protocol) => protocol?.active)?.length}
       />
@@ -32,10 +33,16 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
             ? currToken?.value
             : getBalanceNumber(currToken?.totalLiquidity ?? '0', currToken?.decimals ?? 18)
         }
+        decimals={3}
         symbol={currToken?.symbol ?? ''}
       />
-      <TotalValueCell labelText={t('Max. NFT Wthdrawable')} amount={pool?.minNFTWithdrawableNow} symbol=" NFT" />
-      <TotalValueCell labelText={t('Max. FT Wthdrawable')} amount={pool?.minWithdrawableNow} symbol="%" />
+      <TotalValueCell
+        labelText={t('Max. NFT Wthdrawable')}
+        amount={pool?.minNFTWithdrawableNow}
+        decimals={0}
+        symbol=" NFT"
+      />
+      <TotalValueCell labelText={t('Max. FT Wthdrawable')} amount={pool?.minWithdrawableNow} decimals={0} symbol="%" />
     </>
   )
   return (
