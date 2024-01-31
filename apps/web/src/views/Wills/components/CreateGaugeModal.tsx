@@ -481,7 +481,7 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_PAY) {
-        const args = [state.profileId, state.position]
+        const args = [state.profileId, state.position ?? '0']
         console.log('CONFIRM_PAY===============>', args)
         return callWithGasPrice(willContract, 'payInvoicePayable', args).catch((err) =>
           console.log('CONFIRM_PAY===============>', err),
