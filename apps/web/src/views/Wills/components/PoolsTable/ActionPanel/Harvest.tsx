@@ -167,6 +167,18 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
                 </Text>
               </Box>
               <Box mr="8px" height="32px">
+                <Balance
+                  lineHeight="1"
+                  color="textSubtle"
+                  fontSize="12px"
+                  decimals={0}
+                  value={getBalanceNumber(td?.paidPayable, td?.token?.decimals ?? 18)}
+                />
+                <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                  {t('Paid Payable')}
+                </Text>
+              </Box>
+              <Box mr="8px" height="32px">
                 {parseInt(currAccount?.adminBountyId) ? (
                   <Balance
                     lineHeight="1"

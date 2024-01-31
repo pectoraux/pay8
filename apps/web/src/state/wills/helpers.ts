@@ -306,41 +306,48 @@ export const fetchWill = async (willAddress, chainId) => {
             } catch (e) {
               console.log('e=====================>', e)
             }
-            const [willActivePeriod, balanceOf, totalRemoved, tokenType, totalProcessed] = await bscClient.multicall({
-              allowFailure: true,
-              contracts: [
-                {
-                  address: willAddress,
-                  abi: willABI,
-                  functionName: 'willActivePeriod',
-                  args: [token],
-                },
-                {
-                  address: willAddress,
-                  abi: willABI,
-                  functionName: 'balanceOf',
-                  args: [token],
-                },
-                {
-                  address: willAddress,
-                  abi: willABI,
-                  functionName: 'totalRemoved',
-                  args: [token],
-                },
-                {
-                  address: willAddress,
-                  abi: willABI,
-                  functionName: 'tokenType',
-                  args: [token],
-                },
-                {
-                  address: willAddress,
-                  abi: willABI,
-                  functionName: 'totalProcessed',
-                  args: [token],
-                },
-              ],
-            })
+            const [willActivePeriod, balanceOf, totalRemoved, tokenType, totalProcessed, paidPayable] =
+              await bscClient.multicall({
+                allowFailure: true,
+                contracts: [
+                  {
+                    address: willAddress,
+                    abi: willABI,
+                    functionName: 'willActivePeriod',
+                    args: [token],
+                  },
+                  {
+                    address: willAddress,
+                    abi: willABI,
+                    functionName: 'balanceOf',
+                    args: [token],
+                  },
+                  {
+                    address: willAddress,
+                    abi: willABI,
+                    functionName: 'totalRemoved',
+                    args: [token],
+                  },
+                  {
+                    address: willAddress,
+                    abi: willABI,
+                    functionName: 'tokenType',
+                    args: [token],
+                  },
+                  {
+                    address: willAddress,
+                    abi: willABI,
+                    functionName: 'totalProcessed',
+                    args: [token],
+                  },
+                  {
+                    address: willAddress,
+                    abi: willABI,
+                    functionName: 'paidPayable',
+                    args: [protocolId, token],
+                  },
+                ],
+              })
             return {
               willActivePeriod: willActivePeriod.result.toString(),
               balanceOf: balanceOf.result.toString(),
@@ -348,6 +355,7 @@ export const fetchWill = async (willAddress, chainId) => {
               totalProcessed: totalProcessed.result.toString(),
               totalLiquidity,
               tokenType: tokenType.result,
+              paidPayable: paidPayable.result?.toString(),
               token: new Token(
                 chainId,
                 token,
