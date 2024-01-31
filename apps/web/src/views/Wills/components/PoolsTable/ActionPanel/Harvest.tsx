@@ -2,6 +2,7 @@ import { Button, Text, Flex, Box, Balance, ScanLink, LinkExternal } from '@panca
 import { useAccount } from 'wagmi'
 import Divider from 'components/Divider'
 import { getBlockExploreLink } from 'utils'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
@@ -120,12 +121,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
           </Text>
           {currAccount ? (
             <>
-              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                {currAccount?.ssid}
-              </Text>
-              <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-                {t('SSID')}
-              </Text>
               <LinkExternal href={currAccount?.media} bold={false} small>
                 {t('View Attached Media')}
               </LinkExternal>
@@ -135,6 +130,16 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
               <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
                 {t('Description')}
               </Text>
+              <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+                {t('SSID')}
+              </Text>
+              {currAccount?.ssid?.length ? (
+                <CopyAddress title={truncateHash(currAccount?.ssid)} account={currAccount?.ssid} />
+              ) : (
+                <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                  N/A
+                </Text>
+              )}
             </>
           ) : null}
         </Flex>

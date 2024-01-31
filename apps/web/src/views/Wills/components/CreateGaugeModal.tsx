@@ -109,13 +109,21 @@ const CreateGaugeModal: React.FC<any> = ({
   const stakingTokenContract = useERC20(currency?.address || currToken?.tokenAddress || '')
   const willContract = useWILLContract(pool?.id || router.query.will || '')
   const willNoteContract = useWILLNote()
-  console.log('mcurrencyy===============>', currAccount, currency, pool, willContract, stakingTokenContract)
+  console.log(
+    'mcurrencyy===============>',
+    currAccount,
+    currency,
+    pool,
+    willContract,
+    stakingTokenContract,
+    currToken?.position,
+  )
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
   const stakingTokenBalance = balance
     ? getDecimalAmount(new BigNumber(balance.toExact()), currency?.decimals)
     : BIG_ZERO
-
+  const tokens = currAccount?.tokenData?.map((dat) => dat?.token?.address)
   // console.log("router===================>", router)
   // const { state: status, userAccount, session_id, userCurrency, amount } = router.query
   const [state, setState] = useState<any>(() => ({
@@ -124,8 +132,8 @@ const CreateGaugeModal: React.FC<any> = ({
     bountyId: pool?.bountyId ?? '',
     protocolId: currAccount?.id,
     extraMint: '',
-    tokens: `${currency?.address ?? ''}`,
-    percentages: '',
+    tokens: tokens?.toString() ?? `${currency?.address ?? ''}`,
+    percentages: currAccount?.percentages?.toString() ?? '',
     category: '',
     contractAddress: '',
     optionId: '',
@@ -147,11 +155,12 @@ const CreateGaugeModal: React.FC<any> = ({
     description: currAccount?.description ?? '',
     ratings: currAccount?.ratings?.toString() ?? '',
     esgRating: currAccount?.esgRating ?? '',
-    media: pool?.media ?? '',
-    ssid: '',
+    media: currAccount?.media ?? '',
+    ssid: currAccount?.ssid ?? '',
     identityTokenId: '0',
     message: '',
     tag: '',
+    position: currToken?.position ?? '',
     willProfileId: pool?.profileId,
     profileId: currAccount?.profileId ?? '0',
     minWithdrawableNow: pool?.minWithdrawableNow ?? '',

@@ -33,6 +33,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currToken }) 
       variant={variant}
       location="fromStake"
       pool={pool}
+      currToken={currToken}
       currAccount={currAccount}
       currency={currency ?? inputCurrency}
     />,

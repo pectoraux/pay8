@@ -128,7 +128,7 @@ export const fetchWill = async (willAddress, chainId) => {
   const will = await getWill(willAddress.toLowerCase())
   const bscClient = publicClient({ chainId })
   const tokens = await Promise.all(
-    will?.tokens?.map(async (token) => {
+    will?.tokens?.map(async (token, index) => {
       if (token.tokenAddress?.toLowerCase() === getWillNoteAddress()?.toLowerCase()) {
         const _token = Native.onChain(chainId)
         console.log('_token===================>', _token, _token.wrapped.address)
@@ -146,6 +146,7 @@ export const fetchWill = async (willAddress, chainId) => {
         return {
           ...token,
           ..._token,
+          position: index,
           tokenAddress: _token.wrapped.address,
           totalLiquidity: token?.value, // totalLiquidity.result?.toString(),
         }
@@ -178,6 +179,7 @@ export const fetchWill = async (willAddress, chainId) => {
       })
       return {
         ...token,
+        position: index,
         name: name.result,
         decimals: decimals.result,
         symbol: symbol.result?.toString()?.toUpperCase(),
@@ -259,7 +261,7 @@ export const fetchWill = async (willAddress, chainId) => {
         )
         const percentages = protocol?.percentages?.map((percentage) => parseInt(percentage) / 100)
         const tokenData = await Promise.all(
-          _tokens?.map(async (token) => {
+          _tokens?.map(async (token, index) => {
             let totalLiquidity
             let tokenName
             let decimals
@@ -350,6 +352,7 @@ export const fetchWill = async (willAddress, chainId) => {
                 ],
               })
             return {
+              position: index,
               willActivePeriod: willActivePeriod.result.toString(),
               balanceOf: balanceOf.result.toString(),
               totalRemoved: totalRemoved.result.toString(),
