@@ -569,25 +569,29 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_PROCESS_SCORE) {
-        console.log('CONFIRM_PROCESS_SCORE===============>', [
-          currAccount?.id,
-          BigInt(Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()),
-          BigInt(parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0')),
-        ])
-        const { request } = await client.simulateContract({
-          account: adminAccount,
-          address: getGameMinterAddress(),
-          abi: gameMinterABI,
-          functionName: 'updateScoreNDeadline',
-          args: [
-            BigInt(currAccount?.id),
+        if (
+          parseInt(Object.values(gameData?.data?.startime)?.toString()) >= parseInt(currAccount?.purchasedAt ?? '0')
+        ) {
+          console.log('CONFIRM_PROCESS_SCORE===============>', [
+            currAccount?.id,
             BigInt(Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()),
             BigInt(parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0')),
-          ],
-        })
-        return walletClient
-          .writeContract(request)
-          .catch((err) => console.log('1CONFIRM_PROCESS_SCORE===============>', err))
+          ])
+          const { request } = await client.simulateContract({
+            account: adminAccount,
+            address: getGameMinterAddress(),
+            abi: gameMinterABI,
+            functionName: 'updateScoreNDeadline',
+            args: [
+              BigInt(currAccount?.id),
+              BigInt(Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()),
+              BigInt(parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0')),
+            ],
+          })
+          return walletClient
+            .writeContract(request)
+            .catch((err) => console.log('1CONFIRM_PROCESS_SCORE===============>', err))
+        }
       }
       if (stage === LockStage.CONFIRM_WITHDRAW) {
         const args = [state.owner, state.identityTokenId, state.tokenId]

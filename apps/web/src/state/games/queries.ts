@@ -35,4 +35,5 @@ export const protocolFields = `
   game
   minutes
   metadataUrl
+  purchasedAt
 `

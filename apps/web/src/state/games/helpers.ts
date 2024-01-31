@@ -15,7 +15,6 @@ import { gameFields, protocolFields } from './queries'
 
 export const fetchGameData = async (url, tokenId) => {
   const { data } = await axios.post('/api/fireData', { url: `${url}${tokenId ?? 0}` })
-  console.log('fetchGameData====================>', data)
   return data
 }
 
