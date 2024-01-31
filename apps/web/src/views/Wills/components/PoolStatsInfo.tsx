@@ -124,7 +124,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
             : '-'}
         </Text>
         <Text color="primary" fontSize="14px">
-          {t('Parameters Updatable At')}
+          {t('Parameters Updatable After')}
         </Text>
       </Flex>
       <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
@@ -146,7 +146,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
             : '-'}
         </Text>
         <Text color="primary" fontSize="14px">
-          {t('Will Withdrawable At')}
+          {t('Will Withdrawable After')}
         </Text>
       </Flex>
       <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
