@@ -237,8 +237,9 @@ export const fetchWill = async (willAddress, chainId) => {
         })
         const createdAt = protocolInfo.result[0]
         const updatedAt = protocolInfo.result[1]
-        const media = protocolInfo.result[2]
-        const description = protocolInfo.result[3]
+        const ssid = protocolInfo.result[2]
+        const media = protocolInfo.result[3]
+        const description = protocolInfo.result[4]
 
         const _tokens = await Promise.all(
           protocol?.percentages?.map(async (perct, idx) => {
@@ -374,6 +375,7 @@ export const fetchWill = async (willAddress, chainId) => {
           tokenData,
           percentages,
           media,
+          ssid,
           description,
           locked: locked.result,
           collectionId: collectionId.result.toString(),

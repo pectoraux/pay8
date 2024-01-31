@@ -1,4 +1,4 @@
-import { Button, Text, Flex, Box, Balance, ScanLink } from '@pancakeswap/uikit'
+import { Button, Text, Flex, Box, Balance, ScanLink, LinkExternal } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
 import Divider from 'components/Divider'
 import { getBlockExploreLink } from 'utils'
@@ -118,6 +118,25 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
             {t('Update Period')}
           </Text>
+          {currAccount ? (
+            <>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {currAccount?.ssid}
+              </Text>
+              <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+                {t('SSID')}
+              </Text>
+              <LinkExternal href={currAccount?.media} bold={false} small>
+                {t('View Attached Media')}
+              </LinkExternal>
+              <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+                {currAccount?.description}
+              </Text>
+              <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
+                {t('Description')}
+              </Text>
+            </>
+          ) : null}
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           <Box mr="8px" height="32px">
@@ -171,7 +190,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
                   lineHeight="1"
                   color="textSubtle"
                   fontSize="12px"
-                  decimals={0}
+                  decimals={5}
                   value={getBalanceNumber(td?.paidPayable, td?.token?.decimals ?? 18)}
                 />
                 <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
