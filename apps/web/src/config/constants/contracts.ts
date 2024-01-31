@@ -553,11 +553,11 @@ export default {
     56: '0x',
   },
   willNote: {
-    4002: '0xf99ff978EaBaB6d07d24Fe0266C6302b8cb4cFa8',
+    4002: '0xB3DC3648B66C785663e1a195F64e25843A8E8F6E',
     56: '0x',
   },
   willFactory: {
-    4002: '0x48ce247047DFcE8459f28DF64E09F4D10c899098',
+    4002: '0x58DFB1Ac8B2D6dcE45B6a9606e5fdD45659dcf1b',
     56: '0x',
   },
   worldFactory: {
