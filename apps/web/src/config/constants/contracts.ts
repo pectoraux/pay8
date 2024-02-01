@@ -552,12 +552,12 @@ export default {
     4002: '0x4F9EdF8a6DcF24b0AB7DBCe59F2AAcE3B23e4e71',
     56: '0x',
   },
-  willNote: {
-    4002: '0xa7C49f70A52685C28F74A5E7b8eFd4944f714ec4',
+  willFactory: {
+    4002: '0xb4C110e0f4A2F126d5128cfb779eFC82de176571',
     56: '0x',
   },
-  willFactory: {
-    4002: '0x1F78C6A95d28AA4D42b1445a0A6e099644724712',
+  willNote: {
+    4002: '0xb92Ba734a4419Dc23056CFa5cC5468583B29D879',
     56: '0x',
   },
   worldFactory: {
