@@ -10,20 +10,23 @@ import {
   ArrowForwardIcon,
   HelpIcon,
   useTooltip,
+  useModal,
 } from '@pancakeswap/uikit'
-import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
-import { useTranslation } from '@pancakeswap/localization'
+import { format } from 'date-fns'
+import { useAppDispatch } from 'state'
+import { useRouter } from 'next/router'
 import { Token } from '@pancakeswap/sdk'
+import { getBlockExploreLink } from 'utils'
 import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { getBlockExploreLink } from 'utils'
+import { useTranslation } from '@pancakeswap/localization'
 import { useCurrBribe, useCurrPool } from 'state/wills/hooks'
-import { useAppDispatch } from 'state'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { useRouter } from 'next/router'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import { setCurrPoolData, setCurrBribeData } from 'state/wills'
-import { format } from 'date-fns'
+import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
+
+import WebPagesModal from './WebPagesModal'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>
@@ -57,6 +60,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   const contactChannels = pool?.collection?.contactChannels?.split(',') ?? []
   const contacts = pool?.collection?.contacts?.split(',') ?? []
   const dispatch = useAppDispatch()
+  const [onPresentNFTs] = useModal(<WebPagesModal height="500px" nfts={pool?.payableNotes} />)
 
   const TooltipComponent = () => (
     <Text>
@@ -184,6 +188,14 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <LinkExternal href={`/cancan/collections/${pool?.collection?.id}`} bold={false} small>
             {t('See Admin Channel')}
+          </LinkExternal>
+        </Flex>
+      ) : null}
+
+      {pool?.payableNotes?.length ? (
+        <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+          <LinkExternal style={{ cursor: 'pointer' }} onClick={onPresentNFTs} bold={false} small>
+            {t('View Notes')}
           </LinkExternal>
         </Flex>
       ) : null}

@@ -149,7 +149,7 @@ const CreateGaugeModal: React.FC<any> = ({
     tokenId: '',
     startPayable: '',
     creditFactor: '',
-    toAddress: '',
+    toAddress: account ?? '',
     amountPayable: '',
     periodPayable: '',
     bufferTime: '',

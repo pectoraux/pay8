@@ -3,7 +3,7 @@ import { GRAPH_API_WILLS } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
 import { getCollection } from 'state/cancan/helpers'
 import { publicClient } from 'utils/wagmi'
-import { erc20ABI } from 'wagmi'
+import { erc20ABI, erc721ABI } from 'wagmi'
 import { willABI } from 'config/abi/will'
 import { getWillNoteAddress } from 'utils/addressHelpers'
 import { willNoteABI } from 'config/abi/willNote'
@@ -417,14 +417,42 @@ export const fetchWill = async (willAddress, chainId) => {
         }
       }),
   )
+
+  const payableNotes = await Promise.all(
+    will?.notes?.map(async (note) => {
+      const [owner, metadatUrl] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: getWillNoteAddress(),
+            abi: erc721ABI,
+            functionName: 'ownerOf',
+            args: [BigInt(note?.id)],
+          },
+          {
+            address: getWillNoteAddress(),
+            abi: erc721ABI,
+            functionName: 'tokenURI',
+            args: [BigInt(note?.id)],
+          },
+        ],
+      })
+      return {
+        ...note,
+        metadataUrl: metadatUrl.result,
+        owner: owner.result,
+      }
+    }),
+  )
   // probably do some decimals math before returning info. Maybe get more info. I don't know what it returns.
   return {
     ...will,
     tokens,
     willAddress,
     accounts,
-    unlocked: unlocked.result,
     collection,
+    payableNotes,
+    unlocked: unlocked.result,
     updatePeriod: updatePeriod.toString(),
     activePeriod: activePeriod.toString(),
     minWithdrawableNow: new BigNumber(minWithdrawableNow.toString()).div(100).toJSON(),
