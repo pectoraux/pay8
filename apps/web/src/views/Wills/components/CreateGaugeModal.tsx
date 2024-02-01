@@ -724,15 +724,6 @@ const CreateGaugeModal: React.FC<any> = ({
           continueToNextStage={continueToNextStage}
         />
       )}
-
-      {stage === LockStage.UPDATE_TAX && (
-        <UpdateTaxContractStage
-          state={state}
-          handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
-          continueToNextStage={continueToNextStage}
-        />
-      )}
       {stage === LockStage.STOP_WITHDRAWAL_COUNTDOWN && (
         <StopWithdrawallCountdownStage
           state={state}
@@ -744,6 +735,7 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.TRANSFER_TO_NOTE_PAYABLE && (
         <UpdateTransferToNotePayableStage
           state={state}
+          notes={pool?.payableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />

@@ -1,7 +1,7 @@
 import _toNumber from 'lodash/toNumber'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, Balance } from '@pancakeswap/uikit'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -21,7 +21,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, notes, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -33,6 +33,23 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
 
   return (
     <>
+      {notes?.map((note) => {
+        return (
+          <GreyedOutContainer>
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={0}
+              value={note?.percentage}
+              unit=" %"
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Note #%val%', { val: note?.id })}
+            </Text>
+          </GreyedOutContainer>
+        )
+      })}
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Token ID')}
