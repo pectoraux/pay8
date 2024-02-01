@@ -1,19 +1,6 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  Input,
-  ErrorIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  useTooltip,
-  HelpIcon,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -25,7 +12,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -78,6 +65,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="token"
+          value={state.token}
+          placeholder={t('input token address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
             {t('Profile ID')}
@@ -96,14 +96,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Amount To Transfer')}
+          {t('Percentage')}
         </Text>
         <Input
           type="text"
           scale="sm"
-          name="amountPayable"
-          value={state.amountPayable}
-          placeholder={t('input amount to transfer')}
+          name="percentage"
+          value={state.percentage}
+          placeholder={t('input percentage to teansfer')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

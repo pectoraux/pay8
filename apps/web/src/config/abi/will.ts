@@ -359,7 +359,17 @@ export const willABI = [
       },
       {
         internalType: 'uint256',
-        name: 'amount',
+        name: '_profileId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'duePayable',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'payswapFees',
         type: 'uint256',
       },
     ],
@@ -793,11 +803,6 @@ export const willABI = [
       {
         internalType: 'uint256',
         name: '_position',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_value',
         type: 'uint256',
       },
       {

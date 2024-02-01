@@ -137,6 +137,7 @@ const CreateGaugeModal: React.FC<any> = ({
     extraMint: '',
     tokens: tokens?.toString() ?? `${currency?.address ?? ''}`,
     percentages: currAccount?.percentages?.toString() ?? '',
+    percentage: '',
     category: '',
     contractAddress: '',
     optionId: '',
@@ -221,7 +222,7 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.UPDATE_TAX)
         break
       case LockStage.TRANSFER_TO_NOTE_PAYABLE:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_TRANSFER_TO_NOTE_PAYABLE:
         setStage(LockStage.TRANSFER_TO_NOTE_PAYABLE)
@@ -518,8 +519,14 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_TRANSFER_TO_NOTE_PAYABLE) {
-        const amountPayable = getDecimalAmount(state.amountPayable ?? 0, currency?.decimals)
-        const args = [pool?.id, state.toAddress, state.profileId, state.position, amountPayable.toString()]
+        const args = [
+          pool?.id,
+          state.toAddress,
+          state.token,
+          state.profileId,
+          state.position,
+          parseInt(state.percentage) * 100,
+        ]
         console.log('CONFIRM_TRANSFER_TO_NOTE_PAYABLE===============>', args)
         return callWithGasPrice(willNoteContract, 'transferDueToNotePayable', args).catch((err) =>
           console.log('CONFIRM_TRANSFER_TO_NOTE_PAYABLE===============>', err),
@@ -610,8 +617,8 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" onClick={() => setStage(LockStage.PAY)}>
             {t('CLAIM INHERITANCE')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_TAX)}>
-            {t('UPDATE TAX CONTRACT')}
+          <Button mb="8px" onClick={() => setStage(LockStage.TRANSFER_TO_NOTE_PAYABLE)}>
+            {t('TRANSFER TO NOTE PAYABLE')}
           </Button>
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CLAIM_NOTE)}>
             {t('CLAIM NOTE')}
@@ -659,13 +666,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.STOP_WITHDRAWAL_COUNTDOWN)}>
             {t('STOP WITHDRAWAL COUNTDOWN')}
           </Button>
-          {location === 'fromStake' ? (
-            <>
-              <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
-                {t('DELETE HEIR')}
-              </Button>
-            </>
-          ) : null}
+          <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE_PROTOCOL)}>
+            {t('DELETE HEIR')}
+          </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.DELETE)}>
             {t('DELETE CONTRACT')}
           </Button>
@@ -742,7 +745,6 @@ const CreateGaugeModal: React.FC<any> = ({
         <UpdateTransferToNotePayableStage
           state={state}
           handleChange={handleChange}
-          handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
       )}

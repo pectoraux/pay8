@@ -274,14 +274,8 @@ export const willNoteABI = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'due',
+        name: 'percentage',
         type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'bool',
-        name: 'adminNote',
-        type: 'bool',
       },
     ],
     name: 'TransferDueToNote',
@@ -353,9 +347,9 @@ export const willNoteABI = [
       },
       {
         indexed: false,
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'UpdateMiscellaneous',
@@ -385,13 +379,13 @@ export const willNoteABI = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'minWithdrawableNow',
+        name: 'maxWithdrawableNow',
         type: 'uint256',
       },
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'minNFTWithdrawableNow',
+        name: 'maxNFTWithdrawableNow',
         type: 'uint256',
       },
       {
@@ -477,6 +471,10 @@ export const willNoteABI = [
     ],
     name: 'Withdraw',
     type: 'event',
+  },
+  {
+    stateMutability: 'payable',
+    type: 'fallback',
   },
   {
     inputs: [
@@ -567,19 +565,6 @@ export const willNoteABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'contractAddress',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -611,6 +596,19 @@ export const willNoteABI = [
       },
     ],
     name: 'emitAddBalance',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_profileId',
+        type: 'uint256',
+      },
+    ],
+    name: 'emitDeleteProtocol',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -702,9 +700,9 @@ export const willNoteABI = [
         type: 'address',
       },
       {
-        internalType: 'string[]',
+        internalType: 'string',
         name: 'paramValue5',
-        type: 'string[]',
+        type: 'string',
       },
     ],
     name: 'emitUpdateMiscellaneous',
@@ -726,12 +724,12 @@ export const willNoteABI = [
       },
       {
         internalType: 'uint256',
-        name: '_minWithdrawableNow',
+        name: '_maxWithdrawableNow',
         type: 'uint256',
       },
       {
         internalType: 'uint256',
-        name: '_minNFTWithdrawableNow',
+        name: '_maxNFTWithdrawableNow',
         type: 'uint256',
       },
       {
@@ -913,23 +911,18 @@ export const willNoteABI = [
     outputs: [
       {
         internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
         name: 'will',
         type: 'address',
       },
       {
-        internalType: 'bool',
-        name: 'isNFT',
-        type: 'bool',
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
       },
       {
-        internalType: 'uint256',
-        name: 'due',
-        type: 'uint256',
+        internalType: 'enum NFTYPE',
+        name: 'isNFT',
+        type: 'uint8',
       },
       {
         internalType: 'uint256',
@@ -939,11 +932,6 @@ export const willNoteABI = [
       {
         internalType: 'uint256',
         name: 'percentage',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'payswapFees',
         type: 'uint256',
       },
     ],
@@ -1098,19 +1086,6 @@ export const willNoteABI = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '_will',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddressAt',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'bytes4',
         name: 'interfaceId',
         type: 'bytes4',
@@ -1135,19 +1110,6 @@ export const willNoteABI = [
         internalType: 'string',
         name: '',
         type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'tokenId',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -1217,6 +1179,11 @@ export const willNoteABI = [
         type: 'address',
       },
       {
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: '_profileId',
         type: 'uint256',
@@ -1228,7 +1195,7 @@ export const willNoteABI = [
       },
       {
         internalType: 'uint256',
-        name: '_amount',
+        name: '_percentage',
         type: 'uint256',
       },
     ],
@@ -1371,6 +1338,11 @@ export const willNoteABI = [
         name: '_token',
         type: 'address',
       },
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
     ],
     name: 'withdrawFees',
     outputs: [
@@ -1380,7 +1352,7 @@ export const willNoteABI = [
         type: 'uint256',
       },
     ],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
 ] as const
