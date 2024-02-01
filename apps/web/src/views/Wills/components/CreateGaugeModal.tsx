@@ -19,6 +19,7 @@ import { convertTimeToSeconds } from 'utils/timeHelper'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -107,6 +108,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const { toastSuccess } = useToast()
   const router = useRouter()
   const stakingTokenContract = useERC20(currency?.address || currToken?.tokenAddress || '')
+  const defaultTokenContract = useERC20(DEFAULT_TFIAT)
   const willContract = useWILLContract(pool?.id || router.query.will || '')
   const willNoteContract = useWILLNote()
   console.log(
@@ -498,6 +500,12 @@ const CreateGaugeModal: React.FC<any> = ({
       if (stage === LockStage.CONFIRM_PAY) {
         const args = [state.profileId, state.position ?? '0']
         console.log('CONFIRM_PAY===============>', args)
+        if (parseInt(currToken?.tokenType)) {
+          return callWithGasPrice(defaultTokenContract, 'approve', [willNoteContract.address, MaxUint256])
+            .then(() => delay(3000))
+            .then(() => callWithGasPrice(willContract, 'payInvoicePayable', args))
+            .catch((err) => console.log('CONFIRM_PAY===============>', err))
+        }
         return callWithGasPrice(willContract, 'payInvoicePayable', args).catch((err) =>
           console.log('CONFIRM_PAY===============>', err),
         )
