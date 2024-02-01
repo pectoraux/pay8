@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useERC20 } from 'hooks/useContract'
+import { useGetIsAdmin } from 'state/wills/hooks'
 import { useApprovePool } from 'views/Wills/hooks/useApprove'
 
 import CreateGaugeModal from '../../CreateGaugeModal'
@@ -20,7 +21,9 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currToken }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const variant = pool?.collection?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
+  const isAdmin = useGetIsAdmin(pool?.id, account)
+  const variant = isAdmin ? 'admin' : 'user'
+  // const variant = pool?.collection?.owner?.toLowerCase() === account?.toLowerCase() || isAdmin ? 'admin' : 'user'
   const currencyId = useMemo(() => currToken?.tokenAddress, [currToken])
   const inputCurrency = useCurrency(currencyId)
   const [currency, setCurrency] = useState(inputCurrency) as any

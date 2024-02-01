@@ -48,11 +48,15 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   )
   const tokenAddress = earningToken?.address || ''
   const {
+    years: yearsUpdate,
+    months: monthsUpdate,
     days: daysUpdate,
     hours: hoursUpdate,
     minutes: minutesUpdate,
   } = getTimePeriods(Number(pool?.updatePeriod ?? '0'))
   const {
+    years: yearsWithdrawal,
+    months: monthsWithdrawal,
     days: daysWithdrawal,
     hours: hoursWithdrawal,
     minutes: minutesWithdrawal,
@@ -133,7 +137,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
       </Flex>
       <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="secondary" fontSize="14px">
-          {daysUpdate} {t('days')} {hoursUpdate} {t('hours')} {minutesUpdate} {t('minutes')}
+          {yearsUpdate} {t('years')} {monthsUpdate} {t('months')} {daysUpdate} {t('days')} {hoursUpdate} {t('hours')}{' '}
+          {minutesUpdate} {t('minutes')}
         </Text>
         <Flex ref={targetRef}>
           <Text color="primary" fontSize="14px">
@@ -155,7 +160,8 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
       </Flex>
       <Flex mb="2px" flexDirection="column" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="secondary" fontSize="14px">
-          {daysWithdrawal} {t('days')} {hoursWithdrawal} {t('hours')} {minutesWithdrawal} {t('minutes')}
+          {yearsWithdrawal} {t('years')} {monthsWithdrawal} {t('months')} {daysWithdrawal} {t('days')} {hoursWithdrawal}{' '}
+          {t('hours')} {minutesWithdrawal} {t('minutes')}
         </Text>
         <Flex ref={targetRef4}>
           <Text color="primary" fontSize="14px">

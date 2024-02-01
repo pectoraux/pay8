@@ -13,7 +13,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   filterSelector,
 } from './selectors'
-import { getTag } from './helpers'
+import { getIsAdmin, getTag } from './helpers'
 
 export const useGetTags = () => {
   const { data } = useSWR('wills-tags6', async () => getTag())
@@ -90,4 +90,12 @@ export const usePoolsWithFilterSelector = () => {
 
 export const useFilters = () => {
   return useSelector(filterSelector)
+}
+
+export const useGetIsAdmin = (willAddress, accountAddress) => {
+  const { chainId } = useActiveChainId()
+  const { data } = useSWR(['useGetIsAdmin', willAddress, accountAddress, chainId], async () =>
+    getIsAdmin(willAddress, accountAddress, chainId),
+  )
+  return data
 }

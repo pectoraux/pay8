@@ -529,3 +529,19 @@ export const fetchWills = async ({ fromWill, chainId }) => {
   )
   return wills
 }
+
+export const getIsAdmin = async (willAddress, accountAddress, chainId) => {
+  const bscClient = publicClient({ chainId })
+  const [isAdmin] = await bscClient.multicall({
+    allowFailure: true,
+    contracts: [
+      {
+        address: willAddress,
+        abi: willABI,
+        functionName: 'isAdmin',
+        args: [accountAddress],
+      },
+    ],
+  })
+  return isAdmin.result
+}
