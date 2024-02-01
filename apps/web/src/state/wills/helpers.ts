@@ -491,7 +491,7 @@ export const fetchWill = async (willAddress, chainId) => {
     willAddress,
     accounts,
     collection,
-    payableNotes,
+    payableNotes: payableNotes?.filter((note) => !!note?.metadataUrl),
     unlocked: unlocked.result,
     updatePeriod: updatePeriod.toString(),
     activePeriod: activePeriod.toString(),
