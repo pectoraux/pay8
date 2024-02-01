@@ -20,6 +20,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
+import { getWillNoteAddress } from 'utils/addressHelpers'
 
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -33,7 +34,6 @@ import UpdateOwnerStage from './UpdateOwnerStage'
 import RemoveBalanceStage from './RemoveBalanceStage'
 import UpdateNftApprovalStage from './UpdateNftApprovalStage'
 import UpdateActivePeriodStage from './UpdateActivePeriodStage'
-import UpdateTaxContractStage from './UpdateTaxContractStage'
 import StopWithdrawallCountdownStage from './StopWithdrawallCountdownStage'
 import UpdateTransferToNotePayableStage from './UpdateTransferToNotePayableStage'
 import UpdateProtocolStage from './UpdateProtocolStage'
@@ -177,7 +177,7 @@ const CreateGaugeModal: React.FC<any> = ({
     ve: pool?._ve,
     cosignEnabled: pool?.cosignEnabled,
     minCosigners: pool?.minCosigners || '',
-    token: currency?.address,
+    token: stakingTokenContract?.address ?? getWillNoteAddress(),
     isNative: 0,
     add: 0,
     contentType: '',
@@ -440,22 +440,21 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_REMOVE_BALANCE) {
         let { amountPayable } = state
-        if (state.nftype === 0) {
-          amountPayable = getDecimalAmount(amountPayable ?? 0, currency?.decimals)
+        if (state.nftype > 0) {
+          const args = [state.token, amountPayable.toString()]
+          console.log('CONFIRM_REMOVE_BALANCE===============>', args)
+          return callWithGasPrice(defaultTokenContract, 'approve', [willNoteContract.address, MaxUint256])
+            .then(() => delay(3000))
+            .then(() => callWithGasPrice(willContract, 'removeBalance', args))
+            .catch((err) => console.log('CONFIRM_REMOVE_BALANCE===============>', err))
         }
-        const args = [currency?.address, amountPayable.toString()]
+        amountPayable = getDecimalAmount(amountPayable ?? 0, currency?.decimals)
+        const args = [state.token, amountPayable.toString()]
         console.log('CONFIRM_REMOVE_BALANCE===============>', args)
         return callWithGasPrice(willContract, 'removeBalance', args).catch((err) =>
           console.log('CONFIRM_REMOVE_BALANCE===============>', err),
         )
       }
-      // if (stage === LockStage.CONFIRM_UPDATE_MEDIA) {
-      //   const args = [state.media]
-      //   console.log('CONFIRM_UPDATE_MEDIA===============>', args)
-      //   return callWithGasPrice(willContract, 'updateMedia', args).catch((err) =>
-      //     console.log('CONFIRM_UPDATE_MEDIA===============>', err),
-      //   )
-      // }
       if (stage === LockStage.CONFIRM_UPDATE_ACTIVE_PERIOD) {
         const args = [currency?.address]
         console.log('CONFIRM_UPDATE_ACTIVE_PERIOD===============>', args)
@@ -509,13 +508,6 @@ const CreateGaugeModal: React.FC<any> = ({
         }
         return callWithGasPrice(willContract, 'payInvoicePayable', args).catch((err) =>
           console.log('CONFIRM_PAY===============>', err),
-        )
-      }
-      if (stage === LockStage.CONFIRM_UPDATE_TAX) {
-        const args = [state.contractAddress]
-        console.log('CONFIRM_UPDATE_TAX===============>', args)
-        return callWithGasPrice(willContract, 'updateTaxContract', args).catch((err) =>
-          console.log('CONFIRM_UPDATE_TAX===============>', err),
         )
       }
       if (stage === LockStage.CONFIRM_TRANSFER_TO_NOTE_PAYABLE) {
@@ -580,8 +572,14 @@ const CreateGaugeModal: React.FC<any> = ({
         )
       }
       if (stage === LockStage.CONFIRM_CLAIM_NOTE) {
-        console.log('CONFIRM_CLAIM_NOTE===============>', [state.tokenId])
-        return callWithGasPrice(willNoteContract, 'claimPendingRevenueFromNote', [state.tokenId]).catch((err) =>
+        const args = [state.tokenId]
+        console.log('CONFIRM_CLAIM_NOTE===============>', args)
+        if (state.nftype) {
+          return callWithGasPrice(defaultTokenContract, 'approve', [willNoteContract.address, MaxUint256])
+            .then(() => delay(3000))
+            .then(() => callWithGasPrice(willContract, 'claimPendingRevenueFromNote', args))
+        }
+        return callWithGasPrice(willNoteContract, 'claimPendingRevenueFromNote', args).catch((err) =>
           console.log('CONFIRM_CLAIM_NOTE===============>', err),
         )
       }
@@ -778,6 +776,7 @@ const CreateGaugeModal: React.FC<any> = ({
           state={state}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
+          handleRawValueChange={handleRawValueChange}
           notes={pool?.payableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())}
         />
       )}

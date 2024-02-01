@@ -1,7 +1,18 @@
 import _toNumber from 'lodash/toNumber'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, Balance } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Grid,
+  Box,
+  Text,
+  Button,
+  Input,
+  ErrorIcon,
+  Balance,
+  ButtonMenu,
+  ButtonMenuItem,
+} from '@pancakeswap/uikit'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -21,7 +32,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, notes, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, notes, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -73,6 +84,29 @@ const SetPriceStage: React.FC<any> = ({ state, notes, handleChange, continueToNe
           placeholder={t('input the id of the note')}
           onChange={handleChange}
         />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token Address')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="token"
+          value={state.token}
+          placeholder={t('input the token address')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
+          {t('Input the type of the token to claim')}
+        </Text>
+        <ButtonMenu scale="xs" variant="subtle" activeIndex={state.nftype} onItemClick={handleRawValueChange('nftype')}>
+          <ButtonMenuItem>{t('Not NFT')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('ERC721')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('ERC1155')}</ButtonMenuItem>
+        </ButtonMenu>
       </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
