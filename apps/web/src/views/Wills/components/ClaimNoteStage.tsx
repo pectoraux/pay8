@@ -35,19 +35,30 @@ const SetPriceStage: React.FC<any> = ({ state, notes, handleChange, continueToNe
     <>
       {notes?.map((note) => {
         return (
-          <GreyedOutContainer>
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
-              decimals={0}
-              value={note?.percentage}
-              unit=" %"
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Note #%val%', { val: note?.id })}
-            </Text>
-          </GreyedOutContainer>
+          <Flex flexDirection="row" alignItems="center" justifyContent="center">
+            <GreyedOutContainer>
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {note?.name}, {note?.symbol}
+              </Text>
+              <br />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Name, Symbol')}
+              </Text>
+            </GreyedOutContainer>
+            <GreyedOutContainer>
+              <Balance
+                lineHeight="1"
+                color="textSubtle"
+                fontSize="12px"
+                decimals={0}
+                value={note?.percentage}
+                unit=" %"
+              />
+              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+                {t('Note #%val%', { val: note?.id })}
+              </Text>
+            </GreyedOutContainer>
+          </Flex>
         )
       })}
       <GreyedOutContainer>

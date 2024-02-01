@@ -735,7 +735,6 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.TRANSFER_TO_NOTE_PAYABLE && (
         <UpdateTransferToNotePayableStage
           state={state}
-          notes={pool?.payableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
         />
@@ -775,7 +774,12 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.CLAIM_NOTE && (
-        <ClaimNoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <ClaimNoteStage
+          state={state}
+          handleChange={handleChange}
+          continueToNextStage={continueToNextStage}
+          notes={pool?.payableNotes?.filter((note) => note?.owner?.toLowerCase() === account?.toLowerCase())}
+        />
       )}
       {stage === LockStage.CREATE_LOCK && (
         <PresentBribeModal

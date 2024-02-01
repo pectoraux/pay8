@@ -435,7 +435,7 @@ export const fetchWill = async (willAddress, chainId) => {
 
   const payableNotes = await Promise.all(
     will?.notes?.map(async (note) => {
-      const [owner, metadatUrl] = await bscClient.multicall({
+      const [owner, metadatUrl, _note] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
           {
@@ -450,12 +450,37 @@ export const fetchWill = async (willAddress, chainId) => {
             functionName: 'tokenURI',
             args: [BigInt(note?.id)],
           },
+          {
+            address: getWillNoteAddress(),
+            abi: willNoteABI,
+            functionName: 'notes',
+            args: [BigInt(note?.id)],
+          },
+        ],
+      })
+      const [name, symbol] = await bscClient.multicall({
+        allowFailure: true,
+        contracts: [
+          {
+            address: _note.result[1],
+            abi: erc721ABI,
+            functionName: 'name',
+          },
+          {
+            address: _note.result[1],
+            abi: erc721ABI,
+            functionName: 'symbol',
+          },
         ],
       })
       return {
         ...note,
+        name: name.result?.toString(),
+        symbol: symbol.result?.toString(),
+        tokenAddress: _note.result[1],
         metadataUrl: metadatUrl.result,
         owner: owner.result,
+        percentage: parseInt(note?.percentage?.toString() ?? '0') / 100,
       }
     }),
   )
