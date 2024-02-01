@@ -273,7 +273,22 @@ export const fetchWill = async (willAddress, chainId) => {
             return tk.result
           }),
         )
-        const percentages = protocol?.percentages?.map((percentage) => parseInt(percentage) / 100)
+        const percentages = await Promise.all(
+          protocol?.percentages?.map(async (perct, idx) => {
+            const [percentage] = await bscClient.multicall({
+              allowFailure: true,
+              contracts: [
+                {
+                  address: willAddress,
+                  abi: willABI,
+                  functionName: 'percentages',
+                  args: [BigInt(protocolId), idx],
+                },
+              ],
+            })
+            return parseInt(percentage.result?.toString() ?? '0') / 100
+          }),
+        )
         const tokenData = await Promise.all(
           _tokens?.map(async (token, index) => {
             let totalLiquidity
