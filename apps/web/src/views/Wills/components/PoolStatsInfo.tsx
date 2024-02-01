@@ -19,6 +19,7 @@ import { Token } from '@pancakeswap/sdk'
 import { getBlockExploreLink } from 'utils'
 import { memo, useMemo, useState } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { getWillNoteAddress } from 'utils/addressHelpers'
 import { useTranslation } from '@pancakeswap/localization'
 import { useCurrBribe, useCurrPool } from 'state/wills/hooks'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
@@ -190,6 +191,11 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
           </ScanLink>
         </Flex>
       )}
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <ScanLink href={getBlockExploreLink(getWillNoteAddress(), 'address', chainId)} bold={false} small>
+          {t('View Will Note Contract')}
+        </ScanLink>
+      </Flex>
       {pool?.collection ? (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <LinkExternal href={`/cancan/collections/${pool?.collection?.id}`} bold={false} small>
