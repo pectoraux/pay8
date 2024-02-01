@@ -177,7 +177,7 @@ const CreateGaugeModal: React.FC<any> = ({
     ve: pool?._ve,
     cosignEnabled: pool?.cosignEnabled,
     minCosigners: pool?.minCosigners || '',
-    token: stakingTokenContract?.address ?? getWillNoteAddress(),
+    token: currency?.address ?? getWillNoteAddress(),
     isNative: 0,
     add: 0,
     contentType: '',

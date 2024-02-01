@@ -38,7 +38,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           onChange={handleChange}
         />
       </GreyedOutContainer>
-
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="token"
+          value={state.token}
+          placeholder={t('input token to remove')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
           {t('Selected Token Type')}
