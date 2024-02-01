@@ -20,12 +20,12 @@ interface StackedActionProps {
 const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currToken }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  console.log('currToken==================>', currToken)
   const variant = pool?.collection?.owner?.toLowerCase() === account?.toLowerCase() ? 'admin' : 'user'
   const currencyId = useMemo(() => currToken?.tokenAddress, [currToken])
   const inputCurrency = useCurrency(currencyId)
   const [currency, setCurrency] = useState(inputCurrency) as any
   const stakingTokenContract = useERC20(currency?.address || '')
+  console.log('currToken==================>', currToken, stakingTokenContract)
 
   useEffect(() => setCurrency(inputCurrency), [currencyId, inputCurrency])
 
@@ -85,7 +85,7 @@ const Staked: React.FunctionComponent<any> = ({ pool, currAccount, currToken }) 
         >
           {t('Transaction History')}
         </Button> */}
-        <Button width="100%" onClick={handleApprove} variant="secondary">
+        <Button width="100%" disabled={!stakingTokenContract} onClick={handleApprove} variant="secondary">
           {t('Increase Allowance')}
         </Button>
       </ActionContent>

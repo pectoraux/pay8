@@ -124,6 +124,7 @@ const CreateGaugeModal: React.FC<any> = ({
     ? getDecimalAmount(new BigNumber(balance.toExact()), currency?.decimals)
     : BIG_ZERO
   const tokens = currAccount?.tokenData?.map((dat) => dat?.token?.address)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   // console.log("router===================>", router)
   // const { state: status, userAccount, session_id, userCurrency, amount } = router.query
   const [state, setState] = useState<any>(() => ({
@@ -425,6 +426,7 @@ const CreateGaugeModal: React.FC<any> = ({
         const args2 = [state.token, state.owner, amountReceivable.toString(), state.nftype]
         if (state.nftype > 0) {
           return callWithGasPrice(tokenContract, 'setApprovalForAll', [willContract.address, true])
+            .then(() => delay(3000))
             .then(() => callWithGasPrice(willContract, 'addBalance', args2))
             .catch((err) => console.log('CONFIRM_ADD_BALANCE===============>', err))
         }
@@ -482,7 +484,6 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_UPDATE_NFT_APPROVAL) {
         const args = [willContract.address, true]
-        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
         console.log('CONFIRM_UPDATE_NFT_APPROVAL===============>', args)
         return delay(3000)
           .then(() => callWithGasPrice(tokenContract, 'setApprovalForAll', args))

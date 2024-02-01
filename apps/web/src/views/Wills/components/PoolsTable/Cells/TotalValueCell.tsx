@@ -13,7 +13,7 @@ const StyledCell = styled(Pool.BaseCell)`
   flex: 2 0 100px;
 `
 
-const TotalValueCell: React.FC<any> = ({ labelText, amount, decimals, symbol }) => {
+const TotalValueCell: React.FC<any> = ({ labelText, amount, decimals, symbol, prefix = false }) => {
   return (
     <StyledCell role="cell">
       <Pool.CellContent>
@@ -21,7 +21,13 @@ const TotalValueCell: React.FC<any> = ({ labelText, amount, decimals, symbol }) 
           {labelText}
         </Text>
         <Flex height="20px" alignItems="center">
-          <Balance fontSize="16px" value={amount} decimals={decimals} unit={` ${symbol}`} />
+          <Balance
+            fontSize="16px"
+            value={amount}
+            decimals={decimals}
+            unit={` ${prefix ? '' : symbol}`}
+            prefix={` ${prefix ? `${symbol} #` : ''}`}
+          />
         </Flex>
       </Pool.CellContent>
     </StyledCell>

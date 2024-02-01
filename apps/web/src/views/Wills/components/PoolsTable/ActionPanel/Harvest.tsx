@@ -82,21 +82,23 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
           {currToken?.id ? (
             <>
-              <CopyAddress title={t('Curr Token Address')} account={account} />
+              <CopyAddress title={t('Curr Token Address')} account={currToken?.tokenAddress} />
               <Box mr="8px" height="32px">
                 <Balance
                   lineHeight="1"
                   color="textSubtle"
                   fontSize="12px"
-                  decimals={5}
+                  decimals={parseInt(currToken?.tokenType) ? 0 : 5}
                   value={
                     currToken?.isNative
                       ? nativeBalance
+                      : parseInt(currToken?.tokenType)
+                      ? currToken?.value
                       : getBalanceNumber(currToken?.totalLiquidity, currToken.decimals ?? 18)
                   }
                 />
                 <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                  {t('Total Liquidity')}
+                  {parseInt(currToken?.tokenType) ? t('Token ID') : t('Total Liquidity')}
                 </Text>
               </Box>
               <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
@@ -200,8 +202,12 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
                     lineHeight="1"
                     color="textSubtle"
                     fontSize="12px"
-                    decimals={5}
-                    value={getBalanceNumber(td?.paidPayable, td?.token?.decimals ?? 18)}
+                    decimals={parseInt(td?.tokenType) ? 0 : 5}
+                    value={
+                      parseInt(td?.tokenType)
+                        ? td?.paidPayable
+                        : getBalanceNumber(td?.paidPayable, td?.token?.decimals ?? 18)
+                    }
                   />
                   <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                     {t('Paid Payable')}

@@ -49,8 +49,9 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
             ? nativeBalance
             : getBalanceNumber(currToken?.totalLiquidity ?? '0', currToken?.decimals ?? 18)
         }
-        decimals={3}
+        decimals={parseInt(currToken?.tokenType) ? 0 : 3}
         symbol={currToken?.symbol ?? ''}
+        prefix={parseInt(currToken?.tokenType)}
       />
       <TotalValueCell
         labelText={t('Max. NFT Wthdrawable')}

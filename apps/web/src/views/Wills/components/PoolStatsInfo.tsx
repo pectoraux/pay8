@@ -247,7 +247,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
                 scale="sm"
                 variant={currState2[pool?.id] === balance.id ? 'subtle' : 'tertiary'}
               >
-                {balance.symbol}
+                {balance.symbol} {parseInt(balance?.tokenType) ? `#${balance?.value}` : ''}
               </Button>
             ))
           : null}

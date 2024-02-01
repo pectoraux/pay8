@@ -154,7 +154,8 @@ export const fetchWill = async (willAddress, chainId) => {
           totalLiquidity: token?.value, // totalLiquidity.result?.toString(),
         }
       }
-      const [name, symbol, decimals, totalLiquidity] = await bscClient.multicall({
+      let decimals = '18'
+      const [name, symbol, totalLiquidity] = await bscClient.multicall({
         allowFailure: true,
         contracts: [
           {
@@ -170,21 +171,31 @@ export const fetchWill = async (willAddress, chainId) => {
           {
             address: token.tokenAddress,
             abi: erc20ABI,
-            functionName: 'decimals',
-          },
-          {
-            address: token.tokenAddress,
-            abi: erc20ABI,
             functionName: 'balanceOf',
             args: [willAddress],
           },
         ],
       })
+      try {
+        const [_decimals] = await bscClient.multicall({
+          allowFailure: true,
+          contracts: [
+            {
+              address: token.tokenAddress,
+              abi: erc20ABI,
+              functionName: 'decimals',
+            },
+          ],
+        })
+        decimals = _decimals.result?.toString()
+      } catch (e) {
+        console.log('1e=================++>', e)
+      }
       return {
         ...token,
         position: index,
         name: name.result,
-        decimals: decimals.result,
+        decimals: parseInt(decimals),
         symbol: symbol.result?.toString()?.toUpperCase(),
         totalLiquidity: totalLiquidity.result?.toString(),
       }
@@ -267,7 +278,7 @@ export const fetchWill = async (willAddress, chainId) => {
           _tokens?.map(async (token, index) => {
             let totalLiquidity
             let tokenName
-            let decimals
+            let decimals = '18'
             let symbol
             try {
               if (token?.toLowerCase() !== getWillNoteAddress()?.toLowerCase()) {
@@ -305,12 +316,27 @@ export const fetchWill = async (willAddress, chainId) => {
                 const __token = Native.onChain(chainId)
 
                 symbol = __token?.symbol
-                decimals = __token?.decimals
+                decimals = __token?.decimals?.toString()
                 tokenName = __token?.name
                 // totalLiquidity = _totalLiquidity
               }
             } catch (e) {
-              console.log('e=====================>', e)
+              // console.log('e=====================>', e)
+            }
+            try {
+              const [_decimals] = await bscClient.multicall({
+                allowFailure: true,
+                contracts: [
+                  {
+                    address: token.tokenAddress,
+                    abi: erc20ABI,
+                    functionName: 'decimals',
+                  },
+                ],
+              })
+              decimals = _decimals.result?.toString()
+            } catch (e) {
+              // console.log("1e=================++>", e)
             }
             const [willActivePeriod, balanceOf, totalRemoved, tokenType, totalProcessed, paidPayable] =
               await bscClient.multicall({
@@ -366,7 +392,7 @@ export const fetchWill = async (willAddress, chainId) => {
               token: new Token(
                 chainId,
                 token,
-                parseInt(decimals),
+                parseInt(decimals ?? '18'),
                 symbol,
                 tokenName,
                 `https://tokens.payswap.org/images/${token}.png`,
