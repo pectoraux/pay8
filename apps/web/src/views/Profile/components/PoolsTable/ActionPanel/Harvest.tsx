@@ -177,20 +177,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               {t('Accounts')}
             </Text>
           </Box>
-          <Box mr="8px" mt="8px" height="32px">
-            <Flex flexDirection="column">
-              <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('SSID')}
-              </Text>
-              {!pool?.ssid?.length ? (
-                <Text fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                  N/A
-                </Text>
-              ) : (
-                <CopyAddress title={truncateHash(pool?.ssid)} account={pool?.ssid} />
-              )}
-            </Flex>
-          </Box>
         </Flex>
       </ActionContent>
     </ActionContainer>

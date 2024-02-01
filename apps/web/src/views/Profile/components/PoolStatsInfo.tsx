@@ -5,7 +5,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
 import { memo } from 'react'
 import { useDispatch } from 'react-redux'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import { setCurrPoolData } from 'state/profile'
 import { useCurrPool, useGetIsUnique, useGetSharedEmail } from 'state/profile/hooks'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
@@ -76,6 +77,12 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, currAccount, alignLinksTo
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
         <Text color="primary" fontSize="14px">
           {t('Shared Email')} {`->`} {sharedEmail ? t('Yes') : t('No')}
+        </Text>
+      </Flex>
+      <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
+        <Text color="primary" fontSize="14px">
+          {t('SSID')} {`->`}{' '}
+          {pool?.ssid?.length ? <CopyAddress title={truncateHash(pool?.ssid)} account={pool?.ssid} /> : 'N/A'}
         </Text>
       </Flex>
       {account && currAccount?.tokenAddress && (
