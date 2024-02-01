@@ -36,6 +36,7 @@ import RemoveAccountStage from './RemoveAccountStage'
 import CreateProfileStage from './CreateProfileStage'
 import CrushCheckStage from './CrushCheckStage'
 import UpdateSSIDStage from './UpdateSSIDStage'
+import UpdateTimeContraintStage from './UpdateTimeContraintStage'
 import CrushUpdateStage from './CrushUpdateStage'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
@@ -61,6 +62,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CLAIM_REVENUE]: t('Withdraw Liquidity'),
   [LockStage.REMOVE_ACCOUNT]: t('Remove Account'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
+  [LockStage.UPDATE_TIME_CONSTRAINT]: t('Update Time Constraints'),
   [LockStage.ADD_ACCOUNT_FROM_SSI]: t('Add Account From SSID'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
   [LockStage.CONFIRM_PAY]: t('Back'),
@@ -135,6 +137,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
   const profileContract = useProfileContract()
   const profileHelperContract = useProfileHelperContract()
   const tokenContract = useERC20(currency?.address || '')
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   const [state, setState] = useState(() => ({
     profileId: pool?.id ?? '',
@@ -186,6 +189,12 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         break
       case LockStage.CONFIRM_UPDATE_LOCATION:
         setStage(LockStage.UPDATE_LOCATION)
+        break
+      case LockStage.UPDATE_TIME_CONSTRAINT:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT:
+        setStage(LockStage.UPDATE_TIME_CONSTRAINT)
         break
       case LockStage.CONFIRM_CREATE:
         setStage(LockStage.CREATE)
@@ -252,9 +261,6 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         break
       case LockStage.CONFIRM_CRUSH_CHECK:
         setStage(LockStage.CRUSH_CHECK)
-        break
-      case LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT:
-        setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI:
         setStage(LockStage.ADD_ACCOUNT_FROM_SSI)
@@ -346,6 +352,9 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         break
       case LockStage.CRUSH_CHECK:
         setStage(LockStage.CONFIRM_CRUSH_CHECK)
+        break
+      case LockStage.UPDATE_TIME_CONSTRAINT:
+        setStage(LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT)
         break
       case LockStage.BROADCAST:
         setStage(LockStage.CONFIRM_BROADCAST)
@@ -489,7 +498,6 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       }
       if (stage === LockStage.CONFIRM_UPDATE_SSID) {
         console.log('CONFIRM_UPDATE_SSID=======================>', [state.profileId, state.identityTokenId])
-        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
         return callWithGasPrice(getSSIContract(), 'updateSSID', [state.profileId, state.identityTokenId])
           .then(() => delay(3000))
           .then(() => callWithGasPrice(profileContract, 'updateSSID', []))
@@ -521,9 +529,10 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       }
       if (stage === LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT) {
         console.log('CONFIRM_UPDATE_TIME_CONSTRAINT===============>')
-        return callWithGasPrice(profileContract, 'updateTimeConstraint', []).catch((err) =>
-          console.log('CONFIRM_UPDATE_TIME_CONSTRAINT===============>', err),
-        )
+        return callWithGasPrice(getSSIContract(), 'updateSSID', [state.profileId, state.identityTokenId])
+          .then(() => delay(3000))
+          .then(() => callWithGasPrice(profileContract, 'updateTimeConstraint', []))
+          .catch((err) => console.log('CONFIRM_UPDATE_TIME_CONSTRAINT===============>', err))
       }
       if (stage === LockStage.CONFIRM_ADD_ACCOUNT_FROM_SSI) {
         console.log('CONFIRM_ADD_ACCOUNT_FROM_SSI===============>')
@@ -635,7 +644,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
           <Button variant="tertiary" mb="8px" onClick={() => setStage(LockStage.CLAIM_REVENUE)}>
             {t('WITHDRAW LIQUIDITY')}
           </Button>
-          <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT)}>
+          <Button mb="8px" variant="danger" onClick={() => setStage(LockStage.UPDATE_TIME_CONSTRAINT)}>
             {t('UPDATE TIME CONSTRAINT')}
           </Button>
           <Button variant="danger" mb="8px" onClick={() => setStage(LockStage.REMOVE_ACCOUNT)}>
@@ -648,6 +657,10 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
       )}
       {stage === LockStage.UPDATE_SSID && (
         <UpdateSSIDStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+
+      {stage === LockStage.UPDATE_TIME_CONSTRAINT && (
+        <UpdateTimeContraintStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_LOCATION && (
         <LocationStage

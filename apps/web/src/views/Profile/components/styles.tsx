@@ -54,6 +54,8 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.UPDATE_TIME_CONSTRAINT,
+  LockStage.CONFIRM_UPDATE_TIME_CONSTRAINT,
   LockStage.CRUSH_UPDATE,
   LockStage.CONFIRM_CRUSH_UPDATE,
   LockStage.UPDATE_SSID,
