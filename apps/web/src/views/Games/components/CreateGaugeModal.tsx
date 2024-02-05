@@ -624,7 +624,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       if (stage === LockStage.CONFIRM_UPDATE_DESTINATION) {
         const args = [state.tokenId, state.destination]
         console.log('CONFIRM_UPDATE_DESTINATION===============>', args)
-        return callWithGasPrice(gameHelperContract, 'updateDestination', args).catch((err) =>
+        return callWithGasPrice(gameHelper2Contract, 'updateDestination', args).catch((err) =>
           console.log('CONFIRM_UPDATE_DESTINATION===============>', err),
         )
       }
