@@ -302,11 +302,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           {tooltipVisible7 && tooltip7}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
-        <DatePicker
-          onChange={handleRawValueChange('endReceivable')}
-          selected={state.startReceivable}
-          placeholderText="YYYY/MM/DD"
-        />
+        <DatePicker onChange={handleRawValueChange('endDate')} selected={state.endDate} placeholderText="YYYY/MM/DD" />
         <DatePickerPortal />
       </GreyedOutContainer>
       <GreyedOutContainer>

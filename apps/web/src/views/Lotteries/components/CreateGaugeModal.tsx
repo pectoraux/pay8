@@ -118,6 +118,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     endTime: '',
     rewardsBreakdown: '',
     useNFTicket: 0,
+    isNFT: 0,
     collectionId: '',
     checker: '',
     toAddress: '',
@@ -340,6 +341,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         const endAmount = getDecimalAmount(state.endAmount ?? 0, currency?.decimals)
         const amountReceivable = getDecimalAmount(state.amountReceivable ?? 0, currency?.decimals)
         const timeReceivable = combineDateAndTime(state.startReceivable, state.startTime)?.toString()
+        const timeReceivable2 = combineDateAndTime(state.endDate, state.endTime)?.toString()
         const startReceivable = Math.max(
           differenceInSeconds(new Date(timeReceivable ? parseInt(timeReceivable) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
@@ -348,7 +350,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
         console.log('startReceivable===================>', startReceivable)
         const endReceivable = Math.max(
-          differenceInSeconds(new Date(timeReceivable ? parseInt(timeReceivable) * 1000 : 0), new Date(), {
+          differenceInSeconds(new Date(timeReceivable2 ? parseInt(timeReceivable2) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
           }),
           0,
@@ -368,7 +370,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
             amountReceivable.toString(),
             parseInt(state.discountDivisor ?? '0') * 100,
           ],
-          state.rewardsBreakdown?.split(',').map((rwb) => parseInt(rwb) * 100),
+          state.rewardsBreakdown?.split(',')?.map((val) => parseFloat(val.trim()) * 100),
         ]
         console.log('CONFIRM_START_LOTTERY===============>', lotteryHelperContract, args)
         return callWithGasPrice(lotteryHelperContract, 'startLottery', args).catch((err) =>
