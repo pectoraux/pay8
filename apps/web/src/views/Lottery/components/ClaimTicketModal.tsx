@@ -30,10 +30,6 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currentTokenId, cur
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
   const { toastSuccess, toastError } = useToast()
-  const [state, setState] = useState<any>(() => ({
-    tickets: users?.map((user) => user.id)?.join(','),
-    brackets: '0,1,2,3,4,5',
-  }))
 
   const { lotteryData } = useLottery()
   const prizeAddress = useMemo(
@@ -43,6 +39,12 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currentTokenId, cur
         : lotteryData?.nftPrizes[0]?.tokenAddress,
     [lotteryData, currentTokenId],
   )
+
+  const [state, setState] = useState<any>(() => ({
+    tickets: users?.map((user) => user.id)?.join(','),
+    brackets: '0,1,2,3,4,5',
+    prizeAddress: parseInt(lotteryData?.isNFT) ? prizeAddress : currTokenData?.token?.address,
+  }))
 
   const updateValue = (key: any, value: string | number | boolean | Date) => {
     setState((prevState) => ({
@@ -59,12 +61,7 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currentTokenId, cur
     setPendingFb(true)
     // eslint-disable-next-line consistent-return
     const receipt = await fetchWithCatchTxError(async () => {
-      const args = [
-        parseInt(lotteryData?.isNFT) ? prizeAddress : currTokenData?.token?.address,
-        lotteryId,
-        state.tickets?.split(','),
-        state.brackets?.split(','),
-      ]
+      const args = [state.prizeAddress, lotteryId, state.tickets?.split(','), state.brackets?.split(',')]
       console.log('Confirm_claim_ticket================>', args)
       return callWithGasPrice(lotteryContract, 'claimTickets', args).catch((err) => {
         console.log('Confirm_claim_ticket================>', err)
@@ -89,12 +86,10 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currentTokenId, cur
   }, [
     fetchWithCatchTxError,
     onDismiss,
-    lotteryData?.isNFT,
-    prizeAddress,
-    currTokenData?.token?.address,
-    lotteryId,
+    state.prizeAddress,
     state.tickets,
     state.brackets,
+    lotteryId,
     callWithGasPrice,
     lotteryContract,
     toastError,
@@ -122,6 +117,19 @@ const ClaimTicketModal: React.FC<any> = ({ lotteryId, users, currentTokenId, cur
           name="tickets"
           value={state.tickets}
           placeholder={t('comma separated ids')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Token To Claim')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="prizeAddress"
+          value={state.prizeAddress}
+          placeholder={t('input address of token to claim')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

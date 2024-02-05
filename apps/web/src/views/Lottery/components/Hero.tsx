@@ -288,7 +288,7 @@ const Hero = ({ lottery, currentTokenId }) => {
   const getHeroHeading = () => {
     // if (lottery?.status === LotteryStatus.OPEN) {
     return lottery.isNFT ? (
-      <Box pt="56px" mb="52px">
+      <>
         <StyledSwiper>
           <Swiper
             onSwiper={setSwiperRef}
@@ -304,16 +304,17 @@ const Hero = ({ lottery, currentTokenId }) => {
           </Swiper>
         </StyledSwiper>
         <Flex justifyContent="center" alignItems="center">
-          <Heading mb="32px" scale="lg" color="#ffffff">
-            {t('Your prize!')}
-          </Heading>
           {lottery?.status !== LotteryStatus.OPEN ? (
             <Heading mb="24px" scale="xl" color="#ffffff">
               {t('Tickets on sale soon')}
             </Heading>
-          ) : null}
+          ) : (
+            <Heading mb="32px" scale="lg" color="#ffffff">
+              {t('Your prize!')}
+            </Heading>
+          )}
         </Flex>
-      </Box>
+      </>
     ) : (
       <>
         <PrizeTotalBalance

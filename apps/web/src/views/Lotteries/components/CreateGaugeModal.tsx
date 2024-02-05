@@ -347,7 +347,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           0,
         )
         console.log('startReceivable===================>', startReceivable)
-        const time2Receivable = combineDateAndTime(state.endReceivable, state.endTime)?.toString()
         const endReceivable = Math.max(
           differenceInSeconds(new Date(timeReceivable ? parseInt(timeReceivable) * 1000 : 0), new Date(), {
             roundingMethod: 'ceil',
@@ -356,12 +355,13 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
         const args = [
           account,
-          state.valuepool,
+          state.valuepool || ADDRESS_ZERO,
           startReceivable.toString(),
           endReceivable.toString(),
           endAmount.toString(),
-          parseInt(state.lockDuration) * 60,
+          parseInt(state.lockDuration ?? 0) * 60,
           !!state.useNFTicket,
+          state.isNFT,
           [
             parseInt(state.treasuryFee ?? '0') * 100,
             parseInt(state.referrerFee ?? '0') * 100,
