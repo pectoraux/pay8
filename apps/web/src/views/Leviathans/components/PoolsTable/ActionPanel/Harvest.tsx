@@ -1,6 +1,6 @@
-import { Text, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
 import RichTextEditor from 'components/RichText'
+import { useTranslation } from '@pancakeswap/localization'
+import { Text, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionContent } from './styles'
 

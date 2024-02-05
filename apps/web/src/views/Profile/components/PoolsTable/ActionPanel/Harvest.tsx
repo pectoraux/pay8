@@ -7,7 +7,6 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useGetIsUnique } from 'state/profile/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
-import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
@@ -124,7 +123,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals}
+              decimals={5}
               value={getBalanceNumber(new BigNumber(pool?.paidPayable), currAccount?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">

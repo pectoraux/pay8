@@ -1,11 +1,11 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { format } from 'date-fns'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { format } from 'date-fns'
 
 const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
   const { t } = useTranslation()
@@ -47,7 +47,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token.decimals}
+              decimals={5}
               value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -59,7 +59,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token.decimals}
+              decimals={5}
               value={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -85,7 +85,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
             {t('Option ID')}
           </Text>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {currAccount?.ratings?.length ? currAccount?.ratings.map((r) => r + ', ') : 'N/A'}
+            {currAccount?.ratings?.length ? currAccount?.ratings.map((r) => `${r}, `) : 'N/A'}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Ratings')}

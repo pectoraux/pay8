@@ -1,10 +1,10 @@
-import { Text, Flex, useMatchBreakpoints, LinkExternal, Box, Balance } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import RichTextEditor from 'components/RichText'
-import { useCurrPool, useGetWithdrawable } from 'state/valuepools/hooks'
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
+import RichTextEditor from 'components/RichText'
+import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useCurrPool, useGetWithdrawable } from 'state/valuepools/hooks'
+import { Text, Flex, useMatchBreakpoints, LinkExternal, Box, Balance } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionContent } from './styles'
 
@@ -32,7 +32,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool }) => {
           lineHeight="1"
           color="textSubtle"
           fontSize="12px"
-          decimals={pool?.vaDecimals ?? 18}
+          decimals={5}
           value={getBalanceNumber(new BigNumber(data?.amountWithdrawable?.toString()), pool?.vaDecimals)}
         />
         <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">

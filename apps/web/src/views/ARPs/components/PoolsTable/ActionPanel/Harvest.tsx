@@ -74,7 +74,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -86,7 +86,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.paidPayable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -98,7 +98,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={pool?.percentages ? 0 : currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={
                 pool?.percentages
                   ? parseInt(currAccount?.amountReceivable ?? '0') / 100
@@ -115,7 +115,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={pool?.percentages ? 0 : currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={
                 pool?.percentages
                   ? parseInt(currAccount?.amountPayable ?? '0') / 100
@@ -132,7 +132,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.totalLiquidity, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -164,7 +164,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.amountDueReceivable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -176,7 +176,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.amountDuePayable, currAccount?.token?.decimals)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">

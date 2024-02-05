@@ -88,7 +88,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
                   lineHeight="1"
                   color="textSubtle"
                   fontSize="12px"
-                  decimals={parseInt(currToken?.tokenType) ? 0 : 5}
+                  decimals={5}
                   value={
                     currToken?.isNative
                       ? nativeBalance
@@ -202,7 +202,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
                     lineHeight="1"
                     color="textSubtle"
                     fontSize="12px"
-                    decimals={parseInt(td?.tokenType) ? 0 : 5}
+                    decimals={5}
                     value={
                       parseInt(td?.tokenType)
                         ? td?.paidPayable

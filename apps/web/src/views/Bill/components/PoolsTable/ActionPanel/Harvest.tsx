@@ -1,11 +1,11 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { format } from 'date-fns'
+import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { format } from 'date-fns'
 
 const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
   const { t } = useTranslation()

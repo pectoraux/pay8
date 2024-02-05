@@ -38,7 +38,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={18}
+              decimals={5}
               value={getBalanceNumber(pool?.totalPaid, pool?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -50,7 +50,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={18}
+              decimals={5}
               value={getBalanceNumber(pool?.pricePerMinutes, pool?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -62,7 +62,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={18}
+              decimals={5}
               value={getBalanceNumber(pool?.totalEarned, pool?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -189,7 +189,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
-                decimals={18}
+                decimals={5}
                 value={getBalanceNumber(currAccount?.price, pool?.token?.decimals ?? 18)}
               />
             ) : (
@@ -207,7 +207,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
-                decimals={18}
+                decimals={5}
                 value={getBalanceNumber(currAccount?.won, pool?.token?.decimals ?? 18)}
               />
             ) : (

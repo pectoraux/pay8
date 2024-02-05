@@ -1,13 +1,11 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
+import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
@@ -40,7 +38,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
             <Balance
               lineHeight="1"
               color="textSubtle"
-              decimals={currAccount?.decimals ?? 18}
+              decimals={5}
               fontSize="12px"
               value={getBalanceNumber(currAccount.balance, currAccount?.decimals ?? 18)}
             />

@@ -1,10 +1,10 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
+import { format } from 'date-fns'
 import { useAccount } from 'wagmi'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { convertTimeToSeconds } from 'utils/timeHelper'
 import { useTranslation } from '@pancakeswap/localization'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { convertTimeToSeconds } from 'utils/timeHelper'
-import { format } from 'date-fns'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 

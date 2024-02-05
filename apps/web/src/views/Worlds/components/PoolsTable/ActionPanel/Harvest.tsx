@@ -1,11 +1,11 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { format } from 'date-fns'
 import { useTranslation } from '@pancakeswap/localization'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { format } from 'date-fns'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -71,7 +71,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -83,7 +83,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -95,7 +95,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.dueReceivable, currAccount?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">

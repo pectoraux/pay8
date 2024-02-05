@@ -1,9 +1,9 @@
 import { Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
 const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
   const { t } = useTranslation()
@@ -39,7 +39,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={3}
+              decimals={5}
               value={getBalanceNumber(currAccount?.paidReceivable, currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -52,7 +52,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={3}
+              decimals={5}
               value={getBalanceNumber(currAccount?.paidPayable, currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -65,7 +65,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={3}
+              decimals={5}
               value={getBalanceNumber(currAccount?.amountReceivable, currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -78,7 +78,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={3}
+              decimals={5}
               value={getBalanceNumber(currAccount?.amountPayable, currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />

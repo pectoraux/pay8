@@ -1,7 +1,7 @@
-import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 import { useAccount } from 'wagmi'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { Button, Text, Flex, Box, Balance } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
@@ -59,7 +59,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={3}
+              decimals={5}
               value={getBalanceNumber(currAccount?.minted)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -72,7 +72,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={3}
+              decimals={5}
               value={getBalanceNumber(currAccount?.burnt)}
               unit={` ${currAccount?.token?.symbol}`}
             />
@@ -85,7 +85,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={3}
+              decimals={5}
               value={getBalanceNumber(currAccount?.salePrice)}
               unit={` ${currAccount?.token?.symbol}`}
             />

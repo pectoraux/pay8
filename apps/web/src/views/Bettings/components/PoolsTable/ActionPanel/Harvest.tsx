@@ -1,27 +1,26 @@
-import { format } from 'date-fns'
-import { getBlockExploreLink } from 'utils'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useTranslation } from '@pancakeswap/localization'
-import truncateHash from '@pancakeswap/utils/truncateHash'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { Button, Text, Flex, Box, Balance, ScanLink, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
 import {
-  useGetAmountCollected,
   useGetPaymentCredits,
   useGetPendingRevenue,
   useGetTokenForCredit,
+  useGetAmountCollected,
   useGetWinnersPerBracketNPeriod,
 } from 'state/bettings/hooks'
-import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { format } from 'date-fns'
 import BigNumber from 'bignumber.js'
+import { getBlockExploreLink } from 'utils'
+import { useWeb3React } from '@pancakeswap/wagmi'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useTranslation } from '@pancakeswap/localization'
+import truncateHash from '@pancakeswap/utils/truncateHash'
+import { DEFAULT_BET_SIZE } from 'config/constants/exchange'
+import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import { Button, Text, Flex, Box, Balance, ScanLink, useMatchBreakpoints } from '@pancakeswap/uikit'
 
-import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import { getTicketAnswer } from '../Cells/TicketCell'
 import { Divider } from '../../styles'
+import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const { t } = useTranslation()
@@ -110,7 +109,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals ?? 18}
+              decimals={5}
               value={getBalanceNumber(currAccount?.pricePerTicket, currAccount?.token?.decimals ?? 18)}
             />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -207,7 +206,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
-                decimals={currAccount?.token?.decimals ?? 18}
+                decimals={5}
                 value={getBalanceNumber(new BigNumber(pendingRevenue?.toString()), currAccount?.token?.decimals ?? 18)}
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
@@ -278,7 +277,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
                 lineHeight="1"
                 color="textSubtle"
                 fontSize="12px"
-                decimals={currAccount?.token?.decimals ?? 18}
+                decimals={5}
                 value={getBalanceNumber(new BigNumber(amountCollected?.toString()), currAccount?.token?.decimals ?? 18)}
               />
             ) : (
@@ -318,7 +317,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={currAccount?.token?.decimals}
+              decimals={5}
               value={getBalanceNumber(new BigNumber(paymentCredits?.toString()), currAccount?.token?.decimals)}
               unit={` ${currAccount?.token?.symbol}`}
             />
