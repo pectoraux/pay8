@@ -85,7 +85,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       {pool?.nftPrizes?.map((nftPrize, index) => (
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <ScanLink href={getBlockExploreLink(nftPrize?.tokenAddress, 'address', chainId)} bold={false} small>
-            {t('View Prize %val% Contract', { val: index + 1 })}
+            {t('View NFT Prize #%val% Contract', { val: index + 1 })}
           </ScanLink>
         </Flex>
       ))}

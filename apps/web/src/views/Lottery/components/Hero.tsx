@@ -1,9 +1,22 @@
 import styled, { keyframes } from 'styled-components'
-import { Box, Flex, Heading, Balance } from '@pancakeswap/uikit'
+import {
+  Box,
+  Flex,
+  Heading,
+  Balance,
+  useMatchBreakpoints,
+  IconButton,
+  ArrowBackIcon,
+  ArrowForwardIcon,
+  CardBody,
+} from '@pancakeswap/uikit'
+import { useState } from 'react'
 import Iframe from 'react-iframe'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import SwiperCore from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
 import { TicketPurchaseCard } from '../svgs'
 import BuyTicketsButton from './BuyTicketsButton'
 
@@ -208,6 +221,22 @@ const StarsDecorations = styled(Box)`
     }
   }
 `
+const StyledSwiper = styled.div`
+  ${({ theme }) => theme.mediaQueries.md} {
+    .swiper-wrapper {
+      max-height: 750px;
+    }
+  }
+`
+const SwiperCircle = styled.div<{ isActive }>`
+  background-color: ${({ theme, isActive }) => (isActive ? theme.colors.secondary : theme.colors.textDisabled)};
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+`
+const INITIAL_SLIDE = 4
 
 const Hero = ({ lottery, currentTokenId }) => {
   const { t } = useTranslation()
@@ -217,20 +246,74 @@ const Hero = ({ lottery, currentTokenId }) => {
   const prizeInBusd = tokenData?.amountCollected ?? 0
   const prizeTotal = getBalanceNumber(prizeInBusd, tokenData?.decimals ?? 18)
   console.log('Hero=====================>', lottery, currentTokenId)
+  const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
+  const [activeIndex, setActiveIndex] = useState(1)
+  const { isMd, isLg } = useMatchBreakpoints()
+
+  const updateActiveIndex = ({ activeIndex: newActiveIndex }) => {
+    if (newActiveIndex !== undefined) setActiveIndex(Math.ceil(newActiveIndex / slidesPerView))
+  }
+  let slidesPerView = 4
+  let maxPageIndex = 3
+
+  if (isMd) {
+    slidesPerView = 2
+    maxPageIndex = 6
+  }
+
+  if (isLg) {
+    slidesPerView = 3
+    maxPageIndex = 4
+  }
+
+  const nextSlide = () => {
+    if (activeIndex < maxPageIndex - 1) {
+      setActiveIndex((index) => index + 1)
+      swiperRef.slideNext()
+    }
+  }
+
+  const previousSlide = () => {
+    if (activeIndex > 0) {
+      setActiveIndex((index) => index - 1)
+      swiperRef.slidePrev()
+    }
+  }
+
+  const goToSlide = (index: number) => {
+    setActiveIndex(index / slidesPerView)
+    swiperRef.slideTo(index)
+  }
+
   const getHeroHeading = () => {
     // if (lottery?.status === LotteryStatus.OPEN) {
     return lottery.isNFT ? (
-      <>
-        <Iframe url={lottery?.tokenURI} height="550px" styles={{ marginBottom: '10px' }} id="myId2" />
-        <Heading mb="32px" scale="lg" color="#ffffff">
-          {t('Your prize!')}
-        </Heading>
-        {lottery?.status !== LotteryStatus.OPEN ? (
-          <Heading mb="24px" scale="xl" color="#ffffff">
-            {t('Tickets on sale soon')}
+      <Box pt="56px" mb="52px">
+        <StyledSwiper>
+          <Swiper
+            onSwiper={setSwiperRef}
+            onActiveIndexChange={updateActiveIndex}
+            spaceBetween={16}
+            slidesPerView={slidesPerView}
+            slidesPerGroup={slidesPerView}
+            initialSlide={INITIAL_SLIDE}
+          >
+            {lottery?.tokenURIs?.map((tokenURI, index) => (
+              <Iframe url={tokenURI} height="550px" id={lottery?.nftPrizes[index]?.id} />
+            ))}
+          </Swiper>
+        </StyledSwiper>
+        <Flex justifyContent="center" alignItems="center">
+          <Heading mb="32px" scale="lg" color="#ffffff">
+            {t('Your prize!')}
           </Heading>
-        ) : null}
-      </>
+          {lottery?.status !== LotteryStatus.OPEN ? (
+            <Heading mb="24px" scale="xl" color="#ffffff">
+              {t('Tickets on sale soon')}
+            </Heading>
+          ) : null}
+        </Flex>
+      </Box>
     ) : (
       <>
         <PrizeTotalBalance
