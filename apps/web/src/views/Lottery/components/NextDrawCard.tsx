@@ -76,7 +76,7 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
   const userTicketCount =
     userTickets?.filter((user) => user?.account?.toLowerCase() === account?.toLowerCase())?.length || 0
   const latestRoundId = tokenData?.length
-
+  const ids = lotteryData?.isNFT ? lotteryData?.nftPrizes?.map((prize) => prize?.tokenId) : ''
   const getPrizeBalances = () => {
     return (
       <Balance
@@ -85,11 +85,11 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
         textAlign={['center', null, null, 'left']}
         lineHeight="1"
         bold
-        prefix={parseInt(lotteryData?.isNFT) ? 'NFT # ' : ''}
+        prefix={parseInt(lotteryData?.isNFT) ? 'NFT ID(s) ' : ''}
         unit={parseInt(lotteryData?.isNFT) ? '' : ` ${currTokenData.token?.symbol ?? '$'}`}
         value={
           parseInt(lotteryData?.isNFT)
-            ? lotteryData?.tokenId
+            ? ids?.toString()
             : getBalanceNumber(currTokenData?.amountCollected, currTokenData.token?.decimals)
         }
         decimals={parseInt(lotteryData?.isNFT) ? 0 : 5}
