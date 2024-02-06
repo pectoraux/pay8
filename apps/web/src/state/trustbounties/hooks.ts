@@ -41,6 +41,7 @@ export const useBountiesConfigInitialize = () => {
   const fromBusinesses = router.pathname.includes('businesses')
   const fromContributors = router.pathname.includes('contributors')
   const fromTransfers = router.pathname.includes('transfers')
+  const collectionId = router.query.collectionAddress as string
 
   useEffect(() => {
     if (chainId) {
@@ -48,6 +49,7 @@ export const useBountiesConfigInitialize = () => {
         const init = true
         dispatch(
           fetchBountiesAsync({
+            collectionId,
             fromAccelerator,
             fromContributors,
             fromSponsors,
@@ -61,7 +63,18 @@ export const useBountiesConfigInitialize = () => {
         )
       })
     }
-  }, [dispatch, chainId])
+  }, [
+    dispatch,
+    chainId,
+    collectionId,
+    fromAccelerator,
+    fromContributors,
+    fromSponsors,
+    fromAuditors,
+    fromBusinesses,
+    fromRamps,
+    fromTransfers,
+  ])
 }
 
 export const useFetchPublicPoolsData = () => {
@@ -75,6 +88,7 @@ export const useFetchPublicPoolsData = () => {
   const fromBusinesses = router.pathname.includes('businesses')
   const fromContributors = router.pathname.includes('contributors')
   const fromTransfers = router.pathname.includes('transfers')
+  const collectionId = router.query.collectionAddress as string
 
   const { mutate, status } = useSWR(
     ['/trustbounties', chainId],
@@ -84,6 +98,7 @@ export const useFetchPublicPoolsData = () => {
           console.log('1exkuting============>')
           dispatch(
             fetchBountiesAsync({
+              collectionId,
               fromAccelerator,
               fromContributors,
               fromSponsors,
