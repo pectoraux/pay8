@@ -101,6 +101,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
   const fromBusinesses = router.pathname.includes('businesses')
   const fromRamps = router.pathname.includes('ramps')
   const fromTransfers = router.pathname.includes('transfers')
+  const collectionId = router.query.collectionAddress as string
 
   console.log('ppool==============>', pool, adminARP, stakingTokenContract)
 
@@ -507,6 +508,7 @@ const CreateGaugeModal: React.FC<any> = ({ pool, currency, onDismiss }) => {
       // toastSuccess(getToastText(stage, t), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       dispatch(
         fetchBountiesAsync({
+          collectionId,
           fromAccelerator,
           fromContributors,
           fromSponsors,
