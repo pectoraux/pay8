@@ -97,6 +97,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const stakingTokenContract = useERC20(currencyAddress || '')
   const [nftFilters, setNftFilters] = useState<any>({})
   const router = useRouter()
+  const collectionId = router.query.collectionAddress as string
   const fromAccelerator = router.pathname.includes('accelerator')
   const fromContributors = router.pathname.includes('contributors')
   const fromSponsors = router.pathname.includes('sponsors')
@@ -159,7 +160,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
         state.isNFT,
         !!state.recurring,
         state.avatar,
-        bountySource,
+        collectionId ?? bountySource,
       ]
       console.log('createbounty===============>', trustBountiesContract, args)
       return callWithGasPrice(trustBountiesContract, 'createBounty', args).catch((err) => {
@@ -181,6 +182,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
       )
       dispatch(
         fetchBountiesAsync({
+          collectionId,
           fromAccelerator,
           fromContributors,
           fromSponsors,
@@ -202,6 +204,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
     nftFilters,
     state,
     account,
+    collectionId,
     trustBountiesContract,
     t,
     toastError,
@@ -533,77 +536,79 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
               </ButtonMenu>
             </StyledItemRow>
           </GreyedOutContainer>
-          <GreyedOutContainer>
-            <Flex ref={targetRef10} paddingRight="50px">
-              <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-                {t('Bounty Source')}
-              </Text>
-              {tooltipVisible10 && tooltip10}
-              <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-            </Flex>
-            <Select
-              // name="bountySource"
-              options={[
-                {
-                  label: t('Accelerator'),
-                  value: 'Accelerator',
-                },
-                {
-                  label: t('Auditors'),
-                  value: 'Auditors',
-                },
-                {
-                  label: 'ARP',
-                  value: 'ARP',
-                },
-                {
-                  label: 'Businesses',
-                  value: 'Businesses',
-                },
-                {
-                  label: 'Future Collateral',
-                  value: 'Future Collateral',
-                },
-                {
-                  label: 'Contributors',
-                  value: 'Contributors',
-                },
-                {
-                  label: t('Market Place'),
-                  value: 'MarketPlace',
-                },
-                {
-                  label: t('Profile'),
-                  value: 'Profile',
-                },
-                {
-                  label: t('Ramps'),
-                  value: 'Ramps',
-                },
-                {
-                  label: t('Sponsors'),
-                  value: 'Sponsors',
-                },
-                {
-                  label: 'SSI',
-                  value: 'SSI',
-                },
-                {
-                  label: 'Transfers',
-                  value: 'Transfers',
-                },
-                {
-                  label: t('TrustBounties'),
-                  value: 'TrustBounties',
-                },
-                {
-                  label: t('Worlds'),
-                  value: 'Worlds',
-                },
-              ]}
-              onOptionChange={(val) => handleTypeChange(val.value)}
-            />
-          </GreyedOutContainer>
+          {collectionId ? null : (
+            <GreyedOutContainer>
+              <Flex ref={targetRef10} paddingRight="50px">
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
+                  {t('Bounty Source')}
+                </Text>
+                {tooltipVisible10 && tooltip10}
+                <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
+              </Flex>
+              <Select
+                // name="bountySource"
+                options={[
+                  {
+                    label: t('Accelerator'),
+                    value: 'Accelerator',
+                  },
+                  {
+                    label: t('Auditors'),
+                    value: 'Auditors',
+                  },
+                  {
+                    label: 'ARP',
+                    value: 'ARP',
+                  },
+                  {
+                    label: 'Businesses',
+                    value: 'Businesses',
+                  },
+                  {
+                    label: 'Future Collateral',
+                    value: 'Future Collateral',
+                  },
+                  {
+                    label: 'Contributors',
+                    value: 'Contributors',
+                  },
+                  {
+                    label: t('Market Place'),
+                    value: 'MarketPlace',
+                  },
+                  {
+                    label: t('Profile'),
+                    value: 'Profile',
+                  },
+                  {
+                    label: t('Ramps'),
+                    value: 'Ramps',
+                  },
+                  {
+                    label: t('Sponsors'),
+                    value: 'Sponsors',
+                  },
+                  {
+                    label: 'SSI',
+                    value: 'SSI',
+                  },
+                  {
+                    label: 'Transfers',
+                    value: 'Transfers',
+                  },
+                  {
+                    label: t('TrustBounties'),
+                    value: 'TrustBounties',
+                  },
+                  {
+                    label: t('Worlds'),
+                    value: 'Worlds',
+                  },
+                ]}
+                onOptionChange={(val) => handleTypeChange(val.value)}
+              />
+            </GreyedOutContainer>
+          )}
         </>
       ) : null}
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">

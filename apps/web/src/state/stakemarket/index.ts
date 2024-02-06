@@ -1,8 +1,9 @@
+// eslint-disable-next-line lodash/import-scope
+import { keyBy } from 'lodash'
 import { createSlice } from '@reduxjs/toolkit'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { fetchStakes } from './helpers'
 import { resetUserState } from '../global/actions'
-import { keyBy } from 'lodash'
 
 export const initialFilterState = Object.freeze({
   workspace: null,

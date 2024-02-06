@@ -20,6 +20,7 @@ const initialState: any = {
 
 export const fetchBountiesAsync =
   ({
+    collectionId,
     fromAccelerator,
     fromContributors,
     fromSponsors,
@@ -33,7 +34,7 @@ export const fetchBountiesAsync =
   async (dispatch) => {
     try {
       const trustbounties = await fetchBounties(
-        0,
+        collectionId,
         fromAccelerator,
         fromContributors,
         fromSponsors,
