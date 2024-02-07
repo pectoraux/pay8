@@ -24,7 +24,7 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button variant="danger" mb="8px" onClick={continueToNextStage}>
-          {t('Confirm')}
+          {t('Delete')}
         </Button>
       </Flex>
     </>

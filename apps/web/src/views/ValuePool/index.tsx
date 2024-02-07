@@ -5,7 +5,6 @@ import { useAccount } from 'wagmi'
 import {
   Heading,
   Flex,
-  Image,
   Text,
   Link,
   PageHeader,
@@ -16,7 +15,6 @@ import {
   useModal,
   Breadcrumbs,
   Loading,
-  ReactMarkdown,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/valuepools/hooks'
@@ -67,9 +65,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Heading scale="md" color="text">
               {t('%vp%', { vp: valuepool ?? '' })}
             </Heading>
-            <Heading scale="md" color="text">
-              <RichTextEditor value={ogValuepool?.description} readOnly style={{ width: '100%' }} id="rte" />
-            </Heading>
+            {ogValuepool?.description ? (
+              <Heading scale="md" color="text">
+                <RichTextEditor value={ogValuepool?.description} readOnly style={{ width: '100%' }} id="rte" />
+              </Heading>
+            ) : null}
             {isOwner ? (
               <Flex pt="17px">
                 <Button p="0" onClick={onPresentAdminSettings} variant="text">
