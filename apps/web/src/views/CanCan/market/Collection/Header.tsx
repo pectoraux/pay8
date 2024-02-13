@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useCallback, useState, useMemo } from 'react'
 import { Text, Row, Button, useModal, Flex, FlexGap, LinkExternal, ReactMarkdown, useTooltip } from '@pancakeswap/uikit'
-import { useCurrency, useWorkspaceCurrency } from 'hooks/Tokens'
+import { useCurrency } from 'hooks/Tokens'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { Collection } from 'state/cancan/types'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'

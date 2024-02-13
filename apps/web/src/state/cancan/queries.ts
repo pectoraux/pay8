@@ -263,6 +263,7 @@ userCollection {
   countries
   cities
   products
+  totalVolumeBNB
 }
 `
 

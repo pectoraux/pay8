@@ -35,7 +35,6 @@ const NFTMedia: FC<any> = ({
   tokenURI = null,
   media = null,
   showThumbnail = true,
-  borderRadius = 'default',
   as,
   ...props
 }) => {

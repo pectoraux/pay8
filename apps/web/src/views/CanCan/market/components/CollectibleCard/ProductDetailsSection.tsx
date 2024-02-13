@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Text, Flex, Button, IconButton, ExpandableSectionButton } from '@pancakeswap/uikit'
-import { getBalanceNumber, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
+import { useGetEstimateVotes } from 'state/cancan/hooks'
 
 export interface ExpandableSectionProps {
   paywall: any
@@ -35,11 +36,12 @@ const CloseButton = styled(IconButton)`
   padding-right: 18px;
 `
 
-const ProductDetailsSection: React.FC<ExpandableSectionProps> = ({ paywall }) => {
+const ProductDetailsSection: React.FC<any> = ({ paywall, isUser = false }) => {
   const { t } = useTranslation()
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const isAuction = Number(paywall?.bidDuration ?? 0) > 0
   const dropInDatePassed = Number(paywall?.dropinTimer ?? 0) < Date.now()
+  const votes = useGetEstimateVotes(paywall?.id)
 
   return (
     <ExpandingWrapper
@@ -52,21 +54,25 @@ const ProductDetailsSection: React.FC<ExpandableSectionProps> = ({ paywall }) =>
       />
       {showExpandableSection ? (
         <Wrapper>
-          <Flex justifyContent="space-between">
-            <Text color="secondary">{t('SuperLikes')}:</Text>
-            <Text color="secondary">{getFullDisplayBalance(paywall?.superLikes ?? 0, 18, 5)}</Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text color="failure">{t('SuperDislikes')}:</Text>
-            <Text color="failure">{getFullDisplayBalance(paywall?.superDislikes ?? 0, 18, 5)}</Text>
-          </Flex>
+          {!isUser ? (
+            <>
+              <Flex justifyContent="space-between">
+                <Text color="secondary">{t('SuperLikes')}:</Text>
+                <Text color="secondary">{getFullDisplayBalance(paywall?.superLikes ?? 0, 18, 5)}</Text>
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Text color="failure">{t('SuperDislikes')}:</Text>
+                <Text color="failure">{getFullDisplayBalance(paywall?.superDislikes ?? 0, 18, 5)}</Text>
+              </Flex>
+            </>
+          ) : null}
           <Flex justifyContent="space-between">
             <Text color="secondary">{t('Likes')}:</Text>
-            <Text color="secondary">{paywall.likes ?? 0}</Text>
+            <Text color="secondary">{isUser ? votes?.likes ?? 0 : paywall.likes ?? 0}</Text>
           </Flex>
           <Flex justifyContent="space-between">
             <Text color="failure">{t('Dislikes')}:</Text>
-            <Text color="failure">{paywall.disLikes ?? 0}</Text>
+            <Text color="failure">{isUser ? votes?.dislikes ?? 0 : paywall.disLikes ?? 0}</Text>
           </Flex>
           {isAuction && (
             <Flex justifyContent="center">
