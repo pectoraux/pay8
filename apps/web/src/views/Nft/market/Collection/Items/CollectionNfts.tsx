@@ -1,10 +1,11 @@
+// eslint-disable-next-line lodash/import-scope
+import { orderBy } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   BunnyPlaceholderIcon,
   Spinner,
   Input,
   LinkExternal,
-  Link,
   AutoRenewIcon,
   Button,
   Flex,
@@ -14,6 +15,9 @@ import {
   Dots,
   Balance,
   TabMenu,
+  CardBody,
+  NextLinkFromReactRouter,
+  Box,
 } from '@pancakeswap/uikit'
 import { Collection } from 'state/cancan/types'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -34,7 +38,6 @@ import { FetchStatus } from 'config/constants/types'
 import Divider from 'components/Divider'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { selectFilteredData } from 'state/cancan/selectors'
-import { orderBy } from 'lodash'
 import latinise from '@pancakeswap/utils/latinise'
 import { useCurrency } from 'hooks/Tokens'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
@@ -45,12 +48,13 @@ import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CreateGaugeModal from 'views/CanCan/market/Collection/Items/CreateGaugeModal'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import ProductDetailsSection from 'views/CanCan/market/components/CollectibleCard/ProductDetailsSection'
 
 import ShipStage from '../../components/BuySellModals/SellModal/ShipStage'
 import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard, CollectionCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
-import { BNBAmountLabel } from '../../components/CollectibleCard/styles'
+import { BNBAmountLabel, MetaRow, StyledCollectibleCard } from '../../components/CollectibleCard/styles'
 import BuyModal from '../../components/BuySellModals/BuyModal'
 import OptionFilters from '../../components/BuySellModals/BuyModal/OptionFilters'
 import { nftsBaseUrl } from '../../constants'
@@ -61,6 +65,8 @@ import AddPartnerModal from '../AddPartnerModal'
 import RemoveItemModal from '../RemoveItemModal'
 import SubscribeModal from '../SubscribeModal'
 import UnregisterModal from '../UnregisterModal'
+import { RoundedImage } from '../IndividualNFTPage/shared/styles'
+import PreviewImage from '../../components/CollectibleCard/PreviewImage'
 
 interface CollectionNftsProps {
   collection: Collection
@@ -99,7 +105,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
       return newest
     })
     return newData
-  }, [status, _nfts, showSearch])
+  }, [_nfts, showSearch])
   if ((!nfts || nfts?.length === 0) && isFetchingNfts) {
     return <GridPlaceholder />
   }
@@ -189,6 +195,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
               .map((registration) => {
                 // PARTNERS
                 return (
+                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
                   <div
                     onClick={() => {
                       if (currentPartner && currentPartner.id === registration.id) {
@@ -232,58 +239,67 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
           </Grid>
         </>
       ) : showOnlyNftsUsers && collection.registrations?.filter((registration) => registration.active)?.length > 0 ? (
-        collection.registrations
-          .filter((registration) => registration.active)
-          .map((registration) => {
-            // USERS
-            return (
-              <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
-                <CollectionCard
-                  key={registration.userCollection?.id}
-                  bgSrc={registration.userCollection?.small}
-                  avatarSrc={registration.userCollection?.avatar}
-                  collectionName={registration.userCollection?.name}
-                >
-                  <Flex alignItems="center">
-                    <Text fontSize="12px" color="textSubtle">
-                      {t('Volume')}
-                    </Text>
-                    <BNBAmountLabel
-                      amount={
-                        registration.userCollection?.totalVolumeBNB
-                          ? parseFloat(registration.userCollection.totalVolumeBNB)
-                          : 0
-                      }
+        <Grid
+          gridGap="16px"
+          gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
+          alignItems="start"
+        >
+          {collection.registrations
+            .filter((registration) => registration.active)
+            .map((registration) => {
+              return (
+                <StyledCollectibleCard>
+                  <CardBody p="8px" style={{ background: 'white' }}>
+                    <RoundedImage
+                      width={320}
+                      height={320}
+                      src={registration.userCollection?.avatar}
+                      as={PreviewImage}
                     />
-                  </Flex>
-                  <Flex mb="2px" justifyContent="flex-start">
-                    <Button
-                      onClick={() => {
-                        setUserCollectionId(registration.userCollection?.id)
-                        setUserBountyId(registration.bountyId)
-                        onPresentUnregister()
-                      }}
-                      color="failure"
-                      mr="18px"
-                      style={{ cursor: 'pointer' }}
-                      bold={false}
-                      as={Link}
-                      small
-                    >
-                      {t('Unregister')}
-                    </Button>
-                    <LinkExternal
-                      href={`${nftsBaseUrl}/collections/${registration.userCollection?.id}`}
-                      bold={false}
-                      small
-                    >
-                      {t('See Channel')}
-                    </LinkExternal>
-                  </Flex>
-                </CollectionCard>
-              </Grid>
-            )
-          })
+                    <Flex flexDirection="row" justifyContent="space-evenly">
+                      <CopyAddress account={registration.userCollection?.owner} title={t('User Address')} mb="24px" />
+                      <Button
+                        onClick={() => {
+                          setUserCollectionId(registration.userCollection?.id)
+                          setUserBountyId(registration.bountyId)
+                          onPresentUnregister()
+                        }}
+                        mt="10px"
+                        scale="xs"
+                        style={{ cursor: 'pointer', backgroundColor: 'red' }}
+                      >
+                        {t('Unregister')}
+                      </Button>
+                    </Flex>
+                    <NextLinkFromReactRouter to={`/cancan/collections/${registration.userCollection?.id}`}>
+                      <Text as="h4" fontWeight="600">
+                        {registration.userCollection?.name}
+                      </Text>
+                      <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
+                        {registration.userCollection?.totalVolumeBNB && (
+                          <MetaRow title={t('Volume')}>
+                            <Flex alignItems="center">
+                              <Text fontSize="12px" color="textSubtle">
+                                {registration.userCollection?.totalVolumeBNB.toLocaleString(undefined, {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}
+                              </Text>
+                            </Flex>
+                          </MetaRow>
+                        )}
+                      </Box>
+                    </NextLinkFromReactRouter>
+                  </CardBody>
+                  <ProductDetailsSection
+                    key={registration.userCollection?.id}
+                    paywall={registration.userCollection}
+                    isUser
+                  />
+                </StyledCollectibleCard>
+              )
+            })}{' '}
+        </Grid>
       ) : (
         <Flex alignItems="center" py="48px" flexDirection="column">
           <BunnyPlaceholderIcon width="96px" mb="24px" />

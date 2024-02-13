@@ -253,7 +253,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
           gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
           alignItems="start"
         >
-          {[...collection.registrations, ...collection.registrations]
+          {collection.registrations
             .filter((registration) => registration.active)
             .map((registration) => {
               return (
@@ -265,26 +265,25 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
                       src={registration.userCollection?.avatar}
                       as={PreviewImage}
                     />
-                    <Flex alignItems="center" justifyContent="space-between">
-                      <CopyAddress account={registration.userCollection?.owner} title={t('Owner')} mb="24px" />
+                    <Flex flexDirection="row" justifyContent="space-evenly">
+                      <CopyAddress account={registration.userCollection?.owner} title={t('User Address')} mb="24px" />
+                      <Button
+                        onClick={() => {
+                          setUserCollectionId(registration.userCollection?.id)
+                          setUserBountyId(registration.bountyId)
+                          onPresentUnregister()
+                        }}
+                        mt="10px"
+                        scale="xs"
+                        style={{ cursor: 'pointer', backgroundColor: 'red' }}
+                      >
+                        {t('Unregister')}
+                      </Button>
                     </Flex>
                     <NextLinkFromReactRouter to={`/cancan/collections/${registration.userCollection?.id}`}>
-                      <Flex flexDirection="row" justifyContent="space-evenly">
-                        <Text as="h4" fontWeight="600">
-                          {registration.userCollection?.name}
-                        </Text>
-                        <Button
-                          onClick={() => {
-                            setUserCollectionId(registration.userCollection?.id)
-                            setUserBountyId(registration.bountyId)
-                            onPresentUnregister()
-                          }}
-                          scale="xs"
-                          style={{ cursor: 'pointer', backgroundColor: 'red' }}
-                        >
-                          {t('Unregister')}
-                        </Button>
-                      </Flex>
+                      <Text as="h4" fontWeight="600">
+                        {registration.userCollection?.name}
+                      </Text>
                       <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
                         {registration.userCollection?.totalVolumeBNB && (
                           <MetaRow title={t('Volume')}>
