@@ -40,7 +40,7 @@ import NFTMedia from 'views/CanCan/market/components/NFTMedia'
 import Divider from 'components/Divider'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import latinise from '@pancakeswap/utils/latinise'
-import { selectFilteredData, selectFilteredData3 } from 'state/cancan/selectors'
+import { selectFilteredData, selectFilteredData3, selectFilteredData4 } from 'state/cancan/selectors'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
@@ -96,6 +96,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   const filters = useGetNftFilters(id ?? '') as any
   const _nfts = selectFilteredData(__nfts, filters)
   const registrations = selectFilteredData3(collection.registrations, filters)
+  const partnerRegistrations = selectFilteredData4(collection.partnerRegistrations, filters)
   const nfts = useMemo(() => {
     const newests = orderBy(_nfts, (nft) => (nft?.updatedAt ? Date.parse(nft.updatedAt) : 0), 'desc')
     const newData = newests.filter((newest: any) => {
@@ -123,10 +124,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
             <>
               {displayText}
               {' -> '}
-              {showOnlyNftsUsers
-                ? collection.registrations?.filter((registration) => registration.active)?.length
-                : resultSize}{' '}
-              {t('Result(s)')}
+              {showOnlyNftsUsers ? registrations?.length : resultSize} {t('Result(s)')}
             </>
           ) : (
             <Dots>{t('Loading')}</Dots>
@@ -190,7 +188,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
             )}
           </Flex>
         </>
-      ) : showOnlyNftsOnSale && collection.partnerRegistrations?.length > 0 ? (
+      ) : showOnlyNftsOnSale && partnerRegistrations?.length > 0 ? (
         <>
           {showOnlyNftsOnSale && currentPartner ? (
             <CollapsibleCard
@@ -204,47 +202,45 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
             </CollapsibleCard>
           ) : null}
           <Grid mb="64px" gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}>
-            {collection.partnerRegistrations
-              .filter((registration) => registration.active && registration.partnerCollection?.id)
-              .map((registration) => {
-                return (
-                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                  <div
-                    onClick={() => {
-                      if (currentPartner && currentPartner.id === registration.id) {
-                        setCurrentPartner(null)
-                      } else {
-                        setCurrentPartner(registration)
-                      }
-                    }}
+            {partnerRegistrations?.map((registration) => {
+              return (
+                // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+                <div
+                  onClick={() => {
+                    if (currentPartner && currentPartner.id === registration.id) {
+                      setCurrentPartner(null)
+                    } else {
+                      setCurrentPartner(registration)
+                    }
+                  }}
+                >
+                  <CollectionCard
+                    key={registration.partnerCollection?.id}
+                    bgSrc={registration.partnerCollection?.small}
+                    avatarSrc={registration.partnerCollection?.avatar}
+                    collectionName={registration.partnerCollection?.name}
                   >
-                    <CollectionCard
-                      key={registration.partnerCollection?.id}
-                      bgSrc={registration.partnerCollection?.small}
-                      avatarSrc={registration.partnerCollection?.avatar}
-                      collectionName={registration.partnerCollection?.name}
-                    >
-                      <Flex alignItems="center">
-                        <Text fontSize="12px" color="textSubtle">
-                          {t('Volume')}
-                        </Text>
-                        <BNBAmountLabel
-                          amount={
-                            registration.partnerCollection.totalVolumeBNB
-                              ? parseFloat(registration.partnerCollection.totalVolumeBNB)
-                              : 0
-                          }
-                        />
-                      </Flex>
-                      <Flex mb="2px" justifyContent="flex-end">
-                        <LinkExternal href={`${cancanBaseUrl}/collections/${registration.partnerCollection.id}`} small>
-                          {t('See Channel')}
-                        </LinkExternal>
-                      </Flex>
-                    </CollectionCard>
-                  </div>
-                )
-              })}
+                    <Flex alignItems="center">
+                      <Text fontSize="12px" color="textSubtle">
+                        {t('Volume')}
+                      </Text>
+                      <BNBAmountLabel
+                        amount={
+                          registration.partnerCollection.totalVolumeBNB
+                            ? parseFloat(registration.partnerCollection.totalVolumeBNB)
+                            : 0
+                        }
+                      />
+                    </Flex>
+                    <Flex mb="2px" justifyContent="flex-end">
+                      <LinkExternal href={`${cancanBaseUrl}/collections/${registration.partnerCollection.id}`} small>
+                        {t('See Channel')}
+                      </LinkExternal>
+                    </Flex>
+                  </CollectionCard>
+                </div>
+              )
+            })}
           </Grid>
         </>
       ) : showOnlyNftsUsers && registrations?.length > 0 ? (
@@ -253,61 +249,54 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
           gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
           alignItems="start"
         >
-          {registrations
-            // .filter((registration) => registration.active)
-            .map((registration) => {
-              return (
-                <StyledCollectibleCard>
-                  <CardBody p="8px" style={{ background: 'white' }}>
-                    <RoundedImage
-                      width={320}
-                      height={320}
-                      src={registration.userCollection?.avatar}
-                      as={PreviewImage}
-                    />
-                    <Flex flexDirection="row" justifyContent="space-evenly">
-                      <CopyAddress account={registration.userCollection?.owner} title={t('User Address')} mb="24px" />
-                      <Button
-                        onClick={() => {
-                          setUserCollectionId(registration.userCollection?.id)
-                          setUserBountyId(registration.bountyId)
-                          onPresentUnregister()
-                        }}
-                        mt="10px"
-                        scale="xs"
-                        style={{ cursor: 'pointer', backgroundColor: 'red' }}
-                      >
-                        {t('Unregister')}
-                      </Button>
-                    </Flex>
-                    <NextLinkFromReactRouter to={`/cancan/collections/${registration.userCollection?.id}`}>
-                      <Text as="h4" fontWeight="600">
-                        {registration.userCollection?.name}
-                      </Text>
-                      <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
-                        {registration.userCollection?.totalVolumeBNB && (
-                          <MetaRow title={t('Volume')}>
-                            <Flex alignItems="center">
-                              <Text fontSize="12px" color="textSubtle">
-                                {registration.userCollection?.totalVolumeBNB.toLocaleString(undefined, {
-                                  minimumFractionDigits: 2,
-                                  maximumFractionDigits: 2,
-                                })}
-                              </Text>
-                            </Flex>
-                          </MetaRow>
-                        )}
-                      </Box>
-                    </NextLinkFromReactRouter>
-                  </CardBody>
-                  <ProductDetailsSection
-                    key={registration.userCollection?.id}
-                    paywall={registration.userCollection}
-                    isUser
-                  />
-                </StyledCollectibleCard>
-              )
-            })}{' '}
+          {registrations?.map((registration) => {
+            return (
+              <StyledCollectibleCard>
+                <CardBody p="8px" style={{ background: 'white' }}>
+                  <RoundedImage width={320} height={320} src={registration.userCollection?.avatar} as={PreviewImage} />
+                  <Flex flexDirection="row" justifyContent="space-evenly">
+                    <CopyAddress account={registration.userCollection?.owner} title={t('User Address')} mb="24px" />
+                    <Button
+                      onClick={() => {
+                        setUserCollectionId(registration.userCollection?.id)
+                        setUserBountyId(registration.bountyId)
+                        onPresentUnregister()
+                      }}
+                      mt="10px"
+                      scale="xs"
+                      style={{ cursor: 'pointer', backgroundColor: 'red' }}
+                    >
+                      {t('Unregister')}
+                    </Button>
+                  </Flex>
+                  <NextLinkFromReactRouter to={`/cancan/collections/${registration.userCollection?.id}`}>
+                    <Text as="h4" fontWeight="600">
+                      {registration.userCollection?.name}
+                    </Text>
+                    <Box borderTop="1px solid" borderTopColor="cardBorder" pt="8px">
+                      {registration.userCollection?.totalVolumeBNB && (
+                        <MetaRow title={t('Volume')}>
+                          <Flex alignItems="center">
+                            <Text fontSize="12px" color="textSubtle">
+                              {registration.userCollection?.totalVolumeBNB.toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              })}
+                            </Text>
+                          </Flex>
+                        </MetaRow>
+                      )}
+                    </Box>
+                  </NextLinkFromReactRouter>
+                </CardBody>
+                <ProductDetailsSection
+                  key={registration.userCollection?.id}
+                  paywall={registration.userCollection}
+                  isUser
+                />
+              </StyledCollectibleCard>
+            )
+          })}{' '}
         </Grid>
       ) : (
         <Flex alignItems="center" py="48px" flexDirection="column">
