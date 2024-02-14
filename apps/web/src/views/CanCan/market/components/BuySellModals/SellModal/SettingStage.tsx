@@ -1,5 +1,5 @@
 import { differenceInSeconds } from 'date-fns'
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, useMemo } from 'react'
 import { requiresApproval } from 'utils/requiresApproval'
 import { Flex, Grid, Text, Button, useToast, Modal } from '@pancakeswap/uikit'
 import { MaxUint256 } from '@pancakeswap/sdk'
@@ -139,7 +139,8 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     city: collection?.cities,
     product: mtags?.toString(),
   })
-  console.log('1mtags======================>', mtags, collection, nftFilters)
+  // eslint-disable-next-line no-return-assign
+  console.log('2mtags======================>', mtags?.toString(), collection, nftFilters)
 
   const updateValue = (key: any, value: string | number) => {
     setState((prevState) => ({
@@ -555,7 +556,12 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
       {stage === SellingStage.MODIFY_CONTACT && (
         <ModifyContactModal
           state={state}
-          nftFilters={nftFilters}
+          nftFilters={{
+            workspace: nftFilters.workspace,
+            country: nftFilters.country,
+            city: nftFilters.city,
+            product: mtags.toString(),
+          }}
           setNftFilters={setNewFilters}
           collection={collection}
           handleChange={handleChange}

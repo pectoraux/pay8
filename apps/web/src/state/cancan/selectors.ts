@@ -52,7 +52,8 @@ export const selectFilteredData3 = (registrations, filters, _tags) => {
     registrations?.filter((registration) => {
       const tags = _tags?.length
         ? _tags
-            ?.map((tg) => parseInt(tg.collection?.id ?? '0') === parseInt(registration?.userCollection?.id ?? '0'))
+            ?.filter((tg) => parseInt(tg.collection?.id ?? '0') === parseInt(registration?.userCollection?.id ?? '0'))
+            ?.map((tg) => tg.id)
             ?.toString()
         : ''
       const res =
@@ -80,7 +81,10 @@ export const selectFilteredData4 = (registrations, filters, _tags) => {
     registrations?.filter((registration) => {
       const tags = _tags?.length
         ? _tags
-            ?.map((tg) => parseInt(tg.collection?.id ?? '0') === parseInt(registration?.partnerCollection?.id ?? '0'))
+            ?.filter(
+              (tg) => parseInt(tg.collection?.id ?? '0') === parseInt(registration?.partnerCollection?.id ?? '0'),
+            )
+            ?.map((tg) => tg.id)
             ?.toString()
         : ''
       const res =

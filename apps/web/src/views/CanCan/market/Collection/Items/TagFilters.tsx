@@ -58,7 +58,16 @@ const Filters: React.FC<any> = ({
     ?.map((reg) => parseInt(reg.partnerCollection?.id ?? '0'))
   const _partnerTags = useGetTagFromCollectionId(partnerCollectionIds)
   const partnerTags = _partnerTags?.length ? _partnerTags?.map((tg) => tg.id) : []
-  const tags = [..._tags, ...userTags, ...partnerTags]
+  function removeDuplicates(arr) {
+    const unique = []
+    for (let i = 0; i < arr.length; i++) {
+      if (unique.indexOf(arr[i]) === -1) {
+        unique.push(arr[i])
+      }
+    }
+    return unique
+  }
+  const tags = removeDuplicates([..._tags, ...userTags, ...partnerTags])
   console.log('tagstags=============>', tags, _tags)
   console.log('1tagstags=============>', userTags, _userTags, userCollectionIds)
   console.log('2tagstags=============>', partnerTags, _partnerTags, partnerCollectionIds)

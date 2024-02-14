@@ -110,7 +110,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     workspace: collection?.workspaces,
     country: collection?.countries,
     city: collection?.cities,
-    product: mtags?.toString(),
+    product: mtags,
   })
 
   const updateValue = (key: any, value: string | number) => {
@@ -421,7 +421,12 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
       {stage === SellingStage.MODIFY_CONTACT && (
         <ModifyContactModal
           state={state}
-          nftFilters={nftFilters}
+          nftFilters={{
+            workspace: nftFilters.workspace,
+            country: nftFilters.country,
+            city: nftFilters.city,
+            product: mtags.toString(),
+          }}
           setNftFilters={setNewFilters}
           handleChange={handleChange}
           continueToNextStage={continueToNextStage}
