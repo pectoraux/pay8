@@ -46,12 +46,10 @@ export const selectFilteredData2 = (nfts, filters) => {
   })
 }
 
-export const selectFilteredData3 = (registrations, filters, _tags) => {
+export const selectFilteredData3 = (registrations, filters, tags) => {
   const _res =
     registrations?.length &&
     registrations?.filter((registration) => {
-      const mtags = _tags?.length && _tags?.split(',')?.map((tag) => tag.id)
-      const tags = mtags?.toString()
       const res =
         registration.active &&
         (!filters.country ||
@@ -71,9 +69,7 @@ export const selectFilteredData3 = (registrations, filters, _tags) => {
   return _res
 }
 
-export const selectFilteredData4 = (registrations, filters, _tags) => {
-  const mtags = _tags?.length && _tags?.split(',')?.map((tag) => tag.id)
-  const tags = mtags?.toString()
+export const selectFilteredData4 = (registrations, filters, tags) => {
   const _res =
     registrations?.length &&
     registrations?.filter((registration) => {
