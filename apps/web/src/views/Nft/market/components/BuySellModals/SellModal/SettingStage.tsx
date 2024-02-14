@@ -5,6 +5,7 @@ import { Flex, Grid, Text, Button, useToast } from '@pancakeswap/uikit'
 import { MaxUint256 } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import { useWeb3React } from '@pancakeswap/wagmi'
+import { useGetTagFromCollectionId } from 'state/cancan/hooks'
 import { useTranslation, ContextApi } from '@pancakeswap/localization'
 
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -103,14 +104,12 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     city: [],
     product: [],
   }))
+  const mtags = useGetTagFromCollectionId([parseInt(collection?.id)])
   const [nftFilters, setNewFilters] = useState({
     workspace: collection?.workspaces,
     country: collection?.countries,
     city: collection?.cities,
-    product: collection?.products
-      ?.split(',')
-      .filter((e) => e.trim().length)
-      ?.toString(),
+    product: mtags,
   })
 
   const updateValue = (key: any, value: string | number) => {

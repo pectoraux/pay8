@@ -50,7 +50,7 @@ const Filters: React.FC<any> = ({
     () =>
       nftFilters?.country?.length &&
       Country.getAllCountries()?.find((val) => val.name === nftFilters.country[0])?.isoCode,
-    [nftFilters],
+    [Country, nftFilters.country],
   )
 
   const workspaces = Object.entries(WORKSPACES)?.reduce(
@@ -62,7 +62,7 @@ const Filters: React.FC<any> = ({
     }),
     {} as any,
   )
-  const countries = Object.entries(Country.getAllCountries())?.reduce(
+  const countries = Object.entries(Country?.getAllCountries())?.reduce(
     (accum: any, attr: any) => ({
       Country: accum.Country
         ? [...accum.Country, { traitType: 'Country', value: attr[1].name, count: 0 }]

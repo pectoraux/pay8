@@ -93,6 +93,7 @@ const Filters: React.FC<any> = ({ nftFilters, setNftFilters, workspace = true })
         ?.isoCode,
     [Country, nftFilters.country],
   )
+  console.log('nftFilters=================>', nftFilters)
   const workspaces = Object.entries(WORKSPACES)?.reduce(
     (accum: any, attr: any) => ({
       ...accum,
