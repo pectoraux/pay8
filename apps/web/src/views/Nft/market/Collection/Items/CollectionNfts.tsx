@@ -30,6 +30,7 @@ import {
   useGetNftFilters,
   useGetNftShowSearch,
   useGetProtocolInfo,
+  useGetTagFromCollectionId,
 } from 'state/cancan/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import NFTMedia from 'views/CanCan/market/components/NFTMedia'
