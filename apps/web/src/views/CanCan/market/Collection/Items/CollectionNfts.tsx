@@ -4,7 +4,6 @@ import {
   Spinner,
   LinkExternal,
   Input,
-  Link,
   AutoRenewIcon,
   Button,
   Flex,
@@ -41,7 +40,7 @@ import NFTMedia from 'views/CanCan/market/components/NFTMedia'
 import Divider from 'components/Divider'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import latinise from '@pancakeswap/utils/latinise'
-import { selectFilteredData } from 'state/cancan/selectors'
+import { selectFilteredData, selectFilteredData3 } from 'state/cancan/selectors'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
@@ -54,7 +53,7 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import GridPlaceholder from '../../components/GridPlaceholder'
 import { CollectibleLinkCard, CollectionCard } from '../../components/CollectibleCard'
 import { useCollectionNfts } from '../../hooks/useCollectionNfts'
-import { BNBAmountLabel, CostLabel, MetaRow, StyledCollectibleCard } from '../../components/CollectibleCard/styles'
+import { BNBAmountLabel, MetaRow, StyledCollectibleCard } from '../../components/CollectibleCard/styles'
 import BuyModal from '../../components/BuySellModals/BuyModal'
 import ShipStage from '../../components/BuySellModals/SellModal/ShipStage'
 
@@ -96,6 +95,7 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   }, [setPage, page])
   const filters = useGetNftFilters(id ?? '') as any
   const _nfts = selectFilteredData(__nfts, filters)
+  const registrations = selectFilteredData3(collection.registrations, filters)
   const nfts = useMemo(() => {
     const newests = orderBy(_nfts, (nft) => (nft?.updatedAt ? Date.parse(nft.updatedAt) : 0), 'desc')
     const newData = newests.filter((newest: any) => {
@@ -247,14 +247,14 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
               })}
           </Grid>
         </>
-      ) : showOnlyNftsUsers && collection.registrations?.filter((registration) => registration.active)?.length > 0 ? (
+      ) : showOnlyNftsUsers && registrations?.length > 0 ? (
         <Grid
           gridGap="16px"
           gridTemplateColumns={['1fr', null, 'repeat(3, 1fr)', null, 'repeat(4, 1fr)']}
           alignItems="start"
         >
-          {collection.registrations
-            .filter((registration) => registration.active)
+          {registrations
+            // .filter((registration) => registration.active)
             .map((registration) => {
               return (
                 <StyledCollectibleCard>

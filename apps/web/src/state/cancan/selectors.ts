@@ -45,3 +45,28 @@ export const selectFilteredData2 = (nfts, filters) => {
     )
   })
 }
+
+export const selectFilteredData3 = (registrations, filters) => {
+  const _res =
+    registrations?.length &&
+    registrations?.filter((registration) => {
+      const res =
+        registration.active &&
+        (!filters.country ||
+          filters.country.includes('All') ||
+          filters.country.filter((value) =>
+            registration?.userCollection?.countries?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          )?.length > 0) &&
+        (!filters.city ||
+          filters.city.includes('All') ||
+          filters.city.filter((value) =>
+            registration?.userCollection?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          )?.length > 0) &&
+        (!filters.product ||
+          filters.product.filter((value) =>
+            registration?.userCollection?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
+          )?.length > 0)
+      return res
+    })
+  return _res
+}
