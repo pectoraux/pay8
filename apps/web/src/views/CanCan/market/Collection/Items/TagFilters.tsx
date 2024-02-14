@@ -4,7 +4,7 @@ import { Flex } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
 import { Item } from 'views/CanCan/market/components/Filters'
 import { WORKSPACES } from 'config'
-import { useGetNftFilters, useGetTags } from 'state/cancan/hooks'
+import { useGetNftFilters, useGetTagFromCollectionId, useGetTags } from 'state/cancan/hooks'
 
 import { ListTraitFilter } from './ListTraitFilter'
 import { ListTraitFilter2 } from './ListTraitFilter2'
@@ -34,6 +34,7 @@ const ScrollableFlexContainer = styled(Flex)`
 
 const Filters: React.FC<any> = ({
   address,
+  collection,
   setNftFilters,
   showWorkspace = true,
   showCountry = true,
@@ -45,7 +46,22 @@ const Filters: React.FC<any> = ({
   const { Country } = require('country-state-city')
   // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
   const { City } = require('country-state-city')
-  const tags = useGetTags()
+  const __tags = useGetTags()
+  const _tags = __tags?.split(',')
+  const userCollectionIds = collection?.registrations
+    ?.filter((reg) => reg?.userCollection?.id)
+    ?.map((reg) => parseInt(reg.userCollection?.id ?? '0'))
+  const _userTags = useGetTagFromCollectionId(userCollectionIds)
+  const userTags = _userTags?.length ? _userTags?.map((tg) => tg.id) : []
+  const partnerCollectionIds = collection?.partnerRegistrations
+    ?.filter((reg) => reg?.partnerCollection?.id)
+    ?.map((reg) => parseInt(reg.partnerCollection?.id ?? '0'))
+  const _partnerTags = useGetTagFromCollectionId(partnerCollectionIds)
+  const partnerTags = _partnerTags?.length ? _partnerTags?.map((tg) => tg.id) : []
+  const tags = [..._tags, ...userTags, ...partnerTags]
+  console.log('tagstags=============>', tags, _tags)
+  console.log('1tagstags=============>', userTags, _userTags, userCollectionIds)
+  console.log('2tagstags=============>', partnerTags, _partnerTags, partnerCollectionIds)
   const code = useMemo(
     () =>
       nftFilters?.country?.length &&
@@ -80,7 +96,7 @@ const Filters: React.FC<any> = ({
       { traitType: 'City', value: 'All', count: 0 } as any,
     ) || []
   const productsHome =
-    tags?.split(',')?.reduce(
+    tags?.reduce(
       (accum: any, attr: any) => ({
         ...accum,
         Product: accum.Product
