@@ -32,6 +32,7 @@ import {
   useGetNftShowSearch,
   useGetProtocolInfo,
   useGetNftFilters,
+  useGetTagFromCollectionId,
 } from 'state/cancan/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import CollapsibleCard from 'components/CollapsibleCard'
@@ -95,8 +96,12 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   }, [setPage, page])
   const filters = useGetNftFilters(id ?? '') as any
   const _nfts = selectFilteredData(__nfts, filters)
-  const registrations = selectFilteredData3(collection.registrations, filters)
-  const partnerRegistrations = selectFilteredData4(collection.partnerRegistrations, filters)
+  const userCollectionIds = collection?.registrations?.filter((reg) => reg?.userCollection?.id)
+  const userTags = useGetTagFromCollectionId(userCollectionIds)
+  const registrations = selectFilteredData3(collection?.registrations, filters, userTags)
+  const partnerCollectionIds = collection?.partnerRegistrations?.filter((reg) => reg?.partnerCollection?.id)
+  const partnerTags = useGetTagFromCollectionId(partnerCollectionIds)
+  const partnerRegistrations = selectFilteredData4(collection?.partnerRegistrations, filters, partnerTags)
   const nfts = useMemo(() => {
     const newests = orderBy(_nfts, (nft) => (nft?.updatedAt ? Date.parse(nft.updatedAt) : 0), 'desc')
     const newData = newests.filter((newest: any) => {

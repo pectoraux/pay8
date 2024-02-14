@@ -119,6 +119,19 @@ const ModifyCollectionModal: React.FC<any> = ({
           />
         </GreyedOutContainer>
         <Filters nftFilters={nftFilters} setNftFilters={setNftFilters} />
+        <GreyedOutContainer style={{ paddingTop: '18px' }}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Not satisfied with above tags ? Add a custom tag')}
+          </Text>
+          <Input
+            type="text"
+            scale="sm"
+            name="customTags"
+            value={state.customTags}
+            placeholder={t('input a custom tag')}
+            onChange={handleChange}
+          />
+        </GreyedOutContainer>
       </Box>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">

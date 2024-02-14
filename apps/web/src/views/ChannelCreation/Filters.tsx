@@ -90,7 +90,7 @@ const Filters: React.FC<any> = ({ collection, nftFilters, setNftFilters, workspa
     () =>
       nftFilters?.country?.length &&
       Country.getAllCountries()?.find((val) => val.name === nftFilters.country[0])?.isoCode,
-    [nftFilters],
+    [Country, nftFilters.country],
   )
   const workspaces = Object.entries(WORKSPACES)?.reduce(
     (accum: any, attr: any) => ({

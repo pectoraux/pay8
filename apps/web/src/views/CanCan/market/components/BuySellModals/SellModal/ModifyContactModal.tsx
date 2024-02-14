@@ -250,6 +250,19 @@ const ModifyCollectionModal: React.FC<any> = ({
           {tooltipVisible8 && tooltip8}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
         </Flex>
+        <GreyedOutContainer style={{ paddingTop: '18px' }}>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Not satisfied with above tags ? Add a custom tag')}
+          </Text>
+          <Input
+            type="text"
+            scale="sm"
+            name="customTags"
+            value={state.customTags}
+            placeholder={t('input a custom tag')}
+            onChange={handleChange}
+          />
+        </GreyedOutContainer>
       </Box>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">

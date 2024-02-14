@@ -111,7 +111,29 @@ export const getTagFromProductId = async (address) => {
       { address },
     )
     const mtags = res.tags.map((tag) => tag.id)
-    console.log('getTag===========>', res, mtags?.toString(), address)
+    console.log('getTagFromProductId===========>', res, mtags?.toString(), address)
+    return mtags?.toString()
+  } catch (error) {
+    console.error('Failed to fetch tags from=============>', error)
+    return null
+  }
+}
+
+export const getTagFromCollectionId = async (addresses) => {
+  try {
+    const res = await request(
+      GRAPH_API_CANCAN,
+      gql`
+        query {
+          tags(where: { active: true, collection_: { id: addresses } }) {
+            id
+          }
+        }
+      `,
+      { addresses },
+    )
+    const mtags = res.tags.map((tag) => tag.id)
+    console.log('getTagFromCollectionId===========>', res, mtags?.toString(), addresses)
     return mtags?.toString()
   } catch (error) {
     console.error('Failed to fetch tags from=============>', error)

@@ -128,12 +128,16 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     price: '',
     contentType: '',
     valuepool: '',
+    customTags: '',
   }))
   const [nftFilters, setNewFilters] = useState({
     workspace: collection?.workspaces,
     country: collection?.countries,
     city: collection?.cities,
-    product: collection?.products,
+    product: collection?.products
+      ?.split(',')
+      .filter((e) => e.trim().length)
+      ?.toString(),
   })
 
   const updateValue = (key: any, value: string | number) => {
@@ -348,6 +352,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         )
       }
       if (stage === SellingStage.CONFIRM_MODIFY_CONTACT) {
+        const customTags = state.customTags?.split(',')
         const args = [
           state.name,
           state.description,
@@ -359,7 +364,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           nftFilters?.workspace?.toString(),
           nftFilters?.country?.toString(),
           nftFilters?.city?.toString(),
-          nftFilters?.product?.toString(),
+          nftFilters?.product?.length ? nftFilters?.product[0] : customTags?.length && customTags[0],
         ]
         console.log('CONFIRM_MODIFY_CONTACT===========>', args)
         return callWithGasPrice(marketCollectionsContract, 'updateCollection', args).catch((err) =>

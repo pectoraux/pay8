@@ -2,7 +2,7 @@ import { differenceInSeconds } from 'date-fns'
 import { useState, ChangeEvent } from 'react'
 import { requiresApproval } from 'utils/requiresApproval'
 import { Flex, Grid, Text, Button, useToast } from '@pancakeswap/uikit'
-import { Currency, MaxUint256 } from '@pancakeswap/sdk'
+import { MaxUint256 } from '@pancakeswap/sdk'
 import useTheme from 'hooks/useTheme'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation, ContextApi } from '@pancakeswap/localization'
@@ -16,7 +16,7 @@ import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/sh
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import AvatarImage from '../../BannerHeader/AvatarImage'
-import { SellingStage, MarketPlace } from './types'
+import { SellingStage } from './types'
 import ConfirmStage from '../shared/ConfirmStage'
 import UpdateAuditorsStage from './UpdateAuditorsStage'
 import ModifyCollectionModal from './ModifyCollectionModal'
@@ -95,6 +95,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     youtubeChannel: '',
     telegramChannel: '',
     instagramChannel: '',
+    customTags: '',
     contactChannels: collection?.contactChannels?.toString() ?? '',
     contacts: collection?.contacts?.toString() ?? '',
     workspace: [],
@@ -106,7 +107,10 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     workspace: collection?.workspaces,
     country: collection?.countries,
     city: collection?.cities,
-    product: collection?.products,
+    product: collection?.products
+      ?.split(',')
+      .filter((e) => e.trim().length)
+      ?.toString(),
   })
 
   const updateValue = (key: any, value: string | number) => {
@@ -231,6 +235,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
         )
       }
       if (stage === SellingStage.CONFIRM_MODIFY_CONTACT) {
+        const customTags = state.customTags?.split(',')
         const args = [
           state.name,
           state.description,
@@ -242,7 +247,7 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
           nftFilters?.workspace?.toString(),
           nftFilters?.country?.toString(),
           nftFilters?.city?.toString(),
-          nftFilters?.product?.toString(),
+          nftFilters?.product?.length ? nftFilters?.product[0] : customTags?.length && customTags[0],
         ]
         console.log('CONFIRM_MODIFY_CONTACT===========>', args)
         return callWithGasPrice(marketCollectionsContract, 'updateCollection', args).catch((err) =>

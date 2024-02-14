@@ -46,10 +46,12 @@ export const selectFilteredData2 = (nfts, filters) => {
   })
 }
 
-export const selectFilteredData3 = (registrations, filters) => {
+export const selectFilteredData3 = (registrations, filters, _tags) => {
   const _res =
     registrations?.length &&
     registrations?.filter((registration) => {
+      const mtags = _tags?.map((tag) => tag.id)
+      const tags = mtags?.toString()
       const res =
         registration.active &&
         (!filters.country ||
@@ -63,15 +65,15 @@ export const selectFilteredData3 = (registrations, filters) => {
             registration?.userCollection?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
           )?.length > 0) &&
         (!filters.product ||
-          filters.product.filter((value) =>
-            registration?.userCollection?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
-          )?.length > 0)
+          filters.product.filter((value) => tags?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length > 0)
       return res
     })
   return _res
 }
 
-export const selectFilteredData4 = (registrations, filters) => {
+export const selectFilteredData4 = (registrations, filters, _tags) => {
+  const mtags = _tags?.map((tag) => tag.id)
+  const tags = mtags?.toString()
   const _res =
     registrations?.length &&
     registrations?.filter((registration) => {
@@ -89,9 +91,7 @@ export const selectFilteredData4 = (registrations, filters) => {
             registration?.partnerCollection?.cities?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
           )?.length > 0) &&
         (!filters.product ||
-          filters.product.filter((value) =>
-            registration?.partnerCollection?.products?.toLowerCase()?.split(',').includes(value?.toLowerCase()),
-          )?.length > 0)
+          filters.product.filter((value) => tags?.toLowerCase()?.split(',').includes(value?.toLowerCase()))?.length > 0)
       return res
     })
   return _res

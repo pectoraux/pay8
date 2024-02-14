@@ -52,6 +52,7 @@ import {
   getNftCashbackRevenue,
   getNftTokenForCredit,
   getTagFromProductId,
+  getTagFromCollectionId,
 } from './helpers'
 import { nftMarketActivityFiltersAtom, tryVideoNftMediaAtom, nftMarketFiltersAtom } from './atoms'
 
@@ -311,6 +312,13 @@ export const useGetTags = () => {
 
 export const useGetTagsFromProductId = (productId) => {
   const { data } = useSWR(['cancan-tags', productId], async () => getTagFromProductId(productId))
+  return data ?? ''
+}
+
+export const useGetTagFromCollectionId = (collectionIds) => {
+  const { data } = useSWR(['useGetTagFromCollectionId', collectionIds?.length], async () =>
+    getTagFromCollectionId(collectionIds),
+  )
   return data ?? ''
 }
 
