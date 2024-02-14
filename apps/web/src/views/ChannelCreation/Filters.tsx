@@ -81,7 +81,7 @@ const ScrollableFlexContainer = styled(Flex)`
   }
 `
 
-const Filters: React.FC<any> = ({ collection, nftFilters, setNftFilters, workspace = true }) => {
+const Filters: React.FC<any> = ({ nftFilters, setNftFilters, workspace = true }) => {
   // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
   const { Country } = require('country-state-city')
   // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
@@ -89,7 +89,8 @@ const Filters: React.FC<any> = ({ collection, nftFilters, setNftFilters, workspa
   const code = useMemo(
     () =>
       nftFilters?.country?.length &&
-      Country.getAllCountries()?.find((val) => val.name === nftFilters.country[0])?.isoCode,
+      Country.getAllCountries()?.find((val) => val.name === nftFilters.country[0] || val.name === nftFilters.country)
+        ?.isoCode,
     [Country, nftFilters.country],
   )
   const workspaces = Object.entries(WORKSPACES)?.reduce(
@@ -118,8 +119,8 @@ const Filters: React.FC<any> = ({ collection, nftFilters, setNftFilters, workspa
       }),
       { traitType: 'City', value: 'All', count: 0 } as any,
     ) || []
-  const productsHome = collection?.products?.length
-    ? collection?.products?.split(',')?.reduce(
+  const productsHome = nftFilters?.product?.length
+    ? nftFilters?.product?.split(',')?.reduce(
         (accum: any, attr: any) => ({
           ...accum,
           Product: accum.Product

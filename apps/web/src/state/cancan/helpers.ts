@@ -120,17 +120,20 @@ export const getTagFromProductId = async (address) => {
 }
 
 export const getTagFromCollectionId = async (addresses) => {
+  console.log('1getTagFromCollectionId===========>', addresses)
   try {
     const res = await request(
       GRAPH_API_CANCAN,
       gql`
-        query {
-          tags(where: { active: true, collection_: { id_in: addresses } }) {
+        query getTagFromCollectionId($where: Tag_filter) {
+          tags(where: $where) {
             id
           }
         }
       `,
-      { addresses },
+      {
+        where: { active: true, collection_: { id_in: addresses } },
+      },
     )
     const mtags = res.tags.map((tag) => tag.id)
     console.log('getTagFromCollectionId===========>', res, mtags?.toString(), addresses)

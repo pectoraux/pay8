@@ -19,6 +19,7 @@ import {
   useNFTicketHelper,
   usePaywallMarketTradesContract,
 } from 'hooks/useContract'
+import { useGetTagFromCollectionId } from 'state/cancan/hooks'
 import ApproveAndConfirmStage from 'views/Nft/market/components/BuySellModals/shared/ApproveAndConfirmStage'
 import TransactionConfirmed from 'views/Nft/market/components/BuySellModals/shared/TransactionConfirmed'
 import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
@@ -130,14 +131,13 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     valuepool: '',
     customTags: '',
   }))
+  const mtags = useGetTagFromCollectionId([parseInt(collection?.id)])
+  console.log('mtags======================>', mtags, collection)
   const [nftFilters, setNewFilters] = useState({
     workspace: collection?.workspaces,
     country: collection?.countries,
     city: collection?.cities,
-    product: collection?.products
-      ?.split(',')
-      .filter((e) => e.trim().length)
-      ?.toString(),
+    product: mtags?.toString(),
   })
 
   const updateValue = (key: any, value: string | number) => {

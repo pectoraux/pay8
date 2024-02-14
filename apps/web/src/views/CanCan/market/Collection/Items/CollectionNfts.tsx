@@ -96,11 +96,15 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
   }, [setPage, page])
   const filters = useGetNftFilters(id ?? '') as any
   const _nfts = selectFilteredData(__nfts, filters)
-  const userCollectionIds = collection?.registrations?.filter((reg) => reg?.userCollection?.id)
+  const userCollectionIds = collection?.registrations
+    ?.filter((reg) => reg?.userCollection?.id)
+    ?.map((reg) => parseInt(reg.userCollection?.id ?? '0'))
   const userTags = useGetTagFromCollectionId(userCollectionIds)
   console.log('userTags================>', userTags, userCollectionIds)
   const registrations = selectFilteredData3(collection?.registrations, filters, userTags)
-  const partnerCollectionIds = collection?.partnerRegistrations?.filter((reg) => reg?.partnerCollection?.id)
+  const partnerCollectionIds = collection?.partnerRegistrations
+    ?.filter((reg) => reg?.partnerCollection?.id)
+    ?.map((reg) => parseInt(reg.partnerCollection?.id ?? '0'))
   const partnerTags = useGetTagFromCollectionId(partnerCollectionIds)
   console.log('partnerTags================>', partnerTags, partnerCollectionIds)
   const partnerRegistrations = selectFilteredData4(collection?.partnerRegistrations, filters, partnerTags)

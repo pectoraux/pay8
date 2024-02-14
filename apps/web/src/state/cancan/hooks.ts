@@ -316,7 +316,7 @@ export const useGetTagsFromProductId = (productId) => {
 }
 
 export const useGetTagFromCollectionId = (collectionIds) => {
-  const { data } = useSWR(['useGetTagFromCollectionId', collectionIds?.length], async () =>
+  const { data } = useSWR(['useGetTagFromCollectionId8', collectionIds?.length], async () =>
     getTagFromCollectionId(collectionIds),
   )
   return data ?? ''

@@ -93,12 +93,16 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
 
   const filters = useGetNftFilters(id ?? '') as any
   const _nfts = selectFilteredData(__nfts, filters)
-  const userCollectionIds = collection?.registrations?.filter((reg) => reg?.userCollection?.id)
+  const userCollectionIds = collection?.registrations
+    ?.filter((reg) => reg?.userCollection?.id)
+    ?.map((reg) => parseInt(reg.userCollection?.id ?? '0'))
   const userTags = useGetTagFromCollectionId(userCollectionIds)
-  const registrations = selectFilteredData3(collection.registrations, filters, userTags)
-  const partnerCollectionIds = collection?.partnerRegistrations?.filter((reg) => reg?.partnerCollection?.id)
+  const registrations = selectFilteredData3(collection?.registrations, filters, userTags)
+  const partnerCollectionIds = collection?.partnerRegistrations
+    ?.filter((reg) => reg?.partnerCollection?.id)
+    ?.map((reg) => parseInt(reg.partnerCollection?.id ?? '0'))
   const partnerTags = useGetTagFromCollectionId(partnerCollectionIds)
-  const partnerRegistrations = selectFilteredData4(collection.partnerRegistrations, filters, partnerTags)
+  const partnerRegistrations = selectFilteredData4(collection?.partnerRegistrations, filters, partnerTags)
   const nfts = useMemo(() => {
     const newests = orderBy(_nfts, (nft) => (nft?.updatedAt ? Date.parse(nft.updatedAt) : 0), 'desc')
     const newData = newests.filter((newest: any) => {
