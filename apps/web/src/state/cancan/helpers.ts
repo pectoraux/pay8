@@ -125,7 +125,7 @@ export const getTagFromCollectionId = async (addresses) => {
       GRAPH_API_CANCAN,
       gql`
         query {
-          tags(where: { active: true, collection_: { id: addresses } }) {
+          tags(where: { active: true, collection_: { id_in: addresses } }) {
             id
           }
         }
