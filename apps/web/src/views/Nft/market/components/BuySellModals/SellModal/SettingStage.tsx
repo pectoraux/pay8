@@ -104,12 +104,13 @@ const EditStage: React.FC<any> = ({ variant = 'ChannelPage', collection, mainCur
     city: [],
     product: [],
   }))
-  const mtags = useGetTagFromCollectionId([parseInt(collection?.id)])
+  const _mtags = useGetTagFromCollectionId([parseInt(collection?.id)])
+  const mtags = _mtags.map((tag) => tag.id)
   const [nftFilters, setNewFilters] = useState({
     workspace: collection?.workspaces,
     country: collection?.countries,
     city: collection?.cities,
-    product: mtags,
+    product: mtags?.toString(),
   })
 
   const updateValue = (key: any, value: string | number) => {

@@ -46,10 +46,13 @@ export const selectFilteredData2 = (nfts, filters) => {
   })
 }
 
-export const selectFilteredData3 = (registrations, filters, tags) => {
+export const selectFilteredData3 = (registrations, filters, _tags) => {
   const _res =
     registrations?.length &&
     registrations?.filter((registration) => {
+      const tags =
+        _tags?.length &&
+        _tags?.map((tg) => parseInt(tg.collection?.id ?? '0') === parseInt(registration?.userCollection?.id ?? '0'))
       const res =
         registration.active &&
         (!filters.country ||
@@ -69,10 +72,13 @@ export const selectFilteredData3 = (registrations, filters, tags) => {
   return _res
 }
 
-export const selectFilteredData4 = (registrations, filters, tags) => {
+export const selectFilteredData4 = (registrations, filters, _tags) => {
   const _res =
     registrations?.length &&
     registrations?.filter((registration) => {
+      const tags =
+        _tags?.length &&
+        _tags?.map((tg) => parseInt(tg.collection?.id ?? '0') === parseInt(registration?.partnerCollection?.id ?? '0'))
       const res =
         registration.active &&
         registration.partnerCollection?.id &&

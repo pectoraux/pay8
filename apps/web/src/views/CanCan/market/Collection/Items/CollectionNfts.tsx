@@ -100,8 +100,8 @@ const CollectionNfts: React.FC<any> = ({ collection, displayText }) => {
     ?.filter((reg) => reg?.userCollection?.id)
     ?.map((reg) => parseInt(reg.userCollection?.id ?? '0'))
   const userTags = useGetTagFromCollectionId(userCollectionIds)
-  console.log('userTags================>', userTags, userCollectionIds)
   const registrations = selectFilteredData3(collection?.registrations, filters, userTags)
+  console.log('userTags================>', userTags, userCollectionIds)
   const partnerCollectionIds = collection?.partnerRegistrations
     ?.filter((reg) => reg?.partnerCollection?.id)
     ?.map((reg) => parseInt(reg.partnerCollection?.id ?? '0'))
