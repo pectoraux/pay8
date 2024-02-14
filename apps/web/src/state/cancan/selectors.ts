@@ -50,7 +50,7 @@ export const selectFilteredData3 = (registrations, filters, _tags) => {
   const _res =
     registrations?.length &&
     registrations?.filter((registration) => {
-      const mtags = _tags?.map((tag) => tag.id)
+      const mtags = _tags?.length && _tags?.map((tag) => tag.id)
       const tags = mtags?.toString()
       const res =
         registration.active &&
@@ -72,7 +72,7 @@ export const selectFilteredData3 = (registrations, filters, _tags) => {
 }
 
 export const selectFilteredData4 = (registrations, filters, _tags) => {
-  const mtags = _tags?.map((tag) => tag.id)
+  const mtags = _tags?.length && _tags?.map((tag) => tag.id)
   const tags = mtags?.toString()
   const _res =
     registrations?.length &&
