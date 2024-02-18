@@ -3,14 +3,7 @@ import styled from 'styled-components'
 import Page from 'components/Layout/Page'
 import { useTranslation } from '@pancakeswap/localization'
 import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
-import {
-  useFilters,
-  useGetFiatPrice,
-  useGetNativePrice,
-  useGetTags,
-  usePoolsPageFetch,
-  usePoolsWithFilterSelector,
-} from 'state/ramps/hooks'
+import { useFilters, useGetTags, usePoolsPageFetch, usePoolsWithFilterSelector } from 'state/ramps/hooks'
 import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 
 import PoolControls from './components/PoolControls'
@@ -98,7 +91,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
-        <Steps title={t('How to create my own ramp ?')} onPresentCreateGauge={onPresentCreateGauge} />
+        <Steps title={t('How to create my own ramp?')} onPresentCreateGauge={onPresentCreateGauge} />
         <Questions />
         <V3SubgraphHealthIndicator />
       </Page>

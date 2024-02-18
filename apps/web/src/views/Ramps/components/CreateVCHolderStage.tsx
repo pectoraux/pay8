@@ -77,33 +77,6 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract, onD
     return null
   }
 
-  const TooltipComponent = () => (
-    <Text>
-      {t(
-        "Identity tokens are used to confirm identity requirements burners need to fulfill to proceed with the burn. If your ramp doesn't have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the ramp to deliver you an identity token and input its ID in this field.",
-      )}
-    </Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        "Make sure you take the burning fee into account. If your ramp's burning fee is 10% then inputting 100 will only send you 100 - (100 * 10 / 100) = 90 in FIAT currency.",
-      )}
-    </Text>
-  )
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
-    targetRef: targetRef2,
-    tooltip: tooltip2,
-    tooltipVisible: tooltipVisible2,
-  } = useTooltip(<TooltipComponent2 />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-
   return (
     <>
       <GreyedOutContainer>

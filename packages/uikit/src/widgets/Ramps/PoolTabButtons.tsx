@@ -67,16 +67,16 @@ const PoolTabButtons = ({
   setFavoritesOnly,
   saleOnly,
   setSaleOnly,
-  viewMode,
-  setViewMode,
-}: any) => {
+}: // viewMode,
+// setViewMode,
+any) => {
   const router = useRouter();
 
   const { t } = useTranslation();
 
   const isExact = !router.pathname.includes("manual");
 
-  const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
+  // const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
 
   const liveOrFinishedSwitch = (
     <Wrapper>

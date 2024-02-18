@@ -8,7 +8,7 @@ const InlineLink = styled(Link)`
 
 const config = [
   {
-    title: <Trans>What are Decentralized Ramps (dRamps) ?</Trans>,
+    title: <Trans>What are Decentralized Ramps (dRamps)?</Trans>,
     description: [
       <Trans>
         Decentralized Ramps, or dRamps, are an innovative feature that enables users to transfer value to and out of
@@ -18,7 +18,7 @@ const config = [
     ],
   },
   {
-    title: <Trans>How do Decentralized Ramps work ?</Trans>,
+    title: <Trans>How do Decentralized Ramps work?</Trans>,
     description: [
       <Trans>
         dRamps operate through a network of independent agents worldwide. These agents deploy their own ramps,
@@ -29,7 +29,7 @@ const config = [
     ],
   },
   {
-    title: <Trans>What's the purpose of collateralization in Decentralized Ramps ?</Trans>,
+    title: <Trans>What is the purpose of collateralization in Decentralized Ramps?</Trans>,
     description: [
       <Trans>
         Collateralization serves as a security measure to ensure the value and stability of the minted tokens. Agents
@@ -40,7 +40,7 @@ const config = [
     ],
   },
   {
-    title: <Trans>How do agents activate their ramps in the dRamps system ?</Trans>,
+    title: <Trans>How do agents activate their ramps in the dRamps system?</Trans>,
     description: [
       <Trans>
         Agents activate their ramps by attaching bounties/collaterals to their ramps . These collaterals are placed in
@@ -50,7 +50,7 @@ const config = [
     ],
   },
   {
-    title: <Trans>How can users transfer value across different blockchains using dRamps ?</Trans>,
+    title: <Trans>How can users transfer value across different blockchains using dRamps?</Trans>,
     description: [
       <Trans>
         To transfer value across blockchains, users initiate a process that involves transitioning value from the origin

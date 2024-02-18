@@ -152,7 +152,7 @@ const BGWrapper = styled.div`
 
 export const RampBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('Ramps transfer value on/off blockchains')
 
@@ -186,7 +186,7 @@ export const RampBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/304.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/304.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

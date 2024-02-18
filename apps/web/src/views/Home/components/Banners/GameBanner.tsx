@@ -162,7 +162,7 @@ const LogoBox = styled(Box)`
 `
 export const GameBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('Launch or play your favorite games')
 
@@ -196,7 +196,7 @@ export const GameBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/315.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/315.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

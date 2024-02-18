@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components'
 
 import * as S from './Styled'
 import { flyingAnim } from './animations'
-import { lotteryImage } from './images'
 
 const RightWrapper = styled.div`
   position: absolute;
@@ -197,7 +196,7 @@ export const ARPBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/329.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/329.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

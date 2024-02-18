@@ -93,22 +93,7 @@ const BurnStage: React.FC<any> = ({ state, setBurntToVC, rampHelperContract, onD
       )}
     </Text>
   )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t(
-        "Make sure you take the burning fee into account. If your ramp's burning fee is 10% then inputting 100 will only send you 100 - (100 * 10 / 100) = 90 in FIAT currency.",
-      )}
-    </Text>
-  )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
-    targetRef: targetRef2,
-    tooltip: tooltip2,
-    tooltipVisible: tooltipVisible2,
-  } = useTooltip(<TooltipComponent2 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })
@@ -127,7 +112,7 @@ const BurnStage: React.FC<any> = ({ state, setBurntToVC, rampHelperContract, onD
           scale="sm"
           name="amountReceivable"
           value={state.amountReceivable}
-          placeholder={t('input amount to amountReceivable')}
+          placeholder={t('input amount to burn')}
           // onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -160,16 +145,19 @@ const BurnStage: React.FC<any> = ({ state, setBurntToVC, rampHelperContract, onD
       {activeButtonIndex ? (
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <Text small bold color="textSubtle">
-            {t(`Card Number: ${ccFormat(cardInfo?.data?.cardNumber)}`)}
+            {t('Card Number: %val%', { val: ccFormat(cardInfo?.data?.cardNumber) })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`CVV: ${cardInfo?.data?.cvc}`)}
+            {t('CVV: %val%', { val: cardInfo?.data?.cvc })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Expiration: ${cardInfo?.data?.exp_month}/${cardInfo?.data?.exp_year}`)}
+            {t('Expiration: %val%/%val2%', { val: cardInfo?.data?.exp_month, val2: cardInfo?.data?.exp_year })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Total Burnt To Card: ${cardInfo?.data?.amount} ${cardInfo?.data?.symbol?.toUpperCase()}`)}
+            {t('Total Burnt To Card: %val% %val2%', {
+              val: cardInfo?.data?.amount,
+              val2: cardInfo?.data?.symbol?.toUpperCase(),
+            })}
           </Text>
         </Flex>
       ) : null}

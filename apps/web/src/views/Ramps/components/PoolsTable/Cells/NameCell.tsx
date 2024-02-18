@@ -22,8 +22,8 @@ const StyledCell = styled(Pool.BaseCell)`
 const NameCell: React.FC<any> = ({ pool, rampAccount }) => {
   const { t } = useTranslation()
 
-  let title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
-  let subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
+  const title: React.ReactNode = `${t('Mint')} ${rampAccount?.token?.symbol ?? ''}`
+  const subtitle: React.ReactNode = `${t('Burn')} ${rampAccount?.token?.symbol ?? ''}`
 
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
 

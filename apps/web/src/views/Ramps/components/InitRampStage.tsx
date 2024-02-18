@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { GreyedOutContainer, Divider } from './styles'
@@ -36,11 +35,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       {t(
         "Use this field to attach your unique profile id to the ramp. Attaching a unique profile id to your ramp enable your token markets to mint up to 80% of their attached bounties' value whereas not attaching a unique profile only let your token markets mint 40% of their attached bounties' value. To create a unique profile, you first need to find an SSID auditor to create your SSID; go to Earn > Auditors",
       )}
-    </Text>
-  )
-  const TooltipComponent2 = () => (
-    <Text>
-      {t('You need to specify the address of the owner of the channel to which the item to purchase belongs.')}
     </Text>
   )
   const TooltipComponent3 = () => (
@@ -84,14 +78,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     </Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
-    targetRef: targetRef2,
-    tooltip: tooltip2,
-    tooltipVisible: tooltipVisible2,
-  } = useTooltip(<TooltipComponent2 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })

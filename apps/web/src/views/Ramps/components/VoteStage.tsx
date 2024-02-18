@@ -13,7 +13,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -28,7 +28,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('How do you vote ?')}
+            {t('How do you vote?')}
           </Text>
           <ButtonMenu
             scale="xs"

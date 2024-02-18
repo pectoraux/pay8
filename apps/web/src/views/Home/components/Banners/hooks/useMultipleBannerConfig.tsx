@@ -1,16 +1,8 @@
 import shuffle from 'lodash/shuffle'
 import { ReactElement, useMemo } from 'react'
-import EthBanner from '../EthBanner'
-import CompetitionBanner from '../CompetitionBanner'
-import IFOBanner from '../IFOBanner'
-import V3LaunchBanner from '../V3LaunchBanner'
-import PerpetualBanner from '../PerpetualBanner'
-import LiquidStakingBanner from '../LiquidStakingBanner'
+
 import { GameBanner } from '../GameBanner'
 import { BettingBanner } from '../BettingBanner'
-import FarmV3MigrationBanner from '../FarmV3MigrationBanner'
-import useIsRenderCompetitionBanner from './useIsRenderCompetitionBanner'
-import useIsRenderIfoBanner from './useIsRenderIFOBanner'
 import { NftBanner } from '../NftBanner'
 import { CanCanBanner } from '../CanCanBanner'
 import { RampBanner } from '../RampBanner'
@@ -50,9 +42,6 @@ interface IBannerConfig {
  */
 
 export const useMultipleBannerConfig = () => {
-  const isRenderIFOBanner = useIsRenderIfoBanner()
-  const isRenderCompetitionBanner = useIsRenderCompetitionBanner()
-
   return useMemo(() => {
     const SHUFFLE_BANNERS: IBannerConfig[] = [
       { shouldRender: true, banner: <RampBanner /> },
@@ -83,5 +72,5 @@ export const useMultipleBannerConfig = () => {
     return [...NO_SHUFFLE_BANNERS, ...shuffle(SHUFFLE_BANNERS)]
       .filter((bannerConfig: IBannerConfig) => bannerConfig.shouldRender)
       .map((bannerConfig: IBannerConfig) => bannerConfig.banner)
-  }, [isRenderIFOBanner, isRenderCompetitionBanner])
+  }, [])
 }

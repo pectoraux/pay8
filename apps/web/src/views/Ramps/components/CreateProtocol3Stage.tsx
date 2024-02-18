@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, ErrorIcon, Input, LinkExternal } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { Divider, GreyedOutContainer } from './styles'
 

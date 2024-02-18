@@ -21,8 +21,6 @@ import _toNumber from 'lodash/toNumber'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useGetAccountSg, useGetExtraUSDPrices } from 'state/ramps/hooks'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import BigNumber from 'bignumber.js'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -57,7 +55,7 @@ const BurnStage: React.FC<any> = ({
   const { account } = useWeb3React()
   const router = useRouter()
   const { toastError, toastSuccess } = useToast()
-  const { data: accountData, refetch } = useGetAccountSg(account, 'stripe')
+  const { data: accountData } = useGetAccountSg(account, 'stripe')
   const [linking, setLinking] = useState<boolean>(false)
   const [linked, setLinked] = useState<boolean>(accountData?.active && accountData?.id)
   const [toVC, setToVC] = useState(0)

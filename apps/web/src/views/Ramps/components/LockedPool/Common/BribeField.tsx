@@ -68,7 +68,7 @@ const BribeField: React.FC<any> = ({
         setLockedAmount('')
       }
     },
-    [stakingMax, setLockedAmount, stakingDecimals],
+    [stakingMax, stakingDecimals, setShare, setLockedAmount],
   )
 
   return (

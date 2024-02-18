@@ -152,7 +152,7 @@ const BGWrapper = styled.div`
 
 export const CanCanBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('Build the app you like with CanCan')
 
@@ -186,7 +186,7 @@ export const CanCanBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/318.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/318.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

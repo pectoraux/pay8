@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components'
 
 import * as S from './Styled'
 import { flyingAnim } from './animations'
-import { lotteryImage } from './images'
 
 const RightWrapper = styled.div`
   position: absolute;
@@ -163,7 +162,7 @@ const LogoBox = styled(Box)`
 `
 export const FCBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('Use Future Collaterals for collateralised lending')
 
@@ -197,7 +196,7 @@ export const FCBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/339.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/339.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

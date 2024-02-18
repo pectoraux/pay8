@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components'
 
 import * as S from './Styled'
 import { flyingAnim } from './animations'
-import { lotteryImage } from './images'
 
 const RightWrapper = styled.div`
   position: absolute;
@@ -163,9 +162,9 @@ const LogoBox = styled(Box)`
 `
 export const SSIBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
-  const title = t('Create your SSI, store and share your data privately on the blockchain ')
+  const title = t('Create your SSI, store and share your data privately on the blockchain')
 
   return (
     <S.Wrapper
@@ -197,7 +196,7 @@ export const SSIBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/364.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/364.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

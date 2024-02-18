@@ -152,7 +152,7 @@ const BGWrapper = styled.div`
 
 export const NftBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('Build the next OpenSea with the eCollectible Marketplace')
 
@@ -186,7 +186,7 @@ export const NftBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/396.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/396.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

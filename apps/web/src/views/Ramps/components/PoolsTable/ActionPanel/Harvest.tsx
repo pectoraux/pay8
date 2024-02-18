@@ -332,7 +332,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId, rampAccount }) =>
           <CopyAddress title={truncateHash(pool?._ve)} account={pool?._ve} />
           {extraTokens?.length ? (
             <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">
-              {t('ExTra Tokens')}
+              {t('Extra Tokens')}
             </Text>
           ) : null}
           {extraTokens?.length
@@ -345,7 +345,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId, rampAccount }) =>
       {cardInfo?.data?.cardNumber?.length ? (
         <StyledItemRow>
           <Text fontSize="12px" pt="1px" pr="3px" bold as="span">
-            {t('Reveal Card ?')}
+            {t('Reveal Card?')}
           </Text>
           <ButtonMenu scale="xs" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>
@@ -356,16 +356,19 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId, rampAccount }) =>
       {activeButtonIndex ? (
         <Flex flexDirection="column" mt="10px" justifyContent="center" alignItems="center">
           <Text small bold color="textSubtle">
-            {t(`Card Number: ${ccFormat(cardInfo?.data?.cardNumber)}`)}
+            {t('Card Number: %val%', { val: ccFormat(cardInfo?.data?.cardNumber) })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`CVV: ${cardInfo?.data?.cvc}`)}
+            {t('CVV: %val%', { val: cardInfo?.data?.cvc })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Expiration: ${cardInfo?.data?.exp_month}/${cardInfo?.data?.exp_year}`)}
+            {t('Expiration: %val%/%val2%', { val: cardInfo?.data?.exp_month, val2: cardInfo?.data?.exp_year })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Total Burnt To Card: ${cardInfo?.data?.amount} ${cardInfo?.data?.symbol?.toUpperCase()}`)}
+            {t('Total Burnt To Card: %val% %val2%', {
+              val: cardInfo?.data?.amount,
+              val2: cardInfo?.data?.symbol?.toUpperCase(),
+            })}
           </Text>
         </Flex>
       ) : null}

@@ -163,7 +163,7 @@ const LogoBox = styled(Box)`
 `
 export const LotteryBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('Launch or take part in lottery events')
 

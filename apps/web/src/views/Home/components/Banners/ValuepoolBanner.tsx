@@ -163,7 +163,7 @@ const LogoBox = styled(Box)`
 `
 export const ValuepoolBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('Launch or join a DAO/ValuePool')
 
@@ -197,7 +197,7 @@ export const ValuepoolBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/319.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/319.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

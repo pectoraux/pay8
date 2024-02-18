@@ -1,26 +1,6 @@
-import axios from 'axios'
-import Dots from 'components/Loader/Dots'
-import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
-import {
-  Flex,
-  ButtonMenu,
-  ButtonMenuItem,
-  Grid,
-  Box,
-  Text,
-  Button,
-  Input,
-  ErrorIcon,
-  useToast,
-  useTooltip,
-  HelpIcon,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGetAccountSg } from 'state/ramps/hooks'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 
 import { GreyedOutContainer, Divider } from './styles'
 
