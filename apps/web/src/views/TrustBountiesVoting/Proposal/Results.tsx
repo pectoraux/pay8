@@ -156,7 +156,7 @@ const Results: React.FC<any> = ({ litigation, hasAccountVoted, hasVotedForAttack
             ) : (
               <>
                 <Timer minutes={minutes} hours={hours} days={days} />
-                {days || hours || minutes ? <StyledTimerText pt="18px">{t('left')}</StyledTimerText> : null}
+                {days || hours || minutes ? <StyledTimerText pt="18px">{t('remaining')}</StyledTimerText> : null}
               </>
             )}
           </Flex>

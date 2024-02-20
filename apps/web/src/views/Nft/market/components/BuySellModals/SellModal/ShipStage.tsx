@@ -236,16 +236,17 @@ const EditStage: React.FC<any> = ({ variant, collection, articleState, currency,
     } else if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
       link += `${state.tokenId?.split(' ')?.join('-')?.trim()}`
     }
+    const subject = t('New Product Listed')
     switch (stage) {
       case SellingStage.CONFIRM_CREATE_PAYWALL2 || SellingStage.CONFIRM_CREATE_ASK_ORDER:
         await axios.post('/api/email2', {
-          subject: 'New Product Listed',
+          subject,
           messageHtml: `
-          # MarketPlace Support
+          # ${t('MarketPlace Support')}
     
-          A channel you're following just launched a new product: [${state.tokenId}](${link})
+          ${t("A channel you're following just launched a new product:")} [${state.tokenId}](${link})
           
-          _Thanks for using Payswap_
+          ${t('_Thanks for using Payswap_')}
           `,
           emailList: state.emailList,
         })

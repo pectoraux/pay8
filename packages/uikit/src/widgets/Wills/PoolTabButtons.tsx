@@ -67,7 +67,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
 
   const isExact = router.pathname.includes("wills/bounties/admin");
 
-  const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
+  // const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
 
   const liveOrFinishedSwitch = (
     <Wrapper>

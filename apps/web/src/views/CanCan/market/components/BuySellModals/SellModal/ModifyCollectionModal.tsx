@@ -207,7 +207,7 @@ const ModifyCollectionModal: React.FC<any> = ({ state, handleChange, handleRawVa
             scale="sm"
             name="minBounty"
             value={state.minBounty}
-            placeholder={t('partner minimum bounty')}
+            placeholder={t('input partner minimum bounty')}
             onChange={handleChange}
           />
         </GreyedOutContainer>
@@ -224,7 +224,7 @@ const ModifyCollectionModal: React.FC<any> = ({ state, handleChange, handleRawVa
             scale="sm"
             name="userMinBounty"
             value={state.userMinBounty}
-            placeholder={t('user minimum bounty')}
+            placeholder={t('input user minimum bounty')}
             onChange={handleChange}
           />
         </GreyedOutContainer>

@@ -1,13 +1,11 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { fetchBountiesAsync } from 'state/trustbounties'
 import { Text, Flex, Box, Card, Button, CopyButton, Balance, useToast, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useTrustBountiesContract } from 'hooks/useContract'
-import { useAppDispatch } from 'state'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 
@@ -47,13 +45,12 @@ export const ScrollableRow = styled.div`
 const DataCard = ({ bountyId, isNativeCoin, claim, decimals }) => {
   const { t } = useTranslation()
   const { days, hours, minutes } = getTimePeriods(Number(claim.endTime ?? '0'))
-  const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
+  const { fetchWithCatchTxError } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess, toastError } = useToast()
   const [pendingFb, setPendingFb] = useState(false)
   const [pendingFb2, setPendingFb2] = useState(false)
   const trustBountiesContract = useTrustBountiesContract()
-  const isHunter = claim.winner === null || claim.winner === ADDRESS_ZERO
 
   console.log('claim===============>', claim, !!claim.winner)
   const handleConcede = useCallback(

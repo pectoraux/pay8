@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   Flex,
   Box,
@@ -12,14 +12,12 @@ import {
   Balance,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { Divider, GreyedOutContainer } from './styles2'
 import { useGetPendingFromNote } from 'state/cancan/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
+import { Divider, GreyedOutContainer } from './styles2'
 
 interface RemoveStageProps {
   state: any
@@ -34,7 +32,7 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleRawValu
 
   useEffect(() => {
     refetch()
-  }, [state])
+  }, [refetch, state])
 
   return (
     <>

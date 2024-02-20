@@ -3,7 +3,6 @@ import { Card, CardHeader, ChevronDownIcon, Flex, Heading, Button, ChevronUpIcon
 import { useWeb3React } from '@pancakeswap/wagmi'
 import orderBy from 'lodash/orderBy'
 import { useTranslation } from '@pancakeswap/localization'
-import { Vote } from 'state/types'
 import VoteRow from '../components/Proposal/VoteRow'
 
 const VOTES_PER_VIEW = 20

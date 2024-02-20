@@ -46,7 +46,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="password"
           value={state.password}
-          placeholder={t('input your password')}
+          placeholder={t('input your old password')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

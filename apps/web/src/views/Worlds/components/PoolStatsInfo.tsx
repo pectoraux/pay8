@@ -92,7 +92,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
       </Flex>
       <Flex flex="1" flexDirection="column" alignSelf="flex-center">
         <Text color="primary" fontSize="14px">
-          {t('Bounty Required')} {`->`} {pool?.bountyRequired ? t('True') : t('False')}
+          {t('Bounty Required')} {`->`} {pool?.bountyRequired ? t('Yes') : t('No')}
         </Text>
         <Text color="primary" fontSize="14px">
           {t('World ID')} {`->`} {pool?.profileId}
@@ -110,7 +110,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           {t('Trading Fee')} {`->`} {parseInt(pool?.tradingFee) / 100}%
         </Text>
         <Text color="primary" fontSize="14px">
-          {t('Price Per Minutes')} {`->`} {getBalanceNumber(pool?.pricePerAttachMinutes)} USD
+          {t('Price Per Minute')} {`->`} {getBalanceNumber(pool?.pricePerAttachMinutes)} USD
         </Text>
         {pool?.collection?.countries ? (
           <Text color="primary" fontSize="14px">

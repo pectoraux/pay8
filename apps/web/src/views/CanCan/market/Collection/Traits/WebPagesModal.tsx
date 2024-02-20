@@ -1,9 +1,7 @@
-import { useMemo } from 'react'
-import { Modal, Grid } from '@pancakeswap/uikit'
+import { Modal } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import * as React from 'react'
 import Iframe from 'react-iframe'
-import { useCurrPool } from 'state/arps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 interface BuyTicketsModalProps {

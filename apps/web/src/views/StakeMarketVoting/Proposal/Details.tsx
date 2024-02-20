@@ -9,7 +9,6 @@ import {
   LinkExternal,
   Text,
   Button,
-  useToast,
   Farm as FarmUI,
   Balance,
 } from '@pancakeswap/uikit'
@@ -18,15 +17,15 @@ import { format } from 'date-fns'
 import { Proposal } from 'state/types'
 import { getBlockExploreLink } from 'utils'
 import { useTranslation } from '@pancakeswap/localization'
-import { IPFS_GATEWAY } from '../config'
-import { ColorTag, ProposalStateTag } from '../components/Proposals/tags'
-import CreateContentModal from './CreateContentModal'
 import { useGetStake } from 'state/stakemarket/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import Divider from 'components/Divider'
 import { useCurrency } from 'hooks/Tokens'
 import BigNumber from 'bignumber.js'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { IPFS_GATEWAY } from '../config'
+import CreateContentModal from './CreateContentModal'
+import { ColorTag, ProposalStateTag } from '../components/Proposals/tags'
 
 interface DetailsProps {
   proposal: Proposal

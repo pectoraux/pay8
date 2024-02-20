@@ -1,10 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, Heading, Balance } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import { NftToken } from 'state/cancan/types'
-import { GreyedOutContainer, Divider } from './styles'
 import { useGetNote } from 'state/stakemarket/hooks'
 import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
@@ -12,6 +9,7 @@ import styled from 'styled-components'
 import Timer from 'views/StakeMarket/components/PoolsTable/Cells/Timer'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -45,7 +43,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
 
   useEffect(() => {
     refetch()
-  }, [state])
+  }, [refetch, state])
 
   useEffect(() => {
     if (inputRef && inputRef.current) {

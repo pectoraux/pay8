@@ -44,9 +44,7 @@ const Proposals = ({ searchQuery }) => {
     () => (searchQuery ? { question_contains_nocase: searchQuery, searchable: true } : {}),
     [searchQuery],
   )
-  const { status: status3, data: userDatas } = useSWR(['userDatas', searchQuery], async () =>
-    getUserData2(1000, 0, where),
-  )
+  const { data: userDatas } = useSWR(['userDatas', searchQuery], async () => getUserData2(1000, 0, where))
   console.log('getSSIData================>', data, profile)
   const handleProposalTypeChange = (newProposalType: EntryType) => {
     setState((prevState) => ({
@@ -58,7 +56,7 @@ const Proposals = ({ searchQuery }) => {
   useEffect(() => {
     if (!data?.length) refetch()
     if (!profile) refetch2()
-  }, [account, status, status2])
+  }, [account, data?.length, profile, refetch, refetch2, status, status2])
 
   const handleFilterChange = (newFilterState: EntryState) => {
     setState((prevState) => ({

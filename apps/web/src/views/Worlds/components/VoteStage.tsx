@@ -40,7 +40,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('How do you vote ?')}
+            {t('How do you vote?')}
           </Text>
           <ButtonMenu
             scale="xs"

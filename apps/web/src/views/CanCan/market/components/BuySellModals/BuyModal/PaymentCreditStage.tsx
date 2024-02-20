@@ -1,7 +1,5 @@
-import styled from 'styled-components'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
-  Box,
   Flex,
   Grid,
   Text,
@@ -30,47 +28,6 @@ interface TransferStageProps {
   continueToNextStage: () => void
 }
 
-const Wrapper = styled(Flex)`
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.dropdown};
-  border-radius: 16px;
-  position: relative;
-`
-const Address = styled.div`
-  flex: 1;
-  position: relative;
-  padding-left: 16px;
-
-  & > input {
-    background: transparent;
-    border: 0;
-    color: ${({ theme }) => theme.colors.text};
-    display: block;
-    font-weight: 600;
-    font-size: 16px;
-    padding: 0;
-    width: 100%;
-
-    &:focus {
-      outline: 0;
-    }
-  }
-
-  &:after {
-    background: linear-gradient(
-      to right,
-      ${({ theme }) => theme.colors.background}00,
-      ${({ theme }) => theme.colors.background}E6
-    );
-    content: '';
-    height: 100%;
-    pointer-events: none;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 40px;
-  }
-`
 const PaymentCreditStage: React.FC<any> = ({
   thumbnail,
   nftToBuy,
@@ -108,7 +65,7 @@ const PaymentCreditStage: React.FC<any> = ({
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
           <Text bold>{nftToBuy.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {`Collection #${collectionId}`}
+            {t('Collection #%val%', { val: collectionId })}
           </Text>
         </Grid>
       </Flex>
@@ -199,37 +156,36 @@ const PaymentCreditStage: React.FC<any> = ({
       {discountTokens?.map((data, index) => (
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <Text small bold color="textSubtle">
-            {t(`Token Position: ${index}`)}
+            {t('Token Position: %val%', { val: index })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Token Name: ${data.token?.name}`)}
+            {t('Token Name: %val%', { val: data.token?.name })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Token Symbol: ${data.token?.symbol}`)}
+            {t('Token Symbol: %val%', { val: data.token?.symbol })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(
-              `Discount: ${
+            {t('Discount: %val%', {
+              val:
                 data.checker !== ADDRESS_ZERO
                   ? getBalanceNumber(new BigNumber(data.discount))
-                  : parseInt(data.discount ?? '0') / 100
-              }`,
-            )}{' '}
+                  : parseInt(data.discount ?? '0') / 100,
+            })}{' '}
             {data.checker !== ADDRESS_ZERO ? currency?.symbol : '%'}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Collection ID: ${data.collectionId}`)}
+            {t('Collection ID: %val%', { val: data.collectionId })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Checker: `)}
+            {t('Checker: ')}
           </Text>
           <CopyAddress account={data.checker} mb="2px" tooltipMessage={t('Copied Checker Address')} />
           <Text small bold color="textSubtle">
-            {t(`Token Address: `)}
+            {t('Token Address: ')}
           </Text>
           <CopyAddress account={data.token?.address} mb="2px" tooltipMessage={t('Copied Token Address')} />
           <Text small bold color="textSubtle">
-            {t(`Destination Address: `)}
+            {t('Destination Address: ')}
           </Text>
           <CopyAddress account={data.destination} mb="2px" tooltipMessage={t('Copied Destination Address')} />
           <Divider />

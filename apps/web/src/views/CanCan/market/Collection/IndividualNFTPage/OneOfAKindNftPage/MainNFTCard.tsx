@@ -28,7 +28,6 @@ import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import { useGetOrder, useGetThumbnailNContent } from 'state/cancan/hooks'
 import { differenceInSeconds } from 'date-fns'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import RichText from 'components/RichText'
 
 import MarketPageTitle from '../../../components/MarketPageTitle'
 import StatBox, { StatBoxItem } from '../../../components/StatBox'
@@ -67,13 +66,12 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
   const collectionId = useRouter().query.collectionAddress as string
   const isPaywall = useRouter().pathname.includes('[collectionAddress]/paywall')
   // const currentAskPriceAsNumber = nft?.currentAskPrice ? parseFloat(nft?.currentAskPrice) : 0
-  const {
-    mainCurrency,
-    secondaryCurrency,
-    currentAskPriceAsNumber,
-    mainToSecondaryCurrencyFactor,
-    priceInSecondaryCurrency,
-  } = useWorkspaceCurrency(nft?.ve?.toLowerCase(), nft?.tFIAT, nft?.usetFIAT, nft?.currentAskPrice)
+  const { mainCurrency, currentAskPriceAsNumber } = useWorkspaceCurrency(
+    nft?.ve?.toLowerCase(),
+    nft?.tFIAT,
+    nft?.usetFIAT,
+    nft?.currentAskPrice,
+  )
   const { isMobile } = useMatchBreakpoints()
   const { mp4, isArticle, contentType, refetch } = useGetThumbnailNContent(nft)
   console.log('useGetThumbnailNContent====================>', mp4, isArticle, contentType, nft)
@@ -301,7 +299,7 @@ const MainNFTCard: React.FC<any> = ({ collection, nft, isOwnNft, nftIsProfilePic
               {bought && !isAuction ? (
                 <Flex flexDirection="column" mt="50px">
                   <LinkExternal href="https://paychat.payswap.org" bold textTransform="uppercase">
-                    {t('Notify Seller On PayChat or elsewhere!')}
+                    {t('You Can Notify The Seller On PayChat Or elsewhere If In A Hurry!')}
                   </LinkExternal>
                   <Contacts contactChannels={contactChannels} contacts={contacts} />
                 </Flex>

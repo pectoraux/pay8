@@ -41,7 +41,7 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
-  const titleName = 'Value Pool'
+  const titleName = 'ValuePool'
   const { reload, query } = useRouter()
   const fromValuepool = query.valuepool
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
@@ -189,7 +189,7 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
   })
 
   return (
-    <Modal title={t('Create Value Pool')} onDismiss={onDismiss}>
+    <Modal title={t('Create ValuePool')} onDismiss={onDismiss}>
       <GreyedOutContainer>
         <Flex ref={targetRef}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -211,7 +211,7 @@ const CreateValuepoolModal: React.FC<any> = ({ currency, onDismiss }) => {
         <StyledItemRow>
           <Flex ref={targetRef2} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Is Riskpool ?')}
+              {t('Is Riskpool?')}
             </Text>
             {tooltipVisible2 && tooltip2}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

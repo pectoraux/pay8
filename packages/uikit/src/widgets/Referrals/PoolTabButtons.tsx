@@ -1,7 +1,6 @@
-import { useRouter } from "next/router";
 import styled from "styled-components";
 import { useTranslation } from "@pancakeswap/localization";
-import { ButtonMenu, ButtonMenuItem, Toggle, Text, NotificationDot, NextLinkFromReactRouter } from "../../components";
+import { Toggle, Text, NotificationDot } from "../../components";
 import { ToggleView, ViewMode } from "../../components/ToggleView";
 
 const ToggleWrapper = styled.div`
@@ -65,30 +64,29 @@ const PoolTabButtons = ({
   setStakedOnly,
   favoritesOnly,
   setFavoritesOnly,
-  hasStakeInFinishedPools,
-  viewMode,
-  setViewMode,
-}: any) => {
-  const router = useRouter();
+}: // viewMode,
+// setViewMode,
+any) => {
+  // const router = useRouter();
 
   const { t } = useTranslation();
 
-  const isExact = router.pathname.includes("affiliate");
+  // const isExact = router.pathname.includes("affiliate");
 
-  const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
+  // const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
 
-  const liveOrFinishedSwitch = (
-    <Wrapper>
-      <ButtonMenu activeIndex={!isExact ? 0 : 1} scale="sm" variant="subtle">
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/businesses" replace>
-          {t("CanCan")}
-        </ButtonMenuItem>
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/businesses/affiliates" replace>
-          {t("Affiliates")}
-        </ButtonMenuItem>
-      </ButtonMenu>
-    </Wrapper>
-  );
+  // const liveOrFinishedSwitch = (
+  //   <Wrapper>
+  //     <ButtonMenu activeIndex={!isExact ? 0 : 1} scale="sm" variant="subtle">
+  //       <ButtonMenuItem as={NextLinkFromReactRouter} to="/businesses" replace>
+  //         {t("CanCan")}
+  //       </ButtonMenuItem>
+  //       <ButtonMenuItem as={NextLinkFromReactRouter} to="/businesses/affiliates" replace>
+  //         {t("Affiliates")}
+  //       </ButtonMenuItem>
+  //     </ButtonMenu>
+  //   </Wrapper>
+  // );
 
   const stakedOnlySwitch = (
     <ToggleWrapper>

@@ -15,7 +15,7 @@ import {
 import { getCollectionActivity } from 'state/cancan/helpers'
 import Container from 'components/Layout/Container'
 import TableLoader from 'components/TableLoader'
-import { Activity, Collection } from 'state/cancan/types'
+import { Collection } from 'state/cancan/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import useTheme from 'hooks/useTheme'
@@ -72,7 +72,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
           nftActivityFiltersParsed,
           MAX_PER_QUERY,
         )
-        const activity = sortActivity(collectionActivity)?.filter((activity) => activity?.item ?? activity?.paywall)
+        const activity = sortActivity(collectionActivity)?.filter((_activity) => _activity?.item ?? _activity?.paywall)
         setPaginationData({
           activity,
           currentPage: 1,
@@ -88,7 +88,7 @@ const ActivityHistory: React.FC<any> = ({ collection }) => {
     // if ((collectionAddress && isAddress(collectionAddress)) || collectionAddress === '') {
     fetchCollectionActivity()
     // }
-  }, [dispatch, collectionId, collectionAddress, nftActivityFiltersString, lastUpdated])
+  }, [dispatch, collectionId, collectionAddress, nftActivityFiltersString, lastUpdated, chainId])
 
   useEffect(() => {
     const slice = paginationData.activity?.slice(

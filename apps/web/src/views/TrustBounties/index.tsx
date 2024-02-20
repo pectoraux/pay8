@@ -1,17 +1,6 @@
 import styled from 'styled-components'
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Text,
-  FlexLayout,
-  PageHeader,
-  Loading,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-} from '@pancakeswap/uikit'
+import { Heading, Flex, Text, PageHeader, Loading, Pool, ArrowForwardIcon, Button, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/trustbounties/hooks'
@@ -52,7 +41,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       howToElem.scrollIntoView()
     }
   }
-  const { refresh } = usePoolsPageFetch()
+  usePoolsPageFetch()
 
   return (
     <>
@@ -66,7 +55,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('Have a business in the marketplace?')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Create a trust bounty so your customers are more confident when purchasing your products..')}
+              {t('Create a trust bounty so your customers are more confident when purchasing your products...')}
             </Heading>
             <Flex>
               <Button p="0" variant="text">
@@ -117,7 +106,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
-        <Steps title={t('How does it work ?')} onPresentTrustBounties={onPresentTrustBounties} />
+        <Steps title={t('How does it work?')} onPresentTrustBounties={onPresentTrustBounties} />
         <Questions />
         <V3SubgraphHealthIndicator />
       </Page>

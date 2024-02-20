@@ -1,12 +1,12 @@
+import { useState } from 'react'
 import { CloseIcon, Flex, IconButton, PageSection } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
 import styled from 'styled-components'
+import { FINISHED_ROUNDS_BG_DARK } from 'views/Lottery/pageSectionStyles'
+import CheckEarnings from 'views/TrustBountiesVoting/components/CheckEarnings'
 import Footer from './components/Footer'
 import Hero from './components/Hero'
 import { Proposals } from './components/Proposals'
-import { useState } from 'react'
-import { FINISHED_ROUNDS_BG_DARK } from 'views/Lottery/pageSectionStyles'
-import CheckEarnings from 'views/TrustBountiesVoting/components/CheckEarnings'
 
 const Chrome = styled.div`
   flex: none;

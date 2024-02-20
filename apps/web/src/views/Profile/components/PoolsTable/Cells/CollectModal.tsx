@@ -1,7 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoRenewIcon, Button, Flex, Heading, Modal, Text } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { useTheme } from 'styled-components'
 
 export interface CollectModalProps {
   formattedBalance: string
@@ -27,7 +26,6 @@ export function CollectModal({
   pendingTx,
 }: CollectModalWithHandlerProps) {
   const { t } = useTranslation()
-  const theme = useTheme()
 
   return (
     <Modal title={`${earningTokenSymbol} ${t('Harvest')}`} onDismiss={onDismiss}>

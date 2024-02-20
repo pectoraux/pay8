@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 import { Box, Breadcrumbs, Card, Flex, Heading, SearchInput, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Link from 'next/link'
 import { useTranslation } from '@pancakeswap/localization'
@@ -13,7 +14,6 @@ import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
 import ProposalRow from './ProposalRow'
 import LocationFilters from './LocationFilters'
-import { useRouter } from 'next/router'
 
 interface State {
   proposalType: ProposalType
@@ -44,11 +44,11 @@ const Proposals = () => {
     filterState: ProposalState.ACTIVE,
   })
 
-  const { proposalType, filterState } = state
+  const { proposalType } = state
 
   // const { status, data } = useSWR(['proposals', filterState], async () => getProposals(1000, 0, filterState))
   const valuepoolAddress = useRouter().query.valuepool as string
-  let where = valuepoolAddress ? { valuepool_: { id: valuepoolAddress?.toLowerCase() } } : {}
+  const where = valuepoolAddress ? { valuepool_: { id: valuepoolAddress?.toLowerCase() } } : {}
   const { status, data } = useSWR('proposals1', async () => getProposalsSg(where))
 
   const handleProposalTypeChange = (newProposalType: ProposalType) => {

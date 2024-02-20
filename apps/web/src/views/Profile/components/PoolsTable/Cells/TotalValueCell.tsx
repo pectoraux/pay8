@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
-import { Flex, Box, Text, Balance, Pool, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Flex, Box, Text, Balance, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
-import { Token } from '@pancakeswap/sdk'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface TotalStakedCellProps {

@@ -1,10 +1,8 @@
 import { Text, TokenImage, Pool, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import SaveIcon from 'views/Info/components/SaveIcon'
 import { useWatchlistTokens } from 'state/user/hooks'
-import truncateHash from '@pancakeswap/utils/truncateHash'
 
 interface NameCellProps {
   pool: Pool.DeserializedPool<Token>

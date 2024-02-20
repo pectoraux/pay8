@@ -23,7 +23,7 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
-  const titleName = 'Value Pool'
+  const titleName = 'ValuePool'
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
@@ -31,7 +31,6 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
   const vaFactoryContract = useVaFactoryContract()
   const [nftFilters, setNewFilters] = useState({} as any)
   const fromValuepool = useRouter().query.valuepool
-  const { reload } = useRouter()
   const [state, setState] = useState<any>(() => ({
     name: '',
     symbol: '',
@@ -46,17 +45,6 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
       })),
     )
   }, [nftFilters])
-
-  const updateValue = (key: any, value: any) => {
-    setState((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }))
-  }
-  const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { name: inputName, value } = evt.currentTarget
-    updateValue(inputName, value)
-  }
 
   const handleInitGauge = useCallback(async () => {
     setPendingFb(true)
@@ -110,7 +98,7 @@ const InitValuepoolModal: React.FC<any> = ({ pool, onDismiss }) => {
   }, [inputRef])
 
   return (
-    <Modal title={t('Initialize Value Pool')} onDismiss={onDismiss}>
+    <Modal title={t('Initialize ValuePool')} onDismiss={onDismiss}>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

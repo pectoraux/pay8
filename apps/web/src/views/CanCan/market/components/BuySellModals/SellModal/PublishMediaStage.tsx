@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import RichTextEditor from 'components/RichText'
-import { Flex, Box, Text, Button } from '@pancakeswap/uikit'
+import { Flex, Box, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 // import { Web3Storage, getFilesFromPath } from 'web3.storage'
 import { Divider } from '../shared/styles'
@@ -9,7 +9,7 @@ interface RemoveStageProps {
   handleRawValueChange?: any
 }
 
-const PublishMediaStage: React.FC<any> = ({ state, updateValue }) => {
+const PublishMediaStage: React.FC<any> = ({ updateValue }) => {
   const { t } = useTranslation()
   const [value, onChange] = useState('')
   // const token = process.env.API_TOKEN

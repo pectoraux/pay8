@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Skeleton, Text, Flex, Box, useMatchBreakpoints, Balance, Pool } from '@pancakeswap/uikit'
+import { Text, Flex, Box, useMatchBreakpoints, Balance } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from '@pancakeswap/localization'
 import BaseCell, { CellContent } from './BaseCell'
@@ -16,7 +16,7 @@ const StyledCell = styled(BaseCell)`
   }
 `
 
-const EarningsCell: React.FC<any> = ({ pool, account }) => {
+const EarningsCell: React.FC<any> = ({ pool }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const { gaugeWeight, weightPercent } = pool

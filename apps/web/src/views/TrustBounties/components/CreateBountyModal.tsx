@@ -520,7 +520,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
             <StyledItemRow>
               <Flex ref={targetRef9} paddingRight="50px">
                 <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-                  {t('Recurring Bounty ?')}
+                  {t('Recurring Bounty?')}
                 </Text>
                 {tooltipVisible9 && tooltip9}
                 <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -591,10 +591,6 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
                   {
                     label: 'SSI',
                     value: 'SSI',
-                  },
-                  {
-                    label: 'Transfers',
-                    value: 'Transfers',
                   },
                   {
                     label: t('TrustBounties'),

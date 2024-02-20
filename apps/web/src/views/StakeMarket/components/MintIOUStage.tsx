@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import { NftToken } from 'state/cancan/types'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -36,9 +34,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     <Text>{t('This sets your stake ID. You can only deliver IOUs to stakes that you have partnered with.')}</Text>
   )
   const TooltipComponent2 = () => <Text>{t('This sets the stake ID of the IOU recipient.')}</Text>
-  const TooltipComponent3 = () => (
-    <Text>{t("This specifies the position of recipient's stake ID in your list of stake partners.")}</Text>
-  )
   const TooltipComponent4 = () => (
     <Text>
       {t(
@@ -55,14 +50,6 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
     tooltip: tooltip2,
     tooltipVisible: tooltipVisible2,
   } = useTooltip(<TooltipComponent2 />, {
-    placement: 'bottom-end',
-    tooltipOffset: [20, 10],
-  })
-  const {
-    targetRef: targetRef3,
-    tooltip: tooltip3,
-    tooltipVisible: tooltipVisible3,
-  } = useTooltip(<TooltipComponent3 />, {
     placement: 'bottom-end',
     tooltipOffset: [20, 10],
   })

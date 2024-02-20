@@ -120,7 +120,7 @@ export function PoolControls<T>({
           ? pool.devaddr_?.toLowerCase() === account?.toLowerCase()
           : pool.owner?.toLowerCase() === account?.toLowerCase();
       }),
-    [finishedPools]
+    [account, finishedPools, router.asPath]
   );
   const stakedOnlyOpenPools = useCallback(() => {
     return openPoolsWithStartBlockFilter.filter((pool) => {
@@ -128,7 +128,7 @@ export function PoolControls<T>({
         ? pool.devaddr_?.toLowerCase() === account?.toLowerCase()
         : pool.owner?.toLowerCase() === account?.toLowerCase();
     });
-  }, [openPoolsWithStartBlockFilter]);
+  }, [account, openPoolsWithStartBlockFilter, router.asPath]);
 
   useEffect(() => {
     if (isIntersecting) {

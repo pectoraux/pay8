@@ -149,7 +149,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="toAddress"
           value={state.toAddress}
-          placeholder={t('input destination')}
+          placeholder={t('input destination address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -188,7 +188,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('First 4 Plus Codes')}
+            {t('First 4 PlusCodes')}
           </Text>
           {tooltipVisible5 && tooltip5}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -198,14 +198,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="first4"
           value={state.first4}
-          placeholder={t('input first 4 codes')}
+          placeholder={t('input first 4 pluscodes')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef6}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Last 4 Plus Codes')}
+            {t('Last 4 PlusCodes')}
           </Text>
           {tooltipVisible6 && tooltip6}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -215,14 +215,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="last4"
           value={state.last4}
-          placeholder={t('input last 4 codes')}
+          placeholder={t('input last 4 pluscodes')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef7}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Plus Codes Extension')}
+            {t("PlusCodes' Extensions")}
           </Text>
           {tooltipVisible7 && tooltip7}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -232,7 +232,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="nfts"
           value={state.nfts}
-          placeholder={t('input code extension')}
+          placeholder={t('input the extensions of the pluscodes')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

@@ -26,8 +26,6 @@ import { convertTimeToSeconds } from 'utils/timeHelper'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import BigNumber from 'bignumber.js'
 import { fetchStakesAsync } from 'state/stakemarket'
-import LocationStage from 'views/Ramps/components/LocationStage'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { combineDateAndTime } from 'views/SSI/CreateProposal/helpers'
 

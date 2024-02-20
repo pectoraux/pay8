@@ -4,6 +4,7 @@ import { Flex, Card, Text, Table, Th, ArrowBackIcon, ArrowForwardIcon, useMatchB
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { Activity, NftToken } from 'state/nftMarket/types'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useAppDispatch } from '../../../../../../state'
 import NoNftsImage from '../../../components/Activity/NoNftsImage'
@@ -12,7 +13,6 @@ import { Arrow, PageButtons } from '../../../components/PaginationButtons'
 import { getTokenActivity } from '../../../../../../state/cancan/helpers'
 import { sortActivity } from '../../../ActivityHistory/utils/sortActivity'
 import ActivityRow from '../../../components/Activity/ActivityRow'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 
 interface ActivityCardProps {
   nft: NftToken
@@ -47,7 +47,7 @@ const ActivityCard: React.FC<any> = ({ nft }) => {
     }
 
     fetchTokenActivity()
-  }, [nft, dispatch])
+  }, [nft, dispatch, chainId, collectionId])
 
   useEffect(() => {
     const getMaxPages = () => {

@@ -102,7 +102,7 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, favoritesOnly, setFavorites
     : 3;
   const indexFromRoot = isExact ? 0 : isBounty ? 1 : isVP ? 2 : 3;
   const { collectionAddress } = router.query;
-  const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
+  // const viewModeToggle = <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={setViewMode} />;
 
   const liveOrFinishedSwitch = (
     <Wrapper>

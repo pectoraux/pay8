@@ -1,10 +1,6 @@
-import { useState } from 'react'
-import { Flex, Box, Text, Button, ButtonMenu, ButtonMenuItem, Input, ErrorIcon, Grid } from '@pancakeswap/uikit'
+import { Flex, Box, Text, Button, Input, ErrorIcon, Grid } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { Divider, GreyedOutContainer } from './styles2'
 
 interface RemoveStageProps {
@@ -14,7 +10,7 @@ interface RemoveStageProps {
   continueToNextStage: () => void
 }
 
-const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleSuperChatChange, continueToNextStage }) => {
+const ClaimPendingRevenue: React.FC<any> = ({ state, handleSuperChatChange, continueToNextStage }) => {
   const { t } = useTranslation()
   return (
     <>

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { useState, useCallback, useMemo } from 'react'
 import { Box, Button, Flex, Heading, PageHeader, NextLinkFromReactRouter, PageSection } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
@@ -17,7 +18,6 @@ import SearchBar from '../components/SearchBar'
 import Collections from './Collections'
 import Newest from './Newest'
 import config from './config'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 const Gradient = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientCardHeader};
@@ -73,7 +73,6 @@ const Home = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   const handleChangeSearchQuery = useCallback(

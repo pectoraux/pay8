@@ -54,7 +54,7 @@ const UserMerchantProofType: React.FC<any> = ({
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
           <Text bold>{nftToSell?.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {`Collection #${collectionId}`}
+            {t('Collection #%val%', { val: collectionId })}
           </Text>
         </Grid>
       </Flex>
@@ -67,7 +67,7 @@ const UserMerchantProofType: React.FC<any> = ({
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingRight="50px" paddingTop="13px" bold>
-            {t('Rewards in')}
+            {t('Give Rewards in')}
           </Text>
           <ButtonMenu
             scale="sm"

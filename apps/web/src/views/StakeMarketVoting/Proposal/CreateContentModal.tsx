@@ -116,7 +116,7 @@ const CreateContentModal: React.FC<any> = ({ litigation, onSuccess, onDismiss })
       <Box mb="24px">
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Which one are you ?')}
+            {t('Which one are you?')}
           </Text>
           <ButtonMenu scale="xs" variant="subtle" activeIndex={activeButtonIndex} onItemClick={setActiveButtonIndex}>
             <ButtonMenuItem>{t('Attacker')}</ButtonMenuItem>

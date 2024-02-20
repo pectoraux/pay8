@@ -1,16 +1,13 @@
-import { Box, Flex, Grid, Text, Button, OpenNewIcon, IconButton, Link, VerifiedIcon } from '@pancakeswap/uikit'
+import { Box, Flex, Text, VerifiedIcon } from '@pancakeswap/uikit'
 import styled from 'styled-components'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
-import { getBscScanLinkForNft } from 'utils'
 import { NftToken, Collection } from 'state/cancan/types'
 // import { useGetCollectionBounties } from 'state/cancan/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import ExpandableCard from '../shared/ExpandableCard'
-import { SmallRoundedImage, CollectibleRowContainer } from '../shared/styles'
 import { useGetTokenURIs } from 'state/valuepools/hooks'
 import { getAuditorHelperAddress } from 'utils/addressHelpers'
 import Iframe from 'react-iframe'
 import Divider from 'components/Divider'
+import ExpandableCard from '../shared/ExpandableCard'
 
 interface CollectibleRowProps {
   badgeNft: NftToken
@@ -40,7 +37,7 @@ const StyledBox = styled(Box)`
   }
 `
 
-const AuditNFTsCard: React.FC<any> = ({ collection, nft, onSuccess }) => {
+const AuditNFTsCard: React.FC<any> = ({ collection, nft }) => {
   const { t } = useTranslation()
   const { data: tokenURIs } = useGetTokenURIs(getAuditorHelperAddress(), [
     {
@@ -57,7 +54,7 @@ const AuditNFTsCard: React.FC<any> = ({ collection, nft, onSuccess }) => {
     <StyledBox>
       <Flex
         flexDirection="column"
-        height={numBadges == 2 ? '1100px' : '100%'}
+        height={numBadges === 2 ? '1100px' : '100%'}
         justifyContent="center"
         overflowY="hidden"
         alignItems="center"

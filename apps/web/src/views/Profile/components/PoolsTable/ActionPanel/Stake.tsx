@@ -1,4 +1,4 @@
-import { Button, Text, useModal, Pool, Skeleton, Flex } from '@pancakeswap/uikit'
+import { Button, Text, useModal, Flex } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallback, useState } from 'react'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'

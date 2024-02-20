@@ -1,4 +1,3 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { ContextApi, TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex, Modal } from '@pancakeswap/uikit'
@@ -212,7 +211,6 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
   const dispatch = useAppDispatch()
   const fromValuepool = useRouter().query.valuepool
 
-  const [activeButtonIndex, setActiveButtonIndex] = useState<any>(0)
   const [share, setShare] = useState(0)
 
   const [state, setState] = useState<any>(() => ({

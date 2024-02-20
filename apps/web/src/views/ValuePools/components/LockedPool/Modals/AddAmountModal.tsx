@@ -63,7 +63,7 @@ const AddAmountModal: React.FC<any> = ({
   const currState = useCurrPool()
   const [checkedState, setCheckedState] = useState(false)
   const { t } = useTranslation()
-  const { tokenAddress, userData } = pool
+  const { userData } = pool
   const lockedAmountAsBigNumber = !Number.isNaN(new BigNumber(lockedAmount).toNumber())
     ? new BigNumber(lockedAmount)
     : BIG_ZERO

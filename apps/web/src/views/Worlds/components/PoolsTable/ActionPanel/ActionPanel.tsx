@@ -85,8 +85,8 @@ const InfoSection = styled(Box)`
 
 const ActionPanel: React.FC<any> = ({ account, pool, currAccount, expanded }) => {
   const { isMobile } = useMatchBreakpoints()
-  const [showSessions, setShowSessions] = useState(false)
-  const toggleSessions = () => setShowSessions(!showSessions)
+  // const [showSessions, setShowSessions] = useState(false)
+  // const toggleSessions = () => setShowSessions(!showSessions)
 
   return (
     <StyledActionPanel expanded={expanded}>

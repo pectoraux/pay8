@@ -55,7 +55,7 @@ const CashbackStage: React.FC<any> = ({
 
   useEffect(() => {
     refetch()
-  }, [tokenId])
+  }, [refetch, tokenId])
 
   return (
     <>
@@ -67,7 +67,7 @@ const CashbackStage: React.FC<any> = ({
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
           <Text bold>{askOrder.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {`Collection #${collectionId}`}
+            {t('Collection #%val%', { val: collectionId })}
           </Text>
         </Grid>
       </Flex>
@@ -121,13 +121,17 @@ const CashbackStage: React.FC<any> = ({
       </Grid>
       <Flex alignItems="center" flexDirection="column" justifyContent="center" mb="15px">
         <Text small bold color="secondary">
-          {t(`Cashback start: ${format(Number(askOrder?.priceReductor?.cashbackStart) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+          {t('Cashback start: %val%', {
+            val: format(Number(askOrder?.priceReductor?.cashbackStart) * 1000, 'MMM dd, yyyy HH:mm'),
+          })}
         </Text>
         <Text small bold color="secondary">
-          {t(`Using Identity Code: ${askOrder?.priceReductor?.checkIdentityCode ? t('Yes') : t('No')}`)}
+          {t('Using Identity Code: %val%', { val: askOrder?.priceReductor?.checkIdentityCode ? t('Yes') : t('No') })}
         </Text>
         <Text small bold color="secondary">
-          {t(`Current Item Purchases Only: ${askOrder?.priceReductor?.checkItemOnly ? t('Yes') : t('No')}`)}
+          {t('Current Item Purchases Only: %val%', {
+            val: askOrder?.priceReductor?.checkItemOnly ? t('Yes') : t('No'),
+          })}
         </Text>
       </Flex>
       {numbersCashbackAvailable ? (
@@ -136,22 +140,26 @@ const CashbackStage: React.FC<any> = ({
             {t('From numbers criteria')}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Period start: ${format(Number(numbersElligibilityCriteria[0]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+            {t('Period start: %val%', {
+              val: format(Number(numbersElligibilityCriteria[0]) * 1000, 'MMM dd, yyyy HH:mm'),
+            })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Period end: ${format(Number(numbersElligibilityCriteria[1]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+            {t('Period end: %val%', {
+              val: format(Number(numbersElligibilityCriteria[1]) * 1000, 'MMM dd, yyyy HH:mm'),
+            })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Lower threshold: ${numbersElligibilityCriteria[3]}`)}
+            {t('Lower threshold: %val%', { val: numbersElligibilityCriteria[3] })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Upper threshold: ${numbersElligibilityCriteria[4]}`)}
+            {t('Upper threshold: %val%', { val: numbersElligibilityCriteria[4] })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Cashback percentage: ${parseInt(numbersElligibilityCriteria[2]) / 100}%`)}
+            {t('Cashback percentage: %val%%', { val: parseInt(numbersElligibilityCriteria[2]) / 100 })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Limit: 1`)}
+            {t('Limit: %val%', { val: numbersElligibilityCriteria?.length > 5 ? numbersElligibilityCriteria[5] : 1 })}
           </Text>
         </Flex>
       ) : null}
@@ -161,22 +169,24 @@ const CashbackStage: React.FC<any> = ({
             {t('From cost criteria')}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Period start: ${format(Number(costElligibilityCriteria[0]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+            {t('Period start: %val%', {
+              val: format(Number(costElligibilityCriteria[0]) * 1000, 'MMM dd, yyyy HH:mm'),
+            })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Period end: ${format(Number(costElligibilityCriteria[1]) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+            {t('Period end: %val%', { val: format(Number(costElligibilityCriteria[1]) * 1000, 'MMM dd, yyyy HH:mm') })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Lower threshold: ${getBalanceNumber(costElligibilityCriteria[3])}`)}
+            {t('Lower threshold: %val%', { val: getBalanceNumber(costElligibilityCriteria[3]) })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Upper threshold: ${getBalanceNumber(costElligibilityCriteria[4])}`)}
+            {t('Upper threshold: %val%', { val: getBalanceNumber(costElligibilityCriteria[4]) })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Cashback percentage: ${parseInt(costElligibilityCriteria[2]) / 100}`)}%
+            {t('Cashback percentage: %val%%', { val: parseInt(costElligibilityCriteria[2]) / 100 })}
           </Text>
           <Text small bold color="textSubtle">
-            {t(`Limit: 1`)}
+            {t('Limit: %val%', { val: costElligibilityCriteria?.length > 5 ? costElligibilityCriteria[5] : 1 })}
           </Text>
         </Flex>
       ) : null}

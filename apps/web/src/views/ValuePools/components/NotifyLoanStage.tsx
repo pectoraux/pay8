@@ -11,14 +11,12 @@ import {
   ButtonMenuItem,
   Balance,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 
-import { GreyedOutContainer, Divider } from './styles'
 import { useGetBalanceOf } from 'state/valuepools/hooks'
-import { getNFTicketHelper2 } from 'utils/contractHelpers'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   nftToSell?: any

@@ -42,7 +42,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('Referral Rewards Program')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Do you refer people to businesses in CanCan ?')}
+              {t('Do you refer people to businesses in CanCan?')}
             </Heading>
             <Heading scale="md" color="text">
               {t('Create a gauge and start earning each time your referree makes a purchase.')}
@@ -86,7 +86,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
-        <Steps title={t('How does it work ?')} />
+        <Steps title={t('How does it work?')} />
         <Questions />
         <V3SubgraphHealthIndicator />
       </Page>

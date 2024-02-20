@@ -102,7 +102,16 @@ const SubscribeModal: React.FC<any> = ({ collection, paywall, onDismiss }) => {
       )
       setIsDone(true)
     }
-  }, [t, state, paywall, toastSuccess, callWithGasPrice, paywallContract, fetchWithCatchTxError])
+  }, [
+    fetchWithCatchTxError,
+    paywallContract,
+    state.nfticketId,
+    state.pickedOption,
+    account,
+    callWithGasPrice,
+    toastSuccess,
+    t,
+  ])
 
   return (
     <Modal title={t('Start Subscription to Wall')} onDismiss={onDismiss}>

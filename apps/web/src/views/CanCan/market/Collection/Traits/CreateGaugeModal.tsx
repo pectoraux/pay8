@@ -73,7 +73,6 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
   const { account } = useWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const { toastSuccess } = useToast()
-  const router = useRouter()
   const stakingTokenContract = useERC20(currency?.address || '')
   const nfticketContract = useNFTicket()
   const nftSvgContract = useNFTSVGContract()
@@ -99,11 +98,6 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
     decimals: currency?.decimals ?? 18,
     collectionId: pool?.collection?.id ?? '',
   }))
-  const [nftFilters, setNftFilters] = useState<any>({
-    country: pool?.countries,
-    city: pool?.cities,
-    product: pool?.products,
-  })
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
       ...prevState,
@@ -246,7 +240,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
         const args = [currency?.address, account, state.toAddress, state.identityTokenId]
         const contract = !state.marketplace
           ? marketTradesContract
-          : state.marketplace == 1
+          : state.marketplace === 1
           ? nftMarketTradesContract
           : paywallMarketTradesContract
         console.log('CONFIRM_CLAIM_REVENUE===============>', args)

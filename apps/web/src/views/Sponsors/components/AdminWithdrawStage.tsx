@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { Flex, Grid, Box, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'

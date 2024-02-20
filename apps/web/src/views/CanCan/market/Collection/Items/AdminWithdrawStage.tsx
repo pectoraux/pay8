@@ -1,30 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  ErrorIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  useTooltip,
-  HelpIcon,
-  Input,
-  Balance,
-} from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Button, ErrorIcon, useTooltip, Input } from '@pancakeswap/uikit'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-//
+import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
+
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getBalanceNumber, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { GreyedOutContainer, Divider } from './styles'
-import { useGetBalanceOf } from 'state/valuepools/hooks'
 import BribeField from 'views/ARPs/components/LockedPool/Common/BribeField'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   currency?: any

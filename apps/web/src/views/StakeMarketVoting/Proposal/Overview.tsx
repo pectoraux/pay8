@@ -1,19 +1,7 @@
-import {
-  ArrowBackIcon,
-  Box,
-  Button,
-  ReactMarkdown,
-  NotFound,
-  Flex,
-  Heading,
-  Text,
-  IconButton,
-} from '@pancakeswap/uikit'
+import { ArrowBackIcon, Box, Button, ReactMarkdown, NotFound, Flex, Heading, Text } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
-import { getAllVotes, getProposal } from 'state/voting/helpers'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import useSWRImmutable from 'swr/immutable'
-import { ProposalState } from 'state/types'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'

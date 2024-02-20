@@ -1,13 +1,9 @@
 import { useState } from 'react'
 import { Box } from '@pancakeswap/uikit'
-import { useCurrencyBalance } from 'state/wallet/hooks'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
 import BigNumber from 'bignumber.js'
-import { GenericModalProps } from '../types'
 import BribeField from '../Common/BribeField'
 import LockedModalBody from '../Common/LockedModalBody'
 

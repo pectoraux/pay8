@@ -225,7 +225,7 @@ const SetPriceStage: React.FC<any> = ({
         <StyledItemRow>
           <Flex ref={targetRef5} paddingRight="5px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="10px" bold>
-              {t('Is Bounty Required')}
+              {t('Is Bounty Required?')}
             </Text>
             {tooltipVisible5 && tooltip5}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -245,7 +245,7 @@ const SetPriceStage: React.FC<any> = ({
         <StyledItemRow>
           <Flex ref={targetRef6} paddingRight="5px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="10px" bold>
-              {t('Is Profile Required')}
+              {t('Is Profile Required?')}
             </Text>
             {tooltipVisible6 && tooltip6}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

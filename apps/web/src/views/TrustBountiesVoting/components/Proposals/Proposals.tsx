@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Box, Breadcrumbs, Card, Flex, Heading, SearchInput, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Link from 'next/link'
+import { useCallback, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import Container from 'components/Layout/Container'
 import useSWR from 'swr'
@@ -13,7 +14,6 @@ import ProposalsLoading from './ProposalsLoading'
 import TabMenu from './TabMenu'
 import ProposalRow from './ProposalRow'
 import LocationFilters from './LocationFilters'
-import { useCallback, useState } from 'react'
 
 interface State {
   proposalType: ProposalType
@@ -45,7 +45,7 @@ const Proposals = () => {
     filterState: ProposalState.ACTIVE,
   })
 
-  const { proposalType, filterState } = state
+  const { proposalType } = state
 
   // const { status, data } = useSWR(['proposals', filterState], async () => getProposals(1000, 0, filterState))
   const { status, data } = useSWR('litigations1', async () => getLitigationsSg())

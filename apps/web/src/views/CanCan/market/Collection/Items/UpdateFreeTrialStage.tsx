@@ -51,7 +51,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Free Trial Period (minutes')}
+          {t('Free Trial Period (minutes)')}
         </Text>
         <Input
           type="text"

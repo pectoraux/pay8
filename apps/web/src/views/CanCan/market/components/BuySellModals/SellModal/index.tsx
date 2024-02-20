@@ -437,10 +437,6 @@ const SellModal: React.FC<any> = ({ variant, nftToSell, currency, onDismiss }) =
     setStage(SellingStage.UPDATE_BURN_FOR_CREDIT_TOKENS)
   }
 
-  const continueToUpdateMerchantProofTypeStage = () => {
-    setStage(SellingStage.UPDATE_MERCHANT_PROOF_TYPE)
-  }
-
   const continueToUpdateDiscountsAndCashbackStage = () => {
     setStage(SellingStage.UPDATE_DISCOUNTS_AND_CASHBACKS)
   }

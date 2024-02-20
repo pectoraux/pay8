@@ -90,17 +90,7 @@ const RemoveAmountModal: React.FC<any> = ({
         // ceiling={ceiling}
       />
     ),
-    [
-      stakingToken,
-      remainingDuration,
-      checkedState,
-      currentLockedAmountAsBalance,
-      // atLeastOneWeekNewDuration,
-      totalLockedAmount,
-      usdValueNewStaked,
-      lockEndTime,
-      ceiling,
-    ],
+    [remainingDuration, checkedState, currentLockedAmountAsBalance, totalLockedAmount, usdValueNewStaked, lockEndTime],
   )
 
   return (

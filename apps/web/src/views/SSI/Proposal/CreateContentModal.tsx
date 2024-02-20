@@ -444,7 +444,7 @@ const CreateContentModal: React.FC<any> = ({ entry, unencrypted, onDismiss }) =>
             isLoading={pendingTx || pendingFb}
             disabled={activeButtonIndex1 ? false : activeButtonIndex2 ? false : !generateIdentityProof()}
           >
-            {t('%action% Data', { action: activeButtonIndex1 ? 'Share' : 'Generate Proof' })}
+            {activeButtonIndex1 ? t('Share Data') : t('Generate Proof')}
           </Button>
         ) : (
           <ConnectWalletButton />

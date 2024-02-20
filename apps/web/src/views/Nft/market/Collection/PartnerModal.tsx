@@ -33,7 +33,7 @@ interface FormState {
   gameName: string
 }
 
-const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
+const PartnerModal: React.FC<any> = ({ collection, onDismiss }) => {
   const [state, setState] = useState<any>(() => ({
     bountyId: '',
     productId: '',

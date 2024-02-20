@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will get funds from a valuepool added as a source to the specified bounty. This function should only be called when there is need for funds to pay a claim..',
+              'This will get funds from a valuepool added as a source to the specified bounty. This function should only be called when there is need for funds to pay a claim...',
             )}
           </Text>
         </Box>

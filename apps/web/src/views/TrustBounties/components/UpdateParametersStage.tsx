@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import RichTextEditor from 'components/RichText'
 import { GreyedOutContainer, Divider } from './styles'
 

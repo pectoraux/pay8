@@ -113,7 +113,20 @@ const PartnerModal: React.FC<any> = ({ registration, onDismiss }) => {
       )
       setIsDone(true)
     }
-  }, [state, t, account, registration, toastSuccess, callWithGasPrice, marketHelper2Contract, fetchWithCatchTxError])
+  }, [
+    fetchWithCatchTxError,
+    state.paywall,
+    state.bountyId,
+    state.productId,
+    state.deactivate,
+    registration?.collection?.owner,
+    account,
+    marketHelper2Contract,
+    paywallMarketHelper2Contract,
+    callWithGasPrice,
+    toastSuccess,
+    t,
+  ])
 
   return (
     <Modal title={t('Remove Item from Wall')} onDismiss={onDismiss}>

@@ -102,7 +102,7 @@ export function PoolControls<T>({
   const normalizedUrlSearch = useMemo(
     () => (typeof router?.query?.search === "string" ? router.query.search : ""),
     [router.query]
-  );
+  ) as any;
   const [_searchQuery, setSearchQuery] = useState("");
   const searchQuery = normalizedUrlSearch && !_searchQuery ? normalizedUrlSearch : _searchQuery;
   const [sortOption, setSortOption] = useState("hot");
@@ -120,7 +120,7 @@ export function PoolControls<T>({
       finishedPools.filter((pool) => {
         return pool.owner?.toLowerCase() === account?.toLowerCase();
       }),
-    [finishedPools]
+    [account, finishedPools]
   );
   const stakedOnlyOpenPools = useCallback(() => {
     return openPoolsWithStartBlockFilter.filter((pool: any) => {
@@ -128,7 +128,7 @@ export function PoolControls<T>({
       console.log("resres==================>", res);
       return !!res?.length;
     });
-  }, [openPoolsWithStartBlockFilter]);
+  }, [account, openPoolsWithStartBlockFilter]);
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0;
   console.log("1resres================>", openPoolsWithStartBlockFilter, stakedOnly, stakedOnlyOpenPools());
   useEffect(() => {
@@ -167,7 +167,7 @@ export function PoolControls<T>({
       return sortedPools.filter((pool: any) => latinise(pool?.name?.toLowerCase() || "").includes(lowercaseQuery));
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 

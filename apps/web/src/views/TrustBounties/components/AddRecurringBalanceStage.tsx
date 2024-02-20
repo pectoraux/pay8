@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { GreyedOutContainer, Divider } from './styles'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { getMarketTradesAddress, getNftMarketTradesAddress, getPaywallMarketTradesAddress } from 'utils/addressHelpers'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   state: any

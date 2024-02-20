@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { NftToken } from 'state/cancan/types'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -53,7 +51,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the marketplace of this Valuepool. The marketplace of a Valuepool is the contract it interacts with to make purchases. If you want your users to use your Valuepool to make purchases of subscriptions, input the subscription market trades contract address, if you want them to purchase NFTs on the eCollectibles marketplace, input the NFT market trades contract, in case of regular products/services on Cancan, use the market trades contract. If you want your users to purchase lottery tickets, use the lottery contract address. For purchases of gaming minutes, use the game factory contract address. For purchases of betting tickets, use the betting contract address, etc. All those contract addresses are available in the documentation. ',
+              'This will update the marketplace of this Valuepool. The marketplace of a Valuepool is the contract it interacts with to make purchases. If you want your users to use your Valuepool to make purchases of subscriptions, input the subscription market trades contract address, if you want them to purchase NFTs on the eCollectibles marketplace, input the NFT market trades contract, in case of regular products/services on Cancan, use the market trades contract. If you want your users to purchase lottery tickets, use the lottery contract address. For purchases of gaming minutes, use the game factory contract address. For purchases of betting tickets, use the betting contract address, etc. All those contract addresses are available in the documentation.',
             )}
           </Text>
         </Box>

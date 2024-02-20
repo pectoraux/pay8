@@ -159,18 +159,18 @@ const LockedModalBody: React.FC<any> = ({
       {!needsApprove && cakeNeeded ? (
         hasEnoughBalanceToExtend ? (
           <Text fontSize="12px" mt="24px">
-            {t('0.0001 CAKE will be spent to extend')}
+            {t('0.0001 token will be spent to extend')}
           </Text>
         ) : (
           <Message variant="warning" mt="24px">
-            <MessageText maxWidth="200px">{t('0.0001 CAKE required for enabling extension')}</MessageText>
+            <MessageText maxWidth="200px">{t('0.0001 token required for enabling extension')}</MessageText>
           </Message>
         )
       ) : null}
 
       {showApproveWarning && needsApprove ? (
         <Message variant="warning" mt="24px">
-          <MessageText maxWidth="200px">{t('Insufficient token allowance. Click "Enable" to approve.')}</MessageText>
+          <MessageText maxWidth="200px">{t("Insufficient token allowance. Click 'Enable' to approve.")}</MessageText>
         </Message>
       ) : null}
 

@@ -1,26 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  ErrorIcon,
-  Input,
-  ButtonMenu,
-  ButtonMenuItem,
-  HelpIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
+import { useEffect, useRef } from 'react'
+import { Flex, Grid, Box, Text, Button, ErrorIcon, Input, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import BigNumber from 'bignumber.js'
 
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {

@@ -186,14 +186,14 @@ const ReviewStage: React.FC<any> = ({
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'If you do not have enough of the tokens accepeted for this product, you can purchase more of the tokens from the dRamp on page Trade > dRamps.',
+        'If you do not have enough of the tokens accepted for this product, you can purchase more of the tokens from the dRamp on page Trade > dRamps.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'If you do not have enough of the tokens accepeted for this product, you can purchase more of the tokens from the dRamp on page Trade > dRamps.',
+        'If you do not have enough of the tokens accepted for this product, you can purchase more of the tokens from the dRamp on page Trade > dRamps.',
       )}
     </Text>
   )
@@ -355,7 +355,7 @@ const ReviewStage: React.FC<any> = ({
             currency={currencies[paymentCurrency]}
             secondaryCurrency={getSecondaryCurrency(currencies[paymentCurrency])}
           />
-          {Object.keys(nftFilters).map((optionKey, idx) => {
+          {Object.keys(nftFilters).map((optionKey) => {
             return Object.keys(nftFilters[optionKey])
               .filter((valueKey) => !!nftFilters[optionKey][valueKey].count)
               .map((valueKey) => {

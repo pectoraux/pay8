@@ -1,15 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { NftToken } from 'state/cancan/types'
-import Options from './Options'
-import { OptionType } from './types'
-import { Divider, RoundedImage } from '../shared/styles'
-import { GreyedOutContainer } from './styles'
 import { getMarketHelperAddress, getPaywallMarketHelperAddress } from 'utils/addressHelpers'
 import { useGetTimeEstimates } from 'state/cancan/hooks'
 import { useRouter } from 'next/router'
+import Options from './Options'
+import { Divider, RoundedImage } from '../shared/styles'
+import { GreyedOutContainer } from './styles'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -61,7 +58,7 @@ const SetPriceStage: React.FC<any> = ({
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
           <Text bold>{nftToSell?.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {`Collection #${collectionId}`}
+            {t('Collection #%val%', { val: collectionId })}
           </Text>
         </Grid>
       </Flex>
@@ -69,7 +66,7 @@ const SetPriceStage: React.FC<any> = ({
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
           {t('Item Time Estimate')}
         </Text>
-        <Input type="text" scale="sm" value={`${timeEstimate?.itemPrice ?? '0'} seconds`} disabled />
+        <Input type="text" scale="sm" value={t('%val% seconds', { val: timeEstimate?.itemPrice ?? '0' })} disabled />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>

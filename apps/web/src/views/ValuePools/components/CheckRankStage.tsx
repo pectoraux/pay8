@@ -1,18 +1,5 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  ButtonMenuItem,
-  ButtonMenu,
-  Input,
-  ErrorIcon,
-  HelpIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { GreyedOutContainer, Divider } from './styles'
@@ -200,7 +187,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="options"
           value={state.options}
-          placeholder={t('comma separated token ids')}
+          placeholder={t('comma separated option ids')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -258,7 +245,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef8}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Ve NFT Token ID')}
+            {t('VeNFT Token ID')}
           </Text>
           {tooltipVisible8 && tooltip8}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -268,7 +255,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="tokenId"
           value={state.tokenId}
-          placeholder={t('input ve nft token id')}
+          placeholder={t('input veNFT token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

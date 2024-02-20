@@ -109,7 +109,7 @@ const PaymentCreditStage: React.FC<any> = ({
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
           <Text bold>{nftToBuy.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {`Collection #${collectionId}`}
+            {t('Collection #%val%', { val: collectionId })}
           </Text>
         </Grid>
       </Flex>

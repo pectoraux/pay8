@@ -1,7 +1,6 @@
 import { Flex, Box, Text, Button, Input, ButtonMenu, ButtonMenuItem, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { MarketPlace } from './types'
 import { GreyedOutContainer } from './styles'
 import { Divider } from '../shared/styles'
 
@@ -50,8 +49,8 @@ const UpdateAuditorsStage: React.FC<RemoveStageProps> = ({
               activeIndex={state.addAuditors}
               onItemClick={handleRawValueChange('addAuditors')}
             >
-              <ButtonMenuItem>Remove</ButtonMenuItem>
-              <ButtonMenuItem>Add</ButtonMenuItem>
+              <ButtonMenuItem>{t('Remove')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Add')}</ButtonMenuItem>
             </ButtonMenu>
           </StyledItemRow>
         </GreyedOutContainer>

@@ -1,25 +1,6 @@
 import { useCallback, useState } from 'react'
-import times from 'lodash/times'
 import capitalize from 'lodash/capitalize'
-import sum from 'lodash/sum'
-import orderBy from 'lodash/orderBy'
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  Text,
-  Skeleton,
-  Table,
-  Td,
-  Th,
-  Flex,
-  Box,
-  Balance,
-  Button,
-  useModal,
-  LinkExternal,
-  ButtonMenu,
-  ButtonMenuItem,
-} from '@pancakeswap/uikit'
+import { Flex, Box, Balance, Button, useModal, LinkExternal, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import {
   useGetCollection,
   useGetPendingRevenue,
@@ -29,10 +10,9 @@ import {
 } from 'state/cancan/hooks'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import BigNumber from 'bignumber.js'
-import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import CollapsibleCard from 'components/CollapsibleCard'
 import { useTranslation } from '@pancakeswap/localization'
-import { ActionContainer, ActionContent, ActionTitles } from '../styles'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import { useCurrency } from 'hooks/Tokens'
@@ -40,6 +20,7 @@ import CreateGaugeModal from './CreateGaugeModal'
 import WebPagesModal from './WebPagesModal'
 import { GreyedOutContainer } from './styles2'
 import { StyledItemRow } from '../Items/ListTraitFilter2/styles'
+import { ActionContent, ActionTitles } from '../styles'
 
 interface CollectionTraitsProps {
   collectionAddress: string
@@ -48,7 +29,7 @@ interface CollectionTraitsProps {
 const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>> = ({ collectionAddress }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { collection, refresh } = useGetCollection(collectionAddress)
+  const { collection } = useGetCollection(collectionAddress)
   const [currency, setCurrency] = useState(DEFAULT_TFIAT)
   const [marketPlace, setMarketPlace] = useState(0)
   const cacanCurrencyInput = useCurrency(DEFAULT_TFIAT)
@@ -106,7 +87,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
   const actionTitle2 = (
     <>
       <Text fontSize="12px" mr="3px" bold color="textSubtle" as="span" textTransform="uppercase">
-        {'USD'}
+        USD
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
         {t('Revenue')}

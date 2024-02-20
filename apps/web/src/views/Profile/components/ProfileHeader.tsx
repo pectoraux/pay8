@@ -75,7 +75,7 @@ const ProfileHeader: React.FC<any> = ({
   const { sharedEmail } = useGetSharedEmail(account)
 
   const Icon = !showUsername ? VisibilityOff : VisibilityOn
-  const isBounties = useRouter().asPath.includes('bounties')
+  // const isBounties = useRouter().asPath.includes('bounties')
   const [onPresentTrustBounties] = useModal(<CreateBountyModal currency={currency ?? inputCurency} />)
 
   const avatar = useMemo(() => {
@@ -231,6 +231,7 @@ const ProfileHeader: React.FC<any> = ({
     currency,
     inputCurency,
     handleInputSelect,
+    sharedEmail,
     hasProfile,
     openPresentCreateProfile,
   ])

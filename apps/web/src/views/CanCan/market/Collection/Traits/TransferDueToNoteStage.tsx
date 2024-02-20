@@ -1,10 +1,6 @@
-import { useState } from 'react'
 import { Flex, Box, Text, Button, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency } from '@pancakeswap/sdk'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { Divider, GreyedOutContainer } from './styles2'
 
@@ -16,9 +12,6 @@ interface RemoveStageProps {
 
 const TransferDueToNote: React.FC<any> = ({ state, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
-  const [lockedAmount, setLockedAmount] = useState('')
-  const stakingTokenBalance = BIG_ZERO
-  const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   return (
     <>

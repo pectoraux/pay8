@@ -1,9 +1,7 @@
 import { Flex, Box, Text, Button, Input, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import Filters from 'views/ChannelCreation/Filters'
 
-import { MarketPlace } from './types'
 import { GreyedOutContainer } from './styles'
 import { Divider } from '../shared/styles'
 
@@ -14,15 +12,7 @@ interface RemoveStageProps {
   continueToNextStage: () => void
 }
 
-const ModifyCollectionModal: React.FC<any> = ({
-  state,
-  nftFilters,
-  setNftFilters,
-  collection,
-  handleChange,
-  handleRawValueChange,
-  continueToNextStage,
-}) => {
+const ModifyCollectionModal: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
 
   return (
@@ -59,7 +49,7 @@ const ModifyCollectionModal: React.FC<any> = ({
         </GreyedOutContainer>
         <GreyedOutContainer>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Badge Id')}
+            {t('Badge ID')}
           </Text>
           <Input
             type="text"
@@ -105,7 +95,7 @@ const ModifyCollectionModal: React.FC<any> = ({
             scale="sm"
             name="userMinBounty"
             value={state.userMinBounty}
-            placeholder={t('user minimum bounty')}
+            placeholder={t('input user minimum bounty')}
             onChange={handleChange}
           />
         </GreyedOutContainer>

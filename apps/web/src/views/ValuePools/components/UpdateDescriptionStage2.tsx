@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { NftToken } from 'state/cancan/types'
 import RichTextEditor from 'components/RichText'
 
 import { GreyedOutContainer, Divider } from './styles'
@@ -23,7 +21,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, handleEasyMdeChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleEasyMdeChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 

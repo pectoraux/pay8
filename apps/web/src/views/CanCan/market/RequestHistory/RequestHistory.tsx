@@ -13,7 +13,7 @@ import {
 } from '@pancakeswap/uikit'
 import Container from 'components/Layout/Container'
 import TableLoader from 'components/TableLoader'
-import { Activity, Collection } from 'state/cancan/types'
+import { Collection } from 'state/cancan/types'
 import { useTranslation } from '@pancakeswap/localization'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import useTheme from 'hooks/useTheme'

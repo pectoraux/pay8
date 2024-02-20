@@ -13,7 +13,6 @@ import {
   Grid,
   ErrorIcon,
   useTooltip,
-  HelpIcon,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'

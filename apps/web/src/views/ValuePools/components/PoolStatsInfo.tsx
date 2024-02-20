@@ -231,7 +231,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
         </Flex>
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <Text color="primary" fontSize="14px">
-            {t('Min Sponsor Percentile')} {`->`} {parseInt(pool.minimumSponsorPercentile ?? '0') / 100}%
+            {t('Min. Sponsor Percentile')} {`->`} {parseInt(pool.minimumSponsorPercentile ?? '0') / 100}%
           </Text>
         </Flex>
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

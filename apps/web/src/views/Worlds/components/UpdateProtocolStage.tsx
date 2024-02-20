@@ -212,7 +212,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="amountReceivable"
           value={state.amountReceivable}
-          placeholder={t('input an amount receivable')}
+          placeholder={t('input amount receivable')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

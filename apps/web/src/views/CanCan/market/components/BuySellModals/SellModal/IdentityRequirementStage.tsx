@@ -131,7 +131,7 @@ const IdentityRequirementStage: React.FC<any> = ({
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
           <Text bold>{nftToSell?.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {`Collection #${collectionId}`}
+            {t('Collection #%val%', { val: collectionId })}
           </Text>
         </Grid>
       </Flex>
@@ -222,7 +222,7 @@ const IdentityRequirementStage: React.FC<any> = ({
       <GreyedOutContainer>
         <Flex ref={targetRef6}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Only Data Keepers ?')}
+            {t('Only Data Keepers?')}
           </Text>
           {tooltipVisible6 && tooltip6}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -243,7 +243,7 @@ const IdentityRequirementStage: React.FC<any> = ({
         </Text>
       </Grid>
       <Flex flexDirection="column" alignItems="center" justifyContent="space-between" height="150px">
-        <LinkExternal href="">{t('Learn more about identiy requirements')}</LinkExternal>
+        <LinkExternal href="https://docs.payswap.org">{t('Learn more about identiy requirements')}</LinkExternal>
       </Flex>
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">

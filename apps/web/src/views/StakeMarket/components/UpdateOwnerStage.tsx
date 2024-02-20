@@ -33,7 +33,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="owner"
           value={state.owner}
-          placeholder={t('input new owner')}
+          placeholder={t('input new owner address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

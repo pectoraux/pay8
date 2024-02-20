@@ -87,7 +87,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
-        <Steps title={t('How does it work ?')} />
+        <Steps title={t('How does it work?')} />
         <Questions />
         <V3SubgraphHealthIndicator />
       </Page>

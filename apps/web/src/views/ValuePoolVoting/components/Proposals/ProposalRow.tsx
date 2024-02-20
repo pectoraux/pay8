@@ -11,10 +11,10 @@ import styled from 'styled-components'
 import { Proposal } from 'state/types'
 import { useGetTokenData } from 'state/ramps/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useGetVoteOption } from 'state/valuepools/hooks'
 import { isCoreProposal } from '../../helpers'
 import TimeFrame from './TimeFrame'
 import { ProposalStateTag, ProposalTypeTag } from './tags'
-import { useGetVoteOption } from 'state/valuepools/hooks'
 
 interface ProposalRowProps {
   proposal: Proposal

@@ -114,13 +114,13 @@ export function PoolControls<T>({
       finishedPools.filter((pool) => {
         return pool?.owner?.toLowerCase() === account?.toLowerCase();
       }),
-    [finishedPools]
+    [account, finishedPools]
   );
   const stakedOnlyOpenPools = useCallback(() => {
     return openPoolsWithStartBlockFilter.filter((pool) => {
       return pool?.owner?.toLowerCase() === account?.toLowerCase();
     });
-  }, [openPoolsWithStartBlockFilter]);
+  }, [account, openPoolsWithStartBlockFilter]);
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0;
 
   useEffect(() => {

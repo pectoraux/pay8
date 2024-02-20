@@ -1,9 +1,5 @@
 import styled from 'styled-components'
-import { Text, Flex, Box, useMatchBreakpoints, Balance, Pool } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { Token } from '@pancakeswap/sdk'
+import { Text, Flex, Box, useMatchBreakpoints, Balance } from '@pancakeswap/uikit'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface EarningsCellProps {

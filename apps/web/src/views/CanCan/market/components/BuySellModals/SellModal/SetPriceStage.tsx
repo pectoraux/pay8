@@ -14,15 +14,12 @@ import {
   useTooltip,
   HelpIcon,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import multiplyPriceByAmount from '@pancakeswap/utils/multiplyPriceByAmount'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
-import { NftToken } from 'state/cancan/types'
 import { CurrencyLogo } from 'components/Logo'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { StyledItemRow } from 'views/CanCan/market/components/Filters/ListFilter/styles'
-import { OptionType } from './types'
 import { Divider, RoundedImage } from '../shared/styles'
 import { GreyedOutContainer, RightAlignedInput, FeeAmountCell } from './styles'
 
@@ -49,7 +46,6 @@ const SetPriceStage: React.FC<any> = ({
   currentPrice,
   state,
   handleChange,
-  handleChoiceChange,
   handleRawValueChange,
   continueToNextStage,
 }) => {
@@ -64,7 +60,6 @@ const SetPriceStage: React.FC<any> = ({
     rsrcTokenId,
     maxSupply,
     dropinTimer,
-    options,
   } = state
   const adjustedPriceIsTheSame = variant === 'adjust' && parseFloat(currentPrice) === parseFloat(price)
   const priceAsFloat = parseFloat(price)
@@ -208,7 +203,7 @@ const SetPriceStage: React.FC<any> = ({
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
           <Text bold>{nftToSell?.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {`Collection #${collectionId}`}
+            {t('Collection #%val%', { val: collectionId })}
           </Text>
         </Grid>
       </Flex>

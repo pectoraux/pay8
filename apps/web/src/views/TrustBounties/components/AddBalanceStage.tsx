@@ -147,7 +147,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <StyledItemRow>
           <Flex ref={targetRef4} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Picked Native Coin ?')}
+              {t('Picked Native Coin?')}
             </Text>
             {tooltipVisible4 && tooltip4}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

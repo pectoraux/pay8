@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Flex, Card, Grid, SellIcon, Text, useModal, Box, Skeleton, Button } from '@pancakeswap/uikit'
+import { Flex, Card, Grid, SellIcon, Text, useModal, Box, Button } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { NftToken } from 'state/nftMarket/types'
@@ -84,12 +84,13 @@ const OwnerCard: React.FC<any> = ({ nft, isOwnNft, isPaywall, onSuccess }) => {
                     <CurrencyLogo currency={mainCurrency} size="24px" style={{ marginRight: '8px' }} />
                     <Text bold>{formatNumber(parseFloat(nft?.currentAskPrice), 0, 5)}</Text>
                   </Flex>
-                  {bnbBusdPrice ? (
-                    <Text fontSize="12px" color="textSubtle">
-                      {`(~${formatNumber(priceInUsd, 2, 2)} USD)`}
-                    </Text>
-                  ) : null
-                  // <Skeleton width="86px" height="12px" mt="4px" />
+                  {
+                    bnbBusdPrice ? (
+                      <Text fontSize="12px" color="textSubtle">
+                        {`(~${formatNumber(priceInUsd, 2, 2)} USD)`}
+                      </Text>
+                    ) : null
+                    // <Skeleton width="86px" height="12px" mt="4px" />
                   }
                 </>
               ) : (

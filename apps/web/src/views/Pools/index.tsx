@@ -131,7 +131,7 @@ const Pools: React.FC<any> = () => {
             </>
           )}
         </PoolControls>
-        <Steps title={t('How does it work ?')} onPresentCreateGauge={onPresentCreateGauge} />
+        <Steps title={t('How does it work?')} onPresentCreateGauge={onPresentCreateGauge} />
         <Questions />
       </Page>
       {createPortal(<ScrollToTopButtonV2 />, document.body)}

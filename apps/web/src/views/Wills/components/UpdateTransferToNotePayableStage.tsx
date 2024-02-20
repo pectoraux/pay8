@@ -103,7 +103,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="percentage"
           value={state.percentage}
-          placeholder={t('input percentage to teansfer')}
+          placeholder={t('input percentage to transfer')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

@@ -1,27 +1,12 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import {
-  Button,
-  Heading,
-  Text,
-  Flex,
-  useModal,
-  AutoRenewIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  Input,
-  Grid,
-  ErrorIcon,
-} from '@pancakeswap/uikit'
+import { Button, Heading, Text, Flex, useModal, AutoRenewIcon, Input, Grid, ErrorIcon } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { FetchStatus, LotteryStatus } from 'config/constants/types'
+import { FetchStatus } from 'config/constants/types'
 import { useTranslation } from '@pancakeswap/localization'
-import { useLottery } from 'state/lottery/hooks'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { useGetEarned } from 'state/trustbounties/hooks'
 import ClaimPrizesModal from './ClaimPrizesModal'
-import Divider from 'components/Divider'
 // import useGetUnclaimedRewards from '../hooks/useGetUnclaimedRewards'
 
 const TicketImage = styled.img`
@@ -143,7 +128,7 @@ const CheckEarnings = ({ fromStake = false }) => {
         <TicketImage src="/images/lottery/ticket-l.png" alt="vote ticket" />
         <Flex mx={['4px', null, '16px']} flexDirection="column">
           <Heading textAlign="center" color="#F4EEFF" mb="24px">
-            {t('Did your votes win you any tokens ?')}
+            {t('Did your votes win you any tokens?')}
           </Heading>
           <Flex mb="24px">
             <Input

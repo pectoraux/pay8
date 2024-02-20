@@ -111,7 +111,7 @@ const NftProfile: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
           {t('How does it work?')}
         </DesktopButton>
         {children}
-        <Steps title={t('How does it work ?')} />
+        <Steps title={t('How does it work?')} />
         <Questions />
       </Page>
     </>

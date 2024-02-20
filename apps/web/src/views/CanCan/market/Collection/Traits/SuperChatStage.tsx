@@ -1,24 +1,9 @@
-import { useState } from 'react'
-import {
-  Flex,
-  Box,
-  Text,
-  Button,
-  ButtonMenu,
-  ButtonMenuItem,
-  Input,
-  ErrorIcon,
-  Grid,
-  Balance,
-} from '@pancakeswap/uikit'
+import { Flex, Box, Text, Button, Input, ErrorIcon, Grid, Balance } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { Divider, GreyedOutContainer } from './styles2'
 import BigNumber from 'bignumber.js'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { Divider, GreyedOutContainer } from './styles2'
 
 interface RemoveStageProps {
   state: any

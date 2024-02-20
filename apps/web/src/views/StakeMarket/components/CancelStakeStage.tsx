@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import { NftToken } from 'state/cancan/types'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {

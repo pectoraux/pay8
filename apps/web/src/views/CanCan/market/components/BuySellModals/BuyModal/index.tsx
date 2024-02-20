@@ -159,18 +159,18 @@ const BuyModal: React.FC<any> = ({
     let opt = []
     Object.values(nftFilters)?.map((vals) => {
       Object.keys(vals).map((elt) => {
-        const id =
-          variant === 'paywall'
-            ? nftToBuy.options?.findIndex((cat) => parseFloat(cat.value) === parseFloat(elt))
-            : nftToBuy.options?.findIndex((cat) => cat.element?.toLowerCase() === elt.toLowerCase())
-        const count = vals[elt]?.count
+        // const id =
+        //   variant === 'paywall'
+        //     ? nftToBuy.options?.findIndex((cat) => parseFloat(cat.value) === parseFloat(elt))
+        //     : nftToBuy.options?.findIndex((cat) => cat.element?.toLowerCase() === elt.toLowerCase())
+        // const count = vals[elt]?.count
         opt = [...opt, vals[elt].price]
         return opt
       })
       return null
     })
     return opt
-  }, [variant, nftToBuy, nftFilters])
+  }, [nftFilters])
 
   useEffect(() => {
     refetchPayment()

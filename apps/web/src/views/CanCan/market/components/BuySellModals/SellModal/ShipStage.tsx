@@ -2,7 +2,7 @@ import axios from 'axios'
 import EncryptRsa from 'encrypt-rsa'
 import { differenceInSeconds } from 'date-fns'
 import { useState, ChangeEvent } from 'react'
-import { Flex, Grid, Text, Button, useToast, Modal } from '@pancakeswap/uikit'
+import { Flex, Grid, Text, useToast, Modal } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { Currency, MaxUint256 } from '@pancakeswap/sdk'
 import { useTranslation, TranslateFunction, ContextApi } from '@pancakeswap/localization'
@@ -237,16 +237,17 @@ const EditStage: React.FC<any> = ({
     } else if (stage === SellingStage.CONFIRM_CREATE_ASK_ORDER) {
       link += `${state.tokenId?.split(' ')?.join('-')?.trim()}`
     }
+    const subject = t('New Product Listed')
     switch (stage) {
       case SellingStage.CONFIRM_CREATE_PAYWALL2 || SellingStage.CONFIRM_CREATE_ASK_ORDER:
         await axios.post('/api/email2', {
-          subject: 'New Product Listed',
+          subject,
           messageHtml: `
-          # MarketPlace Support
+          # ${t('MarketPlace Support')}
     
-          A channel you're following just launched a new product: [${state.tokenId}](${link})
+          ${t("A channel you're following just launched a new product:")} [${state.tokenId}](${link})
           
-          _Thanks for using Payswap_
+          ${t('_Thanks for using Payswap_')}
           `,
           emailList: state.emailList,
         })

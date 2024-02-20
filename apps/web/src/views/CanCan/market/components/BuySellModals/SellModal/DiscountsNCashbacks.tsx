@@ -375,7 +375,7 @@ const DiscountsNCashbacks: React.FC<any> = ({
         <Grid flex="1" gridTemplateColumns="1fr 1fr" alignItems="center">
           <Text bold>{nftToSell?.tokenId}</Text>
           <Text fontSize="12px" color="textSubtle" textAlign="right">
-            {`Collection #${collectionId}`}
+            {t('Collection #%val%', { val: collectionId })}
           </Text>
         </Grid>
       </Flex>
@@ -390,7 +390,7 @@ const DiscountsNCashbacks: React.FC<any> = ({
           <StyledItemRow>
             <Flex ref={targetRef9} paddingRight="50px">
               <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" bold>
-                {t('Rewards in')}
+                {t('Give Rewards in')}
               </Text>
               {tooltipVisible9 && tooltip9}
               <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

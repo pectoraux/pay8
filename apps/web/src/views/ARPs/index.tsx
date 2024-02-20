@@ -89,7 +89,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
-        <Steps title={t('How does it work ?')} onPresentCreateGauge={onPresentCreateGauge} />
+        <Steps title={t('How does it work?')} onPresentCreateGauge={onPresentCreateGauge} />
         <Questions />
         <V3SubgraphHealthIndicator />
       </Page>

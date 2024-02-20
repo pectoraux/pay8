@@ -136,7 +136,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
                 {isUnique ? t('Yes') : t('No')}
               </Text>
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('Is Unique ?')}
+                {t('Is Unique?')}
               </Text>
             </Flex>
           </Box>

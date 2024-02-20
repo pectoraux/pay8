@@ -1,4 +1,4 @@
-import { Flex, Text, Balance, Pool, useMatchBreakpoints, Heading } from '@pancakeswap/uikit'
+import { Flex, Text, Pool, useMatchBreakpoints, Heading } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'

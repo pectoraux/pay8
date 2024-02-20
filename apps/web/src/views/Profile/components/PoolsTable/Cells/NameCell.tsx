@@ -1,10 +1,9 @@
-import { Flex, Text, TokenImage, useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
+import { Flex, Text, TokenImage, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { memo } from 'react'
 import styled from 'styled-components'
 import SaveIcon from 'views/Info/components/SaveIcon'
 import { getVaultPosition, VaultPosition, VaultPositionParams } from 'utils/cakePool'
-import { Token } from '@pancakeswap/sdk'
 import { useWatchlistTokens } from 'state/user/hooks'
 import BaseCell, { CellContent } from './BaseCell'
 

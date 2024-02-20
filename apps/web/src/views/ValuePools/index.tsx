@@ -51,7 +51,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Value Pools')}
+              {t('ValuePools')}
             </Heading>
             <Heading scale="md" color="text">
               {t('Browse communities and open an account in one closest to your needs.')}
@@ -105,7 +105,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </>
           )}
         </PoolControls>
-        <Steps title={t('How does it work ?')} />
+        <Steps title={t('How does it work?')} />
         <Questions />
         <V3SubgraphHealthIndicator />
       </Page>

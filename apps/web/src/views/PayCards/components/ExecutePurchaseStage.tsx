@@ -232,7 +232,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <StyledItemRow>
           <Flex ref={targetRef7} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Which marketplace ?')}
+              {t('Which marketplace?')}
             </Text>
             {tooltipVisible7 && tooltip7}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

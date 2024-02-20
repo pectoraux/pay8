@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, ReactElement } from "react";
 import styled from "styled-components";
-import BigNumber from "bignumber.js";
 import partition from "lodash/partition";
 import { useTranslation } from "@pancakeswap/localization";
 import { useIntersectionObserver } from "@pancakeswap/hooks";
@@ -10,7 +9,7 @@ import { useWatchlistTokens } from "../../../../../apps/web/src/state/user/hooks
 
 import PoolTabButtons from "./PoolTabButtons";
 import { ViewMode } from "../../components/ToggleView/ToggleView";
-import { Flex, Text, SearchInput, Select, OptionProps } from "../../components";
+import { Flex, Text, SearchInput, OptionProps } from "../../components";
 
 import { DeserializedPool } from "./types";
 import { sortPools } from "./helpers";
@@ -114,13 +113,13 @@ export function PoolControls<T>({
       finishedPools.filter((pool) => {
         return pool?.owner?.toLowerCase() === account?.toLowerCase();
       }),
-    [finishedPools]
+    [account, finishedPools]
   );
   const stakedOnlyOpenPools = useCallback(() => {
     return openPoolsWithStartBlockFilter.filter((pool) => {
       return pool?.owner?.toLowerCase() === account?.toLowerCase();
     });
-  }, [openPoolsWithStartBlockFilter]);
+  }, [account, openPoolsWithStartBlockFilter]);
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0;
 
   useEffect(() => {
@@ -140,7 +139,7 @@ export function PoolControls<T>({
     []
   );
 
-  const handleSortOptionChange = useCallback((option: OptionProps) => setSortOption(option.value), []);
+  // const handleSortOptionChange = useCallback((option: OptionProps) => setSortOption(option.value), []);
 
   let chosenPools: any;
   if (showFinishedPools) {
@@ -161,7 +160,7 @@ export function PoolControls<T>({
       );
     }
     return sortedPools;
-  }, [account, sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
+  }, [sortOption, chosenPools, favoritesOnly, numberOfPoolsVisible, searchQuery, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 

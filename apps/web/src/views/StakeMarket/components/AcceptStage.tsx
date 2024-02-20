@@ -8,15 +8,14 @@ import {
   ButtonMenuItem,
   ButtonMenu,
   ErrorIcon,
-  Input,
   HelpIcon,
   useTooltip,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
+import { TimePicker } from 'views/SSI/components/DatePicker'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { GreyedOutContainer, Divider } from './styles'
-import { TimePicker } from 'views/SSI/components/DatePicker'
 
 interface SetPriceStageProps {
   state: any

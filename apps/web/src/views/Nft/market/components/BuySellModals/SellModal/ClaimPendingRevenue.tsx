@@ -1,13 +1,7 @@
-import { useState } from 'react'
 import { Flex, Box, Text, Button, ButtonMenu, ButtonMenuItem, Input } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import BribeField from 'views/Ramps/components/LockedPool/Common/BribeField'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { MarketPlace } from './types'
 import { GreyedOutContainer } from './styles'
 import { Divider } from '../shared/styles'
 
@@ -21,9 +15,6 @@ interface RemoveStageProps {
 
 const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
-  const [lockedAmount, setLockedAmount] = useState('')
-  const stakingTokenBalance = BIG_ZERO
-  const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   return (
     <>
@@ -59,7 +50,7 @@ const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleRawValu
               scale="sm"
               name="tokenId"
               value={state.tokenId}
-              placeholder={t('input token id')}
+              placeholder={t('input note token id')}
               onChange={handleChange}
             />
           </GreyedOutContainer>

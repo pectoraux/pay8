@@ -1,9 +1,6 @@
-import { useState } from 'react'
 import { Flex, Box, Text, Button, ButtonMenu, ButtonMenuItem, Input, ErrorIcon, Grid } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import _toNumber from 'lodash/toNumber'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { Divider, GreyedOutContainer } from './styles2'
 
@@ -16,8 +13,6 @@ interface RemoveStageProps {
 
 const ClaimPendingRevenue: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
-  const [lockedAmount, setLockedAmount] = useState('')
-
   return (
     <>
       <GreyedOutContainer style={{ paddingTop: '50px' }}>

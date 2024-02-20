@@ -38,21 +38,21 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "Enter the first 4 characters of your World's plus codes (please visit the site https://plus.codes to learn about plus codes). A World is defined by a list of dozens/hundreds of plus codes. If for instance a World's plus codes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: 8FW4, 8FW4, 8FW4,...",
+        "Enter the first 4 characters of your World's pluscodes (please visit the site https://plus.codes to learn about pluscodes). A World is defined by a list of dozens/hundreds of pluscodes. If for instance a World's pluscodes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: 8FW4, 8FW4, 8FW4,...",
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "Enter the last 4 characters of your World's plus codes (please visit the site https://plus.codes to learn about plus codes). A World is defined by a list of dozens/hundreds of plus codes. If for instance a World's plus codes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: V942, V943, V943,...",
+        "Enter the last 4 characters of your World's pluscodes (please visit the site https://plus.codes to learn about pluscodes). A World is defined by a list of dozens/hundreds of pluscodes. If for instance a World's pluscodes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: V942, V943, V943,...",
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        "Enter the extension codes of your World's plus codes (please visit the site https://plus.codes to learn about plus codes). A World is defined by a list of dozens/hundreds of plus codes. If for instance a World's plus codes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: P4, G3, HR,...",
+        "Enter the extension codes of your World's pluscodes (please visit the site https://plus.codes to learn about pluscodes). A World is defined by a list of dozens/hundreds of pluscodes. If for instance a World's pluscodes are 8FW4V942+P4, 8FW4V943+G3, 8FW4V943+HR,...; you would input in this field: P4, G3, HR,...",
       )}
     </Text>
   )
@@ -123,7 +123,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Destination')}
+            {t('Destination Address')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -133,7 +133,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="toAddress"
           value={state.toAddress}
-          placeholder={t('input destination')}
+          placeholder={t('input destination address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -157,7 +157,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
       <GreyedOutContainer>
         <Flex ref={targetRef4}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('First 4 Plus Codes')}
+            {t('First 4 pluscodes')}
           </Text>
           {tooltipVisible4 && tooltip4}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -167,14 +167,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="first4"
           value={state.first4}
-          placeholder={t('input first 4 codes')}
+          placeholder={t('input first 4 pluscodes')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef5}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Last 4 Plus Codes')}
+            {t('Last 4 pluscodes')}
           </Text>
           {tooltipVisible5 && tooltip5}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -184,14 +184,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="last4"
           value={state.last4}
-          placeholder={t('input last 4 codes')}
+          placeholder={t('input last 4 pluscodes')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <Flex ref={targetRef6}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Plus Codes Extension')}
+            {t("PlusCodes' Extensions")}
           </Text>
           {tooltipVisible6 && tooltip6}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -201,7 +201,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="nfts"
           value={state.nfts}
-          placeholder={t('input code extension')}
+          placeholder={t('input the extensions of the pluscodes')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -211,7 +211,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         </Flex>
         <Box>
           <Text small color="textSubtle">
-            {t('This will mint NFTs for plus codes of a World. Please read the documentation for more information.')}
+            {t('This will mint NFTs for pluscodes of a World. Please read the documentation for more information.')}
           </Text>
         </Box>
       </Grid>

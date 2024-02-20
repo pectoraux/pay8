@@ -15,7 +15,6 @@ import {
   CardHeader,
   Heading,
   Button,
-  Farm,
   useToast,
   useMatchBreakpoints,
   Input,
@@ -37,10 +36,10 @@ import { NextLinkFromReactRouter } from '@pancakeswap/uikit/src/components/NextL
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useMarketCollectionsContract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { ProposalStateTag } from './tags'
-import ExpandableCard from './ExpandableCard'
 import { getBlockExploreLink } from 'utils'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { ProposalStateTag } from './tags'
+import ExpandableCard from './ExpandableCard'
 
 interface ReviewsCardProps {
   reviews: any
@@ -216,7 +215,7 @@ const ReviewsCard: React.FC<any> = ({ nft }) => {
                   ?.map((review) => <SuperReview key={review?.id} review={review} />)
               : nft?.reviews
                   ?.filter((review) => review.normalReview)
-                  ?.map((review, idx) => <NormalReview key="normal-review" review={review} />)}
+                  ?.map((review) => <NormalReview key="normal-review" review={review} />)}
           </Box>
         ) : (
           <>

@@ -8,12 +8,12 @@ import {
   OpenNewIcon,
   TicketFillIcon,
   useModal,
-  Skeleton,
   TokenImage,
   useMatchBreakpoints,
   NextLinkFromReactRouter,
-  ReactMarkdown,
 } from '@pancakeswap/uikit'
+import { useGetExtraNote } from 'state/cancan/hooks'
+import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { Activity, NftToken } from 'state/nftMarket/types'
 import { Price, Currency } from '@pancakeswap/sdk'
@@ -26,9 +26,6 @@ import MobileModal from './MobileModal'
 import ActivityPrice from './ActivityPrice'
 import ActivityEventText from './ActivityEventText'
 import { nftsBaseUrl } from '../../constants'
-import { useGetExtraNote } from 'state/cancan/hooks'
-import styled from 'styled-components'
-import { useRef } from 'react'
 import ArticleModal from './ArticleModal'
 
 interface ActivityRowProps {

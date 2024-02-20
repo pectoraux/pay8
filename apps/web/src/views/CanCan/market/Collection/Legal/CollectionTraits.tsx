@@ -12,9 +12,6 @@ import {
   Text,
   useToast,
   Skeleton,
-  Table,
-  Td,
-  Th,
   ReactMarkdown,
 } from '@pancakeswap/uikit'
 import CollapsibleCard from 'components/CollapsibleCard'

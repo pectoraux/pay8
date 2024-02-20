@@ -12,7 +12,6 @@ import {
   HelpIcon,
   useTooltip,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
@@ -82,7 +81,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'This parameter is relevant in the same context as the previous one and sets a lower bound on the balance of the bounty that the ARPs this Valuepool sends funds to, must have .',
+        'This parameter is relevant in the same context as the previous one and sets a lower bound on the balance of the bounty that the ARPs this Valuepool sends funds to, must have.',
       )}
     </Text>
   )
@@ -225,7 +224,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="minimumLockValue"
           value={state.minimumLockValue}
-          placeholder={t('input min. lock value')}
+          placeholder={t('input minimum lock value')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -242,7 +241,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="minPeriod"
           value={state.minPeriod}
-          placeholder={t('input min. period')}
+          placeholder={t('input minimum period')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
@@ -259,7 +258,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="minBountyRequired"
           value={state.minBountyRequired}
-          placeholder={t('input min. bounty required')}
+          placeholder={t('input minimum bounty required')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

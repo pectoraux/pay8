@@ -1,11 +1,11 @@
 import { Flex, Box, Text, Button, Balance } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { Divider } from '../shared/styles'
-import { GreyedOutContainer } from './styles'
 import { useGetCashbackRevenue } from 'state/cancan/hooks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { format } from 'date-fns'
+import { GreyedOutContainer } from './styles'
+import { Divider } from '../shared/styles'
 
 interface RemoveStageProps {
   continueToNextStage: () => void
@@ -36,7 +36,7 @@ const ResetIdentityLimits: React.FC<any> = ({ nftToSell, isPaywall, continueToNe
         </GreyedOutContainer>
         {parseInt(dueDate) ? (
           <Text small bold color="textSubtle">
-            {t(`Claimable By: ${format(Number(dueDate) * 1000, 'MMM dd, yyyy HH:mm')}`)}
+            {t('Claimable By: %val%', { val: format(Number(dueDate) * 1000, 'MMM dd, yyyy HH:mm') })}
           </Text>
         ) : null}
         <Text mt="24px" color="textSubtle">

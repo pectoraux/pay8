@@ -103,7 +103,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
               </Box>
               <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
                 {currToken?.tokenType === '0'
-                  ? 'Fugible'
+                  ? 'Fungible'
                   : currToken?.tokenType === '1'
                   ? 'NFT - ERC721'
                   : 'NFT - ERC1155'}
@@ -173,7 +173,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currToken, currAcco
             {currAccount?.tokenData?.map((td, index) => (
               <>
                 <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                  {td?.tokenType === 0 ? 'Fugible' : td?.tokenType === 1 ? 'NFT - ERC721' : 'NFT - ERC1155'}
+                  {td?.tokenType === 0 ? 'Fungible' : td?.tokenType === 1 ? 'NFT - ERC721' : 'NFT - ERC1155'}
                 </Text>
                 <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
                   {t('Token Type')}
