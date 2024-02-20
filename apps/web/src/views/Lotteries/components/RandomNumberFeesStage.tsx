@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { Flex, Grid, Box, Text, Button, ButtonMenuItem, ButtonMenu, Input, ErrorIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, ErrorIcon } from '@pancakeswap/uikit'
 import _toNumber from 'lodash/toNumber'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import BribeField from './LockedPool/Common/BribeField'
@@ -21,7 +20,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, currency, handleChange, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, currency, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
   const { account } = useWeb3React()
@@ -42,7 +41,7 @@ const SetPriceStage: React.FC<any> = ({ state, currency, handleChange, handleRaw
     <>
       <GreyedOutContainer>
         <BribeField
-          add="inject"
+          add={t('inject')}
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={currency?.decimals}

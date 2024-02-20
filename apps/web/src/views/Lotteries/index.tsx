@@ -1,16 +1,6 @@
 import { useAccount } from 'wagmi'
-import {
-  Heading,
-  Flex,
-  Image,
-  Text,
-  PageHeader,
-  Pool,
-  ArrowForwardIcon,
-  Button,
-  useModal,
-  Loading,
-} from '@pancakeswap/uikit'
+import { Heading, Flex, Text, PageHeader, Pool, ArrowForwardIcon, Button, useModal, Loading } from '@pancakeswap/uikit'
+import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import { usePoolsPageFetch, usePoolsWithFilterSelector, useGetTags, useFilters } from 'state/lotteries/hooks'
 import Page from 'components/Layout/Page'
@@ -22,7 +12,6 @@ import CreateLotteryModal from './components/CreateLotteryModal'
 import Filters from './Filters'
 import Steps from './Steps'
 import Questions from './components/Questions'
-import styled from 'styled-components'
 
 const DesktopButton = styled(Button)`
   align-self: flex-end;
@@ -39,7 +28,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     const howToElem = document.getElementById('how-to')
     if (howToElem != null) {
       howToElem.scrollIntoView()
-    } else {
     }
   }
   usePoolsPageFetch()

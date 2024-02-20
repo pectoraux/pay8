@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, AutoRenewIcon, useModal } from '@pancakeswap/uikit'
-import { useBurnObject } from 'views/Game/hooks/useBurnObject'
+import { Button, useModal } from '@pancakeswap/uikit'
 import { PotteryDepositStatus } from 'state/types'
 import BurnModal from './BurnModal'
 

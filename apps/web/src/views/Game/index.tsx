@@ -2,7 +2,6 @@ import { useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { PageMeta } from 'components/Layout/Page'
 import { Box, ScrollToTopButtonV2 } from '@pancakeswap/uikit'
-import { usePotteryFetch } from 'state/pottery/hook'
 import Banner from 'views/Game/components/Banner/index'
 import Pot from 'views/Game/components/Pot/index'
 import SubgraphHealthIndicator from 'components/SubgraphHealthIndicator'
@@ -42,7 +41,7 @@ const Pottery: React.FC<React.PropsWithChildren> = () => {
       <FinishedRounds data={pool} tokenId={tokenId} />
       <HowToPlay pool={pool} />
       <PrizeFunds />
-      <FAQ />
+      {/* <FAQ /> */}
       {createPortal(
         <>
           <ScrollToTopButtonV2 />

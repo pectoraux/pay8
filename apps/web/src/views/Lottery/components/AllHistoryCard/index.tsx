@@ -119,7 +119,7 @@ const AllHistoryCard = ({ currentTokenId }) => {
         <Box mt="8px">
           {Number(selectedLotteryNodeData?.endTime ?? 0) ? (
             <Text fontSize="14px">
-              {t('Drawn')} {getDrawnDate(locale, selectedLotteryNodeData?.endTime)}
+              {t('Drawn %val%', { val: getDrawnDate(locale, selectedLotteryNodeData?.endTime) })}
             </Text>
           ) : (
             <Skeleton width="185px" height="21px" />

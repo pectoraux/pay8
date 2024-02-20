@@ -2,18 +2,13 @@ import styled from 'styled-components'
 import { useMemo, useState } from 'react'
 import { Flex, Box, Text, Balance, Input } from '@pancakeswap/uikit'
 import { GreyCard } from 'components/Card'
-import { usePotteryData } from 'state/pottery/hook'
-import { calculateCakeAmount } from 'views/Game/helpers'
-import BigNumber from 'bignumber.js'
 import { LockTimer } from 'views/Game/components/Timer'
-import { BIG_ONE } from '@pancakeswap/utils/bigNumber'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import SubgraphHealthIndicator from 'components/SubgraphHealthIndicator'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import YourDeposit from '../YourDeposit'
 import WalletNotConnected from './WalletNotConnected'
-import AvailableWithdraw from './AvailableWithdraw'
 import PrizeToBeClaimed from './PrizeToBeClaimed'
 import CardFooter from './CardFooter'
 import WinRate from '../WinRate'
@@ -70,7 +65,7 @@ const Claim: React.FC<any> = ({ data, tokenId, setTokenId }) => {
               <SubgraphHealthIndicator inline subgraphName="pancakeswap/pottery" />
               <Flex justifyContent="space-between" mb="20px">
                 <Text fontSize="12px" color="secondary" bold as="span" ml="4px" textTransform="uppercase">
-                  {t('Identity Token Id')}
+                  {t('Identity Token ID')}
                 </Text>
                 <Input
                   type="text"

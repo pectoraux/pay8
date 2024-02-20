@@ -20,7 +20,7 @@ const TotalValueCell2: React.FC<any> = ({ totalLiquidity, symbol }) => {
     <StyledCell role="cell">
       <Pool.CellContent>
         <Text fontSize="12px" color="textSubtle" textAlign="left">
-          {t('Bill Liquidity')}
+          {t('Contract Liquidity')}
         </Text>
         <Flex height="20px" alignItems="center">
           <Balance fontSize="16px" value={totalLiquidity} decimals={3} unit={` ${symbol}`} />

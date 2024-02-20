@@ -20,9 +20,9 @@ import { useCurrPool } from 'state/bills/hooks'
 import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/bills'
+import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 import WebPagesModal from './WebPagesModal'
 import WebPagesModal2 from './WebPagesModal2'
-import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
 
 interface ExpandedFooterProps {
   pool: Pool.DeserializedPool<Token>

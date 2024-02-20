@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { Flex, Skeleton, Text, Balance } from '@pancakeswap/uikit'
+import { Flex, Text, Balance } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
 

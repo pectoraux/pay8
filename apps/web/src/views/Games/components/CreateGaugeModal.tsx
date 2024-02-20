@@ -523,7 +523,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
-        t('Contract approved - you can now start receiving payments for audits!'),
+        t('Contract approved - you can now start receiving payments on your game!'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
       )
     },

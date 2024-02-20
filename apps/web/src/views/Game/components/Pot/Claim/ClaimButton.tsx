@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, AutoRenewIcon, Box, Flex, Text, Input } from '@pancakeswap/uikit'
+import { Button, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useClaimPottery } from 'views/Game/hooks/useClaimPottery'
 
 interface ClaimButtonProps {

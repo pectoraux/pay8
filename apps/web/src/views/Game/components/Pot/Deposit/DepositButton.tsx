@@ -1,10 +1,7 @@
-import { useCallback } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, AutoRenewIcon } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
 import { useDepositPottery } from 'views/Game/hooks/useDepositPottery'
 import { PotteryDepositStatus } from 'state/types'
-import { DEFAULT_TOKEN_DECIMAL } from 'config'
 
 interface DepositButtonProps {
   status: PotteryDepositStatus
@@ -13,15 +10,7 @@ interface DepositButtonProps {
   setDepositAmount: (value: string) => void
 }
 
-const DepositButton: React.FC<any> = ({
-  tokenId,
-  numMinutes,
-  identityTokenId,
-  collectionAddress,
-  setDepositAmount,
-  setNumMinutes,
-  setIdentityTokenId,
-}) => {
+const DepositButton: React.FC<any> = ({ tokenId, numMinutes, identityTokenId, collectionAddress }) => {
   const { t } = useTranslation()
   const { isPending, handleDeposit } = useDepositPottery(numMinutes, tokenId, identityTokenId, collectionAddress)
 

@@ -1,9 +1,8 @@
 import { Card, CardBody, Heading, Text, LinkExternal, Checkbox, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { useGetProfileId, useGetSharedEmail, useProfileForAddress } from 'state/profile/hooks'
+import { useGetProfileId } from 'state/profile/hooks'
 import { noop } from 'lodash'
-import { useProfileFromSSI } from 'state/ssi/hooks'
 
 import NextStepButton from './NextStepButton'
 import useProfileCreation from './contexts/hook'

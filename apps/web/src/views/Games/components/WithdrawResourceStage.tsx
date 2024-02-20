@@ -20,7 +20,7 @@ const UpdateInfoStage: React.FC<any> = ({ state, handleChange, continueToNextSta
 
   useEffect(() => {
     refetch()
-  }, [state.tokenId])
+  }, [refetch, state.tokenId])
 
   useEffect(() => {
     if (inputRef && inputRef.current) {

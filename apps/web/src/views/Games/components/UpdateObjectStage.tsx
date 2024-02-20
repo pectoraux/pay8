@@ -12,7 +12,6 @@ import {
   useTooltip,
   HelpIcon,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
@@ -136,7 +135,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Add ?')}
+            {t('Add?')}
           </Text>
           <ButtonMenu
             scale="xs"

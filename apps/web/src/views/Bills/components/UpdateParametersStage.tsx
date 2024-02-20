@@ -223,7 +223,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="period"
           value={state.period}
-          placeholder={t('input period duration')}
+          placeholder={t('input time lock duration')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

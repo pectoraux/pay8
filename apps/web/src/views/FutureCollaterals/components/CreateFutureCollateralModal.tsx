@@ -224,13 +224,13 @@ const CreateFutureCollateralModal: React.FC<any> = ({ stageName, currency, onDis
 
       {stage === 'PICK_CHANNEL' ? (
         <GreyedOutContainer>
-          <Flex ref={targetRef}>
-            <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-              {t('Profile ID')}
-            </Text>
-            {tooltipVisible && tooltip}
+          {/* <Flex ref={targetRef}> */}
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Profile ID')}
+          </Text>
+          {/* {tooltipVisible && tooltip}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
-          </Flex>
+          </Flex> */}
           <Input
             type="text"
             scale="sm"

@@ -1,8 +1,6 @@
-import { Box, Text, Skeleton, Balance, Input } from '@pancakeswap/uikit'
+import { Box, Text, Balance, Input } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
-import { usePotteryData } from 'state/pottery/hook'
 
 interface YourDepositProps {
   depositBalance?: any
@@ -10,13 +8,11 @@ interface YourDepositProps {
 
 const YourDeposit: React.FC<any> = ({ tokenId, data, setTokenId }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
   // const cakePriceBusd = usePriceCakeBusd()
   // const { data, userData } = usePotteryData()
   const tokenData = useMemo(() => {
     return data?.accounts?.find((protocol) => protocol.id === tokenId)
   }, [data, tokenId])
-  const symb = ` ${data?.token?.symbol?.toUpperCase() ?? '$'}`
   // const totalDepositBalance = getBalanceAmount(tokenData?.depositBalance).toNumber()
   // const balanceInBusd = new BigNumber(totalDepositBalance).times(cakePriceBusd).toNumber()
 
@@ -27,7 +23,7 @@ const YourDeposit: React.FC<any> = ({ tokenId, data, setTokenId }) => {
           {t('Your')}
         </Text>
         <Text fontSize="12px" color="secondary" bold as="span" ml="4px" textTransform="uppercase">
-          {t('Token Id')}
+          {t('Token ID')}
         </Text>
         <Input
           type="text"

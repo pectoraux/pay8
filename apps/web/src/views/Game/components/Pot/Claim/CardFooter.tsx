@@ -1,12 +1,9 @@
 import { useMemo } from 'react'
 import styled from 'styled-components'
-import { Flex, Box, Text, Balance } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
+import { Flex, Box, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { weeksToSeconds } from 'views/Pools/components/utils/formatSecondsToWeeks'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { distanceToNowStrictWithUnit } from 'utils/timeHelper'
-import { DeserializedPublicData, DeserializedPotteryUserData, PotteryDepositStatus } from 'state/types'
+import { DeserializedPublicData, DeserializedPotteryUserData } from 'state/types'
 
 const Container = styled(Flex)`
   flex-direction: column;

@@ -209,7 +209,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-            {t('Price Per Minutes')}
+            {t('Price Per Minute')}
           </Text>
           {tooltipVisible2 && tooltip2}
           <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -218,7 +218,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
           type="text"
           scale="sm"
           value={pricePerMinutes}
-          placeholder={t('input price per minutes')}
+          placeholder={t('input price per minute')}
           onChange={(e) => setPricePerMinutes(e.target.value)}
         />
       </GreyedOutContainer>
@@ -258,7 +258,7 @@ const CreateGameModal: React.FC<any> = ({ currency, onDismiss }) => {
         <StyledItemRow>
           <Flex ref={targetRef5} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Make claimable ?')}
+              {t('Make claimable?')}
             </Text>
             {tooltipVisible5 && tooltip5}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

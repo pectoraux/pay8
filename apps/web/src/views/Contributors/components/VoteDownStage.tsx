@@ -1,9 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Input, Button, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import { NftToken } from 'state/cancan/types'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -22,7 +20,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ pool, tokenId, setTokenId, currency, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ tokenId, setTokenId, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 

@@ -68,7 +68,7 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <BribeField
-          add="pay"
+          add={t('pay')}
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={currency?.decimals}

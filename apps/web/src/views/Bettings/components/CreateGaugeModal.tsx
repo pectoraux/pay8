@@ -463,10 +463,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
       return callWithGasPrice(stakingTokenContract, 'approve', [bettingContract.address, MaxUint256])
     },
     onApproveSuccess: async ({ receipt }) => {
-      toastSuccess(
-        t('Contract approved - you can now start processing your transactions!'),
-        <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
-      )
+      toastSuccess(t('Contract approved'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {
@@ -807,7 +804,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
             {t('UPDATE EXCLUDED CONTENT')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_PRICE_PER_MINUTE)}>
-            {t('UPDATE PRICE PER MINUTES')}
+            {t('UPDATE PRICE PER MINUTE')}
           </Button>
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.UPDATE_URI_GENERATOR)}>
             {t('UPDATE URI GENERATOR')}

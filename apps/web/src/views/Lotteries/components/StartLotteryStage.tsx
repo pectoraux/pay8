@@ -55,7 +55,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "In case your lottery uses a Valuepool, use this parameter to set a lock duration for users' winnings in the Valuepool ",
+        "In case your lottery uses a Valuepool, use this parameter to set a lock duration for users' winnings in the Valuepool",
       )}
     </Text>
   )

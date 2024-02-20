@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { decodeAlphabet, encodeAlphabet } from 'views/Betting/components/BuyTicketsModal/generateTicketNumbers'
 
 import { GreyedOutContainer, Divider } from './styles'
 

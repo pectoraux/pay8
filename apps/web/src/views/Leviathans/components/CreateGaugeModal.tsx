@@ -1,4 +1,3 @@
-import EncryptRsa from 'encrypt-rsa'
 import { MaxUint256 } from '@pancakeswap/swap-sdk-core'
 import { ContextApi, TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { InjectedModalProps, useToast, Button, Flex, Modal } from '@pancakeswap/uikit'

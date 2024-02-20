@@ -1,17 +1,5 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  ButtonMenuItem,
-  ButtonMenu,
-  Input,
-  ErrorIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Button, ButtonMenuItem, ButtonMenu, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'

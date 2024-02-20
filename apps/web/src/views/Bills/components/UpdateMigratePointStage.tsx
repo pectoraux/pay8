@@ -1,19 +1,6 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  Input,
-  ErrorIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  HelpIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { DatePicker, DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { GreyedOutContainer, Divider } from './styles'
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Box, Flex, Text, Heading, Link, Image, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Flex, Text, Heading, Link, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import useTheme from 'hooks/useTheme'
 import { useLottery } from 'state/lottery/hooks'

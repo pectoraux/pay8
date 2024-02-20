@@ -112,7 +112,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {pool?.useNFTicket ? 'True' : 'False'}
+            {pool?.useNFTicket ? 'Yes' : 'No'}
           </Text>
           <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
             {t('Use NFTickets')}
@@ -246,42 +246,41 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
               <>
                 <Divider />
                 <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                  {t(`Token Position: ${index}`)}
+                  {t('Token Position: %val%', { val: index })}
                 </Text>
                 <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                  {t(`Token Name: ${data.token?.name}`)}
+                  {t('Token Name: %val%', { val: data.token?.name })}
                 </Text>
                 <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                  {t(`Token Symbol: ${data.token?.symbol}`)}
+                  {t('Token Symbol: %val%', { val: data.token?.symbol })}
                 </Text>
                 <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                  {t(
-                    `Discount: ${
+                  {t('Discount: %val%', {
+                    val:
                       data.checker !== ADDRESS_ZERO
                         ? getBalanceNumber(new BigNumber(data.discount))
-                        : parseInt(data.discount ?? '0') / 100
-                    }`,
-                  )}{' '}
+                        : parseInt(data.discount ?? '0') / 100,
+                  })}{' '}
                   {data.checker !== ADDRESS_ZERO ? 'USD' : '%'}
                 </Text>
                 <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-                  {t(`Collection ID: ${data.collectionId}`)}
+                  {t('Collection ID #%val%', { val: data.collectionId })}
                 </Text>
                 <Flex flexDirection="row">
                   <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
-                    {t(`Checker: `)}
+                    {t('Checker: ')}
                   </Text>
                   <CopyAddress title={truncateHash(data.checker)} account={data.checker} />
                 </Flex>
                 <Flex flexDirection="row">
                   <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
-                    {t(`Token Address: `)}
+                    {t('Token Address: ')}
                   </Text>
                   <CopyAddress title={truncateHash(data.token?.address)} account={data.token?.address} />
                 </Flex>
                 <Flex flexDirection="row">
                   <Text lineHeight="1" mt="3px" mr="3px" fontSize="12px" color="textSubtle" as="span">
-                    {t(`Destination Address: `)}
+                    {t('Destination Address: ')}
                   </Text>
                   <CopyAddress title={truncateHash(data.destination)} account={data.destination} />
                 </Flex>

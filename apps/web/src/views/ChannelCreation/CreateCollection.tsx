@@ -17,7 +17,7 @@ import {
   HelpIcon,
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { MarketPlace, OptionType } from 'views/CanCan/market/components/BuySellModals/SellModal/types'
+import { OptionType } from 'views/CanCan/market/components/BuySellModals/SellModal/types'
 import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -26,11 +26,11 @@ import { useMarketCollectionsContract } from 'hooks/useContract'
 import BigNumber from 'bignumber.js'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { useCurrency } from 'hooks/Tokens'
+import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 import Filters from './Filters'
 import NextStepButton from './NextStepButton'
-import { useCurrency } from 'hooks/Tokens'
-import { DEFAULT_TFIAT } from 'config/constants/exchange'
 
 const InputWrap = styled.div`
   position: relative;
@@ -140,7 +140,32 @@ const Team: React.FC = () => {
       )
       setIsDone(true)
     }
-  }, [state, t, nftFilters, toastSuccess, callWithGasPrice, fetchWithCatchTxError, marketCollectionsContract])
+  }, [
+    fetchWithCatchTxError,
+    state.amount,
+    state.userAmount,
+    state.referrerFee,
+    state.badgeId,
+    state.recurringBounty,
+    state.identityTokenId,
+    state.requestUserRegistration,
+    state.requestPartnerRegistration,
+    state.name,
+    state.description,
+    state.large,
+    state.small,
+    state.avatar,
+    state.contactChannels,
+    state.contacts,
+    nftFilters?.workspace,
+    nftFilters?.country,
+    nftFilters?.city,
+    nftFilters?.product,
+    marketCollectionsContract,
+    callWithGasPrice,
+    toastSuccess,
+    t,
+  ])
 
   const TooltipComponent = () => <Text>{t('This updates the name of your channel.')}</Text>
   const TooltipComponent2 = () => <Text>{t('This updates the description of your channel.')}</Text>
@@ -438,7 +463,7 @@ const Team: React.FC = () => {
                 </InputWrap>
                 <InputWrap>
                   <Flex ref={targetRef6}>
-                    <Input name="badgeId" onChange={handleChange} placeholder={t('badge ID')} value={state.badgeId} />
+                    <Input name="badgeId" onChange={handleChange} placeholder={t('badge id')} value={state.badgeId} />
                     {tooltipVisible6 && tooltip6}
                     <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
                   </Flex>

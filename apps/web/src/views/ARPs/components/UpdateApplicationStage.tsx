@@ -1,6 +1,5 @@
 import { Flex, Box, Text, Button, Grid, ErrorIcon, Input } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import Filters from 'views/ChannelCreation/Filters'
 import { Divider, GreyedOutContainer } from './styles'
 
 interface RemoveStageProps {

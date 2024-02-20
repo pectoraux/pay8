@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
-import { useWeb3React } from '@pancakeswap/wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 

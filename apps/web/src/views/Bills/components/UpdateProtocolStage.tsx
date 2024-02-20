@@ -190,7 +190,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="identityTokenId"
           value={state.identityTokenId}
-          placeholder={t('input an identity token id')}
+          placeholder={t('input your identity token id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

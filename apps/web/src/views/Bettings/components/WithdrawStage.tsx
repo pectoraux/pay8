@@ -1,14 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Flex, Grid, Input, Box, Text, ButtonMenu, ButtonMenuItem, Button, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
-import BigNumber from 'bignumber.js'
 
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -28,22 +22,9 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({
-  state,
-  account,
-  currency,
-  handleChange,
-  handleRawValueChange,
-  continueToNextStage,
-}) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const [lockedAmount, setLockedAmount] = useState('')
-  const balance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
-  const stakingTokenBalance = balance
-    ? getDecimalAmount(new BigNumber(balance.toFixed()), currency?.decimals)
-    : BIG_ZERO
-  const usdValueStaked = useBUSDCakeAmount(_toNumber(lockedAmount))
 
   useEffect(() => {
     if (inputRef && inputRef.current) {
@@ -56,7 +37,7 @@ const SetPriceStage: React.FC<any> = ({
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="13px" paddingRight="50px" bold>
-            {t('Are You a Referrer')}
+            {t('Are You a Referrer?')}
           </Text>
           <ButtonMenu scale="sm" variant="subtle" activeIndex={state.add} onItemClick={handleRawValueChange('add')}>
             <ButtonMenuItem>{t('No')}</ButtonMenuItem>

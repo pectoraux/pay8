@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, ButtonMenuItem, ButtonMenu, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {

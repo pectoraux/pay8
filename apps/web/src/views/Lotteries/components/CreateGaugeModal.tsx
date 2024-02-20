@@ -169,6 +169,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
   const tokenContract = useErc721CollectionContract(burnForCreditToken?.token?.address || '')
   const tokenContract2 = useErc721CollectionContract(state.token || '')
   console.log('tokenContract==================>', tokenContract, burnForCreditToken, burnForCreditTokens)
+
   const goBack = () => {
     switch (stage) {
       case LockStage.CONFIRM_WITHDRAW:

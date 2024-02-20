@@ -299,10 +299,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, state2, currA
       )
     },
     onApproveSuccess: async ({ receipt }) => {
-      toastSuccess(
-        t('Contract approved - you can now start receiving payments for audits!'),
-        <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
-      )
+      toastSuccess(t('Contract approved'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {

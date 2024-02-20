@@ -6,7 +6,6 @@ import { GreyCard } from 'components/Card'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { format } from 'date-fns'
 import YourDeposit from '../YourDeposit'
 import WinRate from '../WinRate'
@@ -38,12 +37,6 @@ const Deposit: React.FC<any> = ({ tokenId, data, setTokenId }) => {
   const tokenData = useMemo(() => {
     return data?.accounts?.find((protocol) => protocol.id === tokenId)
   }, [data, tokenId])
-  const { days, hours, minutes } = getTimePeriods(Number(tokenData?.deadline ?? '0'))
-  const {
-    days: daysReceivable,
-    hours: hoursReceivable,
-    minutes: minutesReceivable,
-  } = getTimePeriods(Number(tokenData?.gameMinutes ?? '0'))
 
   return (
     <Box>

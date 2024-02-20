@@ -1,5 +1,4 @@
-import { useState, useMemo } from 'react'
-import { Flex, Box, Text, Button, Pool } from '@pancakeswap/uikit'
+import { Flex, Box, Text, Button } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -12,13 +11,6 @@ interface RemoveStageProps {
 
 const RemoveStage: React.FC<any> = ({ pool, currBribeAddress, setCurrBribeAddress, continueToNextStage }) => {
   const { t } = useTranslation()
-  const currBribe = useMemo(() => {
-    if (pool.userDataLoaded) {
-      return pool.userData.bribes?.find((bribe) => bribe.tokenAddress === currBribeAddress)
-    }
-    return pool.poolBribes?.find((bribe) => bribe.tokenAddress === currBribeAddress)
-  }, [currBribeAddress, pool])
-
   return (
     <>
       <GreyedOutContainer>

@@ -1,19 +1,6 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  Input,
-  ErrorIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  HelpIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, HelpIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
@@ -86,7 +73,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="collectionId"
           value={state.collectionId}
-          placeholder={t('input new pool collection id')}
+          placeholder={t('input collection id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

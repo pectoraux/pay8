@@ -7,7 +7,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { PotteryRoundInfo } from 'state/types'
 import Divider from 'components/Divider'
 import { getBlockExploreLink } from 'utils'
-import Winner from './Winner'
 import BurnButton from './BurnButton'
 
 const StyledCardBody = styled(CardBody)`

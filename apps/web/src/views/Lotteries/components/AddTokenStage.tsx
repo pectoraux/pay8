@@ -1,22 +1,6 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  ButtonMenu,
-  ButtonMenuItem,
-  Input,
-  ErrorIcon,
-  HelpIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
-import truncateHash from '@pancakeswap/utils/truncateHash'
-import { getLotteryAddress } from 'utils/addressHelpers'
 
 import { GreyedOutContainer, Divider } from './styles'
 
@@ -29,7 +13,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 

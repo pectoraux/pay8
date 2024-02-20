@@ -1,17 +1,5 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Button,
-  ButtonMenuItem,
-  ButtonMenu,
-  Input,
-  ErrorIcon,
-  useTooltip,
-} from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
+import { Flex, Grid, Box, Text, Button, ButtonMenuItem, ButtonMenu, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
@@ -47,7 +35,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Add contract address')}
+          {t('Contract address')}
         </Text>
         <Input
           type="text"
@@ -102,7 +90,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
       <Divider />
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button mb="8px" onClick={continueToNextStage}>
-          {t('Update Whitelist')}
+          {t('Update')}
         </Button>
       </Flex>
     </>

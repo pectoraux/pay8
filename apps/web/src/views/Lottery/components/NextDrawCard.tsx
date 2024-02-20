@@ -109,14 +109,14 @@ const NextDrawCard = ({ currentTokenId, setCurrentTokenId }) => {
 
   const getNextToken = () => {
     if (status === LotteryStatus.OPEN) {
-      return `${t('Token')}: ${currTokenData.token?.symbol ?? ''}`
+      return t('Token: %val%', { val: currTokenData.token?.symbol ?? '' })
     }
     return ''
   }
 
   const getNextDrawDateTime = () => {
     if (status === LotteryStatus.OPEN) {
-      return `${t('Draw')}: ${endDate.toLocaleString(locale, dateTimeOptions)}`
+      return t('Draw: %val%', { val: endDate.toLocaleString(locale, dateTimeOptions) })
     }
     return ''
   }

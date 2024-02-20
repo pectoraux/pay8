@@ -14,10 +14,10 @@ import {
 } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
-import { GreyedOutContainer, Divider } from './styles'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { getGameFactoryAddress } from 'utils/addressHelpers'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   state: any

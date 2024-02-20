@@ -12,11 +12,9 @@ import {
   ButtonMenu,
   ButtonMenuItem,
 } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import _toNumber from 'lodash/toNumber'
 
 import { useTranslation } from '@pancakeswap/localization'
-import { GreyedOutContainer, Divider } from './styles'
 import { useGetPendingFromNote } from 'state/bills/hooks'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { differenceInSeconds } from 'date-fns'
@@ -25,6 +23,7 @@ import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import Timer from 'views/StakeMarket/components/PoolsTable/Cells/Timer'
 import styled from 'styled-components'
+import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {
   nftToSell?: any
@@ -69,7 +68,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
 
   useEffect(() => {
     refetch()
-  }, [state])
+  }, [refetch, state])
 
   const diff = Math.max(
     differenceInSeconds(new Date(parseInt(expirationDate) * 1000 ?? 0), new Date(), {

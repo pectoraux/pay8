@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { usePool, useCurrPool, useCurrBribe } from 'state/lotteries/hooks'
+import { useCurrPool, useCurrBribe } from 'state/lotteries/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 
 import NameCell from './Cells/NameCell'

@@ -4,13 +4,11 @@ import {
   Grid,
   Box,
   Text,
-  Input,
   Modal,
   Button,
   AutoRenewIcon,
   ErrorIcon,
   useToast,
-  HelpIcon,
   useTooltip,
 } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
@@ -26,7 +24,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filters'
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { Divider, GreyedOutContainer } from './styles'
+import { Divider } from './styles'
 
 interface SetPriceStageProps {
   currency?: any
@@ -45,8 +43,6 @@ const CreateAuditorModal: React.FC<any> = ({ onDismiss }) => {
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const [pendingFb, setPendingFb] = useState(false)
-  const [thumbnail, setThumbnail] = useState('')
-  const [original, setOriginal] = useState('')
   const { toastSuccess, toastError } = useToast()
   const [nftFilters, setNftFilters] = useState<any>({})
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))

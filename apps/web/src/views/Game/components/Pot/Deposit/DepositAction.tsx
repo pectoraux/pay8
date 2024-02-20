@@ -1,17 +1,6 @@
 import styled from 'styled-components'
 import { useState, useMemo, useEffect } from 'react'
-import {
-  Flex,
-  Box,
-  Button,
-  Text,
-  HelpIcon,
-  useTooltip,
-  LogoRoundIcon,
-  Skeleton,
-  InputProps,
-  NumericalInput,
-} from '@pancakeswap/uikit'
+import { Flex, Box, Button, Text, InputProps, NumericalInput } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import BigNumber from 'bignumber.js'
 import { useERC20 } from 'hooks/useContract'
@@ -19,7 +8,6 @@ import useTokenBalance from 'hooks/useTokenBalance'
 import { getFullDisplayBalance, getBalanceAmount } from '@pancakeswap/utils/formatBalance'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { getGameFactoryAddress } from 'utils/addressHelpers'
-import { useUserEnoughCakeValidator } from 'views/Pools/components/LockedPool/hooks/useUserEnoughCakeValidator'
 import { useGetRequiresApproval } from 'state/valuepools/hooks'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -62,17 +50,8 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
   const { chainId } = useActiveChainId()
   const { balance: userCake } = useTokenBalance(gameData?.token?.address)
   const userCakeDisplayBalance = getFullDisplayBalance(userCake, gameData?.token?.decimals, 3)
-  const { userNotEnoughCake, notEnoughErrorMessage } = useUserEnoughCakeValidator(depositAmount, userCake)
   const tokenContract = useERC20(gameData?.token?.address || '')
   const pricePerMinutes = getBalanceAmount(gameData?.pricePerMinutes, gameData?.token?.decimals)
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    t(
-      'Token deposit will be diverted to the fixed-term staking pool. Please note that CAKE deposited can ONLY be withdrawn after 10 weeks.',
-    ),
-    {
-      placement: 'bottom',
-    },
-  )
 
   const onClickMax = () => {
     const userCakeBalance = getBalanceAmount(userCake, gameData?.token?.decimals ?? 18)
@@ -90,7 +69,7 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
 
   useEffect(() => {
     refetch()
-  }, [account, chainId])
+  }, [account, chainId, refetch])
 
   if (needsApproval) {
     return <EnableButton refetch={refetch} tokenContract={tokenContract} />
@@ -145,7 +124,7 @@ const DepositAction: React.FC<any> = ({ tokenId, gameData }) => {
       <InputPanel>
         <Container>
           <Text fontSize="14px" color="textSubtle" mb="12px" textAlign="right">
-            {t('Identity Token Id')}
+            {t('Identity Token ID')}
           </Text>
           <Flex mt="6.5px">
             <NumericalInput

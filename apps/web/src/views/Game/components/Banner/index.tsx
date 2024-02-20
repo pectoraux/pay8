@@ -236,7 +236,7 @@ const Banner: React.FC<any> = ({ collection, tokenId, data, handleScroll }) => {
                   {t('You have')}
                 </Text>
                 <DarkTextStyle ml="3px" bold as="span">
-                  {`${userTickets?.length ?? 0} ticket(s)`}
+                  {t('%val% ticket(s)', { val: userTickets?.length ?? 0 })}
                 </DarkTextStyle>
                 {userTickets?.length ? ' => ' : ''}
                 {ticketText}

@@ -131,7 +131,7 @@ const BurnForCreditStage: React.FC<SetPriceStageProps> = ({
         <StyledItemRow>
           <Flex ref={targetRef3} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Is Credit token fungible ?')}
+              {t('Is Credit token fungible?')}
             </Text>
             {tooltipVisible3 && tooltip3}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

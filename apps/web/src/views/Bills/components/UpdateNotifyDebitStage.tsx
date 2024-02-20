@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Flex, Grid, Box, Text, Button, ErrorIcon, Input } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 
@@ -22,7 +21,7 @@ interface SetPriceStageProps {
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT
-const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, continueToNextStage }) => {
+const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
 
@@ -36,14 +35,14 @@ const SetPriceStage: React.FC<any> = ({ state, account, currency, handleChange, 
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Debit Address')}
+          {t('Debit Contract Address')}
         </Text>
         <Input
           type="text"
           scale="sm"
           name="contractAddress"
           value={state.contractAddress}
-          placeholder={t('input contract address')}
+          placeholder={t('input debit contract address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

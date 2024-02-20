@@ -79,7 +79,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.NOTIFY_CREDIT]: t('Notify Credit'),
   [LockStage.NOTIFY_DEBIT]: t('Notify Debit'),
   [LockStage.UPDATE_TAX_CONTRACT]: t('Update Tax Contract'),
-  [LockStage.UPDATE_USER_OWNER]: t('Update User Owner'),
+  [LockStage.UPDATE_USER_OWNER]: t('Update Account Owner'),
   [LockStage.TRANSFER_TO_NOTE_PAYABLE]: t('Transfer Note Payable'),
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
   [LockStage.UPDATE_CAP]: t('Update Cap'),
@@ -625,10 +625,7 @@ const CreateGaugeModal: React.FC<any> = ({
       return callWithGasPrice(stakingTokenContract, 'approve', [billContract.address, MaxUint256])
     },
     onApproveSuccess: async ({ receipt }) => {
-      toastSuccess(
-        t('Contract approved - you can now start processing transactions!'),
-        <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
-      )
+      toastSuccess(t('Contract approved'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
     },
     // eslint-disable-next-line consistent-return
     onConfirm: () => {

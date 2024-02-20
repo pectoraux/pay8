@@ -58,7 +58,7 @@ const BurnModal: React.FC<any> = ({ tokenId, data, objectName, onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Object successfully burned'),
+        t('Object successfully burnt'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
           {t('You can now use your ingrdients in games.')}
         </ToastDescriptionWithTx>,

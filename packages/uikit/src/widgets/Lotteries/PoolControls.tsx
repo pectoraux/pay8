@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, ReactElement } from "react";
 import styled from "styled-components";
-import BigNumber from "bignumber.js";
 import partition from "lodash/partition";
 import { useTranslation } from "@pancakeswap/localization";
 import { useIntersectionObserver } from "@pancakeswap/hooks";
@@ -114,13 +113,13 @@ export function PoolControls<T>({
       finishedPools.filter((pool) => {
         return pool.owner?.toLowerCase() === account?.toLowerCase();
       }),
-    [finishedPools]
+    [account, finishedPools]
   );
   const stakedOnlyOpenPools = useCallback(() => {
     return openPoolsWithStartBlockFilter.filter((pool) => {
       return pool.owner?.toLowerCase() === account?.toLowerCase();
     });
-  }, [openPoolsWithStartBlockFilter]);
+  }, [account, openPoolsWithStartBlockFilter]);
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0;
 
   useEffect(() => {

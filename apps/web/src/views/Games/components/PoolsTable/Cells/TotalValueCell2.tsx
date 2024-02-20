@@ -4,7 +4,6 @@ import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { useGetGame } from 'state/games/hooks'
 
 interface TotalStakedCellProps {
   totalStakedBalance: number

@@ -1,19 +1,6 @@
 import { useEffect, useRef } from 'react'
-import {
-  Flex,
-  Grid,
-  Box,
-  Text,
-  Input,
-  Button,
-  ErrorIcon,
-  ButtonMenu,
-  ButtonMenuItem,
-  useTooltip,
-  HelpIcon,
-} from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Input, Button, ErrorIcon, useTooltip, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
 import { GreyedOutContainer, Divider } from './styles'
 
 interface SetPriceStageProps {

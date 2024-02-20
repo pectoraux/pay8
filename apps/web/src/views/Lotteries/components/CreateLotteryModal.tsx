@@ -221,7 +221,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        "In case your lottery uses a Valuepool, use this parameter to set a lock duration for users' winnings in the Valuepool ",
+        "In case your lottery uses a Valuepool, use this parameter to set a lock duration for users' winnings in the Valuepool",
       )}
     </Text>
   )

@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, Input, ErrorIcon, useTooltip } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
-import { useWeb3React } from '@pancakeswap/wagmi'
+import { Flex, Grid, Box, Text, Button, Input, ErrorIcon } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
 
@@ -26,7 +24,6 @@ interface SetPriceStageProps {
 const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>()
-  const { account } = useWeb3React()
 
   useEffect(() => {
     if (inputRef && inputRef.current) {

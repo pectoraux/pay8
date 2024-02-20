@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { usePool, useCurrPool } from 'state/games/hooks'
+import { useCurrPool } from 'state/games/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
@@ -10,7 +10,7 @@ import TotalUsersCell from './Cells/TotalUsersCell'
 import TotalValueCell from './Cells/TotalValueCell'
 import TotalValueCell2 from './Cells/TotalValueCell2'
 
-const PoolRow: React.FC<any> = ({ sousId, pool, account, initialActivity }) => {
+const PoolRow: React.FC<any> = ({ pool, account, initialActivity }) => {
   // const { pool } = usePool(sousId)
   const { t } = useTranslation()
   const currState = useCurrPool()

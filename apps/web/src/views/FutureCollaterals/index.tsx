@@ -8,7 +8,6 @@ import { V3SubgraphHealthIndicator } from 'components/SubgraphHealthIndicator'
 import { DEFAULT_TFIAT } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useCallback, useState } from 'react'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 import PoolControls from './components/PoolControls'
 import PoolRow from './components/PoolsTable/PoolRow'
@@ -28,7 +27,6 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   console.log('pools=============>', pools)
   const inputCurency = useCurrency(DEFAULT_TFIAT)
   const [currency, setCurrency] = useState(inputCurency)
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
   const [onPresentCreateGauge] = useModal(<CreateFutureCollateralModal currency={currency} stageName="PICK_CHANNEL" />)
   const [onPresentCreateGauge2] = useModal(
     <CreateFutureCollateralModal currency={currency} stageName="MINT_COLLATERAL" />,
