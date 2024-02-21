@@ -12,12 +12,10 @@ import {
   Text,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import { ToastDescriptionWithTx } from 'components/Toast'
 import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
 import useTheme from 'hooks/useTheme'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { BetPosition, NodeLedger, NodeRound } from 'state/types'
-import { getNow } from 'utils/getNow'
 import { PrizePoolRow, RoundResultBox } from '../RoundResult'
 import CardHeader, { getBorderBackground } from './CardHeader'
 import MultiplierArrow from './MultiplierArrow'
@@ -38,52 +36,15 @@ interface State {
   position: BetPosition
 }
 
-const OpenRoundCard: React.FC<any> = ({
-  betting,
-  betAmount,
-  hasEnteredUp,
-  hasEnteredDown,
-  setBettingId,
-  setAllBettings,
-  allBettings,
-  onTokenSwitch,
-}) => {
+const OpenRoundCard: React.FC<any> = ({ betting, allBettings }) => {
   const [state, setState] = useState<State>({
     isSettingPosition: false,
     position: BetPosition.BULL,
   })
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { toastSuccess } = useToast()
-  const { account } = useWeb3React()
-  const dispatch = useLocalDispatch()
   // const { token, displayedDecimals } = useConfig()
   const { isSettingPosition, position } = state
-  const [isBufferPhase, setIsBufferPhase] = useState(false)
-  const positionDisplay = useMemo(
-    () => (position === BetPosition.BULL ? t('Up').toUpperCase() : t('Down').toUpperCase()),
-    [t, position],
-  )
-  const positionEnteredText = useMemo(
-    () => (hasEnteredUp ? t('Up').toUpperCase() : hasEnteredDown ? t('Down').toUpperCase() : null),
-    [t, hasEnteredUp, hasEnteredDown],
-  )
-  const positionEnteredIcon = useMemo(
-    () =>
-      hasEnteredUp ? (
-        <ArrowUpIcon color="currentColor" />
-      ) : hasEnteredDown ? (
-        <ArrowDownIcon color="currentColor" />
-      ) : null,
-    [hasEnteredUp, hasEnteredDown],
-  )
-  const { targetRef, tooltipVisible, tooltip } = useTooltip(
-    <div style={{ whiteSpace: 'nowrap' }}>
-      sldksdk
-      {/* {`${formatBnbv2(betAmount, displayedDecimals)} ${token.symbol}`} */}
-    </div>,
-    { placement: 'top' },
-  )
   return (
     <CardFlip isFlipped={isSettingPosition} height="404px">
       <Card borderBackground={getBorderBackground(theme, 'next')} style={{ cursor: 'pointer' }}>
@@ -103,7 +64,7 @@ const OpenRoundCard: React.FC<any> = ({
               overflow="auto"
               maxHeight="200px"
             >
-              {betting?.subjects?.split(',')?.map((subject, index) => (
+              {betting?.subjects?.split(',')?.map((subject) => (
                 <Button
                   // variant={variants[index % 6]}
                   width="150px"

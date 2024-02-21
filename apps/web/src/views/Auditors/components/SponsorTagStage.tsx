@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { Flex, Grid, Box, Text, Button, ErrorIcon, Input, useTooltip, HelpIcon } from '@pancakeswap/uikit'
-import { Currency } from '@pancakeswap/sdk'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useTranslation } from '@pancakeswap/localization'
 import _toNumber from 'lodash/toNumber'
@@ -130,7 +129,7 @@ const SetPriceStage: React.FC<any> = ({
       </GreyedOutContainer>
       <GreyedOutContainer>
         <BribeField
-          add="pay"
+          add={t('pay')}
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={currency?.decimals}

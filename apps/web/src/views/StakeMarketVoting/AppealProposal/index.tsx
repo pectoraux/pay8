@@ -15,7 +15,6 @@ import {
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import snapshot from '@snapshot-labs/snapshot.js'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useStakeMarketContract } from 'hooks/useContract'
@@ -27,7 +26,6 @@ import Container from 'components/Layout/Container'
 import { PageMeta } from 'components/Layout/Page'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import Layout from '../components/Layout'
 import { ADMINS } from '../config'
@@ -131,7 +129,7 @@ const CreateProposal = () => {
       <PageMeta />
       <Box mb="48px">
         <Breadcrumbs>
-          <Link href="/stakemarket">{t('Stake Market')}</Link>
+          <Link href="/stakemarket">{t('StakeMarket')}</Link>
           <Link href="/stakemarket/voting">{t('Voting')}</Link>
           <Text>{t('Make a Proposal')}</Text>
         </Breadcrumbs>

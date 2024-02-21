@@ -11,7 +11,6 @@ import {
   Input,
   LinkExternal,
   Text,
-  useModal,
   useToast,
   ButtonMenu,
   ReactMarkdown,
@@ -245,7 +244,7 @@ const CreateProposal = () => {
       <PageMeta />
       <Box mb="48px">
         <Breadcrumbs>
-          <Link href="/trustbounties">{t('Trust Bounties')}</Link>
+          <Link href="/trustbounties">{t('TrustBounties')}</Link>
           <Link href="/trustbounties/voting">{t('Voting')}</Link>
           <Text>{t('Create a Claim')}</Text>
         </Breadcrumbs>
@@ -329,7 +328,7 @@ const CreateProposal = () => {
                   {tooltipVisible2 && tooltip2}
                   <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
                 </Flex>
-                <SecondaryLabel>{t('Friendly Claim ?')}</SecondaryLabel>
+                <SecondaryLabel>{t('Friendly Claim?')}</SecondaryLabel>
                 <StyledItemRow>
                   <ButtonMenu
                     scale="xs"
@@ -347,7 +346,7 @@ const CreateProposal = () => {
                   {tooltipVisible3 && tooltip3}
                   <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
                 </Flex>
-                <SecondaryLabel>{t('Lock Bounty ?')}</SecondaryLabel>
+                <SecondaryLabel>{t('Lock Bounty?')}</SecondaryLabel>
                 <StyledItemRow>
                   <ButtonMenu
                     scale="xs"

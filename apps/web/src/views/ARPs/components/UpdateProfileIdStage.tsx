@@ -15,7 +15,7 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
           {t('Update Profile ID')}
         </Text>
         <Text mt="24px" color="textSubtle">
-          {t("Use this to update your account's profile id.")}
+          {t("Use this to update your account's profile ID.")}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}

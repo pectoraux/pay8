@@ -1,14 +1,7 @@
 import { useWeb3React } from '@pancakeswap/wagmi'
-import orderBy from 'lodash/orderBy'
-import { Box, Button, Flex, Heading, Text, Grid } from '@pancakeswap/uikit'
+import { Flex, Text, Grid } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
 import { Bet } from 'state/types'
-import Iframe from 'react-iframe'
-import { useConfig } from 'views/Betting/context/ConfigProvider'
-// import { useGetCurrentHistoryPage, useGetHasHistoryLoaded, useGetIsFetchingHistory } from 'state/bettings/hooks'
-import HistoricalBet from './HistoricalBet'
-import V1ClaimCheck from '../v1/V1ClaimCheck'
 import { RoundedImage } from 'views/CanCan/market/Collection/IndividualNFTPage/shared/styles'
 
 interface RoundsTabProps {

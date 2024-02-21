@@ -32,7 +32,6 @@ import { PageMeta } from 'components/Layout/Page'
 import Link from 'next/link'
 import { getBlockExploreLink } from 'utils'
 import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
-import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useSSIContract } from 'hooks/useContract'
@@ -64,7 +63,6 @@ const CreateProposal = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const initialBlock = useInitialBlock()
-  const { fetchWithCatchTxError } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
   const ssiContract = useSSIContract()
   const { toastSuccess } = useToast()

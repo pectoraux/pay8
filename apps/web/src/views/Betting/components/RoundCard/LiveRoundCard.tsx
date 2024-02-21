@@ -23,7 +23,7 @@ const LiveRoundCard: React.FC<any> = ({ allBettings, betting }) => {
   const closeTimestamp = betting?.currEnd
   const lockTimestamp = betting?.currStart
 
-  const variants = ['success', 'primary', 'secondary', 'tertiary', 'light', 'danger']
+  // const variants = ['success', 'primary', 'secondary', 'tertiary', 'light', 'danger']
   const isBull = true
   const [onPresentBuyTicketsModal] = useModal(<BuyTicketsModal betting={betting} />)
   const { targetRef, tooltip, tooltipVisible } = useTooltip(t('Last price from Chainlink Oracle'), {

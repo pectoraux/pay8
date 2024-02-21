@@ -4,7 +4,6 @@ import {
   Grid,
   Box,
   Text,
-  Input,
   Modal,
   Button,
   AutoRenewIcon,
@@ -26,7 +25,7 @@ import Filters from 'views/CanCan/market/components/BuySellModals/SellModal/Filt
 import { getVeFromWorkspace } from 'utils/addressHelpers'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useRouter } from 'next/router'
-import { Divider, GreyedOutContainer } from './styles'
+import { Divider } from './styles'
 
 interface SetPriceStageProps {
   onDismiss?: any

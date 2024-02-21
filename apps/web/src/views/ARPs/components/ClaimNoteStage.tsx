@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
 
   useEffect(() => {
     refetch()
-  }, [state])
+  }, [refetch, state])
 
   const diff = Math.max(
     differenceInSeconds(new Date(parseInt(expirationDate) * 1000 ?? 0), new Date(), {

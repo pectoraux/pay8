@@ -159,15 +159,7 @@ export function PoolControls<T>({
       return sortedPools.filter((pool: any) => latinise(pool?.id || "").includes(lowercaseQuery));
     }
     return sortedPools;
-  }, [
-    account,
-    sortOption,
-    chosenPools,
-    favoritesOnly,
-    numberOfPoolsVisible,
-    searchQuery,
-    // watchlistTokens
-  ]);
+  }, [account, sortOption, chosenPools, numberOfPoolsVisible, searchQuery, favoritesOnly, watchlistTokens]);
 
   chosenPoolsLength.current = chosenPools.length;
 

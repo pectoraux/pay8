@@ -71,9 +71,7 @@ const getButtonProps = (value: BigNumber, bnbBalance: BigNumber, minBetAmountBal
 //   CAKE: useGetCakeBalance,
 // }
 
-const SetPositionCard: React.FC<any> = ({ position, togglePosition, epoch, onBack, onSuccess }) => {
-  const [value, setValue] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+const SetPositionCard: React.FC<any> = ({ position }) => {
   const [percent, setPercent] = useState(0)
   const { account } = useWeb3React()
   const { t } = useTranslation()

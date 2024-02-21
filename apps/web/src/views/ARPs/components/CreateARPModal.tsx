@@ -221,7 +221,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <StyledItemRow>
           <Flex ref={targetRef3} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Is Automatic ?')}
+              {t('Is Automatic?')}
             </Text>
             {tooltipVisible3 && tooltip3}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -236,7 +236,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <StyledItemRow>
           <Flex ref={targetRef4} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Is Percentages ?')}
+              {t('Is Percentages?')}
             </Text>
             {tooltipVisible4 && tooltip4}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />
@@ -251,7 +251,7 @@ const CreateARPModal: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <StyledItemRow>
           <Flex ref={targetRef5} paddingRight="50px">
             <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" bold>
-              {t('Is Immutable Contract ?')}
+              {t('Is Immutable Contract?')}
             </Text>
             {tooltipVisible5 && tooltip5}
             <HelpIcon ml="4px" width="15px" height="15px" color="textSubtle" />

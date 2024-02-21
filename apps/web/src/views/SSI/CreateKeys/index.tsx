@@ -84,9 +84,9 @@ const CreateKeys = () => {
     })
     if (receipt?.status) {
       toastSuccess(
-        t('Channel Created'),
+        t('Account Created'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start listing your products either on CanCan or the NFT marketplace')}
+          {t('You can now start adding data to your SSI account')}
         </ToastDescriptionWithTx>,
       )
       setIsLoading(false)

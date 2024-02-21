@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import styled, { DefaultTheme } from 'styled-components'
-import { Box, Flex, FlexProps, Skeleton, Text } from '@pancakeswap/uikit'
+import { Box, Flex, FlexProps, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { BetPosition, NodeRound, Round } from 'state/types'
 import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'

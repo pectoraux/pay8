@@ -39,10 +39,8 @@ const SpinnerWrapper = styled.div`
   width: 100%;
 `
 
-const History = ({ ogBetting, isHistoryPaneOpen, setHistoryPaneState }) => {
+const History = ({ ogBetting, setHistoryPaneState }) => {
   const { account } = useWeb3React()
-  const dispatch = useLocalDispatch()
-  const currentEpoch = 1
   const { t } = useTranslation()
   const bets = []
   const [activeTab, setActiveTab] = useState(HistoryTabs.ROUNDS)

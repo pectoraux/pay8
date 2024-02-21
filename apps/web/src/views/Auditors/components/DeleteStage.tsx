@@ -12,10 +12,10 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
     <>
       <Box p="16px" maxWidth="360px">
         <Text fontSize="24px" bold>
-          {t('Delete Pool')}
+          {t('Delete Contract')}
         </Text>
         <Text mt="24px" color="textSubtle">
-          {t('Use this to delete the entire pool.')}
+          {t('Use this to delete the entire auditor contract.')}
         </Text>
         <Text mt="16px" color="textSubtle">
           {t('Continue?')}

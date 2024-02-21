@@ -1,7 +1,6 @@
 import styled, { keyframes, css } from 'styled-components'
 import { Box, Flex, Text, useMatchBreakpoints, Pool } from '@pancakeswap/uikit'
 import { Token } from '@pancakeswap/sdk'
-import { useState } from 'react'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import PoolStatsInfo from '../../PoolStatsInfo'

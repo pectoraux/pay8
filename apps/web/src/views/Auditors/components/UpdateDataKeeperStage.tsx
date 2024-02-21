@@ -34,14 +34,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           scale="sm"
           name="auditor"
           value={state.auditor}
-          placeholder={t('input number of periods')}
+          placeholder={t('input auditor address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>
       <GreyedOutContainer>
         <StyledItemRow>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" paddingTop="3px" paddingRight="50px" bold>
-            {t('Are you a data keeper ?')}
+            {t('Are you a data keeper?')}
           </Text>
           <ButtonMenu
             scale="xs"

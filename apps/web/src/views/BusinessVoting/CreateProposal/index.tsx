@@ -15,11 +15,9 @@ import {
   ReactMarkdown,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@pancakeswap/wagmi'
-import snapshot from '@snapshot-labs/snapshot.js'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { useRouter } from 'next/router'
 import times from 'lodash/times'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { useInitialBlock } from 'state/block/hooks'
@@ -34,14 +32,11 @@ import Link from 'next/link'
 import { getBlockExploreLink } from 'utils'
 import { DatePickerPortal } from 'views/Voting/components/DatePicker'
 import { useAcceleratorContract } from 'hooks/useContract'
-import { getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import Layout from '../components/Layout'
-import VoteDetailsModal from '../components/VoteDetailsModal'
-import { ADMINS, VOTE_THRESHOLD } from '../config'
-import Choices, { Choice, makeChoice, MINIMUM_CHOICES } from './Choices'
-import { combineDateAndTime, getFormErrors } from './helpers'
+import { ADMINS } from '../config'
+import { makeChoice, MINIMUM_CHOICES } from './Choices'
+import { getFormErrors } from './helpers'
 import { FormErrors, Label, SecondaryLabel } from './styles'
-import { FormState } from './types'
 
 const EasyMde = dynamic(() => import('components/EasyMde'), {
   ssr: false,
@@ -128,10 +123,6 @@ const CreateProposal = () => {
 
   const handleEasyMdeChange = (value: string) => {
     updateValue('body', value)
-  }
-
-  const handleRawValueChange = (key: string) => (value: string) => {
-    updateValue(key, value)
   }
 
   const options = useMemo(() => {

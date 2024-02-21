@@ -61,7 +61,6 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
   const [discountValue, setDiscountValue] = useState('')
   const [totalCost, setTotalCost] = useState('')
   const [ticketCostBeforeDiscount, setTicketCostBeforeDiscount] = useState('')
-  const [buyingStage, setBuyingStage] = useState<BuyingStage>(BuyingStage.BUY)
   const [maxPossibleTicketPurchase, setMaxPossibleTicketPurchase] = useState(BIG_ZERO)
   const [maxTicketPurchaseExceeded, setMaxTicketPurchaseExceeded] = useState(false)
   const [userNotEnoughCake, setUserNotEnoughCake] = useState(false)
@@ -76,9 +75,7 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
   const stringifiedUserCake = userCake.toJSON()
   const memoisedUserCake = useMemo(() => new BigNumber(stringifiedUserCake), [stringifiedUserCake])
 
-  const dispatch = useAppDispatch()
   const hasFetchedBalance = fetchStatus === FetchStatus.Fetched
-  const userCakeDisplayBalance = getFullDisplayBalance(userCake, decimals, 3)
 
   const TooltipComponent = () => (
     <>
@@ -193,33 +190,6 @@ const BuyTicketsModal: React.FC<any> = ({ betting, onDismiss }) => {
     setTotalCost(costAfterDiscount.gt(0) ? getFullDisplayBalance(costAfterDiscount, decimals, 1) : '0')
     setDiscountValue(discountBeingApplied.gt(0) ? getFullDisplayBalance(discountBeingApplied, decimals, 5) : '0')
   }, [ticketsToBuy, priceTicketInCake, discountDivisor, decimals, getTicketCostAfterDiscount])
-
-  const getNumTicketsByPercentage = (percentage: number): number => {
-    const percentageOfMaxTickets = maxPossibleTicketPurchase.gt(0)
-      ? maxPossibleTicketPurchase.div(new BigNumber(100)).times(new BigNumber(percentage))
-      : BIG_ZERO
-    return Math.floor(percentageOfMaxTickets.toNumber())
-  }
-
-  const tenPercentOfBalance = getNumTicketsByPercentage(10)
-  const twentyFivePercentOfBalance = getNumTicketsByPercentage(25)
-  const fiftyPercentOfBalance = getNumTicketsByPercentage(50)
-  const oneHundredPercentOfBalance = getNumTicketsByPercentage(100)
-
-  const handleInputChange = (input: string) => {
-    // Force input to integer
-    const inputAsInt = parseInt(input, 10)
-    const inputAsBN = new BigNumber(inputAsInt)
-    const limitedNumberTickets = limitNumberByMaxTicketsPerBuy(inputAsBN)
-    validateInput(inputAsBN)
-    setTicketsToBuy(inputAsInt ? limitedNumberTickets.toString() : '')
-  }
-
-  const handleNumberButtonClick = (number: number) => {
-    setTicketsToBuy(number.toFixed())
-    setUserNotEnoughCake(false)
-    setMaxTicketPurchaseExceeded(false)
-  }
 
   const [updateTicket, randomize, tickets, allComplete, getTicketsForPurchase] = useTicketsReducer(
     parseInt(ticketsToBuy, 10),

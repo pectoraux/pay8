@@ -1,4 +1,4 @@
-import { Flex, LinkExternal, Pool, ScanLink, Button, Box, ReactMarkdown } from '@pancakeswap/uikit'
+import { Flex, LinkExternal, Pool, ScanLink, Button } from '@pancakeswap/uikit'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'

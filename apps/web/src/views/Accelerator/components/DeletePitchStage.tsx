@@ -12,7 +12,7 @@ const RemoveStage: React.FC<any> = ({ continueToNextStage }) => {
     <>
       <Box p="16px" maxWidth="360px">
         <Text fontSize="24px" bold>
-          {t('Delete ')}
+          {t('Delete')}
         </Text>
         <Text mt="24px" color="textSubtle">
           {t('Use this to delete this Pitch.')}

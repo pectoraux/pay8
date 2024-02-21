@@ -19,7 +19,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-        {t('Auditor Uses')}{' '}
+        {t('Auditor Contract Uses')}{' '}
       </Text>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
         {currAccount?.token?.symbol}

@@ -100,11 +100,11 @@ const CreateProposal = () => {
   const handleSubmit = async () => {
     setIsLoading(true)
     const messageHtml = `
-      # Payswap SSI
+      # ${t('Payswap SSI')}
 
-      This is your verification code ${randomCode}
+      ${t('This is your verification code')} ${randomCode}
       
-      _Thanks for using Payswap_
+      ${t('_Thanks for using Payswap_')}
       `
     const { data: emailRes } = await axios.post('/api/email', {
       messageHtml,

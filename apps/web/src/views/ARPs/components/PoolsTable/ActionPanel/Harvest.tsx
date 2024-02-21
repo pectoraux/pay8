@@ -218,7 +218,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Bounty Id')}
+              {t('Bounty ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -237,7 +237,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Admin Bounty Id')}
+              {t('Admin Bounty ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
@@ -256,7 +256,7 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount }) => {
               </Text>
             )}
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Profile Id')}
+              {t('Profile ID')}
             </Text>
           </Box>
           <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">

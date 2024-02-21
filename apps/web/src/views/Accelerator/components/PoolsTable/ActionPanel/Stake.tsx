@@ -1,7 +1,6 @@
 import { Button, Text, useModal, Pool } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useTranslation } from '@pancakeswap/localization'
-import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import { useWeb3React } from '@pancakeswap/wagmi'
 import { useCallback, useState } from 'react'
@@ -10,13 +9,6 @@ import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 import CreateGaugeModal from '../../CreateGaugeModal'
-
-const IconButtonWrapper = styled.div`
-  display: flex;
-`
-const HelpIconWrapper = styled.div`
-  align-self: center;
-`
 
 interface StackedActionProps {
   pool: Pool.DeserializedPool<Token>

@@ -125,7 +125,7 @@ const Desktop: React.FC<any> = ({ allBettings }) => {
           </PositionPane>
         </SplitWrapper>
         <HistoryPane isHistoryPaneOpen={false} isChartPaneOpen={false}>
-          <History ogBetting={ogBetting} isHistoryPaneOpen={false} setHistoryPaneState={setHistoryPaneState} />
+          <History ogBetting={ogBetting} setHistoryPaneState={setHistoryPaneState} />
         </HistoryPane>
       </StyledDesktop>
     </>
