@@ -214,7 +214,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   const TooltipComponent = () => (
     <Text>
       {t(
-        'This sets the workspace of your stake or the workspace to which belongs the community that will vote on potential future litigations around this stake. If you pick Real Estate for instance, only users holding a Real Estate Leviathan token will be able to vote on any enventual litigations around your stake.',
+        'This sets the workspace of your stake or the workspace to which belongs the community that will vote on potential future litigations around this stake. If you pick Real Estate for instance, only users holding a Real Estate Leviathan token will be able to vote on any eventual litigations around your stake.',
       )}
     </Text>
   )
@@ -296,7 +296,7 @@ const CreateStakeModal: React.FC<any> = ({ currency, onDismiss }) => {
   const TooltipComponent13 = () => (
     <Text>
       {t(
-        'This sets whether you want the stake market to retreive funds (the amount receivable) from your wallet when creating this stake.',
+        'This sets whether you want the stake market to retrieve funds (the amount receivable) from your wallet when creating this stake.',
       )}
     </Text>
   )

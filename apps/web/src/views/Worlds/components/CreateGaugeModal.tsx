@@ -895,7 +895,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currency, cur
             {t('UPDATE BOUNTY REQUIRED')}
           </Button> */}
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_CODE_INFO)}>
-            {t('UPDATE CODE NFO')}
+            {t('UPDATE CODE INFO')}
           </Button>
           <Button mb="8px" onClick={() => setStage(LockStage.UPDATE_CATEGORY)}>
             {t('UPDATE CATEGORY')}

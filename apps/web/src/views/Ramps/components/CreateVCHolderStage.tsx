@@ -203,7 +203,7 @@ const BurnStage: React.FC<any> = ({ state, handleChange, rampHelperContract, onD
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will burn the specified amount of the selected token from your wallet and make the equivalent amount in FIAT currency available to you on the specified cirtual card.',
+              'This will burn the specified amount of the selected token from your wallet and make the equivalent amount in FIAT currency available to you on the specified virtual card.',
             )}
           </Text>
         </Box>

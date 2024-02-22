@@ -45,7 +45,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('Do you refer people to businesses in CanCan?')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Create a gauge and start earning each time your referree makes a purchase.')}
+              {t('Create a gauge and start earning each time your referee makes a purchase.')}
             </Heading>
             <Flex>
               <Button p="0" variant="text">

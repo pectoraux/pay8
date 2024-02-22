@@ -70,7 +70,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will deploy a new extra token that your can later on add to the ramp so it can be minted by users.',
+              'This will deploy a new extra token that you can, later on, add to the dRamp so it can be minted by users.',
             )}
           </Text>
         </Box>

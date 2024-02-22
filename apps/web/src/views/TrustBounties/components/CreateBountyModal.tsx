@@ -229,7 +229,7 @@ const CreateBountyModal: React.FC<any> = ({ currency, onDismiss }) => {
   const TooltipComponent = () => (
     <Text>
       {t(
-        'This sets the workspace of your bounty or the workspace to which belongs the community that will vote on potential future claims created around this bounty. If you pick Real Estate for instance, only users holding a Real Estate Leviathan token will be able to vote on any enventual claims created on your bounty.',
+        'This sets the workspace of your bounty or the workspace to which belongs the community that will vote on potential future claims created around this bounty. If you pick Real Estate for instance, only users holding a Real Estate Leviathan token will be able to vote on any eventual claims created on your bounty.',
       )}
     </Text>
   )

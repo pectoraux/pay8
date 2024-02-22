@@ -61,7 +61,7 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
       toastSuccess(
         t('Referrer successfully launched'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start earning token rewards each purchase your referrees make.')}
+          {t('You can now start earning token rewards each purchase your referees make.')}
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchReferralGaugesAsync({ chainId }))
@@ -100,7 +100,7 @@ const CreateReferralStage: React.FC<SetPriceStageProps> = ({ onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will launch your referrer so you can start receiving votes as a referrer on purchases made by your referrees. Please read the documentation to learn more about referral gauges.',
+              'This will launch your referrer so you can start receiving votes as a referrer on purchases made by your referees. Please read the documentation to learn more about referral gauges.',
             )}
           </Text>
         </Box>
