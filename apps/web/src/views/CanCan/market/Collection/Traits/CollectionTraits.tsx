@@ -1,6 +1,16 @@
 import { useCallback, useState } from 'react'
 import capitalize from 'lodash/capitalize'
-import { Flex, Box, Balance, Button, useModal, LinkExternal, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import {
+  Flex,
+  Box,
+  Balance,
+  Button,
+  useModal,
+  LinkExternal,
+  ButtonMenu,
+  ButtonMenuItem,
+  Text,
+} from '@pancakeswap/uikit'
 import {
   useGetCollection,
   useGetPendingRevenue,
