@@ -1,6 +1,6 @@
 import { EN } from './config/languages'
 
-const publicUrl = 'https://locales.pancakeswap.finance'
+const publicUrl = 'https://locales.payswap.org'
 
 export const LS_KEY = 'pancakeswap_language'
 
