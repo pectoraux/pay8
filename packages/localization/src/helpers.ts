@@ -1,6 +1,6 @@
 import { EN } from './config/languages'
 
-const publicUrl = 'https://locales.payswap.org'
+const publicUrl = 'https://pay8-locales-fuxx2kzp5-payswap.vercel.app'
 
 export const LS_KEY = 'payswap_language'
 
