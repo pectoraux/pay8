@@ -2,7 +2,7 @@ import { EN } from './config/languages'
 
 const publicUrl = 'https://pay8-locales-fuxx2kzp5-payswap.vercel.app'
 
-export const LS_KEY = 'payswap_language'
+export const LS_KEY = 'pancakeswap_language'
 
 export const fetchLocale = async (locale: string) => {
   const response = await fetch(`${publicUrl}/${locale}.json`)
