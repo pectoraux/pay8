@@ -256,7 +256,7 @@ export const FreeTokensBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/341.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/341.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>

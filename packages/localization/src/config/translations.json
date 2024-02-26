@@ -5896,7 +5896,6 @@
   "Is Percentages?": "Is Percentages?",
   "Is Immutable Contract?": "Is Immutable Contract?",
   "This will deploy a new ARP contract with you as its Admin. Please read the documentation to learn more about ARPs.": "This will deploy a new ARP contract with you as its Admin. Please read the documentation to learn more about ARPs.",
-  "BettiNotify Rewardsngs": "Notify Rewards",
   "Notify Debt": "Notify Debt",
   "Update User Percentiles": "Update User Percentiles",
   "UPDATE USER PERCENTILES": "UPDATE USER PERCENTILES",
@@ -6075,5 +6074,10 @@
   "Profile Auctions": "Profile Auctions",
   "PayChat": "PayChat",
   "seconds": "seconds",
-  "Buy and Sell Products and Services on the Blockchain": "Buy and Sell Products and Services on the Blockchain"
+  "Buy and Sell Products and Services on the Blockchain": "Buy and Sell Products and Services on the Blockchain",
+  "Leviathans aim to create abundance in the world": "Leviathans aim to create abundance in the world",
+  "Using DAOs or Valuepools, they setup systems that provide all utilities in abundance": "Using DAOs or Valuepools, they setup systems that provide all utilities in abundance",
+  "Free tokens are minted & distributed weekly": "Free tokens are minted & distributed weekly",
+  "Get rewards through the Accelerator, Businesses, Contributors & Referrals contracts": "Get rewards through the Accelerator, Businesses, Contributors & Referrals contracts",
+  "Referrals": "Referrals"
 }

@@ -163,7 +163,7 @@ const LogoBox = styled(Box)`
 `
 export const LeviathanBanner = () => {
   const { t } = useTranslation()
-  const { isMobile, isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const title = t('Leviathans aim to create abundance in the world')
 
@@ -197,7 +197,7 @@ export const LeviathanBanner = () => {
         </S.LeftWrapper>
         <RightWrapper>
           <BGWrapper>
-            <Image src={'/images/cancan/359.jpg'} alt="Background" width={338} height={176} unoptimized />
+            <Image src="/images/cancan/359.jpg" alt="Background" width={338} height={176} unoptimized />
           </BGWrapper>
         </RightWrapper>
       </S.Inner>
