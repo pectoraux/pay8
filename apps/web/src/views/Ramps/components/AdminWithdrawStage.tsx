@@ -47,7 +47,7 @@ const AdminWithdrawStage: React.FC<any> = ({ state, currency, handleRawValueChan
     <>
       <GreyedOutContainer>
         <BribeField
-          add="withdraw"
+          add={t('withdraw')}
           stakingAddress={currency?.address}
           stakingSymbol={currency?.symbol}
           stakingDecimals={18}

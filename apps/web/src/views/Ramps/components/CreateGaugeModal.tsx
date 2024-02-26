@@ -488,7 +488,7 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_MINT_NFT:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.ADMIN_WITHDRAW:
         setStage(LockStage.ADMIN_SETTINGS)
