@@ -4,7 +4,7 @@ import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
 import { differenceInSeconds, format } from 'date-fns'
 import { convertTimeToSeconds } from 'utils/timeHelper'
-import { usePool } from 'state/stakemarket/hooks'
+import { useFetchLocale, usePool } from 'state/stakemarket/hooks'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import Timer from './Timer'
 
@@ -27,6 +27,7 @@ const DateInfoCell: React.FC<any> = ({ labelText, sousId, t }) => {
   const { pool } = usePool(sousId)
   const statusEndTime = pool?.status?.length ? pool?.status[1] : 0
   const stakeWinner = parseInt(pool?.status?.length ? pool?.status[2] : 0)
+  const locale = useFetchLocale()
   const diff = Math.max(
     differenceInSeconds(new Date(parseInt(pool.waitingDuration) * 1000 ?? 0), new Date(), {
       roundingMethod: 'ceil',
@@ -59,12 +60,12 @@ const DateInfoCell: React.FC<any> = ({ labelText, sousId, t }) => {
             <Box mr="8px" height="32px">
               <Text mt="4px" fontSize="14px" color="primary" bold>
                 {parseInt(pool?.nextDuePayable)
-                  ? format(convertTimeToSeconds(pool?.nextDuePayable), 'MMM do, yyyy HH:mm')
+                  ? format(convertTimeToSeconds(pool?.nextDuePayable), 'MMM do, yyyy HH:mm', { locale })
                   : '-'}
               </Text>
               <Text mt="4px" fontSize="14px" color="textSubtle">
                 {parseInt(pool?.nextDueReceivable)
-                  ? format(convertTimeToSeconds(pool?.nextDueReceivable), 'MMM do, yyyy HH:mm')
+                  ? format(convertTimeToSeconds(pool?.nextDueReceivable), 'MMM do, yyyy HH:mm', { locale })
                   : '-'}
               </Text>
             </Box>

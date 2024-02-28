@@ -212,7 +212,7 @@ const Header: React.FC<any> = ({ collection }) => {
               <ActionContainer className="tour2-1">
                 <ActionTitles>
                   <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
-                    {isOwner ? t('Ship faster') : t('Get Started!')}
+                    {isOwner ? t('Ship faster') : t('Get Started')}!
                   </Text>
                 </ActionTitles>
                 <ActionContent>

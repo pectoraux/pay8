@@ -6,6 +6,7 @@ import { useAppDispatch } from 'state'
 import { requiresApproval } from 'utils/requiresApproval'
 import { FAST_INTERVAL } from 'config/constants'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { fetchLocale, getLanguageCodeFromLS } from '@pancakeswap/localization'
 
 import { fetchStakesAsync } from '.'
 import {
@@ -115,6 +116,12 @@ export const useGetStakeApplication = (stakeId: string) => {
 export const useGetStake = (stakeId: string) => {
   const { chainId } = useActiveChainId()
   const { data } = useSWR(['getStake', stakeId, chainId], async () => getStake(stakeId, chainId))
+  return data
+}
+
+export const useFetchLocale = () => {
+  const codeFromStorage = getLanguageCodeFromLS()
+  const { data } = useSWR(['useFetchLocale', codeFromStorage], async () => fetchLocale(codeFromStorage))
   return data
 }
 

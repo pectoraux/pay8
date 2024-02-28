@@ -21,7 +21,6 @@ import { useAppDispatch } from 'state'
 import { useRouter } from 'next/router'
 import { setCurrPoolData } from 'state/valuepools'
 import { Contacts } from 'views/Ramps/components/PoolStatsInfo'
-import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 
 import WebPagesModal from './WebPagesModal'
@@ -243,10 +242,10 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, alignLinksToRight = true 
           <Text color="primary" fontSize="14px">
             {t('Vote Option')} {`->`}{' '}
             {!parseInt(pool.voteOption ?? '0')
-              ? 'Percentile Based'
+              ? t('Percentile Based')
               : parseInt(pool.voteOption ?? '0') === 1
-              ? 'Weight Based'
-              : 'SSID Based'}
+              ? t('Weight Based')
+              : t('SSID Based')}
           </Text>
         </Flex>
         <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>

@@ -54,12 +54,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
               </Text>
             </Box>
           ) : null}
-          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
-            {t(pool?.status ?? '')}
-          </Text>
-          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-            {t('Status')}
-          </Text>
           <Box mr="8px" height="32px">
             <Balance
               lineHeight="1"
@@ -149,18 +143,6 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
               lineHeight="1"
               color="textSubtle"
               fontSize="12px"
-              decimals={5}
-              value={getBalanceNumber(new BigNumber(toReinject), currAccount?.token?.decimals ?? 18)}
-            />
-            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Amount Left To Reinject')}
-            </Text>
-          </Box>
-          <Box mr="8px" height="32px">
-            <Balance
-              lineHeight="1"
-              color="textSubtle"
-              fontSize="12px"
               decimals={0}
               value={pool?.tokenData?.length}
               prefix="#"
@@ -169,8 +151,26 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currAccount, currUs
               {t('Number of Tokens')}
             </Text>
           </Box>
+          <Box mr="8px" height="32px">
+            <Balance
+              lineHeight="1"
+              color="textSubtle"
+              fontSize="12px"
+              decimals={5}
+              value={getBalanceNumber(new BigNumber(toReinject), currAccount?.token?.decimals ?? 18)}
+            />
+            <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+              {t('Amount Left To Reinject')}
+            </Text>
+          </Box>
         </Flex>
         <Flex flex="1" flexDirection="column" alignSelf="flex-center">
+          <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
+            {t(pool?.status ?? '')}
+          </Text>
+          <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
+            {t('Status')}
+          </Text>
           {parseInt(pool?.lockDuration) ? (
             <Text lineHeight="1" fontSize="12px" color="textSubtle" as="span">
               {daysReceivable} {t('days')} {hoursReceivable} {t('hours')} {minutesReceivable} {t('minutes')}

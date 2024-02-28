@@ -2,9 +2,8 @@ import { Flex, Text, Box, Pool } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Token } from '@pancakeswap/sdk'
 import BigNumber from 'bignumber.js'
-import { format } from 'date-fns'
-import { convertTimeToSeconds } from 'utils/timeHelper'
 import { useTranslation } from '@pancakeswap/localization'
+import { getDrawnDate } from 'views/Lottery/helpers'
 
 interface TotalStakedCellProps {
   totalStakedBalance: number
@@ -17,10 +16,14 @@ const StyledCell = styled(Pool.BaseCell)`
 `
 
 const EndsInCell: React.FC<any> = ({ pool }) => {
-  const { t } = useTranslation()
+  const {
+    t,
+    currentLanguage: { locale },
+  } = useTranslation()
+
   const getDate = (nextDue) => {
     try {
-      return Number(nextDue) ? format(convertTimeToSeconds(nextDue), 'MMM do, yyyy HH:mm') : '-'
+      return Number(nextDue) ? getDrawnDate(locale, nextDue) : '-'
     } catch (err) {
       return '-'
     }

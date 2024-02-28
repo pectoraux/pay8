@@ -29,6 +29,7 @@ const Wrapper = styled(Flex)`
 `
 
 const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPool }) => {
+  // eslint-disable-next-line no-param-reassign
   if (!currPool) currPool = pool
   const { t } = useTranslation()
   const { address: account } = useAccount()
@@ -210,19 +211,19 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, currPool, setCurrPo
           <Box mr="8px" height="32px">
             <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currPool?.profileId} />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Profile Id')}
+              {t('Profile ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
             <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currPool?.bountyId} />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Bounty Id')}
+              {t('Bounty ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">
             <Balance lineHeight="1" color="textSubtle" fontSize="12px" decimals={0} value={currPool?.tokenId} />
             <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-              {t('Token Id')}
+              {t('Token ID')}
             </Text>
           </Box>
           <Box mr="8px" height="32px">

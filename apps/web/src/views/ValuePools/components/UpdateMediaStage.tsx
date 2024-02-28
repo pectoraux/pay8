@@ -66,7 +66,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="lg"
           name="item"
           value={state.item}
-          placeholder={t('input media')}
+          placeholder={t('input media link')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

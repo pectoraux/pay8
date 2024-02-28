@@ -455,9 +455,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
       case LockStage.CONFIRM_REMOVE_SPONSORS:
         setStage(LockStage.REMOVE_SPONSORS)
         break
-      case LockStage.HISTORY:
-        setStage(LockStage.ADMIN_SETTINGS)
-        break
+      // case LockStage.HISTORY:
+      //   setStage(LockStage.ADMIN_SETTINGS)
+      //   break
       case LockStage.UPDATE_OWNER:
         setStage(LockStage.ADMIN_SETTINGS)
         break
@@ -1078,9 +1078,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               {t('WITHDRAW')}
             </Button>
           ) : null}
-          <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.HISTORY)}>
+          {/* <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.HISTORY)}>
             {t('ALL TRANSACTION HISTORY')}
-          </Button>
+          </Button> */}
         </Flex>
       )}
       {stage === LockStage.ADMIN_SETTINGS && (
@@ -1169,9 +1169,9 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', location = 'valuepo
               {t('REMOVE SPONSORS')}
             </Button>
           ) : null}
-          <Button variant="secondary" mb="8px" disabled onClick={() => setStage(LockStage.HISTORY)}>
+          {/* <Button variant="secondary" mb="8px" disabled onClick={() => setStage(LockStage.HISTORY)}>
             {t('ALL TRANSACTION HISTORY')}
-          </Button>
+          </Button> */}
         </Flex>
       )}
       {stage === LockStage.UPDATE_LOCATION && (

@@ -176,7 +176,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(LockStage.WITHDRAW)
         break
       case LockStage.WITHDRAW:
-        setStage(LockStage.SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_CONTRIBUTE_RANDOM_NUMBER_FEES:
         setStage(LockStage.CONTRIBUTE_RANDOM_NUMBER_FEES)
@@ -218,7 +218,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.ADMIN_WITHDRAW:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(variant === 'user' ? LockStage.SETTINGS : LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_ADD_TOKEN:
         setStage(LockStage.ADD_TOKEN)
@@ -695,6 +695,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           state={state}
           account={pool.id}
           currency={currency}
+          handleChange={handleChange}
           continueToNextStage={continueToNextStage}
           handleRawValueChange={handleRawValueChange}
         />

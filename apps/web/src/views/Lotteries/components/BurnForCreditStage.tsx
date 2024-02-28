@@ -158,7 +158,7 @@ const BurnForCreditStage: React.FC<SetPriceStageProps> = ({
         <Box>
           <Text small color="textSubtle">
             {t(
-              'The burns your tokens for discount on your ticket prices in the lottery. Please read the documentation for more information.',
+              'This burns your tokens for discount on your ticket prices in the lottery. Please read the documentation for more information.',
             )}
           </Text>
         </Box>

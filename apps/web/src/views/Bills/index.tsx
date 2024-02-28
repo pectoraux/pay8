@@ -42,7 +42,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             </Heading>
             <Heading scale="md" color="text">
               {t(
-                'Create a contract and start managing your receivables & payables. Bill contracts can be used for bookkeeping, accounting, taxe processing, etc.',
+                'Create a contract and start managing your receivables & payables. Bill contracts can be used for bookkeeping, accounting, tax processing, etc.',
               )}
             </Heading>
             <Heading scale="md" color="text">

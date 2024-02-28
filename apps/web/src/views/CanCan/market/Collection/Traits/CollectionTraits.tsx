@@ -107,7 +107,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
 
   return (
     <>
-      <CollapsibleCard key="revenue" title={capitalize('Revenue From MarketPlaces')} initialOpenState mb="32px">
+      <CollapsibleCard key="revenue" title={t('Revenue From MarketPlaces')} initialOpenState mb="32px">
         <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
           <ActionTitles>{actionTitle}</ActionTitles>
           <CurrencyInputPanel
@@ -360,7 +360,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
           </Flex>
         </ActionContent>
       </CollapsibleCard>
-      <CollapsibleCard key="sponsorrevenue" title={capitalize('Revenue From Sponsors')} initialOpenState mb="32px">
+      <CollapsibleCard key="sponsorrevenue" title={t('Revenue From Sponsors')} initialOpenState mb="32px">
         <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
           <ActionTitles>{actionTitle2}</ActionTitles>
           <ActionContent>
@@ -386,7 +386,7 @@ const CollectionTraits: React.FC<React.PropsWithChildren<CollectionTraitsProps>>
           </Flex>
         </ActionContent>
       </CollapsibleCard>
-      <CollapsibleCard key="superchatrevenue" title={capitalize('Revenue From SuperChats')} initialOpenState mb="32px">
+      <CollapsibleCard key="superchatrevenue" title={t('Revenue From SuperChats')} initialOpenState mb="32px">
         <Flex flex="1" flexDirection="column" alignItems="center" alignSelf="flex-center">
           <ActionTitles>{actionTitle2}</ActionTitles>
           <ActionContent>

@@ -32,7 +32,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           scale="sm"
           name="protocolId"
           value={state.protocolId}
-          placeholder={t('input your protocol id')}
+          placeholder={t('input protocol id')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

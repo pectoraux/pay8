@@ -33,7 +33,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
     <>
       <GreyedOutContainer>
         <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Valuepool address')}
+          {t('Valuepool Address')}
         </Text>
         <Input
           type="text"

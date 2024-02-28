@@ -126,7 +126,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
         setStage(LockStage.TRANSFER_DUE_RECEIVABLE)
         break
       case LockStage.CLAIM_REVENUE_FROM_NOTE:
-        setStage(LockStage.ADMIN_SETTINGS)
+        setStage(isAdmin ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
       case LockStage.CONFIRM_CLAIM_REVENUE_FROM_NOTE:
         setStage(LockStage.CLAIM_REVENUE_FROM_NOTE)
@@ -252,7 +252,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
         const args = [currency?.address, state.tokenId, state.identityTokenId]
         const contract = !state.marketplace
           ? marketTradesContract
-          : state.marketplace == 1
+          : state.marketplace === 1
           ? nftMarketTradesContract
           : paywallMarketTradesContract
         console.log('CONFIRM_CLAIM_REVENUE_FROM_NOTE===============>', args)
@@ -264,7 +264,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
         const args = [currency?.address, state.tokenId, state.identityTokenId]
         const contract = !state.marketplace
           ? marketTradesContract
-          : state.marketplace == 1
+          : state.marketplace === 1
           ? nftMarketTradesContract
           : paywallMarketTradesContract
         console.log('CLAIM_REVENUE_FROM_NOTE===============>', args)
@@ -275,7 +275,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
       if (stage === LockStage.CONFIRM_TRANSFER_DUE_RECEIVABLE) {
         const contract = !state.marketplace
           ? marketTradesContract
-          : state.marketplace == 1
+          : state.marketplace === 1
           ? nftMarketTradesContract
           : paywallMarketTradesContract
         const startReceivable = Math.max(
@@ -299,7 +299,7 @@ const CreateGaugeModal: React.FC<any> = ({ isAdmin, pool, currency, variant, ref
       if (stage === LockStage.CONFIRM_FUND_REVENUE) {
         const contract = !state.marketplace
           ? marketTradesContract
-          : state.marketplace == 1
+          : state.marketplace === 1
           ? nftMarketTradesContract
           : paywallMarketTradesContract
         const amountPayable = getDecimalAmount(state.amountPayable ?? 0, currency?.decimals)
