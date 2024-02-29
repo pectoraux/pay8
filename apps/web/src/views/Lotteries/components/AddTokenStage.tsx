@@ -27,7 +27,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "This specifies the address of the contract that checks whether a user's token is elligible or not for a discount.",
+        "This specifies the address of the contract that checks whether a user's token is eligible or not for a discount.",
       )}
     </Text>
   )

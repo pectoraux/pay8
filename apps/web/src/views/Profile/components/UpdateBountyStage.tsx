@@ -45,7 +45,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add a new bounty to your profile. You need a bounty with a high enough balance attached to your profile to be able to withdraw payments your profile receive. Please read the documentation for more information on this',
+              'This will add a new bounty to your profile. You need a bounty with a high enough balance attached to your profile to be able to withdraw payments your profile receives. Please read the documentation for more information on this',
             )}
           </Text>
         </Box>

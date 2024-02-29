@@ -48,7 +48,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        "This sets the price users will have to pay to purchase one minute in this game. Make sure you have selected the game's currency from the drop down menu next to the 'Create Game' button.",
+        "This sets the price users will have to pay to purchase one minute in this game. Make sure you have selected the game's currency from the drop-down menu next to the 'Create Game' button.",
       )}
     </Text>
   )

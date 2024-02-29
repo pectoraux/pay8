@@ -51,7 +51,7 @@ const BurnTokenForCreditStage: React.FC<any> = ({
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        "This specifies the address of the contract that checks whether a user's token is elligible or not for a discount. In case of fungible tokens, leave this field empty.",
+        "This specifies the address of the contract that checks whether a user's token is eligible or not for a discount. In case of fungible tokens, leave this field empty.",
       )}
     </Text>
   )

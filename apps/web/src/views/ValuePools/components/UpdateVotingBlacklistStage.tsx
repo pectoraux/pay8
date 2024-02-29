@@ -83,7 +83,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the voting blacklist of this Valuepool meaning either add/remove address from the list of users prevented from voting due to previous fraudulant activities.',
+              'This will update the voting blacklist of this Valuepool meaning either add/remove address from the list of users prevented from voting due to previous fraudulent activities.',
             )}
           </Text>
         </Box>

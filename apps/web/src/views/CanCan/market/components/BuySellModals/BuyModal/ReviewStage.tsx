@@ -179,7 +179,7 @@ const ReviewStage: React.FC<any> = ({
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'The merchant id is the identity token id of the merchant and is used to check that the merchant is elligbible for your valuepool. In case your valuepool does not impose any identity requirements on merchnts, just input 0.',
+        'The merchant id is the identity token id of the merchant and is used to check that the merchant is eligible for your valuepool. In case your valuepool does not impose any identity requirements on merchants, just input 0.',
       )}
     </Text>
   )

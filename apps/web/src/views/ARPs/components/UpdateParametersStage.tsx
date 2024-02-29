@@ -85,7 +85,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent10 = () => (
     <Text>
       {t(
-        'This sets an upper bound on the number of accounts that can ever be create by this ARP contract. Once this parameter is set, it can no longer be changed. You can leave it at 0 to be able to create an infinite amount of accounts.',
+        'This sets an upper bound on the number of accounts that can ever be created by this ARP contract. Once this parameter is set, it can no longer be changed. You can leave it at 0 to be able to create an infinite number of accounts.',
       )}
     </Text>
   )

@@ -54,14 +54,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'This sets the start date of the payment cycle from the account owner to the Auditor contract. You should set this value even in the case of non periodic accounts.',
+        'This sets the start date of the payment cycle from the account owner to the Auditor contract. You should set this value even in the case of non-periodic accounts.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'This sets the start date of the payment cycle from the Auditor contract to the account owner. You should set this value even in the case of non periodic accounts.',
+        'This sets the start date of the payment cycle from the Auditor contract to the account owner. You should set this value even in the case of non-periodic accounts.',
       )}
     </Text>
   )

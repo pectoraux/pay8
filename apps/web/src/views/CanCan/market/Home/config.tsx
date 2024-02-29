@@ -12,7 +12,7 @@ const config = (t: ContextApi['t']) => {
       title: t('How much does it cost to list a product?'),
       description: [
         t(
-          'It is completely free, create a profile, click on the *Make a channel* link in the top right drop down menu and create your own channel.',
+          'It is completely free, create a profile, click on the *Make a channel* link in the top right drop-down menu and create your own channel.',
         ),
         t('Once you have a channel, you can list as many products or paywalls as you want.'),
       ],

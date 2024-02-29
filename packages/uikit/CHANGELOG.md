@@ -179,7 +179,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **uikit:** Render menu without link as text in Footer ([#304](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/issues/304)) ([c975470](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/commit/c975470b0f561c4f95bdfac7bb119c7d6365e9af))
-* (menu): Main menu items on tablets causes navigation instead of drop down ([#301](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/issues/301)) ([895ef24](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/commit/895ef24fd054b28bff1eddd1a6df07f08955d512))
+* (menu): Main menu items on tablets causes navigation instead of drop-down ([#301](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/issues/301)) ([895ef24](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/commit/895ef24fd054b28bff1eddd1a6df07f08955d512))
 * (menu): Menu item keys might be the same if label is the same ([#294](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/issues/294)) ([871da8b](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/commit/871da8bf43d2808b3f59a8bf578df20c01d2d35f))
 * Token pocket mobile navigation ([#297](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/issues/297)) ([6b80d7e](https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit/commit/6b80d7e81060ada8af69ece1e61dc275a96a5cfc))
 

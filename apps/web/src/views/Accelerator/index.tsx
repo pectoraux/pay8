@@ -45,7 +45,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
               {t('Publish a pitch describing your company and team.')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Receive votes to be elligible for a portion of the weekly emissions.')}
+              {t('Receive votes to be eligible for a portion of the weekly emissions.')}
             </Heading>
             <Flex>
               <Button p="0" variant="text">

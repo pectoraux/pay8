@@ -222,7 +222,7 @@ const CreateProposal = () => {
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'You can fine tune more parameters about your product. These parameters are not necessary to upade in order to list your product but offer more options to customize your product.',
+        'You can fine tune more parameters about your product. These parameters are not necessary to update in order to list your product but offer more options to customize your product.',
       )}
     </Text>
   )
@@ -292,7 +292,7 @@ const CreateProposal = () => {
   const TooltipComponent15 = () => (
     <Text>
       {t(
-        "Make sure you have select a FIAT token in the drop down menu on top of the List Product/List Paywall button before clicking them. If you've done socials, pick Yes",
+        "Make sure you have select a FIAT token in the drop-down menu on top of the List Product/List Paywall button before clicking them. If you've done socials, pick Yes",
       )}
     </Text>
   )

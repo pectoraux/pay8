@@ -36,14 +36,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'This sets the amount you will be paying the sponsored party at each end of period. Make sure you selected a currency from the drop down menu at the top of the control panel.',
+        'This sets the amount you will be paying the sponsored party at each end of period. Make sure you selected a currency from the drop-down menu at the top of the control panel.',
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets the duration of each payment cycle in minutes. It can be each day/week/month/etc. For non periodic payments, just enter 0.',
+        'This sets the duration of each payment cycle in minutes. It can be each day/week/month/etc. For non-periodic payments, just enter 0.',
       )}
     </Text>
   )
@@ -64,7 +64,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'If you have any marketing media you want to transmit the party being sponsored, this is where you input a link to that media. You can upload it on YouTube and input the YouTube link right here',
+        'If you have any marketing media you want to transmit to the party being sponsored, this is where you input a link to that media. You can upload it on YouTube and input the YouTube link right here',
       )}
     </Text>
   )

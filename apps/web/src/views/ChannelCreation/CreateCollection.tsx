@@ -186,7 +186,7 @@ const Team: React.FC = () => {
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'This sets a lower bound on the percentage your would like channels that partner with yours to give you on sales they make through your channel',
+        'This sets a lower bound on the percentage you would like channels that partner with yours to give you on sales they make through your channel',
       )}
     </Text>
   )
@@ -214,7 +214,7 @@ const Team: React.FC = () => {
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        "Reruccring bounties are bounties that see their balances appreciate every time the product they are attached to is purchased. Each time a purchase occurs, the recurring percentage of the item's price which is the value specified in this field, is taken and added to the balance of the attached bounty. This way, the more sales you do, the higher your bounty and the more you stand to lose if you commit any fraud. Recurring bounties are a great way to create trust with your customers and this field sets the recurring bounty percentage on all products you will list on your channel.",
+        "Recurring bounties are bounties that see their balances appreciate every time the product they are attached to is purchased. Each time a purchase occurs, the recurring percentage of the item's price, which is the value specified in this field, is taken and added to the balance of the attached bounty. This way, the more sales you do, the higher your bounty and the more you stand to lose if you commit any fraud. Recurring bounties are a great way to create trust with your customers and this field sets the recurring bounty percentage on all products you will list on your channel.",
       )}
     </Text>
   )

@@ -32,7 +32,7 @@ const ModifyCollectionModal: React.FC<any> = ({ state, handleChange, handleRawVa
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "Reruccring bounties are bounties that see their balances appreciate every time the product they are attached to is purchased. Each time a purchase occurs, the recurring percentage of the item's price which is the value specified in this field, is taken and added to the balance of the attached bounty. This way, the more sales you do, the higher your bounty and the more you stand to lose if you commit any fraud. Recurring bounties are a great way to create trust with your customers.",
+        "Recurring bounties are bounties that see their balances appreciate every time the product they are attached to is purchased. Each time a purchase occurs, the recurring percentage of the item's price, which is the value specified in this field, is taken and added to the balance of the attached bounty. This way, the more sales you do, the higher your bounty and the more you stand to lose if you commit any fraud. Recurring bounties are a great way to create trust with your customers.",
       )}
     </Text>
   )

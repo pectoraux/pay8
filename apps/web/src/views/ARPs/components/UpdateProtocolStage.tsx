@@ -33,14 +33,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'This sets the amount the account owner will be paying the ARP (periodically for periodic accounts and on a one time payment for non periodic accounts). For percentage based ARPs, this number is a percentage. For non percentage based ARPs, it is an absolute value.',
+        'This sets the amount the account owner will be paying the ARP (periodically for periodic accounts and on a one-time payment for non-periodic accounts). For percentage based ARPs, this number is a percentage. For non percentage based ARPs, it is an absolute value.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'This sets the amount the ARP will be paying the account owner (periodically for periodic accounts and on a one time payment for non periodic accounts). For percentage based ARPs, this number is a percentage. For non percentage based ARPs, it is an absolute value.',
+        'This sets the amount the ARP will be paying the account owner (periodically for periodic accounts and on a one-time payment for non-periodic accounts). For percentage based ARPs, this number is a percentage. For non percentage based ARPs, it is an absolute value.',
       )}
     </Text>
   )
@@ -61,14 +61,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'This sets the start date of the payment cycle from the account owner to the ARP. You should set this value even in the case of non periodic accounts.',
+        'This sets the start date of the payment cycle from the account owner to the ARP. You should set this value even in the case of non-periodic accounts.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'This sets the start date of the payment cycle from the ARP to the account owner. You should set this value even in the case of non periodic accounts.',
+        'This sets the start date of the payment cycle from the ARP to the account owner. You should set this value even in the case of non-periodic accounts.',
       )}
     </Text>
   )

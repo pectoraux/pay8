@@ -67,7 +67,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'Make sure you have selected a currency from the drop down menu on top of the Control Panel button. This removes the specified amount of the specified token from your will contract.',
+              'Make sure you have selected a currency from the drop-down menu on top of the Control Panel button. This removes the specified amount of the specified token from your will contract.',
             )}
           </Text>
         </Box>

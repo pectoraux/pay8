@@ -96,7 +96,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'Make sure you have selected a currency from the drop down menu on top of the Control Panel button. This adds the specified amount of the selected token to your Will contract. After you have added tokens to your contract to constitute its balance, you can start adding heirs to your Will, specifying the percentage of each balance you want to leave them.',
+              'Make sure you have selected a currency from the drop-down menu on top of the Control Panel button. This adds the specified amount of the selected token to your Will contract. After you have added tokens to your contract to constitute its balance, you can start adding heirs to your Will, specifying the percentage of each balance you want to leave them.',
             )}
           </Text>
         </Box>

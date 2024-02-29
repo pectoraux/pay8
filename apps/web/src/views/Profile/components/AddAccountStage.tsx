@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add a new account to your profile. Multiple wallet address can be added to a single profile.',
+              'This will add a new account to your profile. Multiple wallet addresses can be added to a single profile.',
             )}
           </Text>
         </Box>

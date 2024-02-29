@@ -16,7 +16,7 @@ const ResetIdentityLimits: React.FC<RemoveStageProps> = ({ continueToNextStage }
         </Text>
         <Text mt="24px" color="textSubtle">
           {t(
-            'Resetting identity limits for this product will erase any record of previous rewards such that users who already got a discount/cashback will become elligible again. Use this if you enabled identity checks on this product',
+            'Resetting identity limits for this product will erase any record of previous rewards such that users who already got a discount/cashback will become eligible again. Use this if you enabled identity checks on this product',
           )}
         </Text>
         <Text mt="16px" color="textSubtle">

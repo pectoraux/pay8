@@ -36,7 +36,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleEasyMdeChange
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets the terms of your bounty and the conditions under which your bounty can be attacked. Make sure you use non-ambiguous terms, and that you are very clear and succint in the enumeration of your terms. Your terms are not updatable once they are set and ambiguity can harm you since in case of ambiguity, voters are advised to favor the attacker.',
+        'This sets the terms of your bounty and the conditions under which your bounty can be attacked. Make sure you use non-ambiguous terms, and that you are very clear and succinct in the enumeration of your terms. Your terms are not updatable once they are set and ambiguity can harm you since in case of ambiguity, voters are advised to favor the attacker.',
       )}
     </Text>
   )

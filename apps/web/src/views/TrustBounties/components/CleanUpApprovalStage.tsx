@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will clean up all approvals of the specified bounty. Bounties can grant approvals to their balances to other bounties and effectly add part or all of their balances to theirs. This increases the balances of the bounties being approved and makes them more credible as their bounties become more valuable.',
+              'This will clean up all approvals of the specified bounty. Bounties can grant approvals to their balances to other bounties and effectively add part or all of their balances to theirs. This increases the balances of the bounties being approved and makes them more credible as their bounties become more valuable.',
             )}
           </Text>
         </Box>

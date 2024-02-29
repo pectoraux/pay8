@@ -94,7 +94,7 @@ const AddAnnouncementModal: React.FC<any> = ({ position = 0, onDismiss }) => {
   const TooltipComponent = () => (
     <Text>
       {t(
-        'The position is the id of the announcement, you can use this form to update a previously posted announcement by just inputting its id right here. If your annoucement is a new one, then its id will be that of the last announcement + 1.',
+        'The position is the id of the announcement, you can use this form to update a previously posted announcement by just inputting its id right here. If your announcement is a new one, then its id will be that of the last announcement + 1.',
       )}
     </Text>
   )
@@ -152,7 +152,7 @@ const AddAnnouncementModal: React.FC<any> = ({ position = 0, onDismiss }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              "This will add an announcement to this page. You can add your terms of service, guides on how to use your product as well as any announcement you deem necessary. It is advised to keep the announcements on this page to the stict minumum and only post really important ones like terms of service or guides on how to use your product. You can post the rest in your channel's PayChat group.",
+              "This will add an announcement to this page. You can add your terms of service, guides on how to use your product as well as any announcement you deem necessary. It is advised to keep the announcements on this page to the strict minimum and only post really important ones like terms of service or guides on how to use your product. You can post the rest in your channel's PayChat group.",
             )}
           </Text>
         </Box>

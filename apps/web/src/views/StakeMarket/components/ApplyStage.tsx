@@ -27,35 +27,35 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
   const TooltipComponent = () => (
     <Text>
       {t(
-        'This sets the amount you will be receiving (periodically for periodic stakes and a one time payment for non periodic stakes) from the stake. In case you are making a purchase in the marketplace, that amount is 0. For other stakes that amount might not be depending on the purpose of the stake.',
+        'This sets the amount you will be receiving (periodically for periodic stakes and a one-time payment for non-periodic stakes) from the stake. In case you are making a purchase in the marketplace, that amount is 0. For other stakes that amount might not be depending on the purpose of the stake.',
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'This sets the amount you will be paying (periodically for periodic stakes and a one time payment for non periodic stakes) to other parties in the stake. In case you are making a purchase in the marketplace, that amount is the price of the item you are buying.',
+        'This sets the amount you will be paying (periodically for periodic stakes and a one-time payment for non-periodic stakes) to other parties in the stake. In case you are making a purchase in the marketplace, that amount is the price of the item you are buying.',
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'This sets the duration in minutes of each cycle of payment from the stake to you. If you do not receive payment from the stake or the stake is non periodic, just input 0',
+        'This sets the duration in minutes of each cycle of payment from the stake to you. If you do not receive payment from the stake or the stake is non-periodic, just input 0',
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets the duration in minutes of each cycle of payment from you to the stake. If you do not issue payments to the stake or the stake is non periodic, just input 0',
+        'This sets the duration in minutes of each cycle of payment from you to the stake. If you do not issue payments to the stake or the stake is non-periodic, just input 0',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'This sets the wating period in minutes that separates a disagreement between parties on a stake and a litigation being created to resolve that disagreement. You should have at least 24 hours notice so set this parameter to at least 24 * 60 minutes unless you have strong reason to not want to.',
+        'This sets the waiting period in minutes that separates a disagreement between parties on a stake and a litigation being created to resolve that disagreement. You should have at least 24 hours notice so set this parameter to at least 24 * 60 minutes unless you have strong reason to not want to.',
       )}
     </Text>
   )
@@ -76,14 +76,14 @@ const CreateBountyStage: React.FC<any> = ({ state, handleChange, handleRawValueC
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        'This sets the start date of the payment cycle from the contract to you. You should set this value even in the case of non periodic stakes. If this is not relevant to your stake, just leave this field empty.',
+        'This sets the start date of the payment cycle from the contract to you. You should set this value even in the case of non-periodic stakes. If this is not relevant to your stake, just leave this field empty.',
       )}
     </Text>
   )
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'This sets the start date of the payment cycle from you to the contract. You should set this value even in the case of non periodic stakes. If this is not relevant to your stake, just leave this field empty.',
+        'This sets the start date of the payment cycle from you to the contract. You should set this value even in the case of non-periodic stakes. If this is not relevant to your stake, just leave this field empty.',
       )}
     </Text>
   )

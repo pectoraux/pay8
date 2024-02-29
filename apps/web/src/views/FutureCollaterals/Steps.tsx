@@ -128,7 +128,7 @@ const IfoSteps: React.FC<any> = ({ title }) => {
             </Heading>
             <Text color="textSubtle" small>
               {t(
-                'To continue to be elligible to mint future collaterals, you need to make sure you reimburse every single loan you make. Keep the due date in mind and reimburse before then.',
+                'To continue to be eligible to mint future collaterals, you need to make sure you reimburse every single loan you make. Keep the due date in mind and reimburse before then.',
               )}
             </Text>
           </CardBody>

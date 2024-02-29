@@ -39,7 +39,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        'This sets the number of betting periods you would like to have. A betting period is a window during which you accept bets for your event. A single betting event can have multiple betting periods. Input 0 if your want your betting event to have an infinite number of betting periods otherwise input the number of betting periods you wish to have.',
+        'This sets the number of betting periods you would like to have. A betting period is a window during which you accept bets for your event. A single betting event can have multiple betting periods. Input 0 if you want your betting event to have an infinite number of betting periods otherwise input the number of betting periods you wish to have.',
       )}
     </Text>
   )
@@ -103,7 +103,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent11 = () => (
     <Text>
       {t(
-        'This sets the percentage of a ticket price that goes to the referrer. This is only relevant for users that were referred to the betting event. It is a mechanism to incentivise users to referrer other users to the betting event so the more of the ticket price you accept to share with referrers, the bigger the incentive to refer your betting event to other users.',
+        'This sets the percentage of a ticket price that goes to the referrer. This is only relevant for users that were referred to the betting event. It is a mechanism to incentivise users to refer other users to the betting event so the more of the ticket price you accept to share with referrers, the bigger the incentive to refer your betting event to other users.',
       )}
     </Text>
   )

@@ -27,7 +27,7 @@ const CreateProfile: React.FC = () => {
         <CardBody>
           <Flex flexDirection="column" justifyContent="center" alignItems="center">
             <LinkExternal mb="20px" ml="40px" href={`/profile/${account}`}>
-              {t('Go to the profle page to create your profile')}
+              {t('Go to the profile page to create your profile')}
             </LinkExternal>
             <label htmlFor="checkbox" style={{ display: 'block', cursor: 'pointer', marginBottom: '24px' }}>
               <Flex alignItems="center">

@@ -62,7 +62,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will set the category of your world. Red Pill Worlds are digital twins of real places, Blue Pill Worlds are virtual immaginary worlds and Green Worlds are tokenizations of CO2 reduction places in the real world.',
+              'This will set the category of your world. Red Pill Worlds are digital twins of real places, Blue Pill Worlds are virtual imaginary worlds and Green Worlds are tokenizations of CO2 reduction places in the real world.',
             )}
           </Text>
         </Box>

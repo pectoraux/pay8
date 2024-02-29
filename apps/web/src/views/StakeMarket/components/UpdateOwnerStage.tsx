@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update the owner address of the stake. This only works if you had created a profile and attached it to the current stake as it uses your profile id to recognise you as the stake owner in order to be able to update the previous wallet address to the one specified above.',
+              'This will update the owner address of the stake. This only works if you had created a profile and attached it to the current stake as it uses your profile id to recognize you as the stake owner in order to be able to update the previous wallet address to the one specified above.',
             )}
           </Text>
         </Box>

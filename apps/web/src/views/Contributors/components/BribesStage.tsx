@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ currency, lockedAmount, setLockedAmount,
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will deploy a new bribe contract or add funds into an existing bribe. Bribe contracts are used to reward users for voting for you. The more funds you add to your bribe, the bigger the incentive. Make sure you have selected the token you would like to add to your bribe from the drop down menu on top of the Control Panel button.',
+              'This will deploy a new bribe contract or add funds into an existing bribe. Bribe contracts are used to reward users for voting for you. The more funds you add to your bribe, the bigger the incentive. Make sure you have selected the token you would like to add to your bribe from the drop-down menu on top of the Control Panel button.',
             )}
           </Text>
         </Box>

@@ -68,14 +68,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'This sets a lower bound on the total amount of tokens, users need to have locked in a Valuepool to be elligible to submit proposals on that Valuepool.',
+        'This sets a lower bound on the total amount of tokens, users need to have locked in a Valuepool to be eligible to submit proposals on that Valuepool.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'This sets a lower bound in minutes, on the lock duration of the bounties of ARPs where this Valuepool is allowed to send funds. Valuepools can decide through votes to   send funds to operators of various ARPs in order for them to put the funds to work through investments, laons, etc. This parameter can be used to make sure that all ARPs that this Valuepool sends money to have a collateral in place in the trustbounties contract and that the collateral is locked there for a certain minimum time.',
+        'This sets a lower bound in minutes, on the lock duration of the bounties of ARPs where this Valuepool is allowed to send funds. Valuepools can decide through votes to   send funds to operators of various ARPs in order for them to put the funds to work through investments, loans, etc. This parameter can be used to make sure that all ARPs that this Valuepool sends money to have a collateral in place in the trustbounties contract and that the collateral is locked there for a certain minimum time.',
       )}
     </Text>
   )

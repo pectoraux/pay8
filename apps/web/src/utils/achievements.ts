@@ -38,7 +38,7 @@ export const getAchievementDescription = (campaign: Campaign, t: TranslateFuncti
 }
 
 /**
- * Checks if a wallet is eligible to claim points from valid IFO's
+ * Checks if a wallet is eligible for claim points from valid IFO's
  */
 export const getClaimableIfoData = async (account: string, t: TranslateFunction): Promise<Achievement[]> => {
   const ifoCampaigns = ifosList.filter((ifoItem) => ifoItem.campaignId !== undefined)

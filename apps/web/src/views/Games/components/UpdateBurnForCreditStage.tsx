@@ -42,7 +42,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "This specifies the address of the contract that checks whether a user's token is elligible or not for a discount.",
+        "This specifies the address of the contract that checks whether a user's token is eligible or not for a discount.",
       )}
     </Text>
   )
@@ -223,7 +223,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              "This action will create discounts on this game for users who burn the selected token (make sure you selected a token in the drop down menu on top of the Control Panel button). Discount = discount number * number of token burned. You can for instance create an incentive that rewards users with 10% of ticket prices in exchange for them 'burning' 1 BTC. Notice the way we use the term 'burn' in here doesn't necessarily imply actually burning the tokens, it might but it might just also send the tokens back to the users.",
+              "This action will create discounts on this game for users who burn the selected token (make sure you selected a token in the drop-down menu on top of the Control Panel button). Discount = discount number * number of token burned. You can for instance create an incentive that rewards users with 10% of ticket prices in exchange for them 'burning' 1 BTC. Notice the way we use the term 'burn' in here doesn't necessarily imply actually burning the tokens, it might but it might just also send the tokens back to the users.",
             )}
           </Text>
           <Text color="primary" fontSize="12px" bold as="span" textTransform="uppercase">

@@ -41,14 +41,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets the amount the protocol owner will be paying (periodically for periodic protocols and a one time payment for non periodic protocols) to your World contract.',
+        'This sets the amount the protocol owner will be paying (periodically for periodic protocols and a one-time payment for non-periodic protocols) to your World contract.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'This sets the duration in minutes of each cycle of payment from the protocol owner to your World contract. If the protocol is non periodic, just input 0',
+        'This sets the duration in minutes of each cycle of payment from the protocol owner to your World contract. If the protocol is non-periodic, just input 0',
       )}
     </Text>
   )

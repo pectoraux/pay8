@@ -228,7 +228,7 @@ const CreateLotteryModal: React.FC<any> = ({ onDismiss }) => {
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'This sets the discount percentage on bulk ticket purchases. The price of N tickets is computed as this: ticket_price * N * (discount_divisor + 1 - N) / discount_divisor. There is a minimum requirement of 3% on this variable for all lotterues, meaning you cannot put any value lower than 3 in this field.',
+        'This sets the discount percentage on bulk ticket purchases. The price of N tickets is computed as this: ticket_price * N * (discount_divisor + 1 - N) / discount_divisor. There is a minimum requirement of 3% on this variable for all lotteries, meaning you cannot put any value lower than 3 in this field.',
       )}
     </Text>
   )
