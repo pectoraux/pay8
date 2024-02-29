@@ -35,7 +35,7 @@ const SetPriceStage: React.FC<any> = ({ tokenId, setTokenId, add, setAdd, contin
           scale="sm"
           name="bountyId"
           value={tokenId}
-          placeholder={t('input your bounty Id')}
+          placeholder={t('input your bounty id')}
           onChange={(e) => setTokenId(e.target.value)}
         />
       </GreyedOutContainer>

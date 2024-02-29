@@ -218,7 +218,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         if (variant !== 'unfollow') setStage(LockStage.SETTINGS)
         break
       case LockStage.ADD_ACCOUNT:
-        setStage(LockStage.SETTINGS)
+        setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_ADD_ACCOUNT:
         setStage(LockStage.ADD_ACCOUNT)

@@ -4,6 +4,7 @@ import { Flex } from '@pancakeswap/uikit'
 import capitalize from 'lodash/capitalize'
 import { Item } from 'views/CanCan/market/components/Filters'
 import { WORKSPACES } from 'config'
+import { useTranslation } from '@pancakeswap/localization'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { ListTraitFilter } from './ListTraitFilter'
 import { ListTraitFilter2 } from './ListTraitFilter2'
@@ -43,6 +44,7 @@ const Filters: React.FC<any> = ({
   console.log('productsproducts================>', products, products?.length)
   let Country = require('country-state-city').Country
   let City = require('country-state-city').City
+  const { t } = useTranslation()
   const code = useMemo(
     () =>
       nftFilters?.country?.length &&
@@ -134,7 +136,7 @@ const Filters: React.FC<any> = ({
         {showWorkspace && (
           <ListTraitFilter2
             key="workspace"
-            title={capitalize('workspace')}
+            title={t(capitalize('workspace'))}
             traitType="workspace"
             items={workspaceItems}
             nftFilters={nftFilters}
@@ -144,7 +146,7 @@ const Filters: React.FC<any> = ({
         {showCountry && (
           <ListTraitFilter
             key="country"
-            title={capitalize('country')}
+            title={t(capitalize('country'))}
             traitType="country"
             items={countryItems}
             nftFilters={nftFilters}
@@ -155,7 +157,7 @@ const Filters: React.FC<any> = ({
         {showCity && (
           <ListTraitFilter
             key="city"
-            title={capitalize('city')}
+            title={t(capitalize('city'))}
             traitType="city"
             items={cityItems}
             nftFilters={nftFilters}
@@ -166,7 +168,7 @@ const Filters: React.FC<any> = ({
         {showProduct && productItems && (
           <ListTraitFilter
             key="product"
-            title={capitalize('product tags')}
+            title={t(capitalize('product tags'))}
             traitType="product"
             items={productItems ?? []}
             nftFilters={nftFilters}

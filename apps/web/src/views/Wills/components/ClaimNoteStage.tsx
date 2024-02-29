@@ -94,7 +94,7 @@ const SetPriceStage: React.FC<any> = ({ state, notes, handleChange, handleRawVal
           scale="sm"
           name="token"
           value={state.token}
-          placeholder={t('input the token address')}
+          placeholder={t('input token address')}
           onChange={handleChange}
         />
       </GreyedOutContainer>

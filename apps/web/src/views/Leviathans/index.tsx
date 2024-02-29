@@ -64,9 +64,11 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
       </PageHeader>
       <Page>
         <PoolControls
-          pools={pools
-            ?.filter((pool) => LEVIATHANS.includes(pool.id?.toLowerCase()))
-            ?.filter((pool) => !collectionAddress || valuepools?.includes(pool?.id?.toLowerCase()))}
+          pools={pools?.filter(
+            (pool) =>
+              (LEVIATHANS.includes(pool.id?.toLowerCase()) && !collectionAddress) ||
+              valuepools?.includes(pool?.id?.toLowerCase()),
+          )}
         >
           {({ chosenPools }) => (
             <>

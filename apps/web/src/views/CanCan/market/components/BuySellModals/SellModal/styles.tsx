@@ -2,8 +2,8 @@ import styled from 'styled-components'
 import { Modal, Box, Flex, Text, BinanceIcon, Input } from '@pancakeswap/uikit'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { SellingStage } from './types'
 import { CurrencyLogo } from 'components/Logo'
+import { SellingStage } from './types'
 
 export const stagesWithBackButton = [
   SellingStage.RECLAIM_CASHBACK_FUND,
@@ -71,7 +71,6 @@ export const stagesWithBackButton = [
   SellingStage.ADD_LOCATION1,
   SellingStage.ADD_LOCATION2,
   SellingStage.CREATE_PAYWALL1,
-  SellingStage.CREATE_PAYWALL2,
   SellingStage.CONFIRM_CREATE_PAYWALL1,
   SellingStage.CONFIRM_CREATE_PAYWALL2,
 

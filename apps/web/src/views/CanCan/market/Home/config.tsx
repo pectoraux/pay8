@@ -39,11 +39,11 @@ const config = (t: ContextApi['t']) => {
       title: <Trans>What is CanCan?</Trans>,
       description: [
         <Trans>
-          The "CanCan Marketplace" offers a revolutionary platform for users to sell items online, providing a seamless
+          The CanCan Marketplace offers a revolutionary platform for users to sell items online, providing a seamless
           and user-friendly experience that empowers individuals to create their own online shops and engage in
           e-commerce activities. With a range of features and capabilities, this marketplace transforms personal
           channels into dynamic and versatile online stores. Here's a closer look at the key features and benefits of
-          the "CanCan Marketplace":
+          the CanCan Marketplace:
         </Trans>,
         <br></br>,
         <>
@@ -167,7 +167,7 @@ const config = (t: ContextApi['t']) => {
         </>,
         <br></br>,
         <Trans>
-          In summary, the "CanCan Marketplace" revolutionizes e-commerce by offering a platform that transforms personal
+          In summary, the CanCan Marketplace revolutionizes e-commerce by offering a platform that transforms personal
           channels into online shops, providing a seamless way for individuals to become sellers and entrepreneurs. With
           features such as various selling methods, reviews, partnerships, and personalized selling strategies, the
           marketplace empowers users to create successful and engaging online businesses, turning their channels into

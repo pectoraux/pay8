@@ -12,7 +12,6 @@ import {
   Table,
   Th,
   Card,
-  Skeleton,
   useMatchBreakpoints,
   PageHeader,
   Select,
@@ -31,14 +30,13 @@ import { FetchStatus } from 'config/constants/types'
 import { useGetNftFilters, useGetShuffledCollections } from 'state/cancan/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import Page from 'components/Layout/Page'
+import { selectFilteredData2 } from 'state/cancan/selectors'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { nftsBaseUrl } from 'views/CanCan/market/constants'
 import PageLoader from 'components/Loader/PageLoader'
 import DELIST_COLLECTIONS from 'config/constants/nftsCollections/delist'
 import CollectionCardWithVolume from '../components/CollectibleCard/CollectionCardWithVolume'
-import latinise from '@pancakeswap/utils/latinise'
 import SearchBar from '../components/SearchBar'
-import { selectFilteredData2 } from 'state/cancan/selectors'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 export const ITEMS_PER_PAGE = 9
 

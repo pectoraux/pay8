@@ -7,11 +7,11 @@ import { useTranslation } from '@pancakeswap/localization'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { Divider, GreyedOutContainer } from 'views/Auditors/components/styles'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useMarketHelperContract } from 'hooks/useContract'
 import OptionFilters from '../components/BuySellModals/BuyModal/OptionFilters'
-import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 
 interface DepositModalProps {
   max: BigNumber
@@ -36,7 +36,7 @@ interface FormState {
   gameName: string
 }
 
-const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
+const PartnerModal: React.FC<any> = ({ collection }) => {
   const [state, setState] = useState<any>(() => ({
     productId: '',
     referrer: '',
@@ -53,7 +53,7 @@ const PartnerModal: React.FC<any> = ({ collection, onConfirm, onDismiss }) => {
   const nftFilters = useGetNftFilters(account)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const item = useMemo(() => {
-    const it = collection?.items?.find((it) => it.tokenId?.toLowerCase() === state.productId?.toLowerCase())
+    const it = collection?.items?.find((i) => i.tokenId?.toLowerCase() === state.productId?.toLowerCase())
     return (
       it?.option_categories?.map((cat, index) => {
         return {
