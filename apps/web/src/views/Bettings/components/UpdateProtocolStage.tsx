@@ -39,7 +39,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent = () => (
     <Text>
       {t(
-        'This sets the number of betting periods you would like to have. A betting period is a window during which you accept bets for your event. A single betting event can have multiple betting periods. Input 0 if you want your betting event to have an infinite number of betting periods otherwise input the number of betting periods you wish to have.',
+        'This sets the number of betting periods you would like to have. A betting period is a window during which you accept bets for your event. A single betting event can have multiple betting periods. Input 0 if you want your betting event to have an infinite number of betting periods; otherwise, input the number of betting periods you wish to have.',
       )}
     </Text>
   )
@@ -60,7 +60,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'The betting contract does not work with letters so letters need to be encoded. This enables betting contract to accept alphanumerical answers and not just numbers. If the options for your betting event will include letters, pick the option Yes otherwise pick the option No',
+        'The betting contract does not work with letters so letters need to be encoded. This enables the betting contract to accept alphanumerical answers and not just numbers. If the options for your betting event will include letters, pick the option Yes; otherwise, pick the option No',
       )}
     </Text>
   )
@@ -74,28 +74,28 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'Input a link to a media about your betting event. You can input a tutorial on how to bet on this event for your users.',
+        'Input a link to media about your betting event. You can input a tutorial on how to bet on this event for your users.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'List your betting event options separated by commas. If for instance you want your users to pick between Ali1 and Ali2, you will input Ali1, Ali2 here. If you are using alphabet encoding, then just input a-z here.',
+        'List your betting event options separated by commas. If, for instance, you want your users to pick between Ali1 and Ali2, you will input Ali1, Ali2 here. If you are using alphabet encoding, then just input a-z here.',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
       {t(
-        "The action of your betting event can be a question; for instance if you want users to bet on who is going to score, your action will be 'Who is going to score?' and the subjects of that action will be something like 'Player1, Player2' which you will be putting above.",
+        "The action of your betting event can be a question; for instance, if you want users to bet on who is going to score, your action will be 'Who is going to score?' and the subjects of that action will be something like 'Player1, Player2', which you will be putting above.",
       )}
     </Text>
   )
   const TooltipComponent9 = () => (
     <Text>
       {t(
-        'The rewards breakdown is how you are willing to distribute the prize pot between users. There are six brackets and your input here will need 6 comma separated numbers, each between 0 and 100 and all summing up to 100 (e.g: 0,0,0,0,25,75). All betting options are series numbers',
+        'The rewards breakdown is how you are willing to distribute the prize pot between users. There are six brackets and your input here will need 6 comma-separated numbers, each between 0 and 100 and all summing up to 100 (e.g., 0,0,0,0,25,75). All betting options are series numbers',
       )}
     </Text>
   )

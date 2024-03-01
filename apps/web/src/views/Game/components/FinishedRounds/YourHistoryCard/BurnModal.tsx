@@ -60,7 +60,7 @@ const BurnModal: React.FC<any> = ({ tokenId, data, objectName, onDismiss }) => {
       toastSuccess(
         t('Object successfully burnt'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now use your ingrdients in games.')}
+          {t('You can now use your ingredients in games.')}
         </ToastDescriptionWithTx>,
       )
     }
