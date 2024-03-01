@@ -73,7 +73,7 @@ const AddExtraTokenStage: React.FC<any> = ({ state, handleChange, continueToNext
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add an additional token to the ramp outside of the tokens already available for minting/burning operations. To add an extra token, you will need to get a listing permission from an approved auditor. To get your token listed, please send an email to team@payswap.org with a good argument as to why we should grant you permission to list your token. We will get back to you if approved.',
+              'This will add an additional token to the dRamp outside of the tokens already available for minting/burning operations. To add an extra token, you will need to get a listing permission from an approved auditor. To get your token listed, please send an email to team@payswap.org with a good argument as to why we should grant you permission to list your token. We will get back to you if approved.',
             )}
           </Text>
         </Box>

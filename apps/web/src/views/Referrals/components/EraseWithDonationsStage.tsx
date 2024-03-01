@@ -57,7 +57,7 @@ const SetPriceStage: React.FC<any> = ({ lockedAmount, setLockedAmount, currency,
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will burn the selected amount of the selected free token in order to erase any current debt on the free token.An NFT will be minted to your address in exchange for your donation.',
+              'This will burn the selected amount of the selected free token in order to erase any current debt on the free token. An NFT will be minted to your address in exchange for your donation.',
             )}
           </Text>
         </Box>

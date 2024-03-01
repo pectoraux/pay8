@@ -44,7 +44,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will unlock the bounty attached this token market. You can only call this function if your ramp has minted as many tokens as it has burnt.',
+              'This will unlock the bounty attached this token market. You can only call this function if your dRamp has minted as many tokens as it has burnt.',
             )}
           </Text>
         </Box>

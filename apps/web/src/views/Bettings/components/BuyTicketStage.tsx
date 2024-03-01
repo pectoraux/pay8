@@ -48,7 +48,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'Input your options in encoded format and separated with commas. Each comma seperate your option pick for 2 tickets. It is recommended to buy tickets from the betting event page which has an easier form to fill.',
+        'Input your options in encoded format and separated with commas. Each comma separates your option pick for 2 tickets. It is recommended to buy tickets from the betting event page which has an easier form to fill.',
       )}
     </Text>
   )

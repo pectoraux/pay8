@@ -81,7 +81,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'This parameter is relevant in the same context as the previous one and sets a lower bound on the balance of the bounty that the ARPs this Valuepool sends funds to, must have.',
+        'This parameter is relevant in the same context as the previous one and sets a lower bound on the balance of the bounty that the ARPs this Valuepool sends funds to must have.',
       )}
     </Text>
   )

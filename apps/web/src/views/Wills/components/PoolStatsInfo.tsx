@@ -70,7 +70,7 @@ const PoolStatsInfo: React.FC<any> = ({ pool, account, hideAccounts = false, ali
   const TooltipComponent = () => (
     <Text>
       {t(
-        'This sets the minimum laps of time in minutes that must seperate each call to the update parameter function from the control panel menu. Calling that function before the update period time elapses will have no effect on any of the parameters except for the profile id.',
+        'This sets the minimum laps of time in minutes that must separate each call to the update parameter function from the control panel menu. Calling that function before the update period time elapses will have no effect on any of the parameters except for the profile id.',
       )}
     </Text>
   )

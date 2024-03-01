@@ -33,7 +33,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        "Use this field to attach your unique profile id to the ramp. Attaching a unique profile id to your ramp enable your token markets to mint up to 80% of their attached bounties' value whereas not attaching a unique profile only let your token markets mint 40% of their attached bounties' value. To create a unique profile, you first need to find an SSID auditor to create your SSID; go to Earn > Auditors",
+        "Use this field to attach your unique profile id to the dRamp. Attaching a unique profile id to your dRamp enable your token markets to mint up to 80% of their attached bounties' value whereas not attaching a unique profile only let your token markets mint 40% of their attached bounties' value. To create a unique profile, you first need to find an SSID auditor to create your SSID; go to Earn > Auditors",
       )}
     </Text>
   )
@@ -47,34 +47,34 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This is only relevant in the case of automatic ramps and only relevant for the Stripe payment processor. You can find your publishable key in the settings of your Stripe account.',
+        'This is only relevant in the case of automatic dRamps and only relevant for the Stripe payment processor. You can find your publishable key in the settings of your Stripe account.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        'This is only relevant in the case of automatic ramps and only relevant for the Stripe payment processor. You can find your secret key in the settings of your Stripe account.',
+        'This is only relevant in the case of automatic dRamps and only relevant for the Stripe payment processor. You can find your publishable key in the settings of your Stripe account.',
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'This is only relevant in the case of automatic ramps and only relevant for the Stripe payment processor. You can find your client id in the settings of your Stripe account.',
+        'This is only relevant in the case of automatic dRamps and only relevant for the Stripe payment processor. You can find your client id in the settings of your Stripe account.',
       )}
     </Text>
   )
   const TooltipComponent7 = () => (
     <Text>
       {t(
-        'Use this parameter to describe your ramp. In the case of manual ramp, you can list all payment methods that you accept for instance.',
+        'Use this parameter to describe your dRamp. In the case of manual dRamp, you can list all payment methods that you accept for instance.',
       )}
     </Text>
   )
   const TooltipComponent8 = () => (
     <Text>
-      {t('This sets a link to your ramps avatar. It can be a link to your logo or any image that defines your brand.')}
+      {t('This sets a link to your dRamps avatar. It can be a link to your logo or any image that defines your brand.')}
     </Text>
   )
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent />, {
@@ -275,7 +275,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will update parameters of the ramp. Please read the description of each parameter for more details.',
+              'This will update parameters of the dRamp. Please read the description of each parameter for more details.',
             )}
           </Text>
         </Box>

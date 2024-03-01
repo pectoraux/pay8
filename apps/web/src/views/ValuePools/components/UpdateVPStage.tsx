@@ -52,7 +52,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        'Queues in a Valuepool are the backlog of users requesting funds from the Valuepool. That queue is reinitialised every period of time. This parameter sets the duration of that period of time.',
+        'Queues in a Valuepool are the backlog of users requesting funds from the Valuepool. That queue is reinitialized every period of time. This parameter sets the duration of that period of time.',
       )}
     </Text>
   )
@@ -64,7 +64,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets a limit on the previous amount and is gurantee enforced by the contract that the value of the treasury share will never exceed this amount. Once set, it can only be updated to a lesser value, never a higher one.',
+        'This sets a limit on the previous amount and is guarantee enforced by the contract that the value of the treasury share will never exceed this amount. Once set, it can only be updated to a lesser value, never a higher one.',
       )}
     </Text>
   )
