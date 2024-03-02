@@ -292,7 +292,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
           <Divider />
           <Text small color="textSubtle">
             {t(
-              'This update the voting parameters of the specified valuepool. Please read the documentation for more information on each parameter',
+              'This updates the voting parameters of the specified valuepool. Please read the documentation for more information on each parameter',
             )}
           </Text>
         </Box>

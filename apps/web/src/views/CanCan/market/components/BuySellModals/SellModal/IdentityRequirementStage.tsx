@@ -57,21 +57,21 @@ const IdentityRequirementStage: React.FC<any> = ({
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        'This sets the minimum color of the auditors that you consider as valid auditors. Any time a user tries to pass the identity check with an identity token delivered by any auditor with a lower color, the check will fail. There are 4 colors for auditors (Black, Brown, Silver, Gold from lowest rank to highest). The more votes an auditor receives from users, the highest color, the auditor gets; an auditor within the top 75th percentile and above of votes has color Gold, one within the 50th percentile and above has color Silver, one within the 25th percentile and above has color Brown and one below the 25th percentile of votes has color Black.',
+        'This sets the minimum color of the auditors that you consider as valid auditors. Any time a user tries to pass the identity check with an identity token delivered by any auditor with a lower color, the check will fail. There are 4 colors for auditors (Black, Brown, Silver, Gold from lowest rank to highest). The more votes an auditor receives from users, the higher the color the auditor gets; an auditor within the top 75th percentile and above of votes has color Gold, one within the 50th percentile and above has color Silver, one within the 25th percentile and above has color Brown, and one below the 25th percentile of votes has color Black.',
       )}
     </Text>
   )
   const TooltipComponent5 = () => (
     <Text>
       {t(
-        "You can add trustworthy auditors through the 'Update auditors' option from the Channel Settings menu. These will be specific auditors that you trust. This parameters specifies whether to consider as valid, identity tokens not only delivered by those auditors but also the ones that have at least the minimum color specified above. If you only want those you personally added to be trusted, pick Yes but if you also trust all auditors with the right color, pick No.",
+        "You can add trustworthy auditors through the 'Update auditors' option from the Channel Settings menu. These will be specific auditors that you trust. This parameter specifies whether to consider as valid, identity tokens not only delivered by those auditors but also the ones that have at least the minimum color specified above. If you only want those you personally added to be trusted, pick Yes, but if you also trust all auditors with the right color, pick No.",
       )}
     </Text>
   )
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        "Some auditors keep users data for future reference purposes, those auditors are called data keepers. For instance, you might want data keepers that store your users' identities so you can have them reveal it to you in case some users commit fraud. Pick no if you do not need the user's information to be kept by their auditors for compliance reasons.",
+        "Some auditors keep users' data for future reference purposes, those auditors are called data keepers. For instance, you might want data keepers that store your users' identities so you can have them reveal it to you in case some users commit fraud. Pick no if you do not need the user's information to be kept by their auditors for compliance reasons.",
       )}
     </Text>
   )
