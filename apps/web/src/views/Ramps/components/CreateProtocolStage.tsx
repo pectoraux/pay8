@@ -31,7 +31,7 @@ const SetPriceStage: React.FC<any> = ({ continueToNextStage }) => {
         <Box>
           <Text small color="textSubtle">
             {t(
-              'This will add a new token market to your ramp. Token markets enable you to process minting and burning operations for various tokens. For instance, the USD token market will enable you to mint/burn USD tokens for users. You can add token markets for most FIAT currencies. All available token markets for this ramp are listed in the bottom left section of the panel as soon as they are created.',
+              'This will add a new token market to your dRamp. Token markets enable you to process minting and burning operations for various tokens. For instance, the USD token market will enable you to mint/burn USD tokens for users. You can add token markets for most FIAT currencies. All available token markets for this dRamp are listed in the bottom left section of the panel as soon as they are created.',
             )}
           </Text>
         </Box>

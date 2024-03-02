@@ -40,7 +40,7 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
         setPendingFb(false)
         console.log('createGauge=================>', err)
         toastError(
-          t('Issue creating ramp'),
+          t('Issue creating dRamp'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>{err}</ToastDescriptionWithTx>,
         )
       })
@@ -48,9 +48,9 @@ const CreateRampModal: React.FC<any> = ({ currency, onDismiss }) => {
     if (receipt?.status) {
       setPendingFb(false)
       toastSuccess(
-        t('Ramp successfully created'),
+        t('DRamp successfully created'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now start processing transactions through your Ramp.')}
+          {t('You can now start processing transactions through your dRamp.')}
         </ToastDescriptionWithTx>,
       )
       dispatch(fetchRampsAsync({ chainId }))
