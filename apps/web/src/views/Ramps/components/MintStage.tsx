@@ -121,14 +121,14 @@ const SetPriceStage: React.FC<any> = ({
   const TooltipComponent = () => (
     <Text>
       {t(
-        "Identity tokens are used to confirm identity requirements minters need to fulfill to proceed with the mint. If your ramp doesn't have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the ramp to deliver you an identity token and input its ID in this field.",
+        "Identity tokens are used to confirm identity requirements burners need to fulfill to proceed with the burn. If your dRamp doesn't have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the dRamp to deliver you an identity token and input its ID in this field.",
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "Make sure you take the minting fee into account. If your ramp's minting fee is 10% then inputting 100 will only send you 100 - (100 * 10 / 100) = 90 tokens.",
+        "Make sure you take the burning fee into account. If your dRamp's burning fee is 10% then inputting 100 will only send you 100 - (100 * 10 / 100) = 90 in FIAT currency.",
       )}
     </Text>
   )

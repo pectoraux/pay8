@@ -33,14 +33,14 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
   const TooltipComponent = () => (
     <Text>
       {t(
-        "Use this field to attach your unique profile id to the dRamp. Attaching a unique profile id to your dRamp enable your token markets to mint up to 80% of their attached bounties' value whereas not attaching a unique profile only let your token markets mint 40% of their attached bounties' value. To create a unique profile, you first need to find an SSID auditor to create your SSID; go to Earn > Auditors",
+        "Use this field to attach your unique profile id to the dRamp. Attaching a unique profile id to your dRamp enables your token markets to mint up to 80% of their attached bounties' value whereas not attaching a unique profile only lets your token markets mint 40% of their attached bounties' value. To create a unique profile, you first need to find an SSID auditor to create your SSID; go to Earn > Auditors",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'This is only relevant in the case of automatic ramps. Channels are payment processors you want to use. We currently only support Stripe. You can add up to 5 payment processors in a comma seprated format e.g: Stripe, PayPal, Visa, MasterCard, BrainTree.',
+        'This is only relevant in the case of automatic dRamps. Channels are payment processors you want to use. We currently only support Stripe. You can add up to 5 payment processors in a comma-separated format e.g: Stripe, PayPal, Visa, MasterCard, BrainTree.',
       )}
     </Text>
   )

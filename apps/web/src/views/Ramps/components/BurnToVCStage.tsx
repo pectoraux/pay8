@@ -89,7 +89,7 @@ const BurnStage: React.FC<any> = ({ state, setBurntToVC, rampHelperContract, onD
   const TooltipComponent = () => (
     <Text>
       {t(
-        "Identity tokens are used to confirm identity requirements burners need to fulfill to proceed with the burn. If your ramp doesn't have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the ramp to deliver you an identity token and input its ID in this field.",
+        "Identity tokens are used to confirm identity requirements burners need to fulfill to proceed with the burn. If your dRamp doesn't have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the dRamp to deliver you an identity token and input its ID in this field.",
       )}
     </Text>
   )

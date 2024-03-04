@@ -43,21 +43,21 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "This is the minimum number of minutes between the time an auditor's bounty is checked by the contract and the time that bounty becomes unlockable. An auditor's bounty is checked each time that auditor mints a collateral for a user, the contract checks that the auditor has a bounty that does not expire in less than a number of minutes equals to the buffer time and that the bounty has at least a balance superior to a certain amount.",
+        "This is the minimum number of minutes between the time an auditor's bounty is checked by the contract and the time that bounty becomes unlockable. An auditor's bounty is checked each time that auditor mints a collateral for a user. The contract verifies that the auditor has a bounty that does not expire in less than a number of minutes equal to the buffer time, and that the bounty has at least a balance superior to a certain amount.",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'This sets the minimum number of auditors that must blacklist a profile id for it to actually be blacklisted and prevented from minting collaterals for users, adding users to channels or blacklisting users.',
+        'This sets the minimum number of auditors that must blacklist a profile ID for it to actually be blacklisted and prevented from minting collaterals for users, adding users to channels, or blacklisting users.',
       )}
     </Text>
   )
   const TooltipComponent4 = () => (
     <Text>
       {t(
-        "This sets the minimum bounty required from an auditor minting a collateral in terms of the collateral's price. If for instance the collateral is worth 10 and this parameter is 100%, then an auditor will need at least 10 tokens locked up in his/her bounty to mint the collateral.",
+        "This sets the minimum bounty required from an auditor minting a collateral in terms of the collateral's price. If, for instance, the collateral is worth 10 and this parameter is 100%, then an auditor will need at least 10 tokens locked up in his/her bounty to mint the collateral.",
       )}
     </Text>
   )
@@ -67,7 +67,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent6 = () => (
     <Text>
       {t(
-        'This sets the minimum color of an auditor that can mint a collateral, blacklist a profile or add users to channels.',
+        'This sets the minimum color of an auditor that can mint a collateral, blacklist a profile, or add users to channels.',
       )}
     </Text>
   )

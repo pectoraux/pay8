@@ -106,21 +106,21 @@ const BurnStage: React.FC<any> = ({
   const TooltipComponent = () => (
     <Text>
       {t(
-        "Identity tokens are used to confirm identity requirements burners need to fulfill to proceed with the burn. If your ramp doesn't have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the ramp to deliver you an identity token and input its ID in this field.",
+        "Identity tokens are used to confirm identity requirements burners need to fulfill to proceed with the burn. If your dRamp doesn't have any requirements, you can just input 0. If it does, make sure you get an auditor approved by the dRamp to deliver you an identity token and input its ID in this field.",
       )}
     </Text>
   )
   const TooltipComponent2 = () => (
     <Text>
       {t(
-        "Make sure you take the burning fee into account. If your ramp's burning fee is 10% then inputting 100 will only send you 100 - (100 * 10 / 100) = 90 in FIAT currency.",
+        "Make sure you take the burning fee into account. If your dRamp's burning fee is 10% then inputting 100 will only send you 100 - (100 * 10 / 100) = 90 in FIAT currency.",
       )}
     </Text>
   )
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        'In case you decide to burn your tokens to a virtual card, make sure the token you are trying to burn is the currency of the Payment Processor Country (PPC) of this ramp. If the PPC of the ramp is FR (for France) for instance, then you can only burnt EUR tokens to your card, if the PPC is US then you can only burn USD tokens, etc. Trying to burn any other tokens will result in the loss of your funds without possibility of revocery. This is only the case if you are trying to burn tokens to a virtual card',
+        'In case you decide to burn your tokens to a virtual card, make sure the token you are trying to burn is the currency of the Payment Processor Country (PPC) of this dRamp. If the PPC of the dRamp is FR (for France) for instance, then you can only burnt EUR tokens to your card, if the PPC is US then you can only burn USD tokens, etc. Trying to burn any other tokens will result in the loss of your funds without possibility of revocery. This is only the case if you are trying to burn tokens to a virtual card',
       )}
     </Text>
   )
@@ -214,7 +214,7 @@ const BurnStage: React.FC<any> = ({
             <Box>
               <Text small color="textSubtle">
                 {t(
-                  "This will burn the specified amount of the selected token from your wallet and send you the equivalent amount of the corresponding FIAT currency. To burn a token on an automatic ramp, the ramp contract retrieves the requested amount of tokens from the burner's wallet on the blockchain minus the ramp's burning fee then the platform uses a payment processor like Stripe to send the requested amount in the equivalent FIAT currency to the burner's payment processor account. To burn tokens on a manual ramp, the burner would have to send a request for burn through PayChat to the admin of the ramp who will then manually run the burn function through this form and then send the necessary payment to the burner. Manual ramps will list all payment methods they accept and will have guidelines in their descriptions (available at the top left of their ramp's panel) about how to proceed. With manual ramps, you should be able to find a ramp that accepts your payment method no matter what it is: cash, mobile money, etc.",
+                  "This will burn the specified amount of the selected token from your wallet and send you the equivalent amount of the corresponding FIAT currency. To burn a token on an automatic dRamp, the dRamp contract retrieves the requested amount of tokens from the burner's wallet on the blockchain minus the dRamp's burning fee then the platform uses a payment processor like Stripe to send the requested amount in the equivalent FIAT currency to the burner's payment processor account. To burn tokens on a manual dRamp, the burner would have to send a request for burn through PayChat to the admin of the dRamp who will then manually run the burn function through this form and then send the necessary payment to the burner. Manual dRamps will list all payment methods they accept and will have guidelines in their descriptions (available at the top left of their dRamp's panel) about how to proceed. With manual dRamps, you should be able to find a dRamp that accepts your payment method no matter what it is: cash, mobile money, etc.",
                 )}
               </Text>
             </Box>

@@ -234,7 +234,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
         <Box>
           <Text small color="textSubtle">
             {t(
-              "This will create a claim for the bounty attached to this ramp. In case you enter any conflict with this ramp, this function helps you submit a claim for a certain amount of compensation from the ramp's attached bounties.",
+              "This will create a claim for the bounty attached to this dRamp. In case you enter any conflict with this dRamp, this function helps you submit a claim for a certain amount of compensation from the dRamp's attached bounties.",
             )}
           </Text>
         </Box>

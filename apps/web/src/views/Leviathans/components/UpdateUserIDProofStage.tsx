@@ -59,7 +59,7 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, handleRawValueChang
   const TooltipComponent3 = () => (
     <Text>
       {t(
-        "This sets the actual value the previous parameter must verify. For instance is the previous parameter tests for age greater than or equals (testify_age_gte), this parameter can be 18 if you're willing to require members allowed to use the Valuepool for purchases to have an age greathan or equals to 18. Please check the documentation for more information on identity tokens.",
+        "This sets the actual value the previous parameter must verify. For instance is the previous parameter tests for age greater than or equals (testify_age_gte), this parameter can be 18 if you're willing to require members allowed to use the Valuepool for purchases to have an age greater than or equals to 18. Please check the documentation for more information on identity tokens.",
       )}
     </Text>
   )
