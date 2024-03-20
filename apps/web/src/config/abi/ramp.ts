@@ -34,6 +34,13 @@ export const rampABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'addBalanceETH',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -95,6 +102,19 @@ export const rampABI = [
     name: 'buyAccount',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+    ],
+    name: 'buyNative',
+    outputs: [],
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -201,6 +221,19 @@ export const rampABI = [
     name: 'deleteProtocol',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'deposit',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -445,19 +478,6 @@ export const rampABI = [
       },
     ],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_contractAddress',
-        type: 'address',
-      },
-    ],
-    name: 'setContractAddress',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
