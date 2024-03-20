@@ -9,13 +9,13 @@ interface RemoveStageProps {
   continueToNextStage: () => void
 }
 
-const RemoveStage: React.FC<any> = ({ symb, setPrices, continueToNextStage }) => {
+const RemoveStage: React.FC<any> = ({ symb, setPrices, address, continueToNextStage }) => {
   const { t } = useTranslation()
   const [updated, SetUpdated] = useState(false)
   const [spin, setSpin] = useState(false)
   const [disabled, setDisabled] = useState(false)
   const symbols = [symb]
-  const { data, status, refetch } = useGetPrices(symbols, process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO)
+  const { data, status, refetch } = useGetPrices(symbols, process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO, address)
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
   useEffect(() => {
     if (spin) {

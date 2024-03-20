@@ -112,13 +112,16 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_DEV]: t('Update Ramp Owner'),
   [LockStage.UPDATE_BLACKLIST]: t('Update Blacklist'),
   [LockStage.ADD_EXTRA_TOKEN]: t('Add Extra Token'),
+  [LockStage.GET_NATIVE]: t('Buy Native Token'),
   [LockStage.SPONSOR_TAG]: t('Sponsor Tag'),
   [LockStage.UPDATE_LOCATION]: t('Update Location'),
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
   [LockStage.BURN_TO_VC]: t('Burn To Virtual Card (VC)'),
   [LockStage.CREATE_HOLDER]: t('Create VC Holder'),
+  [LockStage.DEPOSIT_NATIVE]: t('Deposit Native Token'),
   [LockStage.CONFIRM_FETCH_API]: t('Back'),
   [LockStage.CONFIRM_FETCH_API2]: t('Back'),
+  [LockStage.CONFIRM_GET_NATIVE]: t('Back'),
   [LockStage.CONFIRM_CREATE_HOLDER]: t('Back'),
   [LockStage.CONFIRM_BURN_TO_VC]: t('Back'),
   [LockStage.CONFIRM_UPDATE_LOCATION]: t('Back'),
@@ -145,6 +148,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.CONFIRM_UPDATE_PROFILE_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TOKEN_ID_FROM_PROFILE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_BADGE_ID]: t('Back'),
+  [LockStage.CONFIRM_DEPOSIT_NATIVE]: t('Back'),
   [LockStage.CONFIRM_UPDATE_TOKEN_ID]: t('Back'),
   [LockStage.CONFIRM_UPDATE_DEV_TOKEN_ID]: t('Back'),
   [LockStage.CONFIRM_UNLOCK_BOUNTY]: t('Back'),
@@ -376,6 +380,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.ADD_EXTRA_TOKEN:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
+      case LockStage.CONFIRM_GET_NATIVE:
+        setStage(LockStage.GET_NATIVE)
+        break
+      case LockStage.GET_NATIVE:
+        setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
+        break
       case LockStage.CONFIRM_REMOVE_EXTRA_TOKEN:
         setStage(variant === 'admin' ? LockStage.ADMIN_SETTINGS : LockStage.SETTINGS)
         break
@@ -386,6 +396,12 @@ const CreateGaugeModal: React.FC<any> = ({
         setStage(LockStage.UPDATE_BADGE_ID)
         break
       case LockStage.UPDATE_BADGE_ID:
+        setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_DEPOSIT_NATIVE:
+        setStage(LockStage.DEPOSIT_NATIVE)
+        break
+      case LockStage.DEPOSIT_NATIVE:
         setStage(LockStage.ADMIN_SETTINGS)
         break
       case LockStage.CONFIRM_RECOVER_ADMIN:
@@ -671,6 +687,12 @@ const CreateGaugeModal: React.FC<any> = ({
       case LockStage.ADD_EXTRA_TOKEN:
         setStage(LockStage.CONFIRM_ADD_EXTRA_TOKEN)
         break
+      case LockStage.GET_NATIVE:
+        setStage(LockStage.CONFIRM_GET_NATIVE)
+        break
+      case LockStage.DEPOSIT_NATIVE:
+        setStage(LockStage.CONFIRM_DEPOSIT_NATIVE)
+        break
       case LockStage.ADMIN_WITHDRAW:
         setStage(LockStage.CONFIRM_ADMIN_WITHDRAW)
         break
@@ -719,7 +741,7 @@ const CreateGaugeModal: React.FC<any> = ({
     // eslint-disable-next-line consistent-return
     onConfirm: async () => {
       if (stage === LockStage.CONFIRM_CREATE_PROTOCOL) {
-        const args = [state.token]
+        const args = [state.token ?? rampHelperContract.address]
         console.log('CONFIRM_CREATE_PROTOCOL===============>', args)
         return callWithGasPrice(rampContract, 'createProtocol', args).catch((err) =>
           console.log('CONFIRM_CREATE_PROTOCOL===============>', err),
@@ -1002,6 +1024,19 @@ const CreateGaugeModal: React.FC<any> = ({
           .then(() => callWithGasPrice(rampHelperContract, 'addExtratoken', args))
           .catch((err) => console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', err))
       }
+      if (stage === LockStage.CONFIRM_GET_NATIVE) {
+        const args = [account]
+        console.log('CONFIRM_GET_NATIVE===============>', args)
+        return callWithGasPrice(rampContract, 'buyNative', args, {
+          value: getDecimalAmount(state.amountReceivable)?.toString(),
+        }).catch((err) => console.log('CONFIRM_GET_NATIVE===============>', err))
+      }
+      if (stage === LockStage.CONFIRM_DEPOSIT_NATIVE) {
+        console.log('CONFIRM_DEPOSIT_NATIVE===============>')
+        return callWithGasPrice(rampContract, 'addBalanceETH', [], {
+          value: getDecimalAmount(state.amountReceivable)?.toString(),
+        }).catch((err) => console.log('CONFIRM_DEPOSIT_NATIVE===============>', err))
+      }
       if (stage === LockStage.CONFIRM_REMOVE_EXTRA_TOKEN) {
         const args = [pool?.rampAddress, currency.address]
         console.log('CONFIRM_REMOVE_EXTRA_TOKEN===============>', args)
@@ -1200,6 +1235,9 @@ const CreateGaugeModal: React.FC<any> = ({
           <Button mb="8px" variant="success" disabled={!rampAccount} onClick={() => setStage(LockStage.FETCH_API2)}>
             {t('FETCH PRICE FROM API')}
           </Button>
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.GET_NATIVE)}>
+            {t('BUY NATIVE TOKENS')}
+          </Button>
           <Button
             mb="8px"
             variant="success"
@@ -1298,6 +1336,12 @@ const CreateGaugeModal: React.FC<any> = ({
           </Button>
           <Button variant="secondary" mb="8px" onClick={() => setStage(LockStage.ADD_EXTRA_TOKEN)}>
             {t('ADD EXTRA TOKEN')}
+          </Button>
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.GET_NATIVE)}>
+            {t('BUY NATIVE TOKENS')}
+          </Button>
+          <Button mb="8px" variant="success" onClick={() => setStage(LockStage.DEPOSIT_NATIVE)}>
+            {t('DEPOSIT NATIVE TOKENS')}
           </Button>
           <Button
             mb="8px"
@@ -1399,10 +1443,12 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.VOTE && (
         <VoteStage
           state={state}
-          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />
+      )}
+      {stage === LockStage.GET_NATIVE && (
+        <VoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_PARAMETERS && (
         <UpdateParametersStage
@@ -1519,6 +1565,7 @@ const CreateGaugeModal: React.FC<any> = ({
         <FetchPriceStage
           state={state}
           symb={rampAccount?.token?.symbol}
+          address={rampAccount?.token?.address}
           setPrices={setPrices}
           continueToNextStage={continueToNextStage}
         />

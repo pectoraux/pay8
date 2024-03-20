@@ -3,6 +3,8 @@ import { Pool, TabMenu, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePool, useCurrPool } from 'state/ramps/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { getRampHelperAddress } from 'utils/addressHelpers'
+import { useNativeBalances } from 'state/wallet/hooks'
 
 import NameCell from './Cells/NameCell'
 import ActionPanel from './ActionPanel/ActionPanel'
@@ -18,6 +20,9 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
     () => pool.accounts?.find((acct) => acct.token.address === currState[pool.rampAddress]),
     [pool, currState],
   )
+  const nb = useNativeBalances([pool?.id])
+  const nativeBalances = Object.values(nb) as any
+  const nativeBalance = nativeBalances?.length && nativeBalances[0]?.toFixed()
   const tabs = (
     <>
       <NameCell pool={pool} rampAccount={rampAccount} />
@@ -25,16 +30,26 @@ const PoolRow: React.FC<any> = ({ sousId, account, initialActivity }) => {
         labelText={t('Total Accounts')}
         amount={pool?.accounts?.filter((protocol) => protocol?.active)?.length}
       />
-      <TotalValueCell
-        labelText={t('Minted Liquidity')}
-        amount={getBalanceNumber(rampAccount?.minted, rampAccount?.token?.decimals)}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
-      <TotalValueCell
-        labelText={t('Burnt Liquidity')}
-        amount={getBalanceNumber(rampAccount?.burnt, rampAccount?.token?.decimals)}
-        symbol={rampAccount?.token?.symbol ?? ''}
-      />
+      {rampAccount?.token?.address?.toLowerCase() === getRampHelperAddress()?.toLowerCase() ? (
+        <TotalValueCell
+          labelText={t('Total Liquidity')}
+          amount={nativeBalance}
+          symbol={rampAccount?.token?.symbol ?? ''}
+        />
+      ) : (
+        <>
+          <TotalValueCell
+            labelText={t('Minted Liquidity')}
+            amount={getBalanceNumber(rampAccount?.minted, rampAccount?.token?.decimals)}
+            symbol={rampAccount?.token?.symbol ?? ''}
+          />
+          <TotalValueCell
+            labelText={t('Burnt Liquidity')}
+            amount={getBalanceNumber(rampAccount?.burnt, rampAccount?.token?.decimals)}
+            symbol={rampAccount?.token?.symbol ?? ''}
+          />
+        </>
+      )}
     </>
   )
   return (

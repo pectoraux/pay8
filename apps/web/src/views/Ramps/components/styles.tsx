@@ -11,6 +11,8 @@ export const StyledModal = styled(Modal)<{ stage: LockStage }>`
 export const stagesWithApproveButton = [LockStage.CONFIRM_BURN]
 
 export const stagesWithConfirmButton = [
+  LockStage.CONFIRM_DEPOSIT_NATIVE,
+  LockStage.CONFIRM_GET_NATIVE,
   LockStage.CONFIRM_RECOVER_ADMIN,
   LockStage.CONFIRM_CREATE_PROTOCOL2,
   LockStage.CONFIRM_CREATE_PROTOCOL3,
@@ -56,6 +58,10 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.GET_NATIVE,
+  LockStage.CONFIRM_GET_NATIVE,
+  LockStage.DEPOSIT_NATIVE,
+  LockStage.CONFIRM_DEPOSIT_NATIVE,
   LockStage.CREATE_PROTOCOL2,
   LockStage.CONFIRM_CREATE_PROTOCOL2,
   LockStage.CREATE_PROTOCOL3,

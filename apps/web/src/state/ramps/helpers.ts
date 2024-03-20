@@ -1,6 +1,6 @@
 import axios from 'axios'
 import NodeRSA from 'encrypt-rsa'
-import { Token } from '@pancakeswap/sdk'
+import { Native, Token } from '@pancakeswap/sdk'
 import { firestore } from 'utils/firebase'
 import request, { gql } from 'graphql-request'
 import { GRAPH_API_EXTRATOKENS, GRAPH_API_RAMPS } from 'config/constants/endpoints'
@@ -350,6 +350,14 @@ export const getNativeToToken = async (tokenAddress, chainId) => {
 
 export const getTokenData = async (tokenAddress, chainId) => {
   const bscClient = publicClient({ chainId })
+  if (tokenAddress?.toLowerCase() === getRampHelperAddress()?.toLowerCase()) {
+    const token = Native.onChain(chainId)
+    return {
+      name: token.name,
+      symbol: token.symbol,
+      decimals: token.decimals,
+    }
+  }
   const [name, symbol, decimals] = await bscClient.multicall({
     allowFailure: true,
     contracts: [
@@ -500,7 +508,7 @@ export const fetchRamp = async (address, chainId) => {
             ppDataFound: ppData?.length && !ppData[0]?.data?.error,
             ppData: ppData?.length && ppData[0]?.data,
             token: new Token(
-              56,
+              chainId,
               session?.tokenAddress,
               decimals.result,
               symbol.result?.toString()?.toUpperCase() ?? 'symbol',

@@ -13,6 +13,7 @@ import { chains } from 'utils/wagmi'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { requiresApproval } from 'utils/requiresApproval'
+import { getRampHelperAddress } from 'utils/addressHelpers'
 import { fetchRampAsync, fetchRampsAsync } from '.'
 import { VaultKey } from '../types'
 import {
@@ -230,10 +231,14 @@ export const useGetNativePrice = (symbol, key) => {
   return { data: data?.data, refetch, status }
 }
 
-export const useGetPrices = (symbols, key) => {
+export const useGetPrices = (symbols, key, address = '') => {
   const { chainId } = useActiveChainId()
   const chain = chains.find((c) => c.id === chainId)
-  const { data: nativePrice, refetch: refetch2 } = useGetNativePrice(chain?.nativeCurrency?.symbol, key)
+  const {
+    data: nativePrice,
+    refetch: refetch2,
+    status: status2,
+  } = useGetNativePrice(chain?.nativeCurrency?.symbol, key)
   if (!nativePrice?.data) refetch2()
   console.log('00mprices===================>', nativePrice)
   const {
@@ -241,6 +246,9 @@ export const useGetPrices = (symbols, key) => {
     status,
     mutate: refetch,
   } = useSWR(['useGetPrices5', symbols?.length, key], async () => getPrices(symbols, key, nativePrice?.data))
+  if (address?.toLowerCase() === getRampHelperAddress()?.toLowerCase()) {
+    return { data: [parseFloat(nativePrice)], refetch: refetch2, status: status2 }
+  }
   return { data, refetch, status }
 }
 
