@@ -111,6 +111,11 @@ export const rampABI = [
         name: 'to',
         type: 'address',
       },
+      {
+        internalType: 'uint256',
+        name: '_amount',
+        type: 'uint256',
+      },
     ],
     name: 'buyNative',
     outputs: [],
