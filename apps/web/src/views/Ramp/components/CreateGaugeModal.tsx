@@ -179,12 +179,14 @@ const CreateGaugeModal: React.FC<any> = ({
   console.log('1mcurrencyy===============>', pool, currency, rampContract)
   // const [onPresentPreviousTx] = useModal(<ActivityHistory />,)
   const { data } = useGetSessionInfoSg(sessionId, rampContract?.address?.toLowerCase())
+  const getNative = (router.query?.userCurrency as any)?.toLowerCase() === getRampHelperAddress()?.toLowerCase()
+  const dataAddress = getNative ? getRampHelperAddress() : data?.tokenAddress
   const { data: stripeData } = useGetSessionInfo(sessionId ?? '', pool?.secretKeys && pool?.secretKeys[0])
-  const { data: tokenData } = useGetTokenData(data?.tokenAddress)
-  const { data: isExtraToken } = useGetIsExtraToken(data?.tokenAddress)
+  const { data: tokenData } = useGetTokenData(dataAddress)
+  const { data: isExtraToken } = useGetIsExtraToken(dataAddress)
   const rampAccount = useMemo(
-    () => pool?.accounts?.find((acct) => acct.token.address?.toLowerCase() === data?.tokenAddress),
-    [pool?.accounts, data?.tokenAddress],
+    () => pool?.accounts?.find((acct) => acct.token.address?.toLowerCase() === dataAddress),
+    [pool?.accounts, dataAddress],
   )
   const { data: usdPrice1 } = useGetPrices(
     [rampAccount?.token?.symbol],
@@ -195,7 +197,6 @@ const CreateGaugeModal: React.FC<any> = ({
   console.log('nativeToToken=================>', rampAccount, usdPrice)
   // console.log('data=================>', data)
   console.log('stripeData=================>', stripeData, tokenData)
-  const getNative = (router.query?.userCurrency as any)?.toLowerCase() === getRampHelperAddress()?.toLowerCase()
 
   const [state, setState] = useState<any>(() => ({
     sk: pool?.secretKeys && pool?.secretKeys[0],
