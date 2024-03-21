@@ -723,9 +723,9 @@ const CreateGaugeModal: React.FC<any> = ({
               variant="success"
               onClick={() => (getNative ? setStage(LockStage.CONFIRM_GET_NATIVE) : setStage(LockStage.CONFIRM_MINT))}
               disabled={
-                !tokenData ||
-                (!isExtraToken && stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase()) ||
-                getNative
+                !getNative &&
+                (!tokenData ||
+                  (!isExtraToken && stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase()))
               }
             >
               {getNative ? t('CONFIRM BUY') : t('CONFIRM MINT')}
