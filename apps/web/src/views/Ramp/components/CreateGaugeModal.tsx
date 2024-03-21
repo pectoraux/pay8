@@ -729,7 +729,7 @@ const CreateGaugeModal: React.FC<any> = ({
               onClick={() => (getNative ? setStage(LockStage.CONFIRM_GET_NATIVE) : setStage(LockStage.CONFIRM_MINT))}
               disabled={
                 getNative
-                  ? !stripeData || !(usdPrice1?.length && !Number.isNaN(usdPrice1[0]))
+                  ? !stripeData || !(usdPrice1?.length && !Number.isNaN(usdPrice1[0])) || data
                   : !tokenData ||
                     (!isExtraToken && stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase())
               }

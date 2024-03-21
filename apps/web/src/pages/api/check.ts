@@ -11,6 +11,7 @@ const handler = async (req, res) => {
       id: session.length && session[0].id,
       amount: session.length && Number(session[0]?.amount_total ?? 0) / 100,
       currency: session.length && session[0].currency,
+      session,
       error: undefined,
     })
   } catch (error) {
