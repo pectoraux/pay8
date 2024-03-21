@@ -525,12 +525,12 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_CREATE_PROTOCOL===============>', err),
         )
       }
-      if (stage === LockStage.CONFIRM_GET_NATIVE) {
+      if (stage === LockStage.CONFIRM_GET_NATIVE && !data) {
         const native = usdPrice1?.length && usdPrice1[0]
         const value = getDecimalAmount(
           new BigNumber(parseFloat(stripeData?.amount) / parseFloat(native?.toString())),
         )?.toString()
-        const args = [account, value]
+        const args = [account, value, state.sessionId]
         console.log('CONFIRM_GET_NATIVE===============>', args, stripeData?.amount, native?.toString())
         return callWithGasPrice(rampContract, 'buyNative', args).catch((err) =>
           console.log('CONFIRM_GET_NATIVE===============>', err),

@@ -116,6 +116,11 @@ export const rampABI = [
         name: '_amount',
         type: 'uint256',
       },
+      {
+        internalType: 'string',
+        name: 'sessionId',
+        type: 'string',
+      },
     ],
     name: 'buyNative',
     outputs: [],
