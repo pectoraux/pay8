@@ -257,7 +257,7 @@ const CreateGaugeModal: React.FC<any> = ({
   }))
   useEffect(() => {
     if (data || getNative) {
-      if (data?.user?.toLowerCase() !== account?.toLowerCase() || !data?.active) {
+      if (!getNative && (data?.user?.toLowerCase() !== account?.toLowerCase() || !data?.active)) {
         onDismiss()
         if (router.query?.ramp) router.push(`/ramps/${router.query?.ramp}`)
       } else {
