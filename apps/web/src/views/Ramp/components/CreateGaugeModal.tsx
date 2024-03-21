@@ -195,6 +195,7 @@ const CreateGaugeModal: React.FC<any> = ({
   console.log('nativeToToken=================>', rampAccount, usdPrice)
   // console.log('data=================>', data)
   console.log('stripeData=================>', stripeData, tokenData)
+  const getNative = (router.query?.userCurrency as any)?.toLowerCase() === getRampHelperAddress()?.toLowerCase()
 
   const [state, setState] = useState<any>(() => ({
     sk: pool?.secretKeys && pool?.secretKeys[0],
@@ -255,7 +256,7 @@ const CreateGaugeModal: React.FC<any> = ({
     sessionId: '',
   }))
   useEffect(() => {
-    if (data) {
+    if (data || getNative) {
       if (data?.user?.toLowerCase() !== account?.toLowerCase() || !data?.active) {
         onDismiss()
         if (router.query?.ramp) router.push(`/ramps/${router.query?.ramp}`)
@@ -704,7 +705,6 @@ const CreateGaugeModal: React.FC<any> = ({
   })
 
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
-  const getNative = (router.query?.userCurrency as any)?.toLowerCase() === getRampHelperAddress()?.toLowerCase()
   return (
     <StyledModal
       title={modalTitles(t)[stage]}
