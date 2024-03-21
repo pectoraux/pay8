@@ -160,6 +160,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
     name: '',
     referrerProfileId: '0',
     customTags: '',
+    reason: '',
   }))
   console.log('pppoool================>', pool, profile)
   const [nftFilters, setNftFilters] = useState<any>({
@@ -431,6 +432,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
           currency?.address,
           state.profileId,
           amount?.toString(),
+          state.reason,
         ]).catch((err) => console.log('CONFIRM_PAY==================>', err))
       }
       if (stage === LockStage.CONFIRM_UPDATE_LATE_DAYS) {
@@ -676,6 +678,7 @@ const BuyModal: React.FC<any> = ({ variant = 'user', pool, currAccount, currency
         <PayProfileStage
           state={state}
           currency={currency}
+          handleChange={handleChange}
           handleRawValueChange={handleRawValueChange}
           continueToNextStage={continueToNextStage}
         />

@@ -99,6 +99,19 @@ const SetPriceStage: React.FC<any> = ({ state, handleChange, continueToNextStage
           onChange={handleChange}
         />
       </GreyedOutContainer>
+      <GreyedOutContainer>
+        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+          {t('Identity Token ID')}
+        </Text>
+        <Input
+          type="text"
+          scale="sm"
+          name="identityTokenId"
+          value={state.identityTokenId}
+          placeholder={t('input your identity token id')}
+          onChange={handleChange}
+        />
+      </GreyedOutContainer>
       <Grid gridTemplateColumns="32px 1fr" p="16px" maxWidth="360px">
         <Flex alignSelf="flex-start">
           <ErrorIcon width={24} height={24} color="textSubtle" />

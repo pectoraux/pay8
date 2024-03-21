@@ -562,7 +562,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
         )
       }
       if (stage === LockStage.CONFIRM_UPDATE_SCORE) {
-        const args = [state.tokenId, state.score, state.deadline]
+        const args = [state.tokenId, state.score, state.deadline, state.identityTokenId]
         console.log('CONFIRM_UPDATE_SCORE===============>', args)
         return callWithGasPrice(gameMinterContract, 'updateScoreNDeadline', args).catch((err) =>
           console.log('CONFIRM_UPDATE_SCORE===============>', err),
@@ -586,6 +586,7 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
               BigInt(currAccount?.id),
               BigInt(Object.values(gameData?.data?.score ?? gameData?.data?.value)?.toString()),
               BigInt(parseInt(Object.values(gameData?.data?.deadline)?.toString() || '0')),
+              BigInt('0'),
             ],
           })
           return walletClient
@@ -832,9 +833,15 @@ const CreateGaugeModal: React.FC<any> = ({ variant = 'user', pool, currAccount, 
           <Button mb="8px" onClick={() => setStage(LockStage.BURN_TOKEN_FOR_CREDIT)}>
             {t('BURN TOKEN FOR CREDIT')}
           </Button>
-          <Button variant="success" mb="8px" onClick={() => setStage(LockStage.PROCESS_SCORE)}>
-            {t('PROCESS SCORE')}
-          </Button>
+          {pool?.gameContract === ADDRESS_ZERO ? (
+            <Button variant="success" mb="8px" onClick={() => setStage(LockStage.UPDATE_SCORE)}>
+              {t('UPDATE SCORE')}
+            </Button>
+          ) : (
+            <Button variant="success" mb="8px" onClick={() => setStage(LockStage.PROCESS_SCORE)}>
+              {t('PROCESS SCORE')}
+            </Button>
+          )}
           <Button mb="8px" variant="secondary" onClick={() => setStage(LockStage.WITHDRAW)}>
             {t('CLAIM REWARDS')}
           </Button>

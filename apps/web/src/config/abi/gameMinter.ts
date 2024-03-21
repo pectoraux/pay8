@@ -508,6 +508,11 @@ export const gameMinterABI = [
         name: '_deadline',
         type: 'uint256',
       },
+      {
+        internalType: 'uint256',
+        name: '_identityTokenId',
+        type: 'uint256',
+      },
     ],
     name: 'updateScoreNDeadline',
     outputs: [],
