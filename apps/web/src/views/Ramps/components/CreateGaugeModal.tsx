@@ -55,6 +55,8 @@ import CreateProtocol3Stage from './CreateProtocol3Stage'
 import UpdateBlacklistStage from './UpdateBlacklistStage'
 import UpdateParametersStage from './UpdateParametersStage'
 import VoteStage from './VoteStage'
+import GetNativeStage from './GetNativeStage'
+import DepositNativeStage from './DepositNativeStage'
 import DeleteStage from './DeleteStage'
 import InitRampStage from './InitRampStage'
 import DeleteRampStage from './DeleteRampStage'
@@ -1024,15 +1026,12 @@ const CreateGaugeModal: React.FC<any> = ({
           .then(() => callWithGasPrice(rampHelperContract, 'addExtratoken', args))
           .catch((err) => console.log('CONFIRM_ADD_EXTRA_TOKEN===============>', err))
       }
-      if (stage === LockStage.CONFIRM_GET_NATIVE) {
-        const args = [account]
-        console.log('CONFIRM_GET_NATIVE===============>', args)
-        return callWithGasPrice(rampContract, 'buyNative', args, {
-          value: getDecimalAmount(state.amountReceivable)?.toString(),
-        }).catch((err) => console.log('CONFIRM_GET_NATIVE===============>', err))
-      }
       if (stage === LockStage.CONFIRM_DEPOSIT_NATIVE) {
-        console.log('CONFIRM_DEPOSIT_NATIVE===============>')
+        console.log(
+          'CONFIRM_DEPOSIT_NATIVE===============>',
+          state.amountReceivable,
+          getDecimalAmount(state.amountReceivable)?.toString(),
+        )
         return callWithGasPrice(rampContract, 'addBalanceETH', [], {
           value: getDecimalAmount(state.amountReceivable)?.toString(),
         }).catch((err) => console.log('CONFIRM_DEPOSIT_NATIVE===============>', err))
@@ -1448,7 +1447,10 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.GET_NATIVE && (
-        <VoteStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <GetNativeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+      )}
+      {stage === LockStage.DEPOSIT_NATIVE && (
+        <DepositNativeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
       )}
       {stage === LockStage.UPDATE_PARAMETERS && (
         <UpdateParametersStage

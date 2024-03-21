@@ -3,6 +3,7 @@ import { useAccount } from 'wagmi'
 import { useState } from 'react'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
+import { getRampHelperAddress } from 'utils/addressHelpers'
 
 import { useGetAccountSg, useGetCardFromStripe, useGetCardId, useGetExtraTokens, usePool } from 'state/ramps/hooks'
 import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
@@ -179,7 +180,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ sousId, rampAccount }) =>
                 value={getBalanceNumber(rampAccount?.nativeToToken)}
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('%token% price in %native%', { native: pool?.nativeSymbol, token: rampAccount?.token?.symbol })}
+                {t('%token% price in %native%', {
+                  native:
+                    rampAccount?.token?.address?.toLowerCase() === getRampHelperAddress()?.toLowerCase()
+                      ? 'USD'
+                      : pool?.nativeSymbol,
+                  token: rampAccount?.token?.symbol,
+                })}
               </Text>
             </Box>
           ) : null}

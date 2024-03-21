@@ -240,14 +240,14 @@ export const useGetPrices = (symbols, key, address = '') => {
     status: status2,
   } = useGetNativePrice(chain?.nativeCurrency?.symbol, key)
   if (!nativePrice?.data) refetch2()
-  console.log('00mprices===================>', nativePrice)
+  console.log('00mprices===================>', nativePrice, address)
   const {
     data,
     status,
     mutate: refetch,
   } = useSWR(['useGetPrices5', symbols?.length, key], async () => getPrices(symbols, key, nativePrice?.data))
   if (address?.toLowerCase() === getRampHelperAddress()?.toLowerCase()) {
-    return { data: [parseFloat(nativePrice)], refetch: refetch2, status: status2 }
+    return { data: [parseFloat(nativePrice?.data)], refetch: refetch2, status: status2 }
   }
   return { data, refetch, status }
 }

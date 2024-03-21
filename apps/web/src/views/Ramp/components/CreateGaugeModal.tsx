@@ -26,14 +26,15 @@ import { fetchRampsAsync } from 'state/ramps'
 import MintStage from 'views/Ramps/components/MintStage'
 import BurnStage from 'views/Ramps/components/BurnStage'
 import {
-  useGetRamp,
   useGetTokenData,
   useGetSessionInfo,
   useGetSessionInfoSg,
   useGetIsExtraToken,
   useGetExtraUSDPrices,
   useFetchRamp,
+  useGetPrices,
 } from 'state/ramps/hooks'
+import { getRampHelperAddress } from 'utils/addressHelpers'
 import { stagesWithBackButton, StyledModal, stagesWithConfirmButton, stagesWithApproveButton } from './styles'
 import { LockStage } from './types'
 import PartnerStage from './PartnerStage'
@@ -91,6 +92,7 @@ const modalTitles = (t: TranslateFunction) => ({
   [LockStage.UPDATE_SPONSOR_MEDIA]: t('Update Sponsor Media'),
   [LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA]: t('Back'),
   [LockStage.CONFIRM_SPONSOR_TAG]: t('Back'),
+  [LockStage.CONFIRM_GET_NATIVE]: t('Back'),
   [LockStage.CONFIRM_CLAIM_SPONSOR_REVENUE]: t('Back'),
   [LockStage.CONFIRM_REMOVE_EXTRA_TOKEN]: t('Back'),
   [LockStage.CONFIRM_ADD_EXTRA_TOKEN]: t('Back'),
@@ -183,6 +185,11 @@ const CreateGaugeModal: React.FC<any> = ({
   const rampAccount = useMemo(
     () => pool?.accounts?.find((acct) => acct.token.address?.toLowerCase() === data?.tokenAddress),
     [pool?.accounts, data?.tokenAddress],
+  )
+  const { data: usdPrice1 } = useGetPrices(
+    [rampAccount?.token?.symbol],
+    process.env.NEXT_PUBLIC_RAPID_API_PRICE_INFO,
+    rampAccount?.token?.address,
   )
   const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
   console.log('nativeToToken=================>', rampAccount, usdPrice)
@@ -513,6 +520,16 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_CREATE_PROTOCOL===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_GET_NATIVE) {
+        const native = usdPrice1?.length && usdPrice1[0]
+        const args = [account]
+        console.log('CONFIRM_GET_NATIVE===============>', args)
+        return callWithGasPrice(rampContract, 'buyNative', args, {
+          value: getDecimalAmount(
+            new BigNumber(parseFloat(stripeData?.amount) / parseFloat(native?.toString())),
+          )?.toString(),
+        }).catch((err) => console.log('CONFIRM_GET_NATIVE===============>', err))
+      }
       if (stage === LockStage.CONFIRM_MINT) {
         const native = isExtraToken ? usdPrice?.length && usdPrice[0] : 1
         console.log(
@@ -687,7 +704,7 @@ const CreateGaugeModal: React.FC<any> = ({
   })
 
   const showBackButton = stagesWithBackButton.includes(stage) && !isConfirming && !isApproving
-
+  const getNative = (router.query?.userCurrency as any)?.toLowerCase() === getRampHelperAddress()?.toLowerCase()
   return (
     <StyledModal
       title={modalTitles(t)[stage]}
@@ -704,13 +721,13 @@ const CreateGaugeModal: React.FC<any> = ({
             <Button
               mb="8px"
               variant="success"
-              onClick={() => setStage(LockStage.CONFIRM_MINT)}
+              onClick={() => (getNative ? setStage(LockStage.CONFIRM_GET_NATIVE) : setStage(LockStage.CONFIRM_MINT))}
               disabled={
                 !tokenData ||
                 (!isExtraToken && stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase())
               }
             >
-              {t('CONFIRM MINT')}
+              {getNative ? t('CONFIRM BUY') : t('CONFIRM MINT')}
             </Button>
           ) : null}
         </Flex>

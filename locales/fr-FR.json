@@ -6331,5 +6331,6 @@
   "Sell to every buyer everywhere!": "Vendez à tous les acheteurs partout !",
   "Buy Native Token": "Buy Native Token",
   "input payment reason": "input payment reason",
+  "This will deposit the specified amount of native tokens into the current ramp.": "This will deposit the specified amount of native tokens into the current ramp.",
   "This will buy the specified amount of native tokens and send it to your wallet.": "This will buy the specified amount of native tokens and send it to your wallet."
 }
