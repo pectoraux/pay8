@@ -1447,7 +1447,13 @@ const CreateGaugeModal: React.FC<any> = ({
         />
       )}
       {stage === LockStage.GET_NATIVE && (
-        <GetNativeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />
+        <GetNativeStage
+          state={state}
+          rampAccount={rampAccount}
+          handleChange={handleChange}
+          rampAddress={pool?.rampAddress}
+          continueToNextStage={continueToNextStage}
+        />
       )}
       {stage === LockStage.DEPOSIT_NATIVE && (
         <DepositNativeStage state={state} handleChange={handleChange} continueToNextStage={continueToNextStage} />

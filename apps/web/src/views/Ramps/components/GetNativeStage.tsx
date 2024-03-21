@@ -91,7 +91,7 @@ const SetPriceStage: React.FC<any> = ({
       rampAddress,
       sk: state.sk,
     }
-    console.log('11data=====================>', args)
+    console.log('11data=====================>', args, usdPrice)
     const { data } = await axios.post('/api/charge', args)
     if (data.error) {
       console.log('data.error=====================>', data.error)
