@@ -330,6 +330,7 @@ export const useGetSessionInfo = (sessionId, sk) => {
   } = useSWRImmutable(['stripe-session-info', sessionId ?? '0', sk0], async () =>
     axios.post('/api/check', { sessionId, sk: sk0 }),
   )
+  console.log('useGetSessionInfo=============>', data)
   return { data: data?.data, refetch, status }
 }
 

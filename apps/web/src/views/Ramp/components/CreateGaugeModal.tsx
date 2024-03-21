@@ -185,7 +185,7 @@ const CreateGaugeModal: React.FC<any> = ({
   const { data: tokenData } = useGetTokenData(dataAddress)
   const { data: isExtraToken } = useGetIsExtraToken(dataAddress)
   const rampAccount = useMemo(
-    () => pool?.accounts?.find((acct) => acct.token.address?.toLowerCase() === dataAddress),
+    () => pool?.accounts?.find((acct) => acct.token.address?.toLowerCase() === dataAddress?.toLowerCase()),
     [pool?.accounts, dataAddress],
   )
   const { data: usdPrice1 } = useGetPrices(
@@ -195,8 +195,8 @@ const CreateGaugeModal: React.FC<any> = ({
   )
   const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
   console.log('nativeToToken=================>', rampAccount, usdPrice)
-  // console.log('data=================>', data)
-  console.log('stripeData=================>', stripeData, tokenData)
+  console.log('1data=================>', usdPrice1)
+  console.log('stripeData=================>', sessionId, stripeData, tokenData)
 
   const [state, setState] = useState<any>(() => ({
     sk: pool?.secretKeys && pool?.secretKeys[0],
@@ -269,7 +269,7 @@ const CreateGaugeModal: React.FC<any> = ({
         setChecked(true)
       }
     }
-  }, [sessionId, data, account, state, router, onDismiss])
+  }, [sessionId, data, account, state, router, onDismiss, getNative])
 
   const updateValue = (key: any, value: any) => {
     setState((prevState) => ({
@@ -292,6 +292,9 @@ const CreateGaugeModal: React.FC<any> = ({
         break
       case LockStage.UPDATE_PARAMETERS:
         setStage(LockStage.ADMIN_SETTINGS)
+        break
+      case LockStage.CONFIRM_GET_NATIVE:
+        setStage(LockStage.PRE_MINT)
         break
       case LockStage.UPDATE_PROTOCOL:
         setStage(LockStage.ADMIN_SETTINGS)
@@ -524,13 +527,14 @@ const CreateGaugeModal: React.FC<any> = ({
       }
       if (stage === LockStage.CONFIRM_GET_NATIVE) {
         const native = usdPrice1?.length && usdPrice1[0]
-        const args = [account]
+        const value = getDecimalAmount(
+          new BigNumber(parseFloat(stripeData?.amount) / parseFloat(native?.toString())),
+        )?.toString()
+        const args = [account, value]
         console.log('CONFIRM_GET_NATIVE===============>', args, stripeData?.amount, native?.toString())
-        return callWithGasPrice(rampContract, 'buyNative', args, {
-          value: getDecimalAmount(
-            new BigNumber(parseFloat(stripeData?.amount) / parseFloat(native?.toString())),
-          )?.toString(),
-        }).catch((err) => console.log('CONFIRM_GET_NATIVE===============>', err))
+        return callWithGasPrice(rampContract, 'buyNative', args).catch((err) =>
+          console.log('CONFIRM_GET_NATIVE===============>', err),
+        )
       }
       if (stage === LockStage.CONFIRM_MINT) {
         const native = isExtraToken ? usdPrice?.length && usdPrice[0] : 1
@@ -724,9 +728,10 @@ const CreateGaugeModal: React.FC<any> = ({
               variant="success"
               onClick={() => (getNative ? setStage(LockStage.CONFIRM_GET_NATIVE) : setStage(LockStage.CONFIRM_MINT))}
               disabled={
-                !getNative &&
-                (!tokenData ||
-                  (!isExtraToken && stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase()))
+                getNative
+                  ? !stripeData || !(usdPrice1?.length && !Number.isNaN(usdPrice1[0]))
+                  : !tokenData ||
+                    (!isExtraToken && stripeData?.currency?.toLowerCase() !== tokenData?.symbol?.toLowerCase())
               }
             >
               {getNative ? t('CONFIRM BUY') : t('CONFIRM MINT')}

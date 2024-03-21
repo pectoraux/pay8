@@ -46,6 +46,7 @@ export const stagesWithConfirmButton = [
 ]
 
 export const stagesWithBackButton = [
+  LockStage.CONFIRM_GET_NATIVE,
   LockStage.UPDATE_SPONSOR_MEDIA,
   LockStage.CONFIRM_UPDATE_SPONSOR_MEDIA,
   LockStage.SPONSOR_TAG,
