@@ -195,7 +195,7 @@ const CreateGaugeModal: React.FC<any> = ({
   )
   const { data: usdPrice } = useGetExtraUSDPrices([rampAccount?.token?.symbol], rampAccount?.encrypted)
   console.log('nativeToToken=================>', rampAccount, usdPrice)
-  console.log('1data=================>', usdPrice1)
+  console.log('1data=================>', usdPrice1, data)
   console.log('stripeData=================>', sessionId, stripeData, tokenData)
 
   const [state, setState] = useState<any>(() => ({
