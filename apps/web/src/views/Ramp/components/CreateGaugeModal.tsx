@@ -532,9 +532,16 @@ const CreateGaugeModal: React.FC<any> = ({
         )?.toString()
         const args = [account, value, state.sessionId]
         console.log('CONFIRM_GET_NATIVE===============>', args, stripeData?.amount, native?.toString())
-        return callWithGasPrice(rampContract, 'buyNative', args).catch((err) =>
-          console.log('CONFIRM_GET_NATIVE===============>', err),
-        )
+        const { request } = await client.simulateContract({
+          account: adminAccount,
+          address: rampContract.address,
+          abi: rampABI,
+          functionName: 'buyNative',
+          args: [account, BigInt(value), state.sessionId],
+        })
+        return walletClient
+          .writeContract(request)
+          .catch((err) => console.log('CONFIRM_GET_NATIVE===============>', err))
       }
       if (stage === LockStage.CONFIRM_MINT) {
         const native = isExtraToken ? usdPrice?.length && usdPrice[0] : 1

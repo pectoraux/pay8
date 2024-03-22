@@ -762,6 +762,14 @@ const CreateGaugeModal: React.FC<any> = ({
           console.log('CONFIRM_CREATE_PROTOCOL2===============>', err),
         )
       }
+      if (stage === LockStage.CONFIRM_GET_NATIVE) {
+        const value = getDecimalAmount(state.amountPayable ?? '0')?.toString()
+        const args = [state.recipient, value, 'manual']
+        console.log('CONFIRM_GET_NATIVE===============>', args)
+        return callWithGasPrice(rampContract, 'buyNative', args).catch((err) =>
+          console.log('CONFIRM_GET_NATIVE===============>', err),
+        )
+      }
       if (stage === LockStage.CONFIRM_CREATE_PROTOCOL3) {
         const encryptRsa = new EncryptRsa()
         const encrypted = encryptRsa.encryptStringWithRsaPublicKey({
@@ -1449,6 +1457,7 @@ const CreateGaugeModal: React.FC<any> = ({
       {stage === LockStage.GET_NATIVE && (
         <GetNativeStage
           state={state}
+          pool={pool}
           rampAccount={rampAccount}
           handleChange={handleChange}
           rampAddress={pool?.rampAddress}

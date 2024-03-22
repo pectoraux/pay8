@@ -124,7 +124,7 @@ export const rampABI = [
     ],
     name: 'buyNative',
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

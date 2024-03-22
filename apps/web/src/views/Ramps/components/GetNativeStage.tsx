@@ -152,19 +152,21 @@ const SetPriceStage: React.FC<any> = ({
 
   return (
     <>
-      {/* <GreyedOutContainer>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
-          {t('Recipient')}
-        </Text>
-        <Input
-          type="text"
-          scale="sm"
-          name="recipient"
-          value={state.recipient}
-          placeholder={t('input recipient address')}
-          onChange={handleChange}
-        />
-      </GreyedOutContainer> */}
+      {pool?.automatic ? null : (
+        <GreyedOutContainer>
+          <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
+            {t('Recipient')}
+          </Text>
+          <Input
+            type="text"
+            scale="sm"
+            name="recipient"
+            value={state.recipient}
+            placeholder={t('input recipient address')}
+            onChange={handleChange}
+          />
+        </GreyedOutContainer>
+      )}
       <GreyedOutContainer>
         <Flex ref={targetRef2}>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold>
@@ -208,7 +210,13 @@ const SetPriceStage: React.FC<any> = ({
       <Flex flexDirection="column" px="16px" pb="16px">
         <Button
           mb="8px"
-          onClick={processCharge}
+          onClick={() => {
+            if (pool?.automatic) {
+              processCharge()
+            } else if (pool?.devaddr_ === account) {
+              continueToNextStage()
+            }
+          }}
           endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
           disabled={state.amountPayable < 2}
         >
