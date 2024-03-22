@@ -1,14 +1,14 @@
-import { Button, Text, Flex, Box, Balance, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
-import { useAccount } from 'wagmi'
 import { useState } from 'react'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { useAccount } from 'wagmi'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useTranslation } from '@pancakeswap/localization'
 import { getRampHelperAddress } from 'utils/addressHelpers'
 
-import { useGetAccountSg, useGetCardFromStripe, useGetCardId, useGetExtraTokens, usePool } from 'state/ramps/hooks'
-import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
-import truncateHash from '@pancakeswap/utils/truncateHash'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import CopyAddress from 'views/FutureCollaterals/components/PoolsTable/ActionPanel/CopyAddress'
+import { Button, Text, Flex, Box, Balance, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
+import { useGetAccountSg, useGetCardFromStripe, useGetCardId, useGetExtraTokens, usePool } from 'state/ramps/hooks'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 

@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
-import { Button, Text, Flex, Box, Balance, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useTranslation } from '@pancakeswap/localization'
-import { useGetAccountSg, useGetCardFromStripe, useGetCardId } from 'state/ramps/hooks'
-import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import { getRampHelperAddress } from 'utils/addressHelpers'
+import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { ccFormat } from 'views/Ramps/components/PoolsTable/ActionPanel/Harvest'
+import { StyledItemRow } from 'views/Nft/market/components/Filters/ListFilter/styles'
+import { useGetAccountSg, useGetCardFromStripe, useGetCardId } from 'state/ramps/hooks'
+import { Button, Text, Flex, Box, Balance, ButtonMenu, ButtonMenuItem } from '@pancakeswap/uikit'
 
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
@@ -135,7 +136,13 @@ const HarvestAction: React.FunctionComponent<any> = ({ pool, rampAccount }) => {
                 value={getBalanceNumber(rampAccount?.nativeToToken)}
               />
               <Text color="primary" fontSize="12px" display="inline" bold as="span" textTransform="uppercase">
-                {t('%token% price in %native%', { native: pool?.nativeSymbol, token: rampAccount?.token?.symbol })}
+                {t('%token% price in %native%', {
+                  native:
+                    rampAccount?.token?.address?.toLowerCase() === getRampHelperAddress()?.toLowerCase()
+                      ? 'USD'
+                      : pool?.nativeSymbol,
+                  token: rampAccount?.token?.symbol,
+                })}
               </Text>
             </Box>
           ) : null}
