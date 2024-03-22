@@ -32,7 +32,10 @@ const Staked: React.FunctionComponent<any> = ({ pool, rampAccount, tokenSessions
   const currencyId = useMemo(() => rampAccount?.token?.address, [rampAccount])
   const rampCurrencyInput = useCurrency(currencyId)
   const [currency, setCurrency] = useState(rampAccount?.address)
-  const handleInputSelect = useCallback((currencyInput) => setCurrency(currencyInput), [])
+  const handleInputSelect = useCallback((currencyInput) => {
+    setCurrency(currencyInput)
+    console.log('currencyInput=================>', currencyInput)
+  }, [])
   const stakingTokenContract = useERC20(currency?.address || rampAccount?.address || '')
 
   const { handleApprove } = useApprovePool(stakingTokenContract, pool?.id, currency?.symbol)
