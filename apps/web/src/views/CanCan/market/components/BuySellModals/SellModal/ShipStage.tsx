@@ -92,7 +92,7 @@ const EditStage: React.FC<any> = ({
       ? SellingStage.CREATE_PAYWALL2
       : SellingStage.CREATE_ASK_ORDER,
   )
-  console.log('currency?.address==============>', currency?.address)
+  console.log('currency?.address==============>', currency?.address, articleState)
   const [expand, setExpand] = useState(false)
   const paywallARP = useGetPaywallARP(collection?.id ?? '', paywallId)
   const [step1Complete, setStep1Complete] = useState(!!paywallARP?.paywallAddress)
@@ -115,7 +115,7 @@ const EditStage: React.FC<any> = ({
     ABTesting: 0,
     ABMin: 0,
     ABMax: 0,
-    mediaType: articleState?.tokenId?.trim()?.length() ? 4 : 0,
+    mediaType: articleState?.tokenId?.trim()?.length ? 4 : 0,
     bidDuration: articleState?.bidDuration ?? '0',
     minBidIncrementPercentage: articleState?.minBidIncrementPercentage ?? '0',
     rsrcTokenId: articleState?.rsrcTokenId ?? '0',
