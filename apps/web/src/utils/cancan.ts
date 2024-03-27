@@ -31,7 +31,7 @@ export function getThumbnailNContent(nft) {
     }
     if (chunks?.length && chunks[0] === 'article') {
       return {
-        mp4: chunks[2],
+        mp4: chunks?.slice(2).join(','),
         thumbnail: chunks[1],
         isArticle: true,
         contentType: chunks[0],
